@@ -109,6 +109,8 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
     volumes:
       - ./keycloak-data:/opt/keycloak/data/import

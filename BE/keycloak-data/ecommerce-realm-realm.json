@@ -1301,12 +1301,12 @@
     "firstBrokerLoginFlowAlias" : "first broker login",
     "config" : {
       "hideOnLoginPage" : "false",
-      "clientId" : "your-google-client-id.apps.googleusercontent.com",
+      "clientId" : "${env.GOOGLE_CLIENT_ID}",
       "acceptsPromptNoneForwardFromClient" : "false",
       "disableUserInfo" : "false",
       "filteredByClaim" : "false",
       "syncMode" : "FORCE",
-      "clientSecret" : "GOCSPX-dummy-client-secret-placeholder-value"
+      "clientSecret" : "${env.GOOGLE_CLIENT_SECRET}"
     }
   } ],
   "identityProviderMappers" : [ ],
