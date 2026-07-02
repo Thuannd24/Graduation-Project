@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_preview_workflow_1781843363025" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0">
+  <bpmn:process id="preview_workflow_1781843363025" name="Workflow Preview" isExecutable="true">
+    <bpmn:startEvent id="start" name="Bắt đầu">
+      <bpmn:outgoing>edge_start_to_memberrank_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="end" name="Kết thúc">
+      <bpmn:incoming>edge_memberrank_1_to_end_default</bpmn:incoming>
+      <bpmn:incoming>edge_fixed_5_to_end</bpmn:incoming>
+      <bpmn:incoming>edge_freeship_7_to_end</bpmn:incoming>
+      <bpmn:incoming>edge_email_8_to_end</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="memberrank_1" name="Điều kiện: Hạng thành viên" default="edge_memberrank_1_to_end_default">
+      <bpmn:incoming>edge_start_to_memberrank_1</bpmn:incoming>
+      <bpmn:outgoing>edge_memberrank_1_to_end_default</bpmn:outgoing>
+      <bpmn:outgoing>edge_memberrank_1_to_percent_3</bpmn:outgoing>
+      <bpmn:outgoing>edge_memberrank_1_to_fixed_5</bpmn:outgoing>
+      <bpmn:outgoing>edge_memberrank_1_to_freeship_7</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="percent_3" name="Hành động: Tặng voucher %" camunda:delegateExpression="${issueVoucherPercentDelegate}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="discountPercent">10</camunda:inputParameter>
+          <camunda:inputParameter name="maxDiscountAmount">50000</camunda:inputParameter>
+          <camunda:inputParameter name="expireDays">7</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>edge_memberrank_1_to_percent_3</bpmn:incoming>
+      <bpmn:outgoing>edge_percent_3_to_email_8</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="fixed_5" name="Hành động: Tặng voucher giảm tiền" camunda:delegateExpression="${issueVoucherFixedDelegate}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="discountAmount">20000</camunda:inputParameter>
+          <camunda:inputParameter name="minOrderValue">150000</camunda:inputParameter>
+          <camunda:inputParameter name="expireDays">7</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>edge_memberrank_1_to_fixed_5</bpmn:incoming>
+      <bpmn:outgoing>edge_fixed_5_to_end</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="freeship_7" name="Hành động: Tặng voucher Freeship" camunda:delegateExpression="${issueVoucherFreeshippingDelegate}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="maxShippingDiscount">30000</camunda:inputParameter>
+          <camunda:inputParameter name="expireDays">7</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>edge_memberrank_1_to_freeship_7</bpmn:incoming>
+      <bpmn:outgoing>edge_freeship_7_to_end</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="email_8" name="Hành động: Gửi Email thông báo" camunda:delegateExpression="${sendNotificationDelegate}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="templateId">welcome_template</camunda:inputParameter>
+          <camunda:inputParameter name="rawContent" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>edge_percent_3_to_email_8</bpmn:incoming>
+      <bpmn:outgoing>edge_email_8_to_end</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="edge_start_to_memberrank_1" sourceRef="start" targetRef="memberrank_1" />
+    <bpmn:sequenceFlow id="edge_memberrank_1_to_end_default" sourceRef="memberrank_1" targetRef="end" />
+    <bpmn:sequenceFlow id="edge_memberrank_1_to_percent_3" sourceRef="memberrank_1" targetRef="percent_3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${memberRank == "VIP"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="edge_memberrank_1_to_fixed_5" sourceRef="memberrank_1" targetRef="fixed_5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${memberRank == 'GOLD'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="edge_fixed_5_to_end" sourceRef="fixed_5" targetRef="end" />
+    <bpmn:sequenceFlow id="edge_memberrank_1_to_freeship_7" sourceRef="memberrank_1" targetRef="freeship_7">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${memberRank == 'SILVER'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="edge_freeship_7_to_end" sourceRef="freeship_7" targetRef="end" />
+    <bpmn:sequenceFlow id="edge_percent_3_to_email_8" sourceRef="percent_3" targetRef="email_8" />
+    <bpmn:sequenceFlow id="edge_email_8_to_end" sourceRef="email_8" targetRef="end" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_preview_workflow_1781843363025">
+    <bpmndi:BPMNPlane id="BPMNPlane_preview_workflow_1781843363025" bpmnElement="preview_workflow_1781843363025">
+      <bpmndi:BPMNShape id="Shape_memberrank_1" bpmnElement="memberrank_1" isMarkerVisible="true">
+        <dc:Bounds x="580" y="190" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="492" y="201" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_start" bpmnElement="start">
+        <dc:Bounds x="702" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="701" y="122" width="38" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_end" bpmnElement="end">
+        <dc:Bounds x="652" y="552" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="650" y="592" width="41" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_percent_3" bpmnElement="percent_3">
+        <dc:Bounds x="160" y="175" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_fixed_5" bpmnElement="fixed_5">
+        <dc:Bounds x="960" y="244" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_email_8" bpmnElement="email_8">
+        <dc:Bounds x="330" y="600" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_freeship_7" bpmnElement="freeship_7">
+        <dc:Bounds x="555" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_edge_start_to_memberrank_1" bpmnElement="edge_start_to_memberrank_1">
+        <di:waypoint x="702" y="125" />
+        <di:waypoint x="605" y="125" />
+        <di:waypoint x="605" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_memberrank_1_to_end_default" bpmnElement="edge_memberrank_1_to_end_default">
+        <di:waypoint x="620" y="225" />
+        <di:waypoint x="750" y="225" />
+        <di:waypoint x="750" y="546" />
+        <di:waypoint x="652" y="546" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_memberrank_1_to_percent_3" bpmnElement="edge_memberrank_1_to_percent_3">
+        <di:waypoint x="602" y="237" />
+        <di:waypoint x="420" y="237" />
+        <di:waypoint x="420" y="175" />
+        <di:waypoint x="250" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_memberrank_1_to_fixed_5" bpmnElement="edge_memberrank_1_to_fixed_5">
+        <di:waypoint x="605" y="240" />
+        <di:waypoint x="605" y="244" />
+        <di:waypoint x="960" y="244" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_memberrank_1_to_freeship_7" bpmnElement="edge_memberrank_1_to_freeship_7">
+        <di:waypoint x="630" y="215" />
+        <di:waypoint x="630" y="315" />
+        <di:waypoint x="605" y="315" />
+        <di:waypoint x="605" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_percent_3_to_email_8" bpmnElement="edge_percent_3_to_email_8">
+        <di:waypoint x="260" y="215" />
+        <di:waypoint x="380" y="215" />
+        <di:waypoint x="380" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_email_8_to_end" bpmnElement="edge_email_8_to_end">
+        <di:waypoint x="430" y="640" />
+        <di:waypoint x="466" y="640" />
+        <di:waypoint x="466" y="570" />
+        <di:waypoint x="652" y="570" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_fixed_5_to_end" bpmnElement="edge_fixed_5_to_end">
+        <di:waypoint x="1010" y="324" />
+        <di:waypoint x="1010" y="630" />
+        <di:waypoint x="566" y="570" />
+        <di:waypoint x="652" y="570" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_edge_freeship_7_to_end" bpmnElement="edge_freeship_7_to_end">
+        <di:waypoint x="605" y="470" />
+        <di:waypoint x="605" y="511" />
+        <di:waypoint x="670" y="511" />
+        <di:waypoint x="670" y="552" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "c1a938c2-3e28-4c8d-8a2b-10f8541249b2",
+		"name": "E-Commerce Inventory Service Integration Tests",
+		"description": "Collection test đầy đủ tích hợp cho Inventory Service thông qua API Gateway (Xem tồn kho công khai, cập nhật tồn kho admin, nhập hàng bổ sung - restock, xem lịch sử giao dịch kho, đồng bộ dữ liệu tồn kho sang Redis)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Public & Internal Operations (Người dùng & Hệ thống)",
+			"item": [
+				{
+					"name": "Lấy thông tin tồn kho của 1 sản phẩm",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/inventories/{{last_product_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"inventories",
+								"{{last_product_id}}"
+							]
+						},
+						"description": "API công khai cho phép lấy thông tin số lượng tồn kho hiện tại của một sản phẩm/variant dựa vào ID sản phẩm. Sử dụng lại biến toàn cục `last_product_id`."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin tồn kho hàng loạt (Batch)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/inventories/batch?productIds={{last_product_id}},1,2",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"inventories",
+								"batch"
+							],
+							"query": [
+								{
+									"key": "productIds",
+									"value": "{{last_product_id}},1,2"
+								}
+							]
+						},
+						"description": "Lấy số lượng tồn kho của nhiều sản phẩm cùng một lúc (hỗ trợ phân tách các ID bằng dấu phẩy `,`)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Admin Operations (Quản trị)",
+			"item": [
+				{
+					"name": "Cập nhật tồn kho sản phẩm (Direct Update)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 150\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/inventories/{{last_product_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"inventories",
+								"{{last_product_id}}"
+							]
+						},
+						"description": "Chỉ ADMIN hoặc STAFF mới có quyền cập nhật trực tiếp số lượng tồn kho của một sản phẩm."
+					},
+					"response": []
+				},
+				{
+					"name": "Nhập kho bổ sung (Restock Product)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 50,\n    \"supplier\": \"Nhà phân phối Apple Vietnam\",\n    \"note\": \"Nhập hàng bổ sung lô hàng tháng 6/2026\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/inventories/{{last_product_id}}/restock",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"inventories",
+								"{{last_product_id}}",
+								"restock"
+							]
+						},
+						"description": "Nhập thêm số lượng sản phẩm vào kho. Hệ thống sẽ tự động cộng dồn số lượng và tạo lịch sử giao dịch kho (Inventory Transaction) tương ứng."
+					},
+					"response": []
+				},
+				{
+					"name": "Xem lịch sử giao dịch kho (Transactions)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/inventories/{{last_product_id}}/transactions?page=0&size=20",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"inventories",
+								"{{last_product_id}}",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "20"
+								}
+							]
+						},
+						"description": "Lấy lịch sử giao dịch kho của một sản phẩm (phân trang). Giúp theo dõi lịch sử nhập hàng (RESTOCK), xuất hàng hoặc cập nhật trực tiếp."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách các sản phẩm sắp hết hàng (Low Stock)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/inventories/low-stock?threshold=10",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"inventories",
+								"low-stock"
+							],
+							"query": [
+								{
+									"key": "threshold",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Lấy danh sách tất cả các sản phẩm có số lượng tồn kho nhỏ hơn hoặc bằng ngưỡng `threshold` truyền vào (mặc định là 10)."
+					},
+					"response": []
+				},
+				{
+					"name": "Đồng bộ tồn kho từ Database sang Redis (Sync Redis)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/inventories/sync-redis",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"inventories",
+								"sync-redis"
+							]
+						},
+						"description": "Kích hoạt đồng bộ hóa số lượng tồn kho thực tế từ DB sang Redis để tối ưu hóa hiệu năng khi checkout đơn hàng (Redis Lock Stock)."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

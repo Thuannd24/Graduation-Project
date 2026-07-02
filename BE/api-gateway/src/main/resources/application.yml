@@ -1,0 +1,192 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8083/realms/ecommerce-realm}
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 20
+            redis-rate-limiter.burstCapacity: 50
+            redis-rate-limiter.requestedTokens: 1
+            key-resolver: "#{@userKeyResolver}"
+
+      routes:
+        - id: keycloak-service
+          uri: ${KEYCLOAK_SERVER_URL:http://localhost:8083}
+          predicates:
+            - Path=/realms/**,/resources/**
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/users/**,/api/v1/public/users/**,/api/v1/public/locations/**,/api/v1/admin/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: user-service-cb
+                fallbackUri: forward:/fallback/user-service
+
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/v1/products/**,/api/v1/public/products/**,/api/v1/brands/**,/api/v1/public/brands/**,/api/v1/admin/brands/**,/api/v1/admin/products/**,/api/v1/admin/categories/**,/api/v1/public/categories/**,/api/v1/wishlist/**,/api/v1/admin/attributes/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: product-service-cb
+                fallbackUri: forward:/fallback/product-service
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/v1/orders/**,/api/v1/public/orders/**,/api/v1/cart/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: order-service-cb
+                fallbackUri: forward:/fallback/order-service
+
+        - id: inventory-service
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/v1/inventories/**,/api/v1/public/inventories/**,/api/v1/admin/inventories/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: inventory-service-cb
+                fallbackUri: forward:/fallback/inventory-service
+
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/api/v1/payments/**,/api/v1/public/payments/**,/api/v1/admin/payments/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: payment-service-cb
+                fallbackUri: forward:/fallback/payment-service
+
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/v1/notifications/**,/api/v1/public/notifications/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: notification-service-cb
+                fallbackUri: forward:/fallback/notification-service
+
+        - id: promotion-service
+          uri: lb://promotion-service
+          predicates:
+            - Path=/api/v1/promotions/**,/api/v1/public/promotions/**,/api/v1/admin/campaigns/**,/api/v1/public/campaigns/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: promotion-service-cb
+                fallbackUri: forward:/fallback/promotion-service
+
+        - id: ai-engine
+          uri: lb://ai-engine-service
+          predicates:
+            - Path=/api/v1/ai/**,/api/v1/public/ai/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ai-engine-cb
+                fallbackUri: forward:/fallback/ai-engine
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 10
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        registerHealthIndicator: true
+    instances:
+      user-service-cb:
+        baseConfig: default
+      product-service-cb:
+        baseConfig: default
+      order-service-cb:
+        baseConfig: default
+      inventory-service-cb:
+        baseConfig: default
+      payment-service-cb:
+        baseConfig: default
+      notification-service-cb:
+        baseConfig: default
+      promotion-service-cb:
+        baseConfig: default
+      ai-engine-cb:
+        waitDurationInOpenState: 30s
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 30s
+    instances:
+      user-service-cb:
+        baseConfig: default
+      product-service-cb:
+        baseConfig: default
+      order-service-cb:
+        baseConfig: default
+      inventory-service-cb:
+        baseConfig: default
+      payment-service-cb:
+        baseConfig: default
+      notification-service-cb:
+        baseConfig: default
+      promotion-service-cb:
+        baseConfig: default
+      ai-engine-cb:
+        baseConfig: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, circuitbreakers
+  endpoint:
+    health:
+      show-details: always
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "!docker"
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}

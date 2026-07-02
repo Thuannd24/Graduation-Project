@@ -1,0 +1,631 @@
+{
+	"info": {
+		"_postman_id": "a927a7c8-b5c6-4892-91ef-f60b72183921",
+		"name": "E-Commerce Product Service Integration Tests",
+		"description": "Collection test đầy đủ tích hợp cho Product Service thông qua API Gateway (Quản trị danh mục, thương hiệu, sản phẩm, các API public xem danh sách, chi tiết, và các API người dùng thêm đánh giá, danh sách yêu thích - Wishlist)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Admin Operations (Quản trị)",
+			"item": [
+				{
+					"name": "Tạo Danh mục mới (Category)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.id) {",
+									"        pm.globals.set(\"last_category_id\", jsonData.data.id);",
+									"        console.log(\"Đã lưu last_category_id: \" + jsonData.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Điện thoại & Máy tính bảng\",\n    \"slug\": \"dien-thoai-may-tinh-bang\",\n    \"parentId\": null,\n    \"imageUrl\": \"http://10.1.24.159:9000/product-images/categories/phones.png\",\n    \"sortOrder\": 1,\n    \"active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/categories",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"categories"
+							]
+						},
+						"description": "Chỉ ADMIN mới có quyền tạo Category mới. Sau khi tạo thành công, script test tự động lưu lại `last_category_id` làm biến Global."
+					},
+					"response": []
+				},
+				{
+					"name": "Tạo Thương hiệu mới (Brand)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.id) {",
+									"        pm.globals.set(\"last_brand_id\", jsonData.data.id);",
+									"        console.log(\"Đã lưu last_brand_id: \" + jsonData.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Apple\",\n    \"slug\": \"apple\",\n    \"logoUrl\": \"http://10.1.24.159:9000/product-images/brands/apple.png\",\n    \"description\": \"Thương hiệu Apple chính hãng từ Mỹ\",\n    \"active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/brands",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"brands"
+							]
+						},
+						"description": "Chỉ ADMIN hoặc STAFF mới có quyền tạo Brand mới. Script test tự động lưu lại `last_brand_id` sau khi tạo thành công."
+					},
+					"response": []
+				},
+				{
+					"name": "Tạo Thuộc tính CPU (Attribute)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.id) {",
+									"        pm.globals.set(\"attr_cpu_id\", jsonData.data.id);",
+									"        console.log(\"Đã lưu attr_cpu_id: \" + jsonData.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"cpu\",\n    \"name\": \"Vi xử lý (CPU)\",\n    \"valueType\": \"text\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/attributes",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attributes"
+							]
+						},
+						"description": "Tạo một thuộc tính toàn sàn cho CPU dạng text tĩnh."
+					},
+					"response": []
+				},
+				{
+					"name": "Tạo Thuộc tính RAM (Attribute)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.id) {",
+									"        pm.globals.set(\"attr_ram_id\", jsonData.data.id);",
+									"        console.log(\"Đã lưu attr_ram_id: \" + jsonData.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"ram\",\n    \"name\": \"Bộ nhớ RAM\",\n    \"valueType\": \"select\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/attributes",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"attributes"
+							]
+						},
+						"description": "Tạo thuộc tính RAM dạng select có thể biến thể."
+					},
+					"response": []
+				},
+				{
+					"name": "Gán CPU vào Danh mục vừa tạo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attributeId\": {{attr_cpu_id}},\n    \"isVariant\": false,\n    \"isRequired\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/categories/{{last_category_id}}/attributes",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"categories",
+								"{{last_category_id}}",
+								"attributes"
+							]
+						},
+						"description": "Thiết lập thuộc tính CPU là thuộc tính kỹ thuật tĩnh bắt buộc cho danh mục điện thoại."
+					},
+					"response": []
+				},
+				{
+					"name": "Gán RAM vào Danh mục làm Biến thể",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attributeId\": {{attr_ram_id}},\n    \"isVariant\": true,\n    \"isRequired\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/categories/{{last_category_id}}/attributes",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"categories",
+								"{{last_category_id}}",
+								"attributes"
+							]
+						},
+						"description": "Thiết lập RAM làm trục thuộc tính biến thể tạo SKU cho danh mục điện thoại."
+					},
+					"response": []
+				},
+				{
+					"name": "Tạo Sản phẩm mới kèm Variant (Product)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.id) {",
+									"        pm.globals.set(\"last_product_id\", jsonData.data.id);",
+									"        console.log(\"Đã lưu last_product_id: \" + jsonData.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"iPhone 15 Pro Max 256GB\",\n    \"slug\": \"iphone-15-pro-max-256gb\",\n    \"description\": \"Siêu phẩm iPhone thế hệ mới nhất của Apple với khung viền Titanium siêu nhẹ và cụm camera zoom 5x cực đỉnh.\",\n    \"attributes\": {\n        \"color\": \"Natural Titanium\",\n        \"storage\": \"256GB\"\n    },\n    \"price\": 30000000,\n    \"costPrice\": 25000000,\n    \"salePrice\": 28990000,\n    \"weight\": 221,\n    \"length\": 15.99,\n    \"width\": 7.67,\n    \"height\": 0.83,\n    \"categoryId\": {{last_category_id}},\n    \"brandId\": {{last_brand_id}},\n    \"imageUrl\": \"http://10.1.24.159:9000/product-images/products/ip15pm.png\",\n    \"images\": [\n        \"http://10.1.24.159:9000/product-images/products/ip15pm-side.png\",\n        \"http://10.1.24.159:9000/product-images/products/ip15pm-back.png\"\n    ],\n    \"status\": \"PUBLISHED\",\n    \"warrantyPeriod\": 12,\n    \"warrantyPolicy\": \"Bảo hành 1 đổi 1 trong 30 ngày đầu, bảo hành phần cứng 12 tháng tại các trung tâm ủy quyền Apple Vietnam.\",\n    \"active\": true,\n    \"tags\": [\"smartphone\", \"apple\", \"ios\", \"titanium\"],\n    \"variants\": [\n        {\n            \"sku\": \"IP15PM-256-NAT\",\n            \"variantAttr\": {\n                \"color\": \"Natural Titanium\",\n                \"storage\": \"256GB\"\n            },\n            \"price\": 28990000,\n            \"costPrice\": 25000000,\n            \"weight\": 221,\n            \"imageUrl\": \"http://10.1.24.159:9000/product-images/products/ip15pm-nat.png\",\n            \"active\": true\n        },\n        {\n            \"sku\": \"IP15PM-256-BLU\",\n            \"variantAttr\": {\n                \"color\": \"Blue Titanium\",\n                \"storage\": \"256GB\"\n            },\n            \"price\": 27990000,\n            \"costPrice\": 24500000,\n            \"weight\": 221,\n            \"imageUrl\": \"http://10.1.24.159:9000/product-images/products/ip15pm-blu.png\",\n            \"active\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/products",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"products"
+							]
+						},
+						"description": "Chỉ ADMIN mới có quyền thêm sản phẩm mới. Request sử dụng lại các biến `{{last_category_id}}` và `{{last_brand_id}}` đã lưu từ trước."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Public Client Operations (Người dùng chung)",
+			"item": [
+				{
+					"name": "Lấy cây danh mục (Category Tree)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/public/categories/tree",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"categories",
+								"tree"
+							]
+						},
+						"description": "API Public lấy toàn bộ sơ đồ hình cây của danh mục sản phẩm (Hỗ trợ hiển thị menu đa cấp phía Frontend)."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách tất cả sản phẩm",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/public/products?active=true&page=0&size=10",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"products"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Lấy danh sách sản phẩm công khai hỗ trợ phân trang (Pagination) và chỉ lấy các sản phẩm đang Active."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy chi tiết sản phẩm theo ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/public/products/{{last_product_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"products",
+								"{{last_product_id}}"
+							]
+						},
+						"description": "Lấy thông tin chi tiết một sản phẩm (gồm cả danh sách các Variant đi kèm) dựa vào ID vừa tạo."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách Thương hiệu (Public)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/public/brands?active=true",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"brands"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Lấy danh sách thương hiệu đang hoạt động công khai."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách thuộc tính của Danh mục (Public)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/public/categories/{{last_category_id}}/attributes",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"categories",
+								"{{last_category_id}}",
+								"attributes"
+							]
+						},
+						"description": "Lấy danh sách các thuộc tính tĩnh và thuộc tính biến thể kèm theo quy tắc cấu hình của một Danh mục (để Frontend vẽ form động)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Authenticated User Operations",
+			"item": [
+				{
+					"name": "Thêm sản phẩm vào Wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/wishlist/{{last_product_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wishlist",
+								"{{last_product_id}}"
+							]
+						},
+						"description": "Thêm sản phẩm hiện tại vào danh sách yêu thích cá nhân. API Gateway sẽ lấy X-User-Id từ JWT truyền xuống."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách Wishlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/wishlist",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wishlist"
+							]
+						},
+						"description": "Lấy tất cả các sản phẩm đã yêu thích của User hiện tại."
+					},
+					"response": []
+				},
+				{
+					"name": "Viết đánh giá sản phẩm (Review)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": {{last_product_id}},\n    \"rating\": 5,\n    \"comment\": \"Điện thoại cầm đầm tay, titanium màu đẹp, camera siêu nét! Đáng đồng tiền bát gạo.\",\n    \"imageUrls\": [\n        \"http://10.1.24.159:9000/product-reviews/reviews/box.png\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/products/reviews",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"reviews"
+							]
+						},
+						"description": "Khách hàng viết đánh giá (1-5 sao) kèm hình ảnh thực tế cho sản phẩm đã mua."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

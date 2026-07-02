@@ -1,0 +1,609 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ==========================================================================
+   1. Core Layout Reset (Light Theme - Major E-commerce Style)
+   ========================================================================== */
+html, body, .login-pf-page, .pf-c-login {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    background-color: #f4f6f9 !important;
+    background: #f4f6f9 !important;
+    color: #2d3748 !important;
+    min-height: 100vh !important;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   2. Main Container & Card
+   ========================================================================== */
+.login-pf-page .card-pf, 
+.pf-c-login__container,
+.pf-c-card,
+#kc-content,
+#kc-content-wrapper,
+div.card-pf,
+div.pf-c-card {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    border: none !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+    max-width: 960px !important;
+    width: 100% !important;
+    padding: 40px !important; /* Standard padding for pages like reset password */
+    overflow: hidden !important;
+}
+
+/* Remove padding only when the dual-column login grid is active */
+.login-pf-page .card-pf:has(.techstore-login-grid), 
+.pf-c-card:has(.techstore-login-grid),
+div.card-pf:has(.techstore-login-grid),
+div.pf-c-card:has(.techstore-login-grid) {
+    padding: 0 !important;
+}
+
+/* Hide default Keycloak header since we customize it inside */
+#kc-header, .pf-c-login__header {
+    display: none !important;
+}
+
+/* ==========================================================================
+   3. Dual-Column Login Grid
+   ========================================================================== */
+.techstore-login-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    min-height: 560px;
+}
+
+@media (min-width: 768px) {
+    .techstore-login-grid {
+        grid-template-columns: 1.1fr 1fr;
+    }
+}
+
+/* Left Column: Promo Banner */
+.techstore-promo-col {
+    background-color: #fcfcfd;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid #f1f3f7;
+}
+
+@media (max-width: 767px) {
+    .techstore-promo-col {
+        display: none; /* Hide promo on mobile to save space */
+    }
+}
+
+.techstore-logo-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.techstore-badge {
+    background-color: #d70018;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+}
+
+.techstore-sub-badge {
+    background-color: #0f172a;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+}
+
+.promo-title {
+    font-size: 21px !important;
+    font-weight: 800 !important;
+    color: #2d3748 !important;
+    line-height: 1.4 !important;
+    margin: 0 0 8px 0 !important;
+    text-align: left !important;
+}
+
+.promo-subtitle {
+    font-size: 14.5px;
+    color: #4a5568;
+    margin: 0 0 24px 0;
+}
+
+/* Promo Card Box with Red Corner Brackets */
+.promo-box {
+    background-color: #f7fafc;
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    border: 1px dashed #e2e8f0;
+}
+
+/* Corner bracket decorations */
+.promo-box::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 20px;
+    height: 20px;
+    border-top: 3px solid #d70018;
+    border-left: 3px solid #d70018;
+    border-top-left-radius: 8px;
+}
+
+.promo-box::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    border-bottom: 3px solid #d70018;
+    border-right: 3px solid #d70018;
+    border-bottom-right-radius: 8px;
+}
+
+.promo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.promo-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13.5px;
+    color: #2d3748;
+    line-height: 1.4;
+}
+
+.promo-icon {
+    font-size: 16px;
+    color: #d70018;
+    margin-top: 1px;
+}
+
+.promo-text strong {
+    color: #d70018;
+    font-weight: 700;
+}
+
+.promo-footer-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.promo-footer-link a {
+    font-size: 13px !important;
+    color: #d70018 !important;
+    font-weight: 700 !important;
+}
+
+.promo-footer-link a:hover {
+    text-decoration: underline !important;
+}
+
+/* Right Column: Form Col */
+.techstore-form-col {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #ffffff;
+}
+
+.techstore-form-col .form-title {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #d70018 !important; /* Vibrant Red */
+    text-align: center !important;
+    margin: 0 0 28px 0 !important;
+    letter-spacing: -0.02em;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+}
+
+/* ==========================================================================
+   4. Form Input Controls
+   ========================================================================== */
+.form-group, .pf-c-form__group {
+    margin-bottom: 20px !important;
+}
+
+label, .pf-c-form__label, .pf-c-form__label-text {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #4a5568 !important;
+    margin-bottom: 6px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+}
+
+input[type="text"].pf-c-form-control,
+input[type="password"].pf-c-form-control,
+input.pf-c-form-control,
+.pf-c-form-control {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    color: #2d3748 !important;
+    padding: 12px 16px !important;
+    font-size: 14.5px !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s ease !important;
+}
+
+input[type="text"].pf-c-form-control:hover, 
+input[type="password"].pf-c-form-control:hover, 
+.pf-c-form-control:hover {
+    border-color: #cbd5e1 !important;
+}
+
+input[type="text"].pf-c-form-control:focus, 
+input[type="password"].pf-c-form-control:focus, 
+.pf-c-form-control:focus {
+    border-color: #d70018 !important; /* Focus Red */
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(215, 0, 24, 0.15) !important;
+}
+
+/* Password eye button support */
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.pf-c-button.pf-m-control {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent !important;
+    border: none !important;
+    color: #718096 !important;
+    padding: 4px !important;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   5. Action Buttons & Links
+   ========================================================================== */
+input#kc-login,
+input.pf-c-button.pf-m-primary,
+button.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-primary {
+    background: #d70018 !important; /* Red cellphones color */
+    border: none !important;
+    border-radius: 10px !important;
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    padding: 14px 20px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: none !important;
+    margin-top: 15px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+}
+
+input#kc-login:hover,
+input.pf-c-button.pf-m-primary:hover,
+button.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-primary:hover {
+    background: #b50012 !important;
+    transform: none !important;
+}
+
+#kc-form-options {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 13.5px !important;
+    margin-bottom: 20px !important;
+}
+
+.checkbox label {
+    color: #4a5568 !important;
+}
+
+.checkbox input[type="checkbox"] {
+    accent-color: #d70018 !important;
+}
+
+a {
+    color: #0066cc !important; /* standard link blue */
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+a:hover {
+    color: #004499 !important;
+    text-decoration: underline !important;
+    text-shadow: none !important;
+}
+
+/* ==========================================================================
+   6. Social Logins & Dividers
+   ========================================================================== */
+.social-divider {
+    text-align: center;
+    position: relative;
+    margin: 24px 0 16px 0;
+}
+
+.social-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e2e8f0;
+    z-index: 1;
+}
+
+.social-divider span {
+    background-color: #ffffff;
+    padding: 0 12px;
+    font-size: 12px;
+    color: #718096;
+    position: relative;
+    z-index: 2;
+}
+
+#kc-social-providers ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+}
+
+.social-btn {
+    flex: 1;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 10px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    color: #2d3748 !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer;
+}
+
+.social-btn:hover {
+    background-color: #f7fafc !important;
+    border-color: #cbd5e1 !important;
+    text-decoration: none !important;
+}
+
+.social-icon {
+    flex-shrink: 0;
+}
+
+.social-alias-text {
+    display: none; /* Hide plain text fallback if custom icons used */
+}
+
+/* ==========================================================================
+   7. Form Registration Info Footer
+   ========================================================================== */
+#kc-info,
+.pf-c-login__main-footer,
+.pf-c-card__footer {
+    background: transparent !important;
+    border: none !important;
+    margin-top: 24px !important;
+    text-align: center !important;
+    border-top: 1px solid #f1f3f7 !important;
+    padding-top: 20px !important;
+}
+
+#kc-registration {
+    font-size: 13.5px !important;
+    color: #4a5568 !important;
+}
+
+#kc-registration a {
+    margin-left: 4px !important;
+    color: #d70018 !important;
+    font-weight: 700 !important;
+}
+
+#kc-registration a:hover {
+    color: #b50012 !important;
+    text-decoration: underline !important;
+}
+
+.register-footer-text {
+    margin-top: 24px;
+    font-size: 14px;
+    color: #4a5568;
+    text-align: center;
+}
+
+.register-footer-text a {
+    color: #d70018 !important;
+    font-weight: 700 !important;
+}
+
+.register-footer-text a:hover {
+    color: #b50012 !important;
+    text-decoration: underline !important;
+}
+
+/* ==========================================================================
+   8. Register Page Customizations
+   ========================================================================== */
+.techstore-register-container {
+    padding: 40px;
+    max-width: 680px;
+    margin: 0 auto;
+    background-color: #ffffff;
+}
+
+.techstore-register-container .form-title {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #d70018 !important;
+    text-align: center !important;
+    margin: 0 0 24px 0 !important;
+}
+
+.register-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 24px 0 14px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f1f3f7;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 576px) {
+    .form-grid--two {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.social-title {
+    text-align: center;
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 12px;
+}
+
+.social-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    display: flex;
+    gap: 12px;
+}
+
+.register-terms {
+    font-size: 12px;
+    color: #718096;
+    line-height: 1.5;
+    margin: 24px 0;
+    text-align: center;
+}
+
+.register-terms a {
+    color: #0066cc;
+}
+
+.register-actions {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+@media (min-width: 576px) {
+    .register-actions {
+        flex-direction: row;
+    }
+}
+
+.btn-back-login {
+    flex: 1;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    color: #4a5568 !important;
+    font-weight: 600 !important;
+    padding: 14px 20px !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-back-login:hover {
+    background-color: #f7fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #2d3748 !important;
+    text-decoration: none !important;
+}
+
+.btn-submit-register {
+    flex: 1.2;
+    margin-top: 0 !important;
+}
+
+/* ==========================================================================
+   9. Alerts & Error Handling
+   ========================================================================== */
+.alert, .pf-c-alert {
+    background: #fff5f5 !important;
+    border: 1px solid #fed7d7 !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 20px !important;
+    color: #c53030 !important;
+    font-size: 13.5px !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.alert-error, .pf-m-danger {
+    background: #fff5f5 !important;
+}
+
+.alert-success, .pf-m-success {
+    background: #f0fff4 !important;
+    border-color: #c6f6d5 !important;
+    color: #22543d !important;
+}
+
+/* Hide Default Keycloak Elements */
+#kc-logo, .login-pf-brand, .pf-c-brand {
+    display: none !important;
+}
+
+/* Inline Error Message Styling */
+span[id^="input-error-"], 
+.pf-c-form__helper-text.pf-m-error,
+.kcInputErrorMessageClass,
+.pf-c-form__helper-text {
+    color: #e53e3e !important;
+    font-size: 12.5px !important;
+    margin-top: 6px !important;
+    display: block !important;
+    font-weight: 600 !important;
+    text-align: left !important;
+}

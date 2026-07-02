@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package ecommerce;
+
+option java_multiple_files = true;
+option java_package = "com.ecommerce.grpc.inventory";
+option java_outer_classname = "InventoryProto";
+
+// -------------------------------------------------------
+// Inventory gRPC Service
+// Used by: order-service (client) → inventory-service (server)
+// Replaces: InventoryClient Feign interface in order-service
+// -------------------------------------------------------
+
+service InventoryGrpcService {
+  // Lấy tồn kho của 1 sản phẩm/variant (dùng khi init cache từ Redis miss)
+  rpc GetInventory(GetInventoryRequest) returns (InventoryGrpcResponse);
+
+  // Lấy tồn kho hàng loạt theo danh sách productIds
+  rpc GetBatchInventory(GetBatchInventoryRequest) returns (BatchInventoryGrpcResponse);
+}
+
+message GetInventoryRequest {
+  int64 product_id = 1;
+  int64 variant_id = 2; // 0 nếu không có variant
+}
+
+message InventoryGrpcResponse {
+  int64 product_id = 1;
+  int64 variant_id = 2;
+  int32 quantity = 3;
+  bool found = 4; // false nếu không tìm thấy trong DB (tránh throw exception qua mạng)
+}
+
+message GetBatchInventoryRequest {
+  repeated int64 product_ids = 1;
+}
+
+message BatchInventoryGrpcResponse {
+  repeated InventoryGrpcResponse inventories = 1;
+}

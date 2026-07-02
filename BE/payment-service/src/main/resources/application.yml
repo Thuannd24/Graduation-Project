@@ -1,0 +1,56 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: "jdbc:mariadb://${DB_HOST:localhost}:${DB_PORT:3308}/${DB_NAME:ecommerce_payment_db}?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8"
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    consumer:
+      group-id: payment-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8083/realms/ecommerce-realm}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+vnpay:
+  pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
+  tmn-code: ${VNPAY_TMN_CODE:TRVXA332}
+  hash-secret: ${VNPAY_HASH_SECRET:PXUX3WDDCDW2EF8IUESPEAY9USTWJGUB}
+  return-url: ${VNPAY_RETURN_URL:http://localhost:8080/api/v1/public/payments/vnpay-callback}
+  expiry-hours: ${VNPAY_EXPIRY_HOURS:1}
+  query-url: ${VNPAY_QUERY_URL:https://sandbox.vnpayment.vn/merchant_webapi/api/transaction}
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  order-service-url: ${ORDER_SERVICE_URL:http://order-service}
+  payment-expiry-minutes: ${PAYMENT_EXPIRY_MINUTES:15}
+  kafka:
+    payment-topic: ${KAFKA_PAYMENT_TOPIC:payment-events}

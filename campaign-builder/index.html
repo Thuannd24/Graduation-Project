@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình Thiết Kế Chiến Dịch Khuyến Mãi</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo">
+                <div class="logo-icon-bg">
+                    <span class="logo-icon">⚡</span>
+                </div>
+                <div class="logo-text">
+                    <h1>CampaignEngine</h1>
+                    <span>Trình Thiết Kế Chiến Dịch Tiếp Thị Tự Động</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="auth-bar">
+                    <span id="auth-status" class="auth-status hidden"></span>
+                    <button id="btn-show-login" class="btn btn-secondary btn-small" type="button">🔐 Đăng Nhập</button>
+                    <button id="btn-logout" class="btn btn-secondary btn-small hidden" type="button">Đăng Xuất</button>
+                </div>
+                <button id="btn-auto-layout" class="btn btn-secondary" title="Tự động sắp xếp sơ đồ">
+                    <span class="btn-icon">🎯</span> Căn Chỉnh
+                </button>
+                <button id="btn-validate" class="btn btn-secondary">
+                    <span class="btn-icon">🔍</span> Kiểm Tra Sơ Đồ
+                </button>
+                <button id="btn-show-deploy" class="btn btn-primary">
+                    <span class="btn-icon">🚀</span> Triển Khai Ngay
+                </button>
+                <button id="btn-reset" class="btn btn-danger">
+                    <span class="btn-icon">🗑️</span> Đặt Lại
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <div class="main-layout">
+            <!-- Sidebar Left: Node Catalog -->
+            <aside class="sidebar-left">
+                <div class="sidebar-section">
+                    <h2>Thư Viện Khối Hỗ Trợ</h2>
+                    <p class="section-desc">
+                        Nhấn vào nút <span class="plus-highlight">+</span> trên đường nối ở bản vẽ để chèn các khối nghiệp vụ sau:
+                    </p>
+                    
+                    <div class="toolbox-groups">
+                        <!-- Triggers Group -->
+                        <div class="toolbox-group">
+                            <div class="group-header">
+                                <span class="group-dot dot-trigger"></span>
+                                <h3>1. Sự Kiện Kích Hoạt (Trigger)</h3>
+                            </div>
+                            <div class="toolbox-cards">
+                                <div class="toolbox-card card-trigger" draggable="true" data-type="Trigger_Event_NewUser">
+                                    <div class="card-icon">👤</div>
+                                    <div class="card-details">
+                                        <h4>Đăng ký mới</h4>
+                                        <p>Trigger_Event_NewUser</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-trigger" draggable="true" data-type="Trigger_Event_OrderSuccess">
+                                    <div class="card-icon">🛒</div>
+                                    <div class="card-details">
+                                        <h4>Mua hàng thành công</h4>
+                                        <p>Trigger_Event_OrderSuccess</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-trigger" draggable="true" data-type="Trigger_Event_ReviewProduct">
+                                    <div class="card-icon">⭐</div>
+                                    <div class="card-details">
+                                        <h4>Đánh giá sản phẩm</h4>
+                                        <p>Trigger_Event_ReviewProduct</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-trigger" draggable="true" data-type="Trigger_Timer_Schedule">
+                                    <div class="card-icon">⏰</div>
+                                    <div class="card-details">
+                                        <h4>Hẹn giờ định kỳ</h4>
+                                        <p>Trigger_Timer_Schedule</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conditions Group -->
+                        <div class="toolbox-group">
+                            <div class="group-header">
+                                <span class="group-dot dot-condition"></span>
+                                <h3>2. Điều Kiện Phân Nhánh</h3>
+                            </div>
+                            <div class="toolbox-cards">
+                                <div class="toolbox-card card-condition" draggable="true" data-type="Condition_MemberRank">
+                                    <div class="card-icon">👑</div>
+                                    <div class="card-details">
+                                        <h4>Hạng thành viên</h4>
+                                        <p>Condition_MemberRank</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-condition" draggable="true" data-type="Condition_TotalSpending">
+                                    <div class="card-icon">💰</div>
+                                    <div class="card-details">
+                                        <h4>Tổng chi tiêu tháng</h4>
+                                        <p>Condition_TotalSpending</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-condition" draggable="true" data-type="Condition_Location">
+                                    <div class="card-icon">📍</div>
+                                    <div class="card-details">
+                                        <h4>Khu vực địa lý</h4>
+                                        <p>Condition_Location</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-condition" draggable="true" data-type="Condition_ContainsCategory">
+                                    <div class="card-icon">🏷️</div>
+                                    <div class="card-details">
+                                        <h4>Danh mục giỏ hàng</h4>
+                                        <p>Condition_ContainsCategory</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-condition" draggable="true" data-type="Condition_ContainsProduct">
+                                    <div class="card-icon">📦</div>
+                                    <div class="card-details">
+                                        <h4>Sản phẩm giỏ hàng</h4>
+                                        <p>Condition_ContainsProduct</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-condition" draggable="true" data-type="Condition_AntiFraudScore">
+                                    <div class="card-icon">🛡</div>
+                                    <div class="card-details">
+                                        <h4>Chống gian lận</h4>
+                                        <p>Condition_AntiFraudScore</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions Group -->
+                        <div class="toolbox-group">
+                            <div class="group-header">
+                                <span class="group-dot dot-action"></span>
+                                <h3>3. Hành Động Nhận Thưởng</h3>
+                            </div>
+                            <div class="toolbox-cards">
+                                <div class="toolbox-card card-action" draggable="true" data-type="Action_IssueVoucher_Percent">
+                                    <div class="card-icon">🎟️</div>
+                                    <div class="card-details">
+                                        <h4>Voucher theo %</h4>
+                                        <p>Action_IssueVoucher_Percent</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-action" draggable="true" data-type="Action_IssueVoucher_Fixed">
+                                    <div class="card-icon">💵</div>
+                                    <div class="card-details">
+                                        <h4>Voucher tiền cố định</h4>
+                                        <p>Action_IssueVoucher_Fixed</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-action" draggable="true" data-type="Action_IssueVoucher_Freeship">
+                                    <div class="card-icon">🚚</div>
+                                    <div class="card-details">
+                                        <h4>Voucher Freeship</h4>
+                                        <p>Action_IssueVoucher_Freeship</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-action" draggable="true" data-type="Action_Upgrade_MemberRank">
+                                    <div class="card-icon">📈</div>
+                                    <div class="card-details">
+                                        <h4>Nâng hạng hội viên</h4>
+                                        <p>Action_Upgrade_MemberRank</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-action" draggable="true" data-type="Action_Loyalty_Point">
+                                    <div class="card-icon">💎</div>
+                                    <div class="card-details">
+                                        <h4>Điểm thưởng tích lũy</h4>
+                                        <p>Action_Loyalty_Point</p>
+                                    </div>
+                                </div>
+                                <div class="toolbox-card card-action" draggable="true" data-type="Action_Send_Email">
+                                    <div class="card-icon">✉️</div>
+                                    <div class="card-details">
+                                        <h4>Gửi thông báo email</h4>
+                                        <p>Action_Send_Email</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Canvas & Edge Visualizer -->
+            <main class="canvas-area">
+                <div class="canvas-header">
+                    <div>
+                        <h2>Bản Vẽ Thiết Kế Sơ Đồ Quy Trình</h2>
+                        <span class="canvas-subtitle">Click chuột vào khối để xem/sửa cấu hình. Nhấp nút tròn dấu cộng (+) trên đường dẫn để chèn khối mới.</span>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <div id="flow-canvas" class="flow-canvas">
+                        <!-- SVG connections overlay -->
+                        <svg class="connections-svg-overlay" id="connections-svg"></svg>
+                        
+                        <!-- Interative nodes will be rendered dynamically in hierarchy levels -->
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Panel: Node/Edge Property Editor -->
+            <aside class="sidebar-right" id="property-panel">
+                <div class="panel-header">
+                    <h2>Bảng Cấu Hình Chi Tiết</h2>
+                </div>
+                <div class="panel-content" id="property-editor-content">
+                    <div class="no-selection-container">
+                        <span class="info-big-icon">💡</span>
+                        <p class="no-selection-message">Chọn một khối trên bản vẽ để tiến hành cấu hình tham số bắt buộc.</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Bottom Panel -->
+        <section class="bottom-panel">
+            <div class="panel-tabs">
+                <button class="tab-btn active" data-tab="tab-validation">🔍 Kết quả kiểm tra (Validation)</button>
+                <button class="tab-btn" data-tab="tab-json">📋 Xem JSON Workflow Graph</button>
+                <button class="tab-btn" data-tab="tab-bpmn">📄 Xem BPMN XML Preview</button>
+                <button class="tab-btn" data-tab="tab-campaigns">📂 Danh Sách Chiến Dịch Đã Chạy</button>
+            </div>
+            
+            <div class="tab-content-container">
+                <!-- Validation Tab -->
+                <div class="tab-content active" id="tab-validation">
+                    <div id="validation-summary" class="validation-status status-info">
+                        Vui lòng nhấn nút <strong>Kiểm Tra Sơ Đồ</strong> ở góc trên bên phải để bắt đầu quét lỗi cấu hình.
+                    </div>
+                    <div id="validation-errors-list" class="error-grid">
+                        <!-- Inline errors -->
+                    </div>
+                </div>
+
+                <!-- JSON Preview Tab -->
+                <div class="tab-content" id="tab-json">
+                    <div class="json-actions">
+                        <span>Cấu trúc JSON Graph gửi lên máy chủ để biên dịch sang định dạng Camunda BPMN XML:</span>
+                        <button id="btn-copy-json" class="btn btn-small btn-secondary">Sao Chép JSON</button>
+                    </div>
+                    <pre><code id="json-preview">{}</code></pre>
+                </div>
+
+                <!-- BPMN XML Preview Tab -->
+                <div class="tab-content" id="tab-bpmn">
+                    <div class="json-actions">
+                        <span>Preview BPMN XML được generate từ workflow graph (Client-side preview - actual compilation on server):</span>
+                        <button id="btn-copy-bpmn" class="btn btn-small btn-secondary">Sao Chép XML</button>
+                        <button id="btn-download-bpmn" class="btn btn-small btn-primary">💾 Tải xuống .bpmn</button>
+                    </div>
+                    <pre><code id="bpmn-preview">&lt;!-- Click "Generate BPMN Preview" to see XML --&gt;</code></pre>
+                </div>
+
+                <!-- Active Campaigns List & Management Tab -->
+                <div class="tab-content" id="tab-campaigns">
+                    <div class="table-container">
+                        <table class="campaign-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên Chiến Dịch</th>
+                                    <th>Mã BPMN Key</th>
+                                    <th>Ngân Sách Còn Lại</th>
+                                    <th>Thời Gian Hiệu Lực</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Thao Tác Quản Lý</th>
+                                </tr>
+                            </thead>
+                            <tbody id="campaign-list-body">
+                                <tr>
+                                    <td colspan="7" class="text-center">Đang tải danh sách chiến dịch tiếp thị từ máy chủ...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal: Login -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Đăng Nhập Admin / Staff</h2>
+                <button class="modal-close" id="close-login-modal">&times;</button>
+            </div>
+            <form id="login-form">
+                <p class="login-hint">API quản trị chiến dịch yêu cầu JWT từ Keycloak (role ADMIN hoặc STAFF).</p>
+                <div class="form-group">
+                    <label for="login-username">Tên đăng nhập</label>
+                    <input type="text" id="login-username" required placeholder="admin_ecommerce" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Mật khẩu</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" autocomplete="current-password">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-login">Hủy</button>
+                    <button type="submit" class="btn btn-primary" id="btn-login-submit">Đăng Nhập</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Deploy Campaign -->
+    <div class="modal" id="deploy-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Triển Khai Chiến Dịch Lên Camunda Engine</h2>
+                <button class="modal-close" id="close-deploy-modal">&times;</button>
+            </div>
+            <form id="deploy-form">
+                <div class="form-group">
+                    <label for="campaign-name">Tên chiến dịch *</label>
+                    <input type="text" id="campaign-name" required placeholder="Ví dụ: Khuyến mãi Ngày Vàng Tháng 6">
+                </div>
+                <div class="form-group">
+                    <label for="campaign-bpmn-key">Mã BPMN Key (Duy nhất, không trùng lặp) *</label>
+                    <input type="text" id="campaign-bpmn-key" required placeholder="Ví dụ: gold_day_june_2026" pattern="^[a-zA-Z0-9_]+$">
+                    <small>Mã này dùng để phân biệt các quy trình trong Camunda (chỉ gồm chữ cái không dấu, số, gạch dưới).</small>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="campaign-budget">Tổng ngân sách cấp phát (VNĐ) *</label>
+                        <input type="number" id="campaign-budget" min="1" required placeholder="Ví dụ: 50000000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="campaign-start">Thời gian bắt đầu *</label>
+                        <input type="datetime-local" id="campaign-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="campaign-end">Thời gian kết thúc *</label>
+                        <input type="datetime-local" id="campaign-end" required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-deploy">Hủy Bỏ</button>
+                    <button type="submit" class="btn btn-primary">Xác Nhận & Triển Khai</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Evaluate (Test Simulation) -->
+    <div class="modal" id="evaluate-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Giả Lập Quy Trình (Evaluate Camunda)</h2>
+                <button class="modal-close" id="close-evaluate-modal">&times;</button>
+            </div>
+            <form id="evaluate-form">
+                <input type="hidden" id="eval-process-key">
+                <div class="form-group">
+                    <label>Chiến dịch tiếp thị: <strong id="eval-campaign-title">N/A</strong> (BPMN Key: <code id="eval-key-code"></code>)</label>
+                </div>
+                <div class="form-group">
+                    <label for="eval-user-id">User ID (Để Feign Client tự động tải Member Rank & Fraud Score từ user-service)</label>
+                    <input type="text" id="eval-user-id" placeholder="Ví dụ: 1">
+                </div>
+                <div class="form-group">
+                    <label for="eval-location">Tỉnh/Thành phố nhận hàng khi checkout</label>
+                    <input type="text" id="eval-location" placeholder="Ví dụ: Hanoi, Ho Chi Minh">
+                </div>
+                <div class="form-group">
+                    <label for="eval-categories">Mã Danh mục sản phẩm trong giỏ (cách nhau bằng dấu phẩy)</label>
+                    <input type="text" id="eval-categories" placeholder="Ví dụ: 101, 102">
+                </div>
+                <div class="form-group">
+                    <label for="eval-products">Mã Sản phẩm cụ thể trong giỏ (cách nhau bằng dấu phẩy)</label>
+                    <input type="text" id="eval-products" placeholder="Ví dụ: prod_iphone_15">
+                </div>
+                <div class="form-group">
+                    <label for="eval-raw-variables">Các biến số runtime bổ sung khác (Định dạng JSON)</label>
+                    <textarea id="eval-raw-variables" placeholder='{"orderValue": 150000}' rows="3">{}</textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-eval">Hủy Bỏ</button>
+                    <button type="submit" class="btn btn-primary" id="btn-run-eval">Chạy Thử Nghiệm</button>
+                </div>
+            </form>
+            <div id="eval-result-section" class="eval-result-section hidden">
+                <h3>Kết quả phản hồi của Camunda Engine:</h3>
+                <pre><code id="eval-result-output"></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Modularized Campaign Builder Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/expression.js"></script>
+    <script src="js/property-editor.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/canvas.js"></script>
+    <script src="js/bpmn-generator.js"></script>
+    <script src="js/api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+{
+	"info": {
+		"_postman_id": "7f83ad2b-7cf3-4416-b184-e40656bd049b",
+		"name": "E-Commerce User Service Integration Tests",
+		"description": "Collection test đầy đủ tích hợp cho User Service thông qua API Gateway (phân quyền, đồng bộ Keycloak, upload ảnh MinIO, quản lý địa chỉ, và admin blacklist)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Authentication (Lấy JWT Token)",
+			"item": [
+				{
+					"name": "Đăng nhập Keycloak lấy Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.access_token) {",
+									"        pm.globals.set(\"access_token\", jsonData.access_token);",
+									"        console.log(\"Đã tự động lưu access_token vào global variable!\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "ecommerce-frontend",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{gateway_url}}/realms/ecommerce-realm/protocol/openid-connect/token",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"realms",
+								"ecommerce-realm",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						},
+						"description": "Gửi thông tin xác thực trực tiếp qua Gateway (định tuyến đến Keycloak). Script tự động lưu `access_token` làm biến Global sau khi gọi thành công."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. User Profile",
+			"item": [
+				{
+					"name": "Lấy thông tin cá nhân (Profile)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/users/me",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me"
+							]
+						},
+						"description": "API Gateway sẽ verify JWT Token, lấy thông tin User (id, email, username, name) truyền qua headers tới user-service. Nếu đây là lần đăng nhập đầu tiên, user-service sẽ tự động đồng bộ hóa thông tin và tạo tài khoản trong DB."
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật thông tin cá nhân",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Nguyen Van Admin Updated\",\n    \"phoneNumber\": \"0988777666\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/users/me",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me"
+							]
+						},
+						"description": "Cập nhật họ tên và số điện thoại của User hiện tại."
+					},
+					"response": []
+				},
+				{
+					"name": "Tải lên ảnh đại diện (Upload Avatar -> MinIO)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "Chọn ảnh tải lên (Max 5MB)",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/users/me/avatar",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me",
+								"avatar"
+							]
+						},
+						"description": "Tải ảnh lên S3/MinIO bucket `user-avatars`, tạo link public và lưu link này vào trường `avatarUrl` trong profile."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Address Management (Sổ địa chỉ)",
+			"item": [
+				{
+					"name": "Lấy danh sách địa chỉ nhận hàng",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/users/me/addresses",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me",
+								"addresses"
+							]
+						},
+						"description": "Lấy toàn bộ danh sách địa chỉ giao nhận hàng của User hiện tại."
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm địa chỉ nhận hàng mới",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.data && jsonData.data.id) {",
+									"        pm.globals.set(\"last_address_id\", jsonData.data.id);",
+									"        console.log(\"Lưu địa chỉ id vừa tạo: \" + jsonData.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipientName\": \"Nguyen Van A\",\n    \"phoneNumber\": \"0912345678\",\n    \"province\": \"Hà Nội\",\n    \"districtWard\": \"Quận Cầu Giấy, Phường Dịch Vọng\",\n    \"detailAddress\": \"Số 15, Ngõ 100, Trần Duy Hưng\",\n    \"isDefault\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/users/me/addresses",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me",
+								"addresses"
+							]
+						},
+						"description": "Tạo mới địa chỉ giao hàng. Script test tự động ghi nhớ `last_address_id` để dùng cho hành động xóa tiếp theo."
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa địa chỉ nhận hàng",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/users/me/addresses/{{last_address_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"me",
+								"addresses",
+								"{{last_address_id}}"
+							]
+						},
+						"description": "Xóa địa chỉ nhận hàng theo ID được lưu từ request tạo."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Admin User Management",
+			"item": [
+				{
+					"name": "[ADMIN + STAFF] Xem danh sách người dùng",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/users?page=0&size=20&sort=createdAt,desc",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "20"
+								},
+								{
+									"key": "sort",
+									"value": "createdAt,desc"
+								}
+							]
+						},
+						"description": "Lấy danh sách tất cả các user hệ thống, phân trang và sắp xếp. Chỉ ADMIN hoặc STAFF mới được phép gọi API này."
+					},
+					"response": []
+				},
+				{
+					"name": "[ADMIN only] Khóa tài khoản khách hàng (Blacklist)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"blacklisted\": true,\n    \"reason\": \"Vi phạm nghiêm trọng điều khoản sử dụng: Gian lận khuyến mãi và spam\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/admin/users/1/blacklist",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"users",
+								"1",
+								"blacklist"
+							]
+						},
+						"description": "Chỉ dành cho ADMIN. Dùng để khóa tài khoản (blacklist) một người dùng (id = 1) để ngăn chặn truy cập hệ thống."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

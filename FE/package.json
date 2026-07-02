@@ -1,0 +1,27 @@
+{
+  "name": "techstore-react",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host localhost --port 5173 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "@xyflow/react": "^12.11.0",
+    "framer-motion": "^12.40.0",
+    "keycloak-js": "^26.2.4",
+    "lucide-react": "^1.21.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.0",
+    "recharts": "^3.8.1",
+    "sonner": "^2.0.7",
+    "vite": "^7.0.0"
+  },
+  "devDependencies": {
+    "react-is": "^19.2.7"
+  }
+}

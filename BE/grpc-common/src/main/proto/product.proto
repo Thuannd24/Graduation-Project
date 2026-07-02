@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package ecommerce;
+
+option java_multiple_files = true;
+option java_package = "com.ecommerce.grpc.product";
+option java_outer_classname = "ProductProto";
+
+// -------------------------------------------------------
+// Product gRPC Service
+// Used by: order-service (client) → product-service (server)
+// Replaces: ProductClient Feign interface in order-service
+// -------------------------------------------------------
+
+service ProductGrpcService {
+  // Lấy thông tin giá, cân nặng của nhiều sản phẩm để tính tổng đơn hàng
+  rpc GetPriceInfo(GetPriceInfoRequest) returns (GetPriceInfoResponse);
+}
+
+message GetPriceInfoRequest {
+  repeated int64 product_ids = 1;
+}
+
+message ProductPriceInfoGrpc {
+  int64 id = 1;
+  string name = 2;
+  // Dùng string để tránh mất mát độ chính xác với BigDecimal (price, weight, costPrice)
+  string price = 3;
+  string cost_price = 4;
+  string weight = 5;
+  string image_url = 6;
+  repeated ProductVariantInfoGrpc variants = 7;
+}
+
+message ProductVariantInfoGrpc {
+  int64 id = 1;
+  int64 product_id = 2;
+  string sku = 3;
+  string variant_attr_json = 4; // JSON string của variantAttr (Map<String,String>)
+  string price = 5;
+  string cost_price = 6;
+  string weight = 7;
+  string image_url = 8;
+  bool active = 9;
+}
+
+message GetPriceInfoResponse {
+  repeated ProductPriceInfoGrpc products = 1;
+}

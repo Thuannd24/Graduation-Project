@@ -1,0 +1,447 @@
+{
+	"info": {
+		"_postman_id": "d2b838c2-3e28-4c8d-8a2b-20f9541250c3",
+		"name": "E-Commerce Order Service Integration Tests",
+		"description": "Collection test tích hợp toàn diện cho Order & Cart Service thông qua API Gateway (Xem giỏ hàng, thêm sản phẩm, cập nhật số lượng, đặt hàng idempotency, xem chi tiết, hủy đơn, mock vận chuyển, webhook cập nhật trạng thái đơn hàng).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "1. Cart Operations (Giỏ hàng)",
+			"item": [
+				{
+					"name": "Lấy giỏ hàng hiện tại",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/cart",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart"
+							]
+						},
+						"description": "Lấy nội dung giỏ hàng hiện tại của người dùng dựa theo ID người dùng được chuyển tiếp trong Header."
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm sản phẩm vào giỏ hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": {{last_product_id}},\n    \"variantId\": {{last_variant_id}},\n    \"quantity\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/cart",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart"
+							]
+						},
+						"description": "Thêm sản phẩm hoặc phiên bản sản phẩm (variant) cụ thể vào giỏ hàng với số lượng xác định. Có validation đầu vào."
+					},
+					"response": []
+				},
+				{
+					"name": "Cập nhật số lượng sản phẩm trong giỏ hàng",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/cart/items/{{last_product_id}}?variantId={{last_variant_id}}&quantity=5",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart",
+								"items",
+								"{{last_product_id}}"
+							],
+							"query": [
+								{
+									"key": "variantId",
+									"value": "{{last_variant_id}}"
+								},
+								{
+									"key": "quantity",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Cập nhật số lượng mong muốn của sản phẩm cụ thể trong giỏ hàng. Giá trị `quantity` bắt buộc tối thiểu phải là 1."
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa sản phẩm khỏi giỏ hàng",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/cart/items/{{last_product_id}}?variantId={{last_variant_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart",
+								"items",
+								"{{last_product_id}}"
+							],
+							"query": [
+								{
+									"key": "variantId",
+									"value": "{{last_variant_id}}"
+								}
+							]
+						},
+						"description": "Xóa bỏ hoàn toàn một mặt hàng cụ thể ra khỏi giỏ hàng của người dùng."
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa toàn bộ giỏ hàng (Clear)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/cart",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart"
+							]
+						},
+						"description": "Dọn sạch toàn bộ giỏ hàng của người dùng hiện tại."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Order Checkout & Status (Đặt hàng & Trạng thái)",
+			"item": [
+				{
+					"name": "Đặt hàng (Checkout) - Idempotent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.code === \"SUCCESS\" && jsonData.data) {",
+									"    pm.environment.set(\"last_order_id\", jsonData.data.id);",
+									"    if (jsonData.data.trackingCode) {",
+									"        pm.environment.set(\"last_tracking_code\", jsonData.data.trackingCode);",
+									"    }",
+									"}"
+								],
+								"type": "javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generate random UUID for Idempotency-Key",
+									"var uuid = 'idemp-' + Math.floor(Math.random() * 1000000);",
+									"pm.environment.set(\"idempotency_key\", uuid);"
+								],
+								"type": "javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Email",
+								"value": "customer@gmail.com",
+								"type": "text"
+							},
+							{
+								"key": "Idempotency-Key",
+								"value": "{{idempotency_key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shippingAddress\": \"123 Đường Láng, Láng Thượng, Đống Đa, Hà Nội\",\n    \"phoneNumber\": \"0987654321\",\n    \"couponCode\": \"SALE2026\",\n    \"note\": \"Giao hàng vào giờ hành chính, gọi trước khi giao\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/orders/checkout",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"checkout"
+							]
+						},
+						"description": "Đặt hàng và thanh toán từ giỏ hàng hiện có. Sử dụng header `Idempotency-Key` để tránh bị trùng đơn hàng khi gửi lại request hoặc mạng chập chờn."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy chi tiết đơn hàng",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/orders/{{last_order_id}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"{{last_order_id}}"
+							]
+						},
+						"description": "Lấy thông tin chi tiết của đơn hàng cụ thể dựa theo ID đơn hàng."
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách đơn hàng của người dùng",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/orders",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						},
+						"description": "Lấy toàn bộ danh sách đơn hàng đã mua của người dùng hiện tại."
+					},
+					"response": []
+				},
+				{
+					"name": "Hủy đơn hàng",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-User-Id",
+								"value": "{{user_id}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Email",
+								"value": "customer@gmail.com",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/orders/{{last_order_id}}/cancel",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"{{last_order_id}}",
+								"cancel"
+							]
+						},
+						"description": "Hủy đơn hàng hiện tại (chỉ được thực hiện khi đơn hàng ở trạng thái PENDING hoặc CONFIRMED). Hệ thống sẽ tự động hoàn lại tồn kho trên Redis và DB."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Mock Shipping & Webhook (Giao vận & Webhook)",
+			"item": [
+				{
+					"name": "Kích hoạt giao hàng (Ship Order)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.code === \"SUCCESS\" && jsonData.data && jsonData.data.trackingCode) {",
+									"    pm.environment.set(\"last_tracking_code\", jsonData.data.trackingCode);",
+									"}"
+								],
+								"type": "javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/orders/{{last_order_id}}/ship",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"{{last_order_id}}",
+								"ship"
+							]
+						},
+						"description": "Admin/Staff kích hoạt trạng thái giao hàng, tạo mã vận đơn giả lập và lưu vào đơn hàng."
+					},
+					"response": []
+				},
+				{
+					"name": "Nhận Webhook từ đối tác vận chuyển (Delivered)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"trackingCode\": \"{{last_tracking_code}}\",\n    \"status\": \"DELIVERED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/orders/webhook/shipping",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"webhook",
+								"shipping"
+							]
+						},
+						"description": "API Webhook tiếp nhận cuộc gọi từ đối tác giao vận (GHTK, GHN...) để cập nhật trạng thái vận đơn trực tiếp sang DELIVERED, CANCELLED..."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "user-test-123",
+			"type": "string"
+		},
+		{
+			"key": "last_product_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "last_variant_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

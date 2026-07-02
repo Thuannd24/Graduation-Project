@@ -1,0 +1,91 @@
+# =============================================================================
+# TECHSTORE ROOT .GITIGNORE (DÀNH CHO DỰ ÁN MICROSERVICES LỚN)
+# =============================================================================
+
+# --- HỆ ĐIỀU HÀNH & HỆ THỐNG ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- CẤU HÌNH IDE & EDITOR ---
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+*.code-workspace
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# --- BACKEND (JAVA MAVEN) ---
+# Thư mục build
+target/
+**/target/
+# Định dạng log
+*.log
+**/logs/
+# Files cấu hình của Maven
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# --- FRONTEND (NODEJS / REACT) ---
+# Thư mục dependencies & build của Frontend
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+.eslintcache
+# Logs debug của npm/yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- KHU VỰC BẢO MẬT & BIẾN MÔI TRƯỜNG ---
+# Bỏ qua các file chứa khoá bí mật thực tế
+.env
+**/.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.pub
+# NGOẠI LỆ: Vẫn cho phép commit các file cấu hình mẫu (Example) lên Git
+!.env.example
+!**/.env.example
+
+# --- DOCKER & DỮ LIỆU CƠ SỞ DỮ LIỆU LOCAL ---
+# Bỏ qua dữ liệu phân tích / db map trực tiếp ra thư mục máy host (nếu có)
+data/
+**/data/
+db_data/
+mysql_data/
+postgres_data/
+mongo_data/
+es_data/
+minio_data/
+keycloak-data/*
+# Ngoại lệ: Giữ lại thư mục import mẫu của Keycloak
+!keycloak-data/ecommerce-realm-export.json
+!keycloak-data/import/
+
+# --- CÁC FILE TẠM THỜI (TEMP/SCRATCH) ---
+*.tmp
+*.bak
+*.swp
+*~

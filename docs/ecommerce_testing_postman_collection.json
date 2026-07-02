@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "a9a3b9f4-18c6-43e9-a417-024c08477d01",
+		"name": "E-Commerce Payment & Ship Test Suite",
+		"description": "Simplified collection for testing payment, refund, and shipping services.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Initiate Payment (COD / VNPAY)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Email",
+						"value": "{{email}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderId\": {{orderId}},\n  \"paymentMethod\": \"COD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{paymentServiceUrl}}/api/v1/payments/initiate",
+					"host": [
+						"{{paymentServiceUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"payments",
+						"initiate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Ship Order",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{orderServiceUrl}}/api/v1/orders/{{orderId}}/ship",
+					"host": [
+						"{{orderServiceUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"{{orderId}}",
+						"ship"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Cancel Order (Auto triggers refund/inventory release)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Email",
+						"value": "{{email}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{orderServiceUrl}}/api/v1/orders/{{orderId}}/cancel",
+					"host": [
+						"{{orderServiceUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"{{orderId}}",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "orderServiceUrl",
+			"value": "http://localhost:8082",
+			"type": "string"
+		},
+		{
+			"key": "paymentServiceUrl",
+			"value": "http://localhost:8084",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "1a2c851e-66a8-4dad-a728-b5bc5a09a605",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "user@gmail.com",
+			"type": "string"
+		},
+		{
+			"key": "orderId",
+			"value": "5",
+			"type": "string"
+		}
+	]
+}

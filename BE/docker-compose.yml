@@ -1,0 +1,370 @@
+version: "3.8"
+
+services:
+  # =========================================================================
+  # INFRASTRUCTURE SERVICES (DATABASES & MIDDLEWARES)
+  # =========================================================================
+  mariadb:
+    image: mariadb:10.11
+    container_name: local-mariadb
+    ports:
+      - "3308:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - ecommerce-network
+    restart: always
+
+  mongodb:
+    image: mongo:6.0
+    container_name: local-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - ecommerce-network
+    restart: always
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: local-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ecommerce-network
+    restart: always
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: local-kafka
+    ports:
+      - "29092:29092"
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:29093
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093,PLAINTEXT_HOST://0.0.0.0:29092
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LOG_DIRS=/tmp/kraft-combined-logs
+      - CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - ecommerce-network
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: local-elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - ecommerce-network
+    restart: always
+
+  minio:
+    image: minio/minio:latest
+    container_name: local-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=12345678a@
+    volumes:
+      - minio_data:/data
+    networks:
+      - ecommerce-network
+    restart: always
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.0
+    container_name: local-keycloak
+    command: start-dev
+    ports:
+      - "8083:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING
+    volumes:
+      - ./keycloak-data:/opt/keycloak/data/import
+      - ./keycloak-themes:/opt/keycloak/themes
+    networks:
+      - ecommerce-network
+    restart: always
+
+  # =========================================================================
+  # BACKEND MICROSERVICES
+  # =========================================================================
+  eureka-server:
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --spider http://localhost:8761/actuator/health || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - KEYCLOAK_SERVER_URL=http://keycloak:8080
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "8085:8085"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - KEYCLOAK_ADMIN_URL=http://keycloak:8080
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  product-service:
+    build:
+      context: .
+      dockerfile: product-service/Dockerfile
+    container_name: product-service
+    ports:
+      - "8089:8089"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - ES_HOST=elasticsearch
+      - ES_PORT=9200
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_PUBLIC_ENDPOINT=http://localhost:9000
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=12345678a@
+      - MINIO_BUCKET_NAME=product-images
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    networks:
+      - ecommerce-network
+    restart: always
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "8082:8082"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: inventory-service/Dockerfile
+    container_name: inventory-service
+    ports:
+      - "8093:8093"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    container_name: payment-service
+    ports:
+      - "8084:8084"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: notification-service
+    ports:
+      - "8086:8086"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  promotion-service:
+    build:
+      context: .
+      dockerfile: promotion-service/Dockerfile
+    container_name: promotion-service
+    ports:
+      - "8087:8087"
+    environment:
+      - EUREKA_HOST=eureka-server
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  # =============================================================================
+  # UI TOOLS (Redis Insight, Kafka UI, Kibana)
+  # =============================================================================
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: local-redis-insight
+    ports:
+      - "5540:5540"
+    networks:
+      - ecommerce-network
+    restart: always
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: local-kafka-ui
+    ports:
+      - "8090:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+    networks:
+      - ecommerce-network
+    restart: always
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    container_name: local-kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - ecommerce-network
+    restart: always
+
+volumes:
+  mariadb_data:
+    driver: local
+  mongo_data:
+    driver: local
+  kafka_data:
+    driver: local
+  es_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  ecommerce-network:
+    name: ecommerce-network
+    driver: bridge

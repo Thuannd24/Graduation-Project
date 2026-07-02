@@ -1,0 +1,82 @@
+{
+  "realm" : "ecommerce-realm",
+  "users" : [ {
+    "id" : "433d18e7-feaa-44b4-9274-1975f023a7f5",
+    "username" : "admin",
+    "firstName" : "admin",
+    "lastName" : "system",
+    "email" : "admin@gmail.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1781581333521,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "a1d4ab94-1b74-4418-8376-a5b395a71eef",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1781581350603,
+      "secretData" : "{\"value\":\"V+M57WFNrT2qHkNHW5+KzRK0JFi3Q6vVOYu1TKe1EQA7mQos8lk9dXQeGBqvFZm6+InBnH9LpnaQfuAF4ofwVg==\",\"salt\":\"zngr6bbV3K5nxU8/T5I1Rg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-ecommerce-realm", "ROLE_ADMIN" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "eeb77c2d-9938-474c-aa6a-438308be1a87",
+    "username" : "customer",
+    "firstName" : "hai",
+    "lastName" : "Thanh",
+    "email" : "customer@gmail.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1781581419037,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-ecommerce-realm", "ROLE_CUSTOMER" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "c3fa9af9-8387-40df-a784-12dcb1cf173d",
+    "username" : "service-account-ecommerce-backend",
+    "emailVerified" : false,
+    "createdTimestamp" : 1781580424123,
+    "enabled" : true,
+    "totp" : false,
+    "serviceAccountClientId" : "ecommerce-backend",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-ecommerce-realm" ],
+    "clientRoles" : {
+      "realm-management" : [ "manage-users", "query-users", "view-users" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "cce3d63b-bf5b-42da-b3f4-9de4f8f14197",
+    "username" : "staff",
+    "firstName" : "staff",
+    "email" : "staff@gmail.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1781581377722,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "5f7622a9-6d6d-461a-8a13-2f860752afec",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1781581442870,
+      "secretData" : "{\"value\":\"r2lLJFj1MwTshNP4dTGqpHQadaH9CtnmrkvRfYxKqLHay4HjDMFtNPbYm3vKmw5YuXrbq2SOUWcIS75FQobXLw==\",\"salt\":\"cmDs6JO+TMtiJN1Fl//zag==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-ecommerce-realm", "ROLE_STAFF" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
