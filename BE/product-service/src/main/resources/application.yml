@@ -31,6 +31,9 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   elasticsearch:
     uris: http://${ES_HOST:localhost}:${ES_PORT:9200}
   kafka:

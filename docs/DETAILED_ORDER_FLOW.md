@@ -123,7 +123,7 @@ sequenceDiagram
 ---
 
 ### Giai đoạn 2: Gửi Event & Trừ kho vật lý (Async Inventory Deduction & State Transition)
-*   **Mục tiêu**: Đảm bảo sự kiện tạo đơn được gửi thành công đến Kafka (Transactional Outbox Pattern), Inventory Service thực hiện trừ kho vật lý an toàn dưới DB bằng cơ chế khóa hai lớp (Redisson Distributed Lock + Pessimistic Lock), và chuyển trạng thái đơn hàng sang `AWAITING_PAYMENT`.
+*   **Mục tiêu**: Đảm bảo sự kiện tạo đơn được gửi thành công đến Kafka (Transactional Outbox Pattern), Inventory Service thực hiện trừ kho vật lý an toàn dưới DB bằng cơ chế Pessimistic Lock (SELECT FOR UPDATE) kết hợp sắp xếp danh sách sản phẩm để tránh deadlock, và chuyển trạng thái đơn hàng sang `AWAITING_PAYMENT`.
 
 ```mermaid
 sequenceDiagram
@@ -132,7 +132,6 @@ sequenceDiagram
     participant DB_O as PostgreSQL (order_db)
     participant Kafka as Apache Kafka
     participant IS as Inventory Service
-    participant Redisson as Redisson Lock (Redis)
     participant DB_I as PostgreSQL (inventory_db)
     participant Redis as Redis Cache
 
@@ -163,31 +162,23 @@ sequenceDiagram
     end
 
     rect rgb(245, 240, 255)
-        Note over IS, Redisson: Bước 3: Đảm bảo luồng chạy tuần tự & Trừ kho vật lý
+        Note over IS, DB_I: Bước 3: Trừ kho vật lý (DB Transaction)
+        IS->>DB_I: BEGIN TRANSACTION
+        IS->>IS: Sắp xếp các sản phẩm theo ID để tránh DB Deadlock
         loop Với mỗi sản phẩm trong Event
-            IS->>Redisson: tryLock("lock:product:stock:{productId}:{variantId}", waitTime=5s, leaseTime=10s)
-            alt Lấy khóa phân tán thành công
-                Redisson-->>IS: Lock Acquired
-                IS->>DB_I: BEGIN TRANSACTION
-                IS->>DB_I: SELECT * FROM inventories WHERE product_id=? AND variant_id=? FOR UPDATE (Pessimistic Lock)
-                alt Tồn kho thực tế < Số lượng yêu cầu
-                    IS->>DB_I: ROLLBACK
-                    IS->>Redisson: unlock()
-                    IS->>Kafka: Publish InventoryDeductedEvent (status: FAILED, failReason: OUT_OF_STOCK)
-                else Tồn kho thực tế hợp lệ
-                    IS->>DB_I: UPDATE inventories SET quantity = quantity - requested
-                    IS->>DB_I: INSERT INTO inventory_transactions (type=DEDUCT, order_id, quantity_changed, ...)
-                    IS->>DB_I: COMMIT TRANSACTION
-                    IS->>Redisson: unlock()
-                    
-                    Note over IS, Redis: Bước 4: Đồng bộ dữ liệu RAM (Self-Healing Cache)
-                    IS->>Redis: SET product:stock:{productId}:{variantId} {newQuantity}
-                    IS->>IS: Lưu InventoryDailySnapshot
-                end
-            else Lấy khóa phân tán thất bại
-                Redisson-->>IS: Lock Timeout (Throw Exception, Kafka tự động retry sau)
+            IS->>DB_I: SELECT * FROM inventories WHERE product_id=? AND variant_id=? FOR UPDATE (Pessimistic Lock)
+            alt Tồn kho thực tế < Số lượng yêu cầu
+                IS->>DB_I: ROLLBACK (Thất bại do hết hàng)
+                Note over IS: Bắt InsufficientStockException & Ack Kafka
+                IS->>Kafka: Publish InventoryDeductedEvent (status: FAILED, failReason: OUT_OF_STOCK)
+            else Tồn kho thực tế hợp lệ
+                IS->>DB_I: UPDATE inventories SET quantity = quantity - requested
+                IS->>DB_I: INSERT INTO inventory_transactions (type=DEDUCT, order_id, quantity_changed, ...)
+                Note over IS, Redis: Bước 4: Đồng bộ dữ liệu RAM (Self-Healing Cache)
+                IS->>Redis: SET product:stock:{productId}:{variantId} {newQuantity}
             end
         end
+        IS->>DB_I: COMMIT TRANSACTION (Thành công)
         IS->>Kafka: Publish InventoryDeductedEvent (status: CONFIRMED) (Topic: inventory-events)
     end
 
@@ -283,7 +274,6 @@ sequenceDiagram
     participant DB_O as PostgreSQL (order_db)
     participant Kafka as Apache Kafka
     participant IS as Inventory Service
-    participant Redisson as Redisson Lock (Redis)
     participant DB_I as PostgreSQL (inventory_db)
     participant Redis as Redis Cache
     participant PS as Payment Service
@@ -314,21 +304,20 @@ sequenceDiagram
 
     rect rgb(255, 245, 238)
         Note over Kafka, IS: Bước 2: Hoàn trả tồn kho vật lý (Inventory Service)
-        Kafka->>IS: Consume OrderCancelledEvent { orderId, items }
+        Kafka->>IS: Consume OrderCancelledEvent { orderId }
         IS->>DB_I: SELECT * FROM inventory_transactions WHERE order_id=? AND transaction_type='RELEASE'
         alt Trùng lặp Event (Idempotency)
             DB_I-->>IS: Bản ghi tồn tại (Bỏ qua)
         else Hợp lệ
+            IS->>DB_I: BEGIN TRANSACTION
             loop Với mỗi sản phẩm cần hoàn trả
-                IS->>Redisson: tryLock("lock:product:stock:{productId}:{variantId}", waitTime=5s)
-                IS->>DB_I: BEGIN TRANSACTION
-                IS->>DB_I: SELECT * FROM inventories WHERE product_id=? AND variant_id=? FOR UPDATE
+                IS->>DB_I: SELECT * FROM inventories WHERE product_id=? AND variant_id=? FOR UPDATE (Pessimistic Lock)
                 IS->>DB_I: UPDATE inventories SET quantity = quantity + released_quantity
                 IS->>DB_I: INSERT INTO inventory_transactions (type=RELEASE, order_id, ...)
-                IS->>DB_I: COMMIT TRANSACTION
-                IS->>Redisson: unlock()
-                IS->>Redis: SET product:stock:{productId}:{variantId} {newQuantity} (Đồng bộ lại)
+                Note over IS, Redis: Đồng bộ lại Redis
+                IS->>Redis: SET product:stock:{productId}:{variantId} {newQuantity}
             end
+            IS->>DB_I: COMMIT TRANSACTION
         end
     end
 

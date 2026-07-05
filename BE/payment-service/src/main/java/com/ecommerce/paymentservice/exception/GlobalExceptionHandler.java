@@ -62,6 +62,11 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error("BAD_REQUEST", "Invalid request body format (JSON parse error)."));
     }
 
+    @ExceptionHandler(org.springframework.web.context.request.async.AsyncRequestNotUsableException.class)
+    public void handleAsyncRequestNotUsableException(org.springframework.web.context.request.async.AsyncRequestNotUsableException ex) {
+        log.debug("Client disconnected or connection broken during async processing: {}", ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex) {
         log.error("Internal server error", ex);
@@ -71,3 +76,4 @@ public class GlobalExceptionHandler {
                         "An unexpected system error occurred. Please try again later."));
     }
 }
+

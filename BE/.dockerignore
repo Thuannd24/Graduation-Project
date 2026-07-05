@@ -1,0 +1,17 @@
+.git
+.gitignore
+.idea
+.vscode
+**/*.iml
+# **/target/
+**/node_modules/
+**/dist/
+**/build/
+**/logs/
+**/*.log
+**/data/
+**/mongo_data/
+**/es_data/
+**/minio_data/
+**/mariadb_data/
+**/keycloak-data/

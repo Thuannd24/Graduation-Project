@@ -43,6 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
+    private final RestTemplate standardRestTemplate;
 
     @Value("${vnpay.pay-url}")
     private String vnpPayUrl;
@@ -445,7 +446,7 @@ public class PaymentServiceImpl implements PaymentService {
             requestBody.put("vnp_SecureHash", secureHash);
 
             log.info("Sending QueryDR request to VNPAY for txnRef: {}", txnRef);
-            Map<?, ?> response = restTemplate.postForObject(vnpQueryUrl, requestBody, Map.class);
+            Map<?, ?> response = standardRestTemplate.postForObject(vnpQueryUrl, requestBody, Map.class);
             log.info("Received QueryDR response from VNPAY: {}", response);
 
             if (response != null) {

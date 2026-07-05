@@ -34,6 +34,11 @@ public class RestTemplateConfig {
         return restTemplate;
     }
 
+    @Bean
+    public RestTemplate standardRestTemplate() {
+        return new RestTemplate();
+    }
+
     public static class BearerTokenInterceptor implements ClientHttpRequestInterceptor {
         @Override
         public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
