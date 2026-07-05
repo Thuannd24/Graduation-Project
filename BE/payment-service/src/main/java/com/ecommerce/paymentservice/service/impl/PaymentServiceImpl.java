@@ -23,6 +23,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigDecimal;
@@ -44,6 +48,9 @@ public class PaymentServiceImpl implements PaymentService {
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
     private final RestTemplate standardRestTemplate;
+    private final PlatformTransactionManager transactionManager;
+
+    private final ConcurrentHashMap<Long, Object> orderLocks = new ConcurrentHashMap<>();
 
     @Value("${vnpay.pay-url}")
     private String vnpPayUrl;
@@ -81,121 +88,132 @@ public class PaymentServiceImpl implements PaymentService {
     private static final String STATUS_FAILED = "FAILED";
     private static final String STATUS_REFUNDED = "REFUNDED";
     private static final String STATUS_EXPIRED = "EXPIRED";
+    private static final String STATUS_REFUND_PENDING = "REFUND_PENDING";
 
     @Override
-    @Transactional
     public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) {
-        // Fetch order details from order-service to verify status and retrieve correct
-        // payment amount (prevent price tampering)
-        String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + request.getOrderId() + "/summary";
-        try {
-            ApiResponse<?> orderApiResponse = restTemplate
-                    .getForObject(orderServiceUrl, ApiResponse.class);
+        Object lock = orderLocks.computeIfAbsent(request.getOrderId(), k -> new Object());
+        synchronized (lock) {
+            try {
+                TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+                return transactionTemplate.execute(status -> {
+                    // Fetch order details from order-service to verify status and retrieve correct
+                    // payment amount (prevent price tampering)
+                    String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + request.getOrderId() + "/summary";
+                    try {
+                        ApiResponse<?> orderApiResponse = restTemplate
+                                .getForObject(orderServiceUrl, ApiResponse.class);
 
-            if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
-                    || orderApiResponse.getData() == null) {
-                throw new RuntimeException("Failed to retrieve order details from order-service");
+                        if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
+                                || orderApiResponse.getData() == null) {
+                            throw new RuntimeException("Failed to retrieve order details from order-service");
+                        }
+
+                        Map<?, ?> orderData = (Map<?, ?>) orderApiResponse.getData();
+                        String orderStatus = (String) orderData.get("status");
+                        String orderUserId = (String) orderData.get("userId");
+
+                        // SECURITY CHECK: Verify that the order actually belongs to the user initiating
+                        // the payment
+                        if (orderUserId != null && !orderUserId.equalsIgnoreCase(request.getUserId())) {
+                            throw new IllegalArgumentException(
+                                    "Access Denied: This order does not belong to the authenticated user.");
+                        }
+
+                        // LỖI 1 FIX: Only allow payment for PENDING or AWAITING_PAYMENT orders
+                        if (!"PENDING".equalsIgnoreCase(orderStatus) && !"AWAITING_PAYMENT".equalsIgnoreCase(orderStatus)) {
+                            throw new RuntimeException("Cannot pay for order in status: " + orderStatus);
+                        }
+
+                        Object finalAmountObj = orderData.get("finalAmount");
+                        if (finalAmountObj == null) {
+                            throw new RuntimeException("Order final amount is null");
+                        }
+
+                        BigDecimal verifiedAmount;
+                        if (finalAmountObj instanceof Number) {
+                            verifiedAmount = BigDecimal.valueOf(((Number) finalAmountObj).doubleValue());
+                        } else {
+                            verifiedAmount = new BigDecimal(finalAmountObj.toString());
+                        }
+
+                        request.setAmount(verifiedAmount);
+                    } catch (IllegalArgumentException e) {
+                        log.error("Security violation for Order ID: {} by User ID: {}", request.getOrderId(), request.getUserId());
+                        throw e;
+                    } catch (Exception e) {
+                        log.error("Failed to verify order with order-service. Order ID: {}", request.getOrderId(), e);
+                        throw new RuntimeException("Order verification failed: " + e.getMessage());
+                    }
+
+                    String txnRef = UUID.randomUUID().toString();
+
+                    // IDEMPOTENCY / REUSE CHECK: Check if a payment record already exists for this
+                    // order
+                    Payment payment;
+                    Optional<Payment> existingPaymentOpt = paymentRepository.findByOrderId(request.getOrderId());
+                    if (existingPaymentOpt.isPresent()) {
+                        Payment existingPayment = existingPaymentOpt.get();
+                        String currentStatus = existingPayment.getStatus();
+
+                        if (STATUS_SUCCESS.equalsIgnoreCase(currentStatus)) {
+                            throw new IllegalStateException("Payment has already been successfully completed for this order.");
+                        }
+                        if (STATUS_REFUNDED.equalsIgnoreCase(currentStatus)) {
+                            throw new IllegalStateException("Payment has already been refunded for this order.");
+                        }
+
+                        // If the payment is PENDING or FAILED, reuse the existing record instead of
+                        // creating duplicates
+                        payment = existingPayment;
+                        payment.setPaymentMethod(request.getPaymentMethod());
+                        payment.setAmount(request.getAmount());
+                        payment.setTxnRef(txnRef);
+                        payment.setStatus(STATUS_PENDING);
+                        payment.setFailureCode(null);
+                        payment.setGatewayResponse(null);
+                        payment.setGatewayTxnId(null);
+                    } else {
+                        payment = Payment.builder()
+                                .orderId(request.getOrderId())
+                                .userId(request.getUserId())
+                                .email(request.getEmail())
+                                .txnRef(txnRef)
+                                .paymentMethod(request.getPaymentMethod())
+                                .amount(request.getAmount())
+                                .status(STATUS_PENDING)
+                                .build();
+                    }
+
+                    payment = paymentRepository.save(payment);
+
+                    if (METHOD_COD.equalsIgnoreCase(request.getPaymentMethod())) {
+                        // Cash on delivery - initially pending, will complete on delivery
+                        payment.setStatus(STATUS_PENDING);
+                        paymentRepository.save(payment);
+
+                        publishPaymentEvent("PaymentCODConfirmedEvent", payment, payment.getAmount(), "COD payment pending delivery");
+
+                        return PaymentInitiateResponse.builder()
+                                .paymentId(payment.getId())
+                                .txnRef(txnRef)
+                                .redirectUrl("")
+                                .build();
+                    }
+
+                    // VNPAY Link Construction
+                    String redirectUrl = buildVnPayUrl(payment, txnRef, request.getIpAddress());
+
+                    return PaymentInitiateResponse.builder()
+                            .paymentId(payment.getId())
+                            .txnRef(txnRef)
+                            .redirectUrl(redirectUrl)
+                            .build();
+                });
+            } finally {
+                orderLocks.remove(request.getOrderId(), lock);
             }
-
-            Map<?, ?> orderData = (Map<?, ?>) orderApiResponse.getData();
-            String orderStatus = (String) orderData.get("status");
-            String orderUserId = (String) orderData.get("userId");
-
-            // SECURITY CHECK: Verify that the order actually belongs to the user initiating
-            // the payment
-            if (orderUserId != null && !orderUserId.equalsIgnoreCase(request.getUserId())) {
-                throw new IllegalArgumentException(
-                        "Access Denied: This order does not belong to the authenticated user.");
-            }
-
-            if ("CANCELLED".equalsIgnoreCase(orderStatus) || "PAID".equalsIgnoreCase(orderStatus)) {
-                throw new RuntimeException("Cannot pay for order in status: " + orderStatus);
-            }
-
-            Object finalAmountObj = orderData.get("finalAmount");
-            if (finalAmountObj == null) {
-                throw new RuntimeException("Order final amount is null");
-            }
-
-            BigDecimal verifiedAmount;
-            if (finalAmountObj instanceof Number) {
-                verifiedAmount = BigDecimal.valueOf(((Number) finalAmountObj).doubleValue());
-            } else {
-                verifiedAmount = new BigDecimal(finalAmountObj.toString());
-            }
-
-            request.setAmount(verifiedAmount);
-        } catch (IllegalArgumentException e) {
-            log.error("Security violation for Order ID: {} by User ID: {}", request.getOrderId(), request.getUserId());
-            throw e;
-        } catch (Exception e) {
-            log.error("Failed to verify order with order-service. Order ID: {}", request.getOrderId(), e);
-            throw new RuntimeException("Order verification failed: " + e.getMessage());
         }
-
-        String txnRef = UUID.randomUUID().toString();
-
-        // IDEMPOTENCY / REUSE CHECK: Check if a payment record already exists for this
-        // order
-        Payment payment;
-        Optional<Payment> existingPaymentOpt = paymentRepository.findByOrderId(request.getOrderId());
-        if (existingPaymentOpt.isPresent()) {
-            Payment existingPayment = existingPaymentOpt.get();
-            String currentStatus = existingPayment.getStatus();
-
-            if (STATUS_SUCCESS.equalsIgnoreCase(currentStatus)) {
-                throw new IllegalStateException("Payment has already been successfully completed for this order.");
-            }
-            if (STATUS_REFUNDED.equalsIgnoreCase(currentStatus)) {
-                throw new IllegalStateException("Payment has already been refunded for this order.");
-            }
-
-            // If the payment is PENDING or FAILED, reuse the existing record instead of
-            // creating duplicates
-            payment = existingPayment;
-            payment.setPaymentMethod(request.getPaymentMethod());
-            payment.setAmount(request.getAmount());
-            payment.setTxnRef(txnRef);
-            payment.setStatus(STATUS_PENDING);
-            payment.setFailureCode(null);
-            payment.setGatewayResponse(null);
-            payment.setGatewayTxnId(null);
-        } else {
-            payment = Payment.builder()
-                    .orderId(request.getOrderId())
-                    .userId(request.getUserId())
-                    .email(request.getEmail())
-                    .txnRef(txnRef)
-                    .paymentMethod(request.getPaymentMethod())
-                    .amount(request.getAmount())
-                    .status(STATUS_PENDING)
-                    .build();
-        }
-
-        payment = paymentRepository.save(payment);
-
-        if (METHOD_COD.equalsIgnoreCase(request.getPaymentMethod())) {
-            // Cash on delivery - initially pending, will complete on delivery
-            payment.setStatus(STATUS_PENDING);
-            paymentRepository.save(payment);
-
-            publishPaymentEvent("PaymentCODConfirmedEvent", payment, payment.getAmount(), "COD payment pending delivery");
-
-            return PaymentInitiateResponse.builder()
-                    .paymentId(payment.getId())
-                    .txnRef(txnRef)
-                    .redirectUrl("")
-                    .build();
-        }
-
-        // VNPAY Link Construction
-        String redirectUrl = buildVnPayUrl(payment, txnRef, request.getIpAddress());
-
-        return PaymentInitiateResponse.builder()
-                .paymentId(payment.getId())
-                .txnRef(txnRef)
-                .redirectUrl(redirectUrl)
-                .build();
     }
 
     @Override
@@ -547,6 +565,71 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (Exception e) {
             log.error("Failed to generate HMAC SHA512 hash: {}", e.getMessage());
             throw new RuntimeException("Hash generation error");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void initiateAutoRefund(Long orderId) {
+        Optional<Payment> paymentOpt = paymentRepository.findByOrderId(orderId);
+        if (paymentOpt.isPresent()) {
+            Payment payment = paymentOpt.get();
+            if (STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())) {
+                log.info("Payment for Order ID {} was SUCCESS. Marking payment as REFUND_PENDING and creating Refund record...", orderId);
+                payment.setStatus(STATUS_REFUND_PENDING);
+                paymentRepository.save(payment);
+
+                Refund refund = Refund.builder()
+                        .paymentId(payment.getId())
+                        .refundAmount(payment.getAmount())
+                        .reason("Auto-refund: Order cancelled by user")
+                        .status(STATUS_PENDING)
+                        .build();
+                refundRepository.save(refund);
+            } else if (STATUS_PENDING.equalsIgnoreCase(payment.getStatus())) {
+                log.info("Payment for Order ID {} was PENDING. Marking payment as FAILED...", orderId);
+                payment.setStatus(STATUS_FAILED);
+                payment.setFailureCode("ORDER_CANCELLED");
+                paymentRepository.save(payment);
+            } else {
+                log.info("Payment for Order ID {} is in status {}. Skipping refund/cancellation.", orderId, payment.getStatus());
+            }
+        } else {
+            log.info("No payment record found for Order ID {}. Skipping refund.", orderId);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void processPendingRefunds() {
+        List<Refund> pendingRefunds = refundRepository.findByStatus(STATUS_PENDING);
+        if (pendingRefunds.isEmpty()) {
+            return;
+        }
+
+        log.info("Found {} pending refunds to process", pendingRefunds.size());
+        for (Refund refund : pendingRefunds) {
+            try {
+                Payment payment = paymentRepository.findById(refund.getPaymentId())
+                        .orElseThrow(() -> new RuntimeException("Payment record not found"));
+
+                // In a real VNPAY integration, we would invoke the VNPAY refund API here.
+                // Since this is mock/simulation, we will approve the refund instantly.
+                // However, doing it here in the scheduler keeps the Kafka Consumer responsive.
+                refund.setStatus(STATUS_SUCCESS);
+                refund.setCompletedAt(LocalDateTime.now());
+                refundRepository.save(refund);
+
+                payment.setStatus(STATUS_REFUNDED);
+                paymentRepository.save(payment);
+
+                publishPaymentEvent("RefundCompletedEvent", payment, refund.getRefundAmount(),
+                        "Refund completed for: " + refund.getReason());
+                
+                log.info("Refund ID {} for Payment ID {} completed successfully", refund.getId(), payment.getId());
+            } catch (Exception e) {
+                log.error("Failed to process refund ID: {}", refund.getId(), e);
+            }
         }
     }
 

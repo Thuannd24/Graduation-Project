@@ -48,29 +48,7 @@ public class OrderKafkaConsumer {
         if ("OrderCancelledEvent".equalsIgnoreCase(eventType)) {
             log.info("Processing OrderCancelledEvent for Order ID: {}", orderId);
             try {
-                Optional<Payment> paymentOpt = paymentRepository.findByOrderId(orderId);
-                if (paymentOpt.isPresent()) {
-                    Payment payment = paymentOpt.get();
-                    if ("SUCCESS".equalsIgnoreCase(payment.getStatus())) {
-                        log.info("Payment for Order ID {} was SUCCESS. Initiating auto-refund...", orderId);
-                        RefundRequest refundRequest = RefundRequest.builder()
-                                .paymentId(payment.getId())
-                                .amount(payment.getAmount())
-                                .reason("Auto-refund: Order cancelled by user")
-                                .build();
-                        paymentService.processRefund(refundRequest);
-                        log.info("Auto-refund processed successfully for Order ID {}", orderId);
-                    } else if ("PENDING".equalsIgnoreCase(payment.getStatus())) {
-                        log.info("Payment for Order ID {} was PENDING. Marking payment as FAILED...", orderId);
-                        payment.setStatus("FAILED");
-                        payment.setFailureCode("ORDER_CANCELLED");
-                        paymentRepository.save(payment);
-                    } else {
-                        log.info("Payment for Order ID {} is in status {}. Skipping refund/cancellation.", orderId, payment.getStatus());
-                    }
-                } else {
-                    log.info("No payment record found for Order ID {}. Skipping refund.", orderId);
-                }
+                paymentService.initiateAutoRefund(orderId);
             } catch (Exception e) {
                 log.error("Error processing refund/cancellation for Order ID: {}", orderId, e);
                 throw new RuntimeException("Error processing OrderCancelledEvent for payments", e);

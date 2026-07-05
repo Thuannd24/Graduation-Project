@@ -223,60 +223,56 @@ public class OrderServiceImpl implements OrderService {
             final Order finalOrder = order;
             final List<OrderItem> finalOrderItems = orderItems;
 
-            // Execute DB writes in a transaction
+            // Execute DB writes outside/inside transactions to protect pool
             Order savedOrder;
             try {
-                savedOrder = transactionTemplate.execute(status -> {
-                    Order saved = orderRepository.save(finalOrder);
-                    for (OrderItem item : finalOrderItems) {
-                        item.setOrderId(saved.getId());
-                    }
-                    orderItemRepository.saveAll(finalOrderItems);
+                if (couponCode != null) {
+                    // Transaction 1: Save Order and OrderItems (fast local DB commit)
+                    savedOrder = transactionTemplate.execute(status -> {
+                        Order saved = orderRepository.save(finalOrder);
+                        for (OrderItem item : finalOrderItems) {
+                            item.setOrderId(saved.getId());
+                        }
+                        orderItemRepository.saveAll(finalOrderItems);
+                        return saved;
+                    });
 
-                    // Apply coupon inside transaction so failure rolls back order/outbox
-                    if (couponCode != null) {
-                        applyCouponToOrder(saved, userId, couponCode, totalAmount, checkoutRequest.getShippingFee());
-                    }
-
-                    // Construct and save OutboxEvent inside the same transaction
+                    // Call Feign client OUTSIDE the database transaction
                     try {
-                        List<OrderCreatedEvent.OrderItem> eventItems = finalOrderItems.stream()
-                                .map(item -> OrderCreatedEvent.OrderItem.builder()
-                                        .productId(item.getProductId())
-                                        .variantId(item.getVariantId())
-                                        .quantity(item.getQuantity())
-                                        .build())
-                                .collect(Collectors.toList());
+                        applyCouponToOrder(savedOrder, userId, couponCode, totalAmount, checkoutRequest.getShippingFee());
+                    } catch (Exception ex) {
+                        log.error("Failed to apply voucher for Order ID {}: {}. Cancelling order.", savedOrder.getId(), ex.getMessage());
+                        
+                        // Compensation: Update order status to CANCELLED
+                        transactionTemplate.executeWithoutResult(status -> {
+                            Order orderToCancel = orderRepository.findById(savedOrder.getId())
+                                    .orElseThrow(() -> new RuntimeException("Order not found: " + savedOrder.getId()));
+                            orderToCancel.setStatus("CANCELLED");
+                            orderRepository.save(orderToCancel);
+                        });
 
-                        OrderCreatedEvent createdEvent = OrderCreatedEvent.builder()
-                                .eventId(UUID.randomUUID().toString())
-                                .eventType("OrderCreatedEvent")
-                                .timestamp(LocalDateTime.now().toString())
-                                .orderId(saved.getId())
-                                .userId(userId)
-                                .email(email)
-                                .items(eventItems)
-                                .build();
-
-                        OutboxEvent outboxEvent = OutboxEvent.builder()
-                                .aggregateId(String.valueOf(saved.getId()))
-                                .aggregateType("Order")
-                                .eventType("OrderCreatedEvent")
-                                .payload(objectMapper.writeValueAsString(createdEvent))
-                                .status("PENDING")
-                                .build();
-                        outboxEventRepository.save(outboxEvent);
-                    } catch (Exception e) {
-                        log.error("Failed to construct and save outbox event for OrderCreatedEvent: {}", e.getMessage());
-                        throw new RuntimeException("Order creation failed due to outbox error", e);
+                        throw new InvalidCouponException("Không thể áp dụng mã voucher: " + ex.getMessage());
                     }
-                    return saved;
-                });
-            } catch (RuntimeException ex) {
-                // If any error occurs, make sure to release the voucher just in case it was partially applied in promotion-service
-                if (couponCode != null && finalOrder.getId() != null) {
-                    releaseVoucherForOrder(finalOrder.getId());
+
+                    // Transaction 2: Save the OutboxEvent since Voucher was applied successfully
+                    final Order finalSavedOrder = savedOrder;
+                    transactionTemplate.executeWithoutResult(status -> {
+                        saveOrderCreatedOutboxEvent(finalSavedOrder, finalOrderItems, userId, email);
+                    });
+
+                } else {
+                    // No coupon, save Order, OrderItems and OutboxEvent in a single transaction
+                    savedOrder = transactionTemplate.execute(status -> {
+                        Order saved = orderRepository.save(finalOrder);
+                        for (OrderItem item : finalOrderItems) {
+                            item.setOrderId(saved.getId());
+                        }
+                        orderItemRepository.saveAll(finalOrderItems);
+                        saveOrderCreatedOutboxEvent(saved, finalOrderItems, userId, email);
+                        return saved;
+                    });
                 }
+            } catch (RuntimeException ex) {
                 throw ex;
             }
 
@@ -457,10 +453,10 @@ public class OrderServiceImpl implements OrderService {
         log.info("Order ID {} status updated to {}", orderId, status);
 
         if ("CONFIRMED".equalsIgnoreCase(status)) {
-            redeemVoucherForOrder(orderId);
+            java.util.concurrent.CompletableFuture.runAsync(() -> redeemVoucherForOrder(orderId));
         }
         if ("CANCELLED".equalsIgnoreCase(status)) {
-            releaseVoucherForOrder(orderId);
+            java.util.concurrent.CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId));
         }
 
         // If order gets CANCELLED (e.g. inventory allocation failed), rollback the
@@ -850,5 +846,39 @@ public class OrderServiceImpl implements OrderService {
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .build();
+    }
+
+    private void saveOrderCreatedOutboxEvent(Order order, List<OrderItem> orderItems, String userId, String email) {
+        try {
+            List<OrderCreatedEvent.OrderItem> eventItems = orderItems.stream()
+                    .map(item -> OrderCreatedEvent.OrderItem.builder()
+                            .productId(item.getProductId())
+                            .variantId(item.getVariantId())
+                            .quantity(item.getQuantity())
+                            .build())
+                    .collect(Collectors.toList());
+
+            OrderCreatedEvent createdEvent = OrderCreatedEvent.builder()
+                    .eventId(UUID.randomUUID().toString())
+                    .eventType("OrderCreatedEvent")
+                    .timestamp(LocalDateTime.now().toString())
+                    .orderId(order.getId())
+                    .userId(userId)
+                    .email(email)
+                    .items(eventItems)
+                    .build();
+
+            OutboxEvent outboxEvent = OutboxEvent.builder()
+                    .aggregateId(String.valueOf(order.getId()))
+                    .aggregateType("Order")
+                    .eventType("OrderCreatedEvent")
+                    .payload(objectMapper.writeValueAsString(createdEvent))
+                    .status("PENDING")
+                    .build();
+            outboxEventRepository.save(outboxEvent);
+        } catch (Exception e) {
+            log.error("Failed to construct and save outbox event for OrderCreatedEvent: {}", e.getMessage());
+            throw new RuntimeException("Order creation failed due to outbox error", e);
+        }
     }
 }

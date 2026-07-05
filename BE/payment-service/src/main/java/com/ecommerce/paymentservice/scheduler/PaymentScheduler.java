@@ -24,4 +24,16 @@ public class PaymentScheduler {
             log.error("Failed to run scheduled cleanup of expired pending payments: {}", e.getMessage(), e);
         }
     }
+
+    // Run every minute to process pending refunds asynchronously
+    @Scheduled(cron = "0 */1 * * * *")
+    public void processPendingRefunds() {
+        log.info("Starting scheduled processing of pending refunds...");
+        try {
+            paymentService.processPendingRefunds();
+            log.info("Completed scheduled processing of pending refunds.");
+        } catch (Exception e) {
+            log.error("Failed to run scheduled processing of pending refunds: {}", e.getMessage(), e);
+        }
+    }
 }

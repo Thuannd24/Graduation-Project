@@ -14,6 +14,8 @@ public interface PaymentService {
     String verifyVnPayCallback(Map<String, String> queryParams);
     void processRefund(RefundRequest request);
     void cancelExpiredPayments();
+    void initiateAutoRefund(Long orderId);
+    void processPendingRefunds();
     Page<PaymentResponse> getAllPayments(Pageable pageable);
     PaymentResponse getPaymentByOrderId(Long orderId);
 }

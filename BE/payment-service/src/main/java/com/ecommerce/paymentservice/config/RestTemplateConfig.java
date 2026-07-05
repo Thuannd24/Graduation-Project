@@ -7,6 +7,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,7 +23,10 @@ public class RestTemplateConfig {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(3000); // 3 seconds
+        factory.setReadTimeout(5000);    // 5 seconds
+        RestTemplate restTemplate = new RestTemplate(factory);
 
         List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
         if (interceptors == null) {
@@ -36,7 +40,10 @@ public class RestTemplateConfig {
 
     @Bean
     public RestTemplate standardRestTemplate() {
-        return new RestTemplate();
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(3000); // 3 seconds
+        factory.setReadTimeout(5000);    // 5 seconds
+        return new RestTemplate(factory);
     }
 
     public static class BearerTokenInterceptor implements ClientHttpRequestInterceptor {
