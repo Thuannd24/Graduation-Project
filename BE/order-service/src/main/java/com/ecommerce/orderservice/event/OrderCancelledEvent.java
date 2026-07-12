@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,4 +18,15 @@ public class OrderCancelledEvent {
     private Long orderId;
     private String userId;
     private String email;
+    private List<OrderItemInfo> items;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class OrderItemInfo {
+        private Long productId;
+        private Long variantId;
+        private Integer quantity;
+    }
 }

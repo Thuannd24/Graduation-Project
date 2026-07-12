@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "product-service")
+import com.ecommerce.inventoryservice.config.FeignClientConfig;
+
+@FeignClient(name = "product-service", configuration = FeignClientConfig.class)
 public interface ProductClient {
 
     @GetMapping("/api/internal/products/bulk")

@@ -128,19 +128,19 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
                   key={cat.id}
                   to={`/category?activeCategory=${cat.raw.slug || encodeURIComponent(cat.raw.name || "")}`}
                   onMouseEnter={() => setActiveCategory(cat.raw)}
-                  className={`flex items-center gap-3 px-4 py-[8px] transition-colors group ${isActive ? "bg-red-50" : "hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-[5px] transition-colors group ${isActive ? "bg-red-50" : "hover:bg-slate-50"
                     }`}
                 >
                   {cat.raw?.imageUrl ? (
-                    <img src={cat.raw.imageUrl} alt={cat.label} className="w-[20px] h-[20px] object-contain shrink-0" />
+                    <img src={cat.raw.imageUrl} alt={cat.label} className="w-[28px] h-[28px] object-contain shrink-0 rounded-md bg-white shadow-sm border border-slate-200/60 p-0 group-hover:scale-105 transition-transform" />
                   ) : (
                     <Icon name={cat.icon} className={`text-[20px] shrink-0 transition-colors ${isActive ? "text-red-600" : "text-slate-500 group-hover:text-red-600"}`} />
                   )}
-                  <span className={`text-[13px] leading-tight font-medium transition-colors ${isActive ? "text-red-600 font-bold" : "text-slate-700 group-hover:text-red-600"
+                  <span className={`text-[12px] leading-tight font-bold transition-colors ${isActive ? "text-red-600" : "text-slate-900 group-hover:text-red-600"
                     }`}>
                     {formatCategoryName(cat.label)}
                   </span>
-                  <Icon name="chevron_right" className={`ml-auto text-[16px] shrink-0 ${isActive ? "text-red-600" : "text-slate-400"}`} />
+                  <Icon name="chevron_right" className={`ml-auto text-[20px] shrink-0 ${isActive ? "text-red-600" : "text-slate-500"}`} />
                 </NavLink>
               );
             })}
@@ -155,78 +155,78 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
               className="bg-white rounded-xl border border-slate-200 shadow-[0_8px_40px_rgba(0,0,0,0.15)] p-5 flex gap-4"
               style={{ width: dropdownMegaWidth }}
             >
-            <div className="flex-1 min-w-0 overflow-y-auto no-scrollbar">
-              {activeCategory.children && activeCategory.children.length > 0 ? (
-                <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-5">
-                  {activeCategory.children.map(sub => {
-                    const brandsForSub = allBrands.filter(b =>
-                      b.categoryIds && b.categoryIds.includes(Number(sub.id))
-                    );
-                    return (
-                      <div key={sub.id}>
-                        <h3 className="text-[13px] font-bold text-slate-800 mb-2">
-                          Chọn hãng {(sub.name || "").toLowerCase()}
-                        </h3>
-                        <div className="grid grid-cols-2 gap-2">
-                          {brandsForSub.slice(0, 6).map(brand => {
-                            const officialLogo = getBrandLogo(brand.name);
-                            return (
-                              <Link key={brand.id}
-                                to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&brand=${encodeURIComponent(brand.name)}`}
-                                className="flex items-center justify-center h-12 border border-slate-200 rounded-lg hover:border-red-500 hover:shadow-md bg-white transition-all px-3 overflow-hidden"
-                              >
-                                {brand.logoUrl ? (
-                                  <img src={brand.logoUrl} alt={brand.name} className="max-h-7 max-w-full object-contain" />
-                                ) : officialLogo ? (
-                                  <span className="[&>svg]:h-[22px] [&>svg]:w-auto flex items-center">{officialLogo}</span>
-                                ) : (
-                                  <span className="text-[12px] font-bold text-slate-700 text-center">{brand.name}</span>
-                                )}
-                              </Link>
-                            );
-                          })}
-                        </div>
-                        {brandsForSub.length > 0 && (
-                          <Link to={`/category?activeCategory=${encodeURIComponent(sub.name || "")}`}
-                            className="inline-flex items-center gap-1 text-[12px] text-red-600 font-medium mt-2 hover:underline">
-                            → Xem tất cả {(sub.name || "").toLowerCase()}
-                          </Link>
+            <div className="flex-1 min-w-0 flex gap-5 overflow-y-auto no-scrollbar">
+              {/* Column 1: Sub-categories */}
+              <div className="w-[140px] shrink-0 border-r border-slate-100 pr-3">
+                <h3 className="text-[12px] font-extrabold text-slate-400 tracking-wider uppercase mb-3 flex items-center gap-1.5">
+                  <Icon name="folder_open" className="text-red-500 text-[14px]" />
+                  Danh mục con
+                </h3>
+                <div className="flex flex-col gap-1">
+                  {activeCategory.children && activeCategory.children.length > 0 ? (
+                    activeCategory.children.map(sub => (
+                      <Link
+                        key={sub.id}
+                        to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&sub=${sub.slug || encodeURIComponent(sub.name || "")}`}
+                        className="text-[12px] font-bold text-slate-700 hover:text-red-600 transition-all py-1.5 px-2.5 rounded-lg hover:bg-red-50/60 -ml-2 flex items-center gap-2 group"
+                      >
+                        {sub.imageUrl ? (
+                          <img src={sub.imageUrl} alt={sub.name} className="w-[18px] h-[18px] object-contain shrink-0 rounded-sm bg-white p-[1px] shadow-sm border border-slate-100 group-hover:scale-110 transition-transform duration-300" />
+                        ) : (
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-red-500 group-hover:w-3 group-hover:rounded-sm transition-all duration-300 shrink-0" />
                         )}
-                      </div>
-                    );
-                  })}
+                        <span className="group-hover:translate-x-0.5 transition-transform duration-300">{sub.name}</span>
+                      </Link>
+                    ))
+                  ) : (
+                    <span className="text-[11px] text-slate-400 italic px-1">Không có danh mục con</span>
+                  )}
                 </div>
-              ) : (
-                <div>
-                  <h3 className="text-[13px] font-bold text-slate-800 mb-3">
-                    Chọn hãng {(activeCategory.name || "").toLowerCase()}
-                  </h3>
-                  <div className="grid grid-cols-3 gap-2">
-                    {allBrands.filter(b => b.categoryIds && b.categoryIds.includes(Number(activeCategory.id))).slice(0, 9).map(brand => {
+              </div>
+
+              {/* Column 2: Brands list (compact wrapped boxes) */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-[12px] font-extrabold text-slate-400 tracking-wider uppercase mb-3 flex items-center gap-1.5">
+                  <Icon name="sell" className="text-red-500 text-[14px]" />
+                  Thương hiệu
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {(() => {
+                    const categoryIds = [
+                      Number(activeCategory.id),
+                      ...(activeCategory.children || []).map(sub => Number(sub.id))
+                    ];
+                    const categoryBrands = allBrands.filter(b =>
+                      b.categoryIds && b.categoryIds.some(id => categoryIds.includes(id))
+                    );
+
+                    return categoryBrands.slice(0, 15).map(brand => {
                       const officialLogo = getBrandLogo(brand.name);
                       return (
-                        <Link key={brand.id}
+                        <Link
+                          key={brand.id}
                           to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&brand=${encodeURIComponent(brand.name)}`}
-                          className="flex items-center justify-center h-12 border border-slate-200 rounded-lg hover:border-red-500 hover:shadow-md bg-white transition-all px-3 overflow-hidden"
+                          className="group flex items-center justify-center w-[92px] h-[38px] border border-slate-200/80 rounded-lg hover:border-red-500 hover:shadow-md bg-white transition-all overflow-hidden p-1"
                         >
                           {brand.logoUrl ? (
-                            <img src={brand.logoUrl} alt={brand.name} className="max-h-7 max-w-full object-contain" />
+                            <img src={brand.logoUrl} alt={brand.name} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.08]" />
                           ) : officialLogo ? (
-                            <span className="[&>svg]:h-[22px] [&>svg]:w-auto flex items-center">{officialLogo}</span>
+                            <span className="[&>svg]:h-[24px] [&>svg]:w-auto flex items-center transition-transform duration-300 group-hover:scale-105">{officialLogo}</span>
                           ) : (
-                            <span className="text-[12px] font-bold text-slate-700 text-center">{brand.name}</span>
+                            <span className="text-[11px] font-bold text-slate-700 text-center leading-tight transition-transform duration-300 group-hover:scale-105">{brand.name}</span>
                           )}
                         </Link>
                       );
-                    })}
-                  </div>
+                    });
+                  })()}
                 </div>
-              )}
+              </div>
             </div>
             {/* Hot Products */}
-            <div className="w-[220px] shrink-0 border-l border-slate-100 pl-4">
-              <h3 className="text-[13px] font-bold text-slate-800 mb-3 flex items-center gap-1">
-                Sản phẩm nổi bật <span className="text-red-500">⚡</span>
+            <div className="w-[260px] shrink-0 border-l border-slate-100 pl-4">
+              <h3 className="text-[12px] font-extrabold text-slate-400 tracking-wider uppercase mb-3 flex items-center gap-1.5">
+                <Icon name="bolt" className="text-red-500 text-[14px]" />
+                Sản phẩm nổi bật
               </h3>
               <div className="grid grid-cols-3 gap-2">
                 {suggestedProducts.map((product, idx) => (
@@ -270,27 +270,44 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
                 key={cat.id}
                 to={`/category?activeCategory=${cat.raw.slug || encodeURIComponent(cat.raw.name || "")}`}
                 onMouseEnter={() => setActiveCategory(cat.raw)}
-                className={`flex items-center gap-3 px-4 py-[9px] transition-colors group ${isActive
+                className={`flex items-center gap-3 px-4 py-[7px] transition-colors group ${isActive
                   ? "bg-red-50 dark:bg-red-900/20"
                   : "hover:bg-slate-50 dark:hover:bg-slate-800"
                   }`}
               >
                 {cat.raw?.imageUrl ? (
-                  <img src={cat.raw.imageUrl} alt={cat.label} className="w-[26px] h-[26px] object-contain shrink-0" />
+                  <img src={cat.raw.imageUrl} alt={cat.label} className="w-[28px] h-[28px] object-contain shrink-0 rounded-md bg-white shadow-sm border border-slate-200/60 p-0 group-hover:scale-105 transition-transform" />
                 ) : (
                   <Icon
                     name={cat.icon}
-                    className={`text-[26px] shrink-0 transition-colors ${isActive ? "text-red-600" : "text-slate-500 group-hover:text-red-600"}`}
+                    className={`text-[20px] shrink-0 transition-colors ${isActive ? "text-red-600" : "text-slate-500 group-hover:text-red-600"}`}
                   />
                 )}
-                <span className={`text-[13px] leading-tight transition-colors ${isActive ? "text-red-600 font-bold" : "text-slate-700 dark:text-slate-300 font-medium group-hover:text-red-600"}`}>
+                <span className={`text-[12px] leading-tight transition-colors font-bold ${isActive ? "text-red-600" : "text-slate-900 dark:text-slate-100 group-hover:text-red-600"}`}>
                   {formatCategoryName(cat.label)}
                 </span>
-                <Icon name="chevron_right" className={`ml-auto text-[20px] shrink-0 ${isActive ? "text-red-600" : "text-slate-400"}`} />
+                <Icon name="chevron_right" className={`ml-auto text-[24px] shrink-0 ${isActive ? "text-red-600" : "text-slate-500 dark:text-slate-400"}`} />
               </NavLink>
             );
           })}
         </nav>
+        {/* Commitments & Hotline Panel at the bottom of the sidebar to fill height */}
+        <div className="mt-auto border-t border-slate-100 dark:border-slate-800 p-3 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col gap-2.5 shrink-0">
+          <div className="flex items-center gap-2">
+            <Icon name="support_agent" className="text-red-600 dark:text-red-500 text-lg shrink-0" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 leading-none">Tư vấn mua hàng</p>
+              <p className="text-[10px] text-red-600 dark:text-red-400 font-bold mt-0.5 leading-none">1800.2097 (Miễn phí)</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Icon name="verified_user" className="text-red-600 dark:text-red-500 text-lg shrink-0" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-none">Chính sách bảo hành</p>
+              <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 leading-none">Lỗi 1 đổi 1 trong 30 ngày</p>
+            </div>
+          </div>
+        </div>
         </div>
 
         {/* Mega Menu — dính sát sidebar, không gap hover */}
@@ -303,90 +320,79 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
               style={{ width: megaWidth }}
             >
               {/* Left: brands */}
-              <div className="flex-1 min-w-0 overflow-y-auto no-scrollbar">
-            {/* If category has children, group brands per child */}
-            {activeCategory.children && activeCategory.children.length > 0 ? (
-              <div className="grid grid-cols-2 gap-x-5 gap-y-4">
-                {activeCategory.children.map(sub => {
-                  const brandsForSub = allBrands.filter(b =>
-                    b.categoryIds && b.categoryIds.includes(Number(sub.id))
-                  );
-                  return (
-                    <div key={sub.id}>
-                      {/* Section Title */}
-                      <h3 className="text-[13px] font-bold text-slate-800 dark:text-slate-100 mb-2">
-                        Chọn hãng {(sub.name || "").toLowerCase()}
-                      </h3>
-                      {/* Brand logo grid — 2 cols inside narrow subcategory block */}
-                      <div className="grid grid-cols-2 gap-2">
-                        {brandsForSub.slice(0, 6).map(brand => {
-                          const officialLogo = getBrandLogo(brand.name);
-                          return (
-                            <Link
-                              key={brand.id}
-                              to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&brand=${encodeURIComponent(brand.name)}`}
-                              className="flex items-center justify-center h-12 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 hover:shadow-md bg-white dark:bg-slate-800 transition-all px-3 overflow-hidden"
-                            >
-                              {brand.logoUrl ? (
-                                <img src={brand.logoUrl} alt={brand.name} className="max-h-7 max-w-full object-contain" />
-                              ) : officialLogo ? (
-                                <span className="[&>svg]:h-[22px] [&>svg]:w-auto flex items-center">{officialLogo}</span>
-                              ) : (
-                                <span className="text-[12px] font-bold text-slate-700 text-center leading-tight">{brand.name}</span>
-                              )}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                      {/* Xem tất cả */}
-                      <Link
-                        to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&sub=${sub.slug || encodeURIComponent(sub.name || "")}`}
-                        className="mt-1.5 flex items-center gap-1 text-[12px] text-red-600 hover:text-red-700 font-medium group"
-                      >
-                        <Icon name="arrow_forward" className="text-[14px] group-hover:translate-x-0.5 transition-transform" />
-                        Xem tất cả {(sub.name || "").toLowerCase()}
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              /* No children: show brands for the parent category directly — 3 cols, tall cards */
-              <div>
-                <h3 className="text-[13px] font-bold text-slate-800 dark:text-slate-100 mb-3">
-                  Chọn hãng {(activeCategory.name || "").toLowerCase()}
+            <div className="flex-1 min-w-0 flex gap-5 overflow-y-auto no-scrollbar">
+              {/* Column 1: Sub-categories */}
+              <div className="w-[140px] shrink-0 border-r border-slate-100 dark:border-slate-800/80 pr-3">
+                <h3 className="text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-3 flex items-center gap-1.5">
+                  <Icon name="folder_open" className="text-red-500 text-[14px]" />
+                  Danh mục con
                 </h3>
-                <div className="grid grid-cols-3 gap-2">
-                  {allBrands
-                    .filter(b => b.categoryIds && b.categoryIds.includes(Number(activeCategory.id)))
-                    .slice(0, 9)
-                    .map(brand => {
+                <div className="flex flex-col gap-1">
+                  {activeCategory.children && activeCategory.children.length > 0 ? (
+                    activeCategory.children.map(sub => (
+                      <Link
+                        key={sub.id}
+                        to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&sub=${sub.slug || encodeURIComponent(sub.name || "")}`}
+                        className="text-[12px] font-bold text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-500 transition-all py-1.5 px-2.5 rounded-lg hover:bg-red-50/60 dark:hover:bg-red-950/20 -ml-2 flex items-center gap-2 group"
+                      >
+                        {sub.imageUrl ? (
+                          <img src={sub.imageUrl} alt={sub.name} className="w-[18px] h-[18px] object-contain shrink-0 rounded-sm bg-white dark:bg-slate-800 p-[1px] shadow-sm border border-slate-100 dark:border-slate-700 group-hover:scale-110 transition-transform duration-300" />
+                        ) : (
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600 group-hover:bg-red-500 group-hover:w-3 group-hover:rounded-sm transition-all duration-300 shrink-0" />
+                        )}
+                        <span className="group-hover:translate-x-0.5 transition-transform duration-300">{sub.name}</span>
+                      </Link>
+                    ))
+                  ) : (
+                    <span className="text-[11px] text-slate-400 italic dark:text-slate-500 px-1">Không có danh mục con</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Column 2: Brands list (compact wrapped boxes) */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-3 flex items-center gap-1.5">
+                  <Icon name="sell" className="text-red-500 text-[14px]" />
+                  Thương hiệu
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {(() => {
+                    const categoryIds = [
+                      Number(activeCategory.id),
+                      ...(activeCategory.children || []).map(sub => Number(sub.id))
+                    ];
+                    const categoryBrands = allBrands.filter(b =>
+                      b.categoryIds && b.categoryIds.some(id => categoryIds.includes(id))
+                    );
+
+                    return categoryBrands.slice(0, 15).map(brand => {
                       const officialLogo = getBrandLogo(brand.name);
                       return (
                         <Link
                           key={brand.id}
                           to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&brand=${encodeURIComponent(brand.name)}`}
-                          className="flex items-center justify-center h-12 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 hover:shadow-md bg-white dark:bg-slate-800 transition-all px-3 overflow-hidden"
+                          className="group flex items-center justify-center w-[92px] h-[38px] border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 hover:shadow-md bg-white dark:bg-slate-800 transition-all overflow-hidden p-1"
                         >
                           {brand.logoUrl ? (
-                            <img src={brand.logoUrl} alt={brand.name} className="max-h-7 max-w-full object-contain" />
+                            <img src={brand.logoUrl} alt={brand.name} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.08]" />
                           ) : officialLogo ? (
-                            <span className="[&>svg]:h-[22px] [&>svg]:w-auto flex items-center">{officialLogo}</span>
+                            <span className="[&>svg]:h-[24px] [&>svg]:w-auto flex items-center transition-transform duration-300 group-hover:scale-105">{officialLogo}</span>
                           ) : (
-                            <span className="text-[12px] font-bold text-slate-700 text-center leading-tight">{brand.name}</span>
+                            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight transition-transform duration-300 group-hover:scale-105">{brand.name}</span>
                           )}
                         </Link>
                       );
-                    })}
+                    });
+                  })()}
                 </div>
               </div>
-            )}
-          </div>
+            </div>
 
           {/* Right: Hot Products */}
-          <div className="w-[240px] shrink-0 border-l border-slate-100 pl-4">
-            <h3 className="text-[13px] font-bold text-slate-800 mb-3 flex items-center gap-1">
-              Sản phẩm nổi bật <span className="text-red-500">⚡</span>
+          <div className="w-[290px] shrink-0 border-l border-slate-100 pl-4">
+            <h3 className="text-[12px] font-extrabold text-slate-400 dark:text-slate-500 tracking-wider uppercase mb-3 flex items-center gap-1.5">
+              <Icon name="bolt" className="text-red-500 text-[14px]" />
+              Sản phẩm nổi bật
             </h3>
             <div className="grid grid-cols-3 gap-2">
               {suggestedProducts.map((product, idx) => (

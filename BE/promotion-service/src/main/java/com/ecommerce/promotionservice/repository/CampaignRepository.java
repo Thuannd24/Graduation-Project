@@ -14,4 +14,5 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
             String triggerType, LocalDateTime now1, LocalDateTime now2);
     List<Campaign> findByBpmnProcessDefinitionKeyAndActiveTrue(String bpmnProcessDefinitionKey);
     boolean existsByBpmnProcessDefinitionKey(String bpmnProcessDefinitionKey);
+    boolean existsByBpmnProcessDefinitionKeyAndIdNot(String bpmnProcessDefinitionKey, Long id);
 }

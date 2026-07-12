@@ -14,11 +14,11 @@ export function getAuthToken(): string | null {
   if (keycloak.authenticated && keycloak.token) {
     return keycloak.token;
   }
-  return localStorage.getItem(AUTH_TOKEN_KEY);
+  return null;
 }
 
-export function setAuthToken(token: string): void {
-  localStorage.setItem(AUTH_TOKEN_KEY, token);
+export function setAuthToken(_token: string): void {
+  // Token chỉ do Keycloak quản lý in-memory — không persist localStorage.
 }
 
 export function clearAuthToken(): void {
@@ -146,6 +146,12 @@ async function request<T>(path: string, options: RequestInit & { requireAuth?: b
     }
 
     throw new Error(getApiErrorMessage(payload, response.status));
+  }
+
+  // Validation endpoint returns code VALIDATION_FAILED with the result in data
+  // (valid=false + errors[]) — not an HTTP error, must unwrap for the UI.
+  if (payload?.code === "VALIDATION_FAILED" && payload.data != null) {
+    return payload.data as T;
   }
 
   if (payload && (payload.code === "SUCCESS" || typeof payload.success === "boolean")) {

@@ -1,12 +1,11 @@
 package com.ecommerce.promotionservice.service.impl;
 
 import com.ecommerce.promotionservice.dto.IssueVoucherResult;
-import com.ecommerce.promotionservice.entity.Campaign;
 import com.ecommerce.promotionservice.entity.IssuedVoucher;
 import com.ecommerce.promotionservice.entity.VoucherStatus;
 import com.ecommerce.promotionservice.entity.VoucherType;
-import com.ecommerce.promotionservice.repository.CampaignRepository;
 import com.ecommerce.promotionservice.repository.IssuedVoucherRepository;
+import com.ecommerce.promotionservice.service.CampaignBudgetService;
 import com.ecommerce.promotionservice.service.VoucherIssuanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private final IssuedVoucherRepository voucherRepository;
-    private final CampaignRepository campaignRepository;
+    private final CampaignBudgetService budgetService;
 
     @Override
     @Transactional
@@ -39,7 +38,7 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
             throw new IllegalArgumentException("discountPercent phải trong khoảng (0, 100].");
         }
         BigDecimal maxAmt = maxDiscountAmount != null ? maxDiscountAmount : BigDecimal.ZERO;
-        reserveBudget(campaignId, maxAmt);
+        budgetService.reserveBudget(campaignId, maxAmt);
 
         String prefix = "VPC";
         IssuedVoucher voucher = IssuedVoucher.builder()
@@ -68,7 +67,7 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
         if (discountAmount == null || discountAmount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("discountAmount phải > 0.");
         }
-        reserveBudget(campaignId, discountAmount);
+        budgetService.reserveBudget(campaignId, discountAmount);
 
         IssuedVoucher voucher = IssuedVoucher.builder()
                 .code(generateUniqueCode("VPF"))
@@ -96,7 +95,7 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
         if (maxShippingDiscount == null || maxShippingDiscount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("maxShippingDiscount phải > 0.");
         }
-        reserveBudget(campaignId, maxShippingDiscount);
+        budgetService.reserveBudget(campaignId, maxShippingDiscount);
 
         IssuedVoucher voucher = IssuedVoucher.builder()
                 .code(generateUniqueCode("VFS"))
@@ -112,29 +111,6 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 voucher.getCode(), userId, campaignId, maxShippingDiscount);
 
         return toResult(voucher);
-    }
-
-    private void reserveBudget(Long campaignId, BigDecimal amount) {
-        if (campaignId == null || amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            return;
-        }
-        Campaign campaign = campaignRepository.findById(campaignId)
-                .orElseThrow(() -> new IllegalArgumentException("Campaign không tồn tại: " + campaignId));
-
-        BigDecimal remaining = campaign.getRemainingBudget() != null
-                ? campaign.getRemainingBudget()
-                : campaign.getTotalBudget();
-        if (remaining == null) {
-            remaining = BigDecimal.ZERO;
-        }
-        if (remaining.compareTo(amount) < 0) {
-            throw new IllegalStateException(
-                    "Ngân sách chiến dịch không đủ. Còn lại: " + remaining + ", cần: " + amount);
-        }
-        campaign.setRemainingBudget(remaining.subtract(amount));
-        campaignRepository.save(campaign);
-        log.debug("Deducted budget {} from campaign id={}, remaining={}",
-                amount, campaignId, campaign.getRemainingBudget());
     }
 
     private String generateUniqueCode(String prefix) {

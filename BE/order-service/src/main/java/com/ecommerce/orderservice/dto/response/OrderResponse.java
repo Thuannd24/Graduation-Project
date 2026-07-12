@@ -23,6 +23,11 @@ public class OrderResponse {
     private BigDecimal finalAmount;
     private String couponCode;
     private String appliedCampaignId;
+    private Integer pointsRedeemed;
+    private BigDecimal pointDiscountAmount;
+    private BigDecimal shippingFee;
+    private BigDecimal shippingDiscountAmount;
+    private BigDecimal vatAmount;
     private String trackingCode;
     private String shippingAddress;
     private String phoneNumber;

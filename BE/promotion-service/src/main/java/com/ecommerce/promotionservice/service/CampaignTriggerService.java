@@ -32,6 +32,25 @@ public class CampaignTriggerService {
     private final WorkflowTriggerResolver triggerResolver;
     private final CampaignVariableEnricher variableEnricher;
 
+    private String resolveEventUniqueId(String triggerType, Map<String, Object> eventVariables) {
+        if ("Trigger_Event_OrderSuccess".equals(triggerType)) {
+            Object orderId = eventVariables.get("orderId");
+            return orderId != null ? orderId.toString() : null;
+        }
+        if ("Trigger_Event_ReviewProduct".equals(triggerType)) {
+            Object reviewId = eventVariables.get("reviewId");
+            return reviewId != null ? reviewId.toString() : null;
+        }
+        if ("Trigger_Event_NewUser".equals(triggerType)) {
+            Object userId = eventVariables.get("userId");
+            if (userId == null) {
+                userId = eventVariables.get("keycloakUserId");
+            }
+            return userId != null ? userId.toString() : null;
+        }
+        return null;
+    }
+
     @Transactional
     public void triggerByEventType(String triggerType, Map<String, Object> eventVariables) {
         LocalDateTime now = LocalDateTime.now();
@@ -60,8 +79,31 @@ public class CampaignTriggerService {
                         campaign.getId(), campaign.getBpmnProcessDefinitionKey());
                 continue;
             }
-            backfillTriggerTypeIfMissing(campaign, triggerType);
-            startCampaignProcess(campaign, eventVariables);
+
+            String eventUniqueId = resolveEventUniqueId(triggerType, eventVariables);
+            if (eventUniqueId != null) {
+                String businessKey = campaign.getId() + ":" + triggerType + ":" + eventUniqueId;
+                
+                // Check if a process instance with this business key already exists (active or completed)
+                long activeCount = runtimeService.createProcessInstanceQuery()
+                        .processInstanceBusinessKey(businessKey)
+                        .count();
+                long historicCount = historyService.createHistoricProcessInstanceQuery()
+                        .processInstanceBusinessKey(businessKey)
+                        .count();
+                        
+                if (activeCount > 0 || historicCount > 0) {
+                    log.info("Campaign id={} key={} already triggered for event {}:{}. Skipping duplicate execution.",
+                            campaign.getId(), campaign.getBpmnProcessDefinitionKey(), triggerType, eventUniqueId);
+                    continue;
+                }
+                
+                backfillTriggerTypeIfMissing(campaign, triggerType);
+                startCampaignProcess(campaign, businessKey, eventVariables);
+            } else {
+                backfillTriggerTypeIfMissing(campaign, triggerType);
+                startCampaignProcess(campaign, eventVariables);
+            }
         }
     }
 
@@ -75,14 +117,19 @@ public class CampaignTriggerService {
 
     @Transactional
     public Map<String, Object> startCampaignProcess(Campaign campaign, Map<String, Object> inputVariables) {
+        return startCampaignProcess(campaign, null, inputVariables);
+    }
+
+    @Transactional
+    public Map<String, Object> startCampaignProcess(Campaign campaign, String businessKey, Map<String, Object> inputVariables) {
         Map<String, Object> variables = new HashMap<>(inputVariables);
         variables.put("campaignId", campaign.getId());
         variables.put("campaignWorkflowJson", campaign.getWorkflowJson());
 
         variableEnricher.enrich(variables);
 
-        log.info("Starting Camunda process '{}' for campaign id={} with variables keys={}",
-                campaign.getBpmnProcessDefinitionKey(), campaign.getId(), variables.keySet());
+        log.info("Starting Camunda process '{}' with businessKey '{}' for campaign id={} with variables keys={}",
+                campaign.getBpmnProcessDefinitionKey(), businessKey, campaign.getId(), variables.keySet());
 
         List<ProcessDefinition> pds = repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey(campaign.getBpmnProcessDefinitionKey())
@@ -94,11 +141,19 @@ public class CampaignTriggerService {
             String processDefinitionId = pds.get(0).getId();
             log.info("Resolved process definition key '{}' to unique ID '{}' (version {})",
                     campaign.getBpmnProcessDefinitionKey(), processDefinitionId, pds.get(0).getVersion());
-            instance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
+            if (businessKey != null) {
+                instance = runtimeService.startProcessInstanceById(processDefinitionId, businessKey, variables);
+            } else {
+                instance = runtimeService.startProcessInstanceById(processDefinitionId, variables);
+            }
         } else {
             log.warn("No deployed process definition found for key '{}'. Falling back to start by key.",
                     campaign.getBpmnProcessDefinitionKey());
-            instance = runtimeService.startProcessInstanceByKey(campaign.getBpmnProcessDefinitionKey(), variables);
+            if (businessKey != null) {
+                instance = runtimeService.startProcessInstanceByKey(campaign.getBpmnProcessDefinitionKey(), businessKey, variables);
+            } else {
+                instance = runtimeService.startProcessInstanceByKey(campaign.getBpmnProcessDefinitionKey(), variables);
+            }
         }
 
         return getVariablesSafe(instance.getId());

@@ -7,6 +7,9 @@ import ProductCard from "../../catalog/components/ProductCard.jsx";
 import { useCart } from "../../../context/CartContext.jsx";
 import { productApi } from "../../../services/productApi";
 import { formatVnd } from "../../../utils/format.js";
+import { aiApi } from "../../../services/aiApi.ts";
+import { orderApi } from "../../../services/orderApi";
+import { hasAuthToken } from "../../../services/apiClient";
 
 /* ===================== Cart Item Component ===================== */
 
@@ -25,26 +28,26 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: 80, height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, overflow: "hidden" }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`group relative flex flex-col sm:flex-row gap-4 sm:gap-5 p-4 bg-white dark:bg-slate-900 rounded-xl border transition-all duration-300 ${
+      className={`group relative flex gap-4 p-4 bg-white dark:bg-slate-900 rounded-2xl border transition-all duration-300 ${
         removing
           ? "border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20"
-          : "border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-md"
+          : "border-slate-100 dark:border-slate-800/80 hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-sm"
       }`}
     >
-      {/* Image */}
+      {/* Product Image */}
       <Link
         to={`/product/${item.id}`}
-        className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center p-2 shrink-0 group/image"
+        className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex items-center justify-center p-2 shrink-0 transition-transform duration-300"
       >
         {!imgError ? (
           <img
             alt={item.name}
             src={item.image}
-            className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover/image:scale-110"
+            className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
             onError={() => setImgError(true)}
           />
         ) : (
@@ -52,70 +55,79 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
         )}
       </Link>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
-        <div>
-          <Link
-            to={`/product/${item.id}`}
-            className="font-bold text-sm text-slate-800 dark:text-slate-200 hover:text-primary transition-colors line-clamp-2 leading-snug"
-          >
-            {item.name}
-          </Link>
-          <div className="flex items-center gap-2 mt-1.5">
-            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
-              <Icon name="tune" className="text-[10px]" />
-              {item.variant || "Tiêu chuẩn"}
-            </span>
-            {item.qty >= 3 && (
-              <span className="text-[9px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded">
-                Mua sỉ
+      {/* Product Details */}
+      <div className="flex-1 min-w-0 flex flex-col justify-between">
+        <div className="flex justify-between items-start gap-2">
+          <div className="space-y-1">
+            <Link
+              to={`/product/${item.id}`}
+              className="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-200 hover:text-primary transition-colors line-clamp-2 leading-tight"
+            >
+              {item.name}
+            </Link>
+            
+            {/* Specs Tag */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+              <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-850 px-1.5 py-0.5 rounded">
+                <Icon name="tune" className="text-[9px]" />
+                {item.variant || "Tiêu chuẩn"}
               </span>
-            )}
+              <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 px-1.5 py-0.5 rounded">
+                <Icon name="verified" className="text-[9px]" />
+                Chính hãng
+              </span>
+              {item.qty >= 3 && (
+                <span className="text-[9px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded">
+                  Mua sỉ
+                </span>
+              )}
+            </div>
           </div>
+
+          {/* Remove Button */}
+          <button
+            onClick={handleRemove}
+            className="text-slate-305 hover:text-primary p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors shrink-0 border-none bg-transparent cursor-pointer"
+            type="button"
+            title="Xóa sản phẩm"
+          >
+            <Icon name="delete_outline" className="text-lg" />
+          </button>
         </div>
 
-        <div className="flex items-center justify-between sm:justify-end gap-4 flex-wrap">
-          {/* Qty Controls */}
-          <div className="flex items-center border-2 border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-950 h-9">
+        {/* Pricing & Controls Row */}
+        <div className="flex items-end justify-between mt-3">
+          {/* Quantity Controls */}
+          <div className="flex items-center border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-950 h-8">
             <button
               onClick={() => onUpdateQty(item.id, item.variant, item.qty - 1)}
               disabled={item.qty <= 1}
-              className="w-9 h-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed border-none cursor-pointer transition-colors text-base font-bold"
+              className="w-8 h-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed border-none cursor-pointer transition-colors"
               type="button"
             >
-              <Icon name="remove" className="text-sm" />
+              <Icon name="remove" className="text-xs" />
             </button>
-            <div className="w-10 text-center text-sm font-extrabold text-slate-800 dark:text-slate-200 bg-transparent select-none">
+            <div className="w-8 text-center text-xs font-black text-slate-800 dark:text-slate-200">
               {item.qty}
             </div>
             <button
               onClick={() => onUpdateQty(item.id, item.variant, item.qty + 1)}
               disabled={item.qty >= 99}
-              className="w-9 h-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed border-none cursor-pointer transition-colors text-base font-bold"
+              className="w-8 h-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed border-none cursor-pointer transition-colors"
               type="button"
             >
-              <Icon name="add" className="text-sm" />
+              <Icon name="add" className="text-xs" />
             </button>
           </div>
 
-          {/* Price & Remove */}
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <strong className="text-sm font-extrabold text-primary block">
-                {formatVnd(lineTotal)}
-              </strong>
-              <span className="text-[10px] text-slate-400 block mt-0.5">
-                {formatVnd(unitPrice)} / cái
-              </span>
-            </div>
-            <button
-              onClick={handleRemove}
-              className="w-9 h-9 rounded-xl bg-transparent hover:bg-red-50 dark:hover:bg-red-950/20 text-slate-300 hover:text-primary flex items-center justify-center border-none cursor-pointer transition-all hover:scale-110"
-              type="button"
-              title="Xóa sản phẩm"
-            >
-              <Icon name="delete" className="text-lg" />
-            </button>
+          {/* Price Breakdown */}
+          <div className="text-right">
+            <span className="text-[10px] text-slate-400 block mb-0.5">
+              {formatVnd(unitPrice)} / cái
+            </span>
+            <strong className="text-sm font-extrabold text-primary block">
+              {formatVnd(lineTotal)}
+            </strong>
           </div>
         </div>
       </div>
@@ -127,112 +139,137 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
 
 function EmptyCart() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="text-center py-16 sm:py-20 flex flex-col items-center justify-center"
-    >
-      <div className="relative mb-6">
-        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-slate-50 to-red-50 dark:from-slate-900 dark:to-red-950/20 flex items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700">
-          <Icon name="shopping_cart" className="text-5xl text-slate-300 dark:text-slate-600" />
-        </div>
-        <div className="absolute -top-1 -right-1 w-8 h-8 rounded-full bg-amber-400 text-white flex items-center justify-center text-xs font-bold shadow-lg">
-          0
-        </div>
-      </div>
-      <h3 className="text-xl font-black text-slate-800 dark:text-slate-200 mb-1">
-        Giỏ hàng trống
-      </h3>
-      <p className="text-sm text-slate-500 max-w-sm mx-auto mb-6 leading-relaxed">
-        Bạn chưa có sản phẩm nào trong giỏ hàng. Khám phá ngay các sản phẩm công nghệ đỉnh cao!
-      </p>
-      <Link
-        to="/category"
-        className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary to-red-600 text-white font-extrabold text-sm uppercase rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-500/25 hover:shadow-xl"
+    <div className="relative w-full max-w-md mx-auto my-4 sm:my-8">
+      {/* Background Glowing Ambient Orbs */}
+      <div className="absolute -top-10 -left-10 w-44 h-44 bg-primary/20 dark:bg-primary/30 rounded-full blur-3xl -z-10 animate-pulse" />
+      <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-indigo-500/20 dark:bg-indigo-500/30 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: "2s" }} />
+
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/80 rounded-[28px] p-5 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center"
       >
-        <Icon name="arrow_back" className="text-sm" />
-        Tiếp tục mua sắm
-      </Link>
-    </motion.div>
-  );
-}
-
-/* ===================== Free Shipping Progress Bar ===================== */
-
-function ShippingProgress({ subtotal }) {
-  const FREE_SHIPPING_THRESHOLD = 500000; // 500k
-  const progress = Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
-  const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
-
-  if (subtotal >= FREE_SHIPPING_THRESHOLD) {
-    return (
-      <div className="flex items-center gap-2.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/30 rounded-xl px-4 py-3">
-        <div className="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shrink-0">
-          <Icon name="check_circle" className="text-emerald-600 dark:text-emerald-400 text-lg" />
-        </div>
-        <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
-          🎉 Bạn đã được miễn phí vận chuyển!
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl px-4 py-3 space-y-2">
-      <div className="flex items-center gap-2.5">
-        <div className="w-9 h-9 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center shrink-0">
-          <Icon name="local_shipping" className="text-amber-600 dark:text-amber-400 text-lg" />
-        </div>
-        <p className="text-xs font-semibold text-amber-800 dark:text-amber-300 leading-snug">
-          Mua thêm <strong className="text-primary">{formatVnd(remaining)}</strong> để được <strong>miễn phí vận chuyển</strong>
-        </p>
-      </div>
-      <div className="w-full h-2 bg-amber-100 dark:bg-amber-900/40 rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full"
+        {/* Floating Abstract Bubbles for 3D depth */}
+        <motion.div 
+          animate={{ y: [0, -8, 0], x: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          className="absolute top-8 left-8 w-2.5 h-2.5 rounded-full bg-rose-400/40 blur-[0.5px]" 
         />
-      </div>
+        <motion.div 
+          animate={{ y: [0, 8, 0], x: [0, -4, 0] }}
+          transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-12 right-10 w-3 h-3 rounded-full bg-blue-400/40 blur-[0.5px]" 
+        />
+
+        {/* Floating Animated Cart Illustration */}
+        <div className="relative mb-5">
+          {/* Glowing Aura Ring */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary via-rose-500 to-indigo-500 blur-xl opacity-30 animate-pulse" />
+          
+          <motion.div 
+            animate={{ y: [0, -6, 0], rotate: [0, 1, -1, 0] }}
+            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+            className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-primary via-rose-500 to-indigo-500 flex items-center justify-center p-0.5 shadow-[0_8px_24px_rgba(239,68,68,0.15)]"
+          >
+            <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 flex items-center justify-center">
+              <Icon name="shopping_cart" className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-primary via-rose-500 to-indigo-500" />
+            </div>
+          </motion.div>
+          
+          {/* Pulsing Zero Badge */}
+          <span className="absolute top-0 right-0 w-5.5 h-5.5 rounded-full bg-amber-400 text-amber-955 flex items-center justify-center text-[9px] font-black shadow-lg border border-white dark:border-slate-900 animate-bounce">
+            0
+          </span>
+        </div>
+
+        {/* Dynamic Title with Color Gradient */}
+        <h3 className="text-sm font-black mb-1.5 uppercase tracking-wider bg-gradient-to-r from-slate-900 via-primary to-indigo-600 dark:from-white dark:via-primary dark:to-indigo-400 bg-clip-text text-transparent">
+          Giỏ hàng của bạn đang trống
+        </h3>
+        
+        <p className="text-[11px] text-slate-505 dark:text-slate-400 max-w-xs mx-auto mb-5 leading-relaxed font-semibold">
+          Có vẻ như bạn chưa chọn được sản phẩm công nghệ nào. Hãy lấp đầy giỏ hàng bằng những ưu đãi cực hấp dẫn dưới đây!
+        </p>
+
+        <Link
+          to="/category"
+          className="inline-flex items-center gap-1.5 px-6 py-2 bg-gradient-to-r from-primary via-rose-500 to-indigo-600 text-white font-extrabold text-[10px] uppercase rounded-xl transition-all shadow-[0_6px_20px_rgba(239,68,68,0.2)] hover:shadow-[0_8px_25px_rgba(239,68,68,0.3)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+        >
+          <Icon name="arrow_back" className="text-xs animate-pulse" />
+          Tiếp tục mua sắm
+        </Link>
+      </motion.div>
     </div>
   );
 }
 
+
 /* ===================== Main CartPage ===================== */
 
 export default function CartPage() {
-  const { items, updateQty, removeItem, summary } = useCart();
+  const { items, updateQty, removeItem, summary, addToCart, showToast } = useCart();
   const [recommended, setRecommended] = useState([]);
-  const [discountPercent, setDiscountPercent] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [backendSummary, setBackendSummary] = useState(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
 
-  // Load recommended products
   useEffect(() => {
-    productApi
-      .listProducts()
-      .then((data) => setRecommended(data.slice(0, 4)))
-      .catch(() => setRecommended([]));
-  }, []);
-
-  // Handle voucher application
-  const handleApplyVoucher = (code) => {
-    if (code === "AURATECH2026" || code === "TECHSTORE2026" || code === "KM10") {
-      setDiscountPercent(0.1);
-      sessionStorage.setItem("techstore_coupon_code", code);
-      sessionStorage.setItem("techstore_coupon_discount_percent", "0.1");
+    let cancelled = false;
+    async function getPreview() {
+      if (!hasAuthToken() || items.length === 0) {
+        setBackendSummary(null);
+        return;
+      }
+      setPreviewLoading(true);
+      try {
+        const res = await orderApi.previewCheckout({});
+        if (!cancelled) setBackendSummary(res);
+      } catch (err) {
+        console.error("Preview failed:", err);
+      } finally {
+        if (!cancelled) setPreviewLoading(false);
+      }
     }
-  };
+    getPreview();
+    return () => { cancelled = true; };
+  }, [items]);
 
-  // Calculate local summary taking voucher into account
+  // Load dynamic cross-sell recommendations
+  useEffect(() => {
+    if (items.length > 0) {
+      const itemIds = items.map((item) => String(item.id));
+      aiApi
+        .getCrossSellCombo(itemIds)
+        .then(setRecommended)
+        .catch(() => setRecommended([]));
+    } else {
+      productApi
+        .listProducts()
+        .then((data) => setRecommended(data.slice(0, 4)))
+        .catch(() => setRecommended([]));
+    }
+  }, [items]);
+
   const localSummary = useMemo(() => {
+    if (backendSummary) {
+      return {
+        subtotal: backendSummary.subtotal || 0,
+        discount: backendSummary.totalDiscount || 0,
+        shipping: backendSummary.shippingFee || 0,
+        shippingDiscount: backendSummary.shippingDiscount || 0,
+        pointDiscount: backendSummary.pointDiscount || 0,
+        vat: backendSummary.vatAmount || 0,
+        total: backendSummary.finalAmount || 0,
+      };
+    }
     const subtotal = summary.subtotal;
-    const discount = discountPercent > 0 ? Math.round(subtotal * discountPercent) : 0;
-    const vat = Math.round((subtotal - discount) * 0.1);
-    const total = subtotal - discount + vat;
-    return { subtotal, discount, shipping: 0, vat, total };
-  }, [summary, discountPercent]);
+    const discount = 0;
+    const shipping = subtotal >= 500000 ? 0 : 30000;
+    const vat = Math.round(subtotal * 0.1);
+    const total = subtotal - discount + shipping + vat;
+    return { subtotal, discount, shipping, vat, total };
+  }, [summary, backendSummary]);
 
   // Toggle select all
   const toggleSelectAll = () => {
@@ -257,8 +294,11 @@ export default function CartPage() {
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between relative">
           {/* Progress line */}
-          <div className="absolute left-[40px] right-[40px] top-[18px] h-[3px] bg-slate-200 dark:bg-slate-800 rounded-full">
-            <div className="h-full bg-gradient-to-r from-primary to-red-500 rounded-full transition-all duration-500" style={{ width: `${(1 / (steps.length - 1)) * 100}%` }} />
+          <div className="absolute left-[40px] right-[40px] top-[18px] h-[3.5px] bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-primary to-red-500 rounded-full transition-all duration-500" 
+              style={{ width: `${(steps.findIndex(s => s.active) / (steps.length - 1)) * 100}%` }} 
+            />
           </div>
 
           {steps.map((step, idx) => (
@@ -304,16 +344,14 @@ export default function CartPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-xs font-semibold text-slate-500">
-                    Tổng: <strong className="text-primary font-black">{formatVnd(localSummary.total)}</strong>
+                  <span className="text-xs font-bold text-slate-500">
+                    Tạm tính: <strong className="text-primary font-extrabold text-sm ml-1">{formatVnd(localSummary.subtotal)}</strong>
                   </span>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Free Shipping Progress */}
-          {items.length > 0 && <ShippingProgress subtotal={summary.subtotal} />}
 
           {/* Cart Items List */}
           {items.length === 0 ? (
@@ -353,24 +391,37 @@ export default function CartPage() {
         {items.length > 0 && (
           <OrderSummary
             summary={localSummary}
-            onApplyVoucher={handleApplyVoucher}
             actionLabel="Tiến hành thanh toán"
             actionTo="/checkout"
           />
         )}
       </div>
 
-      {/* ===================== Suggested Products ===================== */}
+      {/* ===================== Suggested Products (AI Cross-sell) ===================== */}
       {recommended.length > 0 && (
-        <section className="pt-4">
+        <section className="pt-4 border-t border-slate-100 dark:border-slate-800">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-sm">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-md">
                 <Icon name="bolt" className="text-white text-sm" />
               </div>
-              <h2 className="text-base font-black text-slate-800 dark:text-slate-200 tracking-tight">
-                Có thể bạn sẽ thích
-              </h2>
+              <div>
+                <h2 className="text-base font-black text-slate-800 dark:text-slate-200 tracking-tight flex items-center gap-2">
+                  {items.length > 0 ? (
+                    <>
+                      Ưu đãi mua kèm <span className="text-[10px] bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">AI Combo Recommended</span>
+                    </>
+                  ) : (
+                    "Gợi ý sản phẩm nổi bật"
+                  )}
+                </h2>
+                <p className="text-[10.5px] text-slate-400 font-medium">
+                  {items.length > 0 
+                    ? "Sản phẩm thường được mua cùng các thiết bị trong giỏ hàng của bạn (FP-Growth Association)" 
+                    : "Khám phá các thiết bị công nghệ đỉnh cao đang được yêu thích nhất"
+                  }
+                </p>
+              </div>
             </div>
             <Link
               to="/category"
@@ -380,15 +431,36 @@ export default function CartPage() {
               <Icon name="chevron_right" className="text-sm" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {recommended.map((product, idx) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: idx * 0.05 }}
+                className="flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-3 shadow-sm hover:shadow-md transition-all group"
               >
-                <ProductCard product={product} />
+                <div className="flex-1">
+                  <ProductCard product={product} />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    addToCart({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.image,
+                      qty: 1,
+                      variant: "Tiêu chuẩn"
+                    });
+                    showToast(`Đã thêm ${product.name} vào giỏ hàng!`);
+                  }}
+                  className="w-full mt-3 py-2 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]"
+                >
+                  <Icon name="add_shopping_cart" className="text-xs" />
+                  Thêm nhanh vào giỏ
+                </button>
               </motion.div>
             ))}
           </div>

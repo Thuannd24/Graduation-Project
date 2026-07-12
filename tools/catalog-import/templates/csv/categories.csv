@@ -1,0 +1,5 @@
+# Dòng bắt đầu bằng # là comment
+slug,name,parent_slug,image_url,sort_order,active
+dien-thoai,Điện thoại,,,1,true
+iphone,iPhone,dien-thoai,,1,true
+laptop,Laptop,,,2,true

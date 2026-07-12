@@ -51,6 +51,40 @@ public class CampaignController {
         return ApiResponse.success(campaignService.getCampaign(id));
     }
 
+    /**
+     * PUT /api/v1/admin/campaigns/{id}
+     * Update campaign metadata (name/budget/dates/active) and optionally re-deploy a new revision
+     * of the BPMN process when workflowJson is provided.
+     */
+    @PutMapping("/api/v1/admin/campaigns/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ApiResponse<CampaignDto> updateCampaign(
+            @PathVariable Long id,
+            @RequestBody CampaignDto campaignDto) {
+        return ApiResponse.success(campaignService.updateCampaign(id, campaignDto));
+    }
+
+    /** GET /api/v1/admin/campaigns/dashboard – tổng quan thống kê promotion */
+    @GetMapping("/api/v1/admin/campaigns/dashboard")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ApiResponse<PromotionDashboardDto> getPromotionDashboard() {
+        return ApiResponse.success(campaignService.getPromotionDashboard());
+    }
+
+    /** GET /api/v1/admin/campaigns/{id}/stats  – runtime statistics */
+    @GetMapping("/api/v1/admin/campaigns/{id}/stats")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ApiResponse<CampaignStatsDto> getCampaignStats(@PathVariable Long id) {
+        return ApiResponse.success(campaignService.getCampaignStats(id));
+    }
+
+    /** GET /api/v1/admin/campaigns/{id}/vouchers  – list issued vouchers */
+    @GetMapping("/api/v1/admin/campaigns/{id}/vouchers")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ApiResponse<List<IssuedVoucherDto>> listCampaignVouchers(@PathVariable Long id) {
+        return ApiResponse.success(campaignService.listCampaignVouchers(id));
+    }
+
     /** GET /api/v1/admin/campaigns  – all campaigns (for load modal) */
     @GetMapping("/api/v1/admin/campaigns")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
@@ -58,9 +92,9 @@ public class CampaignController {
         return ApiResponse.success(campaignService.getAllCampaigns());
     }
 
-    /** GET /api/v1/public/campaigns/active */
+    /** GET /api/v1/public/campaigns/active — chỉ trả metadata công khai, không lộ budget/BPMN */
     @GetMapping("/api/v1/public/campaigns/active")
-    public ApiResponse<List<CampaignDto>> getActiveCampaigns() {
+    public ApiResponse<List<PublicCampaignDto>> getActiveCampaigns() {
         return ApiResponse.success(campaignService.getActiveCampaigns());
     }
 
@@ -82,10 +116,11 @@ public class CampaignController {
     }
 
     /**
-     * POST /api/v1/public/campaigns/evaluate
-     * Trigger a running Camunda process instance for the given processKey.
+     * POST /api/v1/admin/campaigns/evaluate
+     * Chỉ ADMIN/STAFF được trigger workflow — tránh phát voucher trái phép qua endpoint public.
      */
-    @PostMapping("/api/v1/public/campaigns/evaluate")
+    @PostMapping("/api/v1/admin/campaigns/evaluate")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
     public ApiResponse<Map<String, Object>> evaluateCampaign(
             @RequestParam("processKey") String processKey,
             @RequestBody Map<String, Object> variables) {

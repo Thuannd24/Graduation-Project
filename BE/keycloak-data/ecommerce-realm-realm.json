@@ -1292,7 +1292,7 @@
     "internalId" : "e5938626-cc27-4197-aac8-6f3955f88417",
     "providerId" : "google",
     "enabled" : true,
-    "updateProfileFirstLoginMode" : "on",
+    "updateProfileFirstLoginMode" : "off",
     "trustEmail" : true,
     "storeToken" : true,
     "addReadTokenRoleOnCreate" : false,
@@ -1525,7 +1525,7 @@
     "topLevel" : false,
     "builtIn" : true,
     "authenticationExecutions" : [ {
-      "authenticator" : "idp-confirm-link",
+      "authenticator" : "idp-auto-link",
       "authenticatorFlow" : false,
       "requirement" : "REQUIRED",
       "priority" : 10,
@@ -1533,7 +1533,7 @@
       "userSetupAllowed" : false
     }, {
       "authenticatorFlow" : true,
-      "requirement" : "REQUIRED",
+      "requirement" : "DISABLED",
       "priority" : 20,
       "autheticatorFlow" : true,
       "flowAlias" : "Account verification options",
@@ -1733,7 +1733,7 @@
       "authenticatorConfig" : "review profile config",
       "authenticator" : "idp-review-profile",
       "authenticatorFlow" : false,
-      "requirement" : "REQUIRED",
+      "requirement" : "DISABLED",
       "priority" : 10,
       "autheticatorFlow" : false,
       "userSetupAllowed" : false
@@ -1912,7 +1912,7 @@
     "alias" : "UPDATE_PROFILE",
     "name" : "Update Profile",
     "providerId" : "UPDATE_PROFILE",
-    "enabled" : true,
+    "enabled" : false,
     "defaultAction" : false,
     "priority" : 40,
     "config" : { }
@@ -1952,7 +1952,7 @@
     "alias" : "VERIFY_PROFILE",
     "name" : "Verify Profile",
     "providerId" : "VERIFY_PROFILE",
-    "enabled" : true,
+    "enabled" : false,
     "defaultAction" : false,
     "priority" : 90,
     "config" : { }

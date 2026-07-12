@@ -48,15 +48,15 @@ export default function ProductCarousel({
 
   const navBtn = {
     position: "absolute",
-    top: "40%",
+    top: "50%",
     transform: "translateY(-50%)",
     zIndex: 10,
-    width: 36,
-    height: 36,
+    width: 42,
+    height: 42,
     backgroundColor: "#fff",
-    border: "1px solid #E5E7EB",
+    border: "1px solid #E2E8F0",
     borderRadius: "50%",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
+    boxShadow: "0 4px 14px rgba(0,0,0,0.1)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -107,15 +107,42 @@ export default function ProductCarousel({
         ))}
       </div>
 
+      <style>{`
+        .carousel-nav-btn {
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .carousel-nav-btn:hover {
+          transform: translateY(-50%) scale(1.1) !important;
+          background-color: #F8FAFC !important;
+          border-color: #CBD5E1 !important;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.15) !important;
+        }
+        .carousel-nav-btn:active {
+          transform: translateY(-50%) scale(0.95) !important;
+        }
+      `}</style>
+
       {canLeft && (
-        <button type="button" aria-label="Xem trước" onClick={() => scrollBy(-1)} style={{ ...navBtn, left: 4 }}>
-          <Icon name="chevron_left" style={{ fontSize: 22, color: "#374151" }} />
+        <button 
+          type="button" 
+          aria-label="Xem trước" 
+          onClick={() => scrollBy(-1)} 
+          className="carousel-nav-btn"
+          style={{ ...navBtn, left: -14 }}
+        >
+          <Icon name="chevron_left" style={{ fontSize: 26, color: "#334155" }} />
         </button>
       )}
 
       {canRight && (
-        <button type="button" aria-label="Xem tiếp" onClick={() => scrollBy(1)} style={{ ...navBtn, right: 4 }}>
-          <Icon name="chevron_right" style={{ fontSize: 22, color: "#374151" }} />
+        <button 
+          type="button" 
+          aria-label="Xem tiếp" 
+          onClick={() => scrollBy(1)} 
+          className="carousel-nav-btn"
+          style={{ ...navBtn, right: -14 }}
+        >
+          <Icon name="chevron_right" style={{ fontSize: 26, color: "#334155" }} />
         </button>
       )}
     </div>

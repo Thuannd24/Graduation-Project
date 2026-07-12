@@ -667,7 +667,7 @@ export default function OrdersTab({
                       } else if (isShipped) {
                         dotColor = "bg-emerald-500";
                         textColor = "text-emerald-700";
-                        subText = `Đơn vị vận chuyển đã nhận hàng - Vận đơn: ${selectedOrder.trackingCode || "MOCK-GHTK-123"}`;
+                        subText = `Đơn vị vận chuyển đã nhận hàng - Vận đơn: ${selectedOrder.trackingCode || "—"}`;
                       } else if (isReady) {
                         dotColor = "bg-blue-500 animate-pulse";
                         textColor = "text-blue-600";

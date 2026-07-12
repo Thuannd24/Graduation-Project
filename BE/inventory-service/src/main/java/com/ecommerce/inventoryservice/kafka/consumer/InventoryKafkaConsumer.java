@@ -7,9 +7,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+
+import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
@@ -18,23 +21,60 @@ public class InventoryKafkaConsumer {
     // InventoryKafkaConsumer lắng nghe message từ Kafka topic "order-events" 
     private final InventoryDeductService deductService;
     private final ObjectMapper objectMapper;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @KafkaListener(topics = "order-events", groupId = "inventory-service-group")
     public void consumeOrderEvent(String message, Acknowledgment ack) {
+        String lockKey = null;
         try {
             log.info("Received order event: {}", message);
 
             JsonNode jsonNode = objectMapper.readTree(message);
+            if (jsonNode.isTextual()) {
+                jsonNode = objectMapper.readTree(jsonNode.asText());
+            }
             String eventType = jsonNode.get("eventType").asText();
+            
+            if (!jsonNode.has("orderId")) {
+                log.error("Invalid order event payload: orderId is missing. Message: {}", message);
+                if (ack != null) {
+                    ack.acknowledge();
+                }
+                return;
+            }
+            
+            Long orderId = jsonNode.get("orderId").asLong();
+            lockKey = "lock:inventory-consumer:" + orderId;
+            boolean lockAcquired = false;
+
+            // Retry for up to 5 seconds to acquire the lock
+            for (int i = 0; i < 50; i++) {
+                Boolean locked = redisTemplate.opsForValue().setIfAbsent(lockKey, "locked", Duration.ofSeconds(10));
+                if (Boolean.TRUE.equals(locked)) {
+                    lockAcquired = true;
+                    break;
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Lock acquisition interrupted", ie);
+                }
+            }
+
+            if (!lockAcquired) {
+                log.warn("Could not acquire lock {} for order event processing. Throwing exception to trigger Kafka retry.", lockKey);
+                throw new RuntimeException("Could not acquire lock for order event processing");
+            }
 
             switch (eventType) {
                 case "OrderCreatedEvent":
-                    OrderCreatedEvent orderCreated = objectMapper.readValue(message, OrderCreatedEvent.class);
+                    OrderCreatedEvent orderCreated = objectMapper.treeToValue(jsonNode, OrderCreatedEvent.class);
                     deductService.processOrderCreated(orderCreated);
                     break;
 
                 case "OrderCancelledEvent":
-                    OrderCancelledEvent orderCancelled = objectMapper.readValue(message, OrderCancelledEvent.class);
+                    OrderCancelledEvent orderCancelled = objectMapper.treeToValue(jsonNode, OrderCancelledEvent.class);
                     deductService.processOrderCancelled(orderCancelled);
                     break;
 
@@ -71,6 +111,14 @@ public class InventoryKafkaConsumer {
             } else {
                 log.error("Failed to process order event due to system/database error: {}", message, e);
                 throw new RuntimeException("Error processing Kafka message, retrying...", e);
+            }
+        } finally {
+            if (lockKey != null) {
+                try {
+                    redisTemplate.delete(lockKey);
+                } catch (Exception e) {
+                    log.error("Failed to release lock {}", lockKey, e);
+                }
             }
         }
     }

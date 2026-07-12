@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, Outlet, useLocation, Navigate } from "react-router-dom";
 import { CartProvider } from "./context/CartContext.jsx";
 import { WishlistProvider } from "./context/WishlistContext.jsx";
 import Header from "./components/common/Header.jsx";
@@ -14,7 +14,6 @@ import RegisterPage from "./features/auth/pages/RegisterPage.jsx";
 import ProfilePage from "./features/profile/pages/ProfilePage.jsx";
 import SearchPage from "./features/catalog/pages/SearchPage.jsx";
 import OrderDetailPage from "./features/profile/pages/OrderDetailPage.jsx";
-import WarrantyPage from "./pages/WarrantyPage.jsx";
 import TradeInPage from "./pages/TradeInPage.jsx";
 import StorePage from "./pages/StorePage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
@@ -23,6 +22,7 @@ import Toast from "./components/common/Toast.jsx";
 import AdminDashboardPage from "./features/admin/pages/AdminDashboardPage.jsx";
 import RequireAuth from "./components/common/RequireAuth.jsx";
 import RequireAdmin from "./components/common/RequireAdmin.jsx";
+import AIChatbotWidget from "./features/chatbot/components/AIChatbotWidget.jsx";
 
 function StorefrontLayout() {
   return (
@@ -32,14 +32,26 @@ function StorefrontLayout() {
         <Outlet />
       </main>
       <Footer />
+      <AIChatbotWidget />
     </div>
   );
+}
+
+function ScrollToTop() {
+  const { pathname, search } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname, search]);
+
+  return null;
 }
 
 export default function App() {
   return (
     <CartProvider>
       <WishlistProvider>
+        <ScrollToTop />
         <Routes>
           {/* Admin routes */}
           <Route path="/admin" element={<RequireAdmin><AdminDashboardPage /></RequireAdmin>} />
@@ -57,7 +69,7 @@ export default function App() {
             <Route path="/profile" element={<RequireAuth><ProfilePage /></RequireAuth>} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/order/:orderId" element={<RequireAuth><OrderDetailPage /></RequireAuth>} />
-            <Route path="/warranty" element={<WarrantyPage />} />
+            <Route path="/warranty" element={<Navigate to="/profile?tab=warranty" replace />} />
             <Route path="/tradein" element={<TradeInPage />} />
             <Route path="/stores" element={<StorePage />} />
             <Route path="/wishlist" element={<WishlistPage />} />

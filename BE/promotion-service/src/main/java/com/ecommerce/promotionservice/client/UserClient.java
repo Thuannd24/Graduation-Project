@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "user-service", fallbackFactory = UserClientFallbackFactory.class)
+import com.ecommerce.promotionservice.config.FeignInternalApiConfig;
+
+@FeignClient(name = "user-service", fallbackFactory = UserClientFallbackFactory.class, configuration = FeignInternalApiConfig.class)
 public interface UserClient {
 
     @GetMapping("/api/internal/users/{userId}/profile-ai")

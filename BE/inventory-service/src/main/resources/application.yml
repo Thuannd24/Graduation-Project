@@ -52,3 +52,7 @@ eureka:
     prefer-ip-address: true
     metadata-map:
       gRPC.port: ${grpc.server.port}
+
+app:
+  internal:
+    api-key: ${INTERNAL_API_KEY:dev-internal-api-key}

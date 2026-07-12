@@ -21,5 +21,13 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("select p from Payment p where p.txnRef = :txnRef")
     Optional<Payment> findByTxnRefWithLock(@Param("txnRef") String txnRef);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Payment p where p.orderId = :orderId")
+    Optional<Payment> findByOrderIdWithLock(@Param("orderId") Long orderId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Payment p where p.id = :id")
+    Optional<Payment> findByIdWithLock(@Param("id") Long id);
+
     List<Payment> findAllByStatusAndCreatedAtBefore(String status, LocalDateTime createdAt);
 }

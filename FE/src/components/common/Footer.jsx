@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import Icon from "./Icon.jsx";
-import logoImg from "../../assets/images/image.png";
 
 export default function Footer() {
   return (
@@ -9,9 +8,9 @@ export default function Footer() {
         
         {/* Brand Information Section */}
         <section className="flex flex-col gap-5">
-          <Link className="flex items-center gap-3 text-slate-900 text-2xl font-black tracking-tight" to="/">
-            <img src={logoImg} alt="AuraTech Logo" className="h-12 w-auto object-contain rounded-lg shadow-sm border border-slate-200" />
-            <span className="font-extrabold text-2xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">AuraTech</span>
+          <Link className="flex items-center select-none hover:opacity-90 transition-opacity font-orbitron text-2xl tracking-wider uppercase" to="/">
+            <span className="font-black text-slate-900 drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)]">Aura</span>
+            <span className="font-light text-rose-600 text-lg border-l border-slate-300 pl-2 ml-2 tracking-widest">Tech</span>
           </Link>
           <p className="text-sm leading-relaxed text-slate-500">
             Hệ thống bán lẻ điện thoại, laptop, thiết bị công nghệ chính hãng hàng đầu Việt Nam. Cam kết chất lượng, bảo hành uy tín.
@@ -34,22 +33,22 @@ export default function Footer() {
           </h3>
           <ul className="space-y-3.5 text-sm">
             <li>
-              <Link to="/warranty" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
+              <Link to="/profile?tab=policy" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
                 <span className="text-[10px] text-red-500">●</span> Chính sách bảo hành
               </Link>
             </li>
             <li>
-              <Link to="/warranty" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
+              <Link to="/profile?tab=policy" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
                 <span className="text-[10px] text-red-500">●</span> Chính sách đổi trả 30 ngày
               </Link>
             </li>
             <li>
-              <Link to="/warranty" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
+              <Link to="/profile?tab=policy" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
                 <span className="text-[10px] text-red-500">●</span> Chính sách giao nhận hàng
               </Link>
             </li>
             <li>
-              <Link to="/warranty" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
+              <Link to="/profile?tab=policy" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
                 <span className="text-[10px] text-red-500">●</span> Chính sách bảo mật thông tin
               </Link>
             </li>
@@ -78,7 +77,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/warranty" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
+              <Link to="/profile?tab=warranty" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
                 <span className="text-[10px] text-red-500">●</span> Trung tâm bảo hành uỷ quyền
               </Link>
             </li>

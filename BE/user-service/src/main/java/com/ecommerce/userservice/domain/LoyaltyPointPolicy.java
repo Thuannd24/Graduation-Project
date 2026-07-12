@@ -20,6 +20,9 @@ public final class LoyaltyPointPolicy {
     public static final String MODE_FIXED = "FIXED";
     public static final String MODE_ORDER_SPEND = "ORDER_SPEND";
 
+    public static final String SOURCE_REDEMPTION = "REDEMPTION";
+    public static final String SOURCE_REFUND = "REFUND";
+
     private LoyaltyPointPolicy() {
     }
 
@@ -47,5 +50,22 @@ public final class LoyaltyPointPolicy {
                 .divide(VND_PER_EARN_POINT, 0, RoundingMode.DOWN)
                 .intValue();
         return (int) Math.floor(basePoints * tierMultiplier(customerTier));
+    }
+
+    /** Số điểm tối đa có thể dùng cho một đơn (giới hạn bởi số dư và giá trị đơn). */
+    public static int calculateMaxRedeemablePoints(int balance, BigDecimal payableAmount) {
+        if (balance <= 0 || payableAmount == null || payableAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            return 0;
+        }
+        int maxByAmount = payableAmount.divide(VND_PER_REDEEM_POINT, 0, RoundingMode.DOWN).intValue();
+        return Math.min(balance, maxByAmount);
+    }
+
+    /** Quy đổi điểm sang số tiền giảm (VND). */
+    public static BigDecimal calculateDiscountFromPoints(int points) {
+        if (points <= 0) {
+            return BigDecimal.ZERO;
+        }
+        return VND_PER_REDEEM_POINT.multiply(BigDecimal.valueOf(points));
     }
 }

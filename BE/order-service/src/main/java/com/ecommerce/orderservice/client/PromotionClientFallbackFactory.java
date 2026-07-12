@@ -15,9 +15,9 @@ public class PromotionClientFallbackFactory implements FallbackFactory<Promotion
     public PromotionClient create(Throwable cause) {
         return new PromotionClient() {
             @Override
-            public ApiResponse<VoucherApplyResult> validateVoucher(VoucherApplyRequest request) {
-                log.error("promotion-service unavailable for validate: {}", cause.getMessage());
-                return ApiResponse.error("SERVICE_UNAVAILABLE", "Không thể kiểm tra mã voucher lúc này.");
+            public ApiResponse<VoucherApplyResult> previewVoucher(VoucherApplyRequest request) {
+                log.error("promotion-service unavailable for preview: {}", cause.getMessage());
+                return ApiResponse.error("SERVICE_UNAVAILABLE", "Không thể xem trước mã voucher lúc này.");
             }
 
             @Override

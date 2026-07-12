@@ -1,0 +1,4 @@
+code,name,value_type,allowed_values,is_color
+ram,RAM,select,"[\"8GB\",\"16GB\"]",false
+color,Màu sắc,select,"[\"Đen\",\"Trắng\"]",true
+cpu,CPU,text,,false

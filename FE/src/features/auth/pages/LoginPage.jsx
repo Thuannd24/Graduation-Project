@@ -56,8 +56,7 @@ export default function LoginPage() {
           </>
         ) : (
           <>
-            <p className="text-slate-300 font-medium">Đang chuyển hướng đến trang đăng nhập AuraTech...</p>
-            <div className="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
           </>
         )}
       </div>

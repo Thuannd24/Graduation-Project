@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: payment-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   datasource:
     url: "jdbc:mariadb://${DB_HOST:localhost}:${DB_PORT:3308}/${DB_NAME:ecommerce_payment_db}?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8"
     username: ${DB_USER:root}
@@ -52,5 +56,7 @@ app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
   order-service-url: ${ORDER_SERVICE_URL:http://order-service}
   payment-expiry-minutes: ${PAYMENT_EXPIRY_MINUTES:15}
+  internal:
+    api-key: ${INTERNAL_API_KEY:dev-internal-api-key}
   kafka:
     payment-topic: ${KAFKA_PAYMENT_TOPIC:payment-events}

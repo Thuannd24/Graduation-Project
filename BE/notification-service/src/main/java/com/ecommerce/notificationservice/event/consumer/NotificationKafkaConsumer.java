@@ -23,6 +23,9 @@ public class NotificationKafkaConsumer {
         log.info("Received order event message: {}", message);
         try {
             JsonNode payload = objectMapper.readTree(message);
+            if (payload.isTextual()) {
+                payload = objectMapper.readTree(payload.asText());
+            }
             String eventType = payload.get("eventType").asText();
             Long orderId = payload.get("orderId").asLong();
             String userId = payload.has("userId") ? payload.get("userId").asText() : "anonymous";
@@ -60,6 +63,9 @@ public class NotificationKafkaConsumer {
         log.info("Received payment event message: {}", message);
         try {
             JsonNode payload = objectMapper.readTree(message);
+            if (payload.isTextual()) {
+                payload = objectMapper.readTree(payload.asText());
+            }
             String eventType = payload.get("eventType").asText();
             Long orderId = payload.get("orderId").asLong();
             String userId = payload.has("userId") ? payload.get("userId").asText() : "anonymous";

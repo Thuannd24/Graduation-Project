@@ -12,12 +12,14 @@ import com.ecommerce.inventoryservice.repository.InventoryTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +34,7 @@ public class InventoryDeductService {
     private final InventoryTransactionRepository transactionRepository;
     private final InventoryKafkaProducer kafkaProducer;
     private final RedisTemplate<String, String> redisTemplate;
+    private final DefaultRedisScript<Long> stockIncrementScript;
 
     private static final String REDIS_KEY_PREFIX = "product:stock:";
 
@@ -47,6 +50,14 @@ public class InventoryDeductService {
             log.warn("Order {} already processed. Skipping duplicate.", event.getOrderId());
             // Publish success event again (idempotent)
             publishSuccessEvent(event.getOrderId());
+            return;
+        }
+
+        // BUG-02 FIX: Check if the order was already cancelled before creation event arrived
+        Optional<InventoryTransaction> cancelTx = transactionRepository
+                .findByOrderIdAndTransactionType(event.getOrderId(), "CANCEL_RECEIVED");
+        if (cancelTx.isPresent()) {
+            log.info("Order {} was already cancelled before creation was processed. Skipping stock deduction.", event.getOrderId());
             return;
         }
 
@@ -113,8 +124,8 @@ public class InventoryDeductService {
                 .build();
         transactionRepository.save(transaction);
 
-        // Sync to Redis (Self-Healing Cache update)
-        syncToRedis(productId, vId, newQuantity);
+        // Rely on early Redis stock reservation. DO NOT overwrite Redis stock with absolute values
+        // here to prevent the Cache Lost Updates anomaly against concurrent checkouts.
 
         log.info("Successfully deducted {} units from product {}, variant {}. New quantity: {}",
                 quantity, productId, vId, newQuantity);
@@ -138,16 +149,50 @@ public class InventoryDeductService {
                 .findByOrderId(event.getOrderId());
 
         if (deductTransactions.isEmpty()) {
-            log.warn("No deduct transactions found for order {}", event.getOrderId());
+            log.warn("No deduct transactions found for order {}. Recording CANCEL_RECEIVED tombstone for race prevention.", event.getOrderId());
+            
+            // Check if already has CANCEL_RECEIVED to be idempotent
+            Optional<InventoryTransaction> existingCancelRec = transactionRepository
+                    .findByOrderIdAndTransactionType(event.getOrderId(), "CANCEL_RECEIVED");
+            if (existingCancelRec.isPresent()) {
+                log.info("Order {} already cancelled (tombstone exists). Skipping duplicate Redis stock rollback.", event.getOrderId());
+                return;
+            }
+
+            InventoryTransaction tombstone = InventoryTransaction.builder()
+                    .orderId(event.getOrderId())
+                    .productId(0L)
+                    .variantId(0L)
+                    .transactionType("CANCEL_RECEIVED")
+                    .quantityChanged(0)
+                    .quantityBefore(0)
+                    .quantityAfter(0)
+                    .referenceId("ORDER-CANCEL-TOMBSTONE-" + event.getOrderId())
+                    .note("Tombstone record for race condition prevention")
+                    .build();
+            transactionRepository.save(tombstone);
+
+            // Rollback Redis stock since database was never deducted but Redis was decremented at checkout
+            if (event.getItems() != null) {
+                for (OrderCancelledEvent.OrderItemInfo item : event.getItems()) {
+                    incrementRedisStock(item.getProductId(), item.getVariantId(), item.getQuantity());
+                }
+            }
             return;
         }
 
-        // Release inventory for each deducted item
-        for (InventoryTransaction deductTx : deductTransactions) {
-            if ("DEDUCT".equals(deductTx.getTransactionType())) {
-                releaseInventory(deductTx.getProductId(), deductTx.getVariantId(), deductTx.getQuantityChanged(),
-                        event.getOrderId());
-            }
+        // SORT transactions by productId and variantId to prevent deadlock
+        List<InventoryTransaction> sortedTransactions = deductTransactions.stream()
+                .filter(tx -> "DEDUCT".equals(tx.getTransactionType()))
+                .sorted(Comparator
+                        .comparing(InventoryTransaction::getProductId)
+                        .thenComparing(tx -> tx.getVariantId() != null ? tx.getVariantId() : 0L))
+                .collect(Collectors.toList());
+
+        // Release inventory for each deducted item in sorted order
+        for (InventoryTransaction deductTx : sortedTransactions) {
+            releaseInventory(deductTx.getProductId(), deductTx.getVariantId(), deductTx.getQuantityChanged(),
+                    event.getOrderId());
         }
 
         log.info("Successfully released inventory for cancelled order {}", event.getOrderId());
@@ -182,8 +227,18 @@ public class InventoryDeductService {
                 .build();
         transactionRepository.save(transaction);
 
-        // Sync to Redis
-        syncToRedis(productId, vId, newQuantity);
+        // Increment Redis stock relatively to prevent overwriting concurrent checkout reservations
+        final Long finalVId = vId;
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    incrementRedisStock(productId, finalVId, quantity);
+                }
+            });
+        } else {
+            incrementRedisStock(productId, vId, quantity);
+        }
 
         log.info("Successfully released {} units to product {}, variant {}. New quantity: {}",
                 quantity, productId, vId, newQuantity);
@@ -196,6 +251,30 @@ public class InventoryDeductService {
             log.debug("Synced product {}, variant {} to Redis with quantity {}", productId, variantId, quantity);
         } catch (Exception e) {
             log.error("Failed to sync product {}, variant {} to Redis", productId, variantId, e);
+        }
+    }
+
+    private void incrementRedisStock(Long productId, Long variantId, Integer quantity) {
+        try {
+            String key = REDIS_KEY_PREFIX + productId + ":" + (variantId != null ? variantId : 0L);
+            
+            // V-13 FIX: Use atomic Lua script instead of check-then-increment pattern
+            // The old pattern: hasKey() then increment() has a race condition where the key
+            // could be evicted between the two Redis calls.
+            Long newStock = redisTemplate.execute(
+                stockIncrementScript,
+                Collections.singletonList(key),
+                String.valueOf(quantity)
+            );
+            
+            if (newStock != null && newStock == -1) {
+                log.info("Redis key {} does not exist. Skipping relative increment.", key);
+            } else if (newStock != null && newStock >= 0) {
+                log.info("Incremented Redis stock for product {}, variant {} by {} to {}", 
+                         productId, variantId, quantity, newStock);
+            }
+        } catch (Exception e) {
+            log.error("Failed to increment Redis stock for product {}, variant {}", productId, variantId, e);
         }
     }
 

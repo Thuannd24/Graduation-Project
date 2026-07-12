@@ -7,6 +7,7 @@ import com.ecommerce.promotionservice.entity.VoucherStatus;
 import com.ecommerce.promotionservice.entity.VoucherType;
 import com.ecommerce.promotionservice.repository.IssuedVoucherRepository;
 import com.ecommerce.promotionservice.service.InternalUserIdResolver;
+import com.ecommerce.promotionservice.service.VoucherMaintenanceService;
 import com.ecommerce.promotionservice.service.VoucherRedemptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
 
     private final IssuedVoucherRepository voucherRepository;
     private final InternalUserIdResolver userIdResolver;
+    private final VoucherMaintenanceService voucherMaintenanceService;
 
     @Override
     @Transactional(readOnly = true)
@@ -94,23 +96,31 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
             return VoucherApplyResult.invalid("Mã voucher không tồn tại.");
         }
 
+        voucherMaintenanceService.expireIfNeeded(voucher);
+        if (voucher.getStatus() == VoucherStatus.EXPIRED) {
+            return VoucherApplyResult.invalid("Mã voucher đã hết hạn.");
+        }
+
         String validationError = validateOwnershipAndState(voucher, userDbId, reserve);
         if (validationError != null) {
             return VoucherApplyResult.invalid(validationError);
         }
 
-        BigDecimal discount;
+        BigDecimal productDiscount;
+        BigDecimal shippingDiscount;
         try {
-            discount = calculateDiscount(voucher, request.getOrderTotal(), request.getShippingFee());
+            productDiscount = calculateProductDiscount(voucher, request.getOrderTotal());
+            shippingDiscount = calculateShippingDiscount(voucher, request.getShippingFee());
         } catch (IllegalArgumentException ex) {
             return VoucherApplyResult.invalid(ex.getMessage());
         }
 
-        if (discount.compareTo(BigDecimal.ZERO) <= 0) {
+        BigDecimal totalDiscount = productDiscount.add(shippingDiscount);
+        if (totalDiscount.compareTo(BigDecimal.ZERO) <= 0) {
             return VoucherApplyResult.invalid("Voucher không áp dụng được cho đơn hàng này.");
         }
 
-        BigDecimal finalAmount = request.getOrderTotal().subtract(discount).max(BigDecimal.ZERO);
+        BigDecimal finalAmount = request.getOrderTotal().subtract(productDiscount).max(BigDecimal.ZERO);
 
         if (reserve) {
             voucher.setStatus(VoucherStatus.RESERVED);
@@ -124,7 +134,9 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
                 .message("Áp dụng voucher thành công.")
                 .voucherCode(voucher.getCode())
                 .voucherType(voucher.getVoucherType())
-                .discountAmount(discount)
+                .discountAmount(totalDiscount)
+                .productDiscountAmount(productDiscount)
+                .shippingDiscountAmount(shippingDiscount)
                 .finalAmount(finalAmount)
                 .campaignId(voucher.getCampaignId())
                 .expiresAt(voucher.getExpiresAt())
@@ -160,12 +172,19 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
         return null;
     }
 
-    private BigDecimal calculateDiscount(IssuedVoucher voucher, BigDecimal orderTotal, BigDecimal shippingFee) {
+    private BigDecimal calculateProductDiscount(IssuedVoucher voucher, BigDecimal orderTotal) {
         return switch (voucher.getVoucherType()) {
             case PERCENT -> calculatePercentDiscount(voucher, orderTotal);
             case FIXED -> calculateFixedDiscount(voucher, orderTotal);
-            case FREESHIP -> calculateFreeshipDiscount(voucher, orderTotal, shippingFee);
+            case FREESHIP -> BigDecimal.ZERO;
         };
+    }
+
+    private BigDecimal calculateShippingDiscount(IssuedVoucher voucher, BigDecimal shippingFee) {
+        if (voucher.getVoucherType() != VoucherType.FREESHIP) {
+            return BigDecimal.ZERO;
+        }
+        return calculateFreeshipDiscount(voucher, shippingFee);
     }
 
     private BigDecimal calculatePercentDiscount(IssuedVoucher voucher, BigDecimal orderTotal) {
@@ -192,16 +211,15 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
         return amount.min(orderTotal);
     }
 
-    private BigDecimal calculateFreeshipDiscount(IssuedVoucher voucher, BigDecimal orderTotal,
-                                                   BigDecimal shippingFee) {
+    private BigDecimal calculateFreeshipDiscount(IssuedVoucher voucher, BigDecimal shippingFee) {
         BigDecimal cap = voucher.getMaxShippingDiscount();
         if (cap == null || cap.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Cấu hình voucher freeship không hợp lệ.");
         }
-        BigDecimal shipBase = shippingFee != null && shippingFee.compareTo(BigDecimal.ZERO) > 0
-                ? shippingFee
-                : cap;
-        return shipBase.min(cap).min(orderTotal);
+        if (shippingFee == null || shippingFee.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Đơn hàng không có phí vận chuyển để áp dụng voucher freeship.");
+        }
+        return shippingFee.min(cap);
     }
 
     private String normalizeCode(String code) {

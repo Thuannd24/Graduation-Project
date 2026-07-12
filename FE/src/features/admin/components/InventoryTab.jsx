@@ -131,6 +131,7 @@ export default function InventoryTab() {
   const [restockNote, setRestockNote] = useState("");
   const [restockSupplier, setRestockSupplier] = useState("");
   const [saving, setSaving] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [txLoading, setTxLoading] = useState(false);
 
@@ -312,6 +313,25 @@ export default function InventoryTab() {
     }
   };
 
+  const handleSyncRedis = async () => {
+    if (!hasAuthToken()) {
+      alert("Vui lòng đăng nhập tài khoản ADMIN/STAFF để thực hiện đồng bộ.");
+      return;
+    }
+    if (!window.confirm("Đồng bộ Redis từ Database?\nThao tác này sẽ ghi đè toàn bộ cache Redis bằng dữ liệu mới nhất từ DB. Tiến hành?")) return;
+    setSyncing(true);
+    try {
+      await inventoryApi.syncRedis();
+      alert("✅ Đồng bộ thành công! Redis đã được cập nhật từ Database.");
+      loadData();
+      loadLowStock(threshold);
+    } catch (err) {
+      alert("❌ Lỗi đồng bộ: " + err.message);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const card = "bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 shadow-sm";
   const input = "w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-800 dark:text-slate-100 outline-none";
 
@@ -446,16 +466,28 @@ export default function InventoryTab() {
             <Icon name="tune" className="text-teal-600 text-lg" />
             <span className="text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase">Quản lý tồn kho SKU</span>
           </div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-            <span>Ngưỡng cảnh báo:</span>
-            <input
-              type="number"
-              min={1}
-              max={100}
-              value={threshold}
-              onChange={(e) => { setThreshold(Number(e.target.value) || 10); setPage(0); }}
-              className="w-16 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-center font-bold"
-            />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSyncRedis}
+              disabled={syncing}
+              title="Đọc lại toàn bộ tồn kho từ DB và ghi vào Redis, sửa trường hợp Redis bị lệch so với DB"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold border border-teal-300 dark:border-teal-700 text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-900/30 hover:bg-teal-100 dark:hover:bg-teal-900/50 disabled:opacity-50 transition-colors"
+            >
+              <Icon name={syncing ? "sync" : "sync"} className={`text-sm ${syncing ? "animate-spin" : ""}`} />
+              {syncing ? "Đang đồng bộ..." : "Đồng bộ Redis từ DB"}
+            </button>
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <span>Ngưỡng cảnh báo:</span>
+              <input
+                type="number"
+                min={1}
+                max={100}
+                value={threshold}
+                onChange={(e) => { setThreshold(Number(e.target.value) || 10); setPage(0); }}
+                className="w-16 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-center font-bold"
+              />
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

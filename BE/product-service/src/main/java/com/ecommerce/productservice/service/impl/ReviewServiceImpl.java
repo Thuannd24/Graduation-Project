@@ -38,6 +38,14 @@ public class ReviewServiceImpl implements ReviewService {
             throw new IllegalArgumentException("Mã đơn hàng (orderId) là bắt buộc để đánh giá sản phẩm.");
         }
 
+        reviewRepository.findByUserIdAndProductIdAndOrderId(
+                reviewDto.getUserId(),
+                reviewDto.getProductId(),
+                reviewDto.getOrderId()
+        ).ifPresent(existing -> {
+            throw new IllegalStateException("Bạn đã đánh giá sản phẩm này cho đơn hàng này rồi.");
+        });
+
         try {
             ApiResponse<Boolean> eligibleResp = orderClient.checkEligibleReview(
                     reviewDto.getUserId(),
@@ -84,6 +92,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ProductReviewDto> getReviewsByProduct(Long productId) {
         return reviewRepository.findByProductId(productId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductReviewDto> getReviewsByUser(String userId) {
+        return reviewRepository.findByUserIdOrderByCreatedAtDesc(userId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

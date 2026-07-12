@@ -1,26 +1,27 @@
-﻿import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { cartApi } from "../services/cartApi";
 import { hasAuthToken } from "../services/apiClient";
 import keycloak from "../services/keycloak";
+import { VAT_RATE, calculateShippingFee } from "../utils/checkoutConstants";
 
 const CartContext = createContext(null);
 
 function normalizeCartItem(item) {
   const productId = String(item.productId || item.id || "");
   const variantId = item.variantId ? String(item.variantId) : "";
-  const name = item.productName || item.name || "Sáº£n pháº©m";
+  const name = item.productName || item.name || "Sản phẩm";
   const image = item.imageUrl || item.image || "";
   const price = Number(item.unitPrice || item.price || 0);
   const qty = Number(item.quantity || item.qty || 1);
-  
-  let variantLabel = item.variant || "TiÃªu chuáº©n";
+
+  let variantLabel = item.variant || "Tiêu chuẩn";
   if (item.variantAttr) {
     try {
       const attr = typeof item.variantAttr === "string" ? JSON.parse(item.variantAttr) : item.variantAttr;
       if (attr && typeof attr === "object") {
         variantLabel = Object.values(attr).join(" - ");
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
   }
@@ -58,7 +59,7 @@ export function CartProvider({ children }) {
       const data = await cartApi.getCart();
       setItems(Array.isArray(data) ? data.map(normalizeCartItem) : []);
     } catch (error) {
-      showToast(error instanceof Error ? error.message : "KhÃ´ng thá»ƒ táº£i giá» hÃ ng.");
+      showToast(error instanceof Error ? error.message : "Không thể tải giỏ hàng.");
     }
   }
 
@@ -68,22 +69,24 @@ export function CartProvider({ children }) {
 
   async function addToCart(product, variant = null) {
     if (!keycloak.authenticated) {
-      showToast("Vui lÃ²ng Ä‘Äƒng nháº­p Ä‘á»ƒ thÃªm sáº£n pháº©m vÃ o giá» hÃ ng.");
+      showToast("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
       setTimeout(() => {
         keycloak.login({
           redirectUri: window.location.href
         });
       }, 800);
-      return;
+      return false;
     }
     try {
       const chosenVariant = variant || product?.selectedVariant || (Array.isArray(product?.variants) ? product.variants[0] : null);
       const variantId = chosenVariant && typeof chosenVariant === "object" ? chosenVariant.id : chosenVariant;
       const data = await cartApi.addItem(product.id, 1, variantId || undefined);
       setItems(Array.isArray(data) ? data.map(normalizeCartItem) : []);
-      showToast("ÄÃ£ thÃªm sáº£n pháº©m vÃ o giá» hÃ ng.");
+      showToast("Đã thêm sản phẩm vào giỏ hàng.");
+      return true;
     } catch (error) {
-      showToast(error instanceof Error ? error.message : "KhÃ´ng thá»ƒ thÃªm sáº£n pháº©m vÃ o giá» hÃ ng.");
+      showToast(error instanceof Error ? error.message : "Không thể thêm sản phẩm vào giỏ hàng.");
+      return false;
     }
   }
 
@@ -94,7 +97,7 @@ export function CartProvider({ children }) {
       const data = await cartApi.updateItem(item.productId, Math.max(1, qty), item.variantId);
       setItems(Array.isArray(data) ? data.map(normalizeCartItem) : []);
     } catch (error) {
-      showToast(error instanceof Error ? error.message : "KhÃ´ng thá»ƒ cáº­p nháº­t giá» hÃ ng.");
+      showToast(error instanceof Error ? error.message : "Không thể cập nhật giỏ hàng.");
     }
   }
 
@@ -104,17 +107,17 @@ export function CartProvider({ children }) {
     try {
       const data = await cartApi.removeItem(item.productId, item.variantId);
       setItems(Array.isArray(data) ? data.map(normalizeCartItem) : []);
-      showToast("ÄÃ£ xÃ³a sáº£n pháº©m khá»i giá» hÃ ng.");
+      showToast("Đã xóa sản phẩm khỏi giỏ hàng.");
     } catch (error) {
-      showToast(error instanceof Error ? error.message : "KhÃ´ng thá»ƒ xÃ³a sáº£n pháº©m khá»i giá» hÃ ng.");
+      showToast(error instanceof Error ? error.message : "Không thể xóa sản phẩm khỏi giỏ hàng.");
     }
   }
 
   const summary = useMemo(() => {
     const subtotal = items.reduce((total, item) => total + Number(item.price || 0) * item.qty, 0);
     const discount = 0;
-    const shipping = 0;
-    const vat = Math.round(subtotal * 0.1);
+    const shipping = calculateShippingFee(subtotal);
+    const vat = Math.round(subtotal * VAT_RATE);
     const total = subtotal - discount + shipping + vat;
     return { subtotal, discount, shipping, vat, total };
   }, [items]);
@@ -125,7 +128,6 @@ export function CartProvider({ children }) {
 
 export function useCart() {
   const value = useContext(CartContext);
-  if (!value) throw new Error("useCart pháº£i Ä‘Æ°á»£c dÃ¹ng bÃªn trong CartProvider");
+  if (!value) throw new Error("useCart phải được dùng bên trong CartProvider");
   return value;
 }
-

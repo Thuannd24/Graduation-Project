@@ -10,6 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WorkflowGraphDto {
+    /** Optional campaign metadata (budget cap, etc.). */
+    private WorkflowMetaDto meta;
     private List<WorkflowNodeDto> nodes;
     private List<WorkflowEdgeDto> edges;
 }

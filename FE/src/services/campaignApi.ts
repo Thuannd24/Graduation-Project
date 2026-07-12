@@ -17,6 +17,8 @@ export interface WorkflowNode {
   id: string;
   name: string;
   type: string;
+  x?: number;
+  y?: number;
   properties: Record<string, unknown>;
 }
 
@@ -36,19 +38,89 @@ export interface WorkflowGraph {
   edges: WorkflowEdge[];
 }
 
+export interface ValidationError {
+  nodeId?: string;
+  errorType?: string;
+  field?: string;
+  message: string;
+}
+
 export interface ValidationResult {
   valid: boolean;
   summary?: string;
-  errors?: Array<{ nodeId?: string; message: string }>;
+  errors?: ValidationError[];
+}
+
+export interface CampaignStats {
+  campaignId: number;
+  campaignName: string;
+  bpmnProcessDefinitionKey?: string;
+  triggerType?: string;
+  active?: boolean;
+  startDate?: string;
+  endDate?: string;
+  totalBudget: number;
+  remainingBudget: number;
+  committedBudget: number;
+  totalIssued: number;
+  totalUnused: number;
+  totalUsed: number;
+  totalExpired: number;
+  totalReserved: number;
+  totalPercent: number;
+  totalFixed: number;
+  totalFreeship: number;
+  conversionRate: number;
+  activeProcessInstances: number;
+}
+
+export interface PromotionDashboard {
+  totalCampaigns: number;
+  activeCampaigns: number;
+  totalIssued: number;
+  totalUsed: number;
+  totalUnused: number;
+  totalExpired: number;
+  totalReserved: number;
+  totalPercent: number;
+  totalFixed: number;
+  totalFreeship: number;
+  totalBudget: number;
+  remainingBudget: number;
+  committedBudget: number;
+  averageConversionRate: number;
+  campaigns: CampaignStats[];
+}
+
+export interface IssuedVoucher {
+  id: number;
+  code: string;
+  userId: number;
+  campaignId: number;
+  voucherType: string;
+  status: string;
+  discountPercent?: number;
+  maxDiscountAmount?: number;
+  discountAmount?: number;
+  minOrderValue?: number;
+  maxShippingDiscount?: number;
+  expiresAt: string;
+  usedAt?: string;
+  usedOrderId?: number;
+  createdAt: string;
 }
 
 export const campaignApi = {
-  validateWorkflow(graph: WorkflowGraph): Promise<{ code: string; data: ValidationResult }> {
-    return apiClient.postAuth("/admin/campaigns/validate", graph);
+  validateWorkflow(graph: WorkflowGraph): Promise<ValidationResult> {
+    return apiClient.postAuth<ValidationResult>("/admin/campaigns/validate", graph);
   },
 
   createCampaign(campaign: CampaignDto): Promise<CampaignDto> {
     return apiClient.postAuth<CampaignDto>("/admin/campaigns", campaign);
+  },
+
+  updateCampaign(id: number, campaign: CampaignDto): Promise<CampaignDto> {
+    return apiClient.putAuth<CampaignDto>(`/admin/campaigns/${id}`, campaign);
   },
 
   getCampaign(id: number): Promise<CampaignDto> {
@@ -70,4 +142,23 @@ export const campaignApi = {
   getActiveCampaigns(): Promise<CampaignDto[]> {
     return apiClient.get<CampaignDto[]>("/public/campaigns/active");
   },
+
+  getPromotionDashboard(): Promise<PromotionDashboard> {
+    return apiClient.get<PromotionDashboard>("/admin/campaigns/dashboard", { requireAuth: true });
+  },
+
+  getCampaignStats(id: number): Promise<CampaignStats> {
+    return apiClient.get<CampaignStats>(`/admin/campaigns/${id}/stats`, { requireAuth: true });
+  },
+
+  listCampaignVouchers(id: number): Promise<IssuedVoucher[]> {
+    return apiClient.get<IssuedVoucher[]>(`/admin/campaigns/${id}/vouchers`, { requireAuth: true });
+  },
+
+  evaluateCampaign(processKey: string, variables: Record<string, unknown>): Promise<Record<string, unknown>> {
+    return apiClient.postAuth<Record<string, unknown>>(
+      `/admin/campaigns/evaluate?processKey=${encodeURIComponent(processKey)}`,
+      variables
+    );
+  }
 };

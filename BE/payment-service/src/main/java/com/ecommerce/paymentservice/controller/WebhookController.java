@@ -68,16 +68,23 @@ public class WebhookController {
         if (isBrowser) {
             String txnRef = queryParams.get("vnp_TxnRef");
             Long orderId = null;
+            String displayRspCode = rspCode;
             if (txnRef != null) {
                 Payment payment = paymentRepository.findByTxnRef(txnRef).orElse(null);
                 if (payment != null) {
                     orderId = payment.getOrderId();
+                    // If the database has already updated the payment to SUCCESS (e.g. via fast IPN webhook),
+                    // we override the redirect code to "00" so the user sees the payment success page.
+                    if ("SUCCESS".equalsIgnoreCase(payment.getStatus()) && "02".equals(rspCode)) {
+                        log.info("Overriding redirect rspCode from 02 to 00 for user experience, since payment status is SUCCESS in DB");
+                        displayRspCode = "00";
+                    }
                 }
             }
 
             String targetUrl = frontendUrl + "/profile";
             if (orderId != null) {
-                targetUrl = frontendUrl + "/order/" + orderId + "?paymentStatus=" + rspCode;
+                targetUrl = frontendUrl + "/order/" + orderId + "?paymentStatus=" + displayRspCode;
             }
 
             log.info("Redirecting customer browser to: {}", targetUrl);

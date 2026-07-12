@@ -1,0 +1,4 @@
+category_slug,attribute_code,is_variant,is_required
+laptop,ram,false,true
+laptop,color,true,false
+iphone,storage,true,true

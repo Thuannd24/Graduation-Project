@@ -102,10 +102,12 @@ public class AttributeServiceImpl implements AttributeService {
                     .attributeId(dto.getAttributeId())
                     .isVariant(dto.getIsVariant() != null ? dto.getIsVariant() : false)
                     .isRequired(dto.getIsRequired() != null ? dto.getIsRequired() : false)
+                    .isFilter(dto.getIsFilter() != null ? dto.getIsFilter() : false)
                     .build();
         } else {
             link.setIsVariant(dto.getIsVariant() != null ? dto.getIsVariant() : link.getIsVariant());
             link.setIsRequired(dto.getIsRequired() != null ? dto.getIsRequired() : link.getIsRequired());
+            link.setIsFilter(dto.getIsFilter() != null ? dto.getIsFilter() : link.getIsFilter());
         }
 
         link = categoryAttributeRepository.save(link);
@@ -160,6 +162,7 @@ public class AttributeServiceImpl implements AttributeService {
                 .attributeIsColor(attr != null ? attr.getIsColor() : null)
                 .isVariant(link.getIsVariant())
                 .isRequired(link.getIsRequired())
+                .isFilter(link.getIsFilter())
                 .build();
     }
 

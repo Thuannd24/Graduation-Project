@@ -40,7 +40,7 @@ export default function TransactionsTab({ orders = [], payments = [], users = []
           total: (o.finalAmount || 0).toLocaleString("vi-VN") + " đ",
           method: o.paymentMethod || "COD",
           status: o.status === "DELIVERED" ? "Complete" : (o.status === "CANCELLED" ? "Canceled" : "Pending"),
-          txnRef: "MOCK-TXN-" + (o.id || idx),
+          txnRef: o.txnRef || `ORD-${o.id || idx}`,
           paidAt: null,
           failureCode: null
         };

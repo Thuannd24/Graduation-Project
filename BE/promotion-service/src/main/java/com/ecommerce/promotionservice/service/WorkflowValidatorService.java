@@ -1,6 +1,8 @@
 package com.ecommerce.promotionservice.service;
 
 import com.ecommerce.promotionservice.dto.*;
+import com.ecommerce.promotionservice.service.support.NotificationTemplateCodes;
+import com.ecommerce.promotionservice.service.support.WorkflowBudgetHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +52,12 @@ public class WorkflowValidatorService {
             "Action_Upgrade_MemberRank"
     );
 
+    private static final Set<String> VOUCHER_ACTION_TYPES = Set.of(
+            "Action_IssueVoucher_Percent",
+            "Action_IssueVoucher_Fixed",
+            "Action_IssueVoucher_Freeship"
+    );
+
     private static final String END_TYPE = "End_Event";
 
     private static final Set<String> ALL_KNOWN_TYPES;
@@ -60,10 +68,9 @@ public class WorkflowValidatorService {
         ALL_KNOWN_TYPES.addAll(CONDITION_TYPES);
         ALL_KNOWN_TYPES.addAll(ACTION_TYPES);
         ALL_KNOWN_TYPES.add(END_TYPE);
-    }
-
+    } 
     // ── Public entry point ─────────────────────────────────────────────────────
-    public ValidationResultDto validate(WorkflowGraphDto graph) {
+    public ValidationResultDto validate( WorkflowGraphDto graph) {
         List<ValidationErrorDto> errors = new ArrayList<>();
 
         if (graph == null || graph.getNodes() == null || graph.getEdges() == null) {
@@ -120,6 +127,23 @@ public class WorkflowValidatorService {
                     "Chiến dịch BẮT BUỘC phải có ít nhất 1 Node Kết thúc (End Event)."));
         }
 
+        // 4) Campaign budget pool — only when voucher actions exist (stored in graph meta)
+        if (WorkflowBudgetHelper.requiresVoucherBudget(graph)) {
+            java.math.BigDecimal pool = WorkflowBudgetHelper.metaTotalBudget(graph);
+            if (pool == null || pool.compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                errors.add(global("missing_parameter", "meta.totalBudget",
+                        "Workflow có node Tặng Voucher — cần thiết lập Quỹ ngân sách chiến dịch trên thanh công cụ editor."));
+            } else {
+                java.math.BigDecimal minPool = WorkflowBudgetHelper.estimateMinimumPool(graph);
+                if (minPool.compareTo(java.math.BigDecimal.ZERO) > 0
+                        && pool.compareTo(minPool) < 0) {
+                    errors.add(global("invalid_data", "meta.totalBudget",
+                            String.format("Quỹ ngân sách (%s VNĐ) nên ≥ tổng trừ tối đa/lượt phát (%s VNĐ) của các node voucher.",
+                                    pool.toPlainString(), minPool.toPlainString())));
+                }
+            }
+        }
+
         // ── II. PER-NODE RULES ─────────────────────────────────────────────────
         for (WorkflowNodeDto node : nodes) {
             long inDeg = inDegree.getOrDefault(node.getId(), 0L);
@@ -134,7 +158,7 @@ public class WorkflowValidatorService {
             } else if (CONDITION_TYPES.contains(type)) {
                 validateCondition(node, inDeg, outs, props, edges, errors);
             } else if (ACTION_TYPES.contains(type)) {
-                validateAction(node, inDeg, outDeg, props, errors);
+                validateAction(node, inDeg, outDeg, props, nodes, errors);
             } else if (END_TYPE.equals(type)) {
                 validateEnd(node, inDeg, outDeg, errors);
             }
@@ -231,7 +255,7 @@ public class WorkflowValidatorService {
                     if (edgeProps.containsKey("operator")) {
                         requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("IN", "NOT_IN"), errors);
                         requireEdgeArrayNonEmpty(node, edge, edgeProps, "value", errors);
-                        requireEdgeStringValuesSubsets(node, edge, edgeProps, "value", Set.of("DIAMOND", "GOLD", "SILVER", "BRONZE"), errors);
+                        requireEdgeStringValuesSubsets(node, edge, edgeProps, "value", Set.of("MEMBER", "SILVER", "GOLD", "VIP"), errors);
                     }
                     break;
                 case "Condition_TotalSpending":
@@ -253,7 +277,9 @@ public class WorkflowValidatorService {
 
     // ── Action validation ─────────────────────────────────────────────────────
     private void validateAction(WorkflowNodeDto node, long inDeg, long outDeg,
-                                 Map<String, Object> props, List<ValidationErrorDto> errors) {
+                                 Map<String, Object> props,
+                                 List<WorkflowNodeDto> allNodes,
+                                 List<ValidationErrorDto> errors) {
         if (inDeg < 1) {
             errors.add(err(node.getId(), "invalid_connectivity", "in_degree",
                     String.format("Node Action \"%s\": in-degree phải >= 1, hiện có %d.", node.getName(), inDeg)));
@@ -288,6 +314,19 @@ public class WorkflowValidatorService {
                     errors.add(err(node.getId(), "missing_parameter", "templateId / rawContent",
                             String.format("Node \"%s\": phải cung cấp \"templateId\" HOẶC \"rawContent\" (không được để trống).", node.getName())));
                 }
+                if (hasTemplate && "Action_Send_Email".equals(node.getType())) {
+                    String templateId = props.get("templateId").toString().trim();
+                    if (!NotificationTemplateCodes.isValidEmailTemplate(templateId)) {
+                        errors.add(err(node.getId(), "invalid_data", "templateId",
+                                String.format("Node \"%s\": templateId \"%s\" không tồn tại. Chọn mẫu email có sẵn hoặc dùng rawContent.",
+                                        node.getName(), templateId)));
+                    }
+                    if ("promotion_voucher_template".equals(templateId)
+                            && !hasVoucherAction(allNodes)) {
+                        errors.add(err(node.getId(), "invalid_data", "templateId",
+                                String.format("Node \"%s\": mẫu voucher cần có node Tặng Voucher trong workflow.", node.getName())));
+                    }
+                }
                 break;
             case "Action_Loyalty_Point":
                 String calcMode = props.get("calculationMode") != null
@@ -297,6 +336,12 @@ public class WorkflowValidatorService {
                     if (props.get("pointAmount") != null && !(props.get("pointAmount") instanceof Number)) {
                         errors.add(err(node.getId(), "invalid_data", "pointAmount",
                                 String.format("Node \"%s\": pointAmount phải là số.", node.getName())));
+                    }
+                    String triggerType = resolveTriggerType(allNodes);
+                    if (!"Trigger_Event_OrderSuccess".equals(triggerType)) {
+                        errors.add(err(node.getId(), "invalid_data", "calculationMode",
+                                String.format("Node \"%s\": ORDER_SPEND cần trigger \"Đơn hàng thành công\" (có orderAmount).",
+                                        node.getName())));
                     }
                 } else {
                     requireNumber(node, props, "pointAmount", errors);
@@ -564,6 +609,20 @@ public class WorkflowValidatorService {
     }
 
     // ── Type utilities ────────────────────────────────────────────────────────
+    private boolean hasVoucherAction(List<WorkflowNodeDto> nodes) {
+        return nodes.stream()
+                .map(WorkflowNodeDto::getType)
+                .anyMatch(type -> type != null && VOUCHER_ACTION_TYPES.contains(type));
+    }
+
+    private String resolveTriggerType(List<WorkflowNodeDto> nodes) {
+        return nodes.stream()
+                .map(WorkflowNodeDto::getType)
+                .filter(type -> type != null && TRIGGER_TYPES.contains(type))
+                .findFirst()
+                .orElse(null);
+    }
+
     private boolean hasNonBlankString(Map<String, Object> props, String key) {
         Object v = props.get(key);
         return v != null && !v.toString().isBlank();
