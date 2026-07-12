@@ -23,6 +23,7 @@ public class ProductController {
     private final ProductService productService;
     private final SearchService searchService;
     private final ReviewService reviewService;
+    private final com.ecommerce.productservice.service.StorageService storageService;
 
     @GetMapping("/api/v1/public/products")
     public ApiResponse<Slice<ProductDto>> getAllProducts(
@@ -74,6 +75,15 @@ public class ProductController {
         return ApiResponse.success(reviewService.getReviewsByProduct(productId));
     }
 
+    @GetMapping("/api/v1/products/reviews/me")
+    public ApiResponse<List<ProductReviewDto>> getMyReviews(
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
+        if (userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("Yêu cầu đăng nhập để xem đánh giá của bạn.");
+        }
+        return ApiResponse.success(reviewService.getReviewsByUser(userId));
+    }
+
     // Secured API - requires user header
     @PostMapping("/api/v1/products/reviews")
     public ApiResponse<ProductReviewDto> addReview(
@@ -83,5 +93,12 @@ public class ProductController {
             reviewDto.setUserId(userId);
         }
         return ApiResponse.success(reviewService.addReview(reviewDto));
+    }
+
+    @PostMapping(value = "/api/v1/products/reviews/images/upload", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<java.util.Map<String, String>> uploadReviewImage(
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+        String url = storageService.uploadFile(file, "reviews");
+        return ApiResponse.success(java.util.Map.of("url", url));
     }
 }

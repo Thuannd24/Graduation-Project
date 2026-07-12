@@ -1,23 +1,6 @@
 import { apiClient } from "./apiClient";
 import type { Product } from "./productApi";
-
-export interface CartItem {
-  id?: string | number;
-  cartItemId?: string | number;
-  productId?: string;
-  qty: number;
-  quantity?: number;
-  variant?: string;
-  product?: Product;
-  [key: string]: unknown;
-}
-
-function normalizeCollection<T>(data: T[] | { content?: T[]; items?: T[] }): T[] {
-  if (Array.isArray(data)) return data;
-  if (Array.isArray(data?.content)) return data.content;
-  if (Array.isArray(data?.items)) return data.items;
-  return [];
-}
+import { normalizeCollection } from "../utils/normalizeCollection";
 
 export const cartApi = {
   async getCart(): Promise<CartItem[]> {

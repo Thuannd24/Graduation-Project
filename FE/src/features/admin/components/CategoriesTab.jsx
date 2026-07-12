@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi.ts";
 
@@ -56,8 +56,12 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
   const [assignForm, setAssignForm] = useState({
     attributeId: "",
     isVariant: false,
-    isRequired: false
+    isRequired: false,
+    isFilter: false
   });
+
+  // Ref để scroll đến form gán thuộc tính khi click edit
+  const assignFormRef = useRef(null);
 
   // Fetch all initial data
   const loadInitialData = async () => {
@@ -303,12 +307,13 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
       const payload = {
         attributeId: Number(assignForm.attributeId),
         isVariant: assignForm.isVariant,
-        isRequired: assignForm.isRequired
+        isRequired: assignForm.isRequired,
+        isFilter: assignForm.isFilter
       };
 
       await productApi.assignAttributeToCategory(selectedCategoryConfigId, payload);
       alert(isEditingAssign ? "Cập nhật cấu hình thuộc tính thành công!" : "Gán thuộc tính vào danh mục thành công!");
-      setAssignForm({ attributeId: "", isVariant: false, isRequired: false });
+      setAssignForm({ attributeId: "", isVariant: false, isRequired: false, isFilter: false });
       setIsEditingAssign(false);
       
       // Refresh category attribute mapping list
@@ -518,6 +523,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                         <th className="px-4 py-3">Tên Thuộc Tính</th>
                         <th className="px-4 py-3 text-center">Kiểu Thuộc Tính</th>
                         <th className="px-4 py-3 text-center">Bắt Buộc Nhập</th>
+                        <th className="px-4 py-3 text-center">Hiện Bộ Lọc</th>
                         <th className="px-4 py-3 text-center">Hành động</th>
                       </tr>
                     </thead>
@@ -544,18 +550,34 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                               <span className="text-slate-400 font-medium text-[10px]">Không</span>
                             )}
                           </td>
- 
+
+                          {/* isFilter badge */}
+                          <td className="px-4 py-3.5 text-center">
+                            {attr.isFilter !== false ? (
+                              <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[9px] px-2 py-0.5 rounded-full font-bold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span> Có
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-400 text-[9px] px-2 py-0.5 rounded-full font-medium">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 inline-block"></span> Không
+                              </span>
+                            )}
+                          </td>
+
                           {/* Actions */}
-                          <td className="px-4 py-3.5 text-center flex items-center justify-center gap-1.5">
+                          <td className="px-4 py-3.5 text-center">
+                            <div className="flex items-center justify-center gap-1.5">
                             <button
                               type="button"
                               onClick={() => {
                                 setAssignForm({
                                   attributeId: attr.attributeId,
                                   isVariant: !!attr.isVariant,
-                                  isRequired: !!attr.isRequired
+                                  isRequired: !!attr.isRequired,
+                                  isFilter: attr.isFilter !== false
                                 });
                                 setIsEditingAssign(true);
+                                setTimeout(() => assignFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
                               }}
                               className="p-1 hover:bg-slate-100 text-slate-450 hover:text-emerald-600 rounded transition-colors"
                               title="Chỉnh sửa cấu hình thuộc tính"
@@ -570,12 +592,13 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                             >
                               <Icon name="link_off" className="text-sm" />
                             </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
                       {linkedAttributes.length === 0 && (
                         <tr>
-                          <td colSpan="5" className="text-center py-8 text-slate-400 italic text-[11px]">
+                          <td colSpan="6" className="text-center py-8 text-slate-400 italic text-[11px]">
                             Danh mục này chưa được gán bất kỳ thông số kỹ thuật nào.
                           </td>
                         </tr>
@@ -588,13 +611,13 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
 
             {/* Box 2: Form to Link/Assign Attribute */}
             {selectedCategoryConfigId && (
-              <form onSubmit={handleAssignAttribute} className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm space-y-4">
+              <form ref={assignFormRef} onSubmit={handleAssignAttribute} className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm space-y-4">
                 <span className="font-extrabold text-xs text-slate-800 flex items-center gap-1.5">
                   <Icon name={isEditingAssign ? "edit_note" : "add_link"} className="text-emerald-600 text-sm" />
                   {isEditingAssign ? "Cập Nhật Cấu Hình Thuộc Tính" : "Gán Thuộc Tính Vào Danh Mục"}
                 </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-slate-450 uppercase tracking-wider block">Chọn Thuộc tính</label>
                     <select
@@ -638,6 +661,23 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                       <label htmlFor="isRequired" className="text-xs text-slate-700 ml-2 font-bold cursor-pointer select-none">Bắt buộc nhập</label>
                     </div>
                   </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Hiển thị bộ lọc</label>
+                    <div className="flex items-center h-10 gap-2">
+                      <input
+                        type="checkbox"
+                        id="isFilter"
+                        checked={!!assignForm.isFilter}
+                        onChange={(e) => setAssignForm({ ...assignForm, isFilter: e.target.checked })}
+                        className="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
+                      />
+                      <label htmlFor="isFilter" className="text-xs text-slate-700 font-bold cursor-pointer select-none">
+                        Cho phép lọc theo thuộc tính này
+                      </label>
+                    </div>
+                    <p className="text-[10px] text-slate-400 italic">Tích để hiện bộ lọc trên trang danh mục (CPU, RAM...). Bỏ tích với thuộc tính nhiều giá trị như màu sắc, tính năng màn hình...</p>
+                  </div>
                 </div>
 
                 <div className="flex justify-end gap-2 border-t border-slate-100 pt-3">
@@ -645,7 +685,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                     <button
                       type="button"
                       onClick={() => {
-                        setAssignForm({ attributeId: "", isVariant: false, isRequired: false });
+                        setAssignForm({ attributeId: "", isVariant: false, isRequired: false, isFilter: false });
                         setIsEditingAssign(false);
                       }}
                       className="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-black uppercase tracking-wider transition-all"

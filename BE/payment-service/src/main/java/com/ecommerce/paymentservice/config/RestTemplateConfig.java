@@ -1,5 +1,6 @@
 package com.ecommerce.paymentservice.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,17 +23,17 @@ public class RestTemplateConfig {
 
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate() {
+    public RestTemplate restTemplate(@Value("${app.internal.api-key:}") String internalApiKey) {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(3000); // 3 seconds
         factory.setReadTimeout(5000);    // 5 seconds
         RestTemplate restTemplate = new RestTemplate(factory);
 
-        List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
-        if (interceptors == null) {
-            interceptors = new ArrayList<>();
-        }
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new BearerTokenInterceptor());
+        if (internalApiKey != null && !internalApiKey.isBlank()) {
+            interceptors.add(new InternalApiKeyInterceptor(internalApiKey));
+        }
         restTemplate.setInterceptors(interceptors);
 
         return restTemplate;
@@ -58,6 +59,23 @@ public class RestTemplateConfig {
                 if (authHeader != null) {
                     request.getHeaders().set("Authorization", authHeader);
                 }
+            }
+            return execution.execute(request, body);
+        }
+    }
+
+    public static class InternalApiKeyInterceptor implements ClientHttpRequestInterceptor {
+        private final String internalApiKey;
+
+        public InternalApiKeyInterceptor(String internalApiKey) {
+            this.internalApiKey = internalApiKey;
+        }
+
+        @Override
+        public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+                throws IOException {
+            if (request.getURI().getPath().contains("/api/internal/")) {
+                request.getHeaders().set("X-Internal-Api-Key", internalApiKey);
             }
             return execution.execute(request, body);
         }

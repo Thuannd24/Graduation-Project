@@ -6,6 +6,8 @@ import "./assets/styles.css";
 import keycloak from "./services/keycloak.js";
 import { setAuthToken, clearAuthToken } from "./services/apiClient.ts";
 
+import { authApi } from "./services/authApi.ts";
+
 keycloak
   .init({
     onLoad: "check-sso",
@@ -15,6 +17,9 @@ keycloak
   .then((authenticated) => {
     if (authenticated) {
       setAuthToken(keycloak.token);
+      
+      // Eagerly sync user to backend DB on login to ensure vouchers are issued
+      authApi.getProfile().catch(console.warn);
 
       // Retrieve and consume the 'just_logged_in' flag
       const isJustLoggedIn = sessionStorage.getItem("just_logged_in") === "true";

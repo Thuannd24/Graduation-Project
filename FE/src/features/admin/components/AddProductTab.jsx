@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi.ts";
+import { buildSalePricePayload, validateProductPricing } from "../../../utils/pricing.ts";
 
 export default function AddProductTab({ onSaveProduct, editingProductId, setEditingProductId }) {
   // Master lists
@@ -259,7 +260,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
             name: detail.name || "",
             slug: detail.slug || "",
             description: detail.description || "",
-            price: detail.price || "",
+            price: (detail.listPrice ?? detail.price) || "",
             costPrice: detail.costPrice || "",
             salePrice: detail.salePrice || "",
             weight: detail.weight || "200",
@@ -531,7 +532,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
         id: index,
         sku: generatedSku,
         variantAttr,
-        price: existing?.price ?? (basicInfo.salePrice || basicInfo.price || 0),
+        price: existing?.price ?? buildSalePricePayload(basicInfo.price, basicInfo.salePrice) ?? Number(basicInfo.price || 0),
         costPrice: existing?.costPrice ?? (basicInfo.costPrice || 0),
         weight: existing?.weight ?? (basicInfo.weight || 200),
         imageUrl: existing?.imageUrl || "",
@@ -579,6 +580,12 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
       return;
     }
 
+    const pricingError = validateProductPricing(basicInfo.price, basicInfo.salePrice);
+    if (pricingError) {
+      alert(pricingError);
+      return;
+    }
+
     if (generatedVariants.length > 0) {
       const skuList = generatedVariants.map(v => v.sku.trim().toUpperCase()).filter(Boolean);
       const duplicateSkus = skuList.filter((sku, idx) => skuList.indexOf(sku) !== idx);
@@ -614,7 +621,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
         description: basicInfo.description,
         price: Number(basicInfo.price),
         costPrice: Number(basicInfo.costPrice || 0),
-        salePrice: Number(basicInfo.salePrice || basicInfo.price),
+        salePrice: buildSalePricePayload(basicInfo.price, basicInfo.salePrice),
         weight: Number(basicInfo.weight || 0),
         length: Number(basicInfo.length || 0),
         width: Number(basicInfo.width || 0),
@@ -795,7 +802,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Giá bán chính thức (đ) *</label>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Giá niêm yết (đ) *</label>
                 <input
                   type="number"
                   required
@@ -818,13 +825,14 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Giá khuyến mãi / Sale (đ)</label>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Giá khuyến mãi (đ)</label>
                 <input
                   type="number"
+                  min="0"
                   value={basicInfo.salePrice}
                   onChange={(e) => setBasicInfo({ ...basicInfo, salePrice: e.target.value })}
                   className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/10 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-800 transition-all outline-none"
-                  placeholder="28990000"
+                  placeholder="Để trống nếu không giảm giá"
                 />
               </div>
             </div>

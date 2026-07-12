@@ -29,6 +29,9 @@ public class OrderKafkaConsumer {
         JsonNode rootNode;
         try {
             rootNode = objectMapper.readTree(message);
+            if (rootNode.isTextual()) {
+                rootNode = objectMapper.readTree(rootNode.asText());
+            }
         } catch (Exception e) {
             log.error("Failed to parse JSON payload for order event: {}. Message: {}", e.getMessage(), message);
             return;

@@ -1,0 +1,4 @@
+# category_slugs phân cách bằng |
+slug,name,logo_url,description,category_slugs,active
+apple,Apple,https://example.com/apple.png,,dien-thoai|iphone|laptop,true
+samsung,Samsung,https://example.com/samsung.png,,dien-thoai,true

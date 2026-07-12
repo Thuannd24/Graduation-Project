@@ -8,9 +8,11 @@ import com.ecommerce.paymentservice.dto.RefundRequest;
 import com.ecommerce.paymentservice.entity.Payment;
 import com.ecommerce.paymentservice.entity.Refund;
 import com.ecommerce.paymentservice.entity.WebhookLog;
+import com.ecommerce.paymentservice.entity.OutboxEvent;
 import com.ecommerce.paymentservice.repository.PaymentRepository;
 import com.ecommerce.paymentservice.repository.RefundRepository;
 import com.ecommerce.paymentservice.repository.WebhookLogRepository;
+import com.ecommerce.paymentservice.repository.OutboxEventRepository;
 import com.ecommerce.paymentservice.service.PaymentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -44,13 +45,15 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final RefundRepository refundRepository;
     private final WebhookLogRepository webhookLogRepository;
+    private final OutboxEventRepository outboxEventRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
     private final RestTemplate standardRestTemplate;
     private final PlatformTransactionManager transactionManager;
+    private final org.springframework.data.redis.core.StringRedisTemplate stringRedisTemplate;
 
-    private final ConcurrentHashMap<Long, Object> orderLocks = new ConcurrentHashMap<>();
+    private static final java.time.Duration PAYMENT_LOCK_TTL = java.time.Duration.ofSeconds(15);
 
     @Value("${vnpay.pay-url}")
     private String vnpPayUrl;
@@ -92,126 +95,148 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) {
-        Object lock = orderLocks.computeIfAbsent(request.getOrderId(), k -> new Object());
-        synchronized (lock) {
-            try {
-                TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-                return transactionTemplate.execute(status -> {
-                    // Fetch order details from order-service to verify status and retrieve correct
-                    // payment amount (prevent price tampering)
-                    String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + request.getOrderId() + "/summary";
-                    try {
-                        ApiResponse<?> orderApiResponse = restTemplate
-                                .getForObject(orderServiceUrl, ApiResponse.class);
+        // BUG-03 FIX: Use Redis distributed lock instead of JVM-local
+        // ConcurrentHashMap.
+        // ConcurrentHashMap only works within a single JVM; with multiple
+        // payment-service
+        // instances, two concurrent requests could both pass and create duplicate
+        // Payment records.
+        String payLockKey = "payment:initiate:lock:" + request.getOrderId();
+        String lockValue = UUID.randomUUID().toString();
+        Boolean acquired = stringRedisTemplate.opsForValue()
+                .setIfAbsent(payLockKey, lockValue, PAYMENT_LOCK_TTL);
 
-                        if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
-                                || orderApiResponse.getData() == null) {
-                            throw new RuntimeException("Failed to retrieve order details from order-service");
-                        }
+        if (!Boolean.TRUE.equals(acquired)) {
+            throw new IllegalStateException(
+                    "Payment initiation already in progress for order " + request.getOrderId() + ". Please try again.");
+        }
 
-                        Map<?, ?> orderData = (Map<?, ?>) orderApiResponse.getData();
-                        String orderStatus = (String) orderData.get("status");
-                        String orderUserId = (String) orderData.get("userId");
+        try {
+            TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+            return transactionTemplate.execute(status -> {
+                // Fetch order details from order-service to verify status and retrieve correct
+                // payment amount (prevent price tampering)
+                String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + request.getOrderId()
+                        + "/summary";
+                try {
+                    ApiResponse<?> orderApiResponse = restTemplate
+                            .getForObject(orderServiceUrl, ApiResponse.class);
 
-                        // SECURITY CHECK: Verify that the order actually belongs to the user initiating
-                        // the payment
-                        if (orderUserId != null && !orderUserId.equalsIgnoreCase(request.getUserId())) {
-                            throw new IllegalArgumentException(
-                                    "Access Denied: This order does not belong to the authenticated user.");
-                        }
-
-                        // LỖI 1 FIX: Only allow payment for PENDING or AWAITING_PAYMENT orders
-                        if (!"PENDING".equalsIgnoreCase(orderStatus) && !"AWAITING_PAYMENT".equalsIgnoreCase(orderStatus)) {
-                            throw new RuntimeException("Cannot pay for order in status: " + orderStatus);
-                        }
-
-                        Object finalAmountObj = orderData.get("finalAmount");
-                        if (finalAmountObj == null) {
-                            throw new RuntimeException("Order final amount is null");
-                        }
-
-                        BigDecimal verifiedAmount;
-                        if (finalAmountObj instanceof Number) {
-                            verifiedAmount = BigDecimal.valueOf(((Number) finalAmountObj).doubleValue());
-                        } else {
-                            verifiedAmount = new BigDecimal(finalAmountObj.toString());
-                        }
-
-                        request.setAmount(verifiedAmount);
-                    } catch (IllegalArgumentException e) {
-                        log.error("Security violation for Order ID: {} by User ID: {}", request.getOrderId(), request.getUserId());
-                        throw e;
-                    } catch (Exception e) {
-                        log.error("Failed to verify order with order-service. Order ID: {}", request.getOrderId(), e);
-                        throw new RuntimeException("Order verification failed: " + e.getMessage());
+                    if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
+                            || orderApiResponse.getData() == null) {
+                        throw new RuntimeException("Failed to retrieve order details from order-service");
                     }
 
-                    String txnRef = UUID.randomUUID().toString();
+                    Map<?, ?> orderData = (Map<?, ?>) orderApiResponse.getData();
+                    String orderStatus = (String) orderData.get("status");
+                    String orderUserId = (String) orderData.get("userId");
 
-                    // IDEMPOTENCY / REUSE CHECK: Check if a payment record already exists for this
-                    // order
-                    Payment payment;
-                    Optional<Payment> existingPaymentOpt = paymentRepository.findByOrderId(request.getOrderId());
-                    if (existingPaymentOpt.isPresent()) {
-                        Payment existingPayment = existingPaymentOpt.get();
-                        String currentStatus = existingPayment.getStatus();
+                    // SECURITY CHECK: Verify that the order actually belongs to the user initiating
+                    // the payment
+                    if (orderUserId != null && !orderUserId.equalsIgnoreCase(request.getUserId())) {
+                        throw new IllegalArgumentException(
+                                "Access Denied: This order does not belong to the authenticated user.");
+                    }
 
-                        if (STATUS_SUCCESS.equalsIgnoreCase(currentStatus)) {
-                            throw new IllegalStateException("Payment has already been successfully completed for this order.");
-                        }
-                        if (STATUS_REFUNDED.equalsIgnoreCase(currentStatus)) {
-                            throw new IllegalStateException("Payment has already been refunded for this order.");
-                        }
+                    // Only allow payment for PENDING or AWAITING_PAYMENT orders
+                    if (!"PENDING".equalsIgnoreCase(orderStatus) && !"AWAITING_PAYMENT".equalsIgnoreCase(orderStatus)) {
+                        throw new RuntimeException("Cannot pay for order in status: " + orderStatus);
+                    }
 
-                        // If the payment is PENDING or FAILED, reuse the existing record instead of
-                        // creating duplicates
-                        payment = existingPayment;
-                        payment.setPaymentMethod(request.getPaymentMethod());
-                        payment.setAmount(request.getAmount());
-                        payment.setTxnRef(txnRef);
-                        payment.setStatus(STATUS_PENDING);
-                        payment.setFailureCode(null);
-                        payment.setGatewayResponse(null);
-                        payment.setGatewayTxnId(null);
+                    Object finalAmountObj = orderData.get("finalAmount");
+                    if (finalAmountObj == null) {
+                        throw new RuntimeException("Order final amount is null");
+                    }
+
+                    BigDecimal verifiedAmount;
+                    if (finalAmountObj instanceof Number) {
+                        verifiedAmount = BigDecimal.valueOf(((Number) finalAmountObj).doubleValue());
                     } else {
-                        payment = Payment.builder()
-                                .orderId(request.getOrderId())
-                                .userId(request.getUserId())
-                                .email(request.getEmail())
-                                .txnRef(txnRef)
-                                .paymentMethod(request.getPaymentMethod())
-                                .amount(request.getAmount())
-                                .status(STATUS_PENDING)
-                                .build();
+                        verifiedAmount = new BigDecimal(finalAmountObj.toString());
                     }
 
-                    payment = paymentRepository.save(payment);
+                    request.setAmount(verifiedAmount);
+                } catch (IllegalArgumentException e) {
+                    log.error("Security violation for Order ID: {} by User ID: {}", request.getOrderId(),
+                            request.getUserId());
+                    throw e;
+                } catch (Exception e) {
+                    log.error("Failed to verify order with order-service. Order ID: {}", request.getOrderId(), e);
+                    throw new RuntimeException("Order verification failed: " + e.getMessage());
+                }
 
-                    if (METHOD_COD.equalsIgnoreCase(request.getPaymentMethod())) {
-                        // Cash on delivery - initially pending, will complete on delivery
-                        payment.setStatus(STATUS_PENDING);
-                        paymentRepository.save(payment);
+                String txnRef = UUID.randomUUID().toString();
 
-                        publishPaymentEvent("PaymentCODConfirmedEvent", payment, payment.getAmount(), "COD payment pending delivery");
+                // IDEMPOTENCY / REUSE CHECK: Check if a payment record already exists for this
+                // order
+                Payment payment;
+                Optional<Payment> existingPaymentOpt = paymentRepository.findByOrderId(request.getOrderId());
+                if (existingPaymentOpt.isPresent()) {
+                    Payment existingPayment = existingPaymentOpt.get();
+                    String currentStatus = existingPayment.getStatus();
 
-                        return PaymentInitiateResponse.builder()
-                                .paymentId(payment.getId())
-                                .txnRef(txnRef)
-                                .redirectUrl("")
-                                .build();
+                    if (STATUS_SUCCESS.equalsIgnoreCase(currentStatus)) {
+                        throw new IllegalStateException(
+                                "Payment has already been successfully completed for this order.");
+                    }
+                    if (STATUS_REFUNDED.equalsIgnoreCase(currentStatus)) {
+                        throw new IllegalStateException("Payment has already been refunded for this order.");
                     }
 
-                    // VNPAY Link Construction
-                    String redirectUrl = buildVnPayUrl(payment, txnRef, request.getIpAddress());
+                    // If the payment is PENDING or FAILED, reuse the existing record instead of
+                    // creating duplicates
+                    payment = existingPayment;
+                    payment.setPaymentMethod(request.getPaymentMethod());
+                    payment.setAmount(request.getAmount());
+                    payment.setTxnRef(txnRef);
+                    payment.setStatus(STATUS_PENDING);
+                    payment.setFailureCode(null);
+                    payment.setGatewayResponse(null);
+                    payment.setGatewayTxnId(null);
+                } else {
+                    payment = Payment.builder()
+                            .orderId(request.getOrderId())
+                            .userId(request.getUserId())
+                            .email(request.getEmail())
+                            .txnRef(txnRef)
+                            .paymentMethod(request.getPaymentMethod())
+                            .amount(request.getAmount())
+                            .status(STATUS_PENDING)
+                            .build();
+                }
+
+                payment = paymentRepository.save(payment);
+
+                if (METHOD_COD.equalsIgnoreCase(request.getPaymentMethod())) {
+                    // Cash on delivery - initially pending, will complete on delivery
+                    payment.setStatus(STATUS_PENDING);
+                    paymentRepository.save(payment);
+
+                    publishPaymentEvent("PaymentCODConfirmedEvent", payment, payment.getAmount(),
+                            "COD payment pending delivery");
 
                     return PaymentInitiateResponse.builder()
                             .paymentId(payment.getId())
                             .txnRef(txnRef)
-                            .redirectUrl(redirectUrl)
+                            .redirectUrl("")
                             .build();
-                });
-            } finally {
-                orderLocks.remove(request.getOrderId(), lock);
+                }
+
+                // VNPAY Link Construction
+                String redirectUrl = buildVnPayUrl(payment, txnRef, request.getIpAddress());
+
+                return PaymentInitiateResponse.builder()
+                        .paymentId(payment.getId())
+                        .txnRef(txnRef)
+                        .redirectUrl(redirectUrl)
+                        .build();
+            });
+        } finally {
+            // Release Redis lock — only if we still own it (prevents removing a lock
+            // re-acquired by another request after TTL expiry)
+            String currentVal = stringRedisTemplate.opsForValue().get(payLockKey);
+            if (lockValue.equals(currentVal)) {
+                stringRedisTemplate.delete(payLockKey);
             }
         }
     }
@@ -251,6 +276,7 @@ public class PaymentServiceImpl implements PaymentService {
             Map.Entry<String, String> entry = itr.next();
             signData.append(entry.getKey());
             signData.append('=');
+            // Spring URL-decodes params; re-encode to match VNPay's server-side hash computation
             signData.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
             if (itr.hasNext()) {
                 signData.append('&');
@@ -296,14 +322,39 @@ public class PaymentServiceImpl implements PaymentService {
             return "04"; // Invalid amount
         }
 
-        if (!STATUS_PENDING.equalsIgnoreCase(payment.getStatus())) {
-            saveWebhookLog(rawParamsJson, true, true);
-            return "02"; // Order already paid
-        }
-
         String responseCode = queryParams.get("vnp_ResponseCode");
         payment.setGatewayTxnId(queryParams.get("vnp_TransactionNo"));
         payment.setGatewayResponse(rawParamsJson);
+
+        if (!STATUS_PENDING.equalsIgnoreCase(payment.getStatus())) {
+            // Late payment check: if payment status is EXPIRED or FAILED, but VNPAY says
+            // transaction was success ("00"),
+            // we must change it to REFUND_PENDING and create a Refund record so customer's
+            // money is not leaked!
+            if ("00".equals(responseCode) && (STATUS_EXPIRED.equalsIgnoreCase(payment.getStatus())
+                    || STATUS_FAILED.equalsIgnoreCase(payment.getStatus()))) {
+                log.warn(
+                        "Late payment received for expired/failed payment txnRef {}. Amount: {}. Initiating auto-refund.",
+                        txnRef, payment.getAmount());
+                payment.setStatus(STATUS_REFUND_PENDING);
+                payment.setPaidAt(LocalDateTime.now());
+                paymentRepository.save(payment);
+
+                Refund refund = Refund.builder()
+                        .paymentId(payment.getId())
+                        .refundAmount(payment.getAmount())
+                        .reason("Auto-refund: Late payment received for expired/failed order")
+                        .status(STATUS_PENDING)
+                        .build();
+                refundRepository.save(refund);
+
+                saveWebhookLog(rawParamsJson, true, true);
+                return "00";
+            }
+
+            saveWebhookLog(rawParamsJson, true, true);
+            return "02"; // Order already paid
+        }
 
         if ("00".equals(responseCode)) {
             payment.setStatus(STATUS_SUCCESS);
@@ -328,7 +379,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public void processRefund(RefundRequest request) {
-        Payment payment = paymentRepository.findById(request.getPaymentId())
+        // V-12 FIX: Use pessimistic write lock to prevent concurrent refund processing
+        // race conditions
+        Payment payment = paymentRepository.findByIdWithLock(request.getPaymentId())
                 .orElseThrow(() -> new RuntimeException("Payment record not found"));
 
         if (!STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())) {
@@ -397,39 +450,98 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional
     public void cancelExpiredPayments() {
         LocalDateTime cutoff = LocalDateTime.now().minusMinutes(paymentExpiryMinutes);
         List<Payment> expiredPayments = paymentRepository.findAllByStatusAndCreatedAtBefore(STATUS_PENDING, cutoff);
-        for (Payment payment : expiredPayments) {
-            if (GATEWAY_VNPAY.equalsIgnoreCase(payment.getPaymentMethod())) {
-                // Before cancelling VNPAY, query VNPAY QueryDR API to verify actual status
-                String vnpStatus = checkVnPayTransactionStatus(payment);
-                if ("00".equals(vnpStatus)) {
-                    log.info("VNPAY QueryDR confirmed success for txnRef {}. Updating status to SUCCESS instead of EXPIRED.", payment.getTxnRef());
-                    payment.setStatus(STATUS_SUCCESS);
-                    payment.setPaidAt(LocalDateTime.now());
-                    paymentRepository.save(payment);
-                    publishPaymentEvent("PaymentSuccessEvent", payment, payment.getAmount(), "VNPAY QueryDR sync success");
-                    continue;
-                } else if ("01".equals(vnpStatus)) {
-                    // Transaction incomplete (user hasn't paid). Safe to expire.
-                    log.info("VNPAY QueryDR confirmed transaction incomplete for txnRef {}. Proceeding with cancellation.", payment.getTxnRef());
-                } else if ("02".equals(vnpStatus)) {
-                    // Transaction failed. Safe to fail/expire.
-                    log.info("VNPAY QueryDR confirmed transaction failed for txnRef {}. Proceeding with cancellation.", payment.getTxnRef());
-                } else {
-                    // API error or unknown status. Skip expiring for safety.
-                    log.warn("VNPAY QueryDR returned unclear/error status ({}) for txnRef {}. Skipping cancellation to prevent false failures.", vnpStatus, payment.getTxnRef());
-                    continue;
-                }
+
+        TransactionTemplate tx = new TransactionTemplate(transactionManager);
+
+        for (Payment p : expiredPayments) {
+            // STEP 1: Query VNPAY OUTSIDE transaction to avoid holding DB connection during
+            // network call
+            String vnpStatus = null;
+            if (GATEWAY_VNPAY.equalsIgnoreCase(p.getPaymentMethod())) {
+                vnpStatus = checkVnPayTransactionStatus(p);
             }
 
-            payment.setStatus(STATUS_EXPIRED);
-            paymentRepository.save(payment);
-            log.info("Payment reference {} has expired and is marked as EXPIRED.", payment.getTxnRef());
+            final String finalVnpStatus = vnpStatus;
 
-            publishPaymentEvent("PaymentFailedEvent", payment, payment.getAmount(), "Payment session expired");
+            // STEP 2: Short, fine-grained transaction for DB operations only
+            tx.executeWithoutResult(status -> {
+                // Re-fetch payment with write lock inside transaction
+                Optional<Payment> lockOpt = paymentRepository.findByTxnRefWithLock(p.getTxnRef());
+                if (lockOpt.isEmpty()) {
+                    return;
+                }
+                Payment payment = lockOpt.get();
+
+                // Re-verify status under lock
+                if (!STATUS_PENDING.equalsIgnoreCase(payment.getStatus())) {
+                    log.info("Payment txnRef {} is no longer PENDING (currently {}). Skipping expiration.",
+                            payment.getTxnRef(), payment.getStatus());
+                    return;
+                }
+
+                if (METHOD_COD.equalsIgnoreCase(payment.getPaymentMethod())) {
+                    log.info("Payment txnRef {} is COD. Skipping expiration.", payment.getTxnRef());
+                    return;
+                }
+
+                // Process VNPAY status result
+                if (GATEWAY_VNPAY.equalsIgnoreCase(payment.getPaymentMethod())) {
+                    if ("00".equals(finalVnpStatus)) {
+                        log.info(
+                                "VNPAY QueryDR confirmed success for txnRef {}. Updating status to SUCCESS instead of EXPIRED.",
+                                payment.getTxnRef());
+                        payment.setStatus(STATUS_SUCCESS);
+                        payment.setPaidAt(LocalDateTime.now());
+                        paymentRepository.save(payment);
+                        publishPaymentEvent("PaymentSuccessEvent", payment, payment.getAmount(),
+                                "VNPAY QueryDR sync success");
+                        return;
+                    } else if ("01".equals(finalVnpStatus)) {
+                        log.info(
+                                "VNPAY QueryDR confirmed transaction incomplete for txnRef {}. Proceeding with cancellation.",
+                                payment.getTxnRef());
+                    } else if ("02".equals(finalVnpStatus) || "NOT_FOUND".equals(finalVnpStatus)) {
+                        log.info(
+                                "VNPAY QueryDR confirmed transaction failed or not found ({}) for txnRef {}. Proceeding with cancellation.",
+                                finalVnpStatus, payment.getTxnRef());
+                    } else {
+                        log.warn(
+                                "VNPAY QueryDR returned unclear/error status ({}) for txnRef {}. Skipping cancellation to prevent false failures.",
+                                finalVnpStatus, payment.getTxnRef());
+                        return;
+                    }
+                }
+
+                // Mark as expired and save to outbox (atomic)
+                payment.setStatus(STATUS_EXPIRED);
+                paymentRepository.save(payment);
+
+                // Save to outbox instead of direct Kafka publish
+                try {
+                    Map<String, Object> event = new HashMap<>();
+                    event.put("eventId", UUID.randomUUID().toString());
+                    event.put("eventType", "PaymentFailedEvent");
+                    event.put("timestamp", LocalDateTime.now().toString());
+                    event.put("orderId", payment.getOrderId());
+                    event.put("paymentId", payment.getId());
+                    event.put("userId", payment.getUserId());
+                    event.put("email", payment.getEmail());
+                    event.put("amount", payment.getAmount());
+                    event.put("message", "Payment session expired");
+
+                    // TODO: Save to outbox_events table for Debezium CDC
+                    // For now, publish directly but acknowledge the risk
+                    publishPaymentEvent("PaymentFailedEvent", payment, payment.getAmount(), "Payment session expired");
+                } catch (Exception e) {
+                    log.error("Failed to publish PaymentFailedEvent for expired payment {}", payment.getTxnRef(), e);
+                    throw new RuntimeException("Failed to publish payment event", e);
+                }
+
+                log.info("Payment reference {} has expired and is marked as EXPIRED.", payment.getTxnRef());
+            });
         }
     }
 
@@ -447,8 +559,10 @@ public class PaymentServiceImpl implements PaymentService {
             String createDate = LocalDateTime.now().format(formatter);
             String ipAddr = "127.0.0.1";
 
-            // Build signature hashData: RequestId|Version|Command|TmnCode|TxnRef|TransDate|CreateDate|IpAddr|OrderInfo
-            String hashData = requestId + "|" + version + "|" + command + "|" + tmnCode + "|" + txnRef + "|" + transDate + "|" + createDate + "|" + ipAddr + "|" + orderInfo;
+            // Build signature hashData:
+            // RequestId|Version|Command|TmnCode|TxnRef|TransDate|CreateDate|IpAddr|OrderInfo
+            String hashData = requestId + "|" + version + "|" + command + "|" + tmnCode + "|" + txnRef + "|" + transDate
+                    + "|" + createDate + "|" + ipAddr + "|" + orderInfo;
             String secureHash = hmacSha512(vnpHashSecret, hashData);
 
             Map<String, Object> requestBody = new HashMap<>();
@@ -473,6 +587,8 @@ public class PaymentServiceImpl implements PaymentService {
 
                 if ("00".equals(responseCode)) {
                     return transactionStatus; // returns "00" (success), "01" (incomplete), "02" (failed), etc.
+                } else if ("91".equals(responseCode)) {
+                    return "NOT_FOUND";
                 }
             }
         } catch (Exception e) {
@@ -503,11 +619,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         vnpParams.put("vnp_CurrCode", "VND");
         vnpParams.put("vnp_TxnRef", txnRef);
-        vnpParams.put("vnp_OrderInfo", "Thanh toan don hang #" + payment.getOrderId());
+        vnpParams.put("vnp_OrderInfo", "Thanh toan don hang " + payment.getOrderId());
         vnpParams.put("vnp_OrderType", "other");
         vnpParams.put("vnp_Locale", "vn");
         vnpParams.put("vnp_ReturnUrl", vnpReturnUrl);
-        
+
         // Sanitize client IP to ensure a valid IPv4 address is used
         String clientIp = ipAddress;
         if (clientIp == null || clientIp.contains(":") || clientIp.equals("0:0:0:0:0:0:0:1")) {
@@ -518,7 +634,7 @@ public class PaymentServiceImpl implements PaymentService {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         vnpParams.put("vnp_CreateDate", now.format(formatter));
-        vnpParams.put("vnp_ExpireDate", now.plusHours(vnpayExpiryHours).format(formatter));
+        vnpParams.put("vnp_ExpireDate", now.plusMinutes(paymentExpiryMinutes).format(formatter));
 
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
@@ -526,14 +642,14 @@ public class PaymentServiceImpl implements PaymentService {
         while (itr.hasNext()) {
             Map.Entry<String, String> entry = itr.next();
 
-            String encodedKey = URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8);
+            // hashData: raw key + standard URLEncoder value (VNPay official sample spec)
             String encodedValue = URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
-
             hashData.append(entry.getKey());
             hashData.append('=');
             hashData.append(encodedValue);
 
-            query.append(encodedKey);
+            // query string: encoded key + encoded value (for URL safety)
+            query.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8));
             query.append('=');
             query.append(encodedValue);
 
@@ -571,11 +687,22 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public void initiateAutoRefund(Long orderId) {
-        Optional<Payment> paymentOpt = paymentRepository.findByOrderId(orderId);
+        // Use pessimistic write lock to prevent concurrent duplicate refunds
+        Optional<Payment> paymentOpt = paymentRepository.findByOrderIdWithLock(orderId);
         if (paymentOpt.isPresent()) {
             Payment payment = paymentOpt.get();
             if (STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())) {
-                log.info("Payment for Order ID {} was SUCCESS. Marking payment as REFUND_PENDING and creating Refund record...", orderId);
+                // IDEMPOTENCY: Check if a refund record already exists to prevent duplicates
+                // Now safe because we have write lock on payment
+                boolean alreadyRefunding = refundRepository.existsByPaymentId(payment.getId());
+                if (alreadyRefunding) {
+                    log.warn("Refund already exists for Payment ID {}. Skipping duplicate initiateAutoRefund.",
+                            payment.getId());
+                    return;
+                }
+                log.info(
+                        "Payment for Order ID {} was SUCCESS. Marking payment as REFUND_PENDING and creating Refund record...",
+                        orderId);
                 payment.setStatus(STATUS_REFUND_PENDING);
                 paymentRepository.save(payment);
 
@@ -592,7 +719,8 @@ public class PaymentServiceImpl implements PaymentService {
                 payment.setFailureCode("ORDER_CANCELLED");
                 paymentRepository.save(payment);
             } else {
-                log.info("Payment for Order ID {} is in status {}. Skipping refund/cancellation.", orderId, payment.getStatus());
+                log.info("Payment for Order ID {} is in status {}. Skipping refund/cancellation.", orderId,
+                        payment.getStatus());
             }
         } else {
             log.info("No payment record found for Order ID {}. Skipping refund.", orderId);
@@ -600,7 +728,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional
     public void processPendingRefunds() {
         List<Refund> pendingRefunds = refundRepository.findByStatus(STATUS_PENDING);
         if (pendingRefunds.isEmpty()) {
@@ -608,25 +735,41 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         log.info("Found {} pending refunds to process", pendingRefunds.size());
+        TransactionTemplate tx = new TransactionTemplate(transactionManager);
+
         for (Refund refund : pendingRefunds) {
             try {
-                Payment payment = paymentRepository.findById(refund.getPaymentId())
-                        .orElseThrow(() -> new RuntimeException("Payment record not found"));
+                tx.executeWithoutResult(status -> {
+                    // Re-fetch with pessimistic write lock to serialize access
+                    Optional<Refund> freshRefundOpt = refundRepository.findByIdWithLock(refund.getId());
+                    if (freshRefundOpt.isEmpty()) {
+                        log.info("Refund ID {} not found. Skipping.", refund.getId());
+                        return;
+                    }
 
-                // In a real VNPAY integration, we would invoke the VNPAY refund API here.
-                // Since this is mock/simulation, we will approve the refund instantly.
-                // However, doing it here in the scheduler keeps the Kafka Consumer responsive.
-                refund.setStatus(STATUS_SUCCESS);
-                refund.setCompletedAt(LocalDateTime.now());
-                refundRepository.save(refund);
+                    Refund freshRefund = freshRefundOpt.get();
+                    if (!STATUS_PENDING.equalsIgnoreCase(freshRefund.getStatus())) {
+                        log.info("Refund ID {} already processed by another instance (status={}). Skipping.",
+                                refund.getId(), freshRefund.getStatus());
+                        return;
+                    }
 
-                payment.setStatus(STATUS_REFUNDED);
-                paymentRepository.save(payment);
+                    Payment payment = paymentRepository.findById(freshRefund.getPaymentId())
+                            .orElseThrow(() -> new RuntimeException("Payment record not found"));
 
-                publishPaymentEvent("RefundCompletedEvent", payment, refund.getRefundAmount(),
-                        "Refund completed for: " + refund.getReason());
-                
-                log.info("Refund ID {} for Payment ID {} completed successfully", refund.getId(), payment.getId());
+                    freshRefund.setStatus(STATUS_SUCCESS);
+                    freshRefund.setCompletedAt(LocalDateTime.now());
+                    refundRepository.save(freshRefund);
+
+                    payment.setStatus(STATUS_REFUNDED);
+                    paymentRepository.save(payment);
+
+                    publishPaymentEvent("RefundCompletedEvent", payment, freshRefund.getRefundAmount(),
+                            "Refund completed for: " + freshRefund.getReason());
+
+                    log.info("Refund ID {} for Payment ID {} completed successfully", freshRefund.getId(),
+                            payment.getId());
+                });
             } catch (Exception e) {
                 log.error("Failed to process refund ID: {}", refund.getId(), e);
             }
@@ -647,10 +790,22 @@ public class PaymentServiceImpl implements PaymentService {
             event.put("message", info);
 
             String message = objectMapper.writeValueAsString(event);
-            kafkaTemplate.send(paymentTopic, String.valueOf(payment.getOrderId()), message);
-            log.info("Successfully published {} to Kafka topic: {}", eventType, paymentTopic);
+
+            // V-10 FIX: Use Outbox Pattern instead of direct Kafka publish
+            // This ensures atomicity between DB write and event publish via Debezium CDC
+            OutboxEvent outboxEvent = OutboxEvent.builder()
+                    .aggregateId(String.valueOf(payment.getId()))
+                    .aggregateType("Payment")
+                    .eventType(eventType)
+                    .payload(message)
+                    .published(false)
+                    .build();
+            outboxEventRepository.save(outboxEvent);
+
+            log.info("Successfully saved {} to outbox for Debezium CDC", eventType);
         } catch (Exception e) {
-            log.error("Failed to publish payment event to Kafka", e);
+            log.error("Failed to save payment event to outbox", e);
+            throw new RuntimeException("Failed to save payment event to outbox. Rolling back database transaction.", e);
         }
     }
 }

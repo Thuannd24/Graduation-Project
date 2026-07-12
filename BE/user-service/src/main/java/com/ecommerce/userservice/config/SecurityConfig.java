@@ -36,7 +36,7 @@ public class SecurityConfig {
                 // Internal API — chỉ cho phép từ nội bộ (không qua Internet)
                 // Trong thực tế nên thêm IP whitelist hoặc mTLS
                 .requestMatchers("/api/internal/**").permitAll()
-                .requestMatchers("/api/v1/public/**").permitAll()
+                .requestMatchers("/api/v1/public/**", "/api/v1/users/public/**").permitAll()
 
                 // Actuator health check
                 .requestMatchers("/actuator/health").permitAll()

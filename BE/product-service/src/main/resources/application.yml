@@ -62,3 +62,7 @@ minio:
   access-key: ${MINIO_ACCESS_KEY:minio}
   secret-key: ${MINIO_SECRET_KEY:12345678a@}
   bucket-name: ${MINIO_BUCKET_NAME:product-images}
+
+app:
+  internal:
+    api-key: ${INTERNAL_API_KEY:dev-internal-api-key}

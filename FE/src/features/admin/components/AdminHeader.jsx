@@ -22,6 +22,8 @@ export default function AdminHeader({ activeTab, darkMode, onToggleDarkMode }) {
         return "Quản Lý Thương Hiệu";
       case "campaigns":
         return "Quy Trình Khuyến Mãi";
+      case "promotion-stats":
+        return "Thống Kê Promotion";
       default:
         return "Hệ thống Quản Trị";
     }

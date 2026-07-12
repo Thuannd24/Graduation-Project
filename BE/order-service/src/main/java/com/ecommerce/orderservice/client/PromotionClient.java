@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public interface PromotionClient {
 
     @PostMapping("/api/internal/vouchers/validate")
-    ApiResponse<VoucherApplyResult> validateVoucher(@RequestBody VoucherApplyRequest request);
+    ApiResponse<VoucherApplyResult> previewVoucher(@RequestBody VoucherApplyRequest request);
 
     @PostMapping("/api/internal/vouchers/apply")
     ApiResponse<VoucherApplyResult> applyVoucher(@RequestBody VoucherApplyRequest request);
@@ -49,6 +49,8 @@ public interface PromotionClient {
         private String voucherCode;
         private String voucherType;
         private BigDecimal discountAmount;
+        private BigDecimal productDiscountAmount;
+        private BigDecimal shippingDiscountAmount;
         private BigDecimal finalAmount;
         private Long campaignId;
         private LocalDateTime expiresAt;

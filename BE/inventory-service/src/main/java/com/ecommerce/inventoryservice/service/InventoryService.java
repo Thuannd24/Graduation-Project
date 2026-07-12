@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class InventoryService {
     private final InventoryTransactionRepository transactionRepository;
     private final RestockRequestRepository restockRequestRepository;
     private final RedisTemplate<String, String> redisTemplate;
+    private final DefaultRedisScript<Long> stockIncrementScript;
     private final ProductClient productClient;
 
     private static final String REDIS_KEY_PREFIX = "product:stock:";
@@ -105,7 +107,7 @@ public class InventoryService {
                 "Admin manual update", null);
 
         // Sync to Redis
-        syncSingleProductToRedis(productId, vId);
+        syncSingleProductToRedis(productId, vId, quantity - oldQuantity);
 
         return InventoryResponse.builder()
                 .productId(inventory.getProductId())
@@ -153,7 +155,7 @@ public class InventoryService {
         restockRequestRepository.save(restockRequest);
 
         // Sync to Redis
-        syncSingleProductToRedis(productId, vId);
+        syncSingleProductToRedis(productId, vId, request.getQuantity());
 
         return RestockResponse.builder()
                 .productId(productId)
@@ -236,15 +238,33 @@ public class InventoryService {
         log.info("Redis sync completed. Synced {} products total", totalSynced);
     }
 
-    public void syncSingleProductToRedis(Long productId, Long variantId) {
+    public void syncSingleProductToRedis(Long productId, Long variantId, Integer delta) {
         try {
             Long vId = variantId != null ? variantId : 0L;
             Inventory inventory = inventoryRepository.findByProductIdAndVariantId(productId, vId)
                     .orElseThrow(() -> new ResourceNotFoundException("Inventory", "productId:variantId", productId + ":" + vId));
 
             String key = REDIS_KEY_PREFIX + productId + ":" + vId;
-            redisTemplate.opsForValue().set(key, String.valueOf(inventory.getQuantity()));
-            log.info("Synced product {}, variant {} to Redis with quantity {}", productId, vId, inventory.getQuantity());
+            boolean absoluteSet = true;
+
+            if (delta != null) {
+                Long newStock = redisTemplate.execute(
+                        stockIncrementScript,
+                        Collections.singletonList(key),
+                        String.valueOf(delta)
+                );
+                if (newStock != null && newStock != -1) {
+                    absoluteSet = false;
+                    log.info("Relatively updated product {}, variant {} in Redis by delta {}. New stock: {}", 
+                            productId, vId, delta, newStock);
+                }
+            }
+
+            if (absoluteSet) {
+                redisTemplate.opsForValue().set(key, String.valueOf(inventory.getQuantity()));
+                log.info("Synced product {}, variant {} to Redis with absolute quantity {}", 
+                        productId, vId, inventory.getQuantity());
+            }
         } catch (Exception e) {
             log.error("Failed to sync product {}, variant {} to Redis", productId, variantId, e);
         }

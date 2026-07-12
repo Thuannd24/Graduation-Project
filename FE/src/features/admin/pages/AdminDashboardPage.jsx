@@ -14,11 +14,14 @@ import CustomersTab from "../components/CustomersTab.jsx";
 import ProductsTab from "../components/ProductsTab.jsx";
 import InventoryTab from "../components/InventoryTab.jsx";
 import CampaignsTab from "../components/CampaignsTab.jsx";
+import PromotionStatsTab from "../components/PromotionStatsTab.jsx";
 import CategoriesTab from "../components/CategoriesTab.jsx";
 import TransactionsTab from "../components/TransactionsTab.jsx";
 import AddProductTab from "../components/AddProductTab.jsx";
 import AdminRoleTab from "../components/AdminRoleTab.jsx";
 import BrandsTab from "../components/BrandsTab.jsx";
+import AnalyticsAITab from "../components/AnalyticsAITab.jsx";
+import SupportChatTab from "../components/SupportChatTab.jsx";
 
 export default function AdminDashboardPage() {
   const navigate = useNavigate();
@@ -335,6 +338,10 @@ export default function AdminDashboardPage() {
           <CampaignsTab />
         )}
 
+        {activeTab === "promotion-stats" && (
+          <PromotionStatsTab />
+        )}
+
         {activeTab === "categories" && (
           <CategoriesTab onNavigateToAddProduct={() => setActiveTab("add-product")} />
         )}
@@ -361,6 +368,14 @@ export default function AdminDashboardPage() {
 
         {activeTab === "brands" && (
           <BrandsTab />
+        )}
+
+        {activeTab === "analytics-ai" && (
+          <AnalyticsAITab />
+        )}
+
+        {activeTab === "support-chat" && (
+          <SupportChatTab />
         )}
       </main>
     </div>

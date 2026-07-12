@@ -36,15 +36,10 @@ public class ProductGrpcClient {
      */
     public GetPriceInfoResponse getPriceInfo(List<Long> productIds) {
         log.debug("[gRPC Client] getPriceInfo {} products", productIds.size());
-        try {
-            GetPriceInfoRequest request = GetPriceInfoRequest.newBuilder()
-                    .addAllProductIds(productIds)
-                    .build();
-            return productStub.getPriceInfo(request);
-        } catch (StatusRuntimeException e) {
-            log.error("[gRPC Client] getPriceInfo failed: {} - {}", e.getStatus(), e.getMessage());
-            return GetPriceInfoResponse.newBuilder().build(); // empty list
-        }
+        GetPriceInfoRequest request = GetPriceInfoRequest.newBuilder()
+                .addAllProductIds(productIds)
+                .build();
+        return productStub.getPriceInfo(request);
     }
 
     // ─────────────────────────────────────────────────────────────────────
@@ -69,6 +64,21 @@ public class ProductGrpcClient {
      */
     public static BigDecimal getPrice(ProductPriceInfoGrpc info) {
         return parseBigDecimal(info.getPrice());
+    }
+
+    public static BigDecimal getListPrice(ProductPriceInfoGrpc info) {
+        if (info.getListPrice() != null && !info.getListPrice().isBlank()) {
+            return parseBigDecimal(info.getListPrice());
+        }
+        return getPrice(info);
+    }
+
+    public static BigDecimal getSalePrice(ProductPriceInfoGrpc info) {
+        if (info.getSalePrice() == null || info.getSalePrice().isBlank()) {
+            return null;
+        }
+        BigDecimal parsed = parseBigDecimal(info.getSalePrice());
+        return parsed.compareTo(BigDecimal.ZERO) > 0 ? parsed : null;
     }
 
     public static BigDecimal getWeight(ProductPriceInfoGrpc info) {

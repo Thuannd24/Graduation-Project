@@ -33,4 +33,8 @@ public class CategoryAttribute {
     @Column(name = "is_required", nullable = false)
     @Builder.Default
     private Boolean isRequired = false;
+
+    @Column(name = "is_filter", nullable = false, columnDefinition = "boolean default false")
+    @Builder.Default
+    private Boolean isFilter = false;
 }

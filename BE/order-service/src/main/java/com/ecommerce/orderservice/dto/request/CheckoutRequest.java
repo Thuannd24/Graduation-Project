@@ -25,5 +25,8 @@ public class CheckoutRequest {
     /** Phí ship ước tính — dùng cho voucher FREESHIP (tùy chọn). */
     private BigDecimal shippingFee;
 
+    /** Số điểm thưởng khách muốn đổi (1 điểm = 1.000 VND). */
+    private Integer pointsToRedeem;
+
     private String note;
 }

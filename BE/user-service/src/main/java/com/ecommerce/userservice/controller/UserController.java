@@ -2,9 +2,11 @@ package com.ecommerce.userservice.controller;
 
 import com.ecommerce.userservice.dto.ApiResponse;
 import com.ecommerce.userservice.dto.request.AddressRequest;
+import com.ecommerce.userservice.dto.request.RedeemPreviewRequest;
 import com.ecommerce.userservice.dto.request.UpdateProfileRequest;
 import com.ecommerce.userservice.dto.response.AddressResponse;
 import com.ecommerce.userservice.dto.response.LoyaltyTransactionDto;
+import com.ecommerce.userservice.dto.response.RedeemPreviewResponse;
 import com.ecommerce.userservice.dto.response.UserProfileResponse;
 import com.ecommerce.userservice.entity.User;
 import com.ecommerce.userservice.service.AddressService;
@@ -122,5 +124,28 @@ public class UserController {
         Page<LoyaltyTransactionDto> history = loyaltyPointService.getTransactionHistory(
                 user.getId(), PageRequest.of(page, size));
         return ResponseEntity.ok(ApiResponse.success(history));
+    }
+
+    @PostMapping("/me/loyalty/redeem-preview")
+    public ResponseEntity<ApiResponse<RedeemPreviewResponse>> previewRedeem(
+            @RequestHeader("X-User-Id") String keycloakUserId,
+            @Valid @RequestBody RedeemPreviewRequest request) {
+        User user = userService.getUserByKeycloakId(keycloakUserId);
+        RedeemPreviewResponse preview = loyaltyPointService.redeemPreview(user.getId(), request.getOrderAmount());
+        return ResponseEntity.ok(ApiResponse.success(preview));
+    }
+
+    @GetMapping("/public/{keycloakUserId}")
+    public ResponseEntity<ApiResponse<UserProfileResponse>> getPublicUserProfile(@PathVariable String keycloakUserId) {
+        log.info("GET /api/v1/users/public/{}", keycloakUserId);
+        User user = userService.getUserByKeycloakId(keycloakUserId);
+        UserProfileResponse profile = UserProfileResponse.builder()
+                .id(user.getId())
+                .keycloakUserId(user.getKeycloakUserId())
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .avatarUrl(user.getAvatarUrl())
+                .build();
+        return ResponseEntity.ok(ApiResponse.success(profile));
     }
 }

@@ -9,11 +9,33 @@ export interface AuthUser {
   fullName?: string;
   role?: string;
   roles?: string[];
+  loyaltyPoints?: number;
+  customerTier?: string;
+}
+
+export interface LoyaltyTransaction {
+  id: number;
+  delta: number;
+  balanceAfter: number;
+  sourceType?: string;
+  description?: string;
+  createdAt?: string;
+}
+
+export interface RedeemPreview {
+  currentBalance: number;
+  maxRedeemablePoints: number;
+  maxDiscountAmount: number;
+  vndPerPoint: number;
 }
 
 export const authApi = {
   me(): Promise<AuthUser> {
     return apiClient.get<AuthUser>("/users/me", { requireAuth: true });
+  },
+
+  getPublicProfile(keycloakUserId: string): Promise<AuthUser> {
+    return apiClient.get<AuthUser>(`/users/public/${keycloakUserId}`);
   },
 
   updateProfile(payload: { fullName?: string; phoneNumber?: string }): Promise<AuthUser> {
@@ -130,5 +152,21 @@ export const authApi = {
 
   getWards(provinceCode: number | string): Promise<any[]> {
     return apiClient.get<any[]>(`/public/locations/provinces/${provinceCode}/wards`);
+  },
+
+  getLoyaltyPoints(): Promise<number> {
+    return apiClient.get<number>("/users/me/loyalty/points", { requireAuth: true });
+  },
+
+  getLoyaltyHistory(page = 0, size = 20): Promise<{ content: LoyaltyTransaction[]; totalPages: number }> {
+    return apiClient.get<any>(`/users/me/loyalty/history?page=${page}&size=${size}`, { requireAuth: true })
+      .then((result) => ({
+        content: Array.isArray(result?.content) ? result.content : [],
+        totalPages: Number(result?.totalPages ?? 1)
+      }));
+  },
+
+  previewLoyaltyRedeem(orderAmount: number): Promise<RedeemPreview> {
+    return apiClient.postAuth<RedeemPreview>("/users/me/loyalty/redeem-preview", { orderAmount });
   }
 };

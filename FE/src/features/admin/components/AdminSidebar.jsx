@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
-import logoImg from "../../../assets/images/image.png";
 
 export default function AdminSidebar({ activeTab, setActiveTab, ordersCount, handleLogout }) {
   return (
@@ -9,9 +8,9 @@ export default function AdminSidebar({ activeTab, setActiveTab, ordersCount, han
       <div>
         {/* Logo Brand */}
         <div className="p-5 flex items-center justify-between border-b border-slate-100 bg-white">
-          <div className="flex items-center gap-2">
-            <img src={logoImg} alt="AuraTech Logo" className="w-11 h-11 object-contain rounded-lg" />
-            <span className="font-extrabold text-xl tracking-tight text-slate-800">AuraTech</span>
+          <div className="flex items-center select-none font-orbitron text-xl tracking-wider uppercase">
+            <span className="font-black text-slate-800">Aura</span>
+            <span className="font-light text-rose-600 text-base border-l border-slate-300 pl-1.5 ml-1.5 tracking-widest">Tech</span>
           </div>
           <button className="text-slate-400 hover:text-slate-600 transition-colors">
             <Icon name="menu_open" className="text-lg" />
@@ -78,6 +77,42 @@ export default function AdminSidebar({ activeTab, setActiveTab, ordersCount, han
               >
                 <Icon name="local_offer" className="text-base" filled={activeTab === "campaigns"} />
                 <span>Coupon Code</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("promotion-stats")}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === "promotion-stats"
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                }`}
+              >
+                <Icon name="insights" className="text-base" filled={activeTab === "promotion-stats"} />
+                <span>Thống kê Promotion</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("analytics-ai")}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === "analytics-ai"
+                    ? "bg-rose-600 text-white shadow-sm"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                }`}
+              >
+                <Icon name="psychology" className="text-base" filled={activeTab === "analytics-ai"} />
+                <span>AI Analytics</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("support-chat")}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === "support-chat"
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                }`}
+              >
+                <Icon name="chat" className="text-base" filled={activeTab === "support-chat"} />
+                <span>Customer Chat</span>
               </button>
 
               <button

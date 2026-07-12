@@ -7,6 +7,7 @@ import com.ecommerce.productservice.exception.ResourceNotFoundException;
 import com.ecommerce.productservice.repository.*;
 import com.ecommerce.productservice.service.ProductService;
 import com.ecommerce.productservice.service.SearchService;
+import com.ecommerce.productservice.util.ProductPricingUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,6 +85,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto createProduct(ProductDto productDto) {
+        normalizeProductPricing(productDto);
         String resolvedBrandName = productDto.getBrand();
         if (productDto.getBrandId() != null) {
             resolvedBrandName = brandRepository.findById(productDto.getBrandId())
@@ -198,6 +200,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto updateProduct(Long id, ProductDto productDto) {
+        normalizeProductPricing(productDto);
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
 
@@ -726,6 +729,14 @@ public class ProductServiceImpl implements ProductService {
     private Map<Long, Attribute> getAttributesMap() {
         return attributeRepository.findAll().stream()
                 .collect(Collectors.toMap(Attribute::getId, a -> a));
+    }
+
+    private void normalizeProductPricing(ProductDto productDto) {
+        if (productDto == null) {
+            return;
+        }
+        productDto.setSalePrice(
+                ProductPricingUtils.normalizeSalePrice(productDto.getPrice(), productDto.getSalePrice()));
     }
 
     private Map<String, Attribute> getAttributesByCodeMap() {

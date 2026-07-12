@@ -23,4 +23,5 @@ public class CategoryAttributeDto {
     
     private Boolean isVariant;
     private Boolean isRequired;
+    private Boolean isFilter;
 }

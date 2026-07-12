@@ -76,6 +76,12 @@ public class LoyaltyPointDelegate implements JavaDelegate {
 
         try {
             Map<String, Object> response = userClient.updatePoints(userDbId.get(), request);
+            if (isFallbackResponse(response)) {
+                execution.setVariable("loyaltyPointApplied", false);
+                execution.setVariable("loyaltyPointError", "user-service unavailable (fallback)");
+                log.warn("[LoyaltyPoint] user-service fallback — points not applied for user {}", userDbId.get());
+                return;
+            }
             Map<String, Object> data = extractData(response);
             if (data != null) {
                 if (data.get("newPointBalance") != null) {
@@ -108,6 +114,14 @@ public class LoyaltyPointDelegate implements JavaDelegate {
             return (Map<String, Object>) dataObj;
         }
         return response;
+    }
+
+    private boolean isFallbackResponse(Map<String, Object> response) {
+        if (response == null) {
+            return true;
+        }
+        Object code = response.get("code");
+        return code != null && "FALLBACK".equalsIgnoreCase(code.toString());
     }
 
     private Long toLong(Object value) {

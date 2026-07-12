@@ -57,3 +57,7 @@ keycloak:
 
 location:
   api-url: ${LOCATION_API_URL:https://provinces.open-api.vn/api/v2}
+
+app:
+  internal:
+    api-key: ${INTERNAL_API_KEY:dev-internal-api-key}

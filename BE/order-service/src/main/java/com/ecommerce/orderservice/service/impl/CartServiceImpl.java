@@ -89,6 +89,8 @@ public class CartServiceImpl implements CartService {
                 } catch (Exception e) {
                     log.error("[gRPC] Failed to fetch product details from product-service during cart retrieval: {}",
                             e.getMessage());
+                    throw new com.ecommerce.orderservice.exception.ServiceUnavailableException(
+                            "Hệ thống giỏ hàng đang bận do không thể tải thông tin sản phẩm. Vui lòng thử lại sau.");
                 }
             }
 
