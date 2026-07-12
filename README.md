@@ -1,4 +1,4 @@
-# TechStore - Hệ Thống Thương Mại Điện Tử Phân Tán (Microservices)
+# AuraTech - Hệ Thống Thương Mại Điện Tử Phân Tán (Microservices)
 
 TechStore là hệ thống thương mại điện tử kiến trúc Microservices hiệu năng cao, sử dụng giao tiếp gRPC và Event-Driven với Apache Kafka để đảm bảo tính nhất quán dữ liệu.
 
