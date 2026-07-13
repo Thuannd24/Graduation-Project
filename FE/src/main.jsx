@@ -17,14 +17,12 @@ keycloak
   .then((authenticated) => {
     if (authenticated) {
       setAuthToken(keycloak.token);
-      
-      // Eagerly sync user to backend DB on login to ensure vouchers are issued
-      authApi.getProfile().catch(console.warn);
 
-      // Retrieve and consume the 'just_logged_in' flag
+      // Provision user in DB only on actual login (not every SSO session restore)
       const isJustLoggedIn = sessionStorage.getItem("just_logged_in") === "true";
       if (isJustLoggedIn) {
         sessionStorage.removeItem("just_logged_in");
+        authApi.me().catch(console.warn);
       }
 
       // 1. Admin Role Redirection

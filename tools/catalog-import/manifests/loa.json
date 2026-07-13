@@ -1,0 +1,817 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:02:23.725Z",
+  "note": "Scraped 5 sản phẩm — danh mục \"Loa\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "loa"
+      ]
+    },
+    {
+      "slug": "jbl",
+      "name": "JBL",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/JBL-240x50.png",
+      "description": "JBL — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "loa"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "loa-harman-kardon-soundstick-5-wifi",
+      "name": "Loa Harman Kardon SoundStick 5 WiFi",
+      "categorySlug": "loa",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Loa Harman Kardon SoundStick 5 Wifi mang đến dải âm ba đường tiếng sắc nét kết hợp cùng hệ thống đèn nền chuyển động theo từng nhịp điệu đầy ấn tượng. Thiết bị sở hữu tổng công suất 190W giúp tái hiện dải âm thanh vô cùng uy lực. Bên cạnh đó, chuẩn Wifi băng tần kép sẽ đảm bảo quá trình truyền tải nhạc luôn mượt mà. Loa Harman Kardon SoundStick 5 Wifi - Thiết kế bắt mắt, âm thanh bùng nổ Mẫu loa mới này tiếp tục kế thừa kiểu dáng vòm trong suốt, kết hợp cùng những nâng cấp sáng ",
+      "price": 11500000,
+      "salePrice": null,
+      "costPrice": 8740000,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_3__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_15_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_7_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_16_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_8_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_9_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_11_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "Loa vệ tinh (mỗi bên): 0.8kg Loa subwoofer: 3.7kg",
+        "dimensions": "Loa vệ tinh (Satellite): 95.5 x 281.1 x 95.5 mm Loa subwoofer: 237.5 x 283.4 x 237.5 mm",
+        "connectivity": "USB-C"
+      },
+      "specsRaw": {
+        "Trọng lượng": "Loa vệ tinh (mỗi bên): 0.8kg Loa subwoofer: 3.7kg",
+        "Kích thước": "Loa vệ tinh (Satellite): 95.5 x 281.1 x 95.5 mm Loa subwoofer: 237.5 x 283.4 x 237.5 mm",
+        "Công suất": "190W RMS",
+        "Cổng kết nối": "USB-C",
+        "Tính năng khác": "Kết nối đa loa cùng Auracast™ Wi-Fi",
+        "Cấu tạo": "6 x loa Mid-range 40mm, 2 x loa Tweeter 25 mm, 1 x loa subwoofer 5.25\"",
+        "Hãng sản xuất": "Harman Kardon",
+        "Thông số": "Loa Harman Kardon SoundStick 5 WiFi"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "4BODHN-DEN-0",
+          "price": 11500000,
+          "costPrice": 8740000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        },
+        {
+          "sku": "4BODHN-TRANG-1",
+          "price": 11500000,
+          "costPrice": 8740000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_3__1.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "loa-thap-samsung-mx-t40",
+      "name": "Loa tháp Samsung MX-T40",
+      "categorySlug": "loa",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Loa tháp Samsung MX-T40/XV – Khuấy động mọi bữa tiệc Trên thị trường hiện có rất nhiều sản phẩm âm thanh với kết cấu kỳ dị, nhưng dù gì, thì âm thanh vẫn là chất lượng cần quan tâm hàng đầu. Nếu bạn cần tìm một chiếc loa sở hữu đầy đủ các yếu tố độc, lạ, hay thì hãy chọn loa Samsung MX-T40. Cấu trúc tháp, dễ dàng kết nối bluetooth Loa sở hữu kết cấu đặc biệt, khiến người ta liên tưởng đến các công trình kiến trúc vĩ đại như tháp Eiffel, Tháp Burj Khalifa,... Vì thế không chỉ để ",
+      "price": 2840000,
+      "salePrice": 1790000,
+      "costPrice": 1360400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_321_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-thap-samsung-mx-t40-new.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0004_vn-giga-party-audio-mx-t40-mx-t4_5_.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0003_vn-giga-party-audio-mx-t40-mx-t4_4_.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0001_vn-giga-party-audio-mx-t40-mx-t4_2_.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0002_vn-giga-party-audio-mx-t40-mx-t4_3_.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0000_vn-giga-party-audio-mx-t40-mx-t4_1_.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "6.8kg",
+        "connectivity": "Cổng USB"
+      },
+      "specsRaw": {
+        "Trọng lượng": "6.8kg",
+        "Công nghệ âm thanh": "Bass Booster, Âm thanh đa hướng",
+        "Công suất": "300W",
+        "Cổng kết nối": "Cổng USB",
+        "Số loa kết nối cùng lúc": "10 loa (MX-T70, T50 và T40)",
+        "Tính năng khác": "Đèn led DJHát Karaoke khi kết nối với Mic Bluetooth đầu USB",
+        "Chống nước": "Kháng nước nhẹ",
+        "Hãng sản xuất": "Samsung Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "2XHL75-DEN-0",
+          "price": 2840000,
+          "costPrice": 1360400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1790000
+        }
+      ]
+    },
+    {
+      "slug": "loa-jbl-go-5",
+      "name": "Loa Bluetooth JBL Go 5",
+      "categorySlug": "loa",
+      "brandSlug": "jbl",
+      "description": "Đặc điểm nổi bật JBL Go 5 là mẫu loa Bluetooth di động thế hệ mới nổi bật với thiết kế siêu nhỏ gọn chỉ 230g, dễ dàng mang theo trong mọi chuyến đi. JBL Go 5 được trang bị kết nối Bluetooth 6.0 ổn định, chuẩn kháng nước và bụi IP68 bền bỉ cùng thời lượng pin lên đến 8 giờ sử dụng. Bên cạnh chất âm JBL Pro Sound mạnh mẽ từ driver 45mm và công suất 4,8W RMS, loa còn hỗ trợ công nghệ Auracast, ghép nối stereo tự động và codec AAC/LC3, mang đến trải nghiệm nghe nhạc linh hoạt và sống động hơn.",
+      "price": 1290000,
+      "salePrice": null,
+      "costPrice": 980400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_7_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_9_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_10_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_1__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-spa.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_9_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_18_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_26_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "230 g",
+        "dimensions": "101 x 77.4 x 43 mm"
+      },
+      "specsRaw": {
+        "Trọng lượng": "230 g",
+        "Kích thước": "101 x 77.4 x 43 mm",
+        "Công suất": "4.8 W RMS",
+        "Thời lượng pin": "8 giờ + 2 giờ cùng Playtime Boost",
+        "Số loa kết nối cùng lúc": "Ghép nối đa loa không giới hạn với Auracast™",
+        "Tính năng khác": "Auracast™",
+        "Hãng sản xuất": "JBL",
+        "Tên sản phẩm": "Giá bán",
+        "Loa Bluetooth JBL Go 5": "1.290.000đ",
+        "Đặc điểm": "JBL Go 4",
+        "Giá niêm yết": "1.070.000đ",
+        "Màu sắc": "Đen, Xanh, Đỏ, Hồng, Vàng, Trắng, Camo",
+        "Màng loa": "45mm",
+        "Tần số đáp ứng": "90 Hz - 20 kHz",
+        "Thời gian sạc": "3 giờ",
+        "Kháng nước": "IP67",
+        "Kết nối Bluetooth": "Bluetooth 5.3"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "IESX65-ANDOI-0",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_7_.png",
+          "active": true,
+          "options": {
+            "color": "Xanh quân đội"
+          }
+        },
+        {
+          "sku": "IESX65-DUONG-1",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_2__1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          }
+        },
+        {
+          "sku": "IESX65-TRANG-2",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_9_.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "IESX65-VANG-3",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_10_.png",
+          "active": true,
+          "options": {
+            "color": "Vàng"
+          }
+        },
+        {
+          "sku": "IESX65-CAM-4",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_3_.png",
+          "active": true,
+          "options": {
+            "color": "Cam"
+          }
+        },
+        {
+          "sku": "IESX65-DO-5",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_6_.png",
+          "active": true,
+          "options": {
+            "color": "Đỏ"
+          }
+        },
+        {
+          "sku": "IESX65-HONG-6",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_4_.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          }
+        },
+        {
+          "sku": "IESX65-DEN-7",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_1__1.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        },
+        {
+          "sku": "IESX65-TIM-8",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_5_.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "loa-keo-party-marshall-bromley-450",
+      "name": "Loa kéo party Marshall Bromley 450",
+      "categorySlug": "loa",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Loa kéo Party Marshall Bromley 450 sở hữu công nghệ True Stereophonic 360°, gồm 2 loa woofer và 4 loa full-range, giúp lan tỏa âm thanh tới mọi vị trí. Mẫu loa Marshall này có thời lượng pin hơn 40 giờ và khả năng kháng nước, bụi IP55. Hệ thống đèn mô phỏng sân khấu của loa giúp các buổi tiệc sôi động hơn. Loa kéo Party Marshall Bromley 450 - Sức mạnh âm nhạc đỉnh cao Marshall Bromley 450 được thiết kế để lan tỏa âm thanh mạnh mẽ tới mọi nơi và khuấy động buổi tiệc. Sản phẩm còn",
+      "price": 21900000,
+      "salePrice": null,
+      "costPrice": 16644000,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_17__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450-spa.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450-.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_13_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_12_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_11_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_14_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_15_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_16_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_17_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_18_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_19_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_20_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_21_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_22_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "12.32 kg",
+        "dimensions": "366 x 492 x 261 mm",
+        "connectivity": "Âm thanh: AUX 3.5mm (Đầu vào và Đầu ra) USB-C RCA Mic/Nhạc cụ: 2 giắc cắm kết hợp XLR/6.35 mm"
+      },
+      "specsRaw": {
+        "Trọng lượng": "12.32 kg",
+        "Kích thước": "366 x 492 x 261 mm",
+        "Công nghệ âm thanh": "Công nghệ True Stereophonic: Âm thanh nổi 360° sắc nét",
+        "Công suất": "400W",
+        "Thời lượng pin": "40 giờ",
+        "Cổng kết nối": "Âm thanh: AUX 3.5mm (Đầu vào và Đầu ra) USB-C RCA Mic/Nhạc cụ: 2 giắc cắm kết hợp XLR/6.35 mm",
+        "Tính năng khác": "Tích hợp đèn Led phong cách sân khấu Cổng nguồn cho micro & nhạc cụChống bụi & nước bắn IP55Quay xách tích hợpPin có thể tháo rời và sạc ngược",
+        "Cấu tạo": "2 x loa trầm 6.5 inch 40 W4 x loa toàn dải 2 inch 6 W2 x bộ tản nhiệt thụ động",
+        "Chống nước": "IP55",
+        "Hãng sản xuất": "Marshall",
+        "Thông số": "Loa kéo party Marshall Bromley 450"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QR2TOS-NVANG-0",
+          "price": 21900000,
+          "costPrice": 16644000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_17__1.png",
+          "active": true,
+          "options": {
+            "color": "Đen Vàng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "loa-bluetooth-fender-riff",
+      "name": "Loa Bluetooth Fender Riff",
+      "categorySlug": "loa",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Loa Bluetooth Fender Riff trang bị công suất lớn đến 60W, bao gồm 2 loa trầm toàn dải, 2 loa tép cùng 2 bộ tản nhiệt âm trầm cho âm thanh đầy mạnh mẽ. Sản phẩm cho thời gian đến 30 giờ hỗ trợ sạc nhanh trong 30 phút có thể phát nhạc 8 giờ. Loa hỗ trợ thêm công nghệ Bluetooth 5.2, mang đến kết nối ổn định với độ trễ thấp. Loa Bluetooth Fender Riff - Âm thanh sống động, pin bền bỉ Loa Fender mang lại chất âm sống động, phù hợp cho nhiều thể loại âm nhạc khác nhau. Sản phẩm có kiểu",
+      "price": 10900000,
+      "salePrice": 4990000,
+      "costPrice": 3792400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_5__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_7_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "2.41 kg",
+        "dimensions": "20 x 20 x 30 cm",
+        "connectivity": "Line guitar 6.3mm AUX IN 3.5mm"
+      },
+      "specsRaw": {
+        "Trọng lượng": "2.41 kg",
+        "Kích thước": "20 x 20 x 30 cm",
+        "Công suất": "60W",
+        "Thời lượng pin": "30 giờ",
+        "Cổng kết nối": "Line guitar 6.3mm AUX IN 3.5mm",
+        "Cấu tạo": "2 x loa trầm toàn dải 2 x loa tweeter 2 x bộ tản nhiệt âm trầm",
+        "Chống nước": "IP54",
+        "Hãng sản xuất": "Fender"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9F8UKF-DEN-0",
+          "price": 10900000,
+          "costPrice": 3792400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_5__1.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 4990000
+        }
+      ]
+    }
+  ]
+}

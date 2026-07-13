@@ -1,0 +1,1453 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:38:07.365Z",
+  "note": "Scraped 17 sản phẩm — danh mục \"Tivi\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "tivi",
+      "name": "Tivi",
+      "parentSlug": null,
+      "sortOrder": 7,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "lg",
+      "name": "LG",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/LG-240x50.png",
+      "description": "LG — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tivi"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tivi"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tivi"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "smart-tivi-lg-uhd-4k-55-inch-55ua8055psa",
+      "name": "Smart tivi LG UHD 4K 55 inch 2026 (55UA8055PSA)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart Tivi UHD 4K 55 inch 55UA8055PSA sử dụng bộ xử lý AI alpha 7 4K Gen8 hiện đại để nâng cấp chất lượng hình ảnh và tối ưu hóa hệ thống âm thanh vòm. Sản phẩm tích hợp chuẩn HDR10 Pro nhằm hiển thị dải màu sống động. Hơn nữa, tivi còn vận hành trên nền hệ điều hành webOS mới, hỗ trợ nâng cấp trong 5 năm. Smart Tivi UHD 4K 55 inch 55UA8055PSA - Hiển thị hình ảnh sắc nét Với khả năng xử lý hình ảnh và âm thanh mạnh mẽ, mẫu tivi LG 55 inch này là lựa chọn giải trí ấn tượng cho nh",
+      "price": 15590000,
+      "salePrice": 10900000,
+      "costPrice": 8284000,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_6_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "HDR10 Pro4K Super UpscalingFilmmaker mode",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "AI Sound ProAI Clear Sound",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV",
+        "Thương hiệu": "LG"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "16713E-HHANG-0",
+          "price": 15590000,
+          "costPrice": 8284000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 10900000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-coocaa-fhd-43-inch-43s3u-plus",
+      "name": "Smart Tivi Coocaa FHD 43 inch 43S3U+",
+      "categorySlug": "tivi",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Smart tivi Coocaa 43S3U+ FHD 43 inch được trang bị màn hình độ phân giải FHD HDR10+ với tần số quét 60Hz cho chất lượng hình ảnh sắc nét và sống động. Trải nghiệm các nội dung đa phương tiện một cách trọn vẹn với âm thanh vòm tổng công suất 20W ứng dụng công nghệ Dolby Audio tân tiến. Điều khiển tivi từ xa dễ dàng hơn bao giờ hết với sự trợ giúp từ ứng dụng Swaiot Home. Smart tivi Coocaa FHD 43 inch 43S3U+: khung hình mượt mà, âm thanh đa chiều đắm chìm Nếu bạn đang tìm kiếm mẫu",
+      "price": 5490000,
+      "salePrice": 4890000,
+      "costPrice": 3716400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_5__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_1__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_4__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_3_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "FullHD",
+        "refresh_rate": "60Hz"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "43 inch",
+        "Công nghệ hình ảnh": "Coocaa German Chế độ bảo vệ mắt 400 nits HDR 10+ Giảm nhiễu thông minh Độ tương phản động cao",
+        "Độ phân giải": "FullHD",
+        "Loại màn hình": "LED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "Dolby Audio+Dolby Audio",
+        "Tiện ích nổi bật": "Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QI61Q0-HHANG-0",
+          "price": 5490000,
+          "costPrice": 3716400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_5__1.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 4890000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025",
+      "name": "Smart Tivi LG UHD 4K 43 inch 2025 (43UA7350)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart Tivi LG UHD 43UA7350 4K 43 inch 2025 mang đến độ phân giải 4K sắc nét, công nghệ HDR10 cùng bộ xử lý α7 AI 4K thế hệ thứ 8 tối ưu chất lượng hình ảnh. Hệ điều hành WebOS 25 kết hợp LG AI giúp cá nhân hóa nội dung, hỗ trợ điều khiển bằng giọng nói. Bên cạnh đó, mẫu tivi LG 43 inch này được tích hợp công nghệ AI Sound Pro giả lập hiệu ứng vòm, tạo không gian nghe sống động. Tổng quan về Smart Tivi LG 43UA7350PSB (Model 2025) Smart Tivi LG AI 4K 43 inch 43UA7350PSB thuộc dòng",
+      "price": 10900000,
+      "salePrice": 7790000,
+      "costPrice": 5920400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_4__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_3__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_2__1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "43 inch",
+        "Công nghệ hình ảnh": "4K Ultra HD (3,840 x 2,160 pixels)HDR10 / HLGDynamic Tone MappingFILMMAKER MODE10 chế độ hình ảnhHGIG ModeGame OptimizerALLMPhản hồi trò chơi tức thì VRR lên tới 60Hz",
+        "Độ phân giải": "4K",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Smart tivi",
+        "Công nghệ âm thanh": "Dolby AtmosClear Voice ProLG Sound SyncSound Mode Share",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "J67355-HHANG-0",
+          "price": 10900000,
+          "costPrice": 5920400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 7790000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025",
+      "name": "Smart Tivi LG UHD 4K 55 inch 2025 (55UA7350PSB)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật 55UA7350PSB là Smart TV LG 55 inch 4K UHD với độ phân giải 3840x2160, sản phẩm trang bị bộ xử lý α7 AI 4K Gen8 cho hình ảnh hiển thị sắc nét, mượt mà. Tần số quét 60Hz kết hợp HDR10 và HLG giúp tăng cường độ tương phản. Mẫu tivi LG 55 inch này còn có hệ thống loa 2.0 công suất 20W tích hợp AI Sound Pro mang đến âm thanh lan tỏa, sống động. Tổng quan về Smart Tivi LG 55UA7350PSB (Model 2025) 55UA7350PSB có tên đầy đủ là Smart tivi LG 4K 55 inch 55UA7350PSB, thuộc dòng UA73 của LG",
+      "price": 14900000,
+      "salePrice": 10990000,
+      "costPrice": 8352400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_1__1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "HDR10Tăng cường biểu cảm 4KHDR (High Dynamic Range) FILMMAKER MODE™ Auto CalibrationHiệu chuẩn tự động Auto Calibration",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "LG Sound SyncClear Voice ProAI Sound (Âm thanh AI)Sound Mode ShareWOW Orchestra",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng",
+        "Thương hiệu": "LG",
+        "Sản xuất tại": "Việt Nam",
+        "Năm ra mắt": "2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "HDU9EP-HHANG-0",
+          "price": 14900000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 10990000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb",
+      "name": "Smart Tivi LG UHD 4K 55 inch 2026 (55NU805BPSB)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart Tivi LG UHD 4K 55 INCH (55NU805BPSB) mang đến trải nghiệm xem rộng rãi với tấm nền 55 inch, khả năng hiển thị 4K cùng α7 AI Processor 4K Gen9. TV hỗ trợ HDR10 Pro, TruMotion, AI Sound Pro cùng hệ điều hành webOS 26. Thiết bị còn tích hợp LG ThinQ cùng khả năng điều khiển bằng giọng nói, giúp điều khiển tiện lợi hơn. Smart Tivi LG UHD 4K 55 INCH (55NU805BPSB) - Trải nghiệm giải trí tiện nghi Thế hệ Tivi LG 55 inch này mang đến trải nghiệm giải trí tiện nghi, phù hợp cho nhu",
+      "price": 14900000,
+      "salePrice": null,
+      "costPrice": 11324000,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_6_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "HLGHDR10Dynamic Tone MappingFilmMaker ModeAI HDR Remastering4K Super UpscalingRGB Primary Color UltraQuick Media SwitchingQuick Frame TransportAuto Brightness ControlAI Brightness Control9 chế độ hình ảnhĐộ trễ phản hồi hình ảnh (gaming) dưới 0.1 msAI Emotional Remastering",
+        "Độ phân giải": "4K",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Smart tivi",
+        "Công nghệ âm thanh": "Dolby DigitalClear Voice ProAuto Volume LevelingAI Acoustic TuningLG Sound SyncTV Sound Mode ShareWISA readyWOW OrchestraAI Sound Pro",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Tích hợp trợ lí ảo Google Assistant, Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng",
+        "Thương hiệu": "Hàn Quốc",
+        "Sản xuất tại": "Việt Nam",
+        "Năm ra mắt": "2026"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "PCH7NL-HHANG-0",
+          "price": 14900000,
+          "costPrice": 11324000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-samsung-qled-55q6fa-4k-55-inch",
+      "name": "Smart tivi Samsung QLED 4K 55 inch 2025 (55Q6FA)",
+      "categorySlug": "tivi",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Smart tivi Samsung QLED 55Q6FA 4K 55 inch được trang bị màn hình QLED 4K cùng công nghệ Quantum HDR và bộ xử lý AI nhằm nâng cao chất lượng hình ảnh. Mẫu tivi Samsung 55 inch này có tần số quét 50Hz, hỗ trợ âm thanh OTS Lite, Adaptive Sound. Sản phẩm vận hành trên hệ điều hành Tizen OS và hỗ trợ điều khiển qua ứng dụng SmartThings. Smart tivi Samsung QLED 55Q6FA 4K 55 inch - Đỉnh cao hình ảnh và âm thanh Tivi Samsung QLED 55Q6FA 4K 55 inch là một chiếc tivi vừa có thiết kế hiện ",
+      "price": 14500000,
+      "salePrice": 10390000,
+      "costPrice": 7896400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_6_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "50Hz",
+        "os": "Tizen OS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "Q4 Lite ProcessorQuantum HDRHDR 10+4K UpscalingMega ContrastUHD DimmingMotion XceleratorFilmmaker Mode (FMM)Color Booster",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "QLED",
+        "Tần số quét": "50Hz",
+        "Loại tivi": "Tivi QLED, Smart tivi",
+        "Công nghệ âm thanh": "Adaptive SoundOTS LiteQ-Symphony",
+        "Hệ điều hành": "Tizen OS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Tích hợp trợ lí ảo Google Assistant, Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng",
+        "Thương hiệu": "Samsung",
+        "Năm ra mắt": "2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "DM4ZPM-HHANG-0",
+          "price": 14500000,
+          "costPrice": 7896400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 10390000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-samsung-uhd-4k-55-inch-55u8500h",
+      "name": "Smart tivi Samsung UHD 4K 55 inch 2026 (55U8500H)",
+      "categorySlug": "tivi",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Smart Tivi Samsung UHD 4K 55 inch (55U8500H) gây ấn tượng nhờ thiết kế Metal Stream sang trọng kết hợp màn hình 55 inch và độ phân giải 4K sắc nét. Sản phẩm sở hữu bộ xử lý Crystal Processor 4K giúp tối ưu hóa độ tương phản. Hệ điều hành Tizen kết hợp tần số quét DLG 120Hz mang đến trải nghiệm giải trí mượt mà. ​​Smart Tivi Samsung UHD 4K 55 inch (55U8500H) - Thiết kế Metal Stream tinh tế Tivi Samsung UHD 4K 55inch (55U8500H) mở ra không gian giải trí đỉnh cao với khả năng tái h",
+      "price": 15500000,
+      "salePrice": 11990000,
+      "costPrice": 9112400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_1__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_2_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "50Hz",
+        "os": "Tizen OS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "HDRHDR 10+Mega ContrastUHD DimmingContrast EnhancerMotion Xcelerator4K UpscalingColor BoosterFilmmaker Mode",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "50Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "OTS LiteQ-SymphonyAdaptive Sound",
+        "Hệ điều hành": "Tizen OS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Tích hợp trợ lí ảo Google Assistant, Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng",
+        "Thương hiệu": "Samsung",
+        "Năm ra mắt": "2026"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "0NDPAB-HHANG-0",
+          "price": 15500000,
+          "costPrice": 9112400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 11990000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch",
+      "name": "Smart Tivi Samsung khung tranh 4K 55 inch 2025 (55LS03F)",
+      "categorySlug": "tivi",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Smart tivi khung tranh Samsung 55LS03F 4K 55 inch với thiết kế độc đáo và kho tác phẩm nghệ thuật phong phú sẽ tạo nên điểm nhấn đặc biệt cho không gian. Mẫu tivi Samsung 55 inch này sở hữu chip AI NQ4 2.0 giúp nâng cao chất lượng hình ảnh, âm thanh. Hệ điều hành Tizen và trợ lý ảo Bixby giúp việc tìm kiếm, sử dụng tivi được tối ưu. Smart tivi khung tranh Samsung 55LS03F 4K 55 inch - Điểm nhấn thẩm mỹ độc đáo Samsung 55LS03F 4K 55 inch 2025 với thiết kế khung tranh độc đáo cùng ",
+      "price": 29900000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_7_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "100Hz",
+        "os": "Tizen OS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "HDR10+Quantum HDRGóc Nhìn Rộng4K AI UpscalingColor Booster ProChế độ FilmmakerChế độ EyeComfortReal Depth EnhancerTương phản dual LEDAuto HDR RemasteringSupreme UHD DimmingMotion Xcelerator 144HzTối Ưu Hóa Độ Sáng HDRHDR Brightness Optimizer",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "QLED",
+        "Tần số quét": "100Hz",
+        "Loại tivi": "Tivi QLED, Smart tivi, Frame",
+        "Công nghệ âm thanh": "OTSDolby AtmosQ-SymphonyÂm Thanh 360°Adaptive Sound Pro",
+        "Hệ điều hành": "Tizen OS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Tích hợp trợ lí ảo Google Assistant, Chiếu hình ảnh từ điện thoại lên TV",
+        "Thương hiệu": "Samsung"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "U68AAD-HHANG-0",
+          "price": 29900000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-uhd-4k-43-inch-43ua8055psa",
+      "name": "Smart tivi LG UHD 4K 43 inch 2026 (43UA8055PSA)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart tivi LG UHD 4K 43 inch 43UA8055PSA sở hữu bộ xử lý alpha 7 Gen 8 và AI Super Upscaling, giúp tái tạo hình ảnh 4K sắc nét và tăng chiều sâu hiển thị. Mẫu tivi LG 43 inch này còn sở hữu AI Magic Remote được tối ưu để hoàn thiện trải nghiệm AI. Với thiết kế thanh mảnh, sản phẩm sẽ dễ dàng hài hòa với không gian sử dụng. Smart tivi LG UHD 4K 43 inch 43UA8055PSA - Tối ưu trải nghiệm với AI Smart tivi LG UHD 43UA8055PSA được trang bị AI cùng các công nghệ hiện đại, giúp tối ưu t",
+      "price": 10690000,
+      "salePrice": 8690000,
+      "costPrice": 6604400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_6_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "43 inch",
+        "Công nghệ hình ảnh": "HDR10 Pro4K Super UpscalingFilmmaker mode",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "AI Sound ProAI Clear Sound",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV",
+        "Thương hiệu": "LG"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "89XDRU-HHANG-0",
+          "price": 10690000,
+          "costPrice": 6604400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 8690000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-uhd-4k-65-inch-65ua8055psa",
+      "name": "Smart tivi LG UHD 4K 65 inch 2026 (65UA8055PSA)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart Tivi LG UHD 4K 65 inch 65UA8055PSA sử dụng công nghệ hiển thị HDR10 Pro, đi cùng con chip AI alpha 7 4K Gen8 mới góp phần tối ưu hóa hình ảnh. Thêm vào đó, chiếc Tivi LG này còn hỗ trợ các tiện ích AI thông minh. Ngoài ra, kích thước màn hình 65 inch cũng đem lại không gian quan sát thoải mái. Smart Tivi LG UHD 4K 65 inch 65UA8055PSA – Tái hiện rõ nét, màn ảnh rộng Dòng tivi LG 65 inch này nâng tầm trải nghiệm người dùng nhờ khả năng cá nhân hóa và tương tác thông minh. Vớ",
+      "price": 19490000,
+      "salePrice": 13190000,
+      "costPrice": 10024400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_6_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "65 inch",
+        "Công nghệ hình ảnh": "HDR10 Pro4K Super UpscalingFilmmaker mode",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "AI Sound ProAI Clear Sound",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV",
+        "Thương hiệu": "LG"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "BBCXNI-HHANG-0",
+          "price": 19490000,
+          "costPrice": 10024400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 13190000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-uhd-4k-50-inch-50ua8055psa",
+      "name": "Smart tivi LG UHD 4K 50 inch 2026 (50UA8055PSA)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart Tivi LG UHD 4K 50 inch (50UA8055PSA) có khả năng tối ưu hóa chất lượng hiển thị và tái tạo âm thanh sống động nhờ bộ xử lý AI alpha 7 4K Gen8. Tính năng 4K Super Upscaling tự động xử lý điểm ảnh, mang lại những khung hình sắc nét và chi tiết. Thiết bị đi kèm AI Magic Remote, hỗ trợ tìm kiếm bằng giọng nói dễ dàng. Smart Tivi LG UHD 4K 50 inch (50UA8055PSA) – Trải nghiệm giải trí rõ nét Dòng tivi LG 50 inch này mang đến không gian giải trí tại gia chất lượng cao nhờ khả năn",
+      "price": 13590000,
+      "salePrice": 9990000,
+      "costPrice": 7592400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_3_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "50 inch",
+        "Công nghệ hình ảnh": "HDR10 Pro4K Super UpscalingFilmmaker mode",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "AI Sound ProAI Clear Sound",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Điều khiển bằng giọng nói không cần remote, Chiếu hình ảnh từ điện thoại lên TV",
+        "Thương hiệu": "LG"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3T6LBI-HHANG-0",
+          "price": 13590000,
+          "costPrice": 7592400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 9990000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025",
+      "name": "Smart Tivi LG UHD 4K 65 inch 2025 (65UA8450PSA)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart TV 65UA8450PSA là TV sở hữu màn hình 65 inch 4K Ultra HD với nền Direct LED, tần số quét 60Hz, hỗ trợ HDR10/HLG và trang bị Bộ xử lý AI α7 Gen8 4K. TV chạy trên webOS 25 với đa dạng tính năng AI thông minh. Tivi có hệ thống kết nối đa dạng, gồm HDMI, USB, Wi-Fi cùng Bluetooth 5.0 hiện đại. Tổng quan về Smart Tivi LG 65UA8450PSA Smart TV 65UA8450PSA là mẫu tivi thông minh thuộc dòng UHD AI 4K TV mới của LG ra mắt năm 2025. Sản phẩm được sản xuất tại Indonesia theo tiêu chuẩ",
+      "price": 19900000,
+      "salePrice": 12990000,
+      "costPrice": 9872400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_1__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_4_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "65 inch",
+        "Công nghệ hình ảnh": "HLGHDR10FilmMaker Mode10 chế độ hình ảnh4K Super Upscaling4K Expression Enhancer",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "WOW OrchestraLG Sound SyncAI Acoustic TuningTV Sound Mode ShareChế độ lọc thoại Clear Voice Proα7 AI Sound Pro (Virtual 9.1.2 Up-mix)",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng",
+        "Thương hiệu": "LG",
+        "Sản xuất tại": "Indonesia",
+        "Năm ra mắt": "2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "BCIBJ3-HHANG-0",
+          "price": 19900000,
+          "costPrice": 9872400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 12990000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024",
+      "name": "Smart Tivi Samsung UHD 4K 43 inch 2024 (43DU7000)",
+      "categorySlug": "tivi",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Smart Tivi Samsung UHD 43DU7000 4K 43 inch 2024 với màn hình LED 43 inch cùng độ phân giải chuẩn 4K, hứa hẹn sẽ cung cấp trải nghiệm hình ảnh cực sắc nét. Bên cạnh đó, nhờ hoạt động trên nền tảng hệ điều hành Tizen, dòng tivi Samsung này còn đem tới giao diện thân thiện, kho ứng dụng đa dạng, giúp tối ưu hóa trải nghiệm giải trí. Chưa hết, Samsung UHD 43DU7000 còn sở hữu công nghệ HDR tiên tiến tăng cường độ sáng và chi tiết, mang lại hình ảnh rõ ràng và sống động hơn trong mọi ",
+      "price": 9400000,
+      "salePrice": 6390000,
+      "costPrice": 4856400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_oled_lg_4k_48_inch_oled48a3psa_4.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_43_inch_2024_7000_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_43_inch_2024_7000_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_43_inch_2024_7000_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_9756_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_976_1_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_977_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_978_7.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "50Hz",
+        "os": "Tizen OS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "43 inch",
+        "Công nghệ hình ảnh": "Kiểm soát đèn nền UHD Dimming HDR10+ 4K Upscaling Độ tương phản lớn Mega Contrast Motion Xcelerator Filmmaker Mode PurColor Giảm độ trễ chơi game Auto Low",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "50Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "Adaptive Sound Q-Symphony kết hợp loa tivi với loa thanh OTS Lite",
+        "Hệ điều hành": "Tizen OS",
+        "Thương hiệu": "Samsung",
+        "Sản xuất tại": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "N6JQP8-HHANG-0",
+          "price": 9400000,
+          "costPrice": 4856400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_oled_lg_4k_48_inch_oled48a3psa_4.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 6390000
+        }
+      ]
+    },
+    {
+      "slug": "tivi-xiaomi-qled-hd-a-pro-32-inch-2026",
+      "name": "Tivi Xiaomi A Pro HD 32 inch QLED 2026",
+      "categorySlug": "tivi",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Tivi Xiaomi QLED HD A Pro 32 inch 2026 có thiết kế viền mỏng sang trọng, màn hình QLED HD (1366 x 768 pixels) sắc nét và tích hợp công nghệ HDR. Tivi chạy trên hệ điều hành Google TV, tích hợp Google Assistant, tính năng Google Cast và Miracast. Sản phẩm tivi Xiaomi 32 inch có tần số quét 60Hz, kích thước 32 inch và hỗ trợ điều khiển thiết bị nhà thông minh. Tivi Xiaomi QLED HD A Pro 32 inch 2026 - Giải trí mãn nhãn, trải nghiệm tiện lợi Gần đây, tivi Xiaomi QLED HD A Pro 32 inc",
+      "price": 4490000,
+      "salePrice": 4190000,
+      "costPrice": 3184400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_91__2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-fhd-a-pro-32-inch-2026.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_83__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_82__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_81__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t140821.203.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t134302.850_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t120408.711_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t134219.164_2.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "HD",
+        "refresh_rate": "60Hz",
+        "os": "Google TV"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "32 inch",
+        "Công nghệ hình ảnh": "Độ phân giải: 1366 x 768Độ sâu màu 16.7 triệuColor Gamut: QLED DCI-P3: 80%(min)/85%(Typ)Góc nhìn 178°(Ngang)/178°(Dọc)",
+        "Độ phân giải": "HD",
+        "Loại màn hình": "QLED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi QLED, Google tivi",
+        "Công nghệ âm thanh": "Dolby AudioDTS-XDTS Virtual:X",
+        "Hệ điều hành": "Google TV",
+        "Tiện ích nổi bật": "Tích hợp trợ lí ảo Google Assistant, Chiếu hình ảnh từ điện thoại lên TV"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "7PNF3L-HHANG-0",
+          "price": 4490000,
+          "costPrice": 3184400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_91__2.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 4190000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025",
+      "name": "Smart Tivi Samsung UHD 4K 55 inch 2025 (55U8500F)",
+      "categorySlug": "tivi",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật 55U8500F là mẫu tivi Samsung sở hữu màn hình 4K sắc nét cùng bộ xử lý Crystal 4K, mang đến trải nghiệm giải trí tại gia với chất lượng hình ảnh sống động. Sản phẩm tivi Samsung 55 inch này tích hợp công nghệ âm thanh OTS Lite chuyển động theo hình ảnh. Thiết bị vận hành trên nền tảng Tizen OS với giao diện trực quan. Tổng quan về Smart Tivi Samsung 55U8500F (Model 2025) Smart Tivi Samsung 55U8500F là model tivi 55 inch thông minh năm 2025, thuộc dòng Crystal UHD được ưa chuộng n",
+      "price": 15900000,
+      "salePrice": 9990000,
+      "costPrice": 7592400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_1__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_3__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_4__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_5__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_6__1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "50Hz",
+        "os": "Tizen OS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "HDR 10+4K UpscalingColor BoosterUHD DimmingMega ContrastMotion XceleratorChế độ FilmmakerNâng Cao Độ Tương Phản",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "LED",
+        "Tần số quét": "50Hz",
+        "Loại tivi": "Tivi LED, Smart tivi",
+        "Công nghệ âm thanh": "OTS LiteQ-SymphonyAdaptive Sound",
+        "Hệ điều hành": "Tizen OS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Tích hợp trợ lí ảo Google Assistant, Chiếu hình ảnh từ điện thoại lên TV",
+        "Thương hiệu": "Samsung"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "939I35-HHANG-0",
+          "price": 15900000,
+          "costPrice": 7592400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_1__1.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 9990000
+        }
+      ]
+    },
+    {
+      "slug": "smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025",
+      "name": "Smart Tivi LG QNED 4K 55 inch 2025 (55QNED80ASA)",
+      "categorySlug": "tivi",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Smart Tivi LG QNED 55QNED80ASA 4K 55 inch 2025 sử dụng màn hình đèn LED viền 55 inch chuẩn độ phân giải UHD 4K cho chất lượng hiển thị đã mắt, sống động. Tivi giúp nâng tầm không gian sống thời thượng bằng mỏng thiết kế mỏng thanh nhã, sang trọng. Bay bổng trong thế giới âm nhạc nhờ dàn âm thanh vòm ảo 9.1.2 cùng AI Sound Pro rõ nét. Smart tivi LG QNED 55QNED80ASA 4K 55 inch 2025 siêu mỏng, âm thanh vòm ảo cao cấp Nếu khách hàng đang tìm mua tivi 55 inch tích hợp nhiều công nghệ",
+      "price": 19400000,
+      "salePrice": 13290000,
+      "costPrice": 10100400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_5_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "WebOS"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "55 inch",
+        "Công nghệ hình ảnh": "HLGHDR10FilmMaker Mode10 chế độ hình ảnh4K Super UpscalingDynamic Tone MappingDynamic QNED ColorKiểm soát đèn nền - Local DimmingĐiều chỉnh độ sáng tự động AI Brightness4K Expression Enhancer",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "QNED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Smart tivi, QNED tivi",
+        "Công nghệ âm thanh": "WOW OrchestraTV Sound Mode ShareAI Acoustic TuningLG Sound SyncChế độ lọc thoại Clear Voice Proα7 AI Sound Pro (Virtual 9.1.2 Up-mix)",
+        "Hệ điều hành": "WebOS",
+        "Tiện ích nổi bật": "Tìm kiếm giọng nói bằng tiếng Việt, Chiếu hình ảnh từ điện thoại lên TV, Điều khiển qua ứng dụng",
+        "Thương hiệu": "LG",
+        "Sản xuất tại": "Indonesia",
+        "Năm ra mắt": "2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A13XEG-HHANG-0",
+          "price": 19400000,
+          "costPrice": 10100400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 13290000
+        }
+      ]
+    },
+    {
+      "slug": "tivi-xiaomi-qled-4k-a-pro-43-inch-2026",
+      "name": "Tivi Xiaomi A Pro 4K 43 inch QLED 2026",
+      "categorySlug": "tivi",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Tivi Xiaomi A Pro 43 inch 4K QLED 2026 thiết kế nguyên khối, chất liệu kim loại đẳng cấp cùng viền siêu mỏng trải nghiệm tràn viền ấn tượng. Kích thước màn hình 43 inch, chất lượng 4K sắc nét cùng tấm nền QLED với hơn 1 tỷ màu, DCI-P3 94% hiển thị tuyệt hảo. Công nghệ MEMC cùng tần số 60Hz cho các chuyển động siêu mượt, không giật hình, xé hình. Tích hợp 2 loa 10W cùng công nghệ DTS Virtual:X, mẫu tivi Xiaomi 43 inch này đem đến chất âm chân thực, giải trí sống động. Tivi Xiaomi",
+      "price": 7990000,
+      "salePrice": 7390000,
+      "costPrice": 5616400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-4k-a-pro-43-inch-2026_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-4k-a-pro-43-inch-2026.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115926.235.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115939.203.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115951.405.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115900.941.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/1/2/12_47_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/1/_/1_718_45.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/3/_/3_629_39.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/2/_/2_691_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/5/_/5_483_27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/4/_/4_557_34.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/6/_/6_399_26.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/7/_/7_276_21.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/8/_/8_174_18.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "resolution": "4K",
+        "refresh_rate": "60Hz",
+        "os": "Google TV"
+      },
+      "specsRaw": {
+        "Kích cỡ màn hình": "43 inch",
+        "Công nghệ hình ảnh": "HDR10+MEMCFilmmaker ModeĐộ phân giải: 3840 x 2160Độ sâu màu 1.07 tỷColor Gamut: QLED DCI-P3: 92%(min)/94% (Typical)Góc nhìn 178°(Ngang)/178°(Dọc)",
+        "Độ phân giải": "4K",
+        "Loại màn hình": "QLED",
+        "Tần số quét": "60Hz",
+        "Loại tivi": "Tivi QLED, Google tivi",
+        "Công nghệ âm thanh": "Dolby AudioDTS-XDTS Virtual:X",
+        "Hệ điều hành": "Google TV",
+        "Tiện ích nổi bật": "Tích hợp trợ lí ảo Google Assistant, Chiếu hình ảnh từ điện thoại lên TV"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "NJW29I-HHANG-0",
+          "price": 7990000,
+          "costPrice": 5616400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-4k-a-pro-43-inch-2026_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 7390000
+        }
+      ]
+    }
+  ]
+}

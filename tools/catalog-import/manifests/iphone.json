@@ -1,0 +1,822 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T09:53:39.752Z",
+  "note": "Scraped 3 sản phẩm — danh mục \"iPhone\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "oppo",
+      "name": "OPPO",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Oppo-240x50.png",
+      "description": "OPPO — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "iphone"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "iphone"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "dien-thoai-oppo-find-x9s",
+      "name": "OPPO Find X9s 12GB 256GB",
+      "categorySlug": "iphone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9s 12GB 256GB OPPO Find X9s là mẫu smartphone cận cao cấp thuộc dòng Find X9 series, được ra mắt tại Việt Nam vào tháng 05/2026. Nổi bật với thiết kế mỏng nhẹ 7.99 mm, thời lượng pin siêu khủng 7025mAh và khả năng nhiếp ảnh chuẩn Hasselblad với mức giá dễ tiếp cận hơn so với dòng Ultra. Tại Việt Nam, máy có giá bán khởi điểm 24.990.000đ cho phiên bản 12GB RAM và 256GB bộ nhớ trong. Điện thoại OPPO Find X9s giá bao nhiêu? Tại thị trường Việt Nam, giá OPPO Find X9s ",
+      "price": 24990000,
+      "salePrice": null,
+      "costPrice": 18992400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-24_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-26_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-19.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-20.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-21.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-16.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-17.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-18.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16.0",
+        "cpu": "MediaTek Dimensity 9500s",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "ARM Immortalis G925 MC12",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "camera_front": "32 MP, f/2.4",
+        "battery": "7025 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "202g",
+        "refresh_rate": "120Hz",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16.0",
+        "Chipset": "MediaTek Dimensity 9500s",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "ARM Immortalis G925 MC12",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 1800 nitsTần số lấy mẫu cảm ứng tối đa 240Hz1.07 tỷ màu460 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "Camera trước": "32 MP, f/2.4",
+        "Pin": "7025 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Sản phẩm": "Giá bán tại Trung Quốc",
+        "OPPO Find X9s 12GB/256GB": "5.699 CNY",
+        "OPPO Find X9s 12GB/512GB": "5.799 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9s",
+        "Thời gian ra mắt": "05/2026",
+        "Màu sắc": "Xám (Midnight Grey), Tím Nhạt (Lavender Sky) và Cam Nhạt (Sunset Orange)",
+        "Thiết kế": "Flagship nhỏ gọn, thân máy cực kỳ mỏng nhẹ (7.99mm), cảm giác cầm nắm gọn gàng",
+        "Kích thước (Cao x Rộng x Dài)": "156.98mm × 73.93mm × 7.99mm",
+        "Trọng lượng": "202g",
+        "Màn hình": "6.59 inch AMOLED, FHD+ (2760×1256 pixels)",
+        "Tần số quét": "120Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kính bảo vệ": "Gorilla Glass 7i",
+        "Hiệu năng": "MediaTek Dimensity 9500s",
+        "RAM & ROM": "12GB+256GB12GB+512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "4K 60fps, Dolby Vision",
+        "Pin & sạc": "7025mAh, sạc nhanh có dây 80W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "2,982,729",
+        "Điểm Geekbench 6": "2,571 điểm đơn nhân7,881 điểm đa nhân",
+        "Yếu tố trải nghiệm": "Điểm đánh giá",
+        "Thời lượng pin (7025mAh)": "9.5 / 10",
+        "Tốc độ sạc nhanh (80W)": "8.5 / 10",
+        "Hiệu năng & Chơi game": "9.0 / 10",
+        "Nút bấm vật lý Snap Key": "9.0 / 10",
+        "Màn hình hiển thị": "8.5 / 10",
+        "Khả năng chụp ảnh": "8.0 / 10",
+        "Độ bền & Cầm nắm": "9.0 / 10",
+        "Thông số": "OPPO Find X9s",
+        "Vi xử lý": "Dimensity 9500s",
+        "RAM / ROM": "12GB/256GB 12GB/512GB",
+        "Quay video": "4K/60fps Dolby Vision",
+        "Pin và Sạc": "7025mAh Sạc có dây 80W",
+        "Vân tay": "Siêu âm trong màn hình",
+        "Tiêu chí": "OPPO Find X9s",
+        "Viền màn hình": "1.15mm (Siêu mỏng công nghệ LIPO)",
+        "Vi xử lý (Chip)": "Dimensity 9500s",
+        "Bảo mật": "Vân tay Siêu âm dưới màn hình"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JAXWEX-XAM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-24_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-NHAT-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam nhạt",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-TIM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-26_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9-ultra",
+      "name": "OPPO Find X9 Ultra 12GB 512GB",
+      "categorySlug": "iphone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9 Ultra 12GB 512GB OPPO Find X9 Ultra là dòng siêu phẩm flagship cao cấp nhất của OPPO ra mắt vào tháng 5/2026. Nổi bật với điểm nhấn là hệ thống camera Hasselblad cảm biến chính 200 MP và camera tele zoom quang học 10x. Đi kèm với chip Snapdragon 8 Elite Gen 5, màn hình 2K+ 144Hz, và viên pin dung lượng lớn 7050 mAh hỗ trợ sạc nhanh 100W. Đây cũng là lần đầu tiên phiên bản Ultra được mở bán chính hãng tại Việt Nam với mức giá khởi điểm 49.990.000đ cho phiên bản 1",
+      "price": 49990000,
+      "salePrice": 48990000,
+      "costPrice": 37232400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-nau-8_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16 Android 16",
+        "cpu": "Snapdragon 8 Elite Gen 5",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno 840",
+        "screen": "6.82 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "camera_front": "50 MP, f/2.4",
+        "battery": "7050 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "refresh_rate": "1–120Hz, tối đa 144Hz",
+        "weight": "235g (Cam) – 236g (Nâu)",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16 Android 16",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 840",
+        "Kích thước màn hình": "6.82 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "3168 x 1440 pixel",
+        "Tính năng màn hình": "Độ sáng tối đa 3600 nitsTần số lấy mẫu cảm ứng tối đa 300Hz1.07 tỷ màu510 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "Camera trước": "50 MP, f/2.4",
+        "Pin": "7050 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Phiên bản": "Giá bán tại Trung Quốc",
+        "OPPO Find X9 Ultra 12GB/512GB": "7.499 CNY",
+        "OPPO Find X9 Ultra 12GB/256GB": "6.999 CNY",
+        "OPPO Find X9 Ultra 16GB/512GB": "7.999 CNY",
+        "OPPO Find X9 Ultra 16GB/1TB": "8.499 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9 Ultra",
+        "Thời gian ra mắt": "05/2026",
+        "Màn hình": "AMOLED 6.82 inch, Quad HD+ (2K+), độ phân giải 3168×1440 pixels",
+        "Tần số quét": "1–120Hz, tối đa 144Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kích thước (Cao x Rộng x Dài)": "163.16mm × 76.97mm × 8.65mm (Cam)163.16mm × 76.97mm × 9.10mm (Nâu)",
+        "Trọng lượng": "235g (Cam) – 236g (Nâu)",
+        "Kính bảo vệ": "Gorilla Glass Victus 2",
+        "Hiệu năng": "Snapdragon 8 Elite Gen 5",
+        "RAM & ROM": "12GB + 512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "8K 30fps, 4K 120fps, Dolby Vision",
+        "Pin & sạc": "7050mAh, sạc nhanh có dây 100W, sạc không dây 50W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "3808128",
+        "Điểm Geekbench 6": "2950 điểm đơn nhân9507 điểm đa nhân",
+        "Tiêu chí đánh giá": "Điểm đánh giá",
+        "Cảm giác cầm nắm": "8.5 / 10",
+        "Màn hình hiển thị": "9.5 / 10",
+        "Hiệu năng & Chiến game": "9.5 / 10",
+        "Chụp ảnh & Quay phim": "10 / 10",
+        "Thời lượng pin & Sạc": "9.5 / 10",
+        "Tính năng AI đi kèm": "9.0 / 10",
+        "Thông số": "OPPO Find X9 Ultra (2026)",
+        "Vi xử lý": "Snapdragon 8 Elite Gen 5",
+        "Bộ nhớ lưu trữ": "12GB LPDDR5X / 512GB UFS 4.1",
+        "Pin & Sạc": "7050 mAh (Silicon-Carbon)Sạc nhanh: 100W có dây / 50W không dây",
+        "Kháng nước": "IP66 / IP68 / IP69",
+        "Tiêu chí": "OPPO Find X9 Ultra chính hãng",
+        "Bảo hành": "Bảo hành chính hãng 24 tháng + Bảo hiểm rơi vỡ màn hình.",
+        "Thông báo": "Không bị chậm, thông báo tức thời, chạy cực kỳ ổn định.",
+        "Ứng dụng rác": "Máy sạch hoàn toàn, cài sẵn đầy đủ dịch vụ Google.",
+        "Định vị & Bản đồ": "Định vị chuẩn xác 100% ngay khi mở ứng dụng."
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "E2UBAN-CAM-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        },
+        {
+          "sku": "E2UBAN-NAU-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-nau-8_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-17t",
+      "name": "Xiaomi 17T 5G 12GB 512GB",
+      "categorySlug": "iphone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17T 5G 12GB 512GB Xiaomi 17T là mẫu smartphone cận cao cấp mới nhất năm 2026, được ví như \"Flagship Killer\" thực thụ nhờ cấu hình đỉnh cao thách thức phân khúc flagship. Thiết bị sở hữu chip Dimensity 8500-Ultra mạnh mẽ kết hợp cùng giao diện HyperOS 3 (Android 16) mượt mà, tích hợp đảo thông minh Xiaomi HyperIsland độc đáo. Trải nghiệm thực tế cầm trên tay cực kỳ đầm nhờ khung viền nguyên khối. Máy sở hữu màn hình CrystalRes AMOLED 120Hz hỗ trợ Dolby Vision rực rỡ, v",
+      "price": 20990000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-2_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-30.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-24.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-26.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-33.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-23.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-32.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-31.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3",
+        "cpu": "MediaTek Dimensity 8500-Ultra",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Mali-G720 MC8",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "camera_front": "32 MP, f/2.2",
+        "battery": "6500 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "charging": "90W có dây"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3",
+        "Chipset": "MediaTek Dimensity 8500-Ultra",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Mali-G720 MC8",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2756 x 1268 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nits460 PPI100% DCI-P312bit, 68 tỉ màuDolby VisionHDR10+",
+        "Camera sau": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "Camera trước": "32 MP, f/2.2",
+        "Pin": "6500 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 17T 5G 12GB 512GB": "18.990.000đ",
+        "Tiêu chí": "Thông số kỹ thuật",
+        "Vi xử lý (Chipset)": "MediaTek Dimensity 8500 Ultra, GPU Mail-G720 MC8 - Cấu trúc tối ưu hiệu năng nặng",
+        "Bộ nhớ": "RAM 12GB LPDDR5X kết hợp ROM 512GB UFS 4.1",
+        "Màn hình": "Kích thước 6.59 inch AMOLED 1.5K, tần số quét 120Hz, độ sáng tối đa 3500 nits, HDR10+, kính cường lực Gorilla Glass 7i",
+        "Pin & sạc": "Dung lượng pin 6500 mAh, công nghệ sạc nhanh siêu tốc 67W",
+        "Hệ điều hành & AI": "Andriod 16, giao diện HyperOS 3. Tích hợp AI. Gemini9",
+        "Kích thước": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "Kết nối khác": "Kháng nước bụi iP68 - Wifi-6E, NFC, mạng 5G",
+        "Vi xử lý": "MediaTek Dimensity 8500-Ultra",
+        "Tốc độ sạc nhanh": "Sạc nhanh có dây UFS/Turbo Charge 67W (đầy pin khoảng 58 phút)",
+        "Cảm biến camera": "Cảm biến chuẩn Leica Light Fusion 800 (quay phim 4K)",
+        "Đặc điểm": "Xiaomi 15",
+        "Phân khúc": "Flagship nhỏ gọn",
+        "Sạc nhanh": "90W có dây",
+        "Camera": "Leica 50MP + 50MP + 50MP"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "CBNSF2-DEN-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-2_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        },
+        {
+          "sku": "CBNSF2-TIM-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    }
+  ]
+}

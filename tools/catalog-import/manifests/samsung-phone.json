@@ -1,0 +1,2605 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:04:58.503Z",
+  "note": "Scraped 20 sản phẩm — danh mục \"Samsung\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "samsung-phone"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "dien-thoai-samsung-galaxy-gap-moi",
+      "name": "Samsung Galaxy Gập Mới",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đăng ký nhận tin Điện thoại Samsung Galaxy gập mới sắp lên kệ - Chính hãng, giá tốt, quà tặng hấp dẫn, trợ giá lên đời. Xem Z Fold mới tại đây,",
+      "price": 4000000,
+      "salePrice": null,
+      "costPrice": 3040000,
+      "imageUrl": "",
+      "images": [],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "cpu": "Chip flagship mới (theo vùng)",
+        "camera": "50MP (dự kiến)",
+        "battery": "~4300mAh (dự kiến)",
+        "charging": "25W có dây và 15W không dây",
+        "weight": "~180g (dự kiến)"
+      },
+      "specsRaw": {
+        "Các phiên bản điện thoại Samsung Galaxy gập mới": "Bộ nhớ",
+        "Gập dọc (vỏ sò)": "256GB",
+        "Gập ngang (màn lớn)": "256GB",
+        "Tiêu chí": "Gập dọc (vỏ sò)",
+        "Kích thước khi gập": "Nhỏ gọn, bỏ túi dễ",
+        "Màn hình chính": "Cỡ trung (~6.9 inch)",
+        "Camera": "Camera kép cơ bản",
+        "Tầm giá": "Dễ tiếp cận hơn",
+        "Chip": "Chip flagship mới (theo vùng)",
+        "Camera chính": "50MP (dự kiến)",
+        "Pin": "~4300mAh (dự kiến)",
+        "Sạc": "25W có dây và 15W không dây",
+        "Trọng lượng": "~180g (dự kiến)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "KQ0TDU-HHANG-0",
+          "price": 4000000,
+          "costPrice": 3040000,
+          "imageUrl": "",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-s25-edge",
+      "name": "Samsung Galaxy S25 Edge 5G 12GB 256GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy S25 Edge 5G 12GB 256GB Samsung Galaxy S25 Edge khai mở kỷ nguyên mới với khung titan bền bỉ và độ mỏng 5,8 mm, kết hợp tinh tế giữa kỹ thuật tinh xảo cùng phong cách sang trọng. Sức mạnh từ Snapdragon 8 Elite hỗ trợ bởi AI kiến tạo nên trải nghiệm giải trí ấn tượng. Sản phẩm sở hữu hệ thống camera 200MP và 12MP với góc nhìn rộng mở. Bảng giá Samsung Galaxy S25 Edge mới nhất Chỉ từ 21.490.000 VNĐ là bạn đã có cơ hội sở hữu một Samsung Galaxy S25 Edge cao cấp vớ",
+      "price": 29450000,
+      "salePrice": 19290000,
+      "costPrice": 14660400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-13_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-12_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-14_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-13.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-edge-5g_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-edge-5g-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-edge-5g-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-edge-5g-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-edge-5g-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-14.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-12.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-2_2.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.7 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "200.0 MP + 12.0 MP",
+        "camera_front": "12.0 MP",
+        "nfc": "Có",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "battery": "3900 mAh",
+        "os": "Android",
+        "cpu": "8 nhân"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Camera sau": "200.0 MP + 12.0 MP",
+        "Camera trước": "12.0 MP",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "3900 mAh",
+        "Thẻ SIM": "Nano SIM hoặc eSIM",
+        "Hệ điều hành": "Android",
+        "Độ phân giải màn hình": "3120 x 1440 pixels (Quad HD+)",
+        "Tính năng màn hình": "Độ sâu màu sắc 16M",
+        "Loại CPU": "8 nhân",
+        "Tương thích": "Galaxy Ring, Galaxy Buds, Galaxy Fit, Galaxy Watch, Samsung DeX, SmartThings, Smart Switch (PC version)",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy S25 Edge 5G 12GB 256GB": "19.290.000đ",
+        "Đặc điểm thiết kế": "Samsung S25 Edge",
+        "Độ dày (mm)": "5.8",
+        "Trọng lượng (g)": "163",
+        "Thông số": "Samsung Galaxy S25 Edge 5G 12GB 256GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "DQL9W6-BAC-256GB",
+          "price": 29450000,
+          "costPrice": 14660400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-13_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Bạc",
+            "storage": "256GB"
+          },
+          "salePrice": 19290000
+        },
+        {
+          "sku": "DQL9W6-XANH-256GB",
+          "price": 29450000,
+          "costPrice": 14660400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-12_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "256GB"
+          },
+          "salePrice": 19290000
+        },
+        {
+          "sku": "DQL9W6-DEN-256GB",
+          "price": 29450000,
+          "costPrice": 14660400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-edge-14_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 19290000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-s26-ultra",
+      "name": "Samsung Galaxy S26 Ultra 5G 12GB 256GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy S26 Ultra 5G 12GB 256GB Samsung S26 Ultra chính thức ra mắt tại thị trường Việt Nam vào ngày 11/03/2026. Thế hệ Ultra năm nay tạo nên bước ngoặt lớn với tính năng Privacy Display độc quyền trên tấm nền Dynamic AMOLED 2X 6.9 inch siêu sắc nét. Kết hợp cùng \"long mạch\" hiệu năng từ chip Snapdragon 8 Elite Gen 5 (đạt kỷ lục 3.5 triệu điểm Antutu), đây không chỉ là một chiếc smartphone, mà là một biểu tượng công nghệ mạnh mẽ mà các tín đồ Android đặt nhiều kỳ vọng",
+      "price": 36990000,
+      "salePrice": 29890000,
+      "costPrice": 22716400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-11_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-33_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-22_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-ultra_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-ultra-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-ultra-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-plus_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-11.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-12.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-13.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-14.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-15.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-16.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Snapdragon 8 Elite Gen 5",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Adreno 840",
+        "screen": "6.9 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "Góc rộng 200 MP, f/1.4Góc siêu rộng 50 MP, f/1.9Tele 50 MP, f/2.9Tele 10 MP, f/2.4",
+        "camera_front": "12 MP, f/2.2",
+        "battery": "5000 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 16",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 840",
+        "Kích thước màn hình": "6.9 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Độ phân giải màn hình": "3120 x 1440 pixels (Quad HD+)",
+        "Tính năng màn hình": "Độ sáng tối đa 2600 nits",
+        "Camera sau": "Góc rộng 200 MP, f/1.4Góc siêu rộng 50 MP, f/1.9Tele 50 MP, f/2.9Tele 10 MP, f/2.4",
+        "Camera trước": "12 MP, f/2.2",
+        "Pin": "5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "02/2026",
+        "Phiên bản": "Giá",
+        "Samsung Galaxy S26 Ultra 12GB 256GB": "30.490.000đ",
+        "Samsung Galaxy S26 Ultra 12GB 512GB": "36.990.000đ",
+        "Samsung Galaxy S26 Ultra 16GB 1TB": "41.990.000đ",
+        "Tiêu chí": "Samsung Galaxy S26 Ultra",
+        "Thiết kế và trọng lượng": "Mỏng 7.9mm, nặng 214g",
+        "Camera chính": "200MP, khẩu độ f/1.4 cho khả năng thu sáng tốt",
+        "Bộ xử lý": "Snapdragon 8 Elite Gen 5 For Galaxy",
+        "Công nghệ sạc nhanh": "Sạc nhanh 60W",
+        "Thông số": "Samsung Galaxy S26 Ultra",
+        "Màn hình": "6.9 inch, QHD+",
+        "Khung viền": "Armor Aluminum 2",
+        "Bút S Pen": "Tích hợp sẵn",
+        "Pin và sạc": "5000mAh, sạc nhanh 60W"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3ZX1GQ-SSIC-256GB",
+          "price": 36990000,
+          "costPrice": 22716400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-11_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen Classic",
+            "storage": "256GB"
+          },
+          "salePrice": 29890000
+        },
+        {
+          "sku": "3ZX1GQ-BALT-256GB",
+          "price": 36990000,
+          "costPrice": 22716400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím Cobalt",
+            "storage": "256GB"
+          },
+          "salePrice": 29890000
+        },
+        {
+          "sku": "3ZX1GQ-BLUE-256GB",
+          "price": 36990000,
+          "costPrice": 22716400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-ultra-22_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Sky Blue",
+            "storage": "256GB"
+          },
+          "salePrice": 29890000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a27",
+      "name": "Samsung Galaxy A27 5G 6GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A27 5G 6GB 128GB Điện thoại Samsung Galaxy A27 sở hữu cấu hình phần cứng mạnh mẽ với vi xử lý Snapdragon thế hệ mới và hệ thống camera tích hợp chống rung quang học. Không gian hiển thị Infinity-O rộng rãi, mở ra những khung hình tràn viền mãn nhãn. Trong phân khúc tầm trung, sản phẩm này đáp ứng tốt cho các tác vụ làm việc và giải trí. Điện thoại Samsung Galaxy A27 ra mắt khi nào? Samsung Galaxy A27 đã chính thức được giới thiệu đến người dùng toàn cầu vào ng",
+      "price": 8490000,
+      "salePrice": 8390000,
+      "costPrice": 6376400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27-2_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27-1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a27-hong-8.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Snapdragon 6 Gen 3",
+        "ram": "6 GB",
+        "storage": "128 GB",
+        "screen": "6.7 inches",
+        "display_tech": "Super AMOLED",
+        "camera": "Chính 50 MPGóc siêu rộng 5 MPMacro 2 MP",
+        "camera_front": "12 MP",
+        "battery": "5000 mAh",
+        "network": "5G"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Android 16",
+        "Chipset": "Snapdragon 6 Gen 3",
+        "Dung lượng RAM": "6 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Super AMOLED",
+        "Tính năng màn hình": "Tần số quét 120 HzĐộ sáng tối đa 800 nits",
+        "Camera sau": "Chính 50 MPGóc siêu rộng 5 MPMacro 2 MP",
+        "Camera trước": "12 MP",
+        "Pin": "5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Thời điểm ra mắt": "06/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy A27 5G 6GB 128GB": "8.390.000đ",
+        "Thông số": "Samsung Galaxy A27 5G 6GB 128GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A3K2FO-DEN-128GB",
+          "price": 8490000,
+          "costPrice": 6376400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 8390000
+        },
+        {
+          "sku": "A3K2FO-HONG-128GB",
+          "price": 8490000,
+          "costPrice": 6376400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27-2_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "storage": "128GB"
+          },
+          "salePrice": 8390000
+        },
+        {
+          "sku": "A3K2FO-UONG-128GB",
+          "price": 8490000,
+          "costPrice": 6376400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a27-1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "128GB"
+          },
+          "salePrice": 8390000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a57",
+      "name": "Samsung Galaxy A57 5G 8GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A57 5G 8GB 128GB Điện thoại Samsung Galaxy A57 chính thức mở bán tại Việt Nam từ ngày 20 tháng 3 năm 2026, hướng đến người dùng ở phân khúc cận cao cấp với nhiều nâng cấp đáng giá. Samsung A57 nổi bật với màn hình Super AMOLED Plus 6.7 inch FHD+ tần số quét 120Hz, mang đến trải nghiệm hiển thị mượt mà, sống động. Thiết bị sở hữu camera chính 50MP tích hợp OIS, giúp hình ảnh thu được ổn định. Điểm cộng lớn trên A57 chính là viên pin 5000mAh đảm bảo thời lượng s",
+      "price": 12490000,
+      "salePrice": 10990000,
+      "costPrice": 8352400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-3.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a57-8gb-128gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a57-8gb-128gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a57-8gb-128gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a57-8gb-128gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a57-8gb-128gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-tim.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-den.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-nau.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-trag.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-tim-1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Exynos 1680",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "gpu": "Xclipse 550",
+        "screen": "6.7 inches",
+        "display_tech": "Super AMOLED Plus",
+        "camera": "Camera chính: 50MPGóc siêu rộng 12MPMacro 5MP",
+        "camera_front": "12MP",
+        "battery": "5000 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "161.5 × 76.8 × 6.9mm",
+        "weight": "179g",
+        "connectivity": "Wi-Fi 6E, Bluetooth 6.0, 5G"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 16",
+        "Chipset": "Exynos 1680",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "1 nhân 2.9 GHz, 3 nhân 2.6 GHz & 4 nhân 1.95 GHz",
+        "GPU": "Xclipse 550",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Super AMOLED Plus",
+        "Độ phân giải màn hình": "1080 x 2340 pixels (FullHD+)",
+        "Tính năng màn hình": "Tần số quét: 120Hz16 triệu màu1900 nits",
+        "Camera sau": "Camera chính: 50MPGóc siêu rộng 12MPMacro 5MP",
+        "Camera trước": "12MP",
+        "Pin": "5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "03/2026",
+        "Phiên bản": "Giá niêm yết",
+        "Samsung A57 8GB/128GB": "12.490.000đ",
+        "Tiêu chí": "Samsung Galaxy A57",
+        "Kích thước": "161.5 × 76.8 × 6.9mm",
+        "Trọng lượng": "179g",
+        "Màn hình": "Màn Super AMOLED Plus 120Hz",
+        "Vi xử lý": "Exynos 1680 (4nm, NPU mạnh hơn 42%)",
+        "Hệ điều hành": "Android 16 (One UI 8.5)",
+        "Độ sáng": "1900 nits",
+        "Kết nối": "Wi-Fi 6E, Bluetooth 6.0, 5G",
+        "Công nghệ kháng nước và bụi": "IP68 (Cao cấp hơn)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A421JB-DEN-128GB",
+          "price": 12490000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-3.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 10990000
+        },
+        {
+          "sku": "A421JB-XAM-128GB",
+          "price": 12490000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 10990000
+        },
+        {
+          "sku": "A421JB-UONG-128GB",
+          "price": 12490000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "128GB"
+          },
+          "salePrice": 10990000
+        },
+        {
+          "sku": "A421JB-TIM-128GB",
+          "price": 12490000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a57-2_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 10990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a17-5g",
+      "name": "Samsung Galaxy A17 5G 8GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A17 5G 8GB 128GB Samsung Galaxy A17 5G là mẫu smartphone tầm trung nổi bật với sức mạnh từ chipset Exynos 1330 cùng công nghệ chống rung OIS trên camera chính 50MP, giúp tối ưu hiệu năng và chất lượng ảnh chụp. Thiết bị sở hữu viên pin 5.000mAh bền bỉ kèm sạc nhanh 25W, đáp ứng trọn vẹn nhu cầu sử dụng cả ngày dài. Với thiết kế tinh tế gồm 3 gam màu thời thượng, A17 5G hứa hẹn là lựa chọn hàng đầu trong phân khúc năm 2026.",
+      "price": 7090000,
+      "salePrice": 5890000,
+      "costPrice": 4476400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-blue_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-gray_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-5g_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-5g-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back-6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 15",
+        "cpu": "Exynos 1330",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "gpu": "Mali-G68",
+        "screen": "6.7 inches",
+        "display_tech": "Super AMOLED",
+        "camera": "Chính 50 MPPhụ 5 MP, 2 MP",
+        "camera_front": "13 MP",
+        "battery": "Li-Ion 5000 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "sim": "Dual-SIM, Nano-SIM, Hybrid slot",
+        "connectivity": "USB-C 2.0, Wi-Fi ac, Bluetooth 5.3, GPS/Glonass/Beidou/Galileo/QZSS"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 15",
+        "Chipset": "Exynos 1330",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "8 nhân (2 nhân 2.4 GHz & 6 nhân 2.0 GHz)",
+        "GPU": "Mali-G68",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Super AMOLED",
+        "Độ phân giải màn hình": "1080 x 2340 pixels (FullHD+)",
+        "Tính năng màn hình": "Độ sáng tối đa 800 nitsKính cường lực Corning Gorilla Glass 7",
+        "Camera sau": "Chính 50 MPPhụ 5 MP, 2 MP",
+        "Camera trước": "13 MP",
+        "Pin": "Li-Ion 5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM (Sim 2 chung khe với thẻ nhớ)",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "08/2025",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy A17 5G 8GB 128GB": "5.890.000đ",
+        "Thông số": "Samsung Galaxy A17 5G",
+        "Kích thước & Trọng lượng": "164.4 x 77.9 x 7.5 mm, 192g",
+        "Màn hình": "6.7 inch , FHD+ 1080x2340, Super AMOLED, 90Hz",
+        "CPU": "Exynos 1330",
+        "RAM": "8GB",
+        "ROM": "128GB",
+        "Quay video": "FHD 1080p @30fps, Slow motion 120fps HD",
+        "SIM": "Dual-SIM, Nano-SIM, Hybrid slot",
+        "Kết nối": "USB-C 2.0, Wi-Fi ac, Bluetooth 5.3, GPS/Glonass/Beidou/Galileo/QZSS"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3R35C6-NAVY-128GB",
+          "price": 7090000,
+          "costPrice": 4476400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-blue_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh navy",
+            "storage": "128GB"
+          },
+          "salePrice": 5890000
+        },
+        {
+          "sku": "3R35C6-ITAN-128GB",
+          "price": 7090000,
+          "costPrice": 4476400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-back_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen titan",
+            "storage": "128GB"
+          },
+          "salePrice": 5890000
+        },
+        {
+          "sku": "3R35C6-KHOI-128GB",
+          "price": 7090000,
+          "costPrice": 4476400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-5g-gray_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám khói",
+            "storage": "128GB"
+          },
+          "salePrice": 5890000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-s25-plus",
+      "name": "Samsung Galaxy S25 Plus 256GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy S25 Plus 256GB Samsung Galaxy S25 Plus được đánh giá cao về mặt hiệu năng nhờ sở hữu chip Snapdragon 8 Elite mạnh mẽ, mang lại khả năng xử lý vượt trội. Màn hình hiển thị Dynamic AMOLED của máy lớn 6.7 inch với độ phân giải QHD+, đảm bảo trải nghiệm hình ảnh sắc nét và sống động. Kèm theo đó là bộ nhớ RAM 12GB cùng tùy chọn lưu trữ 256GB giúp người dùng thoải mái lưu trữ dữ liệu và chạy nhiều ứng dụng mượt mà. Đôi nét về Samsung Galaxy S25+ (Plus) Điểm đáng ch",
+      "price": 26500000,
+      "salePrice": 19990000,
+      "costPrice": 15192400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_2__2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_3__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_1__6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_plus_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_plus_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_plus_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_plus_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_plus_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_1__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy_9_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy_11_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "cpu": "Snapdragon 8 Elite dành cho Galaxy (3nm)",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "screen": "6.7 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "Camera siêu rộng 12MP Camera góc rộng 50MPCamera Tele 10MP",
+        "camera_front": "12MP",
+        "battery": "4900 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "resolution": "Full HD+",
+        "weight": "162g"
+      },
+      "specsRaw": {
+        "Chipset": "Snapdragon 8 Elite dành cho Galaxy (3nm)",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "Tốc độ CPU: 4.47GHz, 3.5GHz 8 nhân",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Độ phân giải màn hình": "3120 x 1440 pixels (Quad HD+)",
+        "Tính năng màn hình": "120Hz2600 nitsCorning® Gorilla® Armor 2",
+        "Camera sau": "Camera siêu rộng 12MP Camera góc rộng 50MPCamera Tele 10MP",
+        "Camera trước": "12MP",
+        "Pin": "4900 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano-SIM + eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "02-2025",
+        "Thông số": "Samsung Galaxy S25 Plus 256GB",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy S25 Plus 256GB": "19.990.000đ",
+        "Samsung Galaxy S25 Plus 512GB": "22.090.000đ",
+        "Đặc điểm": "Samsung Galaxy S25",
+        "Độ phân giải": "Full HD+",
+        "Khung viền": "Nhôm Armor",
+        "Trọng lượng": "162g",
+        "Camera chính": "50MP",
+        "Khả năng Zoom": "Quang học 3x",
+        "Dung lượng pin": "4.000 mAh",
+        "tốc độ sạc nhanh": "25W",
+        "Bút S Pen": "Không hỗ trợ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "YUR6I7-TROI-256GB",
+          "price": 26500000,
+          "costPrice": 15192400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_2__2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh da trời",
+            "storage": "256GB"
+          },
+          "salePrice": 19990000
+        },
+        {
+          "sku": "YUR6I7-MBAC-256GB",
+          "price": 26500000,
+          "costPrice": 15192400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_3__2.png",
+          "active": true,
+          "options": {
+            "color": "Xám bạc",
+            "storage": "256GB"
+          },
+          "salePrice": 19990000
+        },
+        {
+          "sku": "YUR6I7-NHLA-256GB",
+          "price": 26500000,
+          "costPrice": 15192400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_1__6.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 19990000
+        },
+        {
+          "sku": "YUR6I7-NAVY-256GB",
+          "price": 26500000,
+          "costPrice": 15192400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-plus_6.png",
+          "active": true,
+          "options": {
+            "color": "Xanh navy",
+            "storage": "256GB"
+          },
+          "salePrice": 19990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a37",
+      "name": "Samsung Galaxy A37 5G 8GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A37 5G 8GB 128GB Điện thoại Samsung Galaxy A37 là mẫu máy tầm trung thế hệ mới hứa hẹn phục vụ tốt các nhu cầu sử dụng khi được trang bị bộ vi xử lý Exynos 1480 tiên tiến. Thiết bị sở hữu màn hình 6.7 inch sắc nét. Ngoài ra, model này còn ghi điểm với viên pin 5000mAh, hỗ trợ người dùng xử lý công việc, giải trí liền mạch suốt nhiều giờ. Điện thoại Samsung Galaxy A37 – Ra mắt khi nào? Theo chu kỳ ra mắt sản phẩm của Samsung, điện thoại Samsung Galaxy A37 và Sa",
+      "price": 10790000,
+      "salePrice": 9790000,
+      "costPrice": 7440400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-1_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-3_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-2_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-2_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a37-8gb-128gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a37-8gb-128gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a37-8gb-128gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a37-8gb-128gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a37-8gb-128gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-1-1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Exynos 1480",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "gpu": "Xclipse 530",
+        "screen": "6.7 inches",
+        "display_tech": "Super AMOLED",
+        "camera": "Camera chính: 50MPGóc siêu rộng 12MPMacro 5MP",
+        "camera_front": "12MP",
+        "battery": "5000 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 16",
+        "Chipset": "Exynos 1480",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "4 nhân 2.75 GHz & 4 nhân 2 GHz",
+        "GPU": "Xclipse 530",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Super AMOLED",
+        "Độ phân giải màn hình": "1080 x 2340 pixels (FullHD+)",
+        "Tính năng màn hình": "Tần số quét: 120Hz1900 nits",
+        "Camera sau": "Camera chính: 50MPGóc siêu rộng 12MPMacro 5MP",
+        "Camera trước": "12MP",
+        "Pin": "5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "03/2026"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A3GWXP-XANH-128GB",
+          "price": 10790000,
+          "costPrice": 7440400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-1_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "128GB"
+          },
+          "salePrice": 9790000
+        },
+        {
+          "sku": "A3GWXP-RANG-128GB",
+          "price": 10790000,
+          "costPrice": 7440400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-3_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "128GB"
+          },
+          "salePrice": 9790000
+        },
+        {
+          "sku": "A3GWXP-DEN-128GB",
+          "price": 10790000,
+          "costPrice": 7440400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 9790000
+        },
+        {
+          "sku": "A3GWXP-TIM-128GB",
+          "price": 10790000,
+          "costPrice": 7440400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a37-2_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 9790000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-z-fold-7",
+      "name": "Samsung Galaxy Z Fold7 12GB 256GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy Z Fold7 12GB 256GB Vừa trình làng và đang tạo nên cơn sốt tại thị trường Việt Nam, Samsung Galaxy Z Fold 7 5G khẳng định vị thế dẫn đầu trong dòng điện thoại gập siêu mỏng. Hiện tại, siêu phẩm này đang có ưu đãi cực hời đến 12 triệu đồng tại CellphoneS. Máy gây ấn tượng mạnh với camera 200MP sắc nét và con chip Snapdragon 8 Elite (3nm) tích hợp quyền năng Galaxy AI vượt trội. Với hệ điều hành One UI 8 mới, Z Fold 7 mang đến trải nghiệm cá nhân hóa hoàn hảo. Sở",
+      "price": 46990000,
+      "salePrice": 40990000,
+      "costPrice": 31152400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-5.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Qualcomm Snapdragon 8 Elite For Galaxy",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Adreno 830",
+        "screen": "Chính 8.0 inches, Phụ 6.5 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "200 MP + 12 MP + 10 MP, f/1.7, f/2.2, f/2.4",
+        "camera_front": "Trong 10 MP, f/2.2Ngoài 10 MP, f/2.2",
+        "battery": "4400 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "215gram"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Android 16",
+        "Chipset": "Qualcomm Snapdragon 8 Elite For Galaxy",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 830",
+        "Kích thước màn hình": "Chính 8.0 inches, Phụ 6.5 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Độ phân giải màn hình": "Chính: 2184 x 1968 pixels, Phụ: 2520 x 1080 pixels",
+        "Tính năng màn hình": "Tần số quét 120 HzĐộ sáng tối đa 2600 nitsĐộ sâu màu sắc 16MKính cường lực Corning Gorilla Glass Ceramic 2",
+        "Camera sau": "200 MP + 12 MP + 10 MP, f/1.7, f/2.2, f/2.4",
+        "Camera trước": "Trong 10 MP, f/2.2Ngoài 10 MP, f/2.2",
+        "Pin": "4400 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "07/2025",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy Z Fold7 12GB 256GB": "40.990.000đ",
+        "Samsung Galaxy Z Fold7 12GB 512GB": "42.290.000đ",
+        "Đặc điểm": "Samsung Galaxy Z Fold 7",
+        "Camera chính": "200MP, f/1.7, OIS",
+        "Cảm biến": "1/1.3” (Lớn hơn 44%)",
+        "Chụp đêm": "Nightography AI ProVisual",
+        "Chụp Macro": "Có (Macro Mode chuyên dụng)",
+        "Camera Selfie (Màn ngoài)": "10MP (Góc rộng 100°)",
+        "Quay Video": "8K, HDR 10-bit",
+        "Công nghệ AI": "Galaxy AI + ProVisual Engine",
+        "Vi xử lý (Chip)": "Snapdragon 8 Elite 3nm",
+        "Thông số kỹ thuật": "Samsung Galaxy Z Fold 7",
+        "Vi xử lý": "Snapdragon® 8 Elite 3nm for Galaxy",
+        "Màn hình chính": "Dynamic AMOLED 2X 8 inch",
+        "Màn hình ngoài": "Dynamic AMOLED 2X 6.5 inch",
+        "Camera selfie": "10MP +10MP",
+        "Dung lượng pin": "4.400mAh",
+        "Galxy AI": "Gemini Live Tóm tắt thông minh Thực hiện tác vụ liên ứng dụng bằng lời nói",
+        "Trọng lượng": "215gram"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "567AFM-XAM-256GB",
+          "price": 46990000,
+          "costPrice": 31152400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 40990000
+        },
+        {
+          "sku": "567AFM-DEN-256GB",
+          "price": 46990000,
+          "costPrice": 31152400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 40990000
+        },
+        {
+          "sku": "567AFM-XANH-256GB",
+          "price": 46990000,
+          "costPrice": 31152400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "256GB"
+          },
+          "salePrice": 40990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-s26",
+      "name": "Samsung Galaxy S26 5G 12GB 256GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy S26 5G 12GB 256GB Samsung Galaxy S26 Base trang bị chip Exynos 2600 tiến trình 2nm, RAM 12GB, bộ nhớ 256GB và pin 4.300mAh nâng cấp. Thiết bị nổi bật với thiết kế 7,2mm mỏng nhẹ, khung Armor Aluminum cải tiến, camera 50MP zoom quang 3x cùng Galaxy AI cá nhân hóa thông minh. Đặt mua điện thoại Samsung Galaxy S26 12GB 256GB chính hãng, giá tốt tại CellphoneS Tham gia đặt mua ngay Samsung Galaxy S26 từ 17h ngày 10/3/2026 đến 16/3/2026 để sở hữu sớm trên tay siêu ",
+      "price": 25990000,
+      "salePrice": 21290000,
+      "costPrice": 16180400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-10_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-30_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-20_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-12gb-256gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-12gb-256gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-plus.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s26-plus-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-4.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Exynos 2600 (2nm)",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Xclipse 960",
+        "screen": "6.3 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "Góc rộng 50MP, f/1.8Góc siêu rộng 12MP, f/2.2Tele 10MP, f/2.4",
+        "camera_front": "12 MP, f/2.2",
+        "battery": "4300 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "149,6 x 71,7 x x 7,2mm",
+        "weight": "167g"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Android 16",
+        "Chipset": "Exynos 2600 (2nm)",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "10 nhân",
+        "GPU": "Xclipse 960",
+        "Kích thước màn hình": "6.3 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Độ phân giải màn hình": "2340 x 1080-pixel",
+        "Tính năng màn hình": "16 triệu màuĐộ sáng tối đa 2600 nits",
+        "Camera sau": "Góc rộng 50MP, f/1.8Góc siêu rộng 12MP, f/2.2Tele 10MP, f/2.4",
+        "Camera trước": "12 MP, f/2.2",
+        "Pin": "4300 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "02/2026",
+        "Thông số kỹ thuật": "Samsung Galaxy S26",
+        "Chip": "Exynos 2600 2nm",
+        "Màn hình": "6,3 inch FHD+, Dynamic AMOLED 2X",
+        "Dung lượng pin": "4300mAh",
+        "Kích thước": "149,6 x 71,7 x x 7,2mm",
+        "Trọng lượng": "167g",
+        "Chống bụi/nước": "IP68",
+        "Màu sắc": "Xanh mint, Bạc, Xanh dương, Xanh Icy"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "DJMTEL-SSIC-256GB",
+          "price": 25990000,
+          "costPrice": 16180400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen Classic",
+            "storage": "256GB"
+          },
+          "salePrice": 21290000
+        },
+        {
+          "sku": "DJMTEL-BLUE-256GB",
+          "price": 25990000,
+          "costPrice": 16180400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-10_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Sky Blue",
+            "storage": "256GB"
+          },
+          "salePrice": 21290000
+        },
+        {
+          "sku": "DJMTEL-BALT-256GB",
+          "price": 25990000,
+          "costPrice": 16180400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s26-20_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím Cobalt",
+            "storage": "256GB"
+          },
+          "salePrice": 21290000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-s25-ultra",
+      "name": "Samsung Galaxy S25 Ultra 12GB 256GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy S25 Ultra 12GB 256GB Samsung Galaxy S25 Ultra ra mắt vào rạng sáng ngày 23/1/2025 và mở bán tại Việt Nam từ ngày 9/2/2025 với định vị flagship cao cấp trong Galaxy S25 Series. Thiết bị tái định nghĩa trải nghiệm dòng Galaxy S Ultra với siêu chip Snapdragon 8 Elite cấu hình cực đại và màn hình 6.9 inch mãn nhãn. Không chỉ lột xác với thiết kế viền Titanium bo cong, khắc phục hoàn toàn vết cấn tay của S24 Ultra, siêu phẩm này còn nâng cấp camera siêu rộng lên 50",
+      "price": 33380000,
+      "salePrice": 27490000,
+      "costPrice": 20892400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_5.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_2__6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_1__6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_3__6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_3__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_ultra_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_ultra_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_ultra_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_ultra_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_ultra_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_1__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_2__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-utra_25_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-utra_19_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 15",
+        "cpu": "Snapdragon 8 Elite dành cho Galaxy (3nm)",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "screen": "6.9 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "Camera siêu rộng 50MPCamera góc rộng 200 MPCamera Tele (5x) 50MPCamera Tele (3x) 10MP\"",
+        "camera_front": "12 MP",
+        "battery": "5000 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 15",
+        "Chipset": "Snapdragon 8 Elite dành cho Galaxy (3nm)",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Kích thước màn hình": "6.9 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Độ phân giải màn hình": "3120 x 1440 pixels (Quad HD+)",
+        "Tính năng màn hình": "120Hz2600 nitsCorning® Gorilla® Armor 2",
+        "Camera sau": "Camera siêu rộng 50MPCamera góc rộng 200 MPCamera Tele (5x) 50MPCamera Tele (3x) 10MP\"",
+        "Camera trước": "12 MP",
+        "Pin": "5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano-SIM + eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "02-2025",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy S25 Ultra 12GB 256GB": "27.490.000đ",
+        "Samsung Galaxy S25 Ultra 512GB": "30.690.000đ",
+        "Samsung Galaxy S25 Ultra 1TB": "35.490.000đ",
+        "Thông số": "Samsung Galaxy S25 Ultra",
+        "Màn hình": "Dynamic AMOLED 2X - 6,9 inch",
+        "Hiệu năng": "Snapdragon 8 Elite for Galaxy",
+        "RAM": "12GB",
+        "Kháng nước": "IP68"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "FPRXFN-GBAC-256GB",
+          "price": 33380000,
+          "costPrice": 20892400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_5.png",
+          "active": true,
+          "options": {
+            "color": "Trắng Bạc",
+            "storage": "256GB"
+          },
+          "salePrice": 27490000
+        },
+        {
+          "sku": "FPRXFN-UONG-256GB",
+          "price": 33380000,
+          "costPrice": 20892400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_2__6.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          },
+          "salePrice": 27490000
+        },
+        {
+          "sku": "FPRXFN-XAM-256GB",
+          "price": 33380000,
+          "costPrice": 20892400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_1__6.png",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 27490000
+        },
+        {
+          "sku": "FPRXFN-DEN-256GB",
+          "price": 33380000,
+          "costPrice": 20892400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25-ultra_3__6.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 27490000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a07-5g",
+      "name": "Samsung Galaxy A07 5G 4GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A07 5G 4GB 128GB Điện thoại Samsung Galaxy A07 5G là một lựa chọn tuyệt vời trong phân khúc giá rẻ, nổi bật với màn hình tràn viền 6.7 inch HD+ và tần số quét 120Hz mang đến trải nghiệm hình ảnh mượt mà, sống động. Thiết bị này được trang bị camera chính 50MP sắc nét, cùng viên pin dung lượng khủng 6000mAh, đảm bảo thời gian sử dụng dài lâu. Đây là sự kết hợp hoàn hảo giữa thiết kế hiện đại, hiệu năng ổn định và pin trâu. Với những ưu điểm này, Galaxy A07 5G đ",
+      "price": 5090000,
+      "salePrice": 4390000,
+      "costPrice": 3336400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-1_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-2_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-2_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-5g-4gb-128gb_2_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-5g-4gb-128gb-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-5g-4gb-128gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-5g-4gb-128gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-5g-4gb-128gb-4_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a07-5g-xanh.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android",
+        "cpu": "MediaTek Dimensity 6300 5G",
+        "ram": "4 GB",
+        "storage": "128 GB",
+        "gpu": "Mali-G57",
+        "screen": "6.7 inches",
+        "display_tech": "PLS LCD",
+        "camera": "50 MP, F1.8 + 2 MP, F2.4",
+        "camera_front": "8 MP, F2.0",
+        "battery": "6000 mAh",
+        "network": "5G",
+        "dimensions": "167.4 x 77.4 x 8.2 mm"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Android",
+        "Chipset": "MediaTek Dimensity 6300 5G",
+        "Dung lượng RAM": "4 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "8 nhân, 2.4GHz, 2GHz",
+        "GPU": "Mali-G57",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "PLS LCD",
+        "Độ phân giải màn hình": "720 x 1600 pixel",
+        "Tính năng màn hình": "Tần số quét: 120HzĐộ sâu màu sắc:16M",
+        "Camera sau": "50 MP, F1.8 + 2 MP, F2.4",
+        "Camera trước": "8 MP, F2.0",
+        "Pin": "6000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Thời điểm ra mắt": "01/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy A07 5G 4GB 128GB": "4.390.000đ",
+        "Đặc điểm": "Samsung Galaxy A07 5G",
+        "Màn hình": "PLS LCD 6.7 inch HD+ Tần số quét 120Hz",
+        "Vi xử lý": "MediaTek 24E",
+        "Pin & Sạc": "6,000 mAh",
+        "Kích thước": "167.4 x 77.4 x 8.2 mm"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "WYW37H-BICH-128GB",
+          "price": 5090000,
+          "costPrice": 3336400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-1_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh ngọc bích",
+            "storage": "128GB"
+          },
+          "salePrice": 4390000
+        },
+        {
+          "sku": "WYW37H-DEN-128GB",
+          "price": 5090000,
+          "costPrice": 3336400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g-2_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 4390000
+        },
+        {
+          "sku": "WYW37H-TIM-128GB",
+          "price": 5090000,
+          "costPrice": 3336400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-5g_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 4390000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a07",
+      "name": "Samsung Galaxy A07 4GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A07 4GB 128GB Samsung Galaxy A07 được trang bị chip MediaTek Helio G99 kết hợp RAM 4GB, mang đến hiệu năng ổn định và trải nghiệm mượt mà. Thiết kế điện thoại Samsung Galaxy A này gọn gàng nhưng vẫn tích hợp màn hình lớn 6,7 inch, tối ưu không gian hiển thị. Dung lượng pin 5000mAh hỗ trợ người dùng sử dụng ổn định trong thời gian dài. Điện thoại Samsung Galaxy A07 ra mắt khi nào? Samsung Galaxy A07 sẽ được trình làng chính thức vào tháng 8 năm 2025 và Samsung ",
+      "price": 4190000,
+      "salePrice": 3290000,
+      "costPrice": 2500400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-green_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-violet_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a07-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black-6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.7 inches",
+        "display_tech": "IPS LCD",
+        "camera": "Chính 50 MPPhụ 2 MP",
+        "camera_front": "8 MP",
+        "cpu": "MediaTek Helio G99",
+        "nfc": "Không",
+        "ram": "4 GB",
+        "storage": "128 GB",
+        "battery": "Li-Ion 5000 mAh",
+        "os": "Android 15"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "IPS LCD",
+        "Camera sau": "Chính 50 MPPhụ 2 MP",
+        "Camera trước": "8 MP",
+        "Chipset": "MediaTek Helio G99",
+        "Công nghệ NFC": "Không",
+        "Dung lượng RAM": "4 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Pin": "Li-Ion 5000 mAh",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Hệ điều hành": "Android 15",
+        "Độ phân giải màn hình": "720 x 1600 pixel",
+        "Tính năng màn hình": "Độ sáng tối đa 480 nitsKính cường lực Panda",
+        "Loại CPU": "8 nhân (2 nhân 2.2 GHz & 6 nhân 2.0 GHz)",
+        "Thông số": "Samsung Galaxy A07 4GB 128GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "56HV4I-CBAO-128GB",
+          "price": 4190000,
+          "costPrice": 2500400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-green_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lục bảo",
+            "storage": "128GB"
+          },
+          "salePrice": 3290000
+        },
+        {
+          "sku": "56HV4I-MBAC-128GB",
+          "price": 4190000,
+          "costPrice": 2500400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-violet_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím bạc",
+            "storage": "128GB"
+          },
+          "salePrice": 3290000
+        },
+        {
+          "sku": "56HV4I-UYEN-128GB",
+          "price": 4190000,
+          "costPrice": 2500400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a07-black_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen huyền",
+            "storage": "128GB"
+          },
+          "salePrice": 3290000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-s25-fe",
+      "name": "Samsung Galaxy S25 FE 8GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy S25 FE 8GB 128GB Samsung Galaxy S25 FE được trang bị con chip Exynos 2400 3nm thế hệ mới cùng 8GB RAM để có được hiệu suất hoạt động vượt trội. Phiên bản điện thoại được tinh chỉnh đặc biệt của Samsung này còn sở hữu hệ thống camera 50MP + 12MP + 8MP để có khả năng quay, chụp ấn tượng. Với màn hình Dynamic AMOLED 2X, điện thoại sẽ luôn đảm bảo được chất lượng hiển thị sắc nét, sống động để phục vụ nhu cầu giải trí. Vì sao nên mua Samsung Galaxy S25 FE? S25 FE ",
+      "price": 16690000,
+      "salePrice": 13090000,
+      "costPrice": 9948400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-jetblack-1_3.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-white-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-icyblue-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-navy-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-fe.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-fe-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-fe-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-fe-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-s25-fe-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-navy-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-navy-2.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.7 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "50MP, f/1.8 góc rộng12MP, f/2.2 góc siêu rộng8MP, f/2.4 Tele",
+        "camera_front": "12MP, f/2.2",
+        "cpu": "Exynos 2400",
+        "nfc": "Có",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "battery": "4900 mAh",
+        "os": "Android 16, One UI 8",
+        "weight": "190g",
+        "dimensions": "161.3x76.6x7.4 mm"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Camera sau": "50MP, f/1.8 góc rộng12MP, f/2.2 góc siêu rộng8MP, f/2.4 Tele",
+        "Camera trước": "12MP, f/2.2",
+        "Chipset": "Exynos 2400",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Pin": "4900 mAh",
+        "Thẻ SIM": "2 Nano-SIM + eSIM",
+        "Hệ điều hành": "Android 16, One UI 8",
+        "Độ phân giải màn hình": "1080 x 2340 pixels (FullHD+)",
+        "Tính năng màn hình": "Độ sáng tối đa 1900 nitsGorilla® Victus+16 triệu màu",
+        "Loại CPU": "10 nhân (3.2 GHz, 2.9 GHz, 2.6 GHz, 1.95 GHz)",
+        "Tiêu chí": "Samsung Galaxy S25 FE",
+        "Trọng lượng": "190g",
+        "Kích thước": "161.3x76.6x7.4 mm",
+        "Camera chính": "Camera Ultra Wide: 12MP Camera Wide: 50MP Camera Telephoto: 8MP",
+        "CPU": "Exynos 2400",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy S25 FE 8GB 128GB": "13.090.000đ",
+        "Samsung Galaxy S25 FE 8GB 512GB": "17.990.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "FIKWIE-DEN-128GB",
+          "price": 16690000,
+          "costPrice": 9948400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-jetblack-1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 13090000
+        },
+        {
+          "sku": "FIKWIE-RANG-128GB",
+          "price": 16690000,
+          "costPrice": 9948400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-white-1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "128GB"
+          },
+          "salePrice": 13090000
+        },
+        {
+          "sku": "FIKWIE-NHAT-128GB",
+          "price": 16690000,
+          "costPrice": 9948400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-icyblue-1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương nhạt",
+            "storage": "128GB"
+          },
+          "salePrice": 13090000
+        },
+        {
+          "sku": "FIKWIE-NAVY-128GB",
+          "price": 16690000,
+          "costPrice": 9948400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s25-fe-navy-1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh navy",
+            "storage": "128GB"
+          },
+          "salePrice": 13090000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a06-5g",
+      "name": "Samsung Galaxy A06 5G 4GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A06 5G 4GB 128GB Samsung Galaxy A06 5G được cải tiến sở hữu tấm nền hiển thị 6.7inch, hỗ trợ độ phân giải HD+, cung cấp chất lượng hình ảnh với độ sống động cao. Thông qua cấu hình RAM 4GB và bộ nhớ trong128GB, sản phẩm Samsung Galaxy A giúp tối ưu hiệu năng, hỗ trợ lưu trữ thoải mái các ứng dụng và tài liệu. Bên cạnh đó, viên pin dung lượng 5000mAh của máy còn đảm bảo thời gian sử dụng dài lâu, giúp người dùng yên tâm sử dụng cả ngày dài. Bảng giá Samsung Gal",
+      "price": 3920000,
+      "salePrice": 2590000,
+      "costPrice": 1968400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_2__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_1__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_1__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a06-5g-4gb-128gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a06-5g-4gb-128gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a06-5g-4gb-128gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a06-5g-4gb-128gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a06-5g-4gb-128gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_6_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.7 inches",
+        "display_tech": "PLS LCD",
+        "camera": "50.0 MP, f/1.8 2.0 MP, f/2.4",
+        "camera_front": "8.0 MP, f/2.0",
+        "cpu": "Mali-G57",
+        "ram": "4 GB",
+        "storage": "128 GB",
+        "battery": "5000 mAh",
+        "os": "Android"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "PLS LCD",
+        "Camera sau": "50.0 MP, f/1.8 2.0 MP, f/2.4",
+        "Camera trước": "8.0 MP, f/2.0",
+        "Chipset": "Mali-G57",
+        "Dung lượng RAM": "4 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Pin": "5000 mAh",
+        "Thẻ SIM": "2 Nano SIM (Sim 2 chung khe với thẻ nhớ)",
+        "Hệ điều hành": "Android",
+        "Độ phân giải màn hình": "720 x 1600 pixel",
+        "Tính năng màn hình": "16 triệu màu, 60Hz, 576 nits",
+        "Loại CPU": "2 nhân 2.0 GHz & 6 nhân 1.8 GHz",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy A06 5G 4GB 128GB": "2.590.000đ",
+        "Samsung Galaxy A06 4GB 128GB": "2.590.000đ",
+        "Thông số": "Samsung Galaxy A06 5G 4GB 128GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "J4WUZ4-XANH-128GB",
+          "price": 3920000,
+          "costPrice": 1968400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "128GB"
+          },
+          "salePrice": 2590000
+        },
+        {
+          "sku": "J4WUZ4-XAM-128GB",
+          "price": 3920000,
+          "costPrice": 1968400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_2__2.png",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 2590000
+        },
+        {
+          "sku": "J4WUZ4-DEN-128GB",
+          "price": 3920000,
+          "costPrice": 1968400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a06-5g_1__2.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 2590000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a56",
+      "name": "Samsung Galaxy A56 5G 8GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A56 5G 8GB 128GB Samsung Galaxy A56 là mẫu smartphone tầm trung đã được thương hiệu cho ra mắt ngày 02/03/2025 và trình làng tại thị trường Việt Nam ngay trong cùng tháng. Galaxy A56 sở hữu màn hình Super AMOLED 6,7 inch độ phân giải FHD+ và tần số quét 120 Hz, đem tới trải nghiệm xem sắc nét và mượt mà. Thiết bị trang bị chip Exynos 1580 tiến trình 4nm, giúp xử lý đa nhiệm nhanh chóng, tối ưu hiệu năng. Viên pin 5000mAh hỗ trợ sạc nhanh 45W cung cấp cho máy t",
+      "price": 9810000,
+      "salePrice": 8990000,
+      "costPrice": 6832400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a56-hong.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_1__2_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56.1_1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56.1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a56_5g_8gb_128gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a56_5g_8gb_128gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a56_5g_8gb_128gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a56_5g_8gb_128gb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a56_5g_8gb_128gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_2__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_1__2_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_16_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_4_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android",
+        "cpu": "Exynos 1580",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "screen": "6.7 inches",
+        "display_tech": "Super AMOLED",
+        "camera": "50.0 MP, F/1.8 + 12.0 MP, F/2.2 + 5.0 MP, F/2.4",
+        "camera_front": "12.0 MP, F/2.2",
+        "battery": "5000 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android",
+        "Chipset": "Exynos 1580",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "8 nhân 2.9GHz, 2.6GHz, 1.9GHz",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Super AMOLED",
+        "Độ phân giải màn hình": "1080 x 2340 pixels (FullHD+)",
+        "Tính năng màn hình": "16 triệu màu, 120 Hz, 1200 nit, kính cường lực Corning Gorilla Glass Victus+",
+        "Camera sau": "50.0 MP, F/1.8 + 12.0 MP, F/2.2 + 5.0 MP, F/2.4",
+        "Camera trước": "12.0 MP, F/2.2",
+        "Pin": "5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "SIM 1 + SIM 2 / SIM 1 + eSIM / 2 eSIM",
+        "Công nghệ NFC": "Có",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy A56 5G 8GB 128GB": "8.990.000đ",
+        "Thông số kỹ thuật": "Samsung Galaxy A56 (2025)",
+        "Độ dày & Trọng lượng": "7.4 mm / 198 g",
+        "Chip xử lý (CPU)": "Exynos 1580 (4nm)",
+        "Hiệu suất GPU": "Xclipse 540 (Kiến trúc RDNA 3)",
+        "Công suất sạc nhanh": "45W",
+        "Hỗ trợ cập nhật OS": "6 phiên bản Android",
+        "Tính năng Galaxy AI": "Tích hợp sâu bộ công cụ AI thông minh"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9U2FUC-HONG-128GB",
+          "price": 9810000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a56-hong.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "storage": "128GB"
+          },
+          "salePrice": 8990000
+        },
+        {
+          "sku": "9U2FUC-XAM-128GB",
+          "price": 9810000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_1__2_2.png",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 8990000
+        },
+        {
+          "sku": "9U2FUC-DEN-128GB",
+          "price": 9810000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56.1_1_1.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 8990000
+        },
+        {
+          "sku": "9U2FUC-XANH-128GB",
+          "price": 9810000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a56_2__1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "128GB"
+          },
+          "salePrice": 8990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-z-fold-7-12gb-512gb",
+      "name": "Samsung Galaxy Z Fold7 12GB 512GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy Z Fold7 12GB 512GB Điện thoại Samsung Galaxy Z Fold7 12GB 512GB sở hữu dung lượng bộ nhớ 512GB rộng rãi, RAM 12GB cùng chip Snapdragon 8 Elite mạnh mẽ giúp xử lý mượt mà. Máy nổi bật với màn hình chính 8.0 inch Dynamic 2X tần số quét lên đến 120Hz và camera sau 200MP. Trọng lượng nhẹ chỉ 215g và độ mỏng 8.9mm khi gập mang đến trải nghiệm cầm nắm linh hoạt. Điện thoại Samsung Galaxy Z Fold7 12GB 512GB - Dung lượng bộ nhớ trong ấn tượng Dòng Z Fold 7 tiếp tục kế",
+      "price": 52990000,
+      "salePrice": 42290000,
+      "costPrice": 32140400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-2_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-z-fold-7-12gb-256gb-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-xanh-5_1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Qualcomm Snapdragon 8 Elite For Galaxy",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno 830",
+        "screen": "Chính 8.0 inches, Phụ 6.5 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "200 MP + 12 MP + 10 MP, f/1.7, f/2.2, f/2.4",
+        "camera_front": "Trong 10 MP, f/2.2Ngoài 10 MP, f/2.2",
+        "battery": "4400 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Android 16",
+        "Chipset": "Qualcomm Snapdragon 8 Elite For Galaxy",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 830",
+        "Kích thước màn hình": "Chính 8.0 inches, Phụ 6.5 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Độ phân giải màn hình": "Chính: 2184 x 1968 pixels, Phụ: 2520 x 1080 pixels",
+        "Tính năng màn hình": "Tần số quét 120 HzĐộ sáng tối đa 2600 nitsĐộ sâu màu sắc 16MKính cường lực Corning Gorilla Glass Ceramic 2",
+        "Camera sau": "200 MP + 12 MP + 10 MP, f/1.7, f/2.2, f/2.4",
+        "Camera trước": "Trong 10 MP, f/2.2Ngoài 10 MP, f/2.2",
+        "Pin": "4400 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "07/2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JEIQ6B-XAM-512GB",
+          "price": 52990000,
+          "costPrice": 32140400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-2_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "512GB"
+          },
+          "salePrice": 42290000
+        },
+        {
+          "sku": "JEIQ6B-XANH-512GB",
+          "price": 52990000,
+          "costPrice": 32140400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "512GB"
+          },
+          "salePrice": 42290000
+        },
+        {
+          "sku": "JEIQ6B-DEN-512GB",
+          "price": 52990000,
+          "costPrice": 32140400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-z-fold-7-1_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 42290000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a36",
+      "name": "Samsung Galaxy A36 5G 8GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A36 5G 8GB 128GB Samsung Galaxy A36 5G đã chính thức ra mắt thị trường và mở bán vào tháng 3 năm 2025, mang đến một làn gió mới cho phân khúc điện thoại Samsung tầm trung. Sản phẩm gây ấn tượng nhờ bộ vi xử lý 8 nhân cùng thiết kế mỏng nhẹ chỉ 7.4mm. Galaxy A36 còn được được trang bị chip Snapdragon® 6 Gen 3 Mobile Platform, RAM 8GB và bộ nhớ trong 128GB, kháng bụi, kháng nước đạt chuẩn IP67. Thiết bị nâng tầm trải nghiệm hình ảnh với màn hình Super AMOLED 6.7",
+      "price": 8140000,
+      "salePrice": 7490000,
+      "costPrice": 5692400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_1__1_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_2__1_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36.2_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36.2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a36_5g_8gb_128gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a36_5g_8gb_128gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a36_5g_8gb_128gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a36_5g_8gb_128gb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_a36_5g_8gb_128gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_2__1_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_1__1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_7_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android",
+        "cpu": "Snapdragon 6 Gen 3",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "screen": "6.7 inches",
+        "display_tech": "Super AMOLED",
+        "camera": "50.0 MP, F/1.8 + 8.0 MP, F/2.2 + 5.0 MP, F/2.4",
+        "camera_front": "12.0 MP, F/2.2",
+        "battery": "5000 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android",
+        "Chipset": "Snapdragon 6 Gen 3",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "8 nhân 2.4GHz, 1.8GHz",
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Super AMOLED",
+        "Độ phân giải màn hình": "1080 x 2340 pixels (FullHD+)",
+        "Tính năng màn hình": "16 triệu màu, 120 Hz, 1.200 nit, kính cường lực Corning Gorilla Glass Victus+",
+        "Camera sau": "50.0 MP, F/1.8 + 8.0 MP, F/2.2 + 5.0 MP, F/2.4",
+        "Camera trước": "12.0 MP, F/2.2",
+        "Pin": "5000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "SIM 1 + SIM 2 / SIM 1 + eSIM / 2 eSIM",
+        "Công nghệ NFC": "Có",
+        "Phiên bản": "Giá tham khảo (VNĐ)",
+        "8GB/128GB": "7.490.000",
+        "Đặc điểm": "Samsung Galaxy A36 5G",
+        "Màn hình": "6.7 inch, Super AMOLED, 1.200 nits",
+        "Công suất sạc": "45W",
+        "Thời gian hỗ trợ cập nhật OS": "6 năm (đến năm 2031)",
+        "Thời gian hỗ trợ cập nhật bảo mật": "6 năm"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9THB8Q-XANH-128GB",
+          "price": 8140000,
+          "costPrice": 5692400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_1__1_2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "128GB"
+          },
+          "salePrice": 7490000
+        },
+        {
+          "sku": "9THB8Q-DEN-128GB",
+          "price": 8140000,
+          "costPrice": 5692400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36_2__1_3.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 7490000
+        },
+        {
+          "sku": "9THB8Q-TIM-128GB",
+          "price": 8140000,
+          "costPrice": 5692400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a36.2_1.png",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 7490000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-a17",
+      "name": "Samsung Galaxy A17 8GB 128GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy A17 8GB 128GB Điện thoại Samsung Galaxy A17 mang đến trải nghiệm ấn tượng với bộ vi xử lý MediaTek Helio G99 mạnh mẽ, cho phép người dùng thỏa sức khám phá mọi tính năng. Với RAM 8GB, Galaxy A17 mang đến khả năng vận hành mượt mà ngay cả khi chạy nhiều ứng dụng cùng lúc. Ngoài ra, thiết bị còn đáp ứng nhu cầu lưu trữ đa dạng với bộ nhớ trong lên đến 128GB. Bảng so sánh Samsung Galaxy A17 4G vs Samsung Galaxy A16 4G Samsung Galaxy A17 4G mang nhiều điểm cải tiế",
+      "price": 6190000,
+      "salePrice": 4990000,
+      "costPrice": 3792400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-1_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-a17-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a17-17_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a17-15_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a17-11_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-a17-9_1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.7 inches",
+        "display_tech": "Super AMOLED",
+        "camera": "Chính 50 MPPhụ 5 MP, 2 MP",
+        "camera_front": "13 MP",
+        "cpu": "MediaTek Helio G99",
+        "nfc": "Có",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "battery": "Li-Ion 5000 mAh",
+        "os": "Android 15"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "Super AMOLED",
+        "Camera sau": "Chính 50 MPPhụ 5 MP, 2 MP",
+        "Camera trước": "13 MP",
+        "Chipset": "MediaTek Helio G99",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Pin": "Li-Ion 5000 mAh",
+        "Thẻ SIM": "2 Nano SIM (Sim 2 chung khe với thẻ nhớ)",
+        "Hệ điều hành": "Android 15",
+        "Độ phân giải màn hình": "1080 x 2340 pixels (FullHD+)",
+        "Tính năng màn hình": "Độ sáng tối đa 800 nitsKính cường lực Corning Gorilla Glass 7",
+        "Loại CPU": "8 nhân (2 nhân 2.2GHz & 6 nhân 2.0GHz)",
+        "Thông số": "Samsung Galaxy A17 8GB 128GB",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy A17 8GB 128GB": "4.990.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A3N7XN-XAM-128GB",
+          "price": 6190000,
+          "costPrice": 3792400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-1_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 4990000
+        },
+        {
+          "sku": "A3N7XN-XANH-128GB",
+          "price": 6190000,
+          "costPrice": 3792400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17-2_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "128GB"
+          },
+          "salePrice": 4990000
+        },
+        {
+          "sku": "A3N7XN-DEN-128GB",
+          "price": 6190000,
+          "costPrice": 3792400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-a17_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 4990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-samsung-galaxy-s25",
+      "name": "Samsung Galaxy S25 256GB",
+      "categorySlug": "samsung-phone",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật của Samsung Galaxy S25 256GB Samsung S25 thường 256GB trang bị vi xử lý Qualcomm Snapdragon 8 Elite for Galaxy , RAM 12GB, bộ nhớ trong 256GB cùng viên pin Li-ion 4000mAh. Máy sử dụng màn hình AMOLED 120Hz kích thước 6.2 inch với độ phân giải FHD+. Samsung S25 được trang bị 3 ống kính 50MP+10MP+12MP phía sau và camera selfie 12MP phía trước.",
+      "price": 22580000,
+      "salePrice": 17490000,
+      "costPrice": 13292400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_navy_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_mint_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_blue_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_silver_-_copy_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25_1__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_256gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_256gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_256gb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_256gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_galaxy_s25_256gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25_15_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-samsung-galaxy-s25_16_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.2 inches",
+        "display_tech": "Dynamic AMOLED 2X",
+        "camera": "Camera siêu rộng 12MP Camera góc rộng 50MPCamera Tele 10MP",
+        "camera_front": "12MP",
+        "cpu": "Snapdragon 8 Elite dành cho Galaxy (3nm)",
+        "nfc": "Có",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "battery": "4000 mAh"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.2 inches",
+        "Công nghệ màn hình": "Dynamic AMOLED 2X",
+        "Camera sau": "Camera siêu rộng 12MP Camera góc rộng 50MPCamera Tele 10MP",
+        "Camera trước": "12MP",
+        "Chipset": "Snapdragon 8 Elite dành cho Galaxy (3nm)",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "4000 mAh",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Độ phân giải màn hình": "2340 x 1080-pixel",
+        "Tính năng màn hình": "120Hz2600 nitsCorning® Gorilla® Armor 2",
+        "Loại CPU": "Tốc độ CPU 4.47GHz, 3.5GHz 8 nhân",
+        "Thông số": "Samsung Galaxy S25 256GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "CPO0BO-NAVY-256GB",
+          "price": 22580000,
+          "costPrice": 13292400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_navy_1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh navy",
+            "storage": "256GB"
+          },
+          "salePrice": 17490000
+        },
+        {
+          "sku": "CPO0BO-NHLA-256GB",
+          "price": 22580000,
+          "costPrice": 13292400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_mint_1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 17490000
+        },
+        {
+          "sku": "CPO0BO-TROI-256GB",
+          "price": 22580000,
+          "costPrice": 13292400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_blue_1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh da trời",
+            "storage": "256GB"
+          },
+          "salePrice": 17490000
+        },
+        {
+          "sku": "CPO0BO-MBAC-256GB",
+          "price": 22580000,
+          "costPrice": 13292400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/2/s25_-_silver_-_copy_1.png",
+          "active": true,
+          "options": {
+            "color": "Xám bạc",
+            "storage": "256GB"
+          },
+          "salePrice": 17490000
+        }
+      ]
+    }
+  ]
+}

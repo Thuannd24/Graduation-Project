@@ -1,156 +1,170 @@
 # Catalog Import Tool
 
-Pipeline import dữ liệu lớn vào **product-service** với validate quan hệ đầy đủ (category → brand → product → variant).
+Công cụ scrape sản phẩm từ **cellphones.com.vn** và import vào DB (attributes, categories, brands, products, variants).
 
-> **Mặc định DRY-RUN** — chỉ kiểm tra, **không ghi DB** cho đến khi bạn chạy `--apply`.
+---
 
-## Cấu trúc
+## Yêu cầu
 
-```
-tools/catalog-import/
-├── import.mjs                 # CLI chính (validate / import)
-├── generate-manifest.mjs      # Sinh manifest lớn (200, 500, 1000 SP...)
-├── csv-to-manifest.mjs        # CSV → JSON manifest
-├── data/
-│   └── sample-manifest.json   # Mẫu nhỏ (3 SP + đủ quan hệ)
-├── templates/csv/             # Template CSV cho Excel
-└── reports/                   # Báo cáo sau mỗi lần chạy
-```
+| Thứ cần có | Import sản phẩm | Scrape lại dữ liệu mới |
+|---|---|---|
+| Node.js 18+ | ✅ bắt buộc | ✅ bắt buộc |
+| `npm install` | ❌ không cần | ✅ cần (dùng `cheerio`) |
+| Project đang chạy | ✅ bắt buộc | ❌ không cần |
+| ADMIN_TOKEN | ✅ bắt buộc | ❌ không cần |
 
-## Thứ tự import (tự động)
+---
 
-1. Attributes (`code`)
-2. Categories (`slug`, `parentSlug`)
-3. Category ↔ Attribute links
-4. Brands (`slug`, `categorySlugs`)
-5. Products (`slug`, `categorySlug`, `brandSlug`, `specs`, `variants`, `tags`, `images`)
-
-Upsert theo **slug / code / sku** — chạy lại không duplicate.
-
-## Cách dùng
-
-### Bước 1 — Chuẩn bị BE
-
-Rebuild `product-service` + `api-gateway` (endpoint mới):
+## Cấu trúc file
 
 ```
-POST /api/v1/admin/import/catalog?dryRun=true   ← mặc định
-POST /api/v1/admin/import/catalog?dryRun=false  ← ghi DB
+catalog-import/
+├── scrape-cellphones.mjs       # Scraper (crawl sản phẩm từ cellphones.com.vn)
+├── import.mjs                  # Importer (gửi JSON lên API → ghi DB)
+├── update-cat-brand-icons.mjs  # Cập nhật icon danh mục + logo brand
+├── .env                        # Cấu hình API_BASE_URL + ADMIN_TOKEN (không commit)
+├── .env.example                # Mẫu cấu hình
+└── manifests/                  # File JSON đã scrape sẵn — dùng để import ngay
+    ├── iphone.json
+    ├── samsung-phone.json
+    ├── xiaomi-phone.json
+    ├── oppo-phone.json
+    ├── dien-thoai.json
+    ├── laptop.json
+    ├── tablet.json
+    ├── tai-nghe.json
+    ├── tai-nghe-bt.json
+    ├── loa.json
+    ├── dong-ho.json
+    ├── may-anh.json
+    ├── phu-kien.json
+    ├── op-lung.json
+    ├── sac-cap.json
+    ├── pin-du-phong.json
+    ├── man-hinh.json
+    ├── may-tinh-de-ban.json
+    └── tivi.json
 ```
 
-Yêu cầu role **ROLE_ADMIN**.
+> Mỗi file JSON chứa đầy đủ: **attributes, categoryAttributes, brands, products, variants** — import 1 file là đủ cho cả danh mục đó.
 
-### Dữ liệu mẫu 100 sản phẩm (realistic demo)
+---
 
-File sẵn: **`data/catalog-100.json`**
+## Import sản phẩm vào DB (máy chưa cài gì)
 
-| Thành phần | Số lượng |
-|------------|----------|
-| Sản phẩm | 100 |
-| Danh mục | 18 (cây category kiểu ecommerce VN) |
-| Thương hiệu | 20 (kèm logo Clearbit) |
-| Biến thể (SKU) | ~389 |
-| Thuộc tính | 12 (RAM, màu, CPU, pin...) |
+Chỉ cần **Node.js 18+**, không cần `npm install`.
 
-Mỗi sản phẩm gồm: tên, mô tả, giá/giá sale, specs, tags, bảo hành, ảnh chính + gallery 3 ảnh, variants (màu/dung lượng).
+### Bước 1 — Lấy ADMIN_TOKEN
+
+Đăng nhập admin tại `http://localhost:3000` → F12 → Application → Local Storage → lấy `access_token`.
+
+Hoặc copy từ Keycloak admin console → Users → admin → Sessions.
+
+### Bước 2 — Truncate DB (xóa dữ liệu cũ)
+
+```bash
+docker exec -i infra-mariadb mariadb -u root -proot ecommerce_product_db -e "
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE variant_option_values;
+TRUNCATE TABLE product_variants;
+TRUNCATE TABLE product_images;
+TRUNCATE TABLE product_tags;
+TRUNCATE TABLE products;
+TRUNCATE TABLE brand_categories;
+TRUNCATE TABLE brands;
+TRUNCATE TABLE category_attributes;
+TRUNCATE TABLE categories;
+TRUNCATE TABLE attributes;
+SET FOREIGN_KEY_CHECKS=1;
+"
+```
+
+### Bước 3 — Import từng danh mục
+
+> Token hết hạn sau **15 phút** — lấy token mới nếu bị lỗi 401.
 
 ```powershell
-# Tạo lại file 100 SP
-npm run generate:100
+# Windows PowerShell — set token vào .env trước:
+# API_BASE_URL=http://localhost:8080/api/v1
+# ADMIN_TOKEN=eyJ...
 
-# Validate (dry-run, không ghi DB)
-npm run validate:100
-
-# Import thật (khi sẵn sàng + có ADMIN_TOKEN)
-npm run import:100
+node import.mjs --file manifests/iphone.json        --apply
+node import.mjs --file manifests/samsung-phone.json --apply
+node import.mjs --file manifests/xiaomi-phone.json  --apply
+node import.mjs --file manifests/oppo-phone.json    --apply
+node import.mjs --file manifests/dien-thoai.json    --apply
+node import.mjs --file manifests/laptop.json        --apply
+node import.mjs --file manifests/tablet.json        --apply
+node import.mjs --file manifests/tai-nghe-bt.json   --apply
+node import.mjs --file manifests/loa.json           --apply
+node import.mjs --file manifests/tai-nghe.json      --apply
+node import.mjs --file manifests/may-anh.json       --apply
+node import.mjs --file manifests/dong-ho.json       --apply
+node import.mjs --file manifests/op-lung.json       --apply
+node import.mjs --file manifests/sac-cap.json       --apply
+node import.mjs --file manifests/pin-du-phong.json  --apply
+node import.mjs --file manifests/phu-kien.json      --apply
+node import.mjs --file manifests/may-tinh-de-ban.json --apply
+node import.mjs --file manifests/man-hinh.json      --apply
+node import.mjs --file manifests/tivi.json          --apply
 ```
 
-### Bước 2 — Validate (không ghi DB)
+### Bước 4 — Cập nhật icon danh mục + logo brand
 
 ```powershell
-cd tools/catalog-import
-copy .env.example .env
-node import.mjs --file data/sample-manifest.json
+node update-cat-brand-icons.mjs --token eyJ...
 ```
 
-### Bước 3 — Sinh dữ liệu lớn (synthetic)
+### Bước 5 — Flush Redis cache
 
-```powershell
-node generate-manifest.mjs --count 500 --out data/generated-manifest.json
-node import.mjs --file data/generated-manifest.json
+```bash
+docker exec -i infra-redis redis-cli FLUSHDB
 ```
 
-### Bước 4 — Import thật (khi sẵn sàng)
+---
 
-1. Đăng nhập admin Keycloak, lấy JWT
-2. Điền `ADMIN_TOKEN` vào `.env`
-3. Chạy:
+## Scrape lại dữ liệu mới từ cellphones.com.vn
 
-```powershell
-node import.mjs --file data/generated-manifest.json --apply
+Cần chạy `npm install` trước (lần đầu):
+
+```bash
+npm install
 ```
 
-### Import từ CSV (Excel)
+### Scrape tất cả danh mục (mặc định → `manifests/`)
 
-1. Điền file trong `templates/csv/`
-2. Convert:
-
-```powershell
-node csv-to-manifest.mjs --dir templates/csv --out data/from-csv-manifest.json
-node import.mjs --file data/from-csv-manifest.json
+```bash
+node scrape-cellphones.mjs --per-category
 ```
 
-## Format manifest JSON
+### Scrape 1 danh mục cụ thể
 
-```json
-{
-  "attributes": [{ "code": "ram", "name": "RAM", "valueType": "select" }],
-  "categories": [{ "slug": "laptop", "name": "Laptop", "parentSlug": null }],
-  "categoryAttributes": [{ "categorySlug": "laptop", "attributeCode": "ram", "isVariant": false }],
-  "brands": [{ "slug": "apple", "name": "Apple", "categorySlugs": ["dien-thoai"] }],
-  "products": [{
-    "slug": "iphone-demo",
-    "name": "iPhone Demo",
-    "categorySlug": "iphone",
-    "brandSlug": "apple",
-    "price": 24990000,
-    "salePrice": 23990000,
-    "specs": { "battery": "4000mAh" },
-    "variants": [{ "sku": "IP-DEN-128", "options": { "color": "Đen", "storage": "128GB" } }],
-    "images": ["https://..."],
-    "tags": ["hot"]
-  }]
-}
+```bash
+node scrape-cellphones.mjs --category laptop --limit 150 --out manifests/laptop.json
 ```
 
-## Quy tắc tránh dữ liệu rời rạc
+Sau khi scrape xong → thực hiện lại **Bước 2 → 5**.
 
-| Quy tắc | Giải thích |
-|---------|------------|
-| Dùng `slug` / `code` / `sku` | Không hardcode ID số |
-| Import category cha trước con | `parentSlug` phải tồn tại |
-| Brand liên kết category | `categorySlugs` phải hợp lệ |
-| Spec tĩnh → `specs` | CPU, pin, màn hình |
-| Biến thể → `variants[].options` | Màu, dung lượng |
-| `sku` unique toàn hệ | Không trùng giữa sản phẩm |
-| `salePrice < price` | Validate trước khi ghi |
+---
 
-## Ảnh sản phẩm
+## Validate trước khi import (không ghi DB)
 
-- Manifest dùng **URL sẵn có** (`imageUrl`, `images[]`, `variants[].imageUrl`)
-- Hoặc upload trước qua Admin: `POST /api/v1/admin/products/images/upload` → MinIO
-- Manifest mẫu dùng `picsum.photos` placeholder
+```bash
+node import.mjs --file manifests/laptop.json
+```
 
-## Sau import
+---
 
-- Elasticsearch tự index khi create/update product
-- Import **inventory** riêng qua `inventory-service` nếu cần tồn kho
+## Cấu hình (.env)
 
-## NPM scripts
+Tạo file `.env` từ `.env.example`:
 
-```powershell
-npm run validate    # dry-run sample-manifest
-npm run generate    # sinh 200 SP → data/generated-manifest.json
-npm run csv         # CSV → manifest
-npm run import      # import thật sample (cần ADMIN_TOKEN)
+```bash
+cp .env.example .env
+# Sửa ADMIN_TOKEN
+```
+
+```env
+API_BASE_URL=http://localhost:8080/api/v1
+ADMIN_TOKEN=eyJ...
 ```

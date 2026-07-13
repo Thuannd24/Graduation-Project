@@ -148,6 +148,7 @@ public class ProductServiceImpl implements ProductService {
                         .sku(v.getSku())
                         .variantAttr(null) // Deprecated: variant attributes now stored in variant_option_values
                         .price(v.getPrice())
+                        .salePrice(v.getSalePrice())
                         .costPrice(v.getCostPrice())
                         .weight(v.getWeight())
                         .imageUrl(v.getImageUrl())
@@ -261,6 +262,7 @@ public class ProductServiceImpl implements ProductService {
                 if (existing != null) {
                     // Update existing variant
                     existing.setPrice(v.getPrice());
+                    existing.setSalePrice(v.getSalePrice());
                     existing.setCostPrice(v.getCostPrice());
                     existing.setWeight(v.getWeight());
                     existing.setImageUrl(v.getImageUrl());
@@ -277,6 +279,7 @@ public class ProductServiceImpl implements ProductService {
                             .sku(sku)
                             .variantAttr(null)
                             .price(v.getPrice())
+                            .salePrice(v.getSalePrice())
                             .costPrice(v.getCostPrice())
                             .weight(v.getWeight())
                             .imageUrl(v.getImageUrl())
@@ -548,6 +551,7 @@ public class ProductServiceImpl implements ProductService {
                             .sku(v.getSku())
                             .variantAttr(optionMap) // Dynamic option values represented as a Map
                             .price(v.getPrice())
+                            .salePrice(v.getSalePrice())
                             .costPrice(v.getCostPrice())
                             .weight(v.getWeight())
                             .imageUrl(v.getImageUrl())

@@ -322,14 +322,24 @@ public class CatalogImportServiceImpl implements CatalogImportService {
             }
 
             List<ProductVariantDto> variants = safeList(item.getVariants()).stream()
-                    .map(v -> ProductVariantDto.builder()
-                            .sku(v.getSku())
-                            .price(v.getPrice() != null ? v.getPrice() : item.getSalePrice() != null ? item.getSalePrice() : item.getPrice())
-                            .costPrice(v.getCostPrice() != null ? v.getCostPrice() : item.getCostPrice())
-                            .imageUrl(v.getImageUrl())
-                            .active(v.getActive() == null || v.getActive())
-                            .variantAttr(v.getOptions() != null ? new LinkedHashMap<>(v.getOptions()) : Map.of())
-                            .build())
+                    .map(v -> {
+                        BigDecimal varPrice = v.getPrice() != null ? v.getPrice()
+                                : item.getSalePrice() != null ? item.getSalePrice() : item.getPrice();
+                        BigDecimal varSalePrice = v.getSalePrice() != null ? v.getSalePrice() : null;
+                        // salePrice biến thể phải nhỏ hơn price biến thể
+                        if (varSalePrice != null && varPrice != null && varSalePrice.compareTo(varPrice) >= 0) {
+                            varSalePrice = null;
+                        }
+                        return ProductVariantDto.builder()
+                                .sku(v.getSku())
+                                .price(varPrice)
+                                .salePrice(varSalePrice)
+                                .costPrice(v.getCostPrice() != null ? v.getCostPrice() : item.getCostPrice())
+                                .imageUrl(v.getImageUrl())
+                                .active(v.getActive() == null || v.getActive())
+                                .variantAttr(v.getOptions() != null ? new LinkedHashMap<>(v.getOptions()) : Map.of())
+                                .build();
+                    })
                     .collect(Collectors.toList());
 
             ProductDto dto = ProductDto.builder()

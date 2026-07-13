@@ -72,8 +72,8 @@ TechStore là hệ thống thương mại điện tử kiến trúc Microservice
 3.  **Khởi động Frontend:**
     ```bash
     cd ../FE
-    npm install
-    npm run dev
+   
+    
     ```
 
 ---
