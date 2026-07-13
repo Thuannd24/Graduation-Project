@@ -1,0 +1,2681 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:05:04.443Z",
+  "note": "Scraped 21 sản phẩm — danh mục \"Xiaomi\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "xiaomi-phone"
+      ]
+    },
+    {
+      "slug": "poco",
+      "name": "POCO",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/POCO-240x50.png",
+      "description": "POCO — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "xiaomi-phone"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "dien-thoai-xiaomi-17t",
+      "name": "Xiaomi 17T 5G 12GB 512GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17T 5G 12GB 512GB Xiaomi 17T là mẫu smartphone cận cao cấp mới nhất năm 2026, được ví như \"Flagship Killer\" thực thụ nhờ cấu hình đỉnh cao thách thức phân khúc flagship. Thiết bị sở hữu chip Dimensity 8500-Ultra mạnh mẽ kết hợp cùng giao diện HyperOS 3 (Android 16) mượt mà, tích hợp đảo thông minh Xiaomi HyperIsland độc đáo. Trải nghiệm thực tế cầm trên tay cực kỳ đầm nhờ khung viền nguyên khối. Máy sở hữu màn hình CrystalRes AMOLED 120Hz hỗ trợ Dolby Vision rực rỡ, v",
+      "price": 20990000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-2_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-30.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-24.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-26.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-33.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-23.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-32.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-31.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3",
+        "cpu": "MediaTek Dimensity 8500-Ultra",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Mali-G720 MC8",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "camera_front": "32 MP, f/2.2",
+        "battery": "6500 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "charging": "90W có dây"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3",
+        "Chipset": "MediaTek Dimensity 8500-Ultra",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Mali-G720 MC8",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2756 x 1268 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nits460 PPI100% DCI-P312bit, 68 tỉ màuDolby VisionHDR10+",
+        "Camera sau": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "Camera trước": "32 MP, f/2.2",
+        "Pin": "6500 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 17T 5G 12GB 512GB": "18.990.000đ",
+        "Tiêu chí": "Thông số kỹ thuật",
+        "Vi xử lý (Chipset)": "MediaTek Dimensity 8500 Ultra, GPU Mail-G720 MC8 - Cấu trúc tối ưu hiệu năng nặng",
+        "Bộ nhớ": "RAM 12GB LPDDR5X kết hợp ROM 512GB UFS 4.1",
+        "Màn hình": "Kích thước 6.59 inch AMOLED 1.5K, tần số quét 120Hz, độ sáng tối đa 3500 nits, HDR10+, kính cường lực Gorilla Glass 7i",
+        "Pin & sạc": "Dung lượng pin 6500 mAh, công nghệ sạc nhanh siêu tốc 67W",
+        "Hệ điều hành & AI": "Andriod 16, giao diện HyperOS 3. Tích hợp AI. Gemini9",
+        "Kích thước": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "Kết nối khác": "Kháng nước bụi iP68 - Wifi-6E, NFC, mạng 5G",
+        "Vi xử lý": "MediaTek Dimensity 8500-Ultra",
+        "Tốc độ sạc nhanh": "Sạc nhanh có dây UFS/Turbo Charge 67W (đầy pin khoảng 58 phút)",
+        "Cảm biến camera": "Cảm biến chuẩn Leica Light Fusion 800 (quay phim 4K)",
+        "Đặc điểm": "Xiaomi 15",
+        "Phân khúc": "Flagship nhỏ gọn",
+        "Sạc nhanh": "90W có dây",
+        "Camera": "Leica 50MP + 50MP + 50MP"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "CBNSF2-DEN-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-2_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        },
+        {
+          "sku": "CBNSF2-TIM-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-a7",
+      "name": "Xiaomi Redmi A7 3GB 64GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi A7 3GB 64GB Xiaomi Redmi A7 sở hữu viên pin dung lượng lớn 5200mAh giúp bạn duy trì các cuộc gọi hay giải trí suốt một ngày dài mà không lo cắm sạc nhiều lần. Máy được trang bị bộ vi xử lý tám nhân UNISOC T7250, hỗ trợ vận hành các tác vụ hàng ngày ổn định. Màn hình lớn 6.88 inch đem lại không gian hiển thị rộng rãi, thoải mái. Điện thoại Xiaomi Redmi A7 giá bao nhiêu? Giá Xiaomi Redmi A7 hiện dao động trong khoảng từ 2.899.000 đồng đến 3.590.000 đồng tùy thuộc ",
+      "price": 3890000,
+      "salePrice": 3590000,
+      "costPrice": 2728400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-15.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-14.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-14_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-15_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-11.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-12.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-5_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-16.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 15",
+        "cpu": "Unisoc T7250",
+        "ram": "3 GB",
+        "storage": "64 GB",
+        "gpu": "Mali-G57",
+        "screen": "6.88 inches",
+        "display_tech": "LCD",
+        "camera": "13 MP, f/2.2",
+        "camera_front": "8 MP, f/2.0",
+        "battery": "5200 mAh",
+        "network": "4G"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 15",
+        "Chipset": "Unisoc T7250",
+        "Dung lượng RAM": "3 GB",
+        "Bộ nhớ trong": "64 GB",
+        "Loại CPU": "8 nhân, 2A75@1.8GHz + 6A55@1.6GHz",
+        "GPU": "Mali-G57",
+        "Kích thước màn hình": "6.88 inches",
+        "Công nghệ màn hình": "LCD",
+        "Độ phân giải màn hình": "720 x 1640 pixels",
+        "Tính năng màn hình": "Tần số quét 120 Hz260 PPIĐộ sáng 450 nitsĐộ sâu màu 8-bitTỷ lệ tương phản 1500:1Dải màu 70% NTSCDC DimmingChứng nhận TÜV Rheinland",
+        "Camera sau": "13 MP, f/2.2",
+        "Camera trước": "8 MP, f/2.0",
+        "Pin": "5200 mAh",
+        "Hỗ trợ mạng": "4G",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi Redmi A7 3GB 64GB": "3.590.000đ",
+        "Thông số": "Xiaomi Redmi A7 3GB 64GB",
+        "Tiêu chí": "Xiaomi Redmi A7",
+        "Màn hình": "LCD 6.88 inch, 120Hz Độ phân giải: 720 x 1640 pixels",
+        "RAM": "3GB",
+        "ROM": "64GB",
+        "Dung lượng Pin": "5200 mAh",
+        "Hệ điều hành": "Andriod 15",
+        "Kết nối NFC": "Không hỗ trợ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "ZPBQW2-DEN-64GB",
+          "price": 3890000,
+          "costPrice": 2728400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-15.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "64GB"
+          },
+          "salePrice": 3590000
+        },
+        {
+          "sku": "ZPBQW2-TIM-64GB",
+          "price": 3890000,
+          "costPrice": 2728400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-5.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "64GB"
+          },
+          "salePrice": 3590000
+        },
+        {
+          "sku": "ZPBQW2-UONG-64GB",
+          "price": 3890000,
+          "costPrice": 2728400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-a7-14.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "64GB"
+          },
+          "salePrice": 3590000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-14-pro-plus",
+      "name": "Xiaomi Redmi Note 14 Pro Plus 5G 8GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi Note 14 Pro Plus 5G 8GB 256GB Redmi Note 14 Pro Plus chính hãng ra mắt Việt Nam vào ngày 10/01/2025. Sử dụng chip Snapdragon 7s Gen 3 mạnh mẽ cùng dung lượng RAM 12GB và bộ nhớ trong đến 256GB. Mặt lưng của smartphone nhà Xiaomi sở hữu hệ thống 3 ống kính gồm 200MP, 8MP và 2MP. Điện thoại cũng có màn hình CrystalRes AMOLED 1.5K, kích thước 6.67 inch và viên pin 5110 mAh, sạc nhanh 120W. Sơ lược về Redmi Note 14 Pro Plus Redmi Note 14 Pro+ tạo ấn tượng nhờ sự kết",
+      "price": 10800000,
+      "salePrice": 7990000,
+      "costPrice": 6072400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-14-pro-plus.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus.1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus.2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-note-14-pro-plus.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_pro_plus_5g_8gb_256gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_pro_plus_5g_8gb_256gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_pro_plus_5g_8gb_256gb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_pro_plus_5g_8gb_256gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_pro_plus_5g_8gb_256gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus-den.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus-tim.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-14-pro-plus-xanh.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/h/thiet-ke-mat-lung-xiaomi-redmi-note-14-5g-pro-plus-chinh-hang.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/h/thiet-ke-vien-may-redmi-note-14-pro-plus-chinh-hang.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 14",
+        "cpu": "Snapdragon® 7s Gen 3",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Qualcomm® Adreno™ GPU",
+        "screen": "6.67 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 200MP, OIS - f/1.65 Góc siêu rộng 8MP - f/2.2 Macro 2MP - f/2.4",
+        "camera_front": "Camera trước - f/2.2",
+        "battery": "5110 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "charging": "120W"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 14",
+        "Chipset": "Snapdragon® 7s Gen 3",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân, xung nhịp 2.5Ghz",
+        "GPU": "Qualcomm® Adreno™ GPU",
+        "Kích thước màn hình": "6.67 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2712 x 1220 pixels",
+        "Tính năng màn hình": "Tần số quét: Lên đến 120Hz Độ sáng: 3000 nits Độ sâu màu: 12-bit Tỷ lệ tương phản: 5,000,000:1",
+        "Camera sau": "Chính 200MP, OIS - f/1.65 Góc siêu rộng 8MP - f/2.2 Macro 2MP - f/2.4",
+        "Camera trước": "Camera trước - f/2.2",
+        "Pin": "5110 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Công nghệ NFC": "Có",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi Redmi Note 14 Pro Plus 5G 8GB 256GB": "7.990.000đ",
+        "Xiaomi Redmi Note 14 6GB 128GB": "4.690.000đ",
+        "Thông số": "Xiaomi Redmi Note 14 Pro Plus 5G 8GB 256GB",
+        "Vi xử lý": "Snapdragon 7s Gen 3 (4nm)",
+        "Bộ nhớ và RAM": "8+256GB",
+        "Màn hình": "6.67 inch (Độ sáng 3000 nits)",
+        "Dung lượng pin": "5110 mAh",
+        "Sạc nhanh": "120W",
+        "Hệ điều hành": "Xiaomi HyperOS",
+        "Kháng nước bụi": "Chuẩn IP68"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "7QQJJP-VANG-256GB",
+          "price": 10800000,
+          "costPrice": 6072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-14-pro-plus.jpg",
+          "active": true,
+          "options": {
+            "color": "Vàng",
+            "storage": "256GB"
+          },
+          "salePrice": 7990000
+        },
+        {
+          "sku": "7QQJJP-TIM-256GB",
+          "price": 10800000,
+          "costPrice": 6072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus.1.png",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          },
+          "salePrice": 7990000
+        },
+        {
+          "sku": "7QQJJP-DEN-256GB",
+          "price": 10800000,
+          "costPrice": 6072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus_1.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 7990000
+        },
+        {
+          "sku": "7QQJJP-UONG-256GB",
+          "price": 10800000,
+          "costPrice": 6072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-pro-plus.2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh duong",
+            "storage": "256GB"
+          },
+          "salePrice": 7990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-poco-x8-pro-max",
+      "name": "POCO X8 Pro Max 12GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "poco",
+      "description": "Đặc điểm nổi bật của POCO X8 Pro Max 12GB 256GB Điện thoại Xiaomi POCO X8 Pro Max chính thức ra mắt ngày 17/03/2026 với viên pin có mật độ dung lượng cao 8500mAh hỗ trợ sạc nhanh 100W. Thiết bị sở hữu màn hình AMOLED 1.5K rộng 6.83 inch cùng chip xử lý MediaTek Dimensity 9500s. Độ phân giải ống kính chính camera sau 50MP kết hợp cảm biến rộng 8MP. Đôi nét về điện thoại Xiaomi POCO X8 Pro Max Xiaomi POCO X8 Pro Max là mẫu smartphone thuộc phân khúc cận cao cấp vừa được trình làng thị trường vào l",
+      "price": 16990000,
+      "salePrice": 13690000,
+      "costPrice": 10404400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max_4.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-2_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-poco-x8-pro-max.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-poco-x8-pro-max-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-poco-x8-pro-max-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-poco-x8-pro-max-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-poco-x8-pro-max-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-3.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3 (Android 16)",
+        "cpu": "MediaTek Dimensity 9500s",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Immortalis-G925 MC11",
+        "screen": "6.83 inches",
+        "display_tech": "AMOLED",
+        "camera": "50 MP f/1.5 (cảm biến Light Hunter 600, OIS) + 8 MP (góc siêu rộng)",
+        "camera_front": "20 MP",
+        "battery": "8.500 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3 (Android 16)",
+        "Chipset": "MediaTek Dimensity 9500s",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "1 × Cortex-X925 (tối đa 3.73GHz) + 3 × Cortex-X4 (tối đa 3.3GHz) + 4 × Cortex-A720 (tối đa 2.4GHz)",
+        "GPU": "Immortalis-G925 MC11",
+        "Kích thước màn hình": "6.83 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2772 x 1280 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3.500 nits, PWM 3840Hz, 68 tỷ màu, dải màu DCI-P3, HDR10+",
+        "Camera sau": "50 MP f/1.5 (cảm biến Light Hunter 600, OIS) + 8 MP (góc siêu rộng)",
+        "Camera trước": "20 MP",
+        "Pin": "8.500 mAh",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Thời điểm ra mắt": "03/2026",
+        "Thông số": "POCO X8 Pro Max 12GB 256GB",
+        "Tiêu chí so sánh": "Xiaomi POCO X8 Pro Max",
+        "Hệ điều hành": "Xiaomi HyperOS 3 (Android 16)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "K77FE9-RANG-256GB",
+          "price": 16990000,
+          "costPrice": 10404400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max_4.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "256GB"
+          },
+          "salePrice": 13690000
+        },
+        {
+          "sku": "K77FE9-DEN-256GB",
+          "price": 16990000,
+          "costPrice": 10404400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-2_1_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 13690000
+        },
+        {
+          "sku": "K77FE9-UONG-256GB",
+          "price": 16990000,
+          "costPrice": 10404400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-x8-pro-max-1_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          },
+          "salePrice": 13690000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-17t-pro",
+      "name": "Xiaomi 17T Pro 5G 12GB 512GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17T Pro 5G 12GB 512GB Xiaomi 17T Pro là mẫu smartphone cao cấp mới nhất năm 2026, thiết lập một tiêu chuẩn hoàn toàn mới cho danh hiệu \"Flagship Killer\" nhờ sức mạnh áp đảo từ bộ vi xử lý MediaTek Dimensity 9500 (3nm). Thiết bị sở hữu RAM 12GB cùng các tùy chọn bộ nhớ lưu trữ cực lớn từ 256GB, 512GB lên đến 1TB. Mang lại trải nghiệm giải trí đỉnh cao nhờ màn hình LTPO CrystalRes AMOLED 6.83 inch 144Hz, viên pin Silicon-Carbon kỷ lục 7.000 mAh và hệ thống camera Leica ",
+      "price": 24990000,
+      "salePrice": 22990000,
+      "costPrice": 17472400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-1_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-1_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-33.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-17.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-16.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-12.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-15.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-13.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-14.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "cpu": "MediaTek Dimensity 9500",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "screen": "6.83 inches",
+        "display_tech": "AMOLED",
+        "camera": "Camera chính Leica 50MP f/1.67 OISCamera tele Leica 5X 50MP f/3.0 OISCamera góc siêu rộng Leica 12MP f/2.2",
+        "camera_front": "32MP f/2.2, 90°, tiêu cự 21mm",
+        "battery": "7000mAh",
+        "network": "5G",
+        "charging": "Sạc nhanh dây: 100W Sạc không dây: 50W",
+        "os": "Android 16, giao diện HyperOS 3 (Tích hợp Xiaomi HyperAI & Google Gemini10)",
+        "connectivity": "Wi-Fi 7, Bluetooth 6.0, 5G, NFC, Cổng hồng ngoại IR Blaster, USB-C 2.0"
+      },
+      "specsRaw": {
+        "Chipset": "MediaTek Dimensity 9500",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Kích thước màn hình": "6.83 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nits, tối thiểu 1 nit; 68 tỷ màu; dải màu điện ảnh DCI-P3; DC dimming; HDR10+; Dolby Vision; chứng nhận TÜV Rheinland Low Blue Light (Hardware Solution), Flicker Free, Circadian Friendly, Intelligent Eye Care",
+        "Camera sau": "Camera chính Leica 50MP f/1.67 OISCamera tele Leica 5X 50MP f/3.0 OISCamera góc siêu rộng Leica 12MP f/2.2",
+        "Camera trước": "32MP f/2.2, 90°, tiêu cự 21mm",
+        "Pin": "7000mAh",
+        "Hỗ trợ mạng": "5G",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 17T Pro 5G 12GB 512GB": "22.990.000đ",
+        "Xiaomi 17T Pro 12GB 1TB": "24.990.000đ",
+        "Thông số": "Xiaomi 17T Pro",
+        "Màn hình": "AMOLED 6.83 inch, 1.5K (1280 x 2772 px) Tần số quét: 144Hz Độ sáng tối đa: 3500 nits Hỗ trợ: Dolby Vision, HDR10+, 3840Hz PWM",
+        "Bộ vi xử lý (Chip)": "MediaTek Dimensity 9500 (3 nm) GPU: Immortalis thế hệ mới",
+        "Dung lượng Pin": "7000 mAh (Sử dụng công nghệ Silicon-Carbon mật độ cao)",
+        "Công nghệ sạc": "Sạc nhanh dây: 100W Sạc không dây: 50W",
+        "Hệ điều hành": "Android 16, giao diện HyperOS 3 (Tích hợp Xiaomi HyperAI & Google Gemini10)",
+        "Kết nối": "Wi-Fi 7, Bluetooth 6.0, 5G, NFC, Cổng hồng ngoại IR Blaster, USB-C 2.0",
+        "Thời điểm ra mắt": "05/2026",
+        "Vi xử lý (CPU)": "MediaTek Dimensity 9500 (3nm)",
+        "Đồ họa (GPU)": "ARM Immortalis thế hệ mới",
+        "Chất liệu thiết kế": "Khung kim loại, mặt lưng kính nhám mờ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "5CWWR0-HDAM-512GB",
+          "price": 24990000,
+          "costPrice": 17472400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-1_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Đậm",
+            "storage": "512GB"
+          },
+          "salePrice": 22990000
+        },
+        {
+          "sku": "5CWWR0-DEN-512GB",
+          "price": 24990000,
+          "costPrice": 17472400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 22990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-17-ultra",
+      "name": "Xiaomi 17 Ultra 5G 16GB 512GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17 Ultra 5G 16GB 512GB Xiaomi 17 Ultra đánh dấu bước tiến mới trong phân khúc flagship với hệ thống camera Leica 1-inch thế hệ mới, mang lại khả năng nhiếp ảnh chuyên nghiệp trong một thân máy mỏng nhẹ tinh tế. Máy sở hữu vi xử lý Snapdragon 8 Elite Gen 5 kết hợp cùng màn hình AMOLED 6.9 inch mang lại hiệu năng vượt trội. Đặc biệt, viên pin 6000mAh cho phép máy hoạt động bền bỉ suốt 2 ngày, đi kèm công nghệ sạc nhanh 90W, sạc đầy pin trong khoảng 40 phút. Điện thoại X",
+      "price": 39990000,
+      "salePrice": 31190000,
+      "costPrice": 23704400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den-xanhla_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-trang_1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17-ultra.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17-ultra-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17-ultra-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17-ultra_1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17-ultra-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den-trang.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den-xanhla.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-trang_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den-3.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16 với HyperOS",
+        "cpu": "Qualcomm Snapdragon 8 Elite Gen 5",
+        "ram": "16 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno 840",
+        "screen": "6.9 inches",
+        "display_tech": "LTPO AMOLED",
+        "camera": "Camera chính: 200 MPGóc siêu rộng: 50 MP",
+        "camera_front": "50 MP",
+        "battery": "6000 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "charging": "90W có dây, 80W không dây"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 16 với HyperOS",
+        "Chipset": "Qualcomm Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "16 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 840",
+        "Kích thước màn hình": "6.9 inches",
+        "Công nghệ màn hình": "LTPO AMOLED",
+        "Tính năng màn hình": "Độ phân giải màn hình: 2608 × 1200 pixelsĐộ sáng tối đa 3500 nits",
+        "Camera sau": "Camera chính: 200 MPGóc siêu rộng: 50 MP",
+        "Camera trước": "50 MP",
+        "Pin": "6000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "02/2026",
+        "Tên sản phẩm": "Giá bán tại Trung Quốc",
+        "Xiaomi 17 Ultra 16GB 512GB": "7,999 CNY",
+        "Xiaomi 17 Ultra 16GB 1TB": "8,999 CNY",
+        "Tiêu chí": "Xiaomi 15 Ultra",
+        "Thời gian ra mắt (TQ)": "27/02/2025",
+        "Vi xử lý": "Snapdragon 8 Elite (3nm)",
+        "Màn hình": "6.73 inch, LTPO AMOLED, 120Hz",
+        "Sạc nhanh": "90W có dây, 80W không dây",
+        "Kháng nước/bụi": "IP68",
+        "Hệ điều hành": "HyperOS 2 (Android 15)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "2CSWBT-NHLA-512GB",
+          "price": 39990000,
+          "costPrice": 23704400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den-xanhla_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "512GB"
+          },
+          "salePrice": 31190000
+        },
+        {
+          "sku": "2CSWBT-DEN-512GB",
+          "price": 39990000,
+          "costPrice": 23704400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-den_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 31190000
+        },
+        {
+          "sku": "2CSWBT-RANG-512GB",
+          "price": 39990000,
+          "costPrice": 23704400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-17-ultra-trang_1_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "512GB"
+          },
+          "salePrice": 31190000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-15-12gb-512gb",
+      "name": "Xiaomi 15 5G 12GB 512GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Mua điện thoại Xiaomi 15 512GB chính hãng giá tốt. Bảo hành 18 tháng, đổi mới 30 ngày, trả góp 0%. Mua ngay Mi 15 12gb 512gb tại đây.",
+      "price": 26500000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703565.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703564.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703566.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703569.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_1_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_3_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_2_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_5_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_4_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703567.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703568.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703564_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703570.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703571.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703572.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno GPU",
+        "screen": "6.36 inches",
+        "display_tech": "CrystalRes AMOLED",
+        "camera": "Camera chính Leica: 50MP, ƒ/1.62, OIS, Tiêu cự tương đương 23mmCamera tele Leica: 50MP, ƒ/2.0, OISCamera góc siêu rộng Leica: 50MP, ƒ/2.2, 115°",
+        "camera_front": "Camera trước: 32MP, ƒ/2.0, 90°, Tiêu cự 21mm",
+        "battery": "5240 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 2",
+        "Chipset": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "2 x Lõi Prime, tốc độ tối đa 4,32GHz6 x Lõi hiệu suất, lên đến 3,53GHz",
+        "GPU": "Adreno GPU",
+        "Kích thước màn hình": "6.36 inches",
+        "Công nghệ màn hình": "CrystalRes AMOLED",
+        "Độ phân giải màn hình": "2670 x 1200 pixels",
+        "Tính năng màn hình": "Độ sáng 3200 nitsTự động tinh chỉnh tần số quét 1-120Hz Tốc độ phản hồi cảm ứng lên đến 300HzHỗ trợ 68 tỷ màuDải màu DCI-P3Hỗ trợ Dolby Vision, HDR10+, HDR10Độ sáng DCCông nghệ cảm ứng ướt",
+        "Camera sau": "Camera chính Leica: 50MP, ƒ/1.62, OIS, Tiêu cự tương đương 23mmCamera tele Leica: 50MP, ƒ/2.0, OISCamera góc siêu rộng Leica: 50MP, ƒ/2.2, 115°",
+        "Camera trước": "Camera trước: 32MP, ƒ/2.0, 90°, Tiêu cự 21mm",
+        "Pin": "5240 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Sim kép (nano-Sim và e-Sim) - Hỗ trợ 2 e-Sim",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "36DWCT-NHLA-512GB",
+          "price": 26500000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703565.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        },
+        {
+          "sku": "36DWCT-RANG-512GB",
+          "price": 26500000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703564.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        },
+        {
+          "sku": "36DWCT-DEN-512GB",
+          "price": 26500000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1262703566.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-poco-f8-pro-5g",
+      "name": "Xiaomi POCO F8 Pro 5G 12GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi POCO F8 Pro 5G 12GB 256GB Điện thoại POCO F8 Pro 5G là mẫu điện thoại cận cao cấp \"Flagship Killer\", nổi bật viên pin silicon-carbon 6210mAh, màn hình AMOLED 120Hz độ sáng 3500 nits giúp hiển thị rõ nét dưới nắng. Hơn thế nữa, chip Snapdragon 8 Elite cùng WildBoost giúp duy trì khung hình ổn định khi chiến game.",
+      "price": 18990000,
+      "salePrice": 15490000,
+      "costPrice": 11772400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-f8-pro.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-f8-pro-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-f8-pro-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-f8-pro-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-f8-pro-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-2_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-1_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro_1_1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3",
+        "cpu": "Snapdragon® 8 Elite",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Adreno™",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP chính (Light Fusion 800, 1/1.55\", f/1.88, OIS, 6P) + 50MP tele 60mm (f/2.2) + 8MP góc siêu rộng (f/2.2)",
+        "camera_front": "20MP",
+        "battery": "6210mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "charging": "100W wired",
+        "dimensions": "157.5 x 75.25 x 8.0 mm",
+        "weight": "199g"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3",
+        "Chipset": "Snapdragon® 8 Elite",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno™",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2510 x 1156 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nitsTỷ lệ tương phản 5.000.000:1Độ sáng HBM 2000 nits68 tỷ màu | Dải màu rộng DCI-P3Cảm ứng kháng nước 2.0Chứng nhận TUV (ánh sáng xanh thấp, chống nhấp nháy, nhịp sinh học)",
+        "Camera sau": "50MP chính (Light Fusion 800, 1/1.55\", f/1.88, OIS, 6P) + 50MP tele 60mm (f/2.2) + 8MP góc siêu rộng (f/2.2)",
+        "Camera trước": "20MP",
+        "Pin": "6210mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "10/2025",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi POCO F8 Pro 5G 12GB 256GB": "15.490.000đ",
+        "Tiêu chí": "POCO F8 Pro 5G",
+        "CPU Clock": "Tối đa 4.32 GHz (Oryon)",
+        "Màn hình": "6.59\" AMOLED, 1156x2510 (1,5K), 3500 nits peak",
+        "Sạc nhanh": "100W wired",
+        "Hệ điều hành": "Android 16 + HyperOS 3",
+        "Kích thước và Trọng lượng": "157.5 x 75.25 x 8.0 mm, 199g",
+        "Kích thước": "157.5 x 75.25 x 8.0 mm",
+        "Trọng lượng": "199g",
+        "RAM / Bộ nhớ": "12GB / 256-512GB (UFS 4.1)",
+        "Sạc": "100W có dây",
+        "Loa": "Stereo Bose"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "Q1H2MN-DEN-256GB",
+          "price": 18990000,
+          "costPrice": 11772400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 15490000
+        },
+        {
+          "sku": "Q1H2MN-BAC-256GB",
+          "price": 18990000,
+          "costPrice": 11772400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-1_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Bạc",
+            "storage": "256GB"
+          },
+          "salePrice": 15490000
+        },
+        {
+          "sku": "Q1H2MN-UONG-256GB",
+          "price": 18990000,
+          "costPrice": 11772400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/o/poco-f8-pro-2_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          },
+          "salePrice": 15490000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-15-ultra-1tb",
+      "name": "Xiaomi 15 Ultra 5G 16GB 1TB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 15 Ultra 5G 16GB 1TB Điện thoại Xiaomi 15 Ultra 5G 1TB với chip Snapdragon 8 Elite, 16GB RAM và bộ nhớ 1TB mang tới hiệu năng mạnh mẽ để phục vụ nhu cầu sử dụng nâng cao. Phiên bản Xiaomi 15 Series này sở hữu hệ thống camera Leica thế hệ mới để mở rộng khả năng sáng tạo. Hệ điều hành HyperOS 2 với tính năng AI sẽ giúp việc sử dụng điện thoại được tiện lợi hơn. Dự kiến trình làng vào cuối tháng 5/2026, Xiaomi 17T Pro, hứa hẹn sẽ thiết lập một chuẩn mực hiệu năng mới th",
+      "price": 38250000,
+      "salePrice": 27990000,
+      "costPrice": 21272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-04-16_11-45-37_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-04-16_11-45-37.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-15-ultra-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-15-ultra-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-15-ultra-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-15-ultra-5g-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-15-ultra-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-04-16_11-46-01.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-04-16_11-45-57.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-04-16_11-46-04.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-04-16_11-45-51.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "ram": "16 GB",
+        "storage": "1 TB",
+        "gpu": "Adreno GPU",
+        "screen": "6.73 inches",
+        "display_tech": "AMOLED",
+        "camera": "Camera chính Leica: 50MP, ƒ/1.63, OIS Camera tele Leica: 50MP, ƒ/1.8, OIS Camera siêu tele Leica: 200MP, ƒ/2.6, OIS Camera góc siêu rộng Leica: 50MP, ƒ/2.2, 115° FOV",
+        "camera_front": "Camera trước: 32MP, ƒ/2.0, 90° FOV Cảm biến OV32B Tiêu cự 21mm",
+        "battery": "5410mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 2",
+        "Chipset": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "Dung lượng RAM": "16 GB",
+        "Bộ nhớ trong": "1 TB",
+        "Loại CPU": "2 x Lõi Prime, tốc độ tối đa 4,32GHz6 x Lõi hiệu suất, lên đến 3,53GHz",
+        "GPU": "Adreno GPU",
+        "Kích thước màn hình": "6.73 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "3200 x 1440 pixel",
+        "Tính năng màn hình": "68 tỷ màuTần số quét 1-120HzTốc độ phản hồi cảm ứng 300HzĐộ sáng tối đa 3200 nits trong nhiều tình huống Điều chỉnh độ sáng PWM 1920Hz/DC dimmingOriginal color PRO | Pro HDR | Công nghệ cảm ứng khi ướtHDR10+, Dolby Vision",
+        "Camera sau": "Camera chính Leica: 50MP, ƒ/1.63, OIS Camera tele Leica: 50MP, ƒ/1.8, OIS Camera siêu tele Leica: 200MP, ƒ/2.6, OIS Camera góc siêu rộng Leica: 50MP, ƒ/2.2, 115° FOV",
+        "Camera trước": "Camera trước: 32MP, ƒ/2.0, 90° FOV Cảm biến OV32B Tiêu cự 21mm",
+        "Pin": "5410mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Sim kép (nano-Sim và e-Sim) - Hỗ trợ 2 e-Sim",
+        "Công nghệ NFC": "Có"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QMD6T7-BAC-16GB",
+          "price": 38250000,
+          "costPrice": 21272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-04-16_11-45-37_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Bạc",
+            "storage": "16GB"
+          },
+          "salePrice": 27990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-17t-pro-12gb-1tb",
+      "name": "Xiaomi 17T Pro 12GB 1TB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17T Pro 12GB 1TB Xiaomi 17T Pro 12GB 1TB vừa chính thức ra mắt tại Việt Nam đã đánh dấu bước tiến mạnh mẽ của dòng T-series năm 2026. Phiên bản bộ nhớ 1TB nổi bật với khả năng lưu trữ \"không giới hạn\" kết hợp chip Dimensity 9500 3nm mạnh mẽ và hệ thống camera Leica Zoom AI 120X. Viên pin Silicon-Carbon 7000mAh cùng sạc nhanh 100W càng củng cố vị thế của máy trong phân khúc cao cấp. Nếu bạn đang tìm một chiếc smartphone \"dùng mãi không đầy bộ nhớ\", đây chính là cái tên",
+      "price": 26990000,
+      "salePrice": 24990000,
+      "costPrice": 18992400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro_3.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-2_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-2_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-pro-5g-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-22.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-26.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-27.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-25.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-24.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "cpu": "MediaTek Dimensity 9500",
+        "ram": "12 GB",
+        "storage": "1 TB",
+        "screen": "6.83 inches",
+        "display_tech": "AMOLED",
+        "camera": "Camera chính Leica 50MP f/1.67 OIS, Camera tele Leica 5X 50MP f/3.0 OIS, Camera góc siêu rộng Leica 12MP f/2.2",
+        "camera_front": "32MP f/2.2, 90°, tiêu cự 21mm",
+        "battery": "7000mAh",
+        "network": "5G",
+        "charging": "Có dây 100W / Không dây 50W",
+        "os": "Android 16 / HyperOS 3"
+      },
+      "specsRaw": {
+        "Chipset": "MediaTek Dimensity 9500",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "1 TB",
+        "Kích thước màn hình": "6.83 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nits, tối thiểu 1 nit; 68 tỷ màu; dải màu điện ảnh DCI-P3; DC dimming; HDR10+; Dolby Vision; chứng nhận TÜV Rheinland Low Blue Light (Hardware Solution), Flicker Free, Circadian Friendly, Intelligent Eye Care",
+        "Camera sau": "Camera chính Leica 50MP f/1.67 OIS, Camera tele Leica 5X 50MP f/3.0 OIS, Camera góc siêu rộng Leica 12MP f/2.2",
+        "Camera trước": "32MP f/2.2, 90°, tiêu cự 21mm",
+        "Pin": "7000mAh",
+        "Hỗ trợ mạng": "5G",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 17T Pro 5G 12GB 512GB": "22.990.000đ",
+        "Xiaomi 17T Pro 12GB 1TB": "24.990.000đ",
+        "Thông số": "Xiaomi 17T Pro 12GB 1TB",
+        "Thời điểm ra mắt": "05/2026",
+        "Màn hình": "AMOLED 6.83\", 1.5K, 144Hz, 3500 nits , Gorilla Glass 7i",
+        "Vi xử lý": "MediaTek Dimensity 9500 (3nm)",
+        "RAM / ROM": "12GB LPDDR5X / 1TB UFS 4.1",
+        "Sạc": "Có dây 100W / Không dây 50W",
+        "Hệ điều hành": "Android 16 / HyperOS 3",
+        "Kháng nước": "IP68"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "35H6LD-DEN-12GB",
+          "price": 26990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "12GB"
+          },
+          "salePrice": 24990000
+        },
+        {
+          "sku": "35H6LD-HDAM-12GB",
+          "price": 26990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Đậm",
+            "storage": "12GB"
+          },
+          "salePrice": 24990000
+        },
+        {
+          "sku": "35H6LD-TIM-12GB",
+          "price": 26990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-pro-2_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "12GB"
+          },
+          "salePrice": 24990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-15",
+      "name": "Xiaomi Redmi Note 15 6GB 128GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi Note 15 6GB 128GB Redmi Note 15 6GB/128GB trang bị chip Helio G100 Ultra 8 nhân, chạy hệ điều hành Xiaomi HyperOS 2 cho trải nghiệm mượt mà khi sử dụng. Màn hình AMOLED 6.77 inch 120Hz mang lại cảm giác cuộn chạm đã mắt, cùng pin dung lượng \"khủng\" 6.000mAh, sạc nhanh 33W và camera chính 108MP chụp ảnh sắc nét. Tất cả tạo nên một thiết bị sẵn sàng đáp ứng trọn vẹn nhu cầu học tập, làm việc và giải trí mỗi ngày.. “Nhân tố chủ lực” Xiaomi Redmi Note 15 6GB/128GB R",
+      "price": 5990000,
+      "salePrice": 5590000,
+      "costPrice": 4248400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-2_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-2_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-3.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "MediaTek Helio G100-Ultra",
+        "ram": "6 GB",
+        "storage": "128 GB",
+        "screen": "6.77 inches",
+        "display_tech": "AMOLED",
+        "camera": "Camera chính 108MP ƒ/1.7 + Camera phụ 2MP ƒ/2.4",
+        "camera_front": "20MP ƒ/2.2",
+        "battery": "6000 mAh",
+        "network": "4G"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 2",
+        "Chipset": "MediaTek Helio G100-Ultra",
+        "Dung lượng RAM": "6 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Kích thước màn hình": "6.77 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1080 x 2392 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3200 nits, 12-bit, DCI-P3, PWM 3840Hz, TÜV Rheinland giảm ánh sáng xanh, TÜV Rheinland thân thiện nhịp sinh học, TÜV Rheinland Flicker Free",
+        "Camera sau": "Camera chính 108MP ƒ/1.7 + Camera phụ 2MP ƒ/2.4",
+        "Camera trước": "20MP ƒ/2.2",
+        "Pin": "6000 mAh",
+        "Hỗ trợ mạng": "4G",
+        "Thời điểm ra mắt": "01/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi Redmi Note 15 6GB 128GB": "5.590.000đ",
+        "Thông số": "Xiaomi Redmi Note 15 6GB 128GB",
+        "Tiêu chí": "Redmi Note 15 6GB/128GB 4G",
+        "Bộ xử lý": "MediaTek Helio G100 Ultra",
+        "RAM & ROM": "6GB RAM, 128GB bộ nhớ trong",
+        "Màn hình": "AMOLED 6.77 inch, FHD+ 1080 x 2392, 120Hz, dạng cong",
+        "Pin & sạc": "6.000mAh, sạc nhanh 33W"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "PV4MY7-DEN-128GB",
+          "price": 5990000,
+          "costPrice": 4248400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-2_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 5590000
+        },
+        {
+          "sku": "PV4MY7-UONG-128GB",
+          "price": 5990000,
+          "costPrice": 4248400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "128GB"
+          },
+          "salePrice": 5590000
+        },
+        {
+          "sku": "PV4MY7-TIM-128GB",
+          "price": 5990000,
+          "costPrice": 4248400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-1_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 5590000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-14",
+      "name": "Xiaomi Redmi Note 14 6GB 128GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi Note 14 6GB 128GB Redmi Note 14 ra mắt vào ngày 10/01/2025 tại Việt Nam sở hữu AI mới nhất kèm chip MediaTek Helio G99-Ultra mạnh mẽ đi cùng camera 108MP. Xiaomi Redmi Note 14 giá bao nhiêu? Điện thoại Redmi Note 14 có giá niêm yết 4.900.000đ. Tuy nhiên, mức giá bán chính thức tại hệ thống CellphoneS rẻ hơn đáng kể nhờ các chương trình ưu đãi. Chi tiết giá Redmi Note 14 tại 13/07/2026 như sau:",
+      "price": 4900000,
+      "salePrice": 4690000,
+      "costPrice": 3564400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14_1__2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14.1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14_2__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_6gb_128gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_6gb_128gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_6gb_128gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_6gb_128gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_6gb_128gb_-_4_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14_3__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/c/a/camera-redmi-note-14-gia-re-50mp_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/h/thiet-ke-nut-nhan-redmi-note-14-chinh-hang_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/h/thiet-ke-xiaomi-redmi-note-14-vien-kim-loai-chac-chan_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-redmi-note-14-5g-6-67inch_1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.67 inches",
+        "display_tech": "AMOLED",
+        "camera": "Hệ thống camera AI 108MP Camera đo chiều sâu 2MP - f/2.4 Camera cận cảnh 2MP - f/2.4",
+        "camera_front": "Camera trước 20MP - f/2.2",
+        "cpu": "MediaTek Helio G99-Ultra",
+        "nfc": "Có",
+        "ram": "6 GB",
+        "storage": "128 GB",
+        "battery": "5500mAh",
+        "os": "Android 14",
+        "weight": "196.5g",
+        "gpu": "Mali-G57 MC2"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.67 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "Hệ thống camera AI 108MP Camera đo chiều sâu 2MP - f/2.4 Camera cận cảnh 2MP - f/2.4",
+        "Camera trước": "Camera trước 20MP - f/2.2",
+        "Chipset": "MediaTek Helio G99-Ultra",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "6 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Pin": "5500mAh",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Hệ điều hành": "Android 14",
+        "Độ phân giải màn hình": "1080 x 2400 pixels (FullHD+)",
+        "Tính năng màn hình": "Tốc độ làm mới: Lên đến 120Hz Độ sáng: 1800 nits đỉnh Tỷ lệ tương phản: 5.000.000:1",
+        "Loại CPU": "8 nhân, lên đến 2.2GHz",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi Redmi Note 14 6GB 128GB": "4.690.000đ",
+        "Thông số": "Xiaomi Redmi Note 14",
+        "Màu sắc": "Đen - Xanh - Tím",
+        "Trọng lượng": "196.5g",
+        "Màn hình": "AMOLED 6.67 inch Full-HD+",
+        "CPU": "MediaTek Helio G99-Ultra",
+        "GPU": "Mali-G57 MC2",
+        "RAM": "RAM LPDDR4X 6GB/8GB",
+        "ROM": "UFS 2.2 128GB/256GB",
+        "Kháng nước": "IP54",
+        "Bộ nhớ": "UFS 2.2 128GB/256GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "PL5198-NHLA-128GB",
+          "price": 4900000,
+          "costPrice": 3564400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14_1__2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "128GB"
+          },
+          "salePrice": 4690000
+        },
+        {
+          "sku": "PL5198-TIM-128GB",
+          "price": 4900000,
+          "costPrice": 3564400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14.1.png",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 4690000
+        },
+        {
+          "sku": "PL5198-DEN-128GB",
+          "price": 4900000,
+          "costPrice": 3564400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14_1.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 4690000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-14-5g",
+      "name": "Xiaomi Redmi Note 14 5G 8GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi Note 14 5G 8GB 256GB Điện thoại Xiaomi Redmi Note 14 5G là dòng smartphone tầm trung, với kích thước màn 6.67 inches, AMOLED tần số quét 120Hz, chất lượng hiển thị sắc nét. Chip Dimensity 7025 - Ultra 8 nhân, xung nhịp tối đa 2.5GHz tối ưu hiệu năng. Máy có camera cảm biến chính 108MP OIS, camera góc rộng 8MP giúp chụp ảnh sắc nét, chi tiết. >> Sản phẩm tham khảo: Độ bền của Note 15 4G được minh chứng qua khả năng \"sống sót kỳ diệu\" sau những cú rơi tự do từ độ ",
+      "price": 7160000,
+      "salePrice": 6490000,
+      "costPrice": 4932400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_2__2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_1__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g.1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g.1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_5g_8gb_256gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_5g_8gb_256gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_5g_8gb_256gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_5g_8gb_256gb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_redmi_note_14_5g_8gb_256gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_1__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_3_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS",
+        "cpu": "MediaTek Dimensity 7025 - Ultra",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "IMG BXM-8-256",
+        "screen": "6.67 inches",
+        "display_tech": "AMOLED",
+        "camera": "108MP, ƒ/1.78MP góc siêu rộng, ƒ/2.22MP Macro, ƒ/2.4",
+        "camera_front": "20MP, ƒ/2.2",
+        "battery": "5110mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "resolution": "1080 x 2400 (FHD+)",
+        "weight": "196.5g"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Xiaomi HyperOS",
+        "Chipset": "MediaTek Dimensity 7025 - Ultra",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "Octa-core processor, up to 2.5GHzTiền trình 6nm",
+        "GPU": "IMG BXM-8-256",
+        "Kích thước màn hình": "6.67 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1080 x 2400 pixels (FullHD+)",
+        "Tính năng màn hình": "Tần số quét 120HzĐộ sáng 2100 nitsĐộ sâu màu 8 bitĐộ tương phản 5.000.000:1Giải màu rộng DCI-P3960Hz PWM dimmingCorning Gorilla Glass 5",
+        "Camera sau": "108MP, ƒ/1.78MP góc siêu rộng, ƒ/2.22MP Macro, ƒ/2.4",
+        "Camera trước": "20MP, ƒ/2.2",
+        "Pin": "5110mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 SIM (Nano-SIM)",
+        "Công nghệ NFC": "Có",
+        "Thông số": "Xiaomi Redmi Note 14 5G 8GB 256GB",
+        "Độ phân giải": "1080 x 2400 (FHD+)",
+        "Trọng lượng": "196.5g",
+        "CPU và tiến trình": "8 nhân (6nm)",
+        "RAM / Bộ nhớ trong": "6GB/8GB RAM 128GB/256GB ROM",
+        "Dung lượng Pin": "5500mAh",
+        "Công suất sạc": "33W",
+        "Kháng nước bụi": "IP54"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "KB1P5R-TIM-256GB",
+          "price": 7160000,
+          "costPrice": 4932400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_2__2.png",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          },
+          "salePrice": 6490000
+        },
+        {
+          "sku": "KB1P5R-NHLA-256GB",
+          "price": 7160000,
+          "costPrice": 4932400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g_1__2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 6490000
+        },
+        {
+          "sku": "KB1P5R-DEN-256GB",
+          "price": 7160000,
+          "costPrice": 4932400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-14-5g.1_1.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 6490000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-15-pro",
+      "name": "Xiaomi Redmi Note 15 Pro 12GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi Note 15 Pro 12GB 256GB Redmi Note 15 Pro chính là câu trả lời đanh thép của Xiaomi cho khái niệm \"flagship killer\" năm 2026. Sản phẩm chính thức ra mắt thị trường Việt Nam lúc 16:00 ngày 15/01 với mức giá chỉ 10.090.000đ. Thiết bị gây ấn tượng mạnh nhờ viên pin 6.500mAh, chip Helio G200 Ultra và chuẩn kháng nước IP65 bền bỉ. Kết hợp cùng màn hình AMOLED 6.77 inch sắc nét, đây là lựa chọn đẳng cấp và tiết kiệm hàng đầu trong phân khúc. Redmi Note 15 Pro - \"Cỗ máy",
+      "price": 10090000,
+      "salePrice": 8990000,
+      "costPrice": 6832400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-6.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-8_1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-6_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-4_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-7_1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-6_1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-pro-2_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-pro-19_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-pro-18_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-pro-17_2.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "MediaTek Helio G200-Ultra",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "screen": "6.77 inches",
+        "display_tech": "AMOLED",
+        "camera": "200MP (chính) + 8MP (siêu rộng)",
+        "camera_front": "32MP",
+        "battery": "6500mAh",
+        "network": "4G"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Chipset": "MediaTek Helio G200-Ultra",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Kích thước màn hình": "6.77 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1080 x 2392 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3200 nits, 12-bit, DCI-P3, PWM 3840Hz, TÜV Rheinland",
+        "Camera sau": "200MP (chính) + 8MP (siêu rộng)",
+        "Camera trước": "32MP",
+        "Pin": "6500mAh",
+        "Hỗ trợ mạng": "4G",
+        "Thời điểm ra mắt": "01/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi Redmi Note 15 Pro 12GB 256GB": "8.990.000đ",
+        "Thông số": "Xiaomi Redmi Note 15 6GB 128GB",
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 2",
+        "Hạng mục": "Redmi Note 15 Pro",
+        "Màn hình": "AMOLED 6,77 inch, Full HD+, 120 Hz",
+        "Bộ vi xử lý": "MediaTek Helio G200 Ultra, CPU 8 nhân 6 nm",
+        "RAM & ROM": "Tùy chọn đến 12 GB RAM, 256 GB bộ nhớ UFS 2.2, hỗ trợ thẻ nhớ",
+        "Pin & sạc": "Pin 6.500 mAh, sạc nhanh 45W"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "YRVBT9-UONG-256GB",
+          "price": 10090000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-6.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          },
+          "salePrice": 8990000
+        },
+        {
+          "sku": "YRVBT9-DEN-256GB",
+          "price": 10090000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-7.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 8990000
+        },
+        {
+          "sku": "YRVBT9-XAM-256GB",
+          "price": 10090000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-8.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 8990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-15-pro-5g",
+      "name": "Xiaomi Redmi Note 15 Pro 5G 12GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi Note 15 Pro 5G 12GB 256GB Redmi Note 15 Pro 5G mang đến không gian hiển thị 6.83 inch với màn hình POLED phẳng, độ sáng tối đa 3200 nits, tần số quét 120Hz siêu mượt, siêu nét. Máy được trang bị vi xử lý Dimensity 7400 Ultra 8 nhân hiệu năng cao, chạy hệ điều hành Xiaomi HyperOS 2 tiên tiến, cùng camera chính 200MP nổi bật. Tổng thể thiết bị vẫn giữ thiết kế tinh tế, thanh lịch với độ dày chỉ 7.96mm, nhẹ 210g, đạt chuẩn kháng bụi nước IP66/68/69K, đáp ứng tốt cả",
+      "price": 11490000,
+      "salePrice": 10490000,
+      "costPrice": 7972400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-note-15-pro-5g.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-note-15-pro-5g-1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-note-15-pro-5g-2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-15-pro-5g-vang.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-5g-12gb-256gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-5g-12gb-256gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-5g-12gb-256gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-5g-12gb-256gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-pro-5g-12gb-256gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-15-pro-5g-den.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-15-pro-5g-tim.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-15-pro-5g-vang-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-15-pro-5g-vang-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-15-pro-5g-vang-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-note-15-pro-5g-vang-5.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.83 inches",
+        "display_tech": "AMOLED",
+        "camera": "Camera chính: 200MP, OIS, f/1.7Camera góc siêu rộng: 8MP, f/2.2",
+        "camera_front": "20MP, f/2.2",
+        "cpu": "MediaTek Dimensity 7400-Ultra",
+        "nfc": "Có",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "battery": "6580mAh(typ)",
+        "os": "Xiaomi HyperOS 2",
+        "resolution": "2772 x 1280 (1.5K)"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.83 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "Camera chính: 200MP, OIS, f/1.7Camera góc siêu rộng: 8MP, f/2.2",
+        "Camera trước": "20MP, f/2.2",
+        "Chipset": "MediaTek Dimensity 7400-Ultra",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "6580mAh(typ)",
+        "Thẻ SIM": "2 Nano SIM hoặc 1 Nano + 1 eSIM",
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Độ phân giải màn hình": "2772 x 1280 pixels",
+        "Tính năng màn hình": "Tần số quét: lên đến 120HzDCI-P3 rộng, độ sâu màu 12-bitPWM dimming 3840HzĐộ sáng: 3200 nits1800 nits (HBM)Tỷ lệ tương phản: 8,000,000:1Điều chỉnh độ sáng tự động 16,000 cấp",
+        "Loại CPU": "8 nhân lên đến 2.6 GHz",
+        "Tên tính năng": "Thông số",
+        "NFC": "Có",
+        "Mạng & kết nối di động": "5G",
+        "Loa": "Stereo đối xứng",
+        "Bảo mật": "Nhận diện khuôn mặt",
+        "Tiêu chuẩn": "IP66 / IP68 / IP69K",
+        "Thông số": "Note 15 Pro 5G",
+        "Bộ xử lý": "MediaTek Dimensity 7400-Ultra",
+        "CPU": "8 nhân, tối đa 2.6GHz",
+        "RAM & Bộ nhớ": "12GB + 256GB",
+        "Màn hình": "POLED 6.83 inch 1.5K",
+        "Độ phân giải": "2772 x 1280 (1.5K)",
+        "Pin + Sạc": "6580mAh Sạc nhanh: 45W Sạc ngược: 22.5W"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "S9T054-DEN-256GB",
+          "price": 11490000,
+          "costPrice": 7972400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-note-15-pro-5g.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 10490000
+        },
+        {
+          "sku": "S9T054-TIM-256GB",
+          "price": 11490000,
+          "costPrice": 7972400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-note-15-pro-5g-1.png",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          },
+          "salePrice": 10490000
+        },
+        {
+          "sku": "S9T054-XAM-256GB",
+          "price": 11490000,
+          "costPrice": 7972400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-note-15-pro-5g-2.png",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 10490000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-15-5g-8gb-256gb",
+      "name": "Xiaomi Redmi 15 5G 8GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi 15 5G 8GB 256GB Redmi 15 5G hướng tới người dùng cần smartphone pin trâu, màn hình lớn dễ nhìn và kết nối 5G ổn định. Nhóm người dùng này ưu tiên thiết bị dùng trọn ngày, vừa giải trí vừa, xử lý công việc cơ bản, đồng thời giảm số lần phải cắm sạc. Nhờ chip Snapdragon 6s Gen 3, mẫu điện thoại Redmi này cho phép xem phim, chơi game mượt mà suốt cả ngày. Giới thiệu điện thoại Redmi 15 5G Redmi 15 5G là smartphone thuộc dòng Redmi của Xiaomi, nhắm tới người dùng cầ",
+      "price": 6690000,
+      "salePrice": 5990000,
+      "costPrice": 4552400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g-2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15-5g-8gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15-5g_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15-5g-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15-5g-8gb-256gb-29.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15-5g-8gb-256gb-20.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15-5g-8gb-256gb-21.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15-5g-8gb-256gb-22.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.9 inches",
+        "display_tech": "IPS LCD",
+        "camera": "50MP, Ống kính -5P, f/1.8",
+        "camera_front": "8MP f/2.05",
+        "cpu": "Snapdragon® 6s Gen 3",
+        "nfc": "Có",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "battery": "7000mAh",
+        "os": "Xiaomi HyperOS 2",
+        "refresh_rate": "Lên đến 144Hz",
+        "charging": "33W",
+        "dimensions": "169.48mm x 80.45mm x 8.40mm",
+        "weight": "217g",
+        "resolution": "2340 × 1080"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.9 inches",
+        "Công nghệ màn hình": "IPS LCD",
+        "Camera sau": "50MP, Ống kính -5P, f/1.8",
+        "Camera trước": "8MP f/2.05",
+        "Chipset": "Snapdragon® 6s Gen 3",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "7000mAh",
+        "Thẻ SIM": "2 SIM (Nano-SIM)",
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Độ phân giải màn hình": "2340 x 1080-pixel",
+        "Tính năng màn hình": "Độ sáng 700 nits850 nits (HBM)Tỉ lệ tương phản 1400:1Cảm ứng 288HzĐạt chứng nhận TÜV Rheinland: Giảm ánh sáng xanh, Không nhấp nháy, Thân thiện nhịp sinh học",
+        "Loại CPU": "Kryo, up to 2.3GHz",
+        "Tên tính năng": "Thông số",
+        "Bảo mật": "Cảm biến vân tay cạnh viền, mở khóa khuôn mặt AI",
+        "NFC": "Hỗ trợ NFC tùy thị trường",
+        "Mạng và kết nối": "2 SIM 5G, Wi-Fi băng tần kép, Bluetooth 5.1, GPS đa hệ thống",
+        "Âm thanh": "Loa ngoài hỗ trợ tăng âm lượng, hỗ trợ âm thanh chất lượng cao",
+        "Chống nước, tia nước bắn và bụi": "Chuẩn kháng nước, bụi IP64",
+        "Thông số kỹ thuật": "Redmi 15 5G",
+        "Vi xử lý (Processor)": "Snapdragon® 6s Gen 3 Mobile Platform (6nm, CPU: lên đến 2.3GHz )",
+        "Mạng di động": "Hỗ trợ 5G",
+        "RAM & ROM": "4GB + 128GB 8GB + 256GB (LPDDR4X + UFS2.2)",
+        "Màn hình": "6.9\" FHD+ DotDisplay (2340 × 1080)",
+        "Tần số quét": "Lên đến 144Hz",
+        "Sạc nhanh": "33W",
+        "Kích thước": "169.48mm x 80.45mm x 8.40mm",
+        "Trọng lượng": "217g",
+        "Bluetooth": "Bluetooth 5.1",
+        "Kháng nước/bụi": "IP64",
+        "Tính năng": "Redmi 15 5G",
+        "Bộ xử lý (Chipset)": "Snapdragon® 6s Gen 3 (6nm, max 2.3GHz)",
+        "Độ phân giải": "2340 × 1080",
+        "Độ sáng tối đa": "850 nits (HBM)",
+        "Bộ nhớ & Lưu trữ": "4GB+128GB, 8GB+256GB (LPDDR4X + UFS 2.2)",
+        "Kích thước (Dài x Rộng x Dày)": "169.48mm x 80.45mm x 8.40mm",
+        "Cảm biến vân tay": "Cạnh bên"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "938D9Y-NHLA-256GB",
+          "price": 6690000,
+          "costPrice": 4552400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 5990000
+        },
+        {
+          "sku": "938D9Y-XAM-256GB",
+          "price": 6690000,
+          "costPrice": 4552400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 5990000
+        },
+        {
+          "sku": "938D9Y-DEN-256GB",
+          "price": 6690000,
+          "costPrice": 4552400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-15-5g.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 5990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-15-5g",
+      "name": "Xiaomi Redmi Note 15 5G 6GB 128GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi Redmi Note 15 5G 6GB 128GB Redmi Note 15 5G sở hữu hiệu năng mạnh mẽ từ Snapdragon 6 Gen 3 và viên pin \"khủng\" 5.520mAh, kết nối 5G suốt ngày không lo gián đoạn. Từ việc tận hưởng những thước phim sống động trên màn hình AMOLED 6.77 inch 3200 nits, đến việc sở hữu những bức ảnh sắc nét nhờ camera 108MP, đây chính là người bạn đồng hành bền bỉ và đẳng cấp cho người dùng hiện đại. Đôi nét về Xiaomi Redmi Note 15 5G Sau khi \"gây bão\" tại Trung Quốc và Ấn Độ, Redmi Note 1",
+      "price": 7490000,
+      "salePrice": 6790000,
+      "costPrice": 5160400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-5_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-4_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-5g-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-note-15-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-3_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-5_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-5g-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-5g-1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.77 inches",
+        "display_tech": "AMOLED",
+        "camera": "Camera chính 108MP ƒ/1.7 OIS + Camera siêu rộng 8MP ƒ/2.2",
+        "camera_front": "20MP ƒ/2.2",
+        "cpu": "Snapdragon® 6 Gen 3",
+        "ram": "6 GB",
+        "storage": "128 GB",
+        "battery": "5520mAh",
+        "os": "Xiaomi HyperOS 2",
+        "nfc": "Có hỗ trợ NFC",
+        "connectivity": "5G, Bluetooth 5.1"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.77 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "Camera chính 108MP ƒ/1.7 OIS + Camera siêu rộng 8MP ƒ/2.2",
+        "Camera trước": "20MP ƒ/2.2",
+        "Chipset": "Snapdragon® 6 Gen 3",
+        "Dung lượng RAM": "6 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Pin": "5520mAh",
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Độ phân giải màn hình": "1080 x 2392 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3200 nits, 12-bit, DCI-P3, PWM 3840Hz, chứng nhận TÜV Rheinland",
+        "Tên tính năng": "Thông số",
+        "Bảo mật": "Cảm biến vân tay trong màn hình + mở khóa bằng khuôn mặt AI",
+        "NFC": "Có hỗ trợ NFC",
+        "Mạng và kết nối di động": "5G, Bluetooth 5.1",
+        "Âm thanh": "Loa kép stereo, tăng âm lượng 300%",
+        "Chống nước, chống bụi": "IP66",
+        "Định vị & Vị trí": "GPS: L1 | GLONASS: G1 | BDS: B1I + B1C | Galileo: E1",
+        "Tiêu chí": "Xiaomi Redmi Note 15 5G",
+        "Màn hình": "6.77 inch, 120Hz",
+        "Chip xử lý": "Snapdragon 6 Gen 3",
+        "Kết nối": "5G, Bluetooth 5.1",
+        "Chuẩn chống nước": "IP65",
+        "Vi xử lý": "Snapdragon 6 Gen 3",
+        "Pin & Sạc": "5520mAh, sạc nhanh 45W",
+        "Kháng nước/bụi": "IP66",
+        "Tiện ích khác": "Loa kép (tăng 300% âm lượng), Công nghệ cảm ứng ướt 2.0"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "ZY7TZE-DEN-128GB",
+          "price": 7490000,
+          "costPrice": 5160400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-5_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "128GB"
+          },
+          "salePrice": 6790000
+        },
+        {
+          "sku": "ZY7TZE-UONG-128GB",
+          "price": 7490000,
+          "costPrice": 5160400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-3_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "128GB"
+          },
+          "salePrice": 6790000
+        },
+        {
+          "sku": "ZY7TZE-TIM-128GB",
+          "price": 7490000,
+          "costPrice": 5160400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-note-15-series-4_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 6790000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-15-ultra",
+      "name": "Xiaomi 15 Ultra 5G 16GB 512GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 15 Ultra 5G 16GB 512GB Xiaomi 15 Ultra 16GB 512GB trang bị chip Snapdragon® 8 Elite mạnh mẽ và RAM lên đến 16GB, người dùng sẽ có trải nghiệm mượt mà và dung lượng lưu trữ 512GB. Thiết bị này được nâng cấp nhờ trang bị ống kính tele có độ phân giải cao đến 200 megapixel. Viên pin lớn 5410 mAh, sẽ giúp nâng cao thời gian dùng điện thoại của người dùng. Đồng thời, Mi 15 Ultra trang bị tấm nền AMOLED, sẽ đem lại chất lượng hiển thị nổi bật và chi tiết về màu sắc.",
+      "price": 34360000,
+      "salePrice": 25990000,
+      "costPrice": 19752400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_17_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_16_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_ultra_5g_16gb_512gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_ultra_5g_16gb_512gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_ultra_5g_16gb_512gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_ultra_5g_16gb_512gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_ultra_5g_16gb_512gb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_12_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_7_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_8_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_9_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_10_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_13_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.73 inches",
+        "display_tech": "AMOLED",
+        "camera": "Camera chính Leica: 50MP, ƒ/1.63, OIS Camera tele Leica: 50MP, ƒ/1.8, OIS Camera siêu tele Leica: 200MP, ƒ/2.6, OIS Camera góc siêu rộng Leica: 50MP, ƒ/2.2, 115° FOV",
+        "camera_front": "Camera trước: 32MP, ƒ/2.0, 90° FOV Cảm biến OV32B Tiêu cự 21mm",
+        "cpu": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "nfc": "Có",
+        "ram": "16 GB",
+        "storage": "512 GB",
+        "battery": "5410mAh",
+        "os": "Xiaomi HyperOS 2"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.73 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "Camera chính Leica: 50MP, ƒ/1.63, OIS Camera tele Leica: 50MP, ƒ/1.8, OIS Camera siêu tele Leica: 200MP, ƒ/2.6, OIS Camera góc siêu rộng Leica: 50MP, ƒ/2.2, 115° FOV",
+        "Camera trước": "Camera trước: 32MP, ƒ/2.0, 90° FOV Cảm biến OV32B Tiêu cự 21mm",
+        "Chipset": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "16 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Pin": "5410mAh",
+        "Thẻ SIM": "Sim kép (nano-Sim và e-Sim) - Hỗ trợ 2 e-Sim",
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Độ phân giải màn hình": "3200 x 1440 pixel",
+        "Tính năng màn hình": "68 tỷ màuTần số quét 1-120HzTốc độ phản hồi cảm ứng 300HzĐộ sáng tối đa 3200 nits trong nhiều tình huống Điều chỉnh độ sáng PWM 1920Hz/DC dimmingOriginal color PRO | Pro HDR | Công nghệ cảm ứng khi ướtHDR10+, Dolby Vision",
+        "Loại CPU": "2 x Lõi Prime, tốc độ tối đa 4,32GHz6 x Lõi hiệu suất, lên đến 3,53GHz",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 15 Ultra 5G 16GB 512GB": "25.990.000đ",
+        "Xiaomi 15 Ultra 5G 16GB 1TB": "27.990.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "YTH66V-DEN-512GB",
+          "price": 34360000,
+          "costPrice": 19752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_17_.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 25990000
+        },
+        {
+          "sku": "YTH66V-BAC-512GB",
+          "price": 34360000,
+          "costPrice": 19752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15-ultra_16_.png",
+          "active": true,
+          "options": {
+            "color": "Bạc",
+            "storage": "512GB"
+          },
+          "salePrice": 25990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-15",
+      "name": "Xiaomi 15 5G 12GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 15 5G 12GB 256GB Xiaomi 15 sở hữu màn hình CrystalRes AMOLED 6.36 inch, độ phân giải 1200 x 2670 pixels, hỗ trợ 68 tỷ màu, công nghệ HDR10+ và tốc độ làm mới 120Hz. Máy sử dụng chip Qualcomm Snapdragon® 8 Elite siêu mạnh mẽ, RAM 12GB, bộ nhớ trong 256GB cùng pin 5240mAh. Bên cạnh đó, điện thoại Mi 15 còn hỗ trợ sạc nhanh 90W, camera sau gồm 3 ống kính 50MP, camera trước 32MP.",
+      "price": 24540000,
+      "salePrice": 16990000,
+      "costPrice": 12912400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_97__1_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_96__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_25_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_11_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_2_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_3_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_5_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_15_-_4_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_19_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_24_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_13_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_10_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_8_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_9_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.36 inches",
+        "display_tech": "CrystalRes AMOLED",
+        "camera": "Camera chính Leica: 50MP, ƒ/1.62, OIS, Tiêu cự tương đương 23mmCamera tele Leica: 50MP, ƒ/2.0, OISCamera góc siêu rộng Leica: 50MP, ƒ/2.2, 115°",
+        "camera_front": "Camera trước: 32MP, ƒ/2.0, 90°, Tiêu cự 21mm",
+        "cpu": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "nfc": "Có",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "battery": "5240mAh",
+        "os": "Xiaomi HyperOS 2",
+        "weight": "191g",
+        "gpu": "Adreno™ GPU"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.36 inches",
+        "Công nghệ màn hình": "CrystalRes AMOLED",
+        "Camera sau": "Camera chính Leica: 50MP, ƒ/1.62, OIS, Tiêu cự tương đương 23mmCamera tele Leica: 50MP, ƒ/2.0, OISCamera góc siêu rộng Leica: 50MP, ƒ/2.2, 115°",
+        "Camera trước": "Camera trước: 32MP, ƒ/2.0, 90°, Tiêu cự 21mm",
+        "Chipset": "Snapdragon 8 Elite (Tiến trình sản xuất 3nm)",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "5240mAh",
+        "Thẻ SIM": "Sim kép (nano-Sim và e-Sim) - Hỗ trợ 2 e-Sim",
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Độ phân giải màn hình": "2670 x 1200 pixels",
+        "Tính năng màn hình": "Độ sáng 3200 nitsTự động tinh chỉnh tần số quét 1-120Hz Tốc độ phản hồi cảm ứng lên đến 300HzHỗ trợ 68 tỷ màuDải màu DCI-P3Hỗ trợ Dolby Vision, HDR10+, HDR10Độ sáng DCCông nghệ cảm ứng ướt",
+        "Loại CPU": "2 x Lõi Prime, tốc độ tối đa 4,32GHz6 x Lõi hiệu suất, lên đến 3,53GHz",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 15 Ultra 5G 16GB 512GB": "25.990.000đ",
+        "Xiaomi 15 5G 12GB 256GB": "16.990.000đ",
+        "Xiaomi 15 Ultra 5G 16GB 1TB": "27.990.000đ",
+        "Tiêu chí": "Xiaomi 15",
+        "Màu sắc": "Đen - Trắng - Xanh lá - Xanh dương",
+        "Trọng lượng": "191g",
+        "Màn hình": "1.5K 6.36 inch OLED",
+        "CPU": "Qualcomm Snapdragon® 8 Elite",
+        "GPU": "Adreno™ GPU",
+        "RAM": "12GB LPDDR5X",
+        "Bộ nhớ": "256GB UFS 4.0",
+        "Camera": "50MP, f/1.6, 23mm (chính) 50MP, f/2.0, 60mm (telephoto), OIS, zoom quang học 3x 50MP, f/2.2, 14mm, 115˚ (ultrawide)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "U46SOO-NHLA-256GB",
+          "price": 24540000,
+          "costPrice": 12912400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_97__1_2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 16990000
+        },
+        {
+          "sku": "U46SOO-RANG-256GB",
+          "price": 24540000,
+          "costPrice": 12912400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_96__3.png",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "256GB"
+          },
+          "salePrice": 16990000
+        },
+        {
+          "sku": "U46SOO-DEN-256GB",
+          "price": 24540000,
+          "costPrice": 12912400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-15_25_.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 16990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-15c-8gb-256gb",
+      "name": "Xiaomi Redmi 15C 8GB 256GB NFC",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Mua Điện thoại Xiaomi Redmi 15C 8GB 256GB NFC chính hãng giá rẻ - Thu cũ đổi mới, bảo hành 12 tháng, đổi mới 30 ngày, trả góp 0%. Mua ngay Xiaomi Redmi 15C 8GB 256GB NFC tại đây.",
+      "price": 5690000,
+      "salePrice": 5090000,
+      "costPrice": 3868400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-2_1_4.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-4_1_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-3_1_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-41_1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15c-8gb-256gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15c-8gb-256gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15c-8gb-256gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15c-8gb-256gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-15c-8gb-256gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-40_1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_427320357_1_2_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-42_1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-2_1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-1_1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c_1_3.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "MediaTek Helio G81-Ultra",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Mali-G52 MC2",
+        "screen": "6.9 inches",
+        "display_tech": "LCD",
+        "camera": "50MP, Ống kính -5P, f/1.8",
+        "camera_front": "8MP f/2.0",
+        "battery": "6000mAh",
+        "network": "4G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Chipset": "MediaTek Helio G81-Ultra",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "Octa-core (Cortex-A75 + Cortex-A55), tốc độ tối đa 2.0GHz",
+        "GPU": "Mali-G52 MC2",
+        "Kích thước màn hình": "6.9 inches",
+        "Công nghệ màn hình": "LCD",
+        "Độ phân giải màn hình": "1600 x 720 pixels (HD+)",
+        "Tính năng màn hình": "Độ sáng 660 nits810 nits (HBM)Tỉ lệ tương phản 1200:1Cảm ứng 240HzĐạt chứng nhận TÜV Rheinland: Giảm ánh sáng xanh, Không nhấp nháy, Thân thiện nhịp sinh họcHỗ trợ DC Dimming giảm nhấp nháy",
+        "Camera sau": "50MP, Ống kính -5P, f/1.8",
+        "Camera trước": "8MP f/2.0",
+        "Pin": "6000mAh",
+        "Hỗ trợ mạng": "4G",
+        "Thẻ SIM": "2 SIM (Nano-SIM)",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "10/2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "ADQ6Z8-DEN-256GB",
+          "price": 5690000,
+          "costPrice": 3868400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-2_1_4.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 5090000
+        },
+        {
+          "sku": "ADQ6Z8-UONG-256GB",
+          "price": 5690000,
+          "costPrice": 3868400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-4_1_4.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          },
+          "salePrice": 5090000
+        },
+        {
+          "sku": "ADQ6Z8-NHLA-256GB",
+          "price": 5690000,
+          "costPrice": 3868400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-xiaomi-redmi-15c-3_1_4.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 5090000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-poco-x7-pro-5g",
+      "name": "Xiaomi POCO X7 Pro 5G 12GB 256GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi POCO X7 Pro 5G 12GB 256GB Điện thoại POCO X7 Pro tích hợp vi xử lý Dimensity 8400-Ultra MediaTek tốc độ đến 3.25GHz, kèm theo RAM LPDDR5X, bộ nhớ chuẩn UFS 4.0 và pin 6000mAh. Hơn thế nữa, chiếc điện thoại này còn nổi bật với màn hình 6.67 inch công nghệ AMOLED CrystalRes. Ngoài ra, máy được thiết kế cải thiện với tính kháng nước và bụi chuẩn IP68.",
+      "price": 9990000,
+      "salePrice": 8490000,
+      "costPrice": 6452400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-02-18_13-52-56.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-poco-x7-pro-5g_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-poco-x7-pro-5g_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-poco-x7-pro-5g_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_poco_x7_pro_5g_12gb_256gb_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_poco_x7_pro_5g_12gb_256gb_-_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_poco_x7_pro_5g_12gb_256gb_-_4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_poco_x7_pro_5g_12gb_256gb_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi_poco_x7_pro_5g_12gb_256gb_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-poco-x7-pro-5g_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-poco-x7-pro-5g_3_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 14",
+        "cpu": "Dimensity 8400-Ultra",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Mali G615",
+        "screen": "6.67 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP",
+        "battery": "6000 mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Android 14",
+        "Chipset": "Dimensity 8400-Ultra",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "GPU": "Mali G615",
+        "Kích thước màn hình": "6.67 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1220 x 2712 pixels",
+        "Tính năng màn hình": "3200 nits, Tần số quét 120Hz, Dolby Vison",
+        "Camera sau": "50MP",
+        "Pin": "6000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 SIM (Nano-SIM)",
+        "Công nghệ NFC": "Có",
+        "Thông số": "Xiaomi POCO X7 Pro 5G 12GB 256GB",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi POCO X7 Pro 5G 12GB 256GB": "8.490.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "DMFQBQ-DEN-256GB",
+          "price": 9990000,
+          "costPrice": 6452400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/h/photo_2025-02-18_13-52-56.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 8490000
+        },
+        {
+          "sku": "DMFQBQ-NHLA-256GB",
+          "price": 9990000,
+          "costPrice": 6452400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-poco-x7-pro-5g_2.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 8490000
+        },
+        {
+          "sku": "DMFQBQ-VANG-256GB",
+          "price": 9990000,
+          "costPrice": 6452400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-poco-x7-pro-5g_1.png",
+          "active": true,
+          "options": {
+            "color": "Vàng",
+            "storage": "256GB"
+          },
+          "salePrice": 8490000
+        }
+      ]
+    }
+  ]
+}

@@ -1,2 +1,0 @@
-slug,name,category_slug,brand_slug,description,price,sale_price,cost_price,image_url,images,status,active,warranty_period,warranty_policy,specs_json,tags
-iphone-demo-16,iPhone Demo 16,iphone,apple,Smartphone demo,24990000,23990000,18000000,https://picsum.photos/seed/ip16/600/600,https://picsum.photos/seed/ip16-2/600/600,PUBLISHED,true,12,Bảo hành 12 tháng,"{""battery"":""4000mAh""}",hot|new

@@ -1,0 +1,2116 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:05:17.102Z",
+  "note": "Scraped 25 sản phẩm — danh mục \"Laptop\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "acer",
+      "name": "Acer",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/acer-240x50.png",
+      "description": "Acer — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "laptop"
+      ]
+    },
+    {
+      "slug": "asus",
+      "name": "ASUS",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/ASUS-240x50.png",
+      "description": "ASUS — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "laptop"
+      ]
+    },
+    {
+      "slug": "msi",
+      "name": "MSI",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/MSI-240x50.png",
+      "description": "MSI — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "laptop"
+      ]
+    },
+    {
+      "slug": "vivo",
+      "name": "vivo",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Vivo-240x50.png",
+      "description": "vivo — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "laptop"
+      ]
+    },
+    {
+      "slug": "dell",
+      "name": "Dell",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Dell-240x50.png",
+      "description": "Dell — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "laptop"
+      ]
+    },
+    {
+      "slug": "lenovo",
+      "name": "Lenovo",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/lenovo-240x50.png",
+      "description": "Lenovo — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "laptop"
+      ]
+    },
+    {
+      "slug": "hp",
+      "name": "HP",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/HP-240x50.png",
+      "description": "HP — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "laptop"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "laptop-acer-gaming-nitro-v-15-propanel-anv15-52-50va",
+      "name": "Laptop Acer Gaming Nitro ProPanel ANV15-52-50VA",
+      "categorySlug": "laptop",
+      "brandSlug": "acer",
+      "description": "Đặc điểm nổi bật Laptop Acer Gaming Nitro V 15 ProPanel ANV15-52-50VA đem đến trải nghiệm giải trí sống động, ấn tượng với màn hình ProPanel 180 Hz và độ phủ màu 100% sRGB. Máy trang bị vi xử lý Intel Core 5 processor 210H thế hệ mới cho hiệu năng mạnh mẽ. Ngoài ra, thiết bị còn trang bị RAM DDR5 tốc độ cao hỗ trợ đa nhiệm linh hoạt. Laptop Acer Gaming Nitro V 15 ProPanel ANV15-52-50VA - Trải nghiệm game mượt mà Laptop Acer Gaming Nitro V 15 ProPanel ANV15-52-50VA mang đến phong cách hiện đại cù",
+      "price": 29990000,
+      "salePrice": 27990000,
+      "costPrice": 21272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_31.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_975_17.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_976_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_977_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_acer_gaming_nitro_v_15_propanel_anv15-52-50va_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_30.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2__10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_1__1_18.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_3__10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__6_40_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__10_34_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__6_35_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__10_33_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__6_33_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_11__7_262_1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Độ sáng 300nitsĐộ phủ màu sRGB 100%Acer ComfyView LED-backlit TFT LCD 3 ms Overdrive Góc nhìn rộng",
+        "battery": "57 Wh 4-cell Li-ion batter, 135W 5.5PHY Adapter",
+        "os": "Windows 11 Home Single Language",
+        "cpu": "Intel Core 5 210H (8 lõi / 12 luồng, Efficient-core Max Turbo Frequency :3.6 GHz, Max Turbo Frequency : 4.8GHz, 12 MB Intel Smart Cache)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 6 GB GDDR6 VRAM, hỗ trợ 2560 NVIDIA CUDA Cores",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 5200 MHz",
+        "Số khe ram": "2 khe (1 x 16GB, nâng cấp tối đa 96GB)",
+        "Ổ cứng": "512GB PCIe NVMe SSD (Nâng cấp tối đa 4TB)",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Độ sáng 300nitsĐộ phủ màu sRGB 100%Acer ComfyView LED-backlit TFT LCD 3 ms Overdrive Góc nhìn rộng",
+        "Pin": "57 Wh 4-cell Li-ion batter, 135W 5.5PHY Adapter",
+        "Hệ điều hành": "Windows 11 Home Single Language",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "Intel Core 5 210H (8 lõi / 12 luồng, Efficient-core Max Turbo Frequency :3.6 GHz, Max Turbo Frequency : 4.8GHz, 12 MB Intel Smart Cache)",
+        "Cổng giao tiếp": "1x USB-C hỗ trợ USB 3.2 Gen 2 10Gbps, DP over USB-C, Thunderbolt 4 3x USB-A gồm 1 cổng USB 3.2 Gen 1 hỗ trợ sạc khi tắt máy + 2 cổng USB 3.2 Gen 1 1x HDMI 2.1 hỗ trợ HDCP 1x jack tai nghe 3.5 mm hỗ trợ mic 1x Ethernet RJ-45 1x DC-in"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "ODBZCX-DEN-0",
+          "price": 29990000,
+          "costPrice": 21272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_31.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 27990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-tuf-gaming-a15-fa506ncg-hn329w",
+      "name": "Laptop ASUS TUF Gaming A15 FA506NCG-HN329W",
+      "categorySlug": "laptop",
+      "brandSlug": "asus",
+      "description": "Đặc điểm nổi bật Laptop ASUS TUF Gaming A15 FA506NCG-HN329W là dòng laptop gaming bền bỉ nổi bật với thiết kế chuẩn quân đội MIL-STD-810H, mang lại độ cứng cáp ấn tượng. AMD Ryzen 7 8845HS và GeForce RTX 3050 đủ sức xử lý mượt game AAA và tác vụ đồ họa. Màn hình 15.6 inch Full HD 144Hz giảm thiểu hiện tượng mờ nhòe. Laptop ASUS TUF Gaming A15 FA506NCG-HN329W - Sức mạnh ổn định, độ bền chuẩn quân đội Trong phân khúc laptop gaming tầm trung, ASUS TUF Gaming nổi bật nhờ sự cân bằng giữa hiệu năng v",
+      "price": 37490000,
+      "salePrice": 27990000,
+      "costPrice": 21272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_70.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_9_14.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_tuf_gaming_a15_fa506ncg-hn329w_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_tuf_gaming_a15_fa506ncg-hn329w_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_tuf_gaming_a15_fa506ncg-hn329w_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_69.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_1__42.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_3__40.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_2__40.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_4__31.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_5__28.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_11__10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_12__10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_6__27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_7__28.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Độ sáng 250 nits Tỷ lệ tương phản: 1000:1 Độ phủ màu NTSC 45% / sRGB 62.5% / Adobe RGB 47.34% Màn hình chống chói Adaptive-Sync",
+        "os": "Windows 11 Home",
+        "cpu": "AMD Ryzen 7 8845HS 3.8GHz (24MB Cache, up to 5.1 GHz, 8 lõi, 16 luồng)",
+        "screen": "15.6 inches",
+        "battery": "48WHrs, 3S1P, 3-cell Li-ion"
+      },
+      "specsRaw": {
+        "Chip AI": "AMD XDNA NPU up to 16TOPS",
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 4GB GDDR6 AMD Radeon Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5-5600 SO-DIMM",
+        "Số khe ram": "2 khe (Nâng cấp tối đa 64GB)",
+        "Ổ cứng": "512GB PCIe 4.0 NVMe M.2 SSD (2 Khe cắm M.2 hỗ trợ cả SATA hoặc NVMe, tối đa 1TB)",
+        "Công nghệ màn hình": "Độ sáng 250 nits Tỷ lệ tương phản: 1000:1 Độ phủ màu NTSC 45% / sRGB 62.5% / Adobe RGB 47.34% Màn hình chống chói Adaptive-Sync",
+        "Hệ điều hành": "Windows 11 Home",
+        "Loại CPU": "AMD Ryzen 7 8845HS 3.8GHz (24MB Cache, up to 5.1 GHz, 8 lõi, 16 luồng)",
+        "Kích thước màn hình": "15.6 inches",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Pin": "48WHrs, 3S1P, 3-cell Li-ion",
+        "Cổng giao tiếp": "1x RJ45 (LAN) 1x USB-C 3.2 Gen 2 (10Gbps, hỗ trợ DisplayPort) 3x USB-A 3.2 Gen 1 (5Gbps) 1x HDMI 2.1 TMDS 1x jack tai nghe/micro 3.5mm Micro tích hợp (array)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9ZMTQF-DEN-0",
+          "price": 37490000,
+          "costPrice": 21272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_70.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 27990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-expertbook-p1-p1403cva-c5h16-63ws",
+      "name": "Laptop ASUS ExpertBook P1 P1403CVA-C5H16-63WS",
+      "categorySlug": "laptop",
+      "brandSlug": "asus",
+      "description": "Đặc điểm nổi bật Laptop ASUS ExpertBook P1 P1403CVA-C5H16-63WS sở hữu màn hình 14 inch kết hợp tấm nền IPS-level mang đến hình ảnh sắc nét, chân thực và góc nhìn rộng. Thiết bị được trang bị Intel Core 5 210H 2.2 GHz đảm bảo hiệu năng mượt mà. Laptop có khối lượng nhẹ 1,47 kg, lý tưởng cho người dùng cần đi lại nhiều. Laptop ASUS ExpertBook P1 P1403CVA-C5H16-63WS - Trải nghiệm vượt trội Asus ExpertBook là mẫu laptop thông minh mang đến cho người dùng trải nghiệm làm việc mượt mà và ổn định. Với ",
+      "price": 26990000,
+      "salePrice": 25090000,
+      "costPrice": 19068400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_28.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_42.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_expertbook_p1_p1403cva-c5h16-63ws_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_expertbook_p1_p1403cva-c5h16-63ws_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_expertbook_p1_p1403cva-c5h16-63ws_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_17.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_15.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_15.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_7__64.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__75.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_8__53.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_9__44.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "14 inches",
+        "display_tech": "Màn hình chống chóiĐộ phủ màu NTSC 45% Độ sáng 300nits",
+        "battery": "63WHrs, 3S1P, 3-cell Li-ion",
+        "os": "Windows 11 Home + Microsoft Office Home 2024 + Microsoft 365 Basic",
+        "cpu": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 SO-DIMM",
+        "Số khe ram": "Có thể nâng cấp; Cần tháo vỏ dưới/trên",
+        "Ổ cứng": "512GB SSD M.2 2280 NVMe PCIe 4.0 Khe mở rộng lưu trữ SSD",
+        "Kích thước màn hình": "14 inches",
+        "Công nghệ màn hình": "Màn hình chống chóiĐộ phủ màu NTSC 45% Độ sáng 300nits",
+        "Pin": "63WHrs, 3S1P, 3-cell Li-ion",
+        "Hệ điều hành": "Windows 11 Home + Microsoft Office Home 2024 + Microsoft 365 Basic",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)",
+        "Cổng giao tiếp": "2 x USB 3.2 Gen 1 Type-A 2 x USB 3.2 Gen 2 Type-C (hỗ trợ xuất hình & cấp nguồn) 1 x HDMI 1.4 1 x Jack tai nghe / micro 3.5 mm 1 x Cổng mạng RJ45 Gigabit Ethernet"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9HODEB-XAM-0",
+          "price": 26990000,
+          "costPrice": 19068400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_28.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 25090000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-msi-katana-15-b13vek-2440vn",
+      "name": "Laptop MSI Katana 15 B13VEK-2440VN",
+      "categorySlug": "laptop",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Laptop MSI Katana 15 B13VEK-2440VN được trang bị chip Core i7-13620H cùng card RTX 4050 6GB, mang lại hiệu năng ổn định cho gaming và đa nhiệm nặng. Máy vận hành mượt với RAM 16GB, SSD 1TB Gen4 cùng màn hình 15.6 inch 144Hz. Thiết kế tích hợp nhiều cổng kết nối giúp nâng cao trải nghiệm chơi game. Laptop MSI Katana 15 B13VEK-2440VN - Đồ họa mạnh mẽ, chiến game ổn định Chiếc laptop MSI Katana 15 này là lựa chọn dành cho những ai yêu thích sự bứt phá và khác biệt. Không dừng lại ở",
+      "price": 35490000,
+      "salePrice": 33990000,
+      "costPrice": 25832400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_1__4_62.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_katana_15_b13vek-2440vn_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_katana_15_b13vek-2440vn_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_katana_15_b13vek-2440vn_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_1__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_5__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_4__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_6__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_12__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_11__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_9__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_3__1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Độ phủ màu 45% NTSCMàn hình chống chói",
+        "battery": "3-cell, 53.5WHr",
+        "os": "Windows 11 Home",
+        "cpu": "Intel Core i7-13620H, 10 lõi (6 P-cores + 4 E-cores), 16 luồng, 24 MB Intel Smart Cache, Max Turbo Frequency 4.9 GHz"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 4050 với 194 AI TOPS, GDDR6 6GB Intel UHD Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 5200MHz",
+        "Số khe ram": "2 khe (2x 8GB, Hỗ trợ nâng cấp tối đa 64GB)",
+        "Ổ cứng": "1TB*1, 2x M.2 SSD slot (NVMe PCIe Gen4)",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Độ phủ màu 45% NTSCMàn hình chống chói",
+        "Pin": "3-cell, 53.5WHr",
+        "Hệ điều hành": "Windows 11 Home",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "Intel Core i7-13620H, 10 lõi (6 P-cores + 4 E-cores), 16 luồng, 24 MB Intel Smart Cache, Max Turbo Frequency 4.9 GHz",
+        "Cổng giao tiếp": "1 x USB-C (USB 3.2 Gen 1, DisplayPort) 2 x USB 3.2 Gen 1 Type-A 1 x USB 2.0 Type-A 1 x HDMI 2.1 (8K@60Hz / 4K@120Hz) 1 x RJ45 1 x Jack mic/tai nghe 3.5 mm"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "IS1OAX-DEN-0",
+          "price": 35490000,
+          "costPrice": 25832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_2.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 33990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-acer-gaming-aspire-7-a715-59g-59rd",
+      "name": "Laptop Acer Gaming Aspire 7 A715-59G-59RD",
+      "categorySlug": "laptop",
+      "brandSlug": "acer",
+      "description": "Đặc điểm nổi bật Laptop Acer Gaming Aspire 7 A715-59G-59RD trang bị Intel Core 5 210H mạnh mẽ cùng với RTX 3050 6GB, từ đó đáp ứng tốt cho nhu cầu cơ bản đến nâng cao. Sản phẩm sở hữu màn hình IPS 15.6 inch Full HD 144Hz đi kèm độ sáng 350 nits. Máy tích hợp RAM 16GB DDR4 cũng như SSD 512GB PCIe NVMe, vận hành ổn định. Laptop Acer Gaming Aspire 7 A715-59G-59RD - Hiệu suất mạnh, hầm hố Model laptop Acer Aspire 7 này phục vụ tốt cho những ai cần máy có hiệu năng mạnh để đáp ứng nhu cầu từ học tập,",
+      "price": 27990000,
+      "salePrice": 25990000,
+      "costPrice": 19752400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_3__89.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_1042.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_1043.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_1044.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_1045.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_3__88.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_1__1_105.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2__88.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_165.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_4__79.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_5__71.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_6__55.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_9__35.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_8__44.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_7__57.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Độ sáng 350 nits (chế độ HDR) Độ phủ màu 45% NTSC Acer ComfyView LED-backlit TFT LCD Tỷ lệ 16:9 Góc nhìn rộng lên đến 170° Thiết kế siêu mỏng",
+        "os": "Windows 11 Home Single Language",
+        "cpu": "Intel Core 5 210H (8 lõi / 12 luồng, 1.6 GHz - 4.8 GHz, 12 MB Intel Smart Cache)",
+        "screen": "15.6 inches",
+        "battery": "Pin Li-ion 3 cell 54.8Wh Sạc AC 150W"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 4GB GDDR6, supporting 2560 NVIDIA CUDA Cores",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR4 3200 MHz",
+        "Số khe ram": "2 khe (1 x 16GB, nâng cấp tối đa 32GB)",
+        "Ổ cứng": "512GB PCIe NVMe SSD (Nâng cấp tối đa 4TB)",
+        "Công nghệ màn hình": "Độ sáng 350 nits (chế độ HDR) Độ phủ màu 45% NTSC Acer ComfyView LED-backlit TFT LCD Tỷ lệ 16:9 Góc nhìn rộng lên đến 170° Thiết kế siêu mỏng",
+        "Hệ điều hành khi ra mắt": "Windows 11 Home Single Language",
+        "Loại CPU": "Intel Core 5 210H (8 lõi / 12 luồng, 1.6 GHz - 4.8 GHz, 12 MB Intel Smart Cache)",
+        "Kích thước màn hình": "15.6 inches",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Pin": "Pin Li-ion 3 cell 54.8Wh Sạc AC 150W",
+        "Cổng giao tiếp": "1x USB-C 3.2 Gen 2 (Hỗ trợ DisplayPort 2.1 qua dGPU và sạc USB) 1x USB-A 3.2 Gen 1 1x USB-A 2.0 1x Mini DisplayPort 1.4 1x HDMI 2.1 (hỗ trợ HDCP) 1x RJ-45 1x jack tai nghe/loa 3.5mm (hỗ trợ mic) 1x DC-in 1x đầu đọc microSD"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "FD6WX2-DEN-0",
+          "price": 27990000,
+          "costPrice": 19752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_3__89.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 25990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-msi-modern-15-f1mg-1225vn",
+      "name": "Laptop MSI Modern 15 F1MG-1225VN",
+      "categorySlug": "laptop",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Laptop MSI Modern 15 F1MG-1225 sử dụng CPU Intel® Core™ 5 120U tiên tiến, tạo nên nền tảng hiệu năng ổn định để xử lý đa dạng tác vụ thường nhật. Thiết bị có màn hình 15.6 inch, khá rộng để người dùng theo dõi nội dung thuận tiện. Với viên pin 46.8 Whrs, sản phẩm đủ sức chạy các phiên làm việc kéo dài. Laptop MSI Modern 15 F1MG-1225 - Nhẹ để mang theo, ổn để làm việc F1MG-1225 là model tiêu biểu thuộc dòng Modern 15, nổi bật với thiết kế tinh tế và gọn ",
+      "price": 21990000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_20.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_945_29.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_modern_15_f1mg-1225vn_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_modern_15_f1mg-1225vn_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_modern_15_f1mg-1225vn_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_19.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_1__1_11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_7_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_5__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_4__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_3__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_11_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_10_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Màn hình chống chói Độ phủ màu 45% NTSC",
+        "battery": "3-Cell (46.8 Whrs)",
+        "os": "Windows 11 Home Single Language 64-bit",
+        "cpu": "Intel Core 5 120U (10 lõi (2 P-cores + 8 E-cores), 12 luồng, 5.0 GHz)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR4-3200",
+        "Số khe ram": "2 khe (1 x 16GB, nâng cấp tối đa 64GB)",
+        "Ổ cứng": "512GB",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Màn hình chống chói Độ phủ màu 45% NTSC",
+        "Pin": "3-Cell (46.8 Whrs)",
+        "Hệ điều hành": "Windows 11 Home Single Language 64-bit",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "Intel Core 5 120U (10 lõi (2 P-cores + 8 E-cores), 12 luồng, 5.0 GHz)",
+        "Cổng giao tiếp": "1 x khe thẻ microSD 1 x RJ45 1 x USB-C (USB 3.2 Gen 2, DisplayPort, Power Delivery 3.0) 3 x USB 3.2 Gen 1 Type-A 1 x HDMI (4K@30Hz) 1 x Jack mic/tai nghe 3.5 mm"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3M6JST-XAM-0",
+          "price": 21990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_20.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-vivobook-go-15-e1504fa-bq340w",
+      "name": "Laptop ASUS Vivobook Go 15 E1504FA-BQ340W",
+      "categorySlug": "laptop",
+      "brandSlug": "vivo",
+      "description": "Đặc điểm nổi bật Laptop ASUS VivoBook Go 15 E1504FA-BQ340W sở hữu hiệu năng ổn định nhờ vi xử lý AMD Mendocino R5 tiên tiến kết hợp cùng bộ nhớ RAM 16GB LPDDR5 mới. Thiết bị có màn hình FHD IPS-level sắc nét và đạt chuẩn độ bền quân đội. Máy cung cấp khả năng lưu trữ ấn tượng với SSD 512GB cùng các cổng kết nối hiện đại. Laptop ASUS VivoBook Go 15 E1504FA-BQ340W - Mỏng nhẹ linh hoạt, phong cách trẻ trung Dòng máy tính xách tay ASUS VivoBook Go 15 này của ASUS hướng đến sự cân bằng giữa tính di đ",
+      "price": 19990000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_169.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_945_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_go_15_e1504fa-bq340w_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_go_15_e1504fa-bq340w_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_go_15_e1504fa-bq340w_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_168.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_91.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_108.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_100.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_75.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_82.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__132.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Độ sáng 250 nits Độ phủ màu 45% NTSC Màn hình chống chói TÜV Rheinland",
+        "os": "Windows 11 Home",
+        "cpu": "AMD Ryzen 5 40 (2.8 GHz - 4.3 GHz/ 4MB/ 4 lõi, 8 luồng)",
+        "screen": "15.6 inches",
+        "battery": "42WHrs, 3S1P, 3-cell Li-ion"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "AMD Radeon Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "LPDDR5 on board",
+        "Ổ cứng": "512GB M.2 NVMe PCIe 3.0 SSD",
+        "Công nghệ màn hình": "Độ sáng 250 nits Độ phủ màu 45% NTSC Màn hình chống chói TÜV Rheinland",
+        "Hệ điều hành khi ra mắt": "Windows 11 Home",
+        "Loại CPU": "AMD Ryzen 5 40 (2.8 GHz - 4.3 GHz/ 4MB/ 4 lõi, 8 luồng)",
+        "Kích thước màn hình": "15.6 inches",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Pin": "42WHrs, 3S1P, 3-cell Li-ion",
+        "Cổng giao tiếp": "1x USB-A 2.0 (480Mbps) 1x USB-A 3.2 Gen 1 (5Gbps) 1x USB-C 3.2 Gen 1 (5Gbps) 1x HDMI 1.4 1x jack tai nghe/mic 3.5mm 1x cổng nguồn DC-in"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "XX4I5P-BAC-0",
+          "price": 19990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_169.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-dell-14-dc14250-dc4c5375w1",
+      "name": "Laptop Dell 14 DC14250 DC4C5375W1 - Bảo hành 2 năm",
+      "categorySlug": "laptop",
+      "brandSlug": "dell",
+      "description": "Mua ngay Laptop Dell 14 DC14250 DC4C5375W1 giá rẻ - Hỗ trợ trả góp 0%, đổi mới 30 ngày, bảo hành chính hãng, giao hàng tận nơi miễn phí.",
+      "price": 31390000,
+      "salePrice": null,
+      "costPrice": 23856400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_7__49.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_945_1_21.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_14_dc14250_dc4c5375w1_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_14_dc14250_dc4c5375w1_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_14_dc14250_dc4c5375w1_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_7__48.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_8__36.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_150.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_9__29.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_4__71.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_3__80.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_5__62.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2__80.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_1__1_97.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Độ phủ màu 45% NTSC Độ sáng 300 nits Màn hình chống chói",
+        "os": "Windows 11 Home Single Language, Microsoft Office Home 2024 + Microsoft 365 Basic 1 year",
+        "cpu": "Intel Core 5 120U (10 lõi, up to 5.0 GHz)",
+        "screen": "14 inches",
+        "battery": "4-Cell Battery, 54WHr"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 5200 MT/s",
+        "Số khe ram": "2 khe rời (1 x 16 GB, tối đa 16GB)",
+        "Ổ cứng": "512GB M.2 PCIe NVMe (nâng cấp tối đa 1TB)",
+        "Công nghệ màn hình": "Độ phủ màu 45% NTSC Độ sáng 300 nits Màn hình chống chói",
+        "Hệ điều hành": "Windows 11 Home Single Language, Microsoft Office Home 2024 + Microsoft 365 Basic 1 year",
+        "Loại CPU": "Intel Core 5 120U (10 lõi, up to 5.0 GHz)",
+        "Kích thước màn hình": "14 inches",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (FullHD+)",
+        "Pin": "4-Cell Battery, 54WHr",
+        "Cổng giao tiếp": "1x đầu đọc thẻ SD (SD Card Reader) 1x jack tai nghe/micro toàn cầu 3.5mm (Global Headset Jack) 2x USB-A 3.2 Gen 1 1x USB-C 3.2 Gen 2 1x HDMI 1.4"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9AV234-BAC-0",
+          "price": 31390000,
+          "costPrice": 23856400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_7__49.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "laptop-lenovo-ideapad-slim-3-14iwc11-83rq002nvn",
+      "name": "Laptop Lenovo IdeaPad Slim 3 14IWC11 83RQ002NVN",
+      "categorySlug": "laptop",
+      "brandSlug": "lenovo",
+      "description": "Mua ngay Laptop Lenovo IdeaPad Slim 3 14IWC11 83RQ002NVN giá rẻ - Hỗ trợ trả góp 0%, đổi mới 30 ngày, bảo hành chính hãng, giao hàng tận nơi miễn phí.",
+      "price": 26490000,
+      "salePrice": 24190000,
+      "costPrice": 18384400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_1__1_94.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_945_1_20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_ideapad_slim_3_14iwc11_83rq002nvn_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_ideapad_slim_3_14iwc11_83rq002nvn_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_ideapad_slim_3_14iwc11_83rq002nvn_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_1__1_93.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_3__78.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_4__69.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2__78.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_2_147.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Độ sáng 400 nits Màn hình chống chói Độ phủ màu 45% NTSC",
+        "os": "Windows 11 Home Single Language, English",
+        "cpu": "Intel Core 5 320, 6C (2P + 4LPE) / 6T, Max Turbo up to 4.6Ghz, 6MB Intel Smart Cache",
+        "screen": "14 inches",
+        "battery": "50Wh, 65W Round Tip (3-pin)"
+      },
+      "specsRaw": {
+        "Chip AI": "Up to 16 TOPS",
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "SODIMM DDR5-5600",
+        "Số khe ram": "1 khe (Tối đa 32GB DDR5-5600)",
+        "Ổ cứng": "512GB SSD M.2 2242 PCIe 4.0x4 NVMe (Một ổ đĩa, SSD M.2 2242 dung lượng lên đến 1TB)",
+        "Công nghệ màn hình": "Độ sáng 400 nits Màn hình chống chói Độ phủ màu 45% NTSC",
+        "Hệ điều hành": "Windows 11 Home Single Language, English",
+        "Loại CPU": "Intel Core 5 320, 6C (2P + 4LPE) / 6T, Max Turbo up to 4.6Ghz, 6MB Intel Smart Cache",
+        "Kích thước màn hình": "14 inches",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Pin": "50Wh, 65W Round Tip (3-pin)",
+        "Cổng giao tiếp": "2x USB-A (USB 5Gbps) 1x USB-C (USB 5Gbps, hỗ trợ USB Power Delivery 45–65W và DisplayPort 1.2) 1x HDMI 1.4 1x jack tai nghe/micro 3.5mm (combo) 1x đầu đọc thẻ SD 1x cổng nguồn đầu tròn (Round Tip Power Connector)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "XN6IC0-XAM-0",
+          "price": 26490000,
+          "costPrice": 18384400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/_/x_m_1__1_94.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 24190000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-vivobook-s14-s3407ca-sf913w",
+      "name": "Laptop ASUS VivoBook S14 S3407CA-SF913W",
+      "categorySlug": "laptop",
+      "brandSlug": "vivo",
+      "description": "Đặc điểm nổi bật Laptop Asus Vivobook S14 S3407CA-SF913W được trang bị con chip Intel Core Ultra 5 225H cho khả năng xử lý ổn định cũng như hỗ trợ tác vụ AI hiệu quả. Máy sở hữu màn OLED 14-inch WUXGA đem đến hình ảnh rõ ràng sống động. Mẫu Asus Vivobook này còn có cổng kết nối đa dạng giúp sử dụng mượt mà, linh hoạt. Laptop Asus Vivobook S14 S3407CA-SF913W - Sức mạnh AI vượt trội, kiểu dáng gọn nhẹ Laptop Asus Vivobook S14 S3407CA-SF913W hướng đến những người cần một chiếc laptop cân bằng giữa ",
+      "price": 29990000,
+      "salePrice": 25790000,
+      "costPrice": 19600400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_881_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_s14_s3407ca-sf913w_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_s14_s3407ca-sf913w_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_s14_s3407ca-sf913w_-_3_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_7_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_8_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Độ sáng 300 nits Độ phủ màu 95% DCI-P3 Tỷ lệ tương phản 1.000.000:1 Giảm 70% ánh sáng xanh có hại Chứng nhận TÜV Rheinland",
+        "os": "Windows 11 Home",
+        "cpu": "Intel Core Ultra 5 225H 1.7 GHz (18MB Cache, up to 4.9 GHz, 14 lõi, 14 luồng)",
+        "screen": "14 inches",
+        "battery": "70WHrs, 4S1P, 4-cell Li-ion"
+      },
+      "specsRaw": {
+        "Chip AI": "Intel AI Boost NPU up to 13TOPS",
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 on board",
+        "Ổ cứng": "512GB M.2 NVMe PCIe 4.0 SSD",
+        "Công nghệ màn hình": "Độ sáng 300 nits Độ phủ màu 95% DCI-P3 Tỷ lệ tương phản 1.000.000:1 Giảm 70% ánh sáng xanh có hại Chứng nhận TÜV Rheinland",
+        "Hệ điều hành khi ra mắt": "Windows 11 Home",
+        "Loại CPU": "Intel Core Ultra 5 225H 1.7 GHz (18MB Cache, up to 4.9 GHz, 14 lõi, 14 luồng)",
+        "Kích thước màn hình": "14 inches",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Pin": "70WHrs, 4S1P, 4-cell Li-ion",
+        "Cổng giao tiếp": "2 x USB-A (USB 3.2 Gen 1, 5Gbps) 2 x USB-C (USB 3.2 Gen 1, 5Gbps, hỗ trợ Display / Power Delivery) 1 x HDMI 1.4 1 x Jack tai nghe/micro 3,5mm"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "YGORYF-XAM-0",
+          "price": 29990000,
+          "costPrice": 19600400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssscs_1.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 25790000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-msi-cyborg-15-a13uc-2082vn",
+      "name": "Laptop MSI Cyborg 15 A13UC-2082VN",
+      "categorySlug": "laptop",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Laptop MSI Cyborg 15 A13UC 2082VN được trang bị CPU i7-13620H processor kết hợp cùng card NVIDIA GeForce RTX 3050 Laptop GPU cho hiệu năng ấn tượng. Thiết kế máy cá tính, bền bỉ từ các vật liệu nhựa và kim loại cao cấp. Màn hình sử dụng tấm nền IPS-Level 15.6 inch 144Hz mang đến chất lượng hiển thị ấn tượng. Laptop MSI Cyborg 15 A13UC 2082VN xử lý uy lực, màn hình siêu mượt Chiếc Laptop MSI Cyborg 15 này được người sáng tạo nội dung, game thủ đánh giá cao. Mẫu laptop gaming đến ",
+      "price": 30690000,
+      "salePrice": 26490000,
+      "costPrice": 20132400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__9_27.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_7_126.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_cyborg_15_a13uc-2082vn_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_cyborg_15_a13uc-2082vn_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_msi_cyborg_15_a13uc-2082vn_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__9_26.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__9_23.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__11_33.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__6_19.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__10_18.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__10_17.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__6_16.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__6_17.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_11__7_252.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__8_218.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "battery": "3 Cells 53.5 Whrs",
+        "os": "Windows 11 Home",
+        "cpu": "Intel Core i7-13620H Gen 13th (10 lõi / 16 luồng, 24MB Cache)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 4GB Intel UHD Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 5600",
+        "Số khe ram": "2 khe (1 x 16GB, nâng tối đa 64GB)",
+        "Ổ cứng": "512GB NVMe PCIe Gen4 (Max 4TB)",
+        "Kích thước màn hình": "15.6 inches",
+        "Pin": "3 Cells 53.5 Whrs",
+        "Hệ điều hành": "Windows 11 Home",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "Intel Core i7-13620H Gen 13th (10 lõi / 16 luồng, 24MB Cache)",
+        "Cổng giao tiếp": "Type-C (USB3.2 Gen1 / DisplayPort) 2 x Type-A USB 3.2 Gen 1 1x HDMI 2.1 (4K @ 60Hz) Type-A USB 3.2 Gen 2"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QIQCB8-DEN-0",
+          "price": 30690000,
+          "costPrice": 20132400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__9_27.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 26490000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-vivobook-14-x1407ca-ly008w",
+      "name": "Laptop ASUS VivoBook 14 X1407CA-LY008W",
+      "categorySlug": "laptop",
+      "brandSlug": "vivo",
+      "description": "Đặc điểm nổi bật Laptop ASUS VivoBook 14 X1407CA-LY008W là mẫu máy tính sở hữu bộ vi xử lý Intel Core Ultra 5 Processor 225H tích hợp nhân NPU Intel AI Boost mạnh mẽ. RAM 16GB DDR5 cùng SSD 512GB giúp máy vận hành đa nhiệm ổn định. Màn hình 14 inch WUXGA 16:10 cùng độ bền đạt chuẩn quân đội Mỹ cho trải nghiệm bền bỉ. Laptop ASUS VivoBook 14 X1407CA-LY008W - Năng suất xử lý ấn tượng Mẫu laptop ASUS AI này hứa hẹn mang đến những trải nghiệm làm việc hiện đại cho người dùng văn phòng nhờ tích hợp n",
+      "price": 25990000,
+      "salePrice": 21390000,
+      "costPrice": 16256400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_26.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_30.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_14_x1407ca-ly008w_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_14_x1407ca-ly008w_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_14_x1407ca-ly008w_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_24_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_14_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_16_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_14_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_11_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_10_1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Màn hình chống chóiĐộ phủ màu 45% NTSCĐộ sáng 300nits",
+        "os": "Windows 11 Home",
+        "cpu": "Intel Core Ultra 5 225H 1.7 GHz (18MB Cache, up to 4.9 GHz, 14 lõi, 14 luồng)",
+        "screen": "14 inches",
+        "battery": "42WHrs, 3S1P, 3-cell Li-ion"
+      },
+      "specsRaw": {
+        "Chip AI": "Intel AI Boost NPU up to 13TOPS",
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 on board",
+        "Ổ cứng": "512GB M.2 NVMe PCIe 4.0 SSD",
+        "Công nghệ màn hình": "Màn hình chống chóiĐộ phủ màu 45% NTSCĐộ sáng 300nits",
+        "Hệ điều hành khi ra mắt": "Windows 11 Home",
+        "Loại CPU": "Intel Core Ultra 5 225H 1.7 GHz (18MB Cache, up to 4.9 GHz, 14 lõi, 14 luồng)",
+        "Kích thước màn hình": "14 inches",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Pin": "42WHrs, 3S1P, 3-cell Li-ion",
+        "Cổng giao tiếp": "2 x USB 3.2 Gen 1 Type-A (tốc độ truyền dữ liệu lên đến 5Gbps) 2 x USB 3.2 Gen 1 Type-C (hỗ trợ xuất hình ảnh và cấp nguồn, tốc độ lên đến 5Gbps) 1 x HDMI 1.4 1 x Jack tai nghe / micro 3.5mm (combo)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "XBTNK8-BAC-0",
+          "price": 25990000,
+          "costPrice": 16256400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_26.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 21390000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-hp-omnibook-5-ai-16-af1048tu-bz7q9pa",
+      "name": "Laptop HP Omnibook 5 AI 16-AF1048TU BZ7Q9PA",
+      "categorySlug": "laptop",
+      "brandSlug": "hp",
+      "description": "Đặc điểm nổi bật Laptop HP Omnibook 5 AI 16-AF1048TU BZ7Q9PA nổi bật với chip Intel Core Ultra 5 225U, kết hợp AI Boost cho hiệu suất xử lý vượt trội trong mọi tác vụ. Sản phẩm sở hữu màn hình 16 inch WUXGA IPS, mang lại trải nghiệm hình ảnh sắc nét, sống động. Cùng với đó là RAM 16 GB, đảm bảo khả năng đa nhiệm mượt mà cho cả công việc lẫn giải trí. Laptop HP Omnibook 5 AI 16-AF1048TU BZ7Q9PA - Hiệu suất tối ưu, thiết kế hiện đại HP Omnibook 5 AI 16-AF1048TU BZ7Q9PA sở hữu công nghệ tiên tiến k",
+      "price": 27190000,
+      "salePrice": 25990000,
+      "costPrice": 19752400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_21.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_744_1_42.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_hp_omnibook_5_ai_16-af1048tu_bz7q9pa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_hp_omnibook_5_ai_16-af1048tu_bz7q9pa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_hp_omnibook_5_ai_16-af1048tu_bz7q9pa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_18.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_18.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_16.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "16 inches",
+        "display_tech": "Màn hình chống chói",
+        "battery": "3 Cell Int (59.16Wh)",
+        "os": "Windows 11 Home Single Language 64-bit + Office Home 2024",
+        "cpu": "Intel Core Ultra 5 225U (12 lõi) - Max Turbo Frequency: 4. 80 GHz"
+      },
+      "specsRaw": {
+        "Chip AI": "Intel AI Boost",
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "LPDDR5X/ 7467MHz Onboard",
+        "Ổ cứng": "512GB SSD PCIe (M.2 2280)",
+        "Kích thước màn hình": "16 inches",
+        "Công nghệ màn hình": "Màn hình chống chói",
+        "Pin": "3 Cell Int (59.16Wh)",
+        "Hệ điều hành": "Windows 11 Home Single Language 64-bit + Office Home 2024",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Loại CPU": "Intel Core Ultra 5 225U (12 lõi) - Max Turbo Frequency: 4. 80 GHz",
+        "Cổng giao tiếp": "1 x USB 3.2 Gen 1 Type-A 1 x USB 3.2 Gen 2 Type-A 2 x USB 3.2 Gen 2 Type-C (hỗ trợ Power Delivery/DisplayPort/HP Sleep and Charge) 1 x HDMI 1 x Giắc cắm âm thanh kết hợp tai nghe/micrô"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "RNHDB5-BAC-0",
+          "price": 27190000,
+          "costPrice": 19752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_21.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 25990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-acer-aspire-lite-16-gen-2-al16-52p-76du",
+      "name": "Laptop Acer Aspire Lite 16 GEN 2 AL16-52P-76DU",
+      "categorySlug": "laptop",
+      "brandSlug": "acer",
+      "description": "Đặc điểm nổi bật Laptop Acer Aspire Lite 16 GEN 2 AL16-52P-76DU sở hữu màn hình 16 inch Full HD+, RAM 16GB DDR5 tốc độ 4800MHz (hỗ trợ nâng cấp tối đa 64GB). Chiếc laptop Acer Aspire được trang bị Intel Core i7-1355U, card đồ họa Intel Iris Xe, cùng loa Stereo và webcam Full HD. Thiết kế gọn nhẹ 1.7kg, tích hợp đầy đủ cổng kết nối giúp sử dụng linh hoạt. Laptop Acer Aspire Lite 16 GEN 2 AL16-52P-76DU - Hỗ trợ tốt làm việc và giải trí Laptop Acer Aspire Lite 16 GEN 2 AL16-52P-76DU mang đến sự cân",
+      "price": 19990000,
+      "salePrice": 19290000,
+      "costPrice": 14660400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_235.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_659_1__12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_acer_aspire_lite_16_gen_2_al16-52p-76du_-_1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_acer_aspire_lite_16_gen_2_al16-52p-76du_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_acer_aspire_lite_16_gen_2_al16-52p-76du_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_234.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__4_210.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__4_219.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__2_213.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__4_174.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_11__5_177.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__5_170.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__6_159.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "16 inches",
+        "display_tech": "LED BacklitAcer ComfyViewĐộ phủ màu 45% NTSCĐộ sáng 300nits",
+        "battery": "3-cell Li-ion, 58 Wh",
+        "os": "Windows 11 Home SL",
+        "cpu": "Intel Core i7 Raptor Lake - 1355U (10 lõi / 12 luồng, 1.7GHz, Turbo Boost 5.0 GHz)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "Intel Iris Xe Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 4800 MHz",
+        "Số khe ram": "2 khe (1 khe 16 GB + 1 khe rời, nâng cấp tối đa 64 GB)",
+        "Ổ cứng": "512 GB SSD NVMe PCIe (Có thể tháo ra, lắp thanh khác tối đa 2 TB)",
+        "Kích thước màn hình": "16 inches",
+        "Công nghệ màn hình": "LED BacklitAcer ComfyViewĐộ phủ màu 45% NTSCĐộ sáng 300nits",
+        "Pin": "3-cell Li-ion, 58 Wh",
+        "Hệ điều hành": "Windows 11 Home SL",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (FullHD+)",
+        "Loại CPU": "Intel Core i7 Raptor Lake - 1355U (10 lõi / 12 luồng, 1.7GHz, Turbo Boost 5.0 GHz)",
+        "Cổng giao tiếp": "1x Jack tai nghe 3.5 mm 3 x USB 3.2 1x HDMI 1 x USB Type-C (hỗ trợ USB, Power Delivery và DisplayPort)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "BNBRSV-BAC-0",
+          "price": 19990000,
+          "costPrice": 14660400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_235.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 19290000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-acer-gaming-aspire-7-a715-59g-57tu",
+      "name": "Laptop Acer Gaming Aspire 7 A715-59G-57TU",
+      "categorySlug": "laptop",
+      "brandSlug": "acer",
+      "description": "Đặc điểm nổi bật Laptop Acer Gaming Aspire 7 A715-59G-57TU được trang bị vi xử lý Intel Core i5-12450H cân trơn tru mọi tác vụ từ văn phòng cho đến chơi game nặng. Hỗ trợ cho vi xử lý là card đồ hoạ RTX 3050 6GB giúp chơi game nặng mượt mà hơn. Người dùng có thể mở nhiều nội dung hiển thị cùng một lúc với màn hình lên đến 15.6 inch. Laptop Acer Gaming Aspire 7 A715-59G-57TU – Chiến binh hiệu năng Laptop Acer Gaming Aspire 7 A715-59G-57TU là mẫu laptop hội tụ đủ các yếu tố về hiệu năng mạnh mẽ, t",
+      "price": 23990000,
+      "salePrice": 22490000,
+      "costPrice": 17092400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__9_27.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_1__4_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_acer_gaming_aspire_7_a715-59g-57tu_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_acer_gaming_aspire_7_a715-59g-57tu_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_acer_gaming_aspire_7_a715-59g-57tu_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__8_27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__9_26.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_211.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__8_27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_16__6_165.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_17__8_116.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_18__7_19.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_19__5_18.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Độ sáng 250nitsĐộ phủ màu 45% NTSCAcer ComfyView Màn hình LCD TFT có đèn nền LED Góc nhìn rộng lên đến 170 độ Thiết kế siêu mỏng",
+        "battery": "Pin Li-ion 3 cell 54,8Wh Bộ đổi nguồn AC 150W",
+        "os": "Windows 11 Home Single Language",
+        "cpu": "Intel Core i5-12450H (8 lõi / 12 luồng, Tần số Turbo tối đa của E-core : 3.3 GHz, Tần số Turbo tối đa của P-core : 4.4 GHz, 12 MB Intel Smart Cache)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 6 GB, supporting 2560 NVIDIA CUDA Cores",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR4 3200 MT/s",
+        "Số khe ram": "2 khe (Máy nguyên bản 16GB)",
+        "Ổ cứng": "512GB PCIe NVMe SSD (Nâng cấp tối đa 4TB)",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Độ sáng 250nitsĐộ phủ màu 45% NTSCAcer ComfyView Màn hình LCD TFT có đèn nền LED Góc nhìn rộng lên đến 170 độ Thiết kế siêu mỏng",
+        "Pin": "Pin Li-ion 3 cell 54,8Wh Bộ đổi nguồn AC 150W",
+        "Hệ điều hành": "Windows 11 Home Single Language",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "Intel Core i5-12450H (8 lõi / 12 luồng, Tần số Turbo tối đa của E-core : 3.3 GHz, Tần số Turbo tối đa của P-core : 4.4 GHz, 12 MB Intel Smart Cache)",
+        "Cổng giao tiếp": "2x cổng USB Type-C 2x cổng USB Standard-A Cổng HDMI 2.1 có hỗ trợ HDCP Cổng Ethernet (RJ-45) Giắc cắm 3.5 mm, hỗ trợ tai nghe có micrô tích hợp Giắc cắm DC-in cho bộ đổi nguồn AC Đầu đọc thẻ microSD Mini DisplayPort 1.4"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "LDBS4T-DEN-0",
+          "price": 23990000,
+          "costPrice": 17092400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__9_27.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 22490000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-lenovo-loq-essential-15arp10e-83s0000dvn",
+      "name": "Laptop Lenovo LOQ Essential 15ARP10E 83S0000DVN",
+      "categorySlug": "laptop",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Laptop Lenovo LOQ Essential 15ARP10E 83S0000DVN trang bị vi xử lý AMD Ryzen 5 7535HS hỗ trợ tính toán và phân bổ tài nguyên hệ thống diễn ra hiệu quả. Card đồ họa tiên tiến hỗ trợ hiển thị hình ảnh sắc nét và duy trì hiệu suất ổn định. Màn hình 15.6 inch 144Hz tối ưu hóa trải nghiệm thị giác với độ chi tiết cao. Laptop Lenovo LOQ Essential 15ARP10E 83S0000DVN - AI LA1 thông minh, card đồ họa mạnh mẽ Dòng Lenovo LOQ này gây ấn tượng bởi công nghệ vận hành thông minh và khả năng h",
+      "price": 31990000,
+      "salePrice": 24690000,
+      "costPrice": 18764400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_13__3.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_9_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_loq_essential_15arp10e_83s0000dvn_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_loq_essential_15arp10e_83s0000dvn_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_loq_essential_15arp10e_83s0000dvn_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_13__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_1__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_4__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_3__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_8__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_6__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_7__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_2__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_4__1_1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Độ sáng 300 nits Màn hình chống chói Độ phủ màu 100% sRGB AMD FreeSync",
+        "battery": "57.5Wh, 135W Slim Tip (3-pin)",
+        "os": "Windows 11 Home Single Language, English",
+        "cpu": "AMD Ryzen 5 7535HS (6 lõi / 12 luồng, 3.3 / 4.55GHz, 3MB L2 / 16MB L3)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 6GB GDDR6, Boost Clock 990MHz, TGP 65W",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "SODIMM DDR5-4800",
+        "Số khe ram": "2 khe (1 x 16GB)",
+        "Ổ cứng": "512GB SSD M.2 2242 PCIe 4.0x4 NVMe (Tối đa hai ổ đĩa, 2 ổ SSD M.2, SSD M.2 dung lượng tối đa 1TB mỗi ổ)",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Độ sáng 300 nits Màn hình chống chói Độ phủ màu 100% sRGB AMD FreeSync",
+        "Pin": "57.5Wh, 135W Slim Tip (3-pin)",
+        "Hệ điều hành": "Windows 11 Home Single Language, English",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "AMD Ryzen 5 7535HS (6 lõi / 12 luồng, 3.3 / 4.55GHz, 3MB L2 / 16MB L3)",
+        "Cổng giao tiếp": "2 x USB-A (USB 3.2 Gen 1, 5Gbps) 1 x USB-C (USB 5Gbps, PD 65–100W) 1 x HDMI 2.1 (tối đa 8K/60Hz) 1 x Jack tai nghe/mic 3.5 mm 1 x Ethernet (RJ-45) 1 x Khe đọc thẻ 1 x Cổng nguồn Slim tip"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3H3W9K-XAM-0",
+          "price": 31990000,
+          "costPrice": 18764400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_13__3.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 24690000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-lenovo-ideapad-slim-5-14imh10-83v6001hvn",
+      "name": "Laptop Lenovo IdeaPad Slim 5 14IMH10 83V6001HVN",
+      "categorySlug": "laptop",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Laptop Lenovo IdeaPad Slim 5 14IMH10 83V6001HVN tích hợp Intel Core Ultra 5 135H (14 nhân, 18 luồng) với Intel Arc Graphics, tạo nên hiệu năng ổn định. Máy sở hữu RAM 32GB cùng với SSD 512GB, đáp ứng tốt nhu cầu đa nhiệm. Sản phẩm còn có màn hình 14 inch với độ phủ màu 100% DCI-P3, hiển thị sống động. Laptop Lenovo IdeaPad Slim 5 14IMH10 83V6001HVN - Cấu hình ổn định, hiển thị sắc nét Dòng laptop Lenovo IdeaPad Slim 5 mang đến sức mạnh vận hành mượt mà, đáp ứng tốt nhu cầu hằng ",
+      "price": 30990000,
+      "salePrice": 29490000,
+      "costPrice": 22412400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__127.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_894_1__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_ideapad_slim_5_14imh10_83v6001hvn_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_ideapad_slim_5_14imh10_83v6001hvn_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_ideapad_slim_5_14imh10_83v6001hvn_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__125_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_86_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_157_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_95_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_101_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_70_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_77_1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "32GB",
+        "display_tech": "Độ sáng 400nits Độ phủ màu 100% DCI-P3 DisplayHDR True Black 500",
+        "os": "Windows 11 Home Single Language, English",
+        "cpu": "Intel Core Ultra 5 135H, 14 lõi (4P + 8E + 2LPE) / 18 luồng, Max Turbo up to 4.6GHz, 18MB Intel Smart Cache",
+        "screen": "14 inches",
+        "battery": "60Wh, 65W USB-C Slim (2-pin, Wall-mount)"
+      },
+      "specsRaw": {
+        "Chip AI": "Intel AI Boost, up to 11 TOPS",
+        "Loại card đồ họa": "Intel Arc Graphics",
+        "Dung lượng RAM": "32GB",
+        "Loại RAM": "DDR5-5600",
+        "Số khe ram": "2 khe (2 x 16GB, nâng cấp tối đa 32GB DDR5-5600)",
+        "Ổ cứng": "512GB SSD M.2 2242 PCIe 4.0x4 NVMe (Hỗ trợ tối đa hai ổ đĩa, 2 ổ SSD M.2, tối đa 1TB)",
+        "Công nghệ màn hình": "Độ sáng 400nits Độ phủ màu 100% DCI-P3 DisplayHDR True Black 500",
+        "Hệ điều hành": "Windows 11 Home Single Language, English",
+        "Loại CPU": "Intel Core Ultra 5 135H, 14 lõi (4P + 8E + 2LPE) / 18 luồng, Max Turbo up to 4.6GHz, 18MB Intel Smart Cache",
+        "Kích thước màn hình": "14 inches",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Pin": "60Wh, 65W USB-C Slim (2-pin, Wall-mount)",
+        "Cổng giao tiếp": "1 x USB-A (USB 5Gbps), luôn bật 1 x USB-A (USB 5Gbps) 2 x USB-C (USB 10Gbps), hỗ trợ USB PD 3.0 và DisplayPort 1.4 1 x HDMI 2.1, hỗ trợ độ phân giải lên đến 4K/60Hz 1 x Giắc cắm tai nghe/micro kết hợp (3.5mm) 1 x Đầu đọc thẻ microSD"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "0202CY-XAM-0",
+          "price": 30990000,
+          "costPrice": 22412400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__127.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 29490000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-tuf-gaming-f16-fx607vj-rl034w",
+      "name": "Laptop ASUS TUF Gaming F16 FX607VJ-RL034W",
+      "categorySlug": "laptop",
+      "brandSlug": "asus",
+      "description": "Đặc điểm nổi bật Laptop ASUS TUF Gaming F16 FX607VJ-RL034W tối ưu trải nghiệm gaming với chip Intel Core 5 210H, kết hợp cùng màn hình 16\" FHD+ 144Hz và 16 GB RAM. Sản phẩm tích hợp hệ thống Wi-Fi 6 và cổng USB-C đa năng. Đặc biệt, mẫu laptop có thiết kế Mecha Gray bền bỉ cùng bàn phím RGB với phím Copilot tiện lợi. Laptop ASUS TUF Gaming F16 FX607VJ-RL034W - Màn hình 144Hz, thiết kế hầm hố ASUS TUF Gaming F16 FX607VJ-RL034W là lựa chọn laptop phù hợp cho game thủ tầm trung với cấu hình mạnh mẽ.",
+      "price": 24490000,
+      "salePrice": 22990000,
+      "costPrice": 17472400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__4_147.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_7_36.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_tuf_gaming_f16_fx607vj-rl034w_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_tuf_gaming_f16_fx607vj-rl034w_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_tuf_gaming_f16_fx607vj-rl034w_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__4_146.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__4_162.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__9_133.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__9_92.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15_43.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__9_183.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__7_129.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_177.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__5_154.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_137.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "16 inches",
+        "display_tech": "Độ sáng 300nitsĐộ phủ màu NTSC 45%Màn hình chống chói",
+        "battery": "56WHrs, 4S1P, 4-cell Li-ion",
+        "os": "Windows 11 Home",
+        "cpu": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 6GB GDDR6Intel Iris Xe Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR4-3200 SO-DIMM",
+        "Số khe ram": "2 khe (1 x 16GB, nâng cấp tối đa 64GB)",
+        "Ổ cứng": "512GB PCIe 4.0 NVMe M.2 SSD (2 Khe cắm M.2 hỗ trợ SATA hoặc NVMe, tối đa 2TB)",
+        "Kích thước màn hình": "16 inches",
+        "Công nghệ màn hình": "Độ sáng 300nitsĐộ phủ màu NTSC 45%Màn hình chống chói",
+        "Pin": "56WHrs, 4S1P, 4-cell Li-ion",
+        "Hệ điều hành": "Windows 11 Home",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Loại CPU": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)",
+        "Cổng giao tiếp": "1x Cổng LAN RJ45 1x USB 3.2 Gen 2 Type-C hỗ trợ DisplayPort / cấp nguồn (tốc độ dữ liệu lên đến 10Gbps) 2x USB 3.2 Gen 1 Type-A (tốc độ dữ liệu lên đến 5Gbps) 1x HDMI 2.1 FRL1x 3.5mm Combo Audio Jack"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "FIJ8DL-XAM-0",
+          "price": 24490000,
+          "costPrice": 17472400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__4_147.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 22990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-dell-14-dc14250-dc4c5386w",
+      "name": "Laptop Dell 14 DC14250 DC4C5386W",
+      "categorySlug": "laptop",
+      "brandSlug": "dell",
+      "description": "Đặc điểm nổi bật Laptop Dell 14 DC14250 DC4C5386W cung cấp hiệu năng ổn định, phù hợp cho cả công việc và giải trí, khi được trang bị CPU Intel Core 5 120U và 16GB RAM. Mẫu laptop này mang tới trải nghiệm hiển thị cân bằng với màn hình 14 inch FHD+. Với trọng lượng khoảng 1.67kg, người dùng còn tiện lợi mang laptop theo mọi nơi. Laptop Dell 14 DC14250 DC4C5386W - Bền bỉ cho công việc và giải trí Laptop Dell DC14250 DC4C5386W sở hữu cấu hình ổn định, giúp người dùng có thể sử dụng tốt cho các nhu",
+      "price": 30990000,
+      "salePrice": 27990000,
+      "costPrice": 21272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_126.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_945_33.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_14_dc14250_dc4c5386w_-_1_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_14_dc14250_dc4c5386w_-_2_1_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_14_dc14250_dc4c5386w_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_125.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__97.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__90.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__95.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__59.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_7__50.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_8__40.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__84.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__71.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "14 inches",
+        "display_tech": "Độ phủ màu 45% NTSC Độ sáng 300 nit Màn hình chống chói",
+        "battery": "Li-ion 4-Cell Battery, 54WHr",
+        "os": "Windows 11 Home, Single Language English + Office Home & Student 2024, 1 năm sử dụng Microsoft 365 Basic (miễn phí 1 năm, hết phải gia hạn)",
+        "cpu": "Intel Core 5 120U (Up to 5Ghz, 12Mb Cache)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5",
+        "Số khe ram": "1 khe Onboard + 1 khe trống nâng cấp tối đa 32GB",
+        "Ổ cứng": "512GB M.2 PCIe NVMe (nâng cấp tối đa 1TB)",
+        "Kích thước màn hình": "14 inches",
+        "Công nghệ màn hình": "Độ phủ màu 45% NTSC Độ sáng 300 nit Màn hình chống chói",
+        "Pin": "Li-ion 4-Cell Battery, 54WHr",
+        "Hệ điều hành": "Windows 11 Home, Single Language English + Office Home & Student 2024, 1 năm sử dụng Microsoft 365 Basic (miễn phí 1 năm, hết phải gia hạn)",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (FullHD+)",
+        "Loại CPU": "Intel Core 5 120U (Up to 5Ghz, 12Mb Cache)",
+        "Cổng giao tiếp": "1 x Khe đọc thẻ SD 1 x Jack tai nghe/micrô 3.5 mm 1 x USB 3.2 Gen 1 Type-A 1 x HDMI 1.4 1 x USB 3.2 Gen 2 Type-C 1 x USB 3.2 Gen 1 Type-A"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "PU0DA3-BAC-0",
+          "price": 30990000,
+          "costPrice": 21272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_126.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 27990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-gaming-v16-v3607vu-rp343w",
+      "name": "Laptop ASUS Gaming V16 V3607VU-RP343W",
+      "categorySlug": "laptop",
+      "brandSlug": "asus",
+      "description": "Đặc điểm nổi bật Laptop ASUS Gaming V16 V3607VU-RP343W trang bị Intel Core 5-210H kết hợp với NVIDIA GeForce RTX 4050 cùng hệ thống tản nhiệt ASUS IceCool mạnh mẽ. Máy có RAM 16GB DDR5 và SSD 512GB PCIe 4.0, đảm bảo khả năng xử lý nhanh và linh hoạt. Bên cạnh đó, màn hình 16 inch WUXGA tần số quét 144Hz, mang lại trải nghiệm mượt mà. Laptop ASUS Gaming V16 V3607VU-RP343W – Hiệu năng đỉnh cao cùng AI thông minh Laptop ASUS Gaming V16 V3607VU-RP343W mang đến sức mạnh mạnh mẽ cho mọi trải nghiệm ch",
+      "price": 26990000,
+      "salePrice": 25990000,
+      "costPrice": 19752400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_230.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_7_57.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_gaming_v16_v3607vu-rp343w_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_gaming_v16_v3607vu-rp343w_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_gaming_v16_v3607vu-rp343w_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_229.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__9_229.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__4_206.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__6_184.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__4_183.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__5_175.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_167.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Màn hình chống chóiĐộ sáng 300nits Độ phủ màu 45% NTSC",
+        "os": "Windows 11 Home",
+        "cpu": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)",
+        "screen": "16 inches",
+        "battery": "63WHrs, 3S1P, 3-cell Li-ion"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 4050 6GB GDDR6 (194 AI TOPs)Intel Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5",
+        "Số khe ram": "Có thể nâng cấp; Cần tháo vỏ dưới/trên",
+        "Ổ cứng": "512GB M.2 NVMe PCIe 4.0 SSD",
+        "Công nghệ màn hình": "Màn hình chống chóiĐộ sáng 300nits Độ phủ màu 45% NTSC",
+        "Hệ điều hành khi ra mắt": "Windows 11 Home",
+        "Loại CPU": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)",
+        "Kích thước màn hình": "16 inches",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Pin": "63WHrs, 3S1P, 3-cell Li-ion",
+        "Cổng giao tiếp": "1x USB 3.2 Gen 1 Type-C hỗ trợ hiển thị/sạc (5Gbps) 2x USB 3.2 Gen 1 Type-A (5Gbps) 1x HDMI 2.1 FRL 1x Giắc cắm âm thanh kết hợp 3.5mm 1x DC-in"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "89C334-DEN-0",
+          "price": 26990000,
+          "costPrice": 19752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_230.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 25990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-lenovo-loq-15arp10e-83s0007avn",
+      "name": "Laptop Lenovo LOQ 15ARP10E 83S0007AVN",
+      "categorySlug": "laptop",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Laptop Lenovo LOQ 15ARP10E 83S0007AVN sử dụng CPU AMD Ryzen 7 7735HS, cung cấp đạt hiệu suất ổn định khi xử lý các tác vụ nặng và đáp ứng nhu cầu làm việc. Model sở hữu GPU RTX 3050 6GB GDDR6 hỗ trợ dựng hình ổn định. Máy dùng RAM DDR5-4800 giúp người dùng đa nhiệm tốt trong nhiều bối cảnh. Laptop Lenovo LOQ 15ARP10E 83S0007AVN – Hiệu suất tối ưu trong tầm giá Lenovo LOQ 15ARP10E 83S0007AVN mang tới trải nghiệm sử dụng cân bằng giữa hiệu năng, thiết kế và khả năng làm việc liên ",
+      "price": 30490000,
+      "salePrice": 27990000,
+      "costPrice": 21272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_13__9.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_8_16.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_loq_15arp10e_83s0007avn_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_loq_15arp10e_83s0007avn_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_lenovo_loq_15arp10e_83s0007avn_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_13__8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_40.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__39.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_8__22.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__35.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__36.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_7__23.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__33.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_9__20.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Độ sáng 300nits Màn hình chống chóiĐộ phủ màu 100% sRGB FreeSync",
+        "battery": "57.5Wh, 135W Slim Tip (3-pin)",
+        "os": "Windows 11 Home Single Language, English",
+        "cpu": "AMD Ryzen 7 7735HS (8 lõi / 16 luồng, 3.2 / 4.75GHz, 4MB L2 / 16MB L3)"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 3050 6GB GDDR6, Boost Clock 990MHz, TGP 65W",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "SODIMM DDR5-4800",
+        "Số khe ram": "2 khe (1 x 16GB)",
+        "Ổ cứng": "512GB SSD M.2 2242 PCIe 4.0x4 NVMe (Tối đa hai ổ đĩa, 2x SSD M.2 dung lượng tối đa 1TB mỗi ổ)",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Độ sáng 300nits Màn hình chống chóiĐộ phủ màu 100% sRGB FreeSync",
+        "Pin": "57.5Wh, 135W Slim Tip (3-pin)",
+        "Hệ điều hành": "Windows 11 Home Single Language, English",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "AMD Ryzen 7 7735HS (8 lõi / 16 luồng, 3.2 / 4.75GHz, 4MB L2 / 16MB L3)",
+        "Cổng giao tiếp": "2x USB-A (USB 5Gbps / USB 3.2 Gen 1) 1x USB-C (USB 5Gbps / USB 3.2 Gen 1, hỗ trợ PD 3.0) 1x HDMI 2.1 (hỗ trợ tối đa 8K/60Hz) 1x jack tai nghe/mic 3.5mm 1x cổng Ethernet RJ-45 1x khe đọc thẻ 1x cổng nguồn"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "NWQU7P-XAM-0",
+          "price": 30490000,
+          "costPrice": 21272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_13__9.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 27990000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-acer-gaming-nitro-v-15-propanel-anv15-41-r7cr",
+      "name": "Laptop Acer Gaming Nitro ProPanel ANV15-41-R7CR",
+      "categorySlug": "laptop",
+      "brandSlug": "acer",
+      "description": "Đặc điểm nổi bật Laptop Acer Gaming Nitro V 15 ProPanel ANV15-41-R7CR sở hữu cấu hình mạnh mẽ với CPU AMD Ryzen 5 7535HS và card đồ họa NVIDIA GeForce RTX 4050 6GB GDDR6. Màn hình 15.6 inch FHD IPS và tần số quét 180Hz đem lại hình ảnh sắc nét. Ổ cứng 512GB PCIe NVMe SSD và RAM 16GB DDR5, với hệ thống tản nhiệt Dual-fan đảm bảo hiệu suất tối ưu. Laptop Acer Gaming Nitro V 15 ProPanel ANV15-41-R7CR - Sức mạnh vượt trội từ CPU và GPU Laptop Acer Gaming Nitro V 15 ProPanel được thiết kế để đáp ứng ",
+      "price": 32990000,
+      "salePrice": 27490000,
+      "costPrice": 20892400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_31_6.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_973.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_974.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_975.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_gaming_acer_nitro_v_15_propanel_anv15-41-r7cr_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_26.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_2__13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_1__14.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_3__13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_4__12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_5__12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_6__11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_8__10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_7__13.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Độ sáng 300nitsĐộ phủ màu sRGB 100%Màn hình LCD TFT đèn nền LED Acer ComfyViewGóc nhìn rộng",
+        "battery": "57Whr 4-cell Li-ion Battery, 135W AC Adapter",
+        "os": "Windows 11 Home Single Language",
+        "cpu": "AMD Ryzen 5 7535HS (6 lõi / 12 luồng / Base Clock: 3.3 GHz / Max. Boost Clock: Up to 4.55 GHz / 3MB L2 Cache; 16MB L3 Cache)"
+      },
+      "specsRaw": {
+        "Chip AI": "194 TOPs",
+        "Loại card đồ họa": "NVIDIA GeForce RTX 4050 6 GB GDDR6 VRAM, hỗ trợ 2560 NVIDIA CUDA Cores",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 Up to 4800 MT/s",
+        "Số khe ram": "2 khe (1 x 16GB, nâng cấp tối đa 96GB)",
+        "Ổ cứng": "512GB PCIe NVMe SSD (Tối đa 4TB PCIe Gen4 NVMe SSD​)",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Độ sáng 300nitsĐộ phủ màu sRGB 100%Màn hình LCD TFT đèn nền LED Acer ComfyViewGóc nhìn rộng",
+        "Pin": "57Whr 4-cell Li-ion Battery, 135W AC Adapter",
+        "Hệ điều hành": "Windows 11 Home Single Language",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "AMD Ryzen 5 7535HS (6 lõi / 12 luồng / Base Clock: 3.3 GHz / Max. Boost Clock: Up to 4.55 GHz / 3MB L2 Cache; 16MB L3 Cache)",
+        "Cổng giao tiếp": "1x USB Type-C 3x USB Chuẩn A 1x Cổng HDMI 2.1 hỗ trợ HDCP 1x Giắc cắm tai nghe/loa 3.5 mm, hỗ trợ tai nghe có micro tích hợp 1x Cổng Ethernet (RJ-45) 1x Giắc cắm DC-in cho bộ đổi nguồn AC"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QIPO3Z-DEN-0",
+          "price": 32990000,
+          "costPrice": 20892400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/sssxs_31_6.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 27490000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-asus-vivobook-s14-s3407va-ly146w",
+      "name": "Laptop ASUS Vivobook S14 S3407VA-LY146W",
+      "categorySlug": "laptop",
+      "brandSlug": "vivo",
+      "description": "Đặc điểm nổi bật Laptop ASUS Vivobook S14 S3407VA-LY146W trang bị vi xử lý Intel Core 5 210H, RAM 16GB DDR5, SSD 512GB cùng với màn hình 14 inch WUXGA sắc nét, chân thực. Máy có thiết kế mỏng nhẹ chỉ 1.4kg, vỏ kim loại bền bỉ, pin lớn 70Wh cho thời gian sử dụng dài. Hỗ trợ Wi-Fi 6, camera IR nhận diện khuôn mặt và bàn phím có đèn nền tích hợp phím Copilot. Laptop ASUS Vivobook S14 S3407VA-LY146W – Hiệu năng vượt trội, tích hợp AI Laptop ASUS Vivobook S14 S3407VA-LY146W là mẫu laptop ASUS Vivoboo",
+      "price": 22990000,
+      "salePrice": 19690000,
+      "costPrice": 14964400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_53.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_744_1_47.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_s14_s3407va-ly146w_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_s14_s3407va-ly146w_-_2_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_asus_vivobook_s14_s3407va-ly146w_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_52.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_48.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__5_40.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_50.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_65.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_52.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__8_40.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__9_144.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__8_160.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__8_134.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "display_tech": "Màn hình chống chóiĐộ sáng 300nitsĐộ phủ màu 45% NTSC",
+        "os": "Windows 11 Home",
+        "cpu": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)",
+        "screen": "14 inches",
+        "battery": "70WHrs, 4S1P, 4-cell Li-ion"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "Intel UHD Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5",
+        "Số khe ram": "2 khe (8GB DDR5 Onboard + 8GB DDR5 SO-DIMM)",
+        "Ổ cứng": "512GB M.2 NVMe PCIe 4.0 SSD",
+        "Công nghệ màn hình": "Màn hình chống chóiĐộ sáng 300nitsĐộ phủ màu 45% NTSC",
+        "Hệ điều hành khi ra mắt": "Windows 11 Home",
+        "Loại CPU": "Intel Core 5 210H 2.2 GHz (12MB Cache, up to 4.8 GHz, 8 lõi, 12 luồng)",
+        "Kích thước màn hình": "14 inches",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (WUXGA)",
+        "Pin": "70WHrs, 4S1P, 4-cell Li-ion",
+        "Cổng giao tiếp": "2x USB 3.2 Gen 1 Type-A (tốc độ dữ liệu lên đến 5Gbps) 2x USB 3.2 Gen 1 Type-C hỗ trợ hiển thị/cấp nguồn (tốc độ dữ liệu lên đến 5Gbps) 1x HDMI 1.4 1x Giắc cắm âm thanh kết hợp 3.5mm"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "SKYOMS-BAC-0",
+          "price": 22990000,
+          "costPrice": 14964400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_53.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 19690000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-hp-victus-15-fa2451tx-d17wppa",
+      "name": "Laptop HP Victus 15-FA2451TX D17WPPA",
+      "categorySlug": "laptop",
+      "brandSlug": "hp",
+      "description": "Đặc điểm nổi bật Laptop HP Victus 15-FA2451TX D17WPPA được trang bị Intel i5-13420H cùng với card rời NVIDIA GeForce RTX 4050, mang đến hiệu năng mạnh mẽ ấn tượng. Máy có 16GB RAM và SSD 512GB giúp tăng tốc độ xử lý dữ liệu và đa nhiệm. Ngoài ra, thiết bị sở hữu màn hình 15.6 inch Full HD IPS tần số quét 144Hz. Laptop HP Victus 15-FA2451TX D17WPPA – Cấu hình mạnh mẽ cho gaming Laptop HP Victus 15-FA2451TX D17WPPA được thiết kế cho người dùng cần một thiết bị có hiệu năng cao để xử lý nhiều tác v",
+      "price": 31190000,
+      "salePrice": 27490000,
+      "costPrice": 20892400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_117.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_d_i_8_50.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_hp_victus_15-fa2451tx_d17wppa_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_hp_victus_15-fa2451tx_d17wppa_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_hp_victus_15-fa2451tx_d17wppa_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_116.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_60.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_64.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_57.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_51.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "16GB",
+        "screen": "15.6 inches",
+        "display_tech": "Màn hình chống chóiViền mỏng",
+        "battery": "4 Cell Int (70.07Wh)",
+        "os": "Windows 11 Home Single Language 64-bit",
+        "cpu": "Intel Core i5-13420H (8 lõi) - Max Turbo Frequency: 4.60 GHz"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "NVIDIA GeForce RTX 4050 (6GB of GDDR6 SDRAM, Bus Width: 96- bit) Intel UHD Graphics",
+        "Dung lượng RAM": "16GB",
+        "Loại RAM": "DDR5 5200MHz",
+        "Số khe ram": "2 khe (1 x 16GB)",
+        "Ổ cứng": "512GB SSD1 PCIe (M.2 2280)",
+        "Kích thước màn hình": "15.6 inches",
+        "Công nghệ màn hình": "Màn hình chống chóiViền mỏng",
+        "Pin": "4 Cell Int (70.07Wh)",
+        "Hệ điều hành": "Windows 11 Home Single Language 64-bit",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Loại CPU": "Intel Core i5-13420H (8 lõi) - Max Turbo Frequency: 4.60 GHz",
+        "Cổng giao tiếp": "1 x USB 3.2 Gen 1 Type-C (Power Delivery, DisplayPort, HP Sleep and Charge) 2 x USB 3.2 Gen 1 Type-A (1 cổng hỗ trợ HP Sleep and Charge) 1 x HDMI 1 x RJ45 (LAN) 1 x Jack tai nghe/mic 3.5 mm 1 x khe SSD2 PCIe (M.2 2280)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "YMYFTT-DEN-0",
+          "price": 31190000,
+          "costPrice": 20892400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_117.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 27490000
+        }
+      ]
+    },
+    {
+      "slug": "laptop-dell-pro-15-essential-pv15250-vkvkd",
+      "name": "Laptop Dell Pro 15 Essential PV15250 VKVKD - Nhập khẩu chính hãng",
+      "categorySlug": "laptop",
+      "brandSlug": "dell",
+      "description": "Đặc điểm nổi bật Laptop Dell Pro 15 Essential PV15250 VKVKD có vi xử lý Intel Core 3-100U và bộ nhớ RAM 8GB DDR5 giúp xử lý mượt mà các tác vụ văn phòng hàng ngày. Dung lượng SSD 512GB hỗ trợ thiết bị lưu trữ thông tin ổn định và hiệu quả. Với trọng lượng chỉ 1.90kg, máy cực kỳ linh hoạt để người dùng mang theo đến bất cứ đâu. Laptop Dell Pro 15 Essential PV15250 VKVKD - Hiệu năng ổn định, hiển thị mượt mà Laptop Dell 15 mang đến sự cân bằng giữa hiệu năng ổn định và thiết kế bền bỉ, giúp người ",
+      "price": 14990000,
+      "salePrice": 14490000,
+      "costPrice": 11012400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__1_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_50.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_pro_15_essential_pv15250_vkvkd_-_1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_pro_15_essential_pv15250_vkvkd_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/a/laptop_dell_pro_15_essential_pv15250_vkvkd_-_3_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__84.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_7__72.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_8__57.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_9__48.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_11__1_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_10__41.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "ram": "8GB",
+        "display_tech": "Độ phủ màu 45% NTSC",
+        "os": "Tặng kèm Phần mềm Win 11 Pro 64 BIT cho 1 máy vĩnh viễn (Máy nguyên bản FreeOS)",
+        "cpu": "Intel Core 3 -100U",
+        "screen": "15.6 inches",
+        "battery": "3-cell, 41 Wh hoặc 4-cell, 54 Wh"
+      },
+      "specsRaw": {
+        "Loại card đồ họa": "Intel Graphics",
+        "Dung lượng RAM": "8GB",
+        "Loại RAM": "DDR5",
+        "Số khe ram": "2 khe (Nâng cấp tối đa 16GB)",
+        "Ổ cứng": "512GB SSD",
+        "Công nghệ màn hình": "Độ phủ màu 45% NTSC",
+        "Hệ điều hành khi ra mắt": "Tặng kèm Phần mềm Win 11 Pro 64 BIT cho 1 máy vĩnh viễn (Máy nguyên bản FreeOS)",
+        "Loại CPU": "Intel Core 3 -100U",
+        "Kích thước màn hình": "15.6 inches",
+        "Độ phân giải màn hình": "1920 x 1080 pixels (FullHD)",
+        "Pin": "3-cell, 41 Wh hoặc 4-cell, 54 Wh",
+        "Cổng giao tiếp": "Khe thẻ SD / USB 2.0 / Cổng âm thanh đa năng / HDMI 1.4 / USB 3.2 Gen 1 / USB Type-C (USB 3.2 Gen 1)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "1OISPO-NGDEN-0",
+          "price": 14990000,
+          "costPrice": 11012400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__1_1.png",
+          "active": true,
+          "options": {
+            "color": "Nhập khẩu chính hãng-Đen"
+          },
+          "salePrice": 14490000
+        }
+      ]
+    }
+  ]
+}

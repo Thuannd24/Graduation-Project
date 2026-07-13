@@ -20,6 +20,9 @@ public class ProductVariantDto {
     @DecimalMin(value = "0.01", message = "Giá biến thể phải lớn hơn 0")
     private BigDecimal price;
 
+    @DecimalMin(value = "0.0", message = "Giá khuyến mãi biến thể không được phép âm")
+    private BigDecimal salePrice;
+
     @DecimalMin(value = "0.0", message = "Giá vốn biến thể không được phép âm")
     private BigDecimal costPrice;
     private BigDecimal weight;

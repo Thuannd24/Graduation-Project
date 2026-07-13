@@ -1,0 +1,853 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:02:34.209Z",
+  "note": "Scraped 6 sản phẩm — danh mục \"Máy ảnh, Máy quay\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "sony",
+      "name": "Sony",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/SONY-240x50.png",
+      "description": "Sony — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "may-anh"
+      ]
+    },
+    {
+      "slug": "fujifilm",
+      "name": "Fujifilm",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Fujifilm-240x50.png",
+      "description": "Fujifilm — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "may-anh"
+      ]
+    },
+    {
+      "slug": "canon",
+      "name": "Canon",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Canon-240x50.png",
+      "description": "Canon — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "may-anh"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "may-anh-sony-zv-e10",
+      "name": "Máy ảnh Vlog Compact Sony ZV-E10",
+      "categorySlug": "may-anh",
+      "brandSlug": "sony",
+      "description": "Đặc điểm nổi bật Sony ZV-E10 vẫn vững ngôi vương là chiếc máy ảnh \"quốc dân\" được săn đón nhất hiện nay, bất chấp thị trường vlogging năm 2026 đã đón nhận hàng loạt \"tân binh\" mạnh mẽ. Nhờ mức giá dễ tiếp cận cùng hệ sinh thái ống kính E-mount đồ sộ, ZV-E10 giúp bạn nâng cấp chất lượng hình ảnh từ smartphone lên tầm chuyên nghiệp với hiệu ứng xóa phông nghệ thuật chỉ trong tích tắc. Nếu bạn đang tìm kiếm chiếc máy ảnh Sony sở hữu hiệu năng quay phim vượt trội, Sony ZV-E10 chính là lựa chọn không",
+      "price": 16990000,
+      "salePrice": 13690000,
+      "costPrice": 10404400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1776244297290.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_939_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/1/2/1234x652_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/1/_/1_370_6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/2/_/2_355_6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/3/_/3_340_5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/4/_/4_296_7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/5/_/5_249_8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/s/as01_21.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/s/as01_1__20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/s/as01_2__20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/s/as01_3__20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/s/as01_4__14.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/s/as01_5__14.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/s/as01_6__12.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "Cảm ứng, xoay lật đa hướng",
+        "connectivity": "Wi-Fi, Bluetooth, USB-C"
+      },
+      "specsRaw": {
+        "Hãng sản xuất": "Sony",
+        "Loại máy ảnh": "Mirrorless (không gương lật)",
+        "Loại cảm biến": "Exmor CMOS (ASP-C) 23.5 x 15.6mm",
+        "Loại ống kính": "-",
+        "Khẩu độ": "-",
+        "Tiêu cự": "-",
+        "Chế độ lấy nét": "Automatic (A), Continuous-Servo AF (C), Direct Manual Focus (DMF), Manual Focus (M), Single-Servo AF (S)",
+        "Kích thước ảnh": "Lến đến 6000 x 4000",
+        "Màn trập": "Màn trập cơ / Màn trập điện tử Tốc độ màn trập: [Ảnh tĩnh] 1/4000 đến 30 giây, Chế độ phơi sáng Bulb, [Phim] 1/4000 đến 1/4 (1/3 bước), tối đa 1/60 ở chế độ TỰ ĐỘNG (tối đa 1/30 ở chế độ Tốc độ trập chậm tự động)",
+        "Đặc điểm": "Thông số chi tiết Sony ZV-E10",
+        "Cảm biến": "APS-C Exmor CMOS 24.2 MP",
+        "Hệ thống lấy nét": "Fast Hybrid AF (425 điểm)",
+        "Khả năng quay phim": "4K/30p (Không crop)",
+        "Màn hình": "Cảm ứng, xoay lật đa hướng",
+        "Âm thanh": "Mic 3 đầu hướng + Lọc gió",
+        "Kết nối": "Wi-Fi, Bluetooth, USB-C",
+        "Thông số": "Máy ảnh Vlog Compact Sony ZV-E10"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "NVWXMI-DEN-0",
+          "price": 16990000,
+          "costPrice": 10404400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1776244297290.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 13690000
+        }
+      ]
+    },
+    {
+      "slug": "may-anh-fujifilm-instax-camera-mini-12",
+      "name": "Máy ảnh Fujifilm Instax Mini 12 chụp ảnh lấy liền",
+      "categorySlug": "may-anh",
+      "brandSlug": "fujifilm",
+      "description": "Đặc điểm nổi bật Máy ảnh Fujifilm Instax Mini 12 sẽ tiếp nối các thế hệ tiền nhiệm để trở thành thiết bị chụp hình lấy ngay rất đáng sở hữu trong thời gian tới. Ngoài việc được thừa hưởng thiết kế trẻ trung, dễ sử dụng, Fujifilm Instax Camera Mini 12 sẽ còn có nhiều cải tiến nhằm mang tới các bức hình chất lượng hơn. Vì sao nên mua máy ảnh Fujifilm Instax Mini 12? Máy ảnh chụp lấy liền Fujifilm Instax Mini 12 là một sự lựa chọn tuyệt vời cho những người yêu thích chụp ảnh và muốn trải nghiệm nga",
+      "price": 2390000,
+      "salePrice": 2290000,
+      "costPrice": 1740400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-trang.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-xanhla.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-hong.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-tim.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-xd.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-ksp.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__9_79.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__11_64.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12_4__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12_3__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12_2__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12_7__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12_6__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12_5__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12_10__1.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Hãng sản xuất": "Fujifilm",
+        "Loại máy ảnh": "Chụp in liền",
+        "Loại ống kính": "Kính ngắm quang học",
+        "Tiêu cự": "f = 60 mm",
+        "Chế độ lấy nét": "Fixed Focus",
+        "Màn trập": "Màn trập điện tử được lập trình 1/2 đến 1/250 giâyĐồng bộ chậm khi ánh sáng yếu",
+        "Tên sản phẩm": "Giá bán",
+        "Máy ảnh Fujifilm Instax Mini 12 chụp ảnh lấy liền": "2.290.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A9A055-TRANG-0",
+          "price": 2390000,
+          "costPrice": 1740400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-trang.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 2290000
+        },
+        {
+          "sku": "A9A055-ANHLA-1",
+          "price": 2390000,
+          "costPrice": 1740400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-xanhla.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá"
+          },
+          "salePrice": 2290000
+        },
+        {
+          "sku": "A9A055-HONG-2",
+          "price": 2390000,
+          "costPrice": 1740400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-hong.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 2290000
+        },
+        {
+          "sku": "A9A055-TIM-3",
+          "price": 2390000,
+          "costPrice": 1740400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-tim.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 2290000
+        },
+        {
+          "sku": "A9A055-DUONG-4",
+          "price": 2390000,
+          "costPrice": 1740400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-camera-mini-12-xd.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 2290000
+        }
+      ]
+    },
+    {
+      "slug": "may-anh-film-kodak-i60",
+      "name": "Máy ảnh Film Kodak I60",
+      "categorySlug": "may-anh",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Máy ảnh Film Kodak i60 sở hữu ống kính cố định cùng thiết kế compact giúp người dùng dễ dàng ghi lại những tấm hình mang đậm màu sắc vintage cổ điển. Dòng film 35mm hỗ trợ quá trình tráng ảnh và quét ảnh diễn ra thuận lợi. Đèn flash tích hợp trên thân máy cho khả năng xử lý tốt các tình huống chụp trong điều kiện thiếu sáng. Máy ảnh Film Kodak i60 - Thiết kế retro cùng ống kính cố định tiện lợi Máy ảnh Kodak này sở hữu nhiều ưu điểm về khả năng vận hành giúp tối ưu hóa trải nghi",
+      "price": 1790000,
+      "salePrice": 1521500,
+      "costPrice": 1156340,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_3__22.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_1__36.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_47.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_2__27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_nh_11_56.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_1__35.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_3__21.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_2__26.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_16__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_46.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_7__12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_4__21.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_10__7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_12__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_6__18.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Hãng sản xuất": "Kodak",
+        "Loại máy ảnh": "Máy ảnh phim",
+        "Loại ống kính": "Tiêu cự cố định 31mm Kính ngắm quang học",
+        "Khẩu độ": "f/10 (cố định)",
+        "Màn trập": "Khoảng 1/120s – 1/125s (cố định)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "X77WL4-VANG-0",
+          "price": 1790000,
+          "costPrice": 1156340,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_3__22.png",
+          "active": true,
+          "options": {
+            "color": "Vàng"
+          },
+          "salePrice": 1521500
+        },
+        {
+          "sku": "X77WL4-DUONG-1",
+          "price": 1790000,
+          "costPrice": 1156340,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_1__36.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 1521500
+        },
+        {
+          "sku": "X77WL4-HONG-2",
+          "price": 1790000,
+          "costPrice": 1156340,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_47.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 1521500
+        },
+        {
+          "sku": "X77WL4-BE-3",
+          "price": 1790000,
+          "costPrice": 1156340,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/ma_2__27.png",
+          "active": true,
+          "options": {
+            "color": "Be"
+          },
+          "salePrice": 1521500
+        }
+      ]
+    },
+    {
+      "slug": "may-anh-fujifilm-instax-mini-evo",
+      "name": "Máy ảnh Fujifilm Instax Mini Evo",
+      "categorySlug": "may-anh",
+      "brandSlug": "fujifilm",
+      "description": "Đặc điểm nổi bật Fujifilm Instax mini Evo là chiếc máy chụp ảnh công nghệ mới cho phép bạn thỏa sức sáng tạo ra các mẫu ảnh đẹp xuất sắc. Bạn có thể chụp và in ngay lập tức ảnh từ máy ảnh hoặc in trực tiếp từ điện thoại thông minh nếu muốn. Hãy xem thông tin sau đây để hiểu rõ hơn về chiếc máy ảnh Fujifilm mà bạn đang muốn sở hữu này! Thiết kế của Instax Mini Evo - Cổ điển pha lẫn nét hiện đại Về thiết kế, vẻ đẹp của Instax mini Evo là sự kết hợp hài hòa giữa vẻ cổ điển của lớp da và sự hiện đại",
+      "price": 5990000,
+      "salePrice": 5400000,
+      "costPrice": 4104000,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_233.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-den.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-nau.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-0.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-9.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-5.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Hãng sản xuất": "Fujifilm",
+        "Loại máy ảnh": "Chụp in liền",
+        "Loại cảm biến": "CMOS 1/5 inch",
+        "Khẩu độ": "f/2",
+        "Tiêu cự": "28mm",
+        "Kích thước ảnh": "Film Instax Mini 62 x 46 mm",
+        "Màn trập": "1/4 - 1/8000 giây"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "I1I4D8-HONG-0",
+          "price": 5990000,
+          "costPrice": 4104000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_233.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 5400000
+        },
+        {
+          "sku": "I1I4D8-DEN-1",
+          "price": 5990000,
+          "costPrice": 4104000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-den.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 5400000
+        },
+        {
+          "sku": "I1I4D8-NAU-2",
+          "price": 5990000,
+          "costPrice": 4104000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-anh-fujifilm-instax-mini-evo-nau.png",
+          "active": true,
+          "options": {
+            "color": "Nâu"
+          },
+          "salePrice": 5400000
+        }
+      ]
+    },
+    {
+      "slug": "may-anh-canon-eos-r10-body",
+      "name": "Máy ảnh Canon EOS R10 (Body)",
+      "categorySlug": "may-anh",
+      "brandSlug": "canon",
+      "description": "Đặc điểm nổi bật Máy ảnh Canon EOS R10 Body sử dụng cảm biến APS-C độ phân giải 24.2 Megapixel, ngàm ống kính RF và tốc độ chụp liên tiếp tối đa 23 khung hình/giây, máy có dải ISO rộng 100 - 32000. Sản phẩm máy ảnh kỹ thuật số Canon hỗ trợ quay video UHD 4K, có màn hình cảm ứng 3.0 inch và hỗ trợ kết nối Wi-Fi, Bluetooth.",
+      "price": 25450000,
+      "salePrice": 19990000,
+      "costPrice": 15192400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__6_52.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_nh_4_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_nh_canon_eos_r10_body_-_1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_nh_canon_eos_r10_body_-_2_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_nh_canon_eos_r10_body_-_3_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__6_51.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__5_51.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__6_48.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__7_44.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_84.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__2_75.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Hãng sản xuất": "Canon",
+        "Loại máy ảnh": "Mirrorless (không gương lật)",
+        "Loại cảm biến": "Cảm biến CMOS APS-C 24.2MP",
+        "Chế độ lấy nét": "Continuous-Servo AF, Manual Focus, Single-Servo AF",
+        "Loại kính ngắm": "Kính ngắm điện tử OLED 2.36 triệu điểm Ngàm shoe đa chức năng",
+        "Màn trập": "Màn trập điện tử, Màn trập cơ học theo mặt phẳng tiêu cự Tốc độ màn trập: Màn trập cơ 1/4000 đến 30 giây Màn trập điện tử 1/4000 đến 30 giây"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "G5SBQ5-DEN-0",
+          "price": 25450000,
+          "costPrice": 15192400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__6_52.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 19990000
+        }
+      ]
+    },
+    {
+      "slug": "may-quay-phim",
+      "name": "Máy quay phim",
+      "categorySlug": "may-anh",
+      "brandSlug": "",
+      "description": "Máy quay phim cầm tay - máy quay 4K - Mini chuyên nghiệp giá rẻ chính hãng, giao hỏa tốc, bảo hành chính hãng, ưu đãi lớn khi mua tại CellphoneS",
+      "price": 59990000,
+      "salePrice": null,
+      "costPrice": 45592400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_nh_9_61.png",
+      "images": [],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {},
+      "tags": [],
+      "variants": [
+        {
+          "sku": "VI7HQ6-HHANG-0",
+          "price": 59990000,
+          "costPrice": 45592400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_nh_9_61.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          }
+        }
+      ]
+    }
+  ]
+}

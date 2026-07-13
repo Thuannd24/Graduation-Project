@@ -230,6 +230,7 @@ public class OrderServiceImpl implements OrderService {
             // Save order
             Order order = Order.builder()
                     .userId(userId)
+                    .email(email)
                     .status("PENDING")
                     .totalAmount(totalAmount)
                     .discountAmount(discountAmount)
@@ -384,8 +385,8 @@ public class OrderServiceImpl implements OrderService {
                                         orderIdToCancel);
                             }
 
-                            // Always publish the OrderCancelledEvent to ensure inventory-service can
-                            // release stock
+                            // Rethrow on outbox failure so the transaction rolls back — order stays
+                            // non-CANCELLED and OrderExpiryScheduler (V-17) retries within 30 min.
                             try {
                                 List<OrderCancelledEvent.OrderItemInfo> itemInfos = successfullyDecrementedItems
                                         .stream()
@@ -411,8 +412,11 @@ public class OrderServiceImpl implements OrderService {
                                         orderIdToCancel);
                             } catch (Exception exOutbox) {
                                 log.error(
-                                        "Failed to construct and save outbox event for OrderCancelledEvent during compensation: {}",
-                                        exOutbox.getMessage());
+                                        "Failed to save OrderCancelledEvent to outbox during compensation for Order ID {}: {}",
+                                        orderIdToCancel, exOutbox.getMessage());
+                                throw new RuntimeException(
+                                        "Compensation failed: could not save outbox event for Order " + orderIdToCancel,
+                                        exOutbox);
                             }
                         });
                     });
@@ -724,7 +728,7 @@ public class OrderServiceImpl implements OrderService {
                     .timestamp(LocalDateTime.now().toString())
                     .orderId(orderId)
                     .userId(order.getUserId())
-                    .email(order.getPhoneNumber())
+                    .email(order.getEmail())
                     .items(itemInfos)
                     .build();
 
@@ -766,7 +770,6 @@ public class OrderServiceImpl implements OrderService {
             return;
         }
 
-        String originalStatus = order.getStatus();
         order.setStatus(status);
         orderRepository.save(order);
         log.info("Order ID {} status updated to {}", orderId, status);
@@ -1246,6 +1249,7 @@ public class OrderServiceImpl implements OrderService {
                 String url = baseUrl + "/api/internal/products/price-info?ids=" + idsParam;
                 var response = restTemplate.getForObject(url, java.util.Map.class);
                 if (response != null && "SUCCESS".equals(response.get("code"))) {
+                    @SuppressWarnings("unchecked")
                     List<java.util.Map<String, Object>> data = (List<java.util.Map<String, Object>>) response
                             .get("data");
                     if (data != null) {

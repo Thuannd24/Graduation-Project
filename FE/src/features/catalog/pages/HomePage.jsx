@@ -47,18 +47,19 @@ export default function HomePage() {
   const [loadingNews, setLoadingNews] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      productApi.listProducts(),
-      productApi.listCategories(),
-      aiApi.getPersonalizedRecommendations(),
-    ])
-      .then(([prods, cats, recomms]) => {
+    Promise.all([productApi.listProducts(), productApi.listCategories()])
+      .then(([prods, cats]) => {
         setProducts(prods);
         setCategories(cats);
-        setPersonalizedProducts(recomms);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    aiApi.getPersonalizedRecommendations()
+      .then(setPersonalizedProducts)
+      .catch(() => {});
   }, []);
 
   useEffect(() => {

@@ -515,25 +515,11 @@ public class PaymentServiceImpl implements PaymentService {
                     }
                 }
 
-                // Mark as expired and save to outbox (atomic)
+                // Mark as expired and save PaymentFailedEvent to outbox (atomic with DB update)
                 payment.setStatus(STATUS_EXPIRED);
                 paymentRepository.save(payment);
 
-                // Save to outbox instead of direct Kafka publish
                 try {
-                    Map<String, Object> event = new HashMap<>();
-                    event.put("eventId", UUID.randomUUID().toString());
-                    event.put("eventType", "PaymentFailedEvent");
-                    event.put("timestamp", LocalDateTime.now().toString());
-                    event.put("orderId", payment.getOrderId());
-                    event.put("paymentId", payment.getId());
-                    event.put("userId", payment.getUserId());
-                    event.put("email", payment.getEmail());
-                    event.put("amount", payment.getAmount());
-                    event.put("message", "Payment session expired");
-
-                    // TODO: Save to outbox_events table for Debezium CDC
-                    // For now, publish directly but acknowledge the risk
                     publishPaymentEvent("PaymentFailedEvent", payment, payment.getAmount(), "Payment session expired");
                 } catch (Exception e) {
                     log.error("Failed to publish PaymentFailedEvent for expired payment {}", payment.getTxnRef(), e);

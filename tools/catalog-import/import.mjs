@@ -32,6 +32,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--file" && argv[i + 1]) args.file = argv[++i];
     else if (argv[i] === "--apply") args.apply = true;
+    else if (argv[i] === "--token" && argv[i + 1]) args.token = argv[++i];
     else if (argv[i] === "--help") args.help = true;
   }
   return args;
@@ -71,7 +72,7 @@ async function main() {
   const manifest = JSON.parse(fs.readFileSync(filePath, "utf8"));
   const dryRun = !args.apply;
   const baseUrl = process.env.API_BASE_URL || "http://localhost:8080/api/v1";
-  const token = process.env.ADMIN_TOKEN || "";
+  const token = args.token || process.env.ADMIN_TOKEN || "";
 
   console.log(`\n📦 File: ${args.file}`);
   console.log(`🔍 Mode: ${dryRun ? "DRY-RUN (validate only)" : "APPLY (ghi DB)"}`);

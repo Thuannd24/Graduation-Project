@@ -123,6 +123,7 @@ public class CatalogImportManifestDto {
     public static class ImportVariantItem {
         private String sku;
         private BigDecimal price;
+        private BigDecimal salePrice;
         private BigDecimal costPrice;
         private String imageUrl;
         private Boolean active;

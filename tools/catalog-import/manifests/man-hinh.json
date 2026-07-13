@@ -1,0 +1,1996 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:38:27.820Z",
+  "note": "Scraped 26 sản phẩm — danh mục \"PC, Màn hình, Máy in\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "tivi",
+      "name": "Tivi",
+      "parentSlug": null,
+      "sortOrder": 7,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "lenovo",
+      "name": "Lenovo",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/lenovo-240x50.png",
+      "description": "Lenovo — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "man-hinh"
+      ]
+    },
+    {
+      "slug": "lg",
+      "name": "LG",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/LG-240x50.png",
+      "description": "LG — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "man-hinh"
+      ]
+    },
+    {
+      "slug": "asus",
+      "name": "ASUS",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/ASUS-240x50.png",
+      "description": "ASUS — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "man-hinh"
+      ]
+    },
+    {
+      "slug": "msi",
+      "name": "MSI",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/MSI-240x50.png",
+      "description": "MSI — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "man-hinh"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "man-hinh"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "man-hinh"
+      ]
+    },
+    {
+      "slug": "dell",
+      "name": "Dell",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Dell-240x50.png",
+      "description": "Dell — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "man-hinh"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch",
+      "name": "Màn hình gaming Lenovo Legion R27S 68CCGAC1VN 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Màn hình Lenovo Legion R27S 68CCGAC1VN 27 inch được trang bị độ phân giải Full HD, tấm nền IPS và tần số quét 144Hz, giúp hình ảnh hiển thị mượt mà. Màn hình máy tính Lenovo đạt 99% sRGB, hỗ trợ HDR10 giúp tối ưu độ tương phản. Thiết kế hiện đại tích hợp Eye Comfort, phù hợp cho chơi game và làm việc hằng ngày. Màn hình Lenovo Legion R27S 68CCGAC1VN 27 inch - Hiển thị mượt mà cho gaming và làm việc Mẫu màn hình gaming này là lựa chọn phù hợp cho không gian làm việc và giải trí n",
+      "price": 3190000,
+      "salePrice": 2790000,
+      "costPrice": 2120400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_7.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lenovo_legion_r27s_68ccgac1vn_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lenovo_legion_r27s_68ccgac1vn_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lenovo_legion_r27s_68ccgac1vn_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_6__1_11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_7__1_10.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "144 Hz",
+        "connectivity": "1 x HDMI 2.1 TMDS 1 x DP 1.2",
+        "dimensions": "Có chân đế: 612.2 x 205.0 x 446.20 mm",
+        "weight": "Có chân đế: 3.7 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "144 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "1 x HDMI 2.1 TMDS 1 x DP 1.2",
+        "Kích thước": "Có chân đế: 612.2 x 205.0 x 446.20 mm",
+        "Trọng lượng": "Có chân đế: 3.7 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A1AI99-HHANG-0",
+          "price": 3190000,
+          "costPrice": 2120400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_7.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-lg-ultragear-27g411a-b-27-inch",
+      "name": "Màn hình Gaming LG UltraGear 27G411A-B 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Màn hình LG UltraGear 27G411A-B 27 inch sở hữu tấm nền IPS 27 inch độ phân giải Full HD cùng độ phủ màu sRGB 99%, mang lại hình ảnh đầy sống động. Tốc độ làm mới 144Hz cùng độ phản hồi 5ms, màn hình thể hiện tốt các nội dung nhanh. Màn hình máy tính LG còn hỗ trợ NVIDIA G-SYNC, AMD FreeSync, Black Stabilizer và 1ms MBR. Màn hình LG UltraGear 27G411A-B 27 inch - Hiển thị rộng rãi, nhiều công nghệ Màn hình LG 27G411A-B 27 inch mang đến không gian hiển thị rộng rãi, đồng thời tái t",
+      "price": 3990000,
+      "salePrice": 2790000,
+      "costPrice": 2120400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_895_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g411a-b_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g411a-b_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g411a-b_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_87.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__70.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__66.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__64.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__58.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "144 Hz",
+        "connectivity": "DisplayPort: 1 cổng HDMI (HDCP Version): 2.2 HDMI: 1 cổng DisplayPort Version 1.4 HDMI Version 2.0 Ngõ ra tai nghe",
+        "dimensions": "Có chân đế: 61.28 cm × 45.21 cm × 22.10 cm Không chân đế: 61.28 cm × 35.81 cm × 3.81 cm",
+        "weight": "Có chân đế: 3.81 kg Không chân đế: 2.90 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "144 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "DisplayPort: 1 cổng HDMI (HDCP Version): 2.2 HDMI: 1 cổng DisplayPort Version 1.4 HDMI Version 2.0 Ngõ ra tai nghe",
+        "Kích thước": "Có chân đế: 61.28 cm × 45.21 cm × 22.10 cm Không chân đế: 61.28 cm × 35.81 cm × 3.81 cm",
+        "Trọng lượng": "Có chân đế: 3.81 kg Không chân đế: 2.90 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "8Z6G13-HHANG-0",
+          "price": 3990000,
+          "costPrice": 2120400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_895_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-asus-tuf-vg249qe5a-24-inch",
+      "name": "Màn hình Gaming ASUS TUF VG249QE5A 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "asus",
+      "description": "Đặc điểm nổi bật Màn hình Gaming ASUS TUF VG249QE5A 24 inch nổi bật với tấm nền IPS cùng công nghệ ASUS Extreme Low Motion Blur Sync, giúp loại bỏ bóng mờ và xé hình. Sản phẩm có tốc độ làm mới lên tới 146 Hz và thời gian phản hồi 1ms đảm bảo trải nghiệm chơi game mượt mà. Thiết kế công thái học với chân đế thông minh hỗ trợ người dùng thoải mái sử dụng lâu dài. Màn hình Gaming ASUS TUF VG249QE5A 24 inch - Đỉnh cao của tốc độ và chất lượng hình ảnh Màn hình Gaming ASUS TUF VG249QE5A 24 inch được",
+      "price": 2790000,
+      "salePrice": 2490000,
+      "costPrice": 1892400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_17.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg249qe5a_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg249qe5a_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg249qe5a_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__9_40.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__6_36.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__4_32.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__4_36.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_32.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__5_57.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "146 Hz",
+        "connectivity": "1x DisplayPort 1.2 1x HDMI (v2.0) Giắc cắm tai nghe",
+        "dimensions": "Có chân đế: 54.1 x 39.4 x 17.4 cmKhông có chân đế: 54.1 x 32.3 x 5.8 cm",
+        "weight": "Có chân đế: 3.3 kg Không có chân đế: 2.7 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "146 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "1x DisplayPort 1.2 1x HDMI (v2.0) Giắc cắm tai nghe",
+        "Kích thước": "Có chân đế: 54.1 x 39.4 x 17.4 cmKhông có chân đế: 54.1 x 32.3 x 5.8 cm",
+        "Trọng lượng": "Có chân đế: 3.3 kg Không có chân đế: 2.7 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "S3CV7P-HHANG-0",
+          "price": 2790000,
+          "costPrice": 1892400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_17.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2490000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-lg-ultragear-25g523-b-25-inch",
+      "name": "Màn hình Gaming LG UltraGear 25G523-B 25 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Màn hình gaming LG UltraGear 25G523-B 25 inch được trang bị tấm nền IPS độ phân giải 1920x1080 cùng tần số quét 200Hz mang lại trải nghiệm hình ảnh sắc nét. Thời gian phản hồi nhanh chóng 1ms giúp tối ưu các tựa game hành động. Hệ thống tương thích NVIDIA G-SYNC và AMD FreeSync Premium hỗ trợ liên kết mượt mà. Màn hình gaming LG UltraGear 25G523-B 25 inch - Chuyển động siêu tốc Màn hình gaming LG UltraGear 25G523-B 25 inch mang lại giải pháp hiển thị thế hệ mới cho các game thủ.",
+      "price": 3490000,
+      "salePrice": 3190000,
+      "costPrice": 2424400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_185_1_4.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_25g523-b_25_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_25g523-b_25_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_25g523-b_25_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_75.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_77.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_63.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_71.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_73.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_75.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "200 Hz",
+        "connectivity": "2x HDMI 1x DisplayPort 1.4 1x cổng tai nghe 3.5mm (chỉ xuất âm thanh)"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "25 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "200 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "2x HDMI 1x DisplayPort 1.4 1x cổng tai nghe 3.5mm (chỉ xuất âm thanh)",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "5L5IWM-HHANG-0",
+          "price": 3490000,
+          "costPrice": 2424400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_185_1_4.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 3190000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-msi-mag-245pf-x24-24-inch",
+      "name": "Màn hình Gaming MSI MAG 245PF X24 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Màn hình Gaming MSI MAG 245PF X24 24 inch sở hữu tấm nền Rapid IPS cùng độ phân giải FHD, mang lại hình ảnh sắc nét với tần số quét 240Hz. Thời gian phản hồi 0.5 ms giúp các chuyển động được tái hiện tức thì, loại bỏ hiện tượng bóng ma. Thiết bị màn hình MSI này hỗ trợ HDR Ready và độ phủ màu sRGB lên đến 112% phục vụ các nhu cầu giải trí. Màn hình Gaming MSI MAG 245PF X24 24 inch - Trải nghiệm mượt mà Sản phẩm này mang đến các nâng cấp ấn tượng nhằm gia tăng chất lượng cảm nhận",
+      "price": 3990000,
+      "salePrice": 3090000,
+      "costPrice": 2348400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_942_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245pf_x24_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245pf_x24_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245pf_x24_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_30.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_31.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_31.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_31.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_31.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "240 Hz",
+        "connectivity": "2x HDMI 2.0b (FHD@240Hz) 1x DisplayPort 1.2a1x Headphone-out",
+        "dimensions": "Có chân đế: 538.9 x 227.9 x 507.6 mm Không chân đế: 538.9 x 56.9 x 318.8 mm",
+        "weight": "5.3 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "240 Hz",
+        "Thời gian phản hồi": "0.5ms",
+        "Độ tương phản động": "100000000:1",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "2x HDMI 2.0b (FHD@240Hz) 1x DisplayPort 1.2a1x Headphone-out",
+        "Kích thước": "Có chân đế: 538.9 x 227.9 x 507.6 mm Không chân đế: 538.9 x 56.9 x 318.8 mm",
+        "Trọng lượng": "5.3 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "DG5QHI-HHANG-0",
+          "price": 3990000,
+          "costPrice": 2348400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_942_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 3090000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-msi-mag-275qf-e20-27-inch",
+      "name": "Màn hình Gaming MSI MAG 275QF E20 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Màn hình Gaming MSI MAG 275QF E20 27 inch sử dụng tấm nền IPS với thời gian phản hồi 0.5ms, tần số quét 200Hz kết hợp công nghệ AI Vision tiên tiến. Thêm vào đó, màn hình gaming này còn hỗ trợ giảm ánh sáng xanh để bảo vệ mắt. Ngoài ra, nhờ kiểu dáng thời thượng, ản phẩm cũng thích hợp bố trí trong nhiều không gian khác nhau. Màn hình Gaming MSI MAG 275QF E20 27 inch – Thiết kế đẹp, hiển thị nét Mẫu màn hình MSI là lựa chọn đáng cân nhắc trong phân khúc màn hình gaming tầm trung",
+      "price": 4990000,
+      "salePrice": 4390000,
+      "costPrice": 3336400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_880_1_4.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_e20_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_e20_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_e20_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_63.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_63.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_65.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_61.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_61.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "200 Hz",
+        "connectivity": "2x HDMI 2.0b (WQHD@144Hz) 1x DisplayPort 1.4a (HBR3) 1x Headphone-out",
+        "dimensions": "Có chân đế: 613.3 x 220.09 x 454.34mm Không chân đế: 613.3 x 57.9 x 360.7mm",
+        "weight": "3.95 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "200 Hz",
+        "Thời gian phản hồi": "0.5ms",
+        "Độ tương phản động": "100000000:1",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "2x HDMI 2.0b (WQHD@144Hz) 1x DisplayPort 1.4a (HBR3) 1x Headphone-out",
+        "Kích thước": "Có chân đế: 613.3 x 220.09 x 454.34mm Không chân đế: 613.3 x 57.9 x 360.7mm",
+        "Trọng lượng": "3.95 kg",
+        "Độ phân giải màn hình": "2560 x 1440 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3Z9GK0-HHANG-0",
+          "price": 4990000,
+          "costPrice": 3336400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_880_1_4.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 4390000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch",
+      "name": "Màn hình Gaming Samsung Odyssey G5 G50F LS27FG502EEXXV 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Màn hình Samsung Odyssey G5 G50F LS27FG502EEXXV 27 inch được tích hợp tính năng Eye Saver Mode, giúp giảm ánh sáng xanh và bảo vệ mắt khi sử dụng lâu. Thiết bị đạt độ phủ màu sRGB 99%, mang lại màu sắc cân đối và chân thực hơn. Màn hình còn hỗ trợ HDR10, đem lại độ tương phản cao và tạo chiều sâu hình ảnh. Màn hình Samsung Odyssey G5 G50F LS27FG502EEXXV 27 inch - Trải nghiệm hiển thị siêu nét Mẫu màn hình Samsung này là lựa chọn thích hợp dành cho game thủ và người dùng có kỳ vọ",
+      "price": 6990000,
+      "salePrice": 4790000,
+      "costPrice": 3640400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_18.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g5_g50f_ls27fg502eexxv_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g5_g50f_ls27fg502eexxv_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g5_g50f_ls27fg502eexxv_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_6__1_10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_7__1_9.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_8__1_9.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_9__1_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_10__1_6.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "180 Hz",
+        "connectivity": "1 x DisplayPort 1.2 (HDCP 2.2) 1 x HDMI 2.0 (HDCP 2.2) 1 x Cổng tai nghe 3.5mm",
+        "dimensions": "Có chân đế: 614.0 x 517.8 x 250.2 mmKhông chân đế: 614 x 361.8 x 45.7 mm",
+        "weight": "Có chân đế: 4.1 kgKhông chân đế: 2.9 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "180 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "1 x DisplayPort 1.2 (HDCP 2.2) 1 x HDMI 2.0 (HDCP 2.2) 1 x Cổng tai nghe 3.5mm",
+        "Kích thước": "Có chân đế: 614.0 x 517.8 x 250.2 mmKhông chân đế: 614 x 361.8 x 45.7 mm",
+        "Trọng lượng": "Có chân đế: 4.1 kgKhông chân đế: 2.9 kg",
+        "Độ phân giải màn hình": "2560 x 1440 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "WDWQ71-HHANG-0",
+          "price": 6990000,
+          "costPrice": 3640400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_18.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 4790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch",
+      "name": "Màn hình Gaming Samsung Odyssey G3 G30D LS27DG302EEXXV 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Samsung Odyssey G3 G30D 27 inch giúp người dùng chơi game mượt mà với tần số quét 180Hz và độ phản hồi 1ms, tái hiện mọi chi tiết một cách chân thực. Màn hình tích hợp HDR10, độ phủ màu sRGB 95%, giúp hình ảnh xuất hiện sống động. Sản phẩm còn có chân đỡ công thái học điều chỉnh tùy ý, mang lại sự thoải mái tối đa cho người dùng. Samsung Odyssey G3 G30D 27 inch - Màn hình đỉnh cao cho trận game bùng nổ Màn hình Odyssey G3 G30D 27 inch của Samsung là sự kết hợp hoàn hảo giữa tốc ",
+      "price": 4490000,
+      "salePrice": 3490000,
+      "costPrice": 2652400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_14.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g3_g30d_ls27dg302eexxv_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g3_g30d_ls27dg302eexxv_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g3_g30d_ls27dg302eexxv_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_120.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_94.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_106.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_88.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__5_76.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_327.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__9_160.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_104.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_285.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__8_71.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__8_152.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "180 Hz",
+        "connectivity": "1x POWER 1x Headphone 1x HDMI IN 1x DisplayPort 1.4 1x SERVICE",
+        "dimensions": "Có chân đế: 618.2 x 520.6 x 234.2 mmKhông có chân đế: 618.2 x 376.9 x 92.4 mm",
+        "weight": "Có chân đế: 4.4 kgKhông có chân đế: 2.9 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "VA",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "180 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "1x POWER 1x Headphone 1x HDMI IN 1x DisplayPort 1.4 1x SERVICE",
+        "Kích thước": "Có chân đế: 618.2 x 520.6 x 234.2 mmKhông có chân đế: 618.2 x 376.9 x 92.4 mm",
+        "Trọng lượng": "Có chân đế: 4.4 kgKhông có chân đế: 2.9 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3F923R-HHANG-0",
+          "price": 4490000,
+          "costPrice": 2652400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_14.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 3490000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-xiaomi-g34wqi-34-inch",
+      "name": "Màn hình Gaming Xiaomi G34WQI 2026 34 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "xiaomi",
+      "description": "Mua Màn hình Gaming Xiaomi G34WQI 2026 34 inch chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ trả góp 0%, giao hàng miễn phí toàn quốc.",
+      "price": 8390000,
+      "salePrice": 7490000,
+      "costPrice": 5692400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_xiaomi_g34wqi_2026_34_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_xiaomi_g34wqi_2026_34_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_xiaomi_g34wqi_2026_34_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_84.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_86.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_84.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "180 Hz",
+        "connectivity": "2x DisplayPort 1.4 2x HDMI 2.0 1x cổng âm thanh (Audio) 1x cổng nguồn DC-IN",
+        "dimensions": "811.3 x 277.3 x 521.5mm",
+        "weight": "6.5 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "34 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "21:9",
+        "Tần số quét": "180 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "2x DisplayPort 1.4 2x HDMI 2.0 1x cổng âm thanh (Audio) 1x cổng nguồn DC-IN",
+        "Kích thước": "811.3 x 277.3 x 521.5mm",
+        "Trọng lượng": "6.5 kg",
+        "Độ phân giải màn hình": "3440 × 1440 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "4ZCT1C-HHANG-0",
+          "price": 8390000,
+          "costPrice": 5692400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_2.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 7490000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch",
+      "name": "Màn hình Gaming ViewSonic VX2479A-HD-PRO 240Hz 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Màn hình Gaming ViewSonic VX2479A-HD-PRO 240Hz 24 inch sở hữu tấm nền SuperClear IPS cùng công nghệ AMD FreeSync loại bỏ tối đa hiện tượng xé hình. Đi kèm theo đó là cổng kết nối HDMI 1.4, DisplayPort 1.4 và jack 3.5mm. Ngoài ra, mẫu màn hình gaming này cũng hỗ trợ công nghệ HDR10 và bảo vệ mắt EyeProTech. Màn hình Gaming ViewSonic VX2479A-HD-PRO 240Hz 24 inch - Kiểu dáng thanh lịch, khung hình sắc nét Màn hình Gaming ViewSonic VX2479A-HD-PRO 240Hz 24 inch mang đến trải nghiệm c",
+      "price": 4290000,
+      "salePrice": 2790000,
+      "costPrice": 2120400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_6.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_viewsonic_vx2479a-hd-pro_240hz_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_viewsonic_vx2479a-hd-pro_240hz_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_viewsonic_vx2479a-hd-pro_240hz_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__7_24.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__7_37.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__8_20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_185.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__6_21.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__6_87.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_113.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__4_171.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__5_137.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__4_182.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "240 Hz",
+        "connectivity": "1x Đầu ra âm thanh 3.5 mm 2x HDMI 1.4 1x DisplayPort Cổng cắm nguồn: DC Socket (Center Positive)Khe khóa Kensington",
+        "dimensions": "Có chân đế: 541.86 x 411.6 x 180 mm Không có chân đế: 541.86 x 323 x 43.5 mm",
+        "weight": "Có chân đế: 3.2 kg Không có chân đế: 2.8 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "240 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Độ tương phản động": "50M:1",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "1x Đầu ra âm thanh 3.5 mm 2x HDMI 1.4 1x DisplayPort Cổng cắm nguồn: DC Socket (Center Positive)Khe khóa Kensington",
+        "Kích thước": "Có chân đế: 541.86 x 411.6 x 180 mm Không có chân đế: 541.86 x 323 x 43.5 mm",
+        "Trọng lượng": "Có chân đế: 3.2 kg Không có chân đế: 2.8 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JP28WT-HHANG-0",
+          "price": 4290000,
+          "costPrice": 2120400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_6.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-msi-mag-275qf-27-inch",
+      "name": "Màn hình Gaming MSI MAG 275QF 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Màn hình Gaming MSI MAG 275QF 27 inch là dòng sản phẩm phù hợp cho game thủ với độ phân giải WQHD cùng tần số quét lên đến 180Hz hàng đầu. Để có được chất lượng chơi game tốt nhất màn hình có tốc độ phản hồi chỉ 0.5ms kết hợp với tấm nền Rapid IPS. Ngoài ra với 1 cổng DisplayPort 1.4 2 cổng HDMI™ 2.0b trên màn hình MSI này bạn có thể dễ dàng kết nối với mọi dòng PC hiện nay. Màn hình Gaming MSI MAG 275QF 27 inch - trải nghiệm chất lượng hình ảnh hàng đầu Với thiết kế cá tính, hầ",
+      "price": 5290000,
+      "salePrice": 4590000,
+      "costPrice": 3488400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_5_3.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_27_inch_-_1_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_27_inch_-_2_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_27_inch_-_3_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_11__5_112.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__5_108.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__6_100.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_88.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__6_60.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "180 Hz",
+        "connectivity": "1 x DisplayPort 1.4 2 x HDMI 2.0b (WQHD@144Hz)1 x Đầu ra tai nghe",
+        "dimensions": "Có chân đế: 613.3 x 220.1 x 454.6 mmKhông có chân đế: 613.3 x 57.9 x 360.7 mm",
+        "weight": "Có chân đế: 3.95 kg Không chân đế: 3.57 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "180 Hz",
+        "Thời gian phản hồi": "0.5ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "1 x DisplayPort 1.4 2 x HDMI 2.0b (WQHD@144Hz)1 x Đầu ra tai nghe",
+        "Kích thước": "Có chân đế: 613.3 x 220.1 x 454.6 mmKhông có chân đế: 613.3 x 57.9 x 360.7 mm",
+        "Trọng lượng": "Có chân đế: 3.95 kg Không chân đế: 3.57 kg",
+        "Độ phân giải màn hình": "2560 x 1440 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "PXCE4S-HHANG-0",
+          "price": 5290000,
+          "costPrice": 3488400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_5_3.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 4590000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-xiaomi-a27qi-2026-27-inch",
+      "name": "Màn hình Xiaomi A27QI 2026 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Màn hình Xiaomi A27QI 2026 27 inch được trang bị độ phân giải QHD 2560×1440 sắc nét, tấm nền IPS góc nhìn rộng 178°, tần số quét 120Hz hiển thị mượt mà. Thiết kế viền mỏng hiện đại kết hợp kích thước màn hình pc Xiaomi này giúp tối ưu góc làm việc, phù hợp nhiều phong cách setup khác nhau. Màn hình Xiaomi A27QI 2026 27 inch - Đỉnh cao hiển thị mượt mà Màn hình máy tính Xiaomi A27QI 2026 mang đến sự cân bằng giữa hiển thị sắc nét và trải nghiệm sử dụng ổn định. Dưới đây là những ",
+      "price": 4490000,
+      "salePrice": 3790000,
+      "costPrice": 2880400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_60.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27qi_2026_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27qi_2026_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27qi_2026_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__88.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_115.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__91.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_6.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "120 Hz",
+        "connectivity": "1 x DP 1.4 1 x HDMI 2.0 1 x Âm thanh 1 x DC IN",
+        "dimensions": "Có chân đế: 612.94 × 169.8 × 476.7 mm",
+        "weight": "Có chân đế: 3.9 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "120 Hz",
+        "Thời gian phản hồi": "6ms",
+        "Treo tường": "75 x 75 mm",
+        "Cổng kết nối": "1 x DP 1.4 1 x HDMI 2.0 1 x Âm thanh 1 x DC IN",
+        "Kích thước": "Có chân đế: 612.94 × 169.8 × 476.7 mm",
+        "Trọng lượng": "Có chân đế: 3.9 kg",
+        "Độ phân giải màn hình": "2560 × 1440 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "VVCN8I-HHANG-0",
+          "price": 4490000,
+          "costPrice": 2880400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_60.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 3790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-lg-24u411a-b-24-inch",
+      "name": "Màn hình LG 24U411A-B 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Màn hình LG 24U411A-B 24 inch cho trải nghiệm hình ảnh chân thực với độ phân giải FHD (1920×1080), tần số quét 120Hz và thời gian phản hồi 5ms. Mẫu màn hình máy tính này được thiết kế siêu mỏng cùng khả năng điều chỉnh độ nghiêng linh hoạt. Sản phẩm trang bị D-Sub, HDMI và jack tai nghe, đáp ứng nhu cầu kết nối cơ bản. Màn hình LG 24U411A-B 24 inch - Thiết kế mỏng, hình ảnh chân thực Màn hình LG 24U411A-B hiển thị sắc nét, chuyển động mượt, phù hợp cho cả công việc lẫn giải trí.",
+      "price": 2999000,
+      "salePrice": 2290000,
+      "costPrice": 1740400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_41.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_lg_24u411a-b_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_lg_24u411a-b_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_lg_24u411a-b_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_73.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_61.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_66.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_58.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_11__7_184.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__8_139.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__8_165.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_58.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__5_48.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_267.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__8_48.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "120 Hz",
+        "connectivity": "D-Sub HDMI"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "120 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "D-Sub HDMI",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "81PXO1-HHANG-0",
+          "price": 2999000,
+          "costPrice": 1740400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_41.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2290000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-di-dong-msi-pro-mp165-e6-16-inch",
+      "name": "Màn hình di động MSI Pro MP165 E6 16 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Màn hình di động MSI Pro MP165 E6 16 inch được thiết kế mỏng nhẹ và trọng lượng chỉ khoảng 780g, giúp việc mang theo bên người và sử dụng được dễ dàng hơn. Mẫu màn hình di động này sở hữu tần số quét 60Hz, tấm nền IPS cùng độ sáng 250 nits. Sản phẩm phù hợp sử dụng cho nhiều mục đích khi có thể hỗ trợ ngàm VESA 75 x 75 mm và chuẩn tripod 1/4 inch. Màn hình di động MSI Pro MP165 E6 16 inch - Tối ưu không gian làm việc MSI Pro MP165 E6 16 inch là chiếc màn hình di động có thể dễ d",
+      "price": 3090000,
+      "salePrice": 2590000,
+      "costPrice": 1968400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_msi_pro_mp165_e6_16_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_msi_pro_mp165_e6_16_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_msi_pro_mp165_e6_16_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__8_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__5_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_2.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "60 Hz",
+        "connectivity": "1x HDMI 2.0b (FHD@60Hz) 2x Type-C (tín hiệu DP 1.2a với chế độ Alt & Nguồn điện 15W/Đầu vào nguồn)",
+        "dimensions": "356.5 x 13.85 x 210.35 mm",
+        "weight": "0.78 kg / 1.6 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "16 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "60 Hz",
+        "Thời gian phản hồi": "4ms",
+        "Độ tương phản động": "100000000:1",
+        "Treo tường": "75 x 75 mm",
+        "Cổng kết nối": "1x HDMI 2.0b (FHD@60Hz) 2x Type-C (tín hiệu DP 1.2a với chế độ Alt & Nguồn điện 15W/Đầu vào nguồn)",
+        "Kích thước": "356.5 x 13.85 x 210.35 mm",
+        "Trọng lượng": "0.78 kg / 1.6 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "AKNBUL-HHANG-0",
+          "price": 3090000,
+          "costPrice": 1968400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2590000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-asus-tuf-vg27aq5a-27-inch",
+      "name": "Màn hình Gaming ASUS TUF VG27AQ5A 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "asus",
+      "description": "Đặc điểm nổi bật Màn hình Gaming Asus TUF VG27AQ5A 27 inch sở hữu tần số quét ép xung lên tới 210Hz và tấm nền Fast IPS, mang lại trải nghiệm chơi game cực mượt mà. Sản phẩm màn hình 2K được trang bị độ phân giải QHD 2560x1440 giúp hiển thị hình ảnh sắc nét, màu sắc chân thực hơn. Ngoài ra, thiết bị còn có tạo hình bền chắc với khả năng tinh chỉnh linh hoạt góc nghiêng. Màn hình Gaming Asus TUF VG27AQ5A 27 inch - Chất lượng hiển thị vượt trội Để đáp ứng nhu cầu giải trí lẫn thi đấu eSports, một ",
+      "price": 5290000,
+      "salePrice": 4990000,
+      "costPrice": 3792400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_180_1_13.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg27aq5a_27_inch_-_1_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg27aq5a_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg27aq5a_27_inch_-_3_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__9_234.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__9_274.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_281.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__7_228.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__4_244.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "210 Hz",
+        "connectivity": "DisplayPort 1.4 x 1 (HBR2) HDMI(v2.0) x 2 USB Hub : 1x USB 3.2 Gen 1 Type-C (Service Port) Đầu cắm Tai nghe :Có",
+        "dimensions": "Có chân đế: 61.50 x 45.50 x 21.40 cmKhông chân đế: 61.50 x 36.70 x 5.40 cm",
+        "weight": "Có chân đế: 5 kgKhông chân đế: 4.2 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "210 Hz",
+        "Thời gian phản hồi": "0.3ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "DisplayPort 1.4 x 1 (HBR2) HDMI(v2.0) x 2 USB Hub : 1x USB 3.2 Gen 1 Type-C (Service Port) Đầu cắm Tai nghe :Có",
+        "Kích thước": "Có chân đế: 61.50 x 45.50 x 21.40 cmKhông chân đế: 61.50 x 36.70 x 5.40 cm",
+        "Trọng lượng": "Có chân đế: 5 kgKhông chân đế: 4.2 kg",
+        "Độ phân giải màn hình": "2560 x 1440 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "BP9B7W-HHANG-0",
+          "price": 5290000,
+          "costPrice": 3792400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_180_1_13.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 4990000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-di-dong-vsp-gp1612ws1-16-inch",
+      "name": "Màn hình di động VSP GP1612WS1 16 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Màn hình di động VSP GP1612WS1 16 inch mang tới khả năng hiển thị sắc nét, tái tạo chuyển động mượt mà khi sở hữu độ phân giải WQXGA và tần số quét 120Hz. Mẫu màn hình này có trọng lượng siêu nhẹ, chỉ 0.66kg, tiện lợi mang đi mọi nơi. Với các công nghệ FreeSync, HDR, sản phẩm sẽ phục vụ tốt cả nhu cầu chơi game. Màn hình di động VSP GP1612WS1 16 inch - Tiện lợi, hiển thị đẹp mắt Màn hình VSP GP1612WS1 16 inch với thiết kế di động cùng hệ thống loa tích hợp là lựa chọn tiện lợi đ",
+      "price": 4490000,
+      "salePrice": 3790000,
+      "costPrice": 2880400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_76.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_30.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_31.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_36.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_38.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_40.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "120 Hz",
+        "connectivity": "2 × USB-C (Full-featured) 1 × HDMI 1 × Jack tai nghe 3.5mm 1 cổng (TBD)",
+        "dimensions": "352.62 × 237.18 × 11.65 mm",
+        "weight": "0.66 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "16 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:10",
+        "Tần số quét": "120 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "75 x 75 mm",
+        "Cổng kết nối": "2 × USB-C (Full-featured) 1 × HDMI 1 × Jack tai nghe 3.5mm 1 cổng (TBD)",
+        "Kích thước": "352.62 × 237.18 × 11.65 mm",
+        "Trọng lượng": "0.66 kg",
+        "Độ phân giải màn hình": "2560 × 1600 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "VX4DZG-HHANG-0",
+          "price": 4490000,
+          "costPrice": 2880400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_2.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 3790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-e-dra-egm24f120pv-24-inch",
+      "name": "Màn hình E-Dra EGM24F120PV 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Màn hình E-Dra EGM24F120PV 24 inch trang bị tấm nền IPS A+, độ phân giải Full HD, độ phủ màu 99% sRGB, độ sáng 250cd/m², mang đến hình ảnh sống động. Tốc độ làm mới 120Hz kết hợp phản hồi 1ms giúp mọi chuyển động trên màn hình mượt mà. Màn hình này phù hợp cho người dùng yêu cầu cao về hiệu năng hình ảnh trong tầm giá dễ tiếp cận. Màn hình E-Dra EGM24F120PV 24 inch – Trải nghiệm thị giác mượt mà chuẩn gaming Màn hình E-Dra EGM24F120PV tối ưu cho mọi pha hành động với tốc độ làm ",
+      "price": 2590000,
+      "salePrice": 1790000,
+      "costPrice": 1360400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_24.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_e-dra_egm24f120pv_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_e-dra_egm24f120pv_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_e-dra_egm24f120pv_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_23__3_74.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_24__3_68.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_25__7_65.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "120 Hz",
+        "connectivity": "1 x HDMI + 1 VGA + DC",
+        "dimensions": "602 x 110 x 400 mm (Vỏ hộp)",
+        "weight": "3.7 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "120 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Cổng kết nối": "1 x HDMI + 1 VGA + DC",
+        "Kích thước": "602 x 110 x 400 mm (Vỏ hộp)",
+        "Trọng lượng": "3.7 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "WONWXW-HHANG-0",
+          "price": 2590000,
+          "costPrice": 1360400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_24.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 1790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-di-dong-vsp-gp1614ws1-16-inch",
+      "name": "Màn hình di động VSP GP1614WS1 16 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Màn hình di động VSP GP1614WS1 16 inch sở hữu độ phân giải WUXGA 1920 x 1200 và tần số quét 144Hz giúp hiển thị mượt mà, loại bỏ xé hình khi chơi game. Thiết bị có bề mặt kháng chói Anti-Glare giúp giảm mỏi mắt khi quan sát màn hình lâu. Hơn thế nữa, thiết bị có trọng lượng siêu nhẹ chỉ 0.6 kg giúp người dùng dễ dàng mang theo. Màn hình di động VSP GP1614WS1 16 inch - Siêu nhẹ 0.6kg, kết nối Type-C tiện lợi VSP GP1614WS1 là giải pháp hiển thị hiện đại, đáp ứng tốt nhu cầu làm vi",
+      "price": 3490000,
+      "salePrice": 2990000,
+      "costPrice": 2272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1614ws1_16_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_2_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1614ws1_16_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_77.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_31.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_32.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_37.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_41.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_39.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "144 Hz",
+        "connectivity": "2 × USB-C (Full-featured) 1 × HDMI 1 × Jack tai nghe 3.5mm",
+        "dimensions": "352.62 × 237.18 × 11.65 mm",
+        "weight": "0.66 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "16 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:10",
+        "Tần số quét": "144 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "75 x 75 mm",
+        "Cổng kết nối": "2 × USB-C (Full-featured) 1 × HDMI 1 × Jack tai nghe 3.5mm",
+        "Kích thước": "352.62 × 237.18 × 11.65 mm",
+        "Trọng lượng": "0.66 kg",
+        "Độ phân giải màn hình": "1920 × 1200 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "5MLG9M-HHANG-0",
+          "price": 3490000,
+          "costPrice": 2272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2990000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-xiaomi-a27i-2026-27-inch",
+      "name": "Màn hình Xiaomi A27I 2026 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Màn hình Xiaomi A27i 2026 27 inch sở hữu độ phân giải FHD sắc nét kết hợp tần số quét 144Hz mượt mà mang đến những trải nghiệm hình ảnh ấn tượng. Công nghệ màu Delta E<1 cùng độ tương phản 1500:1 giúp màn Xiaomi tái hiện sắc màu sống động. Cùng với đó là các cổng kết nối HDMI 2.0 và DP 1.4 giúp tối ưu các tác vụ hằng ngày. Màn hình Xiaomi A27i 2026 27 inch - Hiển thị ấn tượng, kết nối đa dạng Mẫu màn hình Xiaomi này tạo thiện cảm nhờ khả năng hiển thị rõ ràng và phong cách thiết",
+      "price": 3090000,
+      "salePrice": 2590000,
+      "costPrice": 1968400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_950_3.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27i_2026_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27i_2026_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27i_2026_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_55.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_53.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_61.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_16_29.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__9_183.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_91.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "144 Hz",
+        "connectivity": "1 x Cổng DP 1.4 1 x Cổng HDMI 2.0 1 x Cổng nguồn DC IN",
+        "dimensions": "611.3 x 170.0 x 474.6mm",
+        "weight": "3.9 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "144 Hz",
+        "Thời gian phản hồi": "6ms",
+        "Treo tường": "75 x 75 mm",
+        "Cổng kết nối": "1 x Cổng DP 1.4 1 x Cổng HDMI 2.0 1 x Cổng nguồn DC IN",
+        "Kích thước": "611.3 x 170.0 x 474.6mm",
+        "Trọng lượng": "3.9 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "I6EZ6D-HHANG-0",
+          "price": 3090000,
+          "costPrice": 1968400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_950_3.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2590000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-msi-pro-mp242l-24-inch",
+      "name": "Màn hình MSI Pro MP242L 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Màn hình MSI Pro MP242L 24 inch tích hợp tấm nền IPS, cho độ phân giải FHD kết hợp tốc độ làm mới lên đến 100Hz, cộng thêm công nghệ Anti-glare hiện đại. Mẫu màn hình MSI này có kích thước rộng 24 inch, quan sát thoải mái. Ngoài ra, sản phẩm màn hình MSI này còn trang bị đủ cổng giao tiếp cơ bản để người dùng thỏa sức kết nối thiết bị khác theo nhu cầu. Màn hình MSI Pro MP242L 24 inch – Mở rộng trải nghiệm, mãn nhãn thị giác Màn hình MSI Pro MP242L 24 inch là chiếc màn hình phẳn",
+      "price": 2490000,
+      "salePrice": 1890000,
+      "costPrice": 1436400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_msi_pro_mp242l_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_msi_pro_mp242l_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_msi_pro_mp242l_24_inch_-_3_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__7_24.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__7_16.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__8_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__6_13.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "100 Hz",
+        "connectivity": "1 x HDMI 1.4b 1 x DisplayPort 1.2a 1 x Headphone-out"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "100 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Cổng kết nối": "1 x HDMI 1.4b 1 x DisplayPort 1.2a 1 x Headphone-out",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "5ISCDB-HHANG-0",
+          "price": 2490000,
+          "costPrice": 1436400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_2.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 1890000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-di-dong-vsp-vp1560fs1-15-6-inch",
+      "name": "Màn hình di động VSP VP1560FS1 15.6 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Màn hình di động VSP VP1560FS1 15.6 inch tối ưu trải nghiệm thị giác với tần số quét 62 Hz mượt mà hơn chuẩn thông thường trên độ phân giải Full HD. Dải màu 72% NTSC với độ sáng 250 cd/m2 giúp tái hiện màu sắc sống động. Trọng lượng 1.2kg và tích hợp hệ thống loa kép, mang đến giải pháp hiển thị di động linh hoạt. Màn hình di động VSP VP1560FS1 15.6 inch - Tấm nền hiện đại, trải nghiệm chân thực Mẫu màn hình di động này mang đến giải pháp mở rộng không gian làm việc vô cùng hiệu",
+      "price": 2490000,
+      "salePrice": 1690000,
+      "costPrice": 1284400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_1_.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_vp1560fs1_15.6_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_vp1560fs1_15.6_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_vp1560fs1_15.6_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_39.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_75.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_37.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "62 Hz",
+        "connectivity": "2 x USB-C (đầy đủ tính năng) 1 x Mini HDMI 1 x Cổng tai nghe (Earphone)",
+        "dimensions": "356.5 × 224.5 × 12 mm",
+        "weight": "1.2 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "15.6 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "62 Hz",
+        "Thời gian phản hồi": "5ms",
+        "Treo tường": "75 x 75 mm",
+        "Cổng kết nối": "2 x USB-C (đầy đủ tính năng) 1 x Mini HDMI 1 x Cổng tai nghe (Earphone)",
+        "Kích thước": "356.5 × 224.5 × 12 mm",
+        "Trọng lượng": "1.2 kg",
+        "Độ phân giải màn hình": "1920 × 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "5BCYTY-HHANG-0",
+          "price": 2490000,
+          "costPrice": 1284400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_1_.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 1690000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-dell-u2424h-24-inch",
+      "name": "Màn hình văn phòng Dell U2424H 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "dell",
+      "description": "Đặc điểm nổi bật Màn hình Dell U2424H 24 inch là màn hình máy tính mang lại trải nghiệm thoải mái với màn hình kích thước 24 inch cùng độ phân giải FHD. Màn hình này với tần số quét 120hz mang lại trải nghiệm hình ảnh mượt mà cùng gam màu hiển thị rộng 100% sRGB và 100% BT.709. Cùng với đó, mẫu màn hình Dell này còn được trang bị hệ thống cổng kết nối đa dạng cũng như chân đế điều chỉnh linh hoạt. Màn hình Dell U2424H 24 inch – Thiết kế sang trọng, hiển thị vượt trội Màn hình Dell U2424H 24 inch",
+      "price": 6990000,
+      "salePrice": 5250000,
+      "costPrice": 3990000,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-dell-u2424h-24-inch_7__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-dell-u2424h-24-inch-10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_v_n_ph_ng_dell_u2424h_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_v_n_ph_ng_dell_u2424h_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_v_n_ph_ng_dell_u2424h_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__2.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "120 Hz",
+        "connectivity": "Display Port 1.4 x 2, HDMI 1.4 x 1, Type C x 2, USB A x 2, Cổng ra âm thanh"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "120 Hz",
+        "Thời gian phản hồi": "5ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "Display Port 1.4 x 2, HDMI 1.4 x 1, Type C x 2, USB A x 2, Cổng ra âm thanh",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "WVOV2D-XAM-0",
+          "price": 6990000,
+          "costPrice": 3990000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-dell-u2424h-24-inch_7__1.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 5250000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-msi-mag-245f-x24-24-inch",
+      "name": "Màn hình Gaming MSI MAG 245F X24 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "msi",
+      "description": "Đặc điểm nổi bật Màn hình Gaming MSI MAG 245F X24 24 inch sở hữu kích thước thực 23.8 inch, sử dụng tấm nền IPS, mang đến khung hình rực rỡ cùng độ chân thực ấn tượng. Thiết bị màn hình MSI có tần số quét 240Hz giúp tái tạo chuyển động mượt mà và liền mạch. Màn hình hỗ trợ Adaptive-Sync, HDR Ready và có các cổng kết nối phổ biến. Màn hình Gaming MSI MAG 245F X24 24 inch - Góc nhìn rộng nhờ tấm nền Rapid IPS Màn hình Gaming MSI MAG 245F X24 24 inch mang lại hình ảnh rực rỡ nhờ tấm nền Rapid IPS t",
+      "price": 3990000,
+      "salePrice": 2990000,
+      "costPrice": 2272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_876_2.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245f_x24_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245f_x24_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245f_x24_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_228.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_163.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_181.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_180.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_146.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "240 Hz",
+        "connectivity": "2x HDMI 2.0b (FHD@240Hz) 1x DisplayPort 1.2a 1x Headphone-out",
+        "dimensions": "Có chân đế: 538.9 x 220 x 411.6 mmKhông có chân đế: 538.9 x 56.9 x 318.8 mm",
+        "weight": "3.25 kg / 5.32 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "240 Hz",
+        "Thời gian phản hồi": "0.5ms",
+        "Độ tương phản động": "100000000:1",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "2x HDMI 2.0b (FHD@240Hz) 1x DisplayPort 1.2a 1x Headphone-out",
+        "Kích thước": "Có chân đế: 538.9 x 220 x 411.6 mmKhông có chân đế: 538.9 x 56.9 x 318.8 mm",
+        "Trọng lượng": "3.25 kg / 5.32 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "SRW9PC-HHANG-0",
+          "price": 3990000,
+          "costPrice": 2272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_876_2.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2990000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-di-dong-e-dra-epm16f60-16-inch",
+      "name": "Màn hình di động E-DRA EPM16F60 16 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Màn hình di động E-DRA EPM16F60 16 inch sở hữu độ phân giải Full HD 1920 × 1080, giúp hình ảnh hiển thị rõ nét và dễ quan sát trong quá trình sử dụng. Thiết kế màn hình có kích thước 356.5 x 216.5 x 9 mm mang lại tổng thể mỏng nhẹ hơn. Các cổng HDMI, USB-C của máy hỗ trợ kết nối linh hoạt với nhiều thiết bị khác nhau. Màn hình di động E-DRA EPM16F60 16 inch - Chất lượng hiển thị sắc nét Màn hình di động E-DRA EPM16F60 16 inch sở hữu thiết kế gọn nhẹ, thuận tiện cho nhu cầu làm v",
+      "price": 2690000,
+      "salePrice": 1790000,
+      "costPrice": 1360400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_907_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_e-dra_epm16f60_16_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_e-dra_epm16f60_16_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_e-dra_epm16f60_16_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__92.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_117.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__89.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__79.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__85.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__66.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__55.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "60 Hz",
+        "connectivity": "HDMI, USB-C, Cổng tai nghe",
+        "dimensions": "356.5 x 216.5 x 9 mm",
+        "weight": "765 gram"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "16 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "60 Hz",
+        "Thời gian phản hồi": "5ms",
+        "Cổng kết nối": "HDMI, USB-C, Cổng tai nghe",
+        "Kích thước": "356.5 x 216.5 x 9 mm",
+        "Trọng lượng": "765 gram",
+        "Độ phân giải màn hình": "1920 x 1080 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "BC8ELT-HHANG-0",
+          "price": 2690000,
+          "costPrice": 1360400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_907_1.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 1790000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-lg-ultragear-24gs65f-24-inch",
+      "name": "Màn hình Gaming LG Ultragear 24GS65F 24 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Màn hình Gaming LG UltraGear 24GS65F 24 inch có độ sắc nét Full HD 1920 x 1080 pixels, tần số quét đạt đến 180Hz, tốc độ phản hồi 1ms với tấm nền IPS. Sản phẩm màn hình Gaming có độ phủ màu sRGB 90%, độ sáng 240 cd/m2 và tích hợp công nghệ AMD FreeSync. Màn hình có kích thước 23.8 inch với viền mỏng 3 cạnh, chân đế điều chỉnh linh hoạt cùng đa dạng cổng kết nối. Đặc điểm nổi bật Màn hình LG Ultragear 24GS65F sở hữu nhiều thông số tối ưu cho nhu cầu chơi game lẫn làm việc hằng ng",
+      "price": 4290000,
+      "salePrice": 2990000,
+      "costPrice": 2272400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_5.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_24gs65f_24_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_24gs65f_24_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_24gs65f_24_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__6_115.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__5_120.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__6_132.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__6_115.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__4_109.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_151.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__2_138.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__7_109.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__4_153.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__4_139.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "180 Hz",
+        "connectivity": "HDMIDisplayPortĐầu ra tai nghe",
+        "weight": "Trọng lượng khi vận chuyển: 7.8 kg"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "24 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "180 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Cổng kết nối": "HDMIDisplayPortĐầu ra tai nghe",
+        "Trọng lượng": "Trọng lượng khi vận chuyển: 7.8 kg",
+        "Độ phân giải màn hình": "1920 x 1080 pixels",
+        "Thông số": "Màn hình Gaming LG Ultragear 24GS65F 24 inch"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "85LKIV-HHANG-0",
+          "price": 4290000,
+          "costPrice": 2272400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_5.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 2990000
+        }
+      ]
+    },
+    {
+      "slug": "man-hinh-gaming-lg-ultragear-27g610a-b-27-inch",
+      "name": "Màn hình Gaming LG UltraGear 27G610A-B 27 inch",
+      "categorySlug": "man-hinh",
+      "brandSlug": "lg",
+      "description": "Đặc điểm nổi bật Màn hình gaming LG UltraGear 27G610A-B 27 inch sở hữu tấm nền IPS cùng độ phân giải QHD giúp tái hiện hình ảnh sắc nét cho người dùng khi làm việc. Tốc độ phản hồi 1ms kết hợp tần số quét 200Hz hỗ trợ người dùng thao tác một cách mượt mà. Thiết bị màn hình 2K tích hợp HDR10 và DisplayHDR 400 mang đến dải màu sắc sinh động. Màn hình gaming LG UltraGear 27G610A-B 27 inch - Độ phân giải QHD sắc nét Màn hình máy tính LG sở hữu nhiều ưu điểm vượt trội giúp nâng cao chất lượng hiển th",
+      "price": 6990000,
+      "salePrice": 5190000,
+      "costPrice": 3944400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g610a-b_27_inch_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g610a-b_27_inch_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g610a-b_27_inch_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_27.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_13__1_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_28.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_28.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_14__1_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_28.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_28.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_28.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_12__1_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_11__1_10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_8__1_21.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "refresh_rate": "200 Hz",
+        "connectivity": "2 x HDMI 1 x DisplayPort 1.4 Đầu ra tai nghe (3 đầu cắm)"
+      },
+      "specsRaw": {
+        "Kích thước thực tế (bao gồm viền)": "27 inches",
+        "Tấm nền": "IPS",
+        "Tỉ lệ màn hình": "16:9",
+        "Tần số quét": "200 Hz",
+        "Thời gian phản hồi": "1ms",
+        "Treo tường": "100 x 100 mm",
+        "Cổng kết nối": "2 x HDMI 1 x DisplayPort 1.4 Đầu ra tai nghe (3 đầu cắm)",
+        "Độ phân giải màn hình": "2560 x 1440 pixels"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "2B23PG-HHANG-0",
+          "price": 6990000,
+          "costPrice": 3944400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_1.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 5190000
+        }
+      ]
+    }
+  ]
+}

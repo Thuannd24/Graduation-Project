@@ -9,8 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
@@ -23,7 +25,7 @@ public class OrderKafkaConsumer {
     private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "order-events", groupId = "payment-service-group")
-    public void consumeOrderEvent(String message) {
+    public void consumeOrderEvent(String message, Acknowledgment ack) {
         log.info("Received order event payload in payment-service: {}", message);
 
         JsonNode rootNode;
@@ -34,6 +36,7 @@ public class OrderKafkaConsumer {
             }
         } catch (Exception e) {
             log.error("Failed to parse JSON payload for order event: {}. Message: {}", e.getMessage(), message);
+            ack.acknowledge();
             return;
         }
 
@@ -42,6 +45,7 @@ public class OrderKafkaConsumer {
 
         if (eventTypeNode == null || orderIdNode == null) {
             log.error("Invalid order event payload: eventType or orderId is missing. Message: {}", message);
+            ack.acknowledge();
             return;
         }
 
@@ -64,7 +68,7 @@ public class OrderKafkaConsumer {
                     Payment payment = paymentOpt.get();
                     if ("COD".equalsIgnoreCase(payment.getPaymentMethod()) && "PENDING".equalsIgnoreCase(payment.getStatus())) {
                         payment.setStatus("SUCCESS");
-                        payment.setPaidAt(java.time.LocalDateTime.now());
+                        payment.setPaidAt(LocalDateTime.now());
                         paymentRepository.save(payment);
                         log.info("COD Payment for Order ID {} successfully updated to SUCCESS upon delivery", orderId);
                     } else {
@@ -79,5 +83,7 @@ public class OrderKafkaConsumer {
                 throw new RuntimeException("Error processing OrderDeliveredEvent for payments", e);
             }
         }
+
+        ack.acknowledge();
     }
 }

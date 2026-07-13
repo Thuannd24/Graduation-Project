@@ -1,0 +1,1987 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:02:21.180Z",
+  "note": "Scraped 14 sản phẩm — danh mục \"OPPO\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "oppo",
+      "name": "OPPO",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Oppo-240x50.png",
+      "description": "OPPO — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "oppo-phone"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "dien-thoai-oppo-reno16-f",
+      "name": "OPPO Reno16 F 5G 8GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Reno16 F 5G 8GB 256GB OPPO Reno 16F là mẫu smartphone tầm trung nổi bật thuộc dòng Reno16 sắp ra mắt vào ngày 02/07/2026. Nổi bật với viên pin khủng 7000 mAh, hỗ trợ sạc nhanh 80W và chip Dimensity 7300-Energy. Điểm nhấn của máy là camera tele 50 MP hỗ trợ OIS cùng nút AI vật lý (AI Snap Key). Đi kèm giao diện ColorOS 16 mượt mà cho độ bền trải nghiệm lên đến 6 năm. Tại Việt Nam, máy có giá bán khởi điểm 15.990.000đ cho phiên bản 8GB RAM và 256GB bộ nhớ trong. Giá OPPO ",
+      "price": 15990000,
+      "salePrice": null,
+      "costPrice": 12152400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-dream-purple-9.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-twilight-violet-9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-9_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-dream-purple.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-dream-purple-1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16, nền tảng Android 16",
+        "cpu": "Dimensity 7300-Energy 5G",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Arm Mali-G615@1.047GHz",
+        "screen": "6.57 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP OIS, f/1.88MP góc rộng, f/2.250MP OIS Tele, f/2.8",
+        "camera_front": "50MP, f/2.0",
+        "battery": "7000 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "8.44mm - 8.58mm",
+        "weight": "196g - 197g",
+        "material": "Khung viền làm bằng hợp kim nhôm chịu lực",
+        "connectivity": "Hỗ trợ 2 SIM (Nano-SIM + Nano-SIM + eSIM, tối đa kích hoạt 2 SIM); O-Connect, AirDrop, Quick Share Định vị đa vệ tinh (GPS, GLONASS, GALILEO, BDS, QZSS); Không có cổng tai nghe 3.5mm; Có hỗ trợ kết nối NFC (tùy thị trường)",
+        "charging": "Sạc nhanh công suất 45W"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16, nền tảng Android 16",
+        "Chipset": "Dimensity 7300-Energy 5G",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "GPU": "Arm Mali-G615@1.047GHz",
+        "Kích thước màn hình": "6.57 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1080 x 2372 pixels (FullHD+)",
+        "Tính năng màn hình": "Tần số quét 120HzĐộ sáng tối đa 1400 nitsKính cường lực AGC DT Star D+1 tỷ màu",
+        "Camera sau": "50MP OIS, f/1.88MP góc rộng, f/2.250MP OIS Tele, f/2.8",
+        "Camera trước": "50MP, f/2.0",
+        "Pin": "7000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 thẻ nhớ",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "06/2026",
+        "Phiên bản": "Mức giá tham khảo",
+        "8GB/256GB": "Từ 15.990.000đ",
+        "12GB/256GB": "Dự kiến 18.000.000đ – 20.000.000đ",
+        "Thông số kỹ thuật": "Điện thoại OPPO Reno16 F",
+        "Thời gian ra mắt": "Tháng 6 hoặc tháng 7 năm 2026 (Dự kiến phiên bản quốc tế)",
+        "Kích thước": "8.44mm - 8.58mm",
+        "Trọng lượng": "196g - 197g",
+        "Màu sắc": "Afterglow Pink (Hồng), Twilight Blue (Xanh hoàng hôn), Aurora Blue (Xanh cực quang), Midnight Black (Đen)",
+        "Thiết kế": "Thiết kế tổng quan mỏng nhẹ với các góc bo tròn mềm mại; mặt lưng kính phẳng tích hợp đèn flash LED dạng vòng đặc trưng (ở phiên bản màu Afterglow Pink)",
+        "Chất liệu": "Khung viền làm bằng hợp kim nhôm chịu lực",
+        "Màn hình": "Kích thước 6.57 inches, tấm nền AMOLED 1 tỷ màu, độ phân giải 1080 x 2372 pixels, tần số quét 120Hz, độ sáng tiêu chuẩn 650 nits (đạt tối đa 1500 nits ở chế độ HBM), hỗ trợ HDR10+ và Dolby Vision",
+        "Vi xử lý": "MediaTek Dimensity 7300",
+        "CPU": "Tám nhân Octa-core (4 x 2.5 GHz Cortex-A78 & 4 x 2.0 GHz Cortex-A55)",
+        "Bộ nhớ RAM & ROM": "Tùy chọn phiên bản RAM 8GB hoặc 12GB; dung lượng ROM tùy chọn gồm 128GB, 256GB và 512GB",
+        "Công nghệ bộ nhớ": "RAM chuẩn LPDDR5X kết hợp bộ nhớ trong tốc độ cao chuẩn UFS 3.1",
+        "Thẻ nhớ ngoài": "Có hỗ trợ mở rộng không gian lưu trữ qua khe cắm thẻ microSDXC",
+        "Quay Video": "Camera sau quay video tối đa 4K@30/60fps (hỗ trợ gyro-EIS, OIS); camera trước quay video tối đa 4K@30/60fps (hỗ trợ gyro-EIS)",
+        "Pin & sạc": "Dung lượng pin Li-Po 7000 mAh; công nghệ sạc nhanh có dây 80W, sạc PPS 55W, sạc PD/QC 15W và hỗ trợ sạc ngược có dây",
+        "Hệ điều hành": "Android 16 chạy trên giao diện tùy biến ColorOS 16",
+        "Tính năng AI": "Tích hợp các thuật toán trí tuệ nhân tạo thông qua tính năng chụp ảnh như AI chân dung, AI chụp ảnh thẻ",
+        "Kết nối": "Hỗ trợ 2 SIM (Nano-SIM + Nano-SIM + eSIM, tối đa kích hoạt 2 SIM); O-Connect, AirDrop, Quick Share Định vị đa vệ tinh (GPS, GLONASS, GALILEO, BDS, QZSS); Không có cổng tai nghe 3.5mm; Có hỗ trợ kết nối NFC (tùy thị trường)",
+        "Tiện ích": "Hệ thống loa kép Stereo chất lượng cao; Bảo mật sinh trắc học với cảm biến vân tay quang học đặt ẩn dưới màn hình",
+        "Chuẩn kháng nước & bụi": "Đạt tiêu chuẩn phân cấp bảo vệ IP66, IP68, IP69, IP69K",
+        "Điểm Antutu": "Đạt khoảng 2,1 triệu điểm",
+        "Điểm Geekbench 6": "Đạt khoảng 1.611 điểm đơn nhân, khoảng 6.402 điểm đa nhân",
+        "Trong hộp": "OPPO Reno16 F 5G (x 1) Củ sạc nhanh SuperVOOC 80W (x 1) Cáp sạc USB Type-C (x 1) Dụng cụ lấy SIM (x 1) Sách hướng dẫn sử dụng (x 1) Miếng dán màn hình (đã được dán sẵn khi xuất xưởng) (x 1) Vỏ bảo vệ (x 1) Không kèm tai nghe trong hộp * Phụ kiện đi kèm có thể khác nhau tùy theo từng thị trường. Vui lòng tham khảo sản phẩm thực tế tại điểm bán.",
+        "Tiêu chí so sánh": "OPPO Reno16 F",
+        "Kính bảo vệ": "Kính phẳng Gorilla Glass Victus 4 kết hợp kính AGC Dragontrail DT-Star D+ ở mặt lưng",
+        "Kích thước & Trọng lượng": "Độ dày 8.44mm - 8.58mm; Trọng lượng 196g - 197g",
+        "Bộ nhớ RAM / ROM": "12GB RAM LPDDR5X + ROM 512GB UFS 3.1",
+        "Quay video": "4K, chống rung đường chân trời",
+        "Dung lượng pin": "7000 mAh (Vật liệu Li-Po tân tiến)",
+        "Công nghệ sạc": "Sạc nhanh công suất 45W",
+        "Hệ điều hành & Kết nối": "ColorOS 16; Hỗ trợ kết nối Wi-Fi 6, mạng di động 5G thế hệ mới",
+        "Chip (Vi xử lý)": "Dimensity 7300",
+        "Camera": "Sau: Chính 50MP OIS + Siêu rộng 8MP + Telephoto 50MP (Zoom quang 3.5x) Trước: 50MP góc rộng 100°",
+        "Sạc": "Sạc nhanh tối đa 45W"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TXGM7X-NHAT-256GB",
+          "price": 15990000,
+          "costPrice": 12152400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-dream-purple-9.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím nhạt",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "TXGM7X-MDEN-256GB",
+          "price": 15990000,
+          "costPrice": 12152400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-twilight-violet-9.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím đen",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "TXGM7X-RANG-256GB",
+          "price": 15990000,
+          "costPrice": 12152400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno16f-pop-white-9_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9s",
+      "name": "OPPO Find X9s 12GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9s 12GB 256GB OPPO Find X9s là mẫu smartphone cận cao cấp thuộc dòng Find X9 series, được ra mắt tại Việt Nam vào tháng 05/2026. Nổi bật với thiết kế mỏng nhẹ 7.99 mm, thời lượng pin siêu khủng 7025mAh và khả năng nhiếp ảnh chuẩn Hasselblad với mức giá dễ tiếp cận hơn so với dòng Ultra. Tại Việt Nam, máy có giá bán khởi điểm 24.990.000đ cho phiên bản 12GB RAM và 256GB bộ nhớ trong. Điện thoại OPPO Find X9s giá bao nhiêu? Tại thị trường Việt Nam, giá OPPO Find X9s ",
+      "price": 24990000,
+      "salePrice": null,
+      "costPrice": 18992400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-24_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-26_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-19.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-20.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-21.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-16.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-17.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-18.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16.0",
+        "cpu": "MediaTek Dimensity 9500s",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "ARM Immortalis G925 MC12",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "camera_front": "32 MP, f/2.4",
+        "battery": "7025 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "202g",
+        "refresh_rate": "120Hz",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16.0",
+        "Chipset": "MediaTek Dimensity 9500s",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "ARM Immortalis G925 MC12",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 1800 nitsTần số lấy mẫu cảm ứng tối đa 240Hz1.07 tỷ màu460 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "Camera trước": "32 MP, f/2.4",
+        "Pin": "7025 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Sản phẩm": "Giá bán tại Trung Quốc",
+        "OPPO Find X9s 12GB/256GB": "5.699 CNY",
+        "OPPO Find X9s 12GB/512GB": "5.799 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9s",
+        "Thời gian ra mắt": "05/2026",
+        "Màu sắc": "Xám (Midnight Grey), Tím Nhạt (Lavender Sky) và Cam Nhạt (Sunset Orange)",
+        "Thiết kế": "Flagship nhỏ gọn, thân máy cực kỳ mỏng nhẹ (7.99mm), cảm giác cầm nắm gọn gàng",
+        "Kích thước (Cao x Rộng x Dài)": "156.98mm × 73.93mm × 7.99mm",
+        "Trọng lượng": "202g",
+        "Màn hình": "6.59 inch AMOLED, FHD+ (2760×1256 pixels)",
+        "Tần số quét": "120Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kính bảo vệ": "Gorilla Glass 7i",
+        "Hiệu năng": "MediaTek Dimensity 9500s",
+        "RAM & ROM": "12GB+256GB12GB+512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "4K 60fps, Dolby Vision",
+        "Pin & sạc": "7025mAh, sạc nhanh có dây 80W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "2,982,729",
+        "Điểm Geekbench 6": "2,571 điểm đơn nhân7,881 điểm đa nhân",
+        "Yếu tố trải nghiệm": "Điểm đánh giá",
+        "Thời lượng pin (7025mAh)": "9.5 / 10",
+        "Tốc độ sạc nhanh (80W)": "8.5 / 10",
+        "Hiệu năng & Chơi game": "9.0 / 10",
+        "Nút bấm vật lý Snap Key": "9.0 / 10",
+        "Màn hình hiển thị": "8.5 / 10",
+        "Khả năng chụp ảnh": "8.0 / 10",
+        "Độ bền & Cầm nắm": "9.0 / 10",
+        "Thông số": "OPPO Find X9s",
+        "Vi xử lý": "Dimensity 9500s",
+        "RAM / ROM": "12GB/256GB 12GB/512GB",
+        "Quay video": "4K/60fps Dolby Vision",
+        "Pin và Sạc": "7025mAh Sạc có dây 80W",
+        "Vân tay": "Siêu âm trong màn hình",
+        "Tiêu chí": "OPPO Find X9s",
+        "Viền màn hình": "1.15mm (Siêu mỏng công nghệ LIPO)",
+        "Vi xử lý (Chip)": "Dimensity 9500s",
+        "Bảo mật": "Vân tay Siêu âm dưới màn hình"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JAXWEX-XAM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-24_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-NHAT-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam nhạt",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-TIM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-26_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-reno15-f",
+      "name": "OPPO Reno15 F 5G 8GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Reno15 F 5G 8GB 256GB OPPO Reno15 F là mẫu smartphone tầm trung ra mắt tháng 1/2026, nổi bật với pin lớn 7000 mAh, sạc nhanh SuperVOOC 80W cho thời gian sử dụng dài. Máy sở hữu màn hình AMOLED 6.57 inch 120Hz hiển thị mượt mà, sắc nét. Về hiệu năng, Reno15 F được trang bị chip Snapdragon 6 Gen 1, đi kèm RAM 8GB và bộ nhớ trong 256GB, cho hiệu năng ổn định. Điểm nhấn đáng chú ý là camera trước 50MP, camera sau 50MP, hỗ trợ kháng nước, bụi IP69, cùng thiết kế trẻ trung, h",
+      "price": 11990000,
+      "salePrice": null,
+      "costPrice": 9112400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15f-2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15f-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15f.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-f-5g-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-f-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-f-5g-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-f-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15f-5g-7.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16.0",
+        "cpu": "Qualcomm Snapdragon 6 Gen 1 5G",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Adreno 710",
+        "screen": "6.57 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50MP f/1.8 (OIS, AF) + Góc siêu rộng 8MP f/2.2 + Macro 2MP f/2.4",
+        "camera_front": "50MP f/2.0, hỗ trợ AF",
+        "battery": "7000mAh",
+        "network": "5G",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16.0",
+        "Chipset": "Qualcomm Snapdragon 6 Gen 1 5G",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 710",
+        "Kích thước màn hình": "6.57 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1080 x 2372 pixels (FullHD+)",
+        "Tính năng màn hình": "1.07 tỷ màu (10-bit), DCI-P3 100%, Độ sáng tối đa 1400 nits",
+        "Camera sau": "Chính 50MP f/1.8 (OIS, AF) + Góc siêu rộng 8MP f/2.2 + Macro 2MP f/2.4",
+        "Camera trước": "50MP f/2.0, hỗ trợ AF",
+        "Pin": "7000mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM (Sim 2 chung khe với thẻ nhớ)",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "01/",
+        "Sản phẩm": "OPPO Reno 15 F 5G",
+        "Màn hình": "6.57 inch, AMOLED, Full HD+, 120Hz",
+        "Độ sáng \n tối đa": "1400 nits",
+        "Bộ vi xử lý (CPU)": "Snapdragon 6 Gen 1 5G (4 nhân 2.2 GHz & 4 nhân 1.8 GHz)",
+        "Hệ điều hành": "Android 16",
+        "RAM & ROM": "8GB RAM, 256GB ROM",
+        "Camera \n sau": "Chính 50MP + Phụ 8MP + 2MP",
+        "Pin & Sạc": "7000mAh (Typ) Siêu sạc nhanh superVOOC 80W",
+        "Kháng nước/bụi": "IP66 + IP68 + IP69",
+        "Bộ vi xử lý (Chipset)": "Snapdragon 6 Gen 1 5G (4 nhân 2.2GHz & 4 nhân 1.8GHz)",
+        "RAM / ROM": "8GB/256GB",
+        "Kết nối mạng": "Wifi 2.4G/5G, 802.11 a/b/g/n/ac",
+        "Phiên bản": "Ram & bộ nhớ trong (ROM)",
+        "OPPO Reno15 5G": "12GB RAM, 256GB ROM",
+        "OPPO Reno15 F 5G": "8GB RAM, 256GB ROM"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3M3KV0-HONG-256GB",
+          "price": 11990000,
+          "costPrice": 9112400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15f-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "3M3KV0-UONG-256GB",
+          "price": 11990000,
+          "costPrice": 9112400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15f-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Dương",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "3M3KV0-NHAT-256GB",
+          "price": 11990000,
+          "costPrice": 9112400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15f.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Nhạt",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-n6",
+      "name": "OPPO Find N6 16GB 512GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find N6 16GB 512GB",
+      "price": 64990000,
+      "salePrice": null,
+      "costPrice": 49392400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-0.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/k/s/ksp.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-n6-16gb-512gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-n6-16gb-512gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-n6-16gb-512gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-n6-16gb-512gb-chip.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16.0",
+        "cpu": "Snapdragon 8 Elite Gen 5",
+        "ram": "16 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno 840",
+        "screen": "Chính 8.12 inches - Phụ 6.62 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 200 MP, f/1.8Góc siêu rộng 50 MP, f/2.0Telephoto 50 MP, f/2.7Monochrome 2 MP, f/2.4",
+        "camera_front": "Trong 20 MP, f/2.4Ngoài 20 MP, f/2.4",
+        "battery": "6000 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "225g"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "ColorOS 16.0",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "16 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "7 nhân",
+        "GPU": "Adreno 840",
+        "Kích thước màn hình": "Chính 8.12 inches - Phụ 6.62 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "Chính: 2480 x 2248 pixels - Phụ: 2616 x 1140 pixels",
+        "Tính năng màn hình": "Tần số quét 120HzĐộ sáng tối đa 1800 nits1.07 tỉ màu100% DCI-P3Màn hình chính 412 PPIMàn hình phụ 431 PPI",
+        "Camera sau": "Chính 200 MP, f/1.8Góc siêu rộng 50 MP, f/2.0Telephoto 50 MP, f/2.7Monochrome 2 MP, f/2.4",
+        "Camera trước": "Trong 20 MP, f/2.4Ngoài 20 MP, f/2.4",
+        "Pin": "6000 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "03/2026",
+        "Tên sản phẩm": "Giá bán tại Việt Nam",
+        "OPPO Find N6 16GB/512GB": "64.990.000đ",
+        "Thông số": "OPPO Find N6",
+        "Khối lượng": "225g",
+        "RAM / ROM": "16GB + 512GB",
+        "Chip xử lý": "Snapdragon 8 Elite Gen 5",
+        "Màn hình trong": "8.12\", QXGA+ (2248 x 2480px), 120Hz",
+        "Màn hình ngoài": "6.62\", Full HD+ (1140 x 2616px), 120Hz",
+        "Độ sáng màn trong": "2500 nits (peak)",
+        "Độ sáng màn ngoài": "3600 nits (peak)",
+        "Quay video tối đa": "4K 120fps Dolby Vision",
+        "Sạc có dây / không dây": "80W / 50W",
+        "Bluetooth": "6.0",
+        "Wi-Fi": "Wi-Fi 7",
+        "Kháng nước": "IP56 / IP58 / IP59"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QSOA5N-CAM-512GB",
+          "price": 64990000,
+          "costPrice": 49392400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam",
+            "storage": "512GB"
+          }
+        },
+        {
+          "sku": "QSOA5N-ITAN-512GB",
+          "price": 64990000,
+          "costPrice": 49392400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-n6-1_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Titan",
+            "storage": "512GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9-ultra",
+      "name": "OPPO Find X9 Ultra 12GB 512GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9 Ultra 12GB 512GB OPPO Find X9 Ultra là dòng siêu phẩm flagship cao cấp nhất của OPPO ra mắt vào tháng 5/2026. Nổi bật với điểm nhấn là hệ thống camera Hasselblad cảm biến chính 200 MP và camera tele zoom quang học 10x. Đi kèm với chip Snapdragon 8 Elite Gen 5, màn hình 2K+ 144Hz, và viên pin dung lượng lớn 7050 mAh hỗ trợ sạc nhanh 100W. Đây cũng là lần đầu tiên phiên bản Ultra được mở bán chính hãng tại Việt Nam với mức giá khởi điểm 49.990.000đ cho phiên bản 1",
+      "price": 49990000,
+      "salePrice": 48990000,
+      "costPrice": 37232400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-nau-8_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16 Android 16",
+        "cpu": "Snapdragon 8 Elite Gen 5",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno 840",
+        "screen": "6.82 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "camera_front": "50 MP, f/2.4",
+        "battery": "7050 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "refresh_rate": "1–120Hz, tối đa 144Hz",
+        "weight": "235g (Cam) – 236g (Nâu)",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16 Android 16",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 840",
+        "Kích thước màn hình": "6.82 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "3168 x 1440 pixel",
+        "Tính năng màn hình": "Độ sáng tối đa 3600 nitsTần số lấy mẫu cảm ứng tối đa 300Hz1.07 tỷ màu510 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "Camera trước": "50 MP, f/2.4",
+        "Pin": "7050 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Phiên bản": "Giá bán tại Trung Quốc",
+        "OPPO Find X9 Ultra 12GB/512GB": "7.499 CNY",
+        "OPPO Find X9 Ultra 12GB/256GB": "6.999 CNY",
+        "OPPO Find X9 Ultra 16GB/512GB": "7.999 CNY",
+        "OPPO Find X9 Ultra 16GB/1TB": "8.499 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9 Ultra",
+        "Thời gian ra mắt": "05/2026",
+        "Màn hình": "AMOLED 6.82 inch, Quad HD+ (2K+), độ phân giải 3168×1440 pixels",
+        "Tần số quét": "1–120Hz, tối đa 144Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kích thước (Cao x Rộng x Dài)": "163.16mm × 76.97mm × 8.65mm (Cam)163.16mm × 76.97mm × 9.10mm (Nâu)",
+        "Trọng lượng": "235g (Cam) – 236g (Nâu)",
+        "Kính bảo vệ": "Gorilla Glass Victus 2",
+        "Hiệu năng": "Snapdragon 8 Elite Gen 5",
+        "RAM & ROM": "12GB + 512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "8K 30fps, 4K 120fps, Dolby Vision",
+        "Pin & sạc": "7050mAh, sạc nhanh có dây 100W, sạc không dây 50W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "3808128",
+        "Điểm Geekbench 6": "2950 điểm đơn nhân9507 điểm đa nhân",
+        "Tiêu chí đánh giá": "Điểm đánh giá",
+        "Cảm giác cầm nắm": "8.5 / 10",
+        "Màn hình hiển thị": "9.5 / 10",
+        "Hiệu năng & Chiến game": "9.5 / 10",
+        "Chụp ảnh & Quay phim": "10 / 10",
+        "Thời lượng pin & Sạc": "9.5 / 10",
+        "Tính năng AI đi kèm": "9.0 / 10",
+        "Thông số": "OPPO Find X9 Ultra (2026)",
+        "Vi xử lý": "Snapdragon 8 Elite Gen 5",
+        "Bộ nhớ lưu trữ": "12GB LPDDR5X / 512GB UFS 4.1",
+        "Pin & Sạc": "7050 mAh (Silicon-Carbon)Sạc nhanh: 100W có dây / 50W không dây",
+        "Kháng nước": "IP66 / IP68 / IP69",
+        "Tiêu chí": "OPPO Find X9 Ultra chính hãng",
+        "Bảo hành": "Bảo hành chính hãng 24 tháng + Bảo hiểm rơi vỡ màn hình.",
+        "Thông báo": "Không bị chậm, thông báo tức thời, chạy cực kỳ ổn định.",
+        "Ứng dụng rác": "Máy sạch hoàn toàn, cài sẵn đầy đủ dịch vụ Google.",
+        "Định vị & Bản đồ": "Định vị chuẩn xác 100% ngay khi mở ứng dụng."
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "E2UBAN-CAM-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        },
+        {
+          "sku": "E2UBAN-NAU-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-nau-8_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-reno15",
+      "name": "OPPO Reno15 5G 12GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Reno15 5G 12GB 256GB OPPO Reno15 là mẫu smartphone cận cao cấp được chính thức mở bán tại thị trường Việt Nam vào tháng 1 năm 2026. Nổi bật với thiết kế khung nhôm mỏng nhẹ, chuẩn kháng bụi nước IP69 và hệ thống AI tích hợp sâu. Máy sở hữu màn hình AMOLED 6.59 inch 120Hz, camera AI 50MP có chống rung OIS, cùng viên pin \"khủng\" 6500 mAh hỗ trợ sạc nhanh 80W. Thiết bị có giá dao động từ 10.820.000đ đến 16.990.000đ tùy phiên bản và chương trình ưu đãi. Vì sao nên mua điện ",
+      "price": 16990000,
+      "salePrice": null,
+      "costPrice": 12912400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_23.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-5g-12gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-5g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-5g-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-5g-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno15-5g-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-15.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-14.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-13.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-12.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-11.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno15-5g-16.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16.0",
+        "cpu": "Qualcomm Snapdragon 7 Gen4 5G",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Adreno 722",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50MP f/1.8 (OIS) + Telephoto 50MP f/2.8 (OIS) + Góc siêu rộng 8MP f/2.2",
+        "camera_front": "50MP f/2.0",
+        "battery": "6500 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "Khoảng 197g",
+        "resolution": "1256 x 2760 pixel (1,5K)",
+        "refresh_rate": "120Hz",
+        "charging": "SuperVOOC 80W",
+        "dimensions": "157,9 x 74,73 x 7,42 mm"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16.0",
+        "Chipset": "Qualcomm Snapdragon 7 Gen4 5G",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 722",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Cảm ứng 240Hz, 100% DCI-P3, 10-bit (1.07 tỷ màu), Độ sáng tối đa 1200 nits",
+        "Camera sau": "Chính 50MP f/1.8 (OIS) + Telephoto 50MP f/2.8 (OIS) + Góc siêu rộng 8MP f/2.2",
+        "Camera trước": "50MP f/2.0",
+        "Pin": "6500 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "01/2026",
+        "Tiêu chí": "OPPO Reno 15",
+        "Màu sắc": "Trắng, Xanh",
+        "Trọng lượng": "Khoảng 197g",
+        "Màn hình": "6,59 inch",
+        "Độ phân giải": "1256 x 2760 pixel (1,5K)",
+        "Độ sáng": "Lên đến 1200 nits",
+        "Tần số quét": "120Hz",
+        "Bộ vi xử lý": "Qualcomm Snapdragon 7 Gen4 5G",
+        "RAM": "12GB",
+        "ROM": "256GB",
+        "Hệ điều hành": "ColorOS 16",
+        "Sạc": "SuperVOOC 80W",
+        "Kích thước": "157,9 x 74,73 x 7,42 mm",
+        "Phiên bản": "RAM & Bộ nhớ trong",
+        "OPPO Reno15 5G": "12GB RAM, 256GB ROM",
+        "OPPO Reno15 F 5G": "8GB RAM, 256GB ROM"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "OO2RYJ-UONG-256GB",
+          "price": 16990000,
+          "costPrice": 12912400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_23.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "OO2RYJ-RANG-256GB",
+          "price": 16990000,
+          "costPrice": 12912400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno-15.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9-16gb-512gb",
+      "name": "OPPO Find X9 16GB 512GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9 16GB 512GB Điện thoại OPPO Find X9 16GB 512GB được ưu ái trang bị chip xử lý Dimensity 9500 5G tối đa 4.21GHz, giúp tối ưu hiệu năng và tiết kiệm điện năng vượt trội. Màn hình AMOLED 6.59 inch của máy mang đến trải nghiệm hiển thị sắc nét với độ phân giải 1.5K+ (1256 x 2760) và tần số quét 120Hz mượt mà. Ngoài ra, máy còn ghi điểm với viên pin dung lượng 7025mAh (Typ) đi kèm siêu sạc nhanh superVOOC 80W và sạc không dây 50W. Điện thoại OPPO Find X9 16GB 512GB – ",
+      "price": 26990000,
+      "salePrice": null,
+      "costPrice": 20512400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-16gb-512gb-1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-16gb-512gb.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb_5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb-3_1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-6_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-5_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-7_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1_1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP OIS (Chính) + 50MP OIS (Tele) + 50MP (Góc rộng) + 2MP (Mono)",
+        "camera_front": "32MP f/2.4",
+        "cpu": "Dimensity 9500 5G",
+        "nfc": "Có",
+        "ram": "16 GB",
+        "storage": "512 GB",
+        "battery": "7025mAh (Typ)",
+        "os": "ColorOS 16, nền tảng Android 16"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "50MP OIS (Chính) + 50MP OIS (Tele) + 50MP (Góc rộng) + 2MP (Mono)",
+        "Camera trước": "32MP f/2.4",
+        "Chipset": "Dimensity 9500 5G",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "16 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Pin": "7025mAh (Typ)",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Hệ điều hành": "ColorOS 16, nền tảng Android 16",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Tần số quét 120Hz, Cảm ứng 240Hz, 1.07 tỷ màu (10-bit), 100% DCI-P3, Độ sáng 1800nits",
+        "Loại CPU": "8 nhân"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TT5Z75-DEN-512GB",
+          "price": 26990000,
+          "costPrice": 20512400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-16gb-512gb-1.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          }
+        },
+        {
+          "sku": "TT5Z75-DO-512GB",
+          "price": 26990000,
+          "costPrice": 20512400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-16gb-512gb.png",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "storage": "512GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-reno12-5g",
+      "name": "OPPO Reno12 5G 12GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Reno12 5G 12GB 256GB OPPO Reno12 5G với sự hỗ trợ của chip xử lý Chip MediaTek 7300-Energy kết hợp với 12GB RAM cung cấp hiệu năng mượt mà và xử lý đa nhiệm hiệu quả. Sở hữu màn hình 6.7 inches AMOLED 120Hz đã giúp Reno 12 có sức hút hơn khi lướt web kèm pin trâu 50000mAh, cho phép duy trì xử lý công việc xuyên suốt ngày dài. Vì sao nên mua điện thoại OPPO Reno12 5G? Với thiết kế sang trọng và các tính năng tiên tiến, Reno12 5G không chỉ đáp ứng nhu cầu giải trí mà còn ",
+      "price": 12990000,
+      "salePrice": 8990000,
+      "costPrice": 6832400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_115.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__7_71.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__7_70.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_114.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno12-5g_9_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno12-5g_7_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno12-5g_16_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno12-5g_11_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno12-5g_15_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno12-5g_14_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.7 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP + OIS Camera góc rộng: 8MP Camera xóa phông: 2MP",
+        "camera_front": "32MP",
+        "cpu": "MediaTek Dimensity 7300",
+        "nfc": "Có",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "battery": "5000mAh",
+        "os": "Android 14",
+        "resolution": "FHD+ (2412 x 1080)",
+        "weight": "khoảng 177g"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.7 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "50MP + OIS Camera góc rộng: 8MP Camera xóa phông: 2MP",
+        "Camera trước": "32MP",
+        "Chipset": "MediaTek Dimensity 7300",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "5000mAh",
+        "Hệ điều hành": "Android 14",
+        "Tính năng màn hình": "Tần số quét 120Hz",
+        "Thông số": "OPPO Reno12 5G",
+        "Màn hình": "6.7 inch 3D Flexible AMOLED",
+        "Độ phân giải": "FHD+ (2412 x 1080)",
+        "Màu sắc": "Matte Brown, Sunset Pink, Astro Silver",
+        "Chip": "MediaTek Dimensity 7300-Energy",
+        "RAM": "12GB",
+        "Dung lượng pin": "5000mAh Hỗ trợ sạc nhanh 80W",
+        "Cổng sạc": "USB Type-C",
+        "Trọng lượng": "khoảng 177g"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "UHJL3P-BAC-256GB",
+          "price": 12990000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_115.png",
+          "active": true,
+          "options": {
+            "color": "Bạc",
+            "storage": "256GB"
+          },
+          "salePrice": 8990000
+        },
+        {
+          "sku": "UHJL3P-DONG-256GB",
+          "price": 12990000,
+          "costPrice": 6832400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__7_71.png",
+          "active": true,
+          "options": {
+            "color": "Nâu Đồng",
+            "storage": "256GB"
+          },
+          "salePrice": 8990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-a6-pro",
+      "name": "OPPO A6 Pro 8GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO A6 Pro 8GB 256GB Điện thoại OPPO A6 Pro là chiếc smartphone gây ấn tượng với chip MediaTek Helio G100 mạnh mẽ, pin 7000mAh siêu khủng hỗ trợ sạc nhanh 80W. Điện thoại còn được trang bị camera chính 50MP cùng camera trước 16MP. Sản phẩm điện thoại OPPO này sở hữu ba màu sắc là Titan, Xanh dương, Hồng. Bảng so sánh thông số OPPO A6 Pro vs OPPO A5 Pro Để có cái nhìn rõ ràng hơn về sự khác biệt giữa OPPO A6 Pro và OPPO A5 Pro, dưới đây là bảng so sánh chi tiết các thông số ",
+      "price": 9990000,
+      "salePrice": null,
+      "costPrice": 7592400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb_4.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb-2_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb-1_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-8gb-128gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-8gb-256gb_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_427320357.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-18.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-16.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-21.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-20.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-19.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.57 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP (Chính, f/1.8) + 2MP (Mono, f/2.4), có đèn flash",
+        "camera_front": "16MP, f/2.4",
+        "cpu": "MediaTek Helio G100, tối đa 2.2GHz",
+        "nfc": "Có",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "battery": "7000mAh",
+        "os": "ColorOS 15 (Android 15)"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.57 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "50MP (Chính, f/1.8) + 2MP (Mono, f/2.4), có đèn flash",
+        "Camera trước": "16MP, f/2.4",
+        "Chipset": "MediaTek Helio G100, tối đa 2.2GHz",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "7000mAh",
+        "Thẻ SIM": "2 Nano SIM (Sim 2 chung khe với thẻ nhớ)",
+        "Hệ điều hành": "ColorOS 15 (Android 15)",
+        "Độ phân giải màn hình": "1080 x 2372 pixels (FullHD+)",
+        "Tính năng màn hình": "1 tỷ màu, Độ sáng tối đa 1400 nits",
+        "Loại CPU": "8 nhân, tối đa 2.2GHz",
+        "Thông số": "OPPO A6 Pro",
+        "Kích thước & Trọng lượng": "158.2 × 75.02 × 8.0 mm, 188g",
+        "Màn hình": "6.57\", AMOLED, FHD+ (1080×2372), 120Hz, 240Hz cảm ứng",
+        "Độ sáng": "600 nits thường, 1400 nits HBM",
+        "Gam màu & Độ sâu màu": "100% DCI-P3, 100% sRGB, 10-bit (1.07 tỉ màu)",
+        "Mật độ điểm ảnh": "397 PPI",
+        "Kính phủ": "AGC DT-Star D+",
+        "Quay video (sau)": "1080P@60fps, 720P/1080P slo-mo@120fps, zoom 10x, dual-view",
+        "Quay video (trước)": "1080P@30fps, 720P@30fps, dual-view",
+        "RAM & ROM": "8+128GB / 8+256GB",
+        "Tên sản phẩm": "Giá bán",
+        "OPPO A6 Pro 8GB 256GB": "9.990.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "EWCB6A-HONG-256GB",
+          "price": 9990000,
+          "costPrice": 7592400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb_4.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "EWCB6A-UONG-256GB",
+          "price": 9990000,
+          "costPrice": 7592400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb-2_4.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "EWCB6A-ITAN-256GB",
+          "price": 9990000,
+          "costPrice": 7592400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb-1_4.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám Titan",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9",
+      "name": "OPPO Find X9 12GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9 12GB 256GB OPPO Find X9 là dòng smartphone cao cấp nhất của OPPO, ra mắt chính thức tại Việt Nam vào cuối tháng 10/2025. Sản phẩm trang bị cấu hình gồm chip Dimensity 9500 mạnh mẽ, hệ thống camera Hasselblad chuyên nghiệp và thời lượng pin \"khủng\" 7.025 mAh. Find X9 là lựa chọn hoàn hảo cho người dùng yêu cầu hiệu năng ổn định, thiết kế hiện đại và độ bền lâu dài. Giá OPPO Find X9 bao nhiêu? Tại thị trường Việt Nam, điện thoại OPPO Find X9 có giá 22.990.000đ đến",
+      "price": 22990000,
+      "salePrice": null,
+      "costPrice": 17472400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-12gb-256gb-1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-12gb-256gb.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb_4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb-3_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-12gb-256gb_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/9/x9_1-6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP OIS (Chính) + 50MP OIS (Tele) + 50MP (Góc rộng) + 2MP (Mono)",
+        "camera_front": "32MP f/2.4",
+        "cpu": "Dimensity 9500 5G",
+        "nfc": "Có",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "battery": "7025mAh (Typ)",
+        "os": "ColorOS 16.0"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "50MP OIS (Chính) + 50MP OIS (Tele) + 50MP (Góc rộng) + 2MP (Mono)",
+        "Camera trước": "32MP f/2.4",
+        "Chipset": "Dimensity 9500 5G",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "7025mAh (Typ)",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Tần số quét 120Hz, Cảm ứng 240Hz, 1.07 tỷ màu (10-bit), 100% DCI-P3, Độ sáng 1800nits",
+        "Loại CPU": "8 nhân",
+        "Sản phẩm": "Phiên bản",
+        "OPPO Find X9": "RAM 12GB + ROM 256GB",
+        "Thông số": "OPPO Find X9 12GB 256GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "N5NVRK-XAM-256GB",
+          "price": 22990000,
+          "costPrice": 17472400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-12gb-256gb-1.png",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "N5NVRK-DEN-256GB",
+          "price": 22990000,
+          "costPrice": 17472400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-12gb-256gb.png",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x8",
+      "name": "OPPO Find X8 16GB 512GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X8 16GB 512GB OPPO Find X8 là mẫu smartphone flagship cao cấp đến từ OPPO, chính thức ra mắt toàn cầu và tại Việt Nam vào tháng 11/2024. Sản phẩm được trang bị chip MediaTek Dimensity 9400 mạnh mẽ, kết hợp màn hình AMOLED 6.59 inch, tần số quét 120Hz, độ phân giải FHD+, mang lại trải nghiệm hiển thị mượt mà và sắc nét. Điểm nhấn của OPPO Find X8 còn đến từ cụm 3 camera sau 50MP, khả năng kháng nước, kháng bụi chuẩn IP68/IP69, cùng viên pin dung lượng lớn 5.630mAh h",
+      "price": 22990000,
+      "salePrice": 19490000,
+      "costPrice": 14812400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/c/o/combo_product_find_x8_-_grey_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/c/o/combo_product_find_x8_-_black_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam-1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x8-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x8-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x8-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x8-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam_8_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam_7_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x8-xam_5_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP OIS (Chính) + 50MP (Chân dung Tele) + 50MP (Góc rộng)",
+        "camera_front": "32MP, khẩu độ F/2.4",
+        "cpu": "MediaTek Dimensity 9400",
+        "nfc": "Có",
+        "ram": "16 GB",
+        "storage": "512 GB",
+        "battery": "5630 mAh",
+        "os": "ColorOS 15, nền tảng Android 15",
+        "resolution": "1256 x 2760 pixel (1.5K+)",
+        "weight": "193g",
+        "dimensions": "157.35 x 74.33 x 7.85 mm"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "50MP OIS (Chính) + 50MP (Chân dung Tele) + 50MP (Góc rộng)",
+        "Camera trước": "32MP, khẩu độ F/2.4",
+        "Chipset": "MediaTek Dimensity 9400",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "16 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Pin": "5630 mAh",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Hệ điều hành": "ColorOS 15, nền tảng Android 15",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Tần số quét: 120Hz, Kính cường lực GG 7i Độ sáng tối đa: 1600 nits Màu sắc hiển thị: 1 tỷ màu",
+        "Loại CPU": "8 nhân",
+        "Tên sản phẩm": "Giá bán",
+        "OPPO Find X8 16GB 512GB": "19.490.000đ",
+        "Thông số": "OPPO Find X8 16GB 512GB",
+        "Màn hình": "AMOLED 6.59 inch",
+        "Kính cường lực": "Corning® Gorilla® Glass 7i",
+        "Độ phân giải": "1256 x 2760 pixel (1.5K+)",
+        "Màu sắc": "Xám, Đen",
+        "Chip": "MediaTek Dimensity 9400",
+        "RAM": "16GB",
+        "ROM": "512GB",
+        "Khẩu độ camera sau": "F/1.8 + F/2.6 + F/2.0",
+        "Tính năng AI": "Camera zoom viễn vọng AI, Ghi chú thông minh, Nhân diện giọng nói, Xử lý tài liệu thông minh, dịch thuật, tóm tắt văn bản, Vẽ lại cùng AI",
+        "Touch to share\n(Chạm để chia sẻ)": "Chia sẻ với iPhone chỉ với 1 chạm",
+        "Kháng nước": "IP68 & IP69",
+        "Dung lượng pin": "5630mAh",
+        "Khả năng sạc": "Sạc nhanh có dây 80W, Sạc nhanh không dây 50W",
+        "Trọng lượng": "193g",
+        "Kích thước": "157.35 x 74.33 x 7.85 mm",
+        "Tính năng": "Chi tiết",
+        "Thiết kế": "- Nhỏ gọn, trẻ trung - Chất liệu kim loại",
+        "Hiệu năng": "- MediaTek Dimensity 9400 - 16GB-512GB lưu trữ lớn",
+        "Camera": "- Chế độ chụp tele, tính năng AI thông minh - Chế độ chân dung nổi bật - Hỗ trợ zoom xa siêu nét",
+        "Pin và sạc": "- Pin lớn 5630mAh - Sạc nhanh 80W/ sạc không dây 50W",
+        "Tính năng nổi bật khác": "- Hỗ trợ AI mới cho các tác vụ công việc - Trang bị chuẩn IP69 chống nước tốt nhất"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "NFNHGJ-XAM-512GB",
+          "price": 22990000,
+          "costPrice": 14812400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/c/o/combo_product_find_x8_-_grey_1.png",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "512GB"
+          },
+          "salePrice": 19490000
+        },
+        {
+          "sku": "NFNHGJ-DEN-512GB",
+          "price": 22990000,
+          "costPrice": 14812400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/c/o/combo_product_find_x8_-_black_1.png",
+          "active": true,
+          "options": {
+            "color": "đen",
+            "storage": "512GB"
+          },
+          "salePrice": 19490000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9-pro",
+      "name": "OPPO Find X9 Pro 16GB 512GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9 Pro 16GB 512GB OPPO Find X9 Pro là mẫu smartphone flagship cao cấp nhất của OPPO, ra mắt tháng 10/2025. Máy nổi bật với chip MediaTek Dimensity 9500 cho hiệu năng hàng đầu, màn hình AMOLED 6.78 inch 1.5K+ 120Hz, độ sáng tối đa 1800 nits cho trải nghiệm hiển thị sắc nét, mượt mà trong mọi điều kiện ánh sáng. Điểm nhấn của Find X9 Pro là hệ thống camera Hasselblad 200MP cho khả năng chụp ảnh chuyên nghiệp, cùng pin dung lượng lớn 7500 mAh, đáp ứng tốt nhu cầu sử d",
+      "price": 32990000,
+      "salePrice": null,
+      "costPrice": 25072400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/i/find-x9-pro.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-pro-16gb-512gb.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-pro-16gb-512gb-2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_find_x9_pro_16gb_512gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-pro.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-pro-126gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-pro_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-pro-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-pro-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_find_x9_pro_16gb_512gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-pro-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-pro-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-pro-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-pro-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-pro-5.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "6.78 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP OIS (Chính) + 200MP OIS (Tele) + 50MP (Góc rộng) + 2MP (Mono)",
+        "camera_front": "50MP; f/2.0; FOV 90°; Ống kính 5P; Hỗ trợ lấy nét AF",
+        "cpu": "Dimensity 9500 5G",
+        "nfc": "Có",
+        "ram": "16 GB",
+        "storage": "512 GB",
+        "battery": "7500mAh",
+        "os": "ColorOS 16, nền tảng Android 16"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "6.78 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Camera sau": "50MP OIS (Chính) + 200MP OIS (Tele) + 50MP (Góc rộng) + 2MP (Mono)",
+        "Camera trước": "50MP; f/2.0; FOV 90°; Ống kính 5P; Hỗ trợ lấy nét AF",
+        "Chipset": "Dimensity 9500 5G",
+        "Công nghệ NFC": "Có",
+        "Dung lượng RAM": "16 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Pin": "7500mAh",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Hệ điều hành": "ColorOS 16, nền tảng Android 16",
+        "Tính năng màn hình": "Độ phân giải: 1272 x 2772 (1.5K+), 120Hz refresh rate, 240Hz touch sampling, 1.07 tỷ màu (10-bit), 100% DCI-P3, 800 nits, HBM 1800 nits, Gorilla Glass Victus 2",
+        "Loại CPU": "8 nhân",
+        "Sản phẩm": "Phiên bản",
+        "OPPO Find X9 Pro": "RAM 16GB + ROM 512GB",
+        "Thông số": "OPPO Find X9 Pro 16GB 512GB",
+        "Độ phân giải màn hình": "1272 x 2772 pixel (1.5K+)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "H3C08U-DO-512GB",
+          "price": 32990000,
+          "costPrice": 25072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/i/find-x9-pro.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "storage": "512GB"
+          }
+        },
+        {
+          "sku": "H3C08U-XAM-512GB",
+          "price": 32990000,
+          "costPrice": 25072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-pro-16gb-512gb.png",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "512GB"
+          }
+        },
+        {
+          "sku": "H3C08U-RANG-512GB",
+          "price": 32990000,
+          "costPrice": 25072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9-pro-16gb-512gb-2.png",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "512GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-a6-pro-8gb-128gb",
+      "name": "OPPO A6 Pro 8GB 128GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO A6 Pro 8GB 128GB OPPO A6 Pro được trang bị màn hình AMOLED 6.57 inch độ phân giải Full HD+ sắc nét cùng sức mạnh xử lý ổn định từ con chip MediaTek Helio G100 hiện đại. Máy có viên pin dung lượng lên đến 7000mAh kèm sạc nhanh 80W. Sản phẩm sở hữu hệ thống camera kép phía sau với cảm biến chính đạt độ phân giải 50MP. OPPO A6 Pro giá bao nhiêu? Điện thoại OPPO A6 Pro có mức giá khoảng 7.990.000 VNĐ đến 9.890.000 VNĐ, tùy thuộc vào từng tùy chọn cấu hình và dung lượng lưu ",
+      "price": 8290000,
+      "salePrice": null,
+      "costPrice": 6300400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-a6-pro-1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-a6-pro-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-a6-pro.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo_a6_pro_8gb_256gb_3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-8gb-128gb_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-8gb-128gb-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-8gb-128gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-8gb-128gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-a6-pro-8gb-128gb-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_427320357_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-18_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-16_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-21_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-20_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-a6-pro-19_2.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 15 (Android 15)",
+        "cpu": "MediaTek Helio G100, tối đa 2.2GHz",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "gpu": "ARM G57 MC2@1G",
+        "screen": "6.57 inches",
+        "display_tech": "AMOLED",
+        "camera": "50MP (Chính, f/1.8) + 2MP (Mono, f/2.4), có đèn flash",
+        "camera_front": "16MP, f/2.4",
+        "battery": "7000mAh",
+        "network": "4G",
+        "nfc": "Có",
+        "material": "Mặt lưng bằng thủy tinh hữu cơ nhám mờ, khung viền bằng nhựa phủ lớp giả kim loại mịn.",
+        "connectivity": "Mạng di động 4G/4G+, 2 Nano-SIM, Wi-Fi 5 băng tần kép, Bluetooth 5.4, cổng sạc kiêm tai nghe USB Type-C, kết nối NFC 360°."
+      },
+      "specsRaw": {
+        "Hệ điều hành": "ColorOS 15 (Android 15)",
+        "Chipset": "MediaTek Helio G100, tối đa 2.2GHz",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "8 nhân, tối đa 2.2GHz",
+        "GPU": "ARM G57 MC2@1G",
+        "Kích thước màn hình": "6.57 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1080 x 2372 pixels (FullHD+)",
+        "Tính năng màn hình": "1 tỷ màu, Độ sáng tối đa 1400 nits",
+        "Camera sau": "50MP (Chính, f/1.8) + 2MP (Mono, f/2.4), có đèn flash",
+        "Camera trước": "16MP, f/2.4",
+        "Pin": "7000mAh",
+        "Hỗ trợ mạng": "4G",
+        "Thẻ SIM": "2 Nano SIM (Sim 2 chung khe với thẻ nhớ)",
+        "Công nghệ NFC": "Có",
+        "Tên sản phẩm": "Giá bán",
+        "OPPO A6 Pro 8GB 256GB": "9.990.000đ",
+        "OPPO A6 Pro 8GB 128GB": "8.290.000đ",
+        "Tiêu chí cấu hình": "Thông số chi tiết trên A6 Pro",
+        "Thiết kế": "Kiểu dáng phẳng nguyên khối, viền màn hình Infinite Edge, độ dày 8.00mm, nặng 188g.",
+        "Chất liệu": "Mặt lưng bằng thủy tinh hữu cơ nhám mờ, khung viền bằng nhựa phủ lớp giả kim loại mịn.",
+        "Màn hình": "AMOLED 6.57 inch, độ phân giải FHD+ , tần số quét 120Hz, độ sáng tối đa 1400 nits, kính cường lực AGC DT-Star D+.",
+        "Chip xử lý": "MediaTek Helio G100 (tiến trình 6nm, 8 nhân tốc độ tối đa 2.2 GHz).",
+        "RAM / ROM": "RAM 8GB LPDDR4X; ROM tùy chọn 128GB hoặc 256GB UFS 2.2.",
+        "Pin & Sạc": "Dung lượng 7000mAh; Sạc nhanh 80W SUPERVOOC, Sạc ngược có dây 5W.",
+        "Độ bền & kháng nước": "Độ bền MIL-STD 810H; Kháng nước và bụi: IP66, IP68 và IP69.",
+        "Kết nối": "Mạng di động 4G/4G+, 2 Nano-SIM, Wi-Fi 5 băng tần kép, Bluetooth 5.4, cổng sạc kiêm tai nghe USB Type-C, kết nối NFC 360°.",
+        "Tiện ích thông minh": "Vân tay quang học dưới màn hình, loa kép Stereo siêu âm lượng 300%, tản nhiệt SuperCool VC, bộ công cụ trợ lý AI"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "I1Y3CN-XAM-128GB",
+          "price": 8290000,
+          "costPrice": 6300400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-a6-pro-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          }
+        },
+        {
+          "sku": "I1Y3CN-UONG-128GB",
+          "price": 8290000,
+          "costPrice": 6300400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-a6-pro-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "128GB"
+          }
+        },
+        {
+          "sku": "I1Y3CN-HONG-128GB",
+          "price": 8290000,
+          "costPrice": 6300400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-a6-pro.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "storage": "128GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-reno14",
+      "name": "OPPO Reno14 5G 12GB 256GB",
+      "categorySlug": "oppo-phone",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Reno14 5G 12GB 256GB OPPO Reno 14 là mẫu smartphone tầm trung ra mắt tại Việt Nam tháng 7/2025, nổi bật với camera AI chuyên nghiệp và thiết kế mặt lưng lấy cảm hứng từ đuôi cá trẻ trung, hiện đại. Máy sở hữu màn hình FHD+ 6.59 inch, 120Hz cho trải nghiệm hiển thị mượt mà, sắc nét. Thiết bị được trang bị pin dung lượng lớn 6000 mAh, đáp ứng tốt nhu cầu sử dụng cả ngày. Điểm nhấn đáng chú ý là camera trước 50MP hỗ trợ quay video 4K, mang lại chất lượng hình ảnh rõ nét tr",
+      "price": 15990000,
+      "salePrice": 15500000,
+      "costPrice": 11780000,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14-w_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14-g_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno14-w.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno14-5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno14.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno14-3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno14-1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-reno14-4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-reno14-g.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14_4_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14_6_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14_5_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 15, Android 15",
+        "cpu": "MediaTek Dimensity 8350 5G, tối đa 3.35GHz",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "ARM G615-MC6",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50MP OIS, F/1.8Tele 50MP OIS, F/2.8Góc rộng 8MP, F/2.2",
+        "camera_front": "50MP, F/2.0",
+        "battery": "6000mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "~187g",
+        "charging": "80W SUPERVOOC, VOOC 3.0, PD, PPS",
+        "sim": "Nano-SIM + eSIM"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 15, Android 15",
+        "Chipset": "MediaTek Dimensity 8350 5G, tối đa 3.35GHz",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân, 3.35GHz",
+        "GPU": "ARM G615-MC6",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Tần số quét 120Hz, độ sáng 1200 nits, kính GG7i",
+        "Camera sau": "Chính 50MP OIS, F/1.8Tele 50MP OIS, F/2.8Góc rộng 8MP, F/2.2",
+        "Camera trước": "50MP, F/2.0",
+        "Pin": "6000mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano-SIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "07/2025",
+        "Thông số": "OPPO Reno14 5G 12GB 256GB",
+        "Thông số kỹ thuật": "OPPO Reno 14",
+        "Kích thước (mm)": "157.90 × 74.73 × 7.42",
+        "Trọng lượng": "~187g",
+        "Màn hình": "6.59\", AMOLED, 120Hz, 1256 × 2760",
+        "Mật độ điểm ảnh": "460 PPI",
+        "Độ sáng tối đa": "1200 nits (HBM)",
+        "Gam màu": "100% DCI-P3 (N, P, Vivid)",
+        "Độ sâu màu": "1.07 tỷ màu (10-bit)",
+        "RAM + ROM": "12GB + 256GB / 512GB, LPDDR5X + UFS 3.1",
+        "CPU": "8 nhân",
+        "Quay video sau": "4K@60fps, 1080P@60fps, Zoom quang 3.5X, kỹ thuật số 18X",
+        "Quay video trước": "4K@60fps, 1080P@60fps, HDR, zoom kỹ thuật số 2X",
+        "Pin (tiêu chuẩn)": "6000mAh",
+        "Sạc nhanh": "80W SUPERVOOC, VOOC 3.0, PD, PPS",
+        "Hệ điều hành": "ColorOS 15.0 (Android 15)",
+        "Cảm biến sinh trắc": "Vân tay trong màn hình, nhận diện khuôn mặt",
+        "SIM": "Nano-SIM + eSIM",
+        "5G": "Có, đa băng tần",
+        "Wi-Fi": "Wi-Fi 6E, 2x2 MIMO",
+        "Bluetooth": "5.4, hỗ trợ aptX, LDAC, LHDC 5.0",
+        "USB": "USB-C, hỗ trợ OTG",
+        "Âm thanh": "Chỉ hỗ trợ tai nghe kỹ thuật số (Type-C)",
+        "Định vị": "GNSS: Beidou, GPS, GLONASS, Galileo, QZSS",
+        "Giá": "15.990.000đ",
+        "Sản phẩm": "Phiên bản",
+        "OPPO Reno14": "RAM 12GB + ROM 256GB",
+        "OPPO Reno14 F": "RAM 8GB + ROM 256GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "OE369K-RANG-256GB",
+          "price": 15990000,
+          "costPrice": 11780000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14-w_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "256GB"
+          },
+          "salePrice": 15500000
+        },
+        {
+          "sku": "OE369K-NHLA-256GB",
+          "price": 15990000,
+          "costPrice": 11780000,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-reno14-g_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 15500000
+        }
+      ]
+    }
+  ]
+}

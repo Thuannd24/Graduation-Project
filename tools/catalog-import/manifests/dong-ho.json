@@ -1,0 +1,1138 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:37:53.984Z",
+  "note": "Scraped 7 sản phẩm — danh mục \"Đồng hồ, Camera\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "tivi",
+      "name": "Tivi",
+      "parentSlug": null,
+      "sortOrder": 7,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "huawei",
+      "name": "Huawei",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/HUAWEI-240x50.png",
+      "description": "Huawei — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "dong-ho"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "dong-ho"
+      ]
+    },
+    {
+      "slug": "garmin",
+      "name": "Garmin",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Garmin-240x50.png",
+      "description": "Garmin — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "dong-ho"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "dong-ho-thong-minh-huawei-watch-fit-5",
+      "name": "Đồng hồ thông minh Huawei Watch Fit 5 Dây Cao Su",
+      "categorySlug": "dong-ho",
+      "brandSlug": "huawei",
+      "description": "Đặc điểm nổi bật",
+      "price": 3690000,
+      "salePrice": 3290000,
+      "costPrice": 2500400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_16__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_5__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_14.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_10__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/p/apple_lte_3_65.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_127.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_89.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_72.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__12_60.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__7_47.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_3__9.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4__4.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "display_tech": "AMOLED",
+        "screen": "1.82 inch",
+        "dimensions": "42.9mm × 38.2mm × 9.5mm (không bao gồm vùng cảm biến)",
+        "weight": "Khoảng 27g (không có dây đeo)",
+        "battery": "Tối đa 10 ngày",
+        "connectivity": "Bluetooth 6.0 (Kết nối ổn định hơn)"
+      },
+      "specsRaw": {
+        "Công nghệ màn hình": "AMOLED",
+        "Kích thước màn hình": "1.82 inch",
+        "Kích thước cổ tay phù hợp": "Tím: 12 - 19 cm Xám, Xanh Lá, Trắng và Đen: 13 - 21 cm",
+        "Nghe,gọi": "Nghe gọi qua Bluetooth",
+        "Tiện ích sức khoẻ": "Chế độ luyện tập, Theo dõi giấc ngủ, Đo nhịp tim, Đo lượng oxy trong máu, Đếm bước chân, Tính calo tiêu thụ, Tính quãng đường chạy, Đo mức độ stress, Phát hiện té ngã, Cảnh báo nhịp tim bất thường, Theo dõi chu kỳ, Tình trạng HRV (Heart Rate Variability), Bài tập thư giãn",
+        "GPS tích hợp": "GPS tích hợp sẵn trên đồng hồ",
+        "Tương thích": "Android 9.0 trở lênbr> iOS 13.0 trở lên",
+        "Thời lượng pin": "Thời lượng pin tối đa 10 ngày (sử dụng cơ bản) Tối đa 7 ngày (sử dụng thường xuyên) Tối đa 4 ngày khi bật AOD",
+        "Hãng sản xuất": "Huawei",
+        "Phiên bản": "Giá tham khảo tại Việt Nam",
+        "Huawei Watch Fit 5": "3.690.000đ",
+        "Huawei Watch Fit 5 Pro": "5.490.000đ",
+        "Thông số": "Huawei Watch Fit 5",
+        "Màu sắc": "Bạc, Tím, Xanh Lá, Trắng, Đen",
+        "Kích thước": "42.9mm × 38.2mm × 9.5mm (không bao gồm vùng cảm biến)",
+        "Kích thước cổ tay": "Bản màu Tím: 120-190mmBản màu Xám, Xanh Lá, Trắng và Đen: 130-210mm",
+        "Màn hình": "1.82 inch AMOLED, 480 × 408 pixel, PPI 347, độ sáng tối đa 2500nits",
+        "Chất liệu vỏ": "Hợp kim nhôm",
+        "Trọng lượng": "Khoảng 27g (không có dây đeo)",
+        "Hệ thống cảm biến": "Cảm biến IMU 9 trục (Gia tốc kế, Con quay hồi chuyển, Từ kế), Cảm biến nhịp tim quang học (HUAWEI TruSense), Cảm biến ánh sáng môi trường",
+        "Chế độ tập luyện": "Chế độ Mini-Workout độc đáo, hơn 100 chế độ thể thao (Chạy bộ, đạp xe, bơi lội, nhảy dây, yoga, yoga bay, nhảy hiện đại...)",
+        "Pin & Sạc": "Tối đa 10 ngày, Sạc không dây",
+        "Hệ điều hành tương thích": "Android 9.0 trở lên, iOS 13.0 trở lên",
+        "Độ bền & Kháng nước": "Đạt chuẩn 5 ATM và IP6X",
+        "Kết nối & Định vị": "Bluetooth 6.0, GPS băng tần kép đa hệ thống (L1+L5), NFC (chỉ hỗ trợ trên phiên bản màu Bạc)",
+        "Tiện ích": "Tích hợp Mic và Loa (hỗ trợ nghe gọi qua Bluetooth)",
+        "Thời gian ra mắt": "05/2026",
+        "Tỷ lệ màn hình": "78.1% (Viền mỏng hơn)",
+        "Bộ nhớ": "4GB",
+        "Định vị GPS": "GPS băng tần kép (Sunflower Positioning)",
+        "Pin": "Tối đa 10 ngày",
+        "Kết nối": "Bluetooth 6.0 (Kết nối ổn định hơn)",
+        "Giá thành tham khảo": "Khoảng 4.090.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "BZRFZ9-TRANG-0",
+          "price": 3690000,
+          "costPrice": 2500400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_16__1.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 3290000
+        },
+        {
+          "sku": "BZRFZ9-ANHLA-1",
+          "price": 3690000,
+          "costPrice": 2500400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_5__4.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá"
+          },
+          "salePrice": 3290000
+        },
+        {
+          "sku": "BZRFZ9-DEN-2",
+          "price": 3690000,
+          "costPrice": 2500400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_14.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 3290000
+        },
+        {
+          "sku": "BZRFZ9-TIM-3",
+          "price": 3690000,
+          "costPrice": 2500400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_10__3.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 3290000
+        }
+      ]
+    },
+    {
+      "slug": "vong-deo-tay-thong-minh-huawei-band-11",
+      "name": "Vòng đeo tay thông minh Huawei Band 11",
+      "categorySlug": "dong-ho",
+      "brandSlug": "huawei",
+      "description": "Đặc điểm nổi bật Huawei Band 11 (ra mắt ngày 21/02/2026) là thế hệ vòng đeo tay thông minh mới nhất của Huawei, nổi bật với thiết kế mỏng nhẹ, màn hình AMOLED 1.62 inch sắc nét, pin dùng bền bỉ đến 14 ngày. Sản phẩm tích hợp các tính năng theo dõi sức khỏe cao cấp như cảm biến 9 trục, đo nhịp tim, SpO2, và theo dõi giấc ngủ. Thiết bị nằm trong phân khúc giá rẻ và tầm trung, hướng đến người dùng cần một thiết bị theo dõi sức khỏe nhỏ gọn, pin trâu và có trải nghiệm mượt mà. Huawei Band 11 giá bao",
+      "price": 1090000,
+      "salePrice": 990000,
+      "costPrice": 752400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_33__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_3_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_9__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_21__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_15__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_389.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/v/_/v_ng_eo_tay_th_ng_minh_huawei_band_11_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/v/_/v_ng_eo_tay_th_ng_minh_huawei_band_11_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/v/_/v_ng_eo_tay_th_ng_minh_huawei_band_11_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_3__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_1_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_5_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_2_.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_4_.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "display_tech": "Màn hình AMOLED Độ sáng tối đa lên đến 1500 nit",
+        "screen": "1.62 inch",
+        "dimensions": "42.6mm × 28.2mm × 8.99mm",
+        "weight": "Bản khung hợp kim nhôm: 17g (không dây đeo)Bản khung Polyme: 16g (không dây đeo)",
+        "os": "HarmonyOS thế hệ mới mượt mà, hỗ trợ xuất trực tiếp sang Google Fit",
+        "connectivity": "Bluetooth 6.0, BLE, Băng tần 2.4 GHz"
+      },
+      "specsRaw": {
+        "Công nghệ màn hình": "Màn hình AMOLED Độ sáng tối đa lên đến 1500 nit",
+        "Kích thước màn hình": "1.62 inch",
+        "Đường kính mặt": "42.6 mm",
+        "Kích thước cổ tay phù hợp": "Đen, xanh lá, trắng: 130 - 210 mm Tím, Beige: 120 - 190 mm",
+        "Nghe,gọi": "Không",
+        "Tiện ích sức khoẻ": "Chế độ luyện tập, Theo dõi giấc ngủ, Đo nhịp tim, Đo lượng oxy trong máu, Đếm bước chân, Tính calo tiêu thụ, Tính quãng đường chạy, Đo mức độ stress, Theo dõi chu kỳ, Tình trạng HRV (Heart Rate Variability)",
+        "Tương thích": "Android 9.0 trở lên iOS 13.0 trở lên",
+        "Thời lượng pin": "Thời lượng sử dụng tối đa 14 ngày. Thời lượng sử dụng thường xuyên 8 ngày.Thời lượng sử dụng 3 ngày khi bật AOD.",
+        "Hãng sản xuất": "Huawei",
+        "Phiên bản": "Giá tham khảo",
+        "Huawei Band 11 khung kim loại": "Khoảng 990.000đ - 1.090.000đ",
+        "Huawei Band 11 khung Polyme": "Khoảng 890.000đ - 990.000đ",
+        "Thông số": "Huawei Band 11",
+        "Thời gian ra mắt": "02/2026",
+        "Thiết kế": "Mặt chữ nhật phẳng bo góc, viền mỏng hiện đại",
+        "Màn hình": "1.62 inch AMOLED 1.62 inch, 286 × 482 pixel, PPI 347, tần số quét 60Hz, độ sáng 1500nits",
+        "Kích thước": "42.6mm × 28.2mm × 8.99mm",
+        "Kích thước cổ tay": "Bản Đen / Xanh lá / Trắng: 130-210 mm Bản Tím / Be: 120-190 mm",
+        "Trọng lượng": "Bản khung hợp kim nhôm: 17g (không dây đeo)Bản khung Polyme: 16g (không dây đeo)",
+        "Chất liệu vỏ": "Hợp kim nhôm cắt CNC hoặc Polyme bền bỉ",
+        "Độ bền & Kháng nước": "Chuẩn kháng nước 5 ATM (chịu áp lực sâu 50m)",
+        "Cảm biến sức khỏe": "Cảm biến IMU 9 trục, Cảm biến nhịp tim quang học (PPG), Cảm biến ánh sáng môi trường",
+        "Tính năng mới": "Quản lý cảm xúc (Emotional Wellbeing 2.0) với 12 trạng thái thú cưng, sạc nhanh đầu Type-C",
+        "Định vị GPS": "Không tích hợp GPS độc lập (bản Pro có GPS)",
+        "Hệ điều hành": "HarmonyOS thế hệ mới mượt mà, hỗ trợ xuất trực tiếp sang Google Fit",
+        "Kết nối": "Bluetooth 6.0, BLE, Băng tần 2.4 GHz"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "K7O3QQ-DEN-0",
+          "price": 1090000,
+          "costPrice": 752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_33__1.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 990000
+        },
+        {
+          "sku": "K7O3QQ-TRANG-1",
+          "price": 1090000,
+          "costPrice": 752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_3_.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 990000
+        },
+        {
+          "sku": "K7O3QQ-ANHLA-2",
+          "price": 1090000,
+          "costPrice": 752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_9__1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá"
+          },
+          "salePrice": 990000
+        },
+        {
+          "sku": "K7O3QQ-TIM-3",
+          "price": 1090000,
+          "costPrice": 752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_21__1.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 990000
+        },
+        {
+          "sku": "K7O3QQ-VANG-4",
+          "price": 1090000,
+          "costPrice": 752400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_15__1.png",
+          "active": true,
+          "options": {
+            "color": "Vàng"
+          },
+          "salePrice": 990000
+        }
+      ]
+    },
+    {
+      "slug": "dong-ho-thong-minh-xiaomi-watch-s5",
+      "name": "Đồng hồ thông minh Xiaomi Watch S5",
+      "categorySlug": "dong-ho",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Xiaomi Watch S5 là mẫu đồng hồ thông minh mặt tròn (46mm) cao cấp vừa ra mắt toàn cầu vào tháng 05/2026. Thiết bị sở hữu khung thép không gỉ 316L bền bỉ, thân máy siêu mỏng 10.99mm và màn hình AMOLED 1.48 inch siêu sáng giúp nhìn rõ mồn một ngay cả dưới trời nắng gắt. Đi kèm chip GPS kép định vị chuẩn xác và viên pin dùng đến 21 ngày, mẫu smartwatch này hiện có giá bán tại Việt Nam từ 4.890.000đ đến 5.290.000đ tùy phiên bản và chương trình ưu đãi. Xiaomi Watch S5 khi nào ra mắt ",
+      "price": 5290000,
+      "salePrice": 4890000,
+      "costPrice": 3716400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_3.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_574_2_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_134.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_96.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__12_67.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__7_54.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_79.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_5.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_1__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_2__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_4__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_5__4.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "display_tech": "AMOLED",
+        "screen": "1.48 inch",
+        "dimensions": "46.00 x 46.00 x 10.99 mm (Chưa tính dây và phần lồi)",
+        "weight": "Khoảng 46g (không kèm dây đeo)",
+        "os": "Xiaomi HyperOS 3",
+        "connectivity": "Hỗ trợ eSIM (tùy bản), Wi-Fi truyền tải nhanh, Bluetooth 5.4, NFC, GNSS",
+        "battery": "815mAh (Dùng nhẹ lên đến 21 ngày)"
+      },
+      "specsRaw": {
+        "Công nghệ màn hình": "AMOLED",
+        "Kích thước màn hình": "1.48 inch",
+        "Đường kính mặt": "46mm",
+        "Kích thước cổ tay phù hợp": "Từ 14 – 21 cm",
+        "Nghe,gọi": "Nghe gọi qua Bluetooth",
+        "Tiện ích sức khoẻ": "Chế độ luyện tập, Theo dõi giấc ngủ, Đo nhịp tim, Đo lượng oxy trong máu, Đếm bước chân, Tính calo tiêu thụ, Tính quãng đường chạy, Đo mức độ stress, Phát hiện té ngã, Cảnh báo nhịp tim bất thường, Theo dõi chu kỳ, Bài tập thở, Bài tập thư giãn, Phát hiện chứng ngưng thở khi ngủ",
+        "GPS tích hợp": "GPS tích hợp sẵn trên đồng hồ",
+        "Tương thích": "Android 8.0 trở lên hoặc iOS 14.0 trở lên",
+        "Thời lượng pin": "Thời lượng pin siêu dài: 21 ngày Sử dụng thông thường: 14 ngày Bluetooth AOD — Sử dụng thông thường: 9 ngày",
+        "Hãng sản xuất": "Xiaomi",
+        "Tên sản phẩm": "Giá bán",
+        "Đồng hồ thông minh Xiaomi Watch S5": "4.890.000đ",
+        "Đồng hồ thông minh Xiaomi Watch S5 Dây Da": "5.390.000đ",
+        "Đồng hồ thông minh Xiaomi Watch S5 Dây Vải": "5.390.000đ",
+        "Tiêu chí": "Thông số",
+        "Thời gian ra mắt": "29/05/2026",
+        "Xuất xứ": "Trung Quốc",
+        "Kích thước": "46.00 x 46.00 x 10.99 mm (Chưa tính dây và phần lồi)",
+        "Kích thước cổ tay": "140–210mm (Bản Đen/Bạc); 135–205mm (Bản Xanh gốm/Xanh rừng)",
+        "Màn hình": "1.48 inch AMOLED, 480x480 pixels, 323 PPI, 2500 nits (Peak), 1500 nits (HBM)",
+        "Kính bảo vệ": "Mặt kính kháng trầy xước cao cấp",
+        "Khung viền": "Thân thép không gỉ 316L Niềng (Bezel): Thép/Gốm/Carbon rèn",
+        "Dây đeo": "Fluororubber, Da thật hoặc Vải nylon dệt (tùy phiên bản)",
+        "Trọng lượng": "Khoảng 46g (không kèm dây đeo)",
+        "Màu sắc": "Đen (Black), Bạc (Silver), Xanh gốm (Ceramic Blue), Xanh rừng (Jungle Green)",
+        "Thiết kế": "Mặt tròn, viền mỏng 2.6mm, núm xoay thép",
+        "Cảm biến": "Nhịp tim, SpO2, Gia tốc kế, Con quay hồi chuyển, Ánh sáng, La bàn, Áp kế",
+        "Định vị": "GNSS băng tần kép 5 hệ thống: GPS, Galileo, Glonass, BeiDou, QZSS",
+        "Tính năng sức khỏe": "Đo nhịp tim, SpO2, Stress, Ngủ chuyên sâu (Sleep 2.0), Chu kỳ phụ nữ, Checkup một chạm",
+        "Pin & sạc": "815mAh (Sử dụng đến 21 ngày); Sạc nam châm 2 chân",
+        "Hệ điều hành": "Xiaomi HyperOS 3",
+        "Khả năng tương thích": "Android 8.0 trở lên hoặc iOS 14.0 trở lên",
+        "Kết nối": "Hỗ trợ eSIM (tùy bản), Wi-Fi truyền tải nhanh, Bluetooth 5.4, NFC, GNSS",
+        "Tiện ích": "Loa & Mic đàm thoại, Thanh toán NFC (Mastercard/Visa), Điều khiển Smart Hub",
+        "Kháng nước & bụi": "Chuẩn 5ATM (Chịu nước ở độ sâu tương đương 50 mét)",
+        "Trong hộp": "Đồng hồ, Đế sạc nam châm, Sách hướng dẫn sử dụng",
+        "Màn hình (Kích thước)": "1.48 inch",
+        "Tấm nền & Độ phân giải": "AMOLED (480 x 480 px), 323 PPI",
+        "Tần số quét & Độ sáng": "Độ sáng đỉnh 2500 nits",
+        "Hệ thống Cảm biến": "Cảm biến 4-LED, 4-PD thế hệ mới; Gia tốc, Con quay, Ánh sáng, La bàn, Khí áp",
+        "Tính năng Sức khỏe mới": "Thuật toán giấc ngủ 2.0 (tăng 14% độ chính xác); Checkup một chạm",
+        "Tính năng Thể thao mới": "Passion mode (theo dõi cổ vũ); Bản đồ ngoại tuyến màu; Nhận diện tư thế chạy",
+        "Định vị & Kết nối": "GNSS 5 hệ thống băng tần kép (tăng 33% độ chính xác); Wi-Fi; Bluetooth 5.4",
+        "Dung lượng Pin": "815mAh (Dùng nhẹ lên đến 21 ngày)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9JENPG-TRANG-0",
+          "price": 5290000,
+          "costPrice": 3716400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_3.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 4890000
+        },
+        {
+          "sku": "9JENPG-DEN-1",
+          "price": 5290000,
+          "costPrice": 3716400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_6.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 4890000
+        }
+      ]
+    },
+    {
+      "slug": "dong-ho-thong-minh-garmin-forerunner-70",
+      "name": "Đồng hồ thông minh Garmin Forerunner 70",
+      "categorySlug": "dong-ho",
+      "brandSlug": "garmin",
+      "description": "Đặc điểm nổi bật",
+      "price": 7190000,
+      "salePrice": null,
+      "costPrice": 5464400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_30__1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_18__2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_24__1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_22.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_12__6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_6__7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_2_32.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/n/_ng_h_th_ng_minh_garmin_forerunner_70_-_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/n/_ng_h_th_ng_minh_garmin_forerunner_70_-_1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/n/_ng_h_th_ng_minh_garmin_forerunner_70_-_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_21.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__15.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__15.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_3__12.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4__7.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "display_tech": "Màn hình AMOLED (tùy chọn chế độ luôn hiển thị)",
+        "screen": "1.2 inch",
+        "dimensions": "42.6 x 42.6 x 11.9 mm",
+        "weight": "40g",
+        "os": "Android và iOS",
+        "connectivity": "Bluetooth, ANT+"
+      },
+      "specsRaw": {
+        "Công nghệ màn hình": "Màn hình AMOLED (tùy chọn chế độ luôn hiển thị)",
+        "Kích thước màn hình": "1.2 inch",
+        "Đường kính mặt": "42.6 mm",
+        "Kích thước cổ tay phù hợp": "Từ 12.5 - 19 cm",
+        "Nghe,gọi": "Không",
+        "Tiện ích sức khoẻ": "Chế độ luyện tập, Theo dõi giấc ngủ, Đo nhịp tim, Đo lượng oxy trong máu, Đếm bước chân, Tính calo tiêu thụ, Tính quãng đường chạy, Đo mức độ stress, Tính tuổi thể chất, Đo VO2 max (Đo lượng tiêu thụ oxy tối đa), Theo dõi chu kỳ, Tình trạng HRV (Heart Rate Variability), Bài tập thở, Nhắc nhở ít vận động, Bài tập thư giãn",
+        "Tương thích": "Android, iOS",
+        "Thời lượng pin": "Chế độ đồng hồ thông minh: tối đa 13 ngày (5 ngày khi bật Always-On Display) Chế độ tiết kiệm pin: tối đa 28 ngày Chế độ chỉ GPS: tối đa 23 giờ Chế độ GNSS đa hệ thống: tối đa 16 giờ",
+        "Hãng sản xuất": "Garmin",
+        "Thông số": "Chi tiết",
+        "Màu sắc": "Đen, Trắng, Vàng chanh, Tím lạnh, Hồng nhạt, Xanh đen",
+        "Kích thước": "42.6 x 42.6 x 11.9 mm",
+        "Màn hình": "AMOLED 1.2 inch (390 x 390 pixels)",
+        "Chất liệu vỏ": "Cốt sợi Polyme",
+        "Chất liệu mặt kính": "Kính cường lực hóa học",
+        "Chất liệu dây đeo": "Silicone (20mm)",
+        "Trọng lượng": "40g",
+        "Hệ thống cảm biến": "Nhịp tim Elevate, Pulse Ox, Biến thiên nhịp tim (HRV)",
+        "Tính năng sức khỏe": "HRV, Body Battery, Sleep Coach, Stress",
+        "Tính năng tập luyện": "Quick Workouts, Garmin Coach, VO2 Max",
+        "Tính năng thông minh": "Thông báo, LiveTrack, Connect IQ",
+        "Pin & Sạc": "Smartwatch: 13 ngày; GPS: 23 giờ",
+        "Hệ điều hành": "Android và iOS",
+        "Kháng nước": "5 ATM",
+        "Kết nối & Định vị": "Bluetooth, ANT+; GPS, GLONASS, Galileo",
+        "Tiện ích": "Báo thức, Thời tiết, Tìm điện thoại",
+        "Tiêu chí": "Garmin Forerunner 70",
+        "Thời điểm ra mắt": "05/2026",
+        "Mặt kính bảo vệ": "Kính cường lực hóa học",
+        "Bộ nhớ": "—",
+        "Định vị GPS": "Đa hệ thống (GPS/GLONASS/Galileo)",
+        "Kết nối": "Bluetooth, ANT+",
+        "Pin (Smartwatch)": "13 ngày",
+        "Giá thành": "7.190.000 VNĐ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "4306IH-NHDEN-0",
+          "price": 7190000,
+          "costPrice": 5464400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_30__1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh Đen"
+          }
+        },
+        {
+          "sku": "4306IH-TIM-1",
+          "price": 7190000,
+          "costPrice": 5464400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_18__2.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          }
+        },
+        {
+          "sku": "4306IH-HONG-2",
+          "price": 7190000,
+          "costPrice": 5464400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_24__1.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          }
+        },
+        {
+          "sku": "4306IH-DEN-3",
+          "price": 7190000,
+          "costPrice": 5464400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_22.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        },
+        {
+          "sku": "4306IH-VANG-4",
+          "price": 7190000,
+          "costPrice": 5464400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_12__6.png",
+          "active": true,
+          "options": {
+            "color": "Vàng"
+          }
+        },
+        {
+          "sku": "4306IH-TRANG-5",
+          "price": 7190000,
+          "costPrice": 5464400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_6__7.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "vong-deo-tay-thong-minh-xiaomi-miband-10-pro",
+      "name": "Vòng đeo tay thông minh Xiaomi Mi Band 10 Pro",
+      "categorySlug": "dong-ho",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Vòng đeo tay thông minh Xiaomi MiBand 10 Pro sở hữu màn hình 1.74 inch AMOLED độ phân giải 336 x 480 pixels với độ sáng 1200 nits, giúp hiển thị rõ nét. Sản phẩm tích hợp viên pin 350mAh với thời gian sử dụng lên đến 21 ngày. Thiết bị có hệ thống cảm biến sức khỏe đa dạng cũng như hỗ trợ Bluetooth 5.4. Lưu ý: Xiaomi MiBand 10 Pro chưa ra mắt chính thức. Các thông số trên được tham khảo từ nguồn uy tín và sẽ được cập nhật chính xác khi sản phẩm trình làng tại Việt Nam. Vòng đeo t",
+      "price": 2190000,
+      "salePrice": 2090000,
+      "costPrice": 1588400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__4.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_534_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__3.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "display_tech": "AMOLED",
+        "screen": "1.74 inch"
+      },
+      "specsRaw": {
+        "Công nghệ màn hình": "AMOLED",
+        "Kích thước màn hình": "1.74 inch",
+        "Kích thước cổ tay phù hợp": "Từ 13.5 – 20.5 cm",
+        "Tiện ích sức khoẻ": "Theo dõi giấc ngủ, Đo nhịp tim, Đo lượng oxy trong máu, Đo mức độ stress, Theo dõi chu kỳ",
+        "Tương thích": "Android, iOS",
+        "Thời lượng pin": "Thời lượng pin mở rộng lên đến 21 ngày 7 ngày sử dụng trong chế độ AOD (Always-On Display)",
+        "Hãng sản xuất": "Xiaomi",
+        "Thông số": "Vòng đeo tay thông minh Xiaomi Mi Band 10 Pro"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "J4SEBP-DEN-0",
+          "price": 2190000,
+          "costPrice": 1588400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 2090000
+        },
+        {
+          "sku": "J4SEBP-HONG-1",
+          "price": 2190000,
+          "costPrice": 1588400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__4.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 2090000
+        },
+        {
+          "sku": "J4SEBP-BAC-2",
+          "price": 2190000,
+          "costPrice": 1588400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__4.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 2090000
+        }
+      ]
+    },
+    {
+      "slug": "dong-ho-thong-minh-amazfit-cheetah-2-pro",
+      "name": "Đồng hồ thông minh Amazfit Cheetah 2 Pro",
+      "categorySlug": "dong-ho",
+      "brandSlug": "",
+      "description": "Mua Đồng hồ thông minh Amazfit Cheetah 2 Pro chính hãng - Giá tốt, bảo hành uy tín, giao hàng tận nơi toàn quốc. Mua ngay Amazfit Cheetah 2 Pro tại đây.",
+      "price": 14990000,
+      "salePrice": 11990000,
+      "costPrice": 9112400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_17.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/m/amazfit_3_2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__14_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__14_8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_84.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__12_72.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__7_59.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__7_44.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_16.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_2__11.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_1__10.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_5__8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_4__7.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_6__10.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "display_tech": "AMOLED",
+        "screen": "1.32 inch"
+      },
+      "specsRaw": {
+        "Công nghệ màn hình": "AMOLED",
+        "Kích thước màn hình": "1.32 inch",
+        "Đường kính mặt": "48mm",
+        "Nghe,gọi": "Nghe gọi qua Bluetooth",
+        "Tiện ích sức khoẻ": "Chế độ luyện tập, Theo dõi giấc ngủ, Đo nhịp tim, Đo lượng oxy trong máu, Đếm bước chân, Tính calo tiêu thụ, Tính quãng đường chạy, Đo mức độ stress, Cảm biến nhiệt độ, Cảnh báo nhịp tim bất thường, Theo dõi chu kỳ, Bài tập thở, Nhắc nhở ít vận động, Bài tập thư giãn",
+        "GPS tích hợp": "GPS tích hợp sẵn trên đồng hồ",
+        "Tương thích": "Android 7.0 trở lên, iOS 14.0 trở lên",
+        "Thời lượng pin": "Pin tối đa 20 ngày (sử dụng thông thường) Tối đa 10 ngày (sử dụng nhiều) Tối đa 8 ngày khi bật AOD GPS chính xác: tối đa 31 giờ GPS + phát nhạc: tối đa 15 giờ GPS + AOD: tối đa 26 giờ GPS tiết kiệm pin: tối đa 69 giờ",
+        "Hãng sản xuất": "Amazfit"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "I2CR4C-DEN-0",
+          "price": 14990000,
+          "costPrice": 9112400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_17.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 11990000
+        }
+      ]
+    },
+    {
+      "slug": "dong-ho-thong-minh-amazfit-t-rex-ultra-2",
+      "name": "Đồng hồ thông minh Amazfit T-Rex Ultra 2",
+      "categorySlug": "dong-ho",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Đồng hồ thông minh Amazfit T-Rex Ultra 2 sở hữu viền Titanium cấp 5 với độ bền chắc cao cùng màn hình AMOLED 1.5 inch đạt độ sáng tối đa đến 3000 nits. Thiết bị hỗ trợ theo dõi chi tiết đến 187 chế độ thể thao khác nhau. Bộ nhớ trong 64GB của smartwatch cho phép lưu trữ bản đồ ngoại tuyến dễ dàng. Đồng hồ thông minh Amazfit T-Rex Ultra 2 - Bền bỉ bứt phá mọi giới hạn Phiên bản smartwatch này mang đậm phong cách thiết kế hầm hố dành riêng cho những người đam mê thám hiểm. Sản phẩ",
+      "price": 16990000,
+      "salePrice": 14990000,
+      "costPrice": 11392400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_1__18.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/m/amazfit_2_20.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_1__17.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_5__13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_22.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_4__1_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_6__1_9.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_7__8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_10__8.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_11__6.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_9__9.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_8__9.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_16_13.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_17__9_53.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_375.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "display_tech": "AMOLED Lên đến 3.000 nits",
+        "screen": "1.5 inch"
+      },
+      "specsRaw": {
+        "Công nghệ màn hình": "AMOLED Lên đến 3.000 nits",
+        "Kích thước màn hình": "1.5 inch",
+        "Kích thước cổ tay phù hợp": "48mm: 14.5 - 21 cm 44mm: 14 - 20.5 cm",
+        "Nghe,gọi": "Nghe gọi qua Bluetooth",
+        "Tiện ích sức khoẻ": "Chế độ luyện tập, Theo dõi giấc ngủ, Đo nhịp tim, Đo lượng oxy trong máu, Đếm bước chân, Tính calo tiêu thụ, Tính quãng đường chạy, Đo mức độ stress, Cảnh báo nhịp tim bất thường, Đo VO2 max (Đo lượng tiêu thụ oxy tối đa), Bài tập thở, Bài tập thư giãn",
+        "GPS tích hợp": "GPS tích hợp sẵn trên đồng hồ",
+        "Tương thích": "Android 7.0 trở lên, iOS 15.0 trở lên",
+        "Thời lượng pin": "Sử dụng thông thường: Lên đến 30 ngày Sử dụng nhiều: Lên đến 15 ngày AOD: Lên đến 10 ngày GPS chính xác: Lên đến 50 giờ Thời lượng pin tối đa của GPS: 177 giờ Nhiệt độ thấp (GPS bật): 40 giờ Nhiệt độ thấp (GPS tắt): 32 ngày",
+        "Hãng sản xuất": "Amazfit",
+        "Thông số": "Đồng hồ thông minh Amazfit T-Rex Ultra 2"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "6NMINT-DEN-0",
+          "price": 16990000,
+          "costPrice": 11392400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_1__18.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 14990000
+        }
+      ]
+    }
+  ]
+}

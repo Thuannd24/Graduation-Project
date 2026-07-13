@@ -401,34 +401,39 @@ export default function ProductDetailPage() {
     setLoading(true);
     Promise.all([
       productApi.getProduct(productId),
-      productApi.listProducts(),
       productApi.getReviews(productId)
     ])
-      .then(async ([detail, products, reviewList]) => {
+      .then(async ([detail, reviewList]) => {
         setProduct(detail);
-        setRelated((Array.isArray(products) ? products : []).filter((item) => item.id !== detail.id).slice(0, 8));
 
-        const userIds = new Set();
-        (reviewList || []).forEach(r => {
-          if (r.userId) userIds.add(r.userId);
-        });
+        // Non-blocking: related products don't block the main render
+        productApi.listProducts()
+          .then((products) => setRelated((Array.isArray(products) ? products : []).filter((item) => item.id !== detail.id).slice(0, 8)))
+          .catch(() => {});
+
+        const userIds = Array.from(new Set((reviewList || []).map((r) => r.userId).filter(Boolean)));
+
+        // Parallel: user profiles + category attributes
+        const [userProfileResults, attrs] = await Promise.all([
+          Promise.all(
+            userIds.map((uid) =>
+              authApi.getPublicProfile(uid)
+                .then((p) => ({ uid, profile: p }))
+                .catch(() => ({ uid, profile: null }))
+            )
+          ),
+          detail?.categoryId
+            ? productApi.getCategoryAttributes(detail.categoryId).catch(() => [])
+            : Promise.resolve([])
+        ]);
 
         const userMap = {};
-        if (userIds.size > 0) {
-          await Promise.all(
-            Array.from(userIds).map(async (uid) => {
-              try {
-                const profile = await authApi.getPublicProfile(uid);
-                userMap[uid] = {
-                  username: profile.fullName || profile.username || "Khách hàng",
-                  avatarUrl: profile.avatarUrl || null
-                };
-              } catch (e) {
-                console.warn(`Failed to fetch public profile for user ${uid}`, e);
-              }
-            })
-          );
-        }
+        userProfileResults.forEach(({ uid, profile }) => {
+          if (profile) userMap[uid] = {
+            username: profile.fullName || profile.username || "Khách hàng",
+            avatarUrl: profile.avatarUrl || null
+          };
+        });
 
         const normalizedReviews = (reviewList || []).map((review) => {
           const uInfo = userMap[review.userId];
@@ -447,18 +452,7 @@ export default function ProductDetailPage() {
           };
         });
         setReviews(normalizedReviews);
-
-        if (detail?.categoryId) {
-          try {
-            const attrs = await productApi.getCategoryAttributes(detail.categoryId);
-            setCategoryAttributes(Array.isArray(attrs) ? attrs : []);
-          } catch (attrError) {
-            console.warn("Failed to load category attributes", attrError);
-            setCategoryAttributes([]);
-          }
-        } else {
-          setCategoryAttributes([]);
-        }
+        setCategoryAttributes(Array.isArray(attrs) ? attrs : []);
 
         const firstImage = detail?.gallery?.[0] || detail?.image || detail?.imageUrl || selectedVariant?.imageUrl || "";
         setActiveImage(firstImage);

@@ -1,0 +1,2074 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:05:05.744Z",
+  "note": "Scraped 20 sản phẩm — danh mục \"Máy tính bảng\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "huawei",
+      "name": "Huawei",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/HUAWEI-240x50.png",
+      "description": "Huawei — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tablet"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tablet"
+      ]
+    },
+    {
+      "slug": "lenovo",
+      "name": "Lenovo",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/lenovo-240x50.png",
+      "description": "Lenovo — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tablet"
+      ]
+    },
+    {
+      "slug": "honor",
+      "name": "HONOR",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Honor-240x50.png",
+      "description": "HONOR — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tablet"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tablet"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "may-tinh-bang-huawei-matepad-11-5-2026-8gb-128gb-kem-ban-phim",
+      "name": "Huawei MatePad 11.5 2026 8GB 128GB, Kèm bàn phím",
+      "categorySlug": "tablet",
+      "brandSlug": "huawei",
+      "description": "Đặc điểm nổi bật Máy tính bảng Huawei MatePad 11.5 2026 8GB 128GB kèm bàn phím có khả năng bảo vệ thị lực tối ưu cho người dùng nhờ màn hình 2.5K Soft Light giảm lóa. Thiết bị vận hành mượt mà nhờ HarmonyOS 5.1 kết hợp công nghệ AI học tập thông minh. Với pin 10100 mAh và sạc nhanh 40W, sản phẩm duy trì nguồn năng lượng bền bỉ. Máy tính bảng Huawei MatePad 11.5 2026 8GB 128GB kèm bàn phím - Trợ lý AI đa năng Dòng máy tính bảng Huawei này tích hợp trí tuệ nhân tạo trong thiết kế mỏng gọn nhằm tối",
+      "price": 10490000,
+      "salePrice": 9990000,
+      "costPrice": 7592400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-8gb-128gb-kem-ban-phim.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-2026-8gb-128gb-kem-ban-phim-6_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-2026-8gb-128gb-kem-ban-phim-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-2026-8gb-128gb-kem-ban-phim-5_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-2026-8gb-128gb-kem-ban-phim-7.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "HarmonyOS 4.3",
+        "cpu": "Kirin T82B",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "screen": "11.5 inches",
+        "display_tech": "TFT LCD",
+        "camera": "13 MP, f/1.8",
+        "camera_front": "8 MP, f/2.0",
+        "battery": "10100 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "HarmonyOS 4.3",
+        "Chipset": "Kirin T82B",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "Octa-core (Tám lõi)",
+        "Kích thước màn hình": "11.5 inches",
+        "Công nghệ màn hình": "TFT LCD",
+        "Độ phân giải màn hình": "2456 × 1600 pixels",
+        "Tính năng màn hình": "Tần số quét 120 HzĐộ sáng tối đa 600 nits256 PPI16.7 triệu màu100% sRGBTốc độ làm mới thông minh 60/90/120 HzCảm ứng đa điểm tối đa 10 điểm",
+        "Camera sau": "13 MP, f/1.8",
+        "Camera trước": "8 MP, f/2.0",
+        "Pin": "10100 mAh",
+        "Tiêu chí": "Huawei MatePad 11.5 2026",
+        "Hệ điều hành": "HarmonyOS 5.1",
+        "Hiệu suất xử lý": "Kirin T82/T82B",
+        "Pin & Sạc nhanh": "10,100 mAh - Sạc SuperCharge 40W",
+        "Phụ kiện": "Sẵn bộ bàn phím rời thông minh"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "B8VU0M-XAM-128GB",
+          "price": 10490000,
+          "costPrice": 7592400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-2026_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 9990000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-redmi-pad-2-9-7-inch",
+      "name": "Xiaomi Redmi Pad 2 9.7 inch Wifi 4GB 64GB",
+      "categorySlug": "tablet",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Máy tính bảng Xiaomi Redmi Pad 2 9.7 inch ra mắt ngày 1/5/2026 sở hữu màn hình 9.7 inch cùng độ phân giải lên đến 2K. Cùng với đó, máy còn sở hữu viên pin bền bỉ 7600 mAh mang lại thời gian sử dụng đến 1.6 ngày. Khi ra mắt, Xiaomi Redmi Pad 2 9.7 inch sẽ có hai lựa chọn màu là Bạc và Xám. Máy tính bảng Xiaomi Redmi Pad 2 9.7 inch - Thiết kế nhỏ gọn, kết nối ổn định Phiên bản máy tính bảng Xiaomi này tập trung vào tính di động cao và trải nghiệm thao tác thuận tiện. Mẫu máy tính ",
+      "price": 4990000,
+      "salePrice": 4690000,
+      "costPrice": 3564400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-8_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-9.7inch.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-9.7inch-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-9.7inch-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-9.7inch-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-9.7inch-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-7.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3",
+        "cpu": "Snapdragon 6s Gen 2",
+        "ram": "4 GB",
+        "storage": "64 GB",
+        "gpu": "Adreno 610",
+        "screen": "9.7 inches",
+        "camera": "8 MP, f/2.0",
+        "camera_front": "5 MP, f/2.2",
+        "battery": "7600 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3",
+        "Chipset": "Snapdragon 6s Gen 2",
+        "Dung lượng RAM": "4 GB",
+        "Bộ nhớ trong": "64 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 610",
+        "Kích thước màn hình": "9.7 inches",
+        "Độ phân giải màn hình": "2048 x 1280 pixels",
+        "Tính năng màn hình": "Tần số quét 120 HzĐộ sáng tối đa 600 nits250 PPITốc độ lấy mẫu cảm ứng lên đến 180Hz",
+        "Camera sau": "8 MP, f/2.0",
+        "Camera trước": "5 MP, f/2.2",
+        "Pin": "7600 mAh",
+        "Thời điểm ra mắt": "04/2026",
+        "Thông số": "Xiaomi Redmi Pad 2 9.7 inch Wifi 4GB 64GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "XBQCLN-XAM-64GB",
+          "price": 4990000,
+          "costPrice": 3564400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "64GB"
+          },
+          "salePrice": 4690000
+        },
+        {
+          "sku": "XBQCLN-BAC-64GB",
+          "price": 4990000,
+          "costPrice": 3564400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/r/e/redmi-pad-2-9-7-inch-8_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Bạc",
+            "storage": "64GB"
+          },
+          "salePrice": 4690000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-lenovo-idea-tab-pro-gen-2-zahd0452vn-kem-but-ban-phim",
+      "name": "Lenovo Idea Tab Pro Gen 2 Matte Edition 8GB 256GB ZAHD0452VN - Kèm bút, bàn phím",
+      "categorySlug": "tablet",
+      "brandSlug": "lenovo",
+      "description": "Mua máy tính bảng Lenovo Idea Tab Pro Gen 2 8GB 256GB ZAHD0452VN kèm bút, bàn phím chính hãng giá rẻ - Thu cũ đổi mới, bảo hành 12 tháng, đổi mới 30 ngày, trả góp 0%. Mua ngay máy tính bảng Lenovo Idea Tab Pro Gen 2 8GB 256GB ZAHD0452VN tại đây",
+      "price": 16990000,
+      "salePrice": null,
+      "costPrice": 12912400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-pro-gen-2-zahd0452vn-kem-but-ban-phim_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-pro-gen-2-zahd0452vn-kem-but-ban-phim.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-11.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/r/pr_idea-tab-pro-gen-2_cm_carousel-12.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-pro-gen-2-zahd0452vn-kem-but-ban-phim-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-pro-gen-2-zahd0452vn-kem-but-ban-phim-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-pro-gen-2-zahd0452vn-kem-but-ban-phim-4.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android™ 16 trở lên",
+        "cpu": "Qualcomm Snapdragon 8s Gen 4",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Integrated Qualcomm Adreno 825",
+        "screen": "13 inches",
+        "display_tech": "LTPS, IPS",
+        "camera": "13MP",
+        "camera_front": "8MP",
+        "battery": "10200 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Android™ 16 trở lên",
+        "Chipset": "Qualcomm Snapdragon 8s Gen 4",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân, 1x Cortex-X4 @3.2GHz + 3x Cortex-A720 @3.0GHz + 2x Cortex-A720 @2.8GHz + 2x Cortex-A720 @2.0GHz",
+        "GPU": "Integrated Qualcomm Adreno 825",
+        "Kích thước màn hình": "13 inches",
+        "Công nghệ màn hình": "LTPS, IPS",
+        "Độ phân giải màn hình": "3504 x 2190 pixels",
+        "Tính năng màn hình": "Tần số quét 144 HzĐộ sáng tối đa 800 nitsĐộ sáng tiêu chuẩn 600 nits3.5KChống chói Paper-like Anti-glare99% DCI-P3Cảm ứng đa điểm 10 điểm",
+        "Camera sau": "13MP",
+        "Camera trước": "8MP",
+        "Pin": "10200 mAh",
+        "Thời điểm ra mắt": "03/2026"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3N0T4N-XAM-256GB",
+          "price": 16990000,
+          "costPrice": 12912400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-pro-gen-2-zahd0452vn-kem-but-ban-phim_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-poco-pad-x1",
+      "name": "Xiaomi Poco Pad X1 8GB 512GB",
+      "categorySlug": "tablet",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Máy tính bảng Xiaomi Poco Pad X1 phiên bản RAM 8GB ROM 512GB nổi bật với hiệu năng mạnh mẽ từ chip Snapdragon 7+ Gen 3 cùng màn hình lớn 11.2 inch. Pin 8.850 mAh phù hợp để làm việc, học hành và giải trí thời gian dài. Hệ điều hành của máy là Xiaomi HyperOS 2 mạnh mẽ, hoạt động êm mượt. Máy tính bảng Xiaomi Poco Pad X1 - Hiệu năng xử lý mạnh mẽ Sản phẩm máy tính bảng Xiaomi này nổi bật với hiệu năng vượt trội cho khả năng xử lý mượt mà nhiều tác vụ từ học tập, làm việc đến giải ",
+      "price": 11290000,
+      "salePrice": 10190000,
+      "costPrice": 7744400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-4_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-3.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "Snapdragon 7+ Gen 3",
+        "ram": "8 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno™",
+        "screen": "11.2 inches",
+        "display_tech": "IPS LCD",
+        "camera": "13 MP, f/2.2",
+        "camera_front": "8 MP, f/2,28",
+        "battery": "8850mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 2",
+        "Chipset": "Snapdragon 7+ Gen 3",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân lên đến 2,8GHz",
+        "GPU": "Adreno™",
+        "Kích thước màn hình": "11.2 inches",
+        "Công nghệ màn hình": "IPS LCD",
+        "Độ phân giải màn hình": "2136 x 3200 pixels",
+        "Tính năng màn hình": "Tần số quét 144Hz, tỷ lệ 3:2, độ sáng 800 nit, 68 tỷ màu, DCI-P3, Pro HDR, công nghệ hình ảnh AI, Công nghệ chạm khi ướt, TÜV Rheinland, Chế độ dưới ánh nắng, Chế độ đọc, Màu sắc thích ứng",
+        "Camera sau": "13 MP, f/2.2",
+        "Camera trước": "8 MP, f/2,28",
+        "Pin": "8850mAh",
+        "Thông số": "Xiaomi Poco Pad X1 8GB 512GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "Q4VCUT-XAM-512GB",
+          "price": 11290000,
+          "costPrice": 7744400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1-4_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "512GB"
+          },
+          "salePrice": 10190000
+        },
+        {
+          "sku": "Q4VCUT-XANH-512GB",
+          "price": 11290000,
+          "costPrice": 7744400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-x1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh",
+            "storage": "512GB"
+          },
+          "salePrice": 10190000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-honor-pad-x8b",
+      "name": "Honor Pad X8b Wifi 6GB 128GB",
+      "categorySlug": "tablet",
+      "brandSlug": "honor",
+      "description": "Đặc điểm nổi bật Máy tính bảng Honor Pad X8b được trang bị bộ vi xử lý Snapdragon 680 8 nhân nhằm duy trì sự mượt mà và ổn định cho mọi tác vụ công việc hằng ngày. Màn hình 11 inch tần số 90Hz tạo nên không gian giải trí sống động. Đồng thời, máy còn sở hữu viên pin lớn 10100mAh giúp duy trì hoạt động bền bỉ trong ngày. Máy tính bảng Honor Pad X8b - Phục vụ học tập và giải trí toàn diện Honor Pad này là sự kết hợp hài hòa giữa thiết kế mỏng nhẹ và hiệu năng ổn định nhằm đáp ứng đa dạng nhu cầu h",
+      "price": 7490000,
+      "salePrice": 7290000,
+      "costPrice": 5540400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honor-pad-x8b.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-honor-pad-x8b-11.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "MagicOS 10 (Android 16)",
+        "cpu": "Snapdragon 680 4G",
+        "ram": "6 GB",
+        "storage": "128 GB",
+        "screen": "11 inches",
+        "display_tech": "TFT LCD",
+        "camera": "5 MP, f/2.0",
+        "camera_front": "5 MP, f/2.0",
+        "battery": "10100 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "MagicOS 10 (Android 16)",
+        "Chipset": "Snapdragon 680 4G",
+        "Dung lượng RAM": "6 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "8 lõi, 4 x Cortex-A73 @ 2.4GHz + 4 x Cortex-A53 @ 1.9GHz",
+        "Kích thước màn hình": "11 inches",
+        "Công nghệ màn hình": "TFT LCD",
+        "Độ phân giải màn hình": "1200 x 1920 pixels",
+        "Tính năng màn hình": "Tần số quét 90 HzĐộ sáng tối đa 500 nits207 PPITỷ lệ tương phản 1500:116.7 triệu màu",
+        "Camera sau": "5 MP, f/2.0",
+        "Camera trước": "5 MP, f/2.0",
+        "Pin": "10100 mAh",
+        "Thời điểm ra mắt": "6/2026",
+        "Thông số": "Honor Pad X8b Wifi 6GB 128GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "A18F1R-XAM-128GB",
+          "price": 7490000,
+          "costPrice": 5540400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honor-pad-x8b.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 7290000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-honor-pad-10",
+      "name": "HONOR Pad 10 Wifi 8GB 256GB",
+      "categorySlug": "tablet",
+      "brandSlug": "honor",
+      "description": "Đặc điểm nổi bật Máy tính bảng Honor Pad 10 được trang bị con chip trung cấp Snapdragon 7 Gen 3 cùng hệ điều hành MagicOS 9.0 (Android 15) mang tới khả năng xử lý mượt mà. Mẫu tablet Honor này được tích hợp nhiều công cụ AI nhằm hỗ trợ cho công việc và học tập. Màn hình 12.1 inch 120Hz của tablet giúp tối ưu chất lượng hiển thị. Máy tính bảng Honor Pad 10 - Pin trâu, hiệu năng mạnh mẽ Honor Pad 10 với hiệu năng mạnh mẽ cùng các công cụ AI giúp tối ưu hiệu suất làm việc và giải trí. Mẫu máy tính ",
+      "price": 10990000,
+      "salePrice": null,
+      "costPrice": 8352400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honor-pad-10.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-11.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-13.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honnor-pad-10-14.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "MagicOS 9.0 (Android 15)",
+        "cpu": "Snapdragon® 7 Gen 3",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "screen": "12.1 inches",
+        "display_tech": "TFT LCD",
+        "camera": "8MP",
+        "camera_front": "8MP",
+        "battery": "10100 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "MagicOS 9.0 (Android 15)",
+        "Chipset": "Snapdragon® 7 Gen 3",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "Octa-core, 1×Cortex-A715 2,63GHz +3×Cortex-A715 2,4GHz +4×Cortex-A510 1.8GHz",
+        "Kích thước màn hình": "12.1 inches",
+        "Công nghệ màn hình": "TFT LCD",
+        "Độ phân giải màn hình": "2560 x 1600 pixels (2.5K)",
+        "Tính năng màn hình": "Tần số quét 120HzHiển thị 1,07 tỷ màu, gam màu rộng DCI-P3500nitsTỷ lệ tương phản: 1500:1249 PPI",
+        "Camera sau": "8MP",
+        "Camera trước": "8MP",
+        "Pin": "10100 mAh",
+        "": "Honor Pad 10",
+        "Màn hình": "12.1 inch 120Hz 2560x1600",
+        "Camera": "Trước: 5MP Sau: 8MP",
+        "Hệ điều hành": "MagicOS 9.0 (Android 15)",
+        "Hỗ trợ tính năng AI": "Có"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "BUHMOU-XAM-256GB",
+          "price": 10990000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/o/honor-pad-10.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-poco-pad-m1",
+      "name": "Xiaomi Poco Pad M1 Wifi 8GB 256GB",
+      "categorySlug": "tablet",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Máy tính bảng Xiaomi Poco Pad M1 là lựa chọn đáng chú ý trong phân khúc dưới 10 triệu. Thiết bị sở hữu màn hình lớn 12.1 inch cho trải nghiệm hiển thị rộng rãi, sắc nét, đi kèm hiệu năng ổn định từ Snapdragon 7s Gen 4 giúp xử lý mượt mà các tác vụ học tập và giải trí. Viên pin 12.000mAh cũng là điểm cộng lớn, đáp ứng tốt nhu cầu sử dụng suốt cả ngày dài.",
+      "price": 8990000,
+      "salePrice": 7990000,
+      "costPrice": 6072400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-pad-m1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-pad-m1-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-poco-pad-m1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-pad-m1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-pad-m1-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-pad-m1-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-pad-m1-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-poco-pad-m1-4.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "Snapdragon® 7s Gen 4 Mobile Platform",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Adreno™ GPU",
+        "screen": "12.1 inches",
+        "camera": "8MP, f/2",
+        "camera_front": "8MP, f/2,28",
+        "battery": "12,000mAh (typ)"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 2",
+        "Chipset": "Snapdragon® 7s Gen 4 Mobile Platform",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân, lên đến 2.7GHz",
+        "GPU": "Adreno™ GPU",
+        "Kích thước màn hình": "12.1 inches",
+        "Độ phân giải màn hình": "1600 x 2560 pixels",
+        "Tính năng màn hình": "Màn hình 2.5KTần số quét: Lên đến 120HzTỷ lệ khung hình 16:10Độ sáng: 500 nits (typ)；600 nits (HBM)1,07 tỷ màu",
+        "Camera sau": "8MP, f/2",
+        "Camera trước": "8MP, f/2,28",
+        "Pin": "12,000mAh (typ)",
+        "Thông số": "Xiaomi Poco Pad M1 Wifi 8GB 256GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "P2XSDO-XAM-256GB",
+          "price": 8990000,
+          "costPrice": 6072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-pad-m1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 7990000
+        },
+        {
+          "sku": "P2XSDO-UONG-256GB",
+          "price": 8990000,
+          "costPrice": 6072400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-poco-pad-m1-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          },
+          "salePrice": 7990000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb",
+      "name": "Xiaomi Pad 8 Pro 8GB 128GB",
+      "categorySlug": "tablet",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Máy tính bảng Xiaomi Pad 8 Pro sử dụng vi xử lý Snapdragon 8 Elite mạnh mẽ trên tiến trình 3nm giúp người dùng xử lý nhanh chóng mọi tác vụ công việc. Máy được trang bị pin dung lượng 9200mAh giúp máy vận hành liên tục. Tần số quét 144Hz kết hợp cùng độ phân giải 3.2K giúp tăng cường độ sắc nét và sự mượt mà khi hiển thị. Máy tính bảng Xiaomi Pad 8 Pro hiệu năng bứt phá Mẫu máy tính bảng Xiaomi này sở hữu nhiều nâng cấp về phần cứng giúp đáp ứng đầy đủ các yêu cầu từ người dùng ",
+      "price": 16990000,
+      "salePrice": 13990000,
+      "costPrice": 10632400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-8gb-256gb-1_3.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-8gb-256gb_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-8gb-256gb-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-1_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-2_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-2_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-pro-8gb-128gb-3.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Snapdragon 8 Elite",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "gpu": "Adreno 830",
+        "screen": "11.2 inches",
+        "display_tech": "IPS LCD",
+        "camera": "50 MP f/1.8",
+        "camera_front": "32 MP",
+        "battery": "9.200 mAh",
+        "nfc": "Có"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 16",
+        "Chipset": "Snapdragon 8 Elite",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "2 nhân 4.32 GHz & 6 nhân 3.53 GHz",
+        "GPU": "Adreno 830",
+        "Kích thước màn hình": "11.2 inches",
+        "Công nghệ màn hình": "IPS LCD",
+        "Độ phân giải màn hình": "2136 x 3200 pixels",
+        "Tính năng màn hình": "144 Hz, 12-bit màu, độ sáng tối đa 800 nit, cùng chuẩn HDR10, HDR Vivid",
+        "Camera sau": "50 MP f/1.8",
+        "Camera trước": "32 MP",
+        "Pin": "9.200 mAh",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "02/2026",
+        "Thông số": "Xiaomi Pad 8 Pro 8GB 128GB"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "AIT9AV-UONG-128GB",
+          "price": 16990000,
+          "costPrice": 10632400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-8gb-256gb-1_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "128GB"
+          },
+          "salePrice": 13990000
+        },
+        {
+          "sku": "AIT9AV-NHLA-128GB",
+          "price": 16990000,
+          "costPrice": 10632400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-8gb-256gb_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "128GB"
+          },
+          "salePrice": 13990000
+        },
+        {
+          "sku": "AIT9AV-XAM-128GB",
+          "price": 16990000,
+          "costPrice": 10632400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-xiaomi-pad-8-8gb-256gb-3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 13990000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-lenovo-idea-tab-plus-wifi-12gb-256gb-zag70980vn-kem-but-ban-phim",
+      "name": "Lenovo Idea Tab Plus Matte Edition Wifi 12GB 256GB ZAG70980VN - Kèm bút, bàn phím",
+      "categorySlug": "tablet",
+      "brandSlug": "lenovo",
+      "description": "Mua máy tính bảng Lenovo Idea Tab Plus Wifi 12GB 256GB ZAG70980VN kèm bút, bàn phím chính hãng giá rẻ - Thu cũ đổi mới, bảo hành 12 tháng, đổi mới 30 ngày, trả góp 0%. Mua ngay máy tính bảng Lenovo Idea Tab Plus Wifi 12GB 256GB ZAG70980VN tại đây",
+      "price": 12390000,
+      "salePrice": null,
+      "costPrice": 9416400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-idea-tab-plus-wifi-zag70979vn-kem-but-ban-phim_3.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-ksp.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-ksp-1.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-ksp-2.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-ksp-3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-9.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android™ 15 trở lên",
+        "cpu": "MediaTek Dimensity 6400",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Arm Mali-G57 MC2",
+        "screen": "12.1 inches",
+        "display_tech": "IPS",
+        "camera": "13MP",
+        "camera_front": "8MP",
+        "battery": "10200 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android™ 15 trở lên",
+        "Chipset": "MediaTek Dimensity 6400",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân, 2x A76 @2.5GHz + 6x A55 @2.0GHz",
+        "GPU": "Arm Mali-G57 MC2",
+        "Kích thước màn hình": "12.1 inches",
+        "Công nghệ màn hình": "IPS",
+        "Độ phân giải màn hình": "2560 x 1600 pixels (2.5K)",
+        "Tính năng màn hình": "Tần số quét 90 HzĐộ sáng tối đa 800 nitsĐộ sáng tiêu chuẩn 600 nits2.5KChống chói Paper-like Anti-glare96% DCI-P3Cảm ứng đa điểm 10 điểm",
+        "Camera sau": "13MP",
+        "Camera trước": "8MP",
+        "Pin": "10200 mAh",
+        "Thời điểm ra mắt": "03/2026"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TTYPYK-XAM-256GB",
+          "price": 12390000,
+          "costPrice": 9416400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-idea-tab-plus-wifi-zag70979vn-kem-but-ban-phim_3.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-pad-7-8gb-256gb",
+      "name": "Xiaomi Pad 7 Wifi 8GB 256GB",
+      "categorySlug": "tablet",
+      "brandSlug": "xiaomi",
+      "description": "Mua máy tính bảng Xiaomi Pad 7 8GB 256GB giá rẻ - Hỗ trợ trả góp 0%, đổi mới 30 ngày, bảo hành chính hãng, giao hàng tận nơi miễn phí.",
+      "price": 11290000,
+      "salePrice": 10990000,
+      "costPrice": 8352400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7-1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7_4__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-7-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-7-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-7-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-7-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7_5__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7_3__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7_2__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7_1__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7_6__3.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "Snapdragon 7+ Gen 3 Mobile Platform",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Adreno™ GPU",
+        "screen": "11.2 inches",
+        "display_tech": "IPS LCD",
+        "camera": "13 MP, f/2.2",
+        "camera_front": "8 MP, f/2.28",
+        "battery": "8850 mAh",
+        "nfc": "Không"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 2",
+        "Chipset": "Snapdragon 7+ Gen 3 Mobile Platform",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 lõi, tốc độ đến 2,8GHz",
+        "GPU": "Adreno™ GPU",
+        "Kích thước màn hình": "11.2 inches",
+        "Công nghệ màn hình": "IPS LCD",
+        "Độ phân giải màn hình": "2136 x 3200 pixels",
+        "Tính năng màn hình": "Tần số quét 144 HzĐộ sáng tối đa 800 nits345 ppi68 tỷ màuDCI-P3HDR chuyên nghiệpHDR10Dolby VisionChế độ đọc sáchMàu thích ứngCông nghệ cảm ứng ướt",
+        "Camera sau": "13 MP, f/2.2",
+        "Camera trước": "8 MP, f/2.28",
+        "Pin": "8850 mAh",
+        "Công nghệ NFC": "Không",
+        "Thời điểm ra mắt": "03/2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TVM4SG-UONG-256GB",
+          "price": 11290000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương",
+            "storage": "256GB"
+          },
+          "salePrice": 10990000
+        },
+        {
+          "sku": "TVM4SG-NHLA-256GB",
+          "price": 11290000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "256GB"
+          },
+          "salePrice": 10990000
+        },
+        {
+          "sku": "TVM4SG-XAM-256GB",
+          "price": 11290000,
+          "costPrice": 8352400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-7-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 10990000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-lenovo-idea-tab-wifi-zafr0402vn-kem-but",
+      "name": "Lenovo Idea Tab Wifi 8GB 256GB ZAFR0402VN - Kèm bút",
+      "categorySlug": "tablet",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Máy tính bảng Lenovo Idea Tab WiFi ZAFR0402VN kèm bút được trang bị bộ xử lý MediaTek Dimensity 6300 8 nhân, dung lượng RAM 8GB đi cùng bộ nhớ trong 256GB. Bên cạnh đó, màn hình của máy có kích thước 11 inch, độ phân giải 2.5K và tần số quét 90Hz. Phiên bản này còn sở hữu pin dung lượng cao 7040 mAh cho thời gian hoạt động nhiều giờ. Máy tính bảng Lenovo Idea Tab WiFi ZAFR0402VN kèm bút - Hiệu suất bền bỉ Lenovo Idea Tab WiFi ZAFR0402VN kèm bút là lựa chọn tablet tốt để phục vụ ",
+      "price": 8490000,
+      "salePrice": 7590000,
+      "costPrice": 5768400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1562_1.png",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1562.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-may-tinh-bang-lenovo-idea-tab-pro-wifi-8gb-256gb-zafr0402vn.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-may-tinh-bang-lenovo-idea-tab-pro-wifi-8gb-256gb-zafr0402vn-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-may-tinh-bang-lenovo-idea-tab-pro-wifi-8gb-256gb-zafr0402vn_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-may-tinh-bang-lenovo-idea-tab-pro-wifi-8gb-256gb-zafr0402vn-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-may-tinh-bang-lenovo-idea-tab-pro-wifi-8gb-256gb-zafr0402vn-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1563.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1564.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1565.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1566.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1567.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 15 trở lên",
+        "cpu": "MediaTek Dimensity 6300",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "gpu": "Arm Mali-G57 MC2",
+        "screen": "11 inches",
+        "display_tech": "IPS LCD",
+        "camera": "8.0 MP",
+        "camera_front": "5 MP",
+        "battery": "7040mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 15 trở lên",
+        "Chipset": "MediaTek Dimensity 6300",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8C, 2x A76 @2.4 GHz + 6x A55@2.0 GHz",
+        "GPU": "Arm Mali-G57 MC2",
+        "Kích thước màn hình": "11 inches",
+        "Công nghệ màn hình": "IPS LCD",
+        "Độ phân giải màn hình": "2560 x 1600 pixels (2.5K)",
+        "Tính năng màn hình": "Kích thước màn hình 11 inchĐộ phân giải 2560x1600 pixelTần số quét 90Hz500nits",
+        "Camera sau": "8.0 MP",
+        "Camera trước": "5 MP",
+        "Pin": "7040mAh"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "XDQD3D-XAM-256GB",
+          "price": 8490000,
+          "costPrice": 5768400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1562_1.png",
+          "active": true,
+          "options": {
+            "color": "xám",
+            "storage": "256GB"
+          },
+          "salePrice": 7590000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-samsung-galaxy-tab-s10-lite-wifi",
+      "name": "Samsung Galaxy Tab S10 Lite Wifi 6GB 128GB",
+      "categorySlug": "tablet",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Máy tính bảng Samsung Galaxy Tab S10 Lite WiFi sở hữu sức mạnh từ chip Exynos 1380, kết hợp RAM 6GB, tối ưu hiệu suất cho nhu cầu làm việc và giải trí. Thiết bị máy tính bảng Samsung này sở hữu màn hình 10.9 inch và tần số quét 90Hz cho hình ảnh sắc nét. Viên pin 8000mAh dung lượng lớn, đáp ứng linh hoạt cho đa dạng tình huống sử dụng. So sánh Samsung Galaxy Tab S10 Lite Wifi với Tab S9 Wifi Việc so sánh Samsung Galaxy Tab S10 Lite WiFi và Tab S9 WiFi giúp người dùng hiểu rõ hơn",
+      "price": 9990000,
+      "salePrice": 8390000,
+      "costPrice": 6376400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-samsung-galaxy-tab-a11-plus-wifi-1_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-samsung-galaxy-tab-a11-plus-wifi_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-samsung-galaxy-tab-a11-plus-wifi_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-tab-s10-lite-wifi.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-tab-s10-lite-wifi_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-tab-s10-lite-wifi-1_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-tab-s10-lite-wifi-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-samsung-galaxy-tab-s10-lite-wifi-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s10-lite-wifi-gray.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s10-lite-wifi-silver.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s10-lite-wifi-red.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s10-lite-wifi-gray-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s10-lite-wifi-gray-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s10-lite-wifi-gray-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-tab-s10-lite-wifi-gray-4.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "10.9 inches",
+        "display_tech": "TFT LCD",
+        "camera": "8 MP",
+        "camera_front": "5 MP",
+        "cpu": "Exynos 1380",
+        "ram": "6 GB",
+        "storage": "128 MB",
+        "battery": "8000 mAh",
+        "os": "Android"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "10.9 inches",
+        "Công nghệ màn hình": "TFT LCD",
+        "Camera sau": "8 MP",
+        "Camera trước": "5 MP",
+        "Chipset": "Exynos 1380",
+        "Dung lượng RAM": "6 GB",
+        "Bộ nhớ trong": "128 MB",
+        "Pin": "8000 mAh",
+        "Hệ điều hành": "Android",
+        "Độ phân giải màn hình": "1320 x 2112 pixels",
+        "Tính năng màn hình": "Hỗ trợ S Pen16 triệu màuTần số quét 90 Hz",
+        "Loại CPU": "8 nhân (4x2.4 GHz + 4x2.0 GHz)",
+        "Tương thích": "Bút S Pen",
+        "Thông số": "Samsung Galaxy Tab S10 Lite Wifi 6GB 128GB",
+        "Tên sản phẩm": "Giá bán",
+        "Samsung Galaxy Tab S10 Lite Wifi 6GB 128GB": "8.390.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "S39F9J-BAC-128GB",
+          "price": 9990000,
+          "costPrice": 6376400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-samsung-galaxy-tab-a11-plus-wifi-1_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Bạc",
+            "storage": "128GB"
+          },
+          "salePrice": 8390000
+        },
+        {
+          "sku": "S39F9J-XAM-128GB",
+          "price": 9990000,
+          "costPrice": 6376400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-samsung-galaxy-tab-a11-plus-wifi_1_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 8390000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-huawei-matepad-se-11-8gb-128gb",
+      "name": "Huawei MatePad SE 11 inch Wifi 8GB 128GB",
+      "categorySlug": "tablet",
+      "brandSlug": "huawei",
+      "description": "Mua máy tính bảng Huawei MatePad SE 11 inch chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ trả góp 0%, giao hàng miễn phí toàn quốc.",
+      "price": 8790000,
+      "salePrice": 6490000,
+      "costPrice": 4932400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-8gb-128gb_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-se-11-inch_1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_matepad_se_11_inch_6gb_128gb_-_1_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_matepad_se_11_inch_6gb_128gb_-_2_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_matepad_se_11_inch_6gb_128gb_-_3_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_matepad_se_11_inch_6gb_128gb_-_4_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_matepad_se_11_inch_6gb_128gb_-_5_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch-co-but_3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch_5__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch_6__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch_7__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch_8__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch_10__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch_9__3.png",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-inch_1__3.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "HarmonyOS 2.0",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "screen": "11 inches",
+        "display_tech": "TFT LCD",
+        "camera": "8 MP, f/2.0",
+        "camera_front": "5 MP, f/2.2",
+        "battery": "7700 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "HarmonyOS 2.0",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Kích thước màn hình": "11 inches",
+        "Công nghệ màn hình": "TFT LCD",
+        "Độ phân giải màn hình": "1920 x 1200 pixels (FullHD+)",
+        "Tính năng màn hình": "Độ sáng tối đa 400 nits16.7 triệu màu, 100% sRGBĐộ tương phản 1400:1Chế độ eBook",
+        "Camera sau": "8 MP, f/2.0",
+        "Camera trước": "5 MP, f/2.2",
+        "Pin": "7700 mAh"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "L8CJWZ-XAM-128GB",
+          "price": 8790000,
+          "costPrice": 4932400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-se-11-8gb-128gb_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 6490000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn",
+      "name": "Lenovo Legion Tab Gen 5 12GB 256GB",
+      "categorySlug": "tablet",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Máy tính bảng Lenovo Legion Tab Gen 5 12GB 256GB ZAH20030VN sở hữu vi xử lý Snapdragon 8 Elite Gen 5 mạnh mẽ giúp xử lý mượt mà tác vụ đồ họa nặng nề. Màn hình 8.8 inch độ phân giải 3K đem lại trải nghiệm đồ họa cực sống động. Nguồn pin 9000mAh mang tới hoạt động ổn định giúp người dùng tự tin trải nghiệm. Máy tính bảng Lenovo Legion Tab Gen 5 12GB 256GB ZAH20030VN - Cấu hình mạnh mẽ Mẫu máy tính bảng Lenovo này mang đến cải tiến vượt trội về cả khả năng hiển thị lẫn các tiện íc",
+      "price": 23990000,
+      "salePrice": 23490000,
+      "costPrice": 17852400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-legion-tab-gen-5-1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-legion-tab-gen-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-legion-tab-gen-5_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-legion-tab-gen-5-12gb-256gb-zah20030vn-den-7.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android 16",
+        "cpu": "Snapdragon 8 Elite Gen 5",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Qualcomm Adreno A840 GPU",
+        "screen": "8.8 inches",
+        "display_tech": "IPS LCD",
+        "camera": "50MP",
+        "camera_front": "8 MP",
+        "battery": "9000 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android 16",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân, 2 nhân Prime tối đa 4.6GHz + 6 nhân Performance tối đa 3.62GHz",
+        "GPU": "Qualcomm Adreno A840 GPU",
+        "Kích thước màn hình": "8.8 inches",
+        "Công nghệ màn hình": "IPS LCD",
+        "Độ phân giải màn hình": "3040 x 1904 pixels",
+        "Tính năng màn hình": "Tần số quét 165 HzĐộ sáng tối đa 800 nitsĐộ sáng 600 nits thông thườngTốc độ lấy mẫu cảm ứng lên đến 480Hz99% DCI-P310 điểm chạmĐộ phân giải cảm ứng 10x",
+        "Camera sau": "50MP",
+        "Camera trước": "8 MP",
+        "Pin": "9000 mAh",
+        "Thời điểm ra mắt": "01/2026",
+        "Đặc điểm": "Lenovo Legion Tab Gen 3",
+        "Bộ xử lý": "Chipset Snapdragon 8 Thế hệ 3",
+        "Dung lượng Pin": "6550mAh",
+        "Độ phủ màu": "98% DCI-P3"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "MZ5L3W-RANG-256GB",
+          "price": 23990000,
+          "costPrice": 17852400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-legion-tab-gen-5-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "storage": "256GB"
+          },
+          "salePrice": 23490000
+        },
+        {
+          "sku": "MZ5L3W-DEN-256GB",
+          "price": 23990000,
+          "costPrice": 17852400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-legion-tab-gen-5.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "256GB"
+          },
+          "salePrice": 23490000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-huawei-matepad-11-5-s-2026",
+      "name": "Huawei MatePad 11.5 S 2026 12GB 256GB - Kèm bàn phím",
+      "categorySlug": "tablet",
+      "brandSlug": "huawei",
+      "description": "Đặc điểm nổi bật Máy tính bảng HUAWEI MatePad 11.5 S 2026 có màn hình PaperMatte cho trải nghiệm thoải mái, độ phân giải 2.8K và tần số quét 144Hz hiển thị sắc nét. Tablet được thiết kế dày 6,1mm và nặng chỉ 515g mỏng, nhẹ. Thiết bị tích hợp HUAWEI Notes cùng AI chuyên sâu hỗ trợ đa tác vụ, giúp người dùng sáng tạo tiện lợi hơn. Máy tính bảng HUAWEI MatePad 11.5 S 2026 - Hiển thị sắc nét, AI đa nhiệm HUAWEI MatePad 11.5 S 2026 đáp ứng tốt cho người dùng cần thiết bị di động vừa mỏng nhẹ vừa mạnh",
+      "price": 18490000,
+      "salePrice": 15590000,
+      "costPrice": 11848400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-s-2026.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-s-2026_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-7.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-8.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-9.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-11-5-s-2026-10.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "HarmonyOS 4.3",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "screen": "11.5 inches",
+        "display_tech": "LCD",
+        "camera": "13 MP, f/1.8",
+        "camera_front": "8 MP, f/2.0",
+        "battery": "8800 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "HarmonyOS 4.3",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Kích thước màn hình": "11.5 inches",
+        "Công nghệ màn hình": "LCD",
+        "Độ phân giải màn hình": "2800 x 1840 pixels",
+        "Tính năng màn hình": "Tần số quét 144 Hz291 PPIĐộ sáng tối đa 500 nits16.7 triệu màuGam màu rộng P3Tốc độ làm mới thích ứng 30~144 HzTỷ lệ tương phản 1500:1Chống lóa, chống phản chiếu",
+        "Camera sau": "13 MP, f/1.8",
+        "Camera trước": "8 MP, f/2.0",
+        "Pin": "8800 mAh",
+        "Thông số": "Huawei MatePad 11.5 S 2026 12GB 256GB - Kèm bàn phím"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "1HSMPM-XAM-256GB",
+          "price": 18490000,
+          "costPrice": 11848400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-11-5-s-2026.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 15590000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-lenovo-idea-tab-plus-wifi-8gb-128gb-zag70981vn-kem-but-ban-phim",
+      "name": "Lenovo Idea Tab Plus Matte Edition Wifi 8GB 128GB ZAG70981VN - Kèm bút, bàn phím",
+      "categorySlug": "tablet",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Máy tính bảng Lenovo Idea Tab Plus WIFI 8GB 128GB ZAG70981VN xám kèm bút, bàn phím sở hữu màn hình 12.1 inch sắc nét, RAM 8GB và bộ nhớ 128GB. Máy được trang bị chip xử lý hiệu năng MediaTek Dimensity 6400 cùng viên pin dung lượng khủng lên đến 10,200mAh. Cùng với đó, mẫu máy tính bảng Lenovo này còn sở hữu camera chính 13MP, camera trước 8MP. Máy tính bảng Lenovo Idea Tab Plus WIFI 8GB 128GB ZAG70981VN xám kèm bút, bàn phím - Trải nghiệm đỉnh cao cùng công nghệ tiên tiến Máy tí",
+      "price": 9890000,
+      "salePrice": null,
+      "costPrice": 7516400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-idea-tab-plus-wifi-8gb-128gb-zag70981vn_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-multiphoto.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-multiphoto-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-multiphoto-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-multiphoto-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-3_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-5_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-6_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-7_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-8_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-idea-tab-plus-wifi-9_1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android™ 15 trở lên",
+        "cpu": "MediaTek Dimensity 6400",
+        "ram": "8 GB",
+        "storage": "128 GB",
+        "gpu": "Arm Mali-G57 MC2",
+        "screen": "12.1 inches",
+        "display_tech": "IPS",
+        "camera": "13MP",
+        "camera_front": "8MP",
+        "battery": "10200 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android™ 15 trở lên",
+        "Chipset": "MediaTek Dimensity 6400",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "8 nhân, 2x A76 @2.5GHz + 6x A55 @2.0GHz",
+        "GPU": "Arm Mali-G57 MC2",
+        "Kích thước màn hình": "12.1 inches",
+        "Công nghệ màn hình": "IPS",
+        "Độ phân giải màn hình": "2560 x 1600 pixels (2.5K)",
+        "Tính năng màn hình": "Tần số quét 90 HzĐộ sáng tối đa 800 nitsĐộ sáng tiêu chuẩn 600 nits2.5KChống chói Paper-like Anti-glare96% DCI-P3Cảm ứng đa điểm 10 điểm",
+        "Camera sau": "13MP",
+        "Camera trước": "8MP",
+        "Pin": "10200 mAh",
+        "Thời điểm ra mắt": "03/2026"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "O15CQK-XAM-128GB",
+          "price": 9890000,
+          "costPrice": 7516400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-lenovo-idea-tab-plus-wifi-8gb-128gb-zag70981vn_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-pad-mini",
+      "name": "Xiaomi Pad Mini 8GB 256GB",
+      "categorySlug": "tablet",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Máy tính bảng Xiaomi Pad Mini nổi bật với màn hình 8.8 inch độ phân giải 3K 165Hz, hiệu năng mạnh mẽ và mượt mà với MediaTek Deminsity 9400+. Thiết bị trang bị pin dung lượng lớn 7500mAh sạc nhanh 67W đủ sức phục vụ liên tục khoảng nhiều giờ. Máy được hoàn thiện với kim loại nguyên khối đi kèm hệ điều hành Xiaomi HyperOS mượt mà. So sánh Xiaomi Pad Mini với Xiaomi Pad 6S Pro Wifi Máy tính bảng Xiaomi Pad Mini có những điểm khác biệt gì so với phiên bản Xiaomi Pad 6S Pro Wifi? Hã",
+      "price": 15990000,
+      "salePrice": 13490000,
+      "costPrice": 10252400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-11_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-mini_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-mini-1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-mini-2_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-mini-3_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-pad-mini-4_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-11.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "screen": "8.8 inches",
+        "display_tech": "LCD",
+        "camera": "13MP 1/3,06\" 1,12μm kích thước điểm ảnhf/2,2 PDAF",
+        "camera_front": "8MP 1/4\" 1,12μm kích thước điểm ảnhf/2,28",
+        "cpu": "MediaTek Dimensity 9400+",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "battery": "7500mAh",
+        "os": "Xiaomi HyperOS 2"
+      },
+      "specsRaw": {
+        "Kích thước màn hình": "8.8 inches",
+        "Công nghệ màn hình": "LCD",
+        "Camera sau": "13MP 1/3,06\" 1,12μm kích thước điểm ảnhf/2,2 PDAF",
+        "Camera trước": "8MP 1/4\" 1,12μm kích thước điểm ảnhf/2,28",
+        "Chipset": "MediaTek Dimensity 9400+",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Pin": "7500mAh",
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Tính năng màn hình": "Tần số quét 165Hz, Cảm ứng 372Hz / 1080Hz tức thời, Cảm ứng bút 240Hz, TÜV Rheinland, Original Color Pro, Sunlight Mode, Adaptive Color, AI Image Processing, Công nghệ chạm khi ướt",
+        "Loại CPU": "1× Cortex-X925 3.73GHz + 3× Cortex-X4 3.3GHz + 4× Cortex-A720 2.4GHz",
+        "Thông số": "Xiaomi Pad Mini 8GB 256GB",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi Pad Mini 8GB 256GB": "13.490.000đ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3V40R7-TIM-256GB",
+          "price": 15990000,
+          "costPrice": 10252400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini-11_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          },
+          "salePrice": 13490000
+        },
+        {
+          "sku": "3V40R7-XAM-256GB",
+          "price": 15990000,
+          "costPrice": 10252400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-pad-mini_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 13490000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-huawei-matepad-papermate-11-5-inch",
+      "name": "Huawei MatePad Papermatte 11.5 inch 2025 8GB 256GB - Kèm bàn phím",
+      "categorySlug": "tablet",
+      "brandSlug": "huawei",
+      "description": "Đặc điểm nổi bật Máy tính bảng Huawei MatePad Papermatte 11.5 inch trang bị màn hình PaperMatte 11.5 inch độ phân giải 2.5K hiển thị 16.7 triệu màu với 100% sRGB. Máy được trang bị chip Kirin T82B, 8GB RAM, 256GB và hệ thống tản nhiệt graphite. Máy có pin dung lượng 10.100 mAh và sạc nhanh HUAWEI SuperCharge 40W. Máy tính bảng Huawei MatePad Papermatte 11.5 inch – Màn hình sắc nét, viết như giấy thật Máy tính bảng Huawei MatePad Papermatte 11.5 inch trang bị công nghệ tiên tiến giúp hạn chế phản",
+      "price": 13490000,
+      "salePrice": 11990000,
+      "costPrice": 9112400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch_1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-papermate-11-5-inch-31.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-papermate-11-5-inch-30.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-papermate-11-5-inch-28.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-papermate-11-5-inch-29.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/may-tinh-bang-huawei-matepad-papermate-11-5-inch-12.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "HarmonyOS 4.3",
+        "cpu": "Kirin T82B",
+        "ram": "8 GB",
+        "storage": "256 GB",
+        "screen": "11.5 inches",
+        "display_tech": "PaperMatte (IPS)",
+        "camera": "13 MP, f/1.8",
+        "camera_front": "8 MP, f/2.0",
+        "battery": "10.100 mAh"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "HarmonyOS 4.3",
+        "Chipset": "Kirin T82B",
+        "Dung lượng RAM": "8 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "Octa-core (8 lõi)",
+        "Kích thước màn hình": "11.5 inches",
+        "Công nghệ màn hình": "PaperMatte (IPS)",
+        "Độ phân giải màn hình": "2456 × 1600 pixels",
+        "Tính năng màn hình": "Tần số quét 120 Hz256 PPIĐộ sáng tối đa 600 nits16.7 triệu màu100% sRGBCảm ứng đa điểm tối đa 10 điểmChống lóa, chống phản chiếuGiảm ánh sáng xanh",
+        "Camera sau": "13 MP, f/1.8",
+        "Camera trước": "8 MP, f/2.0",
+        "Pin": "10.100 mAh",
+        "Thời điểm ra mắt": "10/2025",
+        "Thông số": "Huawei MatePad Papermatte 11.5 inch 2025 8GB 256GB - Kèm bàn phím"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JDFTGY-MXAM-256GB",
+          "price": 13490000,
+          "costPrice": 9112400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Kèm bàn phím -Xám",
+            "storage": "256GB"
+          },
+          "salePrice": 11990000
+        },
+        {
+          "sku": "JDFTGY-MTIM-256GB",
+          "price": 13490000,
+          "costPrice": 9112400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei-matepad-papermate-11-5-inch.jpg",
+          "active": true,
+          "options": {
+            "color": "Kèm bàn phím -Tím",
+            "storage": "256GB"
+          },
+          "salePrice": 11990000
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-lenovo-yoga-tab-tb710",
+      "name": "Lenovo Yoga Tab Wifi 12GB 256GB TB710 ZAG60105VN - Kèm bút, bàn phím",
+      "categorySlug": "tablet",
+      "brandSlug": "lenovo",
+      "description": "Đặc điểm nổi bật Máy tính bảng Lenovo Yoga Tab TB710 trang bị chip Snapdragon 8 Gen 3, RAM 12GB LPDDR5x cùng bộ nhớ 256GB UFS 4.0 cho trải nghiệm hiệu năng mạnh mẽ. Sản phẩm có màn hình LTPS 11.1 inch 3.2K tần số quét 144Hz giúp hiển thị sắc nét. Yoga Tab TB710 còn có viên pin 8860mAh và hệ thống âm thanh Dolby Atmos 4 loa. Máy tính bảng Lenovo Yoga Tab TB710 – Hiệu năng mạnh mẽ, màn hình sắc nét Lenovo Yoga Tab TB710 hướng tới trải nghiệm làm việc và giải trí linh hoạt với thiết kế kim loại mỏn",
+      "price": 17990000,
+      "salePrice": null,
+      "costPrice": 13672400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-4_2.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-4_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-8_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-7_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-6_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-9_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-11.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-10.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-12.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-13.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-14.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-15.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-2_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710_3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-3_1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Android™ 15",
+        "cpu": "Qualcomm® Snapdragon® 8 Gen 3",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "Qualcomm® Adreno™ 750",
+        "screen": "11.1 inches",
+        "display_tech": "LTPS LCD",
+        "camera": "13MP + 2MP",
+        "camera_front": "13MP",
+        "battery": "8860mAh",
+        "nfc": "Không"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Android™ 15",
+        "Chipset": "Qualcomm® Snapdragon® 8 Gen 3",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "6 nhân (1x Cortex-X4 3.3GHz + 4x Cortex-A720 2.95GHz + 1x Cortex-A520 2.1GHz)",
+        "GPU": "Qualcomm® Adreno™ 750",
+        "Kích thước màn hình": "11.1 inches",
+        "Công nghệ màn hình": "LTPS LCD",
+        "Độ phân giải màn hình": "3200 x 2000 pixel (3.2K)",
+        "Tính năng màn hình": "Độ sáng 600-800 nits, Tần số quét 144Hz, Độ phủ màu 98% DCI-P3, Đạt chứng nhận TÜV Rheinland",
+        "Camera sau": "13MP + 2MP",
+        "Camera trước": "13MP",
+        "Pin": "8860mAh",
+        "Công nghệ NFC": "Không",
+        "Thời điểm ra mắt": "08/2025"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "Y47CWR-XAM-256GB",
+          "price": 17990000,
+          "costPrice": 13672400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/e/lenovo-yoga-tab-tb710-4_2.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-redmi-pad-2-wifi",
+      "name": "Xiaomi Redmi Pad 2 Wifi 6GB 128GB",
+      "categorySlug": "tablet",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Máy tính bảng Xiaomi Redmi Pad 2 Wifi sở hữu màn hình 11 inch với độ phân giải 2560 x 1600 pixel, tần số quét 90Hz và cấu hình từ vi xử lý MediaTek Helio G100-Ultra. Máy có RAM 6GB cùng bộ nhớ trong 128GB, pin 9000mAh hỗ trợ sạc nhanh 18W. Redmi Pad2 Wifi có trọng lượng 510g, hỗ trợ Bluetooth 5.3, camera sau 8MP, camera trước 5MP.",
+      "price": 6690000,
+      "salePrice": 6190000,
+      "costPrice": 4704400,
+      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-3_1.jpg",
+      "images": [
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-2_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-1_1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-1.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-wifi.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-wifi_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-wifi-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-wifi-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-redmi-pad-2-wifi-1_2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-3.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-2.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-4.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-5.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-6.jpg",
+        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-8.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 2",
+        "cpu": "MediaTek Helio G100-Ultra",
+        "ram": "6 GB",
+        "storage": "128 GB",
+        "gpu": "Mali-G57 MC2",
+        "screen": "11 inches",
+        "camera": "8MP, f/2.0",
+        "camera_front": "5MP, f/2.2",
+        "battery": "9000 mAh",
+        "weight": "510g",
+        "connectivity": "Bluetooth 5.3, Wi-Fi 5"
+      },
+      "specsRaw": {
+        "Hệ điều hành": "Xiaomi HyperOS 2",
+        "Chipset": "MediaTek Helio G100-Ultra",
+        "Dung lượng RAM": "6 GB",
+        "Bộ nhớ trong": "128 GB",
+        "Loại CPU": "A76+A55, 2xA76@2.2GHz+6xA55@2.0 GHz",
+        "GPU": "Mali-G57 MC2",
+        "Kích thước màn hình": "11 inches",
+        "Độ phân giải màn hình": "2560 x 1600 pixels (2.5K)",
+        "Tính năng màn hình": "Tần số quét 90 HzĐộ sáng tối đa 600 nits274 ppi1,07 tỷ màuChế độ đọc sáchCông nghệ cảm ứng ướtĐộ phân giải siêu cao 10X",
+        "Camera sau": "8MP, f/2.0",
+        "Camera trước": "5MP, f/2.2",
+        "Pin": "9000 mAh",
+        "Thời điểm ra mắt": "06/2025",
+        "Tiêu chí": "Xiaomi Redmi Pad 2 Wifi",
+        "Màu sắc": "Lavender Purple - Mint Green - Graphite Gray",
+        "Trọng lượng": "510g",
+        "Màn hình": "11 inch 2.5K, 500 nits, 90Hz Chứng nhận TÜV Rheinland",
+        "Cấu hình": "MediaTek Helio G100-Ultra 6nm",
+        "Âm thanh": "4 loa Quad, Dolby Atmos",
+        "Kết nối": "Bluetooth 5.3, Wi-Fi 5"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "DKCG20-TIM-128GB",
+          "price": 6690000,
+          "costPrice": 4704400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-3_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "128GB"
+          },
+          "salePrice": 6190000
+        },
+        {
+          "sku": "DKCG20-NHLA-128GB",
+          "price": 6690000,
+          "costPrice": 4704400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-2_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "storage": "128GB"
+          },
+          "salePrice": 6190000
+        },
+        {
+          "sku": "DKCG20-XAM-128GB",
+          "price": 6690000,
+          "costPrice": 4704400,
+          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-redmi-pad-2-wifi-1_1.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "128GB"
+          },
+          "salePrice": 6190000
+        }
+      ]
+    }
+  ]
+}

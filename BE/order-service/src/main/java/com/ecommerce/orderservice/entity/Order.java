@@ -21,6 +21,9 @@ public class Order {
     @Column(name = "user_id", nullable = false, length = 100)
     private String userId;
 
+    @Column(name = "email", length = 255)
+    private String email;
+
     @Column(name = "status", nullable = false)
     @Builder.Default
     private String status = "PENDING"; // PENDING, AWAITING_PAYMENT, CONFIRMED, SHIPPED, DELIVERED, CANCELLED

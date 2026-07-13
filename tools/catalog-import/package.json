@@ -12,5 +12,8 @@
     "import:100": "node import.mjs --file data/catalog-100.json --apply",
     "generate": "node generate-manifest.mjs --count 200 --out data/generated-manifest.json",
     "csv": "node csv-to-manifest.mjs --dir templates/csv --out data/from-csv-manifest.json"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0"
   }
 }
