@@ -79,20 +79,22 @@ Thư mục gốc tuân thủ chuẩn Maven với `pom.xml`:
     └── test/                           # Thư mục chứa Unit Test và Integration Test
 ```
 
-### 3.2. Cấu trúc Python FastAPI (AI Service Layout)
+### 3.2. Cấu trúc Python FastAPI (AI Microservices Layout)
 ```
-ai-engine-service/
-├── requirements.txt                    # Danh sách thư viện Python
-├── Dockerfile                          # Dockerfile đóng gói ứng dụng Python
-├── main.py                             # Khởi tạo FastAPI App & Middleware
-└── app/
-    ├── core/                           # Config, Database client, Security settings
-    ├── api/                            # REST Endpoints
-    │   ├── router.py                   # Tập hợp router chính
-    │   └── endpoints/                  # Định nghĩa chi tiết (chat, pricing, forecast)
-    ├── models/                         # Pydantic schemas (DTOs) & ML Model classes
-    ├── services/                       # Business logic, RAG pipeline, Model Inference
-    └── workers/                        # Celery workers & Cron tasks (RFM Segmentation)
+AI/
+├── shared-common/                      # Thư viện dùng chung (DB connections, Logger, Settings)
+├── search-service/                     # Microservice xử lý Visual & Text Search (:8001)
+├── chatbot-service/                    # Microservice RAG Chatbot, Intent & Sentiment (:8002)
+├── recs-service/                       # Microservice gợi ý cá nhân hóa và Cold-start (:8003)
+└── forecast-service/                   # Microservice dự báo, RFM phân cụm & Định giá (:8004)
+    ├── requirements.txt                # Danh sách thư viện
+    ├── Dockerfile                      # Dockerfile của service
+    ├── main.py                         # File khởi động chính
+    └── app/
+        ├── core/                       # Cấu hình riêng biệt cho service
+        ├── api/                        # REST Endpoints
+        ├── models/                     # Pydantic validation schemas (DTOs)
+        └── services/                   # Logic nghiệp vụ AI & Inference models
 ```
 
 ---

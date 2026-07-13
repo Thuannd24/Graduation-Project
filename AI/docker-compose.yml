@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  search-service:
+    build:
+      context: .
+      dockerfile: search-service/Dockerfile
+    container_name: ai-search-service
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - REDIS_HOST=infra-redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://infra-mongodb:27017/ecommerce_product_nosql
+      - ELASTICSEARCH_HOST=http://infra-elasticsearch:9200
+      - DB_HOST=infra-mariadb
+      - DB_PORT=3306
+    networks:
+      - ecommerce-network
+
+  chatbot-service:
+    build:
+      context: .
+      dockerfile: chatbot-service/Dockerfile
+    container_name: ai-chatbot-service
+    ports:
+      - "8002:8002"
+    environment:
+      - PORT=8002
+      - SEARCH_SERVICE_URL=http://ai-search-service:8001
+      - REDIS_HOST=infra-redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://infra-mongodb:27017/ecommerce_product_nosql
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - search-service
+    networks:
+      - ecommerce-network
+
+  recs-service:
+    build:
+      context: .
+      dockerfile: recs-service/Dockerfile
+    container_name: ai-recs-service
+    ports:
+      - "8003:8003"
+    environment:
+      - PORT=8003
+      - REDIS_HOST=infra-redis
+      - REDIS_PORT=6379
+      - DB_HOST=infra-mariadb
+      - DB_PORT=3306
+    networks:
+      - ecommerce-network
+
+  forecast-service:
+    build:
+      context: .
+      dockerfile: forecast-service/Dockerfile
+    container_name: ai-forecast-service
+    ports:
+      - "8004:8004"
+    environment:
+      - PORT=8004
+      - REDIS_HOST=infra-redis
+      - REDIS_PORT=6379
+      - DB_HOST=infra-mariadb
+      - DB_PORT=3306
+      - USER_SERVICE_URL=http://be-user-service:8085
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    name: be_ecommerce-network
+    external: true
