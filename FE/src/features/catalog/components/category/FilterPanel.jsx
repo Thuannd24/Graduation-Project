@@ -71,9 +71,6 @@ export default function FilterPanel({
                   onChange={() => onBrandToggle(brand)}
                   className="w-4 h-4 accent-[#D70018] rounded cursor-pointer"
                 />
-                {brandObj.logoUrl && (
-                  <img src={brandObj.logoUrl} alt={brand} className="w-5 h-4 object-contain" />
-                )}
                 <span className="font-medium">{brand}</span>
               </label>
             );

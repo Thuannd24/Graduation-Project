@@ -25,7 +25,7 @@ export default function EvaluateModal({ open, form, result, onChangeForm, onClos
             </label>
           </div>
           <div className="cb-fg">
-            <label>User ID (BE tự tải hạng &amp; fraud score)</label>
+            <label>User ID (BE tự tải hạng thành viên)</label>
             <input
               type="text"
               value={form.userId}

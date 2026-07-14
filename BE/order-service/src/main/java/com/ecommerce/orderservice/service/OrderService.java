@@ -20,6 +20,7 @@ public interface OrderService {
     OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status);
     List<WarrantyItemResponse> lookupWarrantyByPhone(String phoneNumber);
     void expireOrder(Long orderId);
+    void retryCompensationTask(Long taskId);
 }
 
 

@@ -12,10 +12,6 @@ export function parseExpression(nodeType, expr) {
     const m = expr.match(/totalSpending\s*(>=|<=|>|<|==)\s*(\d+)/);
     return { operator: m ? m[1] : ">=", amount: m ? Number(m[2]) : 5000000 };
   }
-  if (nodeType === "Condition_AntiFraudScore") {
-    const m = expr.match(/antiFraudScore\s*(>=|<=|>|<|==)\s*(\d+)/);
-    return { operator: m ? m[1] : "<=", score: m ? Number(m[2]) : 50 };
-  }
   if (nodeType === "Condition_Location") {
     const m = expr.match(/targetProvince\s*==\s*['"]([^'"]+)['"]/);
     return { value: m ? m[1] : "Hanoi" };
@@ -50,11 +46,6 @@ export function buildBranchProps(nodeType, params) {
       timeRange: "LAST_30_DAYS"
     };
   }
-  if (nodeType === "Condition_AntiFraudScore") {
-    const op = params.operator || "<=";
-    const scr = Number(params.score) || 0;
-    return { expression: "${antiFraudScore " + op + " " + scr + "}", operator: op, value: scr };
-  }
   if (nodeType === "Condition_Location") {
     const v = params.value || "";
     return { expression: "${targetProvince == '" + v + "'}", operator: "EQUAL", value: [v] };
@@ -77,8 +68,6 @@ export function createDefaultBranchProps(nodeType, overrides = {}) {
       return buildBranchProps(nodeType, { rank: "VIP", ...overrides });
     case "Condition_TotalSpending":
       return buildBranchProps(nodeType, { operator: ">=", amount: 5000000, ...overrides });
-    case "Condition_AntiFraudScore":
-      return buildBranchProps(nodeType, { operator: "<=", score: 50, ...overrides });
     case "Condition_Location":
       return buildBranchProps(nodeType, { value: "", ...overrides });
     case "Condition_ContainsCategory":

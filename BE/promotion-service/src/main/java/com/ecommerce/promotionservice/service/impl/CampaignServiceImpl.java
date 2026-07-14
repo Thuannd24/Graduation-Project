@@ -100,40 +100,45 @@ public class CampaignServiceImpl implements CampaignService {
             dto.setBpmnProcessDefinitionKey(bpmnKey);
         }
 
-        // ── Determine BPMN XML: compile from workflowJson if not already provided ──
-        String bpmnXml = dto.getBpmnXml();
-
-        if ((bpmnXml == null || bpmnXml.trim().isEmpty()) && dto.getWorkflowJson() != null) {
-            log.info("No pre-compiled BPMN XML supplied. Validating and compiling from workflowJson...");
-            try {
-                WorkflowGraphDto graph = workflowGraph != null
-                        ? workflowGraph
-                        : objectMapper.readValue(dto.getWorkflowJson(), WorkflowGraphDto.class);
-
-                // Validate first – reject if invalid
-                ValidationResultDto validation = validatorService.validate(graph);
-                if (!validation.isValid()) {
-                    String errorSummary = validation.getErrors().stream()
-                            .map(e -> "[" + e.getNodeId() + "] " + e.getMessage())
-                            .collect(Collectors.joining("; "));
-                    throw new IllegalArgumentException(
-                            "Workflow không hợp lệ, không thể deploy: " + errorSummary);
-                }
-
-                bpmnXml = compilerService.compile(graph,
-                        dto.getBpmnProcessDefinitionKey(), dto.getName());
-                log.info("Compiled BPMN XML successfully ({} chars)", bpmnXml.length());
-            } catch (IllegalArgumentException e) {
-                throw e;
-            } catch (Exception e) {
-                log.error("Failed to compile workflowJson to BPMN XML: {}", e.getMessage(), e);
-                throw new RuntimeException("Không thể biên dịch workflow JSON sang BPMN: " + e.getMessage());
-            }
+        // ── Determine BPMN XML: ALWAYS compile+validate from workflowJson ──────────
+        // BUG FIX: previously, if the client supplied `bpmnXml` directly in the request, it was
+        // deployed as-is and WorkflowValidatorService was skipped entirely (the block below only
+        // ran `if bpmnXml is blank`). Since these endpoints are ROLE_ADMIN/ROLE_STAFF-only, this
+        // wasn't exploitable by outside attackers, but it let a raw API call (Postman/script)
+        // bypass every business rule this class enforces (default-branch checks, positive-amount
+        // checks, etc.) by skipping the normal Campaign Builder UI. Any client-supplied bpmnXml is
+        // now ignored - the server always compiles its own from a validated workflowJson.
+        if (dto.getWorkflowJson() == null || dto.getWorkflowJson().trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Thiếu workflowJson: hệ thống chỉ triển khai BPMN do chính server biên dịch và validate " +
+                            "từ workflowJson, không chấp nhận bpmnXml gửi trực tiếp từ client.");
         }
 
-        if (bpmnXml == null || bpmnXml.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Sơ đồ quy trình BPMN XML không được để trống. Hãy cung cấp workflowJson hoặc bpmnXml.");
+        String bpmnXml;
+        log.info("Validating and compiling BPMN XML from workflowJson...");
+        try {
+            WorkflowGraphDto graph = workflowGraph != null
+                    ? workflowGraph
+                    : objectMapper.readValue(dto.getWorkflowJson(), WorkflowGraphDto.class);
+
+            // Validate first – reject if invalid
+            ValidationResultDto validation = validatorService.validate(graph);
+            if (!validation.isValid()) {
+                String errorSummary = validation.getErrors().stream()
+                        .map(e -> "[" + e.getNodeId() + "] " + e.getMessage())
+                        .collect(Collectors.joining("; "));
+                throw new IllegalArgumentException(
+                        "Workflow không hợp lệ, không thể deploy: " + errorSummary);
+            }
+
+            bpmnXml = compilerService.compile(graph,
+                    dto.getBpmnProcessDefinitionKey(), dto.getName());
+            log.info("Compiled BPMN XML successfully ({} chars)", bpmnXml.length());
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Failed to compile workflowJson to BPMN XML: {}", e.getMessage(), e);
+            throw new RuntimeException("Không thể biên dịch workflow JSON sang BPMN: " + e.getMessage());
         }
 
         // ── Deploy to Camunda engine ──────────────────────────────────────────

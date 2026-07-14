@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,8 +91,12 @@ public class PaymentServiceImpl implements PaymentService {
     private static final String STATUS_SUCCESS = "SUCCESS";
     private static final String STATUS_FAILED = "FAILED";
     private static final String STATUS_REFUNDED = "REFUNDED";
+    private static final String STATUS_PARTIALLY_REFUNDED = "PARTIALLY_REFUNDED";
     private static final String STATUS_EXPIRED = "EXPIRED";
     private static final String STATUS_REFUND_PENDING = "REFUND_PENDING";
+    // Refund.status: VNPAY rejected the refund or a non-retryable error occurred - needs a human to look at it.
+    // Kept distinct from STATUS_PENDING so the automatic scheduler retry loop does not spin on it forever.
+    private static final String REFUND_STATUS_PENDING_MANUAL = "PENDING_MANUAL";
 
     @Override
     public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) {
@@ -112,59 +117,63 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         try {
-            TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-            return transactionTemplate.execute(status -> {
-                // Fetch order details from order-service to verify status and retrieve correct
-                // payment amount (prevent price tampering)
-                String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + request.getOrderId()
-                        + "/summary";
-                try {
-                    ApiResponse<?> orderApiResponse = restTemplate
-                            .getForObject(orderServiceUrl, ApiResponse.class);
+            // STEP 1: Fetch order details from order-service to verify status and retrieve
+            // correct payment amount (prevent price tampering). This is a network call and must
+            // run OUTSIDE any DB transaction (V-01/V-11 pattern) so a slow/stalled order-service
+            // never holds a payment-service DB connection open.
+            String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + request.getOrderId()
+                    + "/summary";
+            try {
+                ApiResponse<?> orderApiResponse = restTemplate
+                        .getForObject(orderServiceUrl, ApiResponse.class);
 
-                    if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
-                            || orderApiResponse.getData() == null) {
-                        throw new RuntimeException("Failed to retrieve order details from order-service");
-                    }
-
-                    Map<?, ?> orderData = (Map<?, ?>) orderApiResponse.getData();
-                    String orderStatus = (String) orderData.get("status");
-                    String orderUserId = (String) orderData.get("userId");
-
-                    // SECURITY CHECK: Verify that the order actually belongs to the user initiating
-                    // the payment
-                    if (orderUserId != null && !orderUserId.equalsIgnoreCase(request.getUserId())) {
-                        throw new IllegalArgumentException(
-                                "Access Denied: This order does not belong to the authenticated user.");
-                    }
-
-                    // Only allow payment for PENDING or AWAITING_PAYMENT orders
-                    if (!"PENDING".equalsIgnoreCase(orderStatus) && !"AWAITING_PAYMENT".equalsIgnoreCase(orderStatus)) {
-                        throw new RuntimeException("Cannot pay for order in status: " + orderStatus);
-                    }
-
-                    Object finalAmountObj = orderData.get("finalAmount");
-                    if (finalAmountObj == null) {
-                        throw new RuntimeException("Order final amount is null");
-                    }
-
-                    BigDecimal verifiedAmount;
-                    if (finalAmountObj instanceof Number) {
-                        verifiedAmount = BigDecimal.valueOf(((Number) finalAmountObj).doubleValue());
-                    } else {
-                        verifiedAmount = new BigDecimal(finalAmountObj.toString());
-                    }
-
-                    request.setAmount(verifiedAmount);
-                } catch (IllegalArgumentException e) {
-                    log.error("Security violation for Order ID: {} by User ID: {}", request.getOrderId(),
-                            request.getUserId());
-                    throw e;
-                } catch (Exception e) {
-                    log.error("Failed to verify order with order-service. Order ID: {}", request.getOrderId(), e);
-                    throw new RuntimeException("Order verification failed: " + e.getMessage());
+                if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
+                        || orderApiResponse.getData() == null) {
+                    throw new RuntimeException("Failed to retrieve order details from order-service");
                 }
 
+                Map<?, ?> orderData = (Map<?, ?>) orderApiResponse.getData();
+                String orderStatus = (String) orderData.get("status");
+                String orderUserId = (String) orderData.get("userId");
+
+                // SECURITY CHECK: Verify that the order actually belongs to the user initiating
+                // the payment
+                if (orderUserId != null && !orderUserId.equalsIgnoreCase(request.getUserId())) {
+                    throw new IllegalArgumentException(
+                            "Access Denied: This order does not belong to the authenticated user.");
+                }
+
+                // Only allow payment for PENDING or AWAITING_PAYMENT orders
+                if (!"PENDING".equalsIgnoreCase(orderStatus) && !"AWAITING_PAYMENT".equalsIgnoreCase(orderStatus)) {
+                    throw new RuntimeException("Cannot pay for order in status: " + orderStatus);
+                }
+
+                Object finalAmountObj = orderData.get("finalAmount");
+                if (finalAmountObj == null) {
+                    throw new RuntimeException("Order final amount is null");
+                }
+
+                BigDecimal verifiedAmount;
+                if (finalAmountObj instanceof Number) {
+                    verifiedAmount = BigDecimal.valueOf(((Number) finalAmountObj).doubleValue());
+                } else {
+                    verifiedAmount = new BigDecimal(finalAmountObj.toString());
+                }
+
+                request.setAmount(verifiedAmount);
+            } catch (IllegalArgumentException e) {
+                log.error("Security violation for Order ID: {} by User ID: {}", request.getOrderId(),
+                        request.getUserId());
+                throw e;
+            } catch (Exception e) {
+                log.error("Failed to verify order with order-service. Order ID: {}", request.getOrderId(), e);
+                throw new RuntimeException("Order verification failed: " + e.getMessage());
+            }
+
+            // STEP 2: Short DB transaction - idempotency check, persist Payment, build the VNPAY
+            // redirect URL (no network calls inside).
+            TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+            return transactionTemplate.execute(status -> {
                 String txnRef = UUID.randomUUID().toString();
 
                 // IDEMPOTENCY / REUSE CHECK: Check if a payment record already exists for this
@@ -377,15 +386,16 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional
     public void processRefund(RefundRequest request) {
-        // V-12 FIX: Use pessimistic write lock to prevent concurrent refund processing
-        // race conditions
-        Payment payment = paymentRepository.findByIdWithLock(request.getPaymentId())
+        // STEP 1: Read-only snapshot (no lock, no transaction) - just enough to validate the
+        // request and build the gateway call.
+        Payment snapshot = paymentRepository.findById(request.getPaymentId())
                 .orElseThrow(() -> new RuntimeException("Payment record not found"));
 
-        if (!STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())) {
-            throw new RuntimeException("Cannot refund payment in status: " + payment.getStatus());
+        // Allow refunding a payment that was already partially refunded (to top it up further)
+        if (!STATUS_SUCCESS.equalsIgnoreCase(snapshot.getStatus())
+                && !STATUS_PARTIALLY_REFUNDED.equalsIgnoreCase(snapshot.getStatus())) {
+            throw new RuntimeException("Cannot refund payment in status: " + snapshot.getStatus());
         }
 
         // SECURITY CHECK: Validate refund amount
@@ -393,25 +403,168 @@ public class PaymentServiceImpl implements PaymentService {
             throw new IllegalArgumentException("Refund amount must be greater than zero.");
         }
 
-        if (request.getAmount().compareTo(payment.getAmount()) > 0) {
+        BigDecimal alreadyRefundedSnapshot = sumSuccessfulRefunds(snapshot.getId(), null);
+        BigDecimal remainingSnapshot = snapshot.getAmount().subtract(alreadyRefundedSnapshot);
+        if (request.getAmount().compareTo(remainingSnapshot) > 0) {
             throw new IllegalArgumentException("Security Violation: Refund amount (" + request.getAmount()
-                    + ") cannot exceed original payment amount (" + payment.getAmount() + ").");
+                    + ") exceeds remaining refundable amount (" + remainingSnapshot + ").");
         }
+        boolean isFullRefundSnapshot = request.getAmount().compareTo(remainingSnapshot) == 0;
 
-        Refund refund = Refund.builder()
-                .paymentId(payment.getId())
-                .refundAmount(request.getAmount())
-                .reason(request.getReason())
-                .status(STATUS_SUCCESS) // For simulation, approve refund instantly
-                .completedAt(LocalDateTime.now())
-                .build();
+        // STEP 2: Call the payment gateway OUTSIDE any DB transaction (V-01/V-11 pattern: never
+        // hold a DB connection/lock during an outbound HTTP call).
+        VnPayRefundResult gatewayResult = GATEWAY_VNPAY.equalsIgnoreCase(snapshot.getPaymentMethod())
+                ? callVnPayRefundApi(snapshot, request.getAmount(), isFullRefundSnapshot, "admin")
+                : null; // COD has no gateway call - handled as an offline confirmation
+
+        // STEP 3: Short, fine-grained transaction - re-validate under lock and persist the outcome.
+        TransactionTemplate tx = new TransactionTemplate(transactionManager);
+        tx.executeWithoutResult(status -> {
+            Payment payment = paymentRepository.findByIdWithLock(request.getPaymentId())
+                    .orElseThrow(() -> new RuntimeException("Payment record not found"));
+
+            if (!STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())
+                    && !STATUS_PARTIALLY_REFUNDED.equalsIgnoreCase(payment.getStatus())) {
+                throw new RuntimeException("Cannot refund payment in status: " + payment.getStatus());
+            }
+
+            BigDecimal alreadyRefunded = sumSuccessfulRefunds(payment.getId(), null);
+            BigDecimal remaining = payment.getAmount().subtract(alreadyRefunded);
+            if (request.getAmount().compareTo(remaining) > 0) {
+                throw new IllegalArgumentException("Security Violation: Refund amount (" + request.getAmount()
+                        + ") exceeds remaining refundable amount (" + remaining + ").");
+            }
+            boolean isFullRefund = request.getAmount().compareTo(remaining) == 0;
+
+            Refund refund = Refund.builder()
+                    .paymentId(payment.getId())
+                    .refundAmount(request.getAmount())
+                    .reason(request.getReason())
+                    .status(STATUS_PENDING)
+                    .build();
+
+            applyGatewayResult(payment, refund, isFullRefund, gatewayResult);
+        });
+    }
+
+    private BigDecimal sumSuccessfulRefunds(Long paymentId, Long excludingRefundId) {
+        return refundRepository.findByPaymentId(paymentId).stream()
+                .filter(r -> STATUS_SUCCESS.equalsIgnoreCase(r.getStatus()))
+                .filter(r -> excludingRefundId == null || !excludingRefundId.equals(r.getId()))
+                .map(Refund::getRefundAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Persists the outcome of a refund attempt (gatewayResult == null means COD, which has no
+     * gateway call and is treated as an offline cash confirmation). Only publishes
+     * RefundCompletedEvent when money has genuinely moved - a failed/rejected gateway call must
+     * never be reported to the rest of the system as a completed refund.
+     */
+    private void applyGatewayResult(Payment payment, Refund refund, boolean isFullRefund,
+            VnPayRefundResult gatewayResult) {
+        if (gatewayResult == null) {
+            refund.setStatus(STATUS_SUCCESS);
+            refund.setCompletedAt(LocalDateTime.now());
+        } else if (gatewayResult.success()) {
+            refund.setStatus(STATUS_SUCCESS);
+            refund.setGatewayRefundId(gatewayResult.gatewayTransactionNo());
+            refund.setCompletedAt(LocalDateTime.now());
+        } else if (gatewayResult.retryable()) {
+            // Transient/network failure - leave as PENDING so the processPendingRefunds
+            // scheduler retries it automatically on its next run.
+            refund.setStatus(STATUS_PENDING);
+            refund.setReason(refund.getReason() + " | Retry pending: " + gatewayResult.message());
+        } else {
+            // VNPAY explicitly rejected the refund - automatic retries would not help.
+            refund.setStatus(REFUND_STATUS_PENDING_MANUAL);
+            refund.setReason(refund.getReason() + " | Needs manual review: " + gatewayResult.message());
+        }
         refundRepository.save(refund);
 
-        payment.setStatus(STATUS_REFUNDED);
-        paymentRepository.save(payment);
+        if (STATUS_SUCCESS.equalsIgnoreCase(refund.getStatus())) {
+            payment.setStatus(isFullRefund ? STATUS_REFUNDED : STATUS_PARTIALLY_REFUNDED);
+            paymentRepository.save(payment);
+            publishPaymentEvent("RefundCompletedEvent", payment, refund.getRefundAmount(),
+                    "Refund completed for: " + refund.getReason());
+        }
+    }
 
-        publishPaymentEvent("RefundCompletedEvent", payment, request.getAmount(),
-                "Refund completed for: " + request.getReason());
+    private record VnPayRefundResult(boolean success, boolean retryable, String gatewayTransactionNo,
+            String message) {
+    }
+
+    private VnPayRefundResult callVnPayRefundApi(Payment payment, BigDecimal refundAmount, boolean isFullRefund,
+            String createdBy) {
+        try {
+            String requestId = UUID.randomUUID().toString();
+            String version = "2.1.0";
+            String command = "refund";
+            // VNPAY transaction type: "02" = full refund, "03" = partial refund
+            String transactionType = isFullRefund ? "02" : "03";
+            String txnRef = payment.getTxnRef();
+            BigDecimal vnpAmount = refundAmount.multiply(BigDecimal.valueOf(100));
+            String amount = String.valueOf(vnpAmount.longValue());
+            String transactionNo = payment.getGatewayTxnId() != null ? payment.getGatewayTxnId() : "";
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            LocalDateTime originalTxnDate = payment.getPaidAt() != null ? payment.getPaidAt() : payment.getCreatedAt();
+            String transactionDate = originalTxnDate.format(formatter);
+            String createDate = LocalDateTime.now().format(formatter);
+            String ipAddr = DEFAULT_IP_FALLBACK;
+            String orderInfo = "Hoan tien don hang " + payment.getOrderId();
+
+            // Signature per VNPAY "Hoan tra giao dich" (refund) spec:
+            // RequestId|Version|Command|TmnCode|TransactionType|TxnRef|Amount|TransactionNo|TransactionDate|CreateBy|CreateDate|IpAddr|OrderInfo
+            String hashData = requestId + "|" + version + "|" + command + "|" + vnpTmnCode + "|" + transactionType
+                    + "|" + txnRef + "|" + amount + "|" + transactionNo + "|" + transactionDate + "|" + createdBy
+                    + "|" + createDate + "|" + ipAddr + "|" + orderInfo;
+            String secureHash = hmacSha512(vnpHashSecret, hashData);
+
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("vnp_RequestId", requestId);
+            requestBody.put("vnp_Version", version);
+            requestBody.put("vnp_Command", command);
+            requestBody.put("vnp_TmnCode", vnpTmnCode);
+            requestBody.put("vnp_TransactionType", transactionType);
+            requestBody.put("vnp_TxnRef", txnRef);
+            requestBody.put("vnp_Amount", amount);
+            requestBody.put("vnp_TransactionNo", transactionNo);
+            requestBody.put("vnp_CreateBy", createdBy);
+            requestBody.put("vnp_OrderInfo", orderInfo);
+            requestBody.put("vnp_TransactionDate", transactionDate);
+            requestBody.put("vnp_CreateDate", createDate);
+            requestBody.put("vnp_IpAddr", ipAddr);
+            requestBody.put("vnp_SecureHash", secureHash);
+
+            log.info("Sending refund request to VNPAY for txnRef: {}, amount: {}", txnRef, refundAmount);
+            Map<?, ?> response = standardRestTemplate.postForObject(vnpQueryUrl, requestBody, Map.class);
+            log.info("Received refund response from VNPAY: {}", response);
+
+            if (response == null) {
+                return new VnPayRefundResult(false, true, null, "No response from VNPAY");
+            }
+
+            String responseCode = String.valueOf(response.get("vnp_ResponseCode"));
+            String message = String.valueOf(response.get("vnp_Message"));
+
+            if ("00".equals(responseCode)) {
+                String gatewayTxnNo = response.get("vnp_TransactionNo") != null
+                        ? String.valueOf(response.get("vnp_TransactionNo"))
+                        : null;
+                return new VnPayRefundResult(true, false, gatewayTxnNo, message);
+            }
+
+            // 91 = transaction not found (can happen on lag/misconfig), 99 = unknown/other error -
+            // treat as possibly transient and let the scheduler retry. Everything else (e.g. 94 =
+            // request already processed, 95 = txn not eligible) is a definitive rejection.
+            boolean retryable = "91".equals(responseCode) || "99".equals(responseCode);
+            return new VnPayRefundResult(false, retryable, null,
+                    "VNPAY response code " + responseCode + ": " + message);
+        } catch (Exception e) {
+            log.error("Failed to call VNPAY refund API for txnRef: {}", payment.getTxnRef(), e);
+            return new VnPayRefundResult(false, true, null, "Exception calling VNPAY refund API: " + e.getMessage());
+        }
     }
 
     @Override
@@ -433,9 +586,15 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentResponse getPaymentByOrderId(Long orderId) {
+    public PaymentResponse getPaymentByOrderId(Long orderId, String callerUserId, boolean isAdminOrStaff) {
         Payment p = paymentRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Payment not found for order ID: " + orderId));
+
+        // SECURITY: Prevent IDOR - only the owning user or an admin/staff may view this payment
+        if (!isAdminOrStaff && (callerUserId == null || !callerUserId.equalsIgnoreCase(p.getUserId()))) {
+            throw new AccessDeniedException("You do not have permission to view this payment.");
+        }
+
         return PaymentResponse.builder()
                 .id(p.getId())
                 .orderId(p.getOrderId())
@@ -725,6 +884,24 @@ public class PaymentServiceImpl implements PaymentService {
 
         for (Refund refund : pendingRefunds) {
             try {
+                // STEP 1: Read-only snapshot + gateway call OUTSIDE any DB transaction.
+                Optional<Payment> paymentOpt = paymentRepository.findById(refund.getPaymentId());
+                if (paymentOpt.isEmpty()) {
+                    log.warn("Payment {} not found for pending refund {}. Skipping.", refund.getPaymentId(),
+                            refund.getId());
+                    continue;
+                }
+                Payment paymentSnapshot = paymentOpt.get();
+                BigDecimal alreadyRefundedSnapshot = sumSuccessfulRefunds(paymentSnapshot.getId(), refund.getId());
+                boolean isFullRefundSnapshot = refund.getRefundAmount()
+                        .compareTo(paymentSnapshot.getAmount().subtract(alreadyRefundedSnapshot)) >= 0;
+
+                VnPayRefundResult gatewayResult = GATEWAY_VNPAY.equalsIgnoreCase(paymentSnapshot.getPaymentMethod())
+                        ? callVnPayRefundApi(paymentSnapshot, refund.getRefundAmount(), isFullRefundSnapshot,
+                                "system-scheduler")
+                        : null;
+
+                // STEP 2: Short, fine-grained transaction for DB writes only.
                 tx.executeWithoutResult(status -> {
                     // Re-fetch with pessimistic write lock to serialize access
                     Optional<Refund> freshRefundOpt = refundRepository.findByIdWithLock(refund.getId());
@@ -740,21 +917,17 @@ public class PaymentServiceImpl implements PaymentService {
                         return;
                     }
 
-                    Payment payment = paymentRepository.findById(freshRefund.getPaymentId())
+                    Payment payment = paymentRepository.findByIdWithLock(freshRefund.getPaymentId())
                             .orElseThrow(() -> new RuntimeException("Payment record not found"));
 
-                    freshRefund.setStatus(STATUS_SUCCESS);
-                    freshRefund.setCompletedAt(LocalDateTime.now());
-                    refundRepository.save(freshRefund);
+                    BigDecimal alreadyRefunded = sumSuccessfulRefunds(payment.getId(), freshRefund.getId());
+                    boolean isFullRefund = freshRefund.getRefundAmount()
+                            .compareTo(payment.getAmount().subtract(alreadyRefunded)) >= 0;
 
-                    payment.setStatus(STATUS_REFUNDED);
-                    paymentRepository.save(payment);
+                    applyGatewayResult(payment, freshRefund, isFullRefund, gatewayResult);
 
-                    publishPaymentEvent("RefundCompletedEvent", payment, freshRefund.getRefundAmount(),
-                            "Refund completed for: " + freshRefund.getReason());
-
-                    log.info("Refund ID {} for Payment ID {} completed successfully", freshRefund.getId(),
-                            payment.getId());
+                    log.info("Refund ID {} for Payment ID {} processed with result status {}", freshRefund.getId(),
+                            payment.getId(), freshRefund.getStatus());
                 });
             } catch (Exception e) {
                 log.error("Failed to process refund ID: {}", refund.getId(), e);

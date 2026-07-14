@@ -80,7 +80,7 @@ const VISIBLE_CARDS = 5;
 const CARD_GAP = 12;
 
 export default function FlashDealSection() {
-  const [mainTab, setMainTab] = useState("deal");
+  const [mainTab, setMainTab] = useState("new");
   const [activeCat, setActiveCat] = useState(null);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -110,7 +110,7 @@ export default function FlashDealSection() {
     if (mainTab === "new") {
       params.sort = "id,desc";
     } else if (mainTab === "hot") {
-      params.sort = "rating,desc";
+      params.sort = "salesCount,desc";
     }
     
     productApi.listProductsPaged(params)
@@ -151,8 +151,6 @@ export default function FlashDealSection() {
     }}>
       {/* Dynamic Keyframes and Imports */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
-        
         @keyframes floatBanner {
           0%, 100% { transform: translateY(0) rotate(-2deg); }
           50% { transform: translateY(-5px) rotate(1deg); }
@@ -264,7 +262,7 @@ export default function FlashDealSection() {
           transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
           box-sizing: border-box;
           position: relative;
-          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-family: 'Inter', 'Be Vietnam Pro', sans-serif;
           font-weight: 800;
           font-size: 13.5px;
           letter-spacing: 0.05em;
@@ -362,7 +360,7 @@ export default function FlashDealSection() {
         borderRadius: 18,
         overflow: "hidden",
         backgroundColor: "#fff",
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontFamily: "'Inter', 'Be Vietnam Pro', sans-serif",
       }}>
 
         {/* TAB ROW — Flat seamless tab design */}
@@ -428,7 +426,7 @@ export default function FlashDealSection() {
                 cursor: "pointer",
                 fontWeight: 700,
                 fontSize: "12.5px",
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                fontFamily: "'Inter', 'Be Vietnam Pro', sans-serif",
                 border: "none",
                 boxShadow: activeCat === null 
                   ? `0 4px 10px ${activeConfig.glowColor}` 
@@ -475,7 +473,7 @@ export default function FlashDealSection() {
                     cursor: "pointer",
                     fontWeight: 700,
                     fontSize: "12.5px",
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    fontFamily: "'Inter', 'Be Vietnam Pro', sans-serif",
                     border: "none",
                     boxShadow: isActive 
                       ? `0 4px 10px ${activeConfig.glowColor}` 
@@ -538,7 +536,7 @@ export default function FlashDealSection() {
                 visibleCount={VISIBLE_CARDS}
                 gap={CARD_GAP}
                 loading={loading}
-                cardProps={{ showShipping: true }}
+                cardProps={{ showShipping: true, badge: mainTab === "new" ? "new" : undefined }}
               />
             )}
           </div>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @FeignClient(name = "promotion-service", fallbackFactory = PromotionClientFallbackFactory.class)
 public interface PromotionClient {
@@ -37,6 +38,9 @@ public interface PromotionClient {
         private Long orderId;
         private BigDecimal orderTotal;
         private BigDecimal shippingFee;
+        /** Product IDs trong đơn hàng/giỏ hàng hiện tại — dùng để kiểm tra ràng buộc
+         *  danh mục/sản phẩm của voucher ở promotion-service. */
+        private List<Long> productIds;
     }
 
     @Data

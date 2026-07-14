@@ -3,7 +3,7 @@ import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi.ts";
 import { buildSalePricePayload, validateProductPricing } from "../../../utils/pricing.ts";
 
-export default function AddProductTab({ onSaveProduct, editingProductId, setEditingProductId }) {
+export default function AddProductTab({ onSaveProduct, editingProductId, setEditingProductId, initialData }) {
   // Master lists
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -12,10 +12,12 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
 
   // Form states
   const [basicInfo, setBasicInfo] = useState({
-    name: "",
+    name: initialData?.name || "",
     slug: "",
-    description: "",
-    price: "",
+    description: initialData
+      ? "Sản phẩm được thêm nhanh từ trang tổng quan Admin."
+      : "",
+    price: initialData?.price ?? "",
     costPrice: "",
     salePrice: "",
     weight: "200",
@@ -242,6 +244,14 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
 
         setCategories(flatCats);
         setBrands(brandsList);
+
+        if (!editingProductId && initialData?.categoryHint) {
+          const hint = initialData.categoryHint.toLowerCase();
+          const matched = flatCats.find(c => c.label.toLowerCase().includes(hint));
+          if (matched) {
+            setBasicInfo(prev => ({ ...prev, categoryId: matched.id }));
+          }
+        }
 
         if (editingProductId) {
           // Đánh dấu đang load edit TRƯỚC KHI fetch/set bất kỳ state nào

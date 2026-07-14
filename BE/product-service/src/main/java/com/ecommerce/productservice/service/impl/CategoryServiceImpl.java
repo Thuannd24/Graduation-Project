@@ -63,11 +63,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryDto createCategory(CategoryDto categoryDto) {
+        if (categoryRepository.findBySlug(categoryDto.getSlug()).isPresent()) {
+            throw new IllegalArgumentException("Slug danh mục đã tồn tại: " + categoryDto.getSlug());
+        }
         Category category = Category.builder()
                 .name(categoryDto.getName())
                 .slug(categoryDto.getSlug())
                 .parentId(categoryDto.getParentId())
                 .imageUrl(categoryDto.getImageUrl())
+                .icon(categoryDto.getIcon())
                 .sortOrder(categoryDto.getSortOrder())
                 .active(categoryDto.getActive() != null ? categoryDto.getActive() : true)
                 .build();
@@ -80,10 +84,26 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+
+        if (!category.getSlug().equals(categoryDto.getSlug())
+                && categoryRepository.findBySlug(categoryDto.getSlug()).isPresent()) {
+            throw new IllegalArgumentException("Slug danh mục đã tồn tại: " + categoryDto.getSlug());
+        }
+
+        if (categoryDto.getParentId() != null) {
+            if (categoryDto.getParentId().equals(id)) {
+                throw new IllegalArgumentException("Danh mục không thể là cha của chính nó.");
+            }
+            if (createsCycle(id, categoryDto.getParentId())) {
+                throw new IllegalArgumentException("Danh mục cha tạo thành chu trình (cycle) không hợp lệ.");
+            }
+        }
+
         category.setName(categoryDto.getName());
         category.setSlug(categoryDto.getSlug());
         category.setParentId(categoryDto.getParentId());
         category.setImageUrl(categoryDto.getImageUrl());
+        category.setIcon(categoryDto.getIcon());
         category.setSortOrder(categoryDto.getSortOrder());
         if (categoryDto.getActive() != null) {
             category.setActive(categoryDto.getActive());
@@ -98,6 +118,21 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
     }
 
+    // Đi ngược lên chuỗi parentId từ newParentId — nếu gặp lại categoryId thì đây là 1 cycle
+    // (VD: A đang là ông/cha của B, nay lại gán parent của A = B).
+    private boolean createsCycle(Long categoryId, Long newParentId) {
+        Long currentId = newParentId;
+        while (currentId != null) {
+            if (currentId.equals(categoryId)) {
+                return true;
+            }
+            currentId = categoryRepository.findById(currentId)
+                    .map(Category::getParentId)
+                    .orElse(null);
+        }
+        return false;
+    }
+
     private CategoryDto convertToDto(Category category) {
         return CategoryDto.builder()
                 .id(category.getId())
@@ -105,6 +140,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .slug(category.getSlug())
                 .parentId(category.getParentId())
                 .imageUrl(category.getImageUrl())
+                .icon(category.getIcon())
                 .sortOrder(category.getSortOrder())
                 .active(category.getActive())
                 .children(new ArrayList<>())

@@ -27,6 +27,7 @@ public class ProductDto {
 
     private String description;
     private Object attributes; // JSON format
+    private Object specsRaw; // Bản thô toàn bộ thông số crawl được, kể cả phần chưa map vào attribute chuẩn
 
     @NotNull(message = "Giá niêm yết không được để trống")
     @DecimalMin(value = "0.01", message = "Giá niêm yết phải lớn hơn 0")

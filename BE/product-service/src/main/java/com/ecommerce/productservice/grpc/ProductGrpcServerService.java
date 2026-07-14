@@ -95,12 +95,14 @@ public class ProductGrpcServerService extends ProductGrpcServiceGrpc.ProductGrpc
             }
         }
 
+        BigDecimal effectivePrice = ProductPricingUtils.getEffectivePrice(variant.getPrice(), variant.getSalePrice());
+
         return ProductVariantInfoGrpc.newBuilder()
                 .setId(variant.getId() != null ? variant.getId() : 0L)
                 .setProductId(variant.getProductId() != null ? variant.getProductId() : 0L)
                 .setSku(nullToEmpty(variant.getSku()))
                 .setVariantAttrJson(variantAttrJson)
-                .setPrice(bigDecimalToString(variant.getPrice()))
+                .setPrice(bigDecimalToString(effectivePrice))
                 .setCostPrice(bigDecimalToString(variant.getCostPrice()))
                 .setWeight(bigDecimalToString(variant.getWeight()))
                 .setImageUrl(nullToEmpty(variant.getImageUrl()))

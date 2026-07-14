@@ -1,71 +1,161 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
+import FilterPanel from "../components/category/FilterPanel.jsx";
+import FilterDrawer from "../components/category/FilterDrawer.jsx";
+import ProductToolbar from "../components/category/ProductToolbar.jsx";
+import ProductGridSkeleton from "../components/category/ProductGridSkeleton.jsx";
 import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi";
-import { formatVnd } from "../../../utils/format.js";
+import { PRICE_PRESETS } from "../utils/categoryUtils.js";
+import { useDebounce } from "../hooks/useDebounce.js";
+
+const DEFAULT_MAX_PRICE = 50000000;
 
 export default function SearchPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
   const isImageSearch = searchParams.get("imageSearch") === "true";
 
-  const [products, setProducts] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
-  const [sortBy, setSortBy] = useState("relevance");
+  const selectedBrands = useMemo(
+    () => searchParams.get("brand")?.split(",").filter(Boolean) ?? [],
+    [searchParams]
+  );
+  const minPrice = Number(searchParams.get("minPrice") || 0);
+  const maxPrice = Number(searchParams.get("maxPrice") || DEFAULT_MAX_PRICE);
+  const onSale = searchParams.get("sale") === "1";
+  const sort = searchParams.get("sort") || "featured";
+
+  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
   const [uploadedImage, setUploadedImage] = useState("");
   const [cropBox, setCropBox] = useState(null);
 
+  const [priceDraft, setPriceDraft] = useState({ min: minPrice, max: maxPrice });
+  const debouncedPrice = useDebounce(priceDraft, 400);
+
+  const updateFilters = (patch) => {
+    const next = new URLSearchParams(searchParams);
+    Object.entries(patch).forEach(([key, value]) => {
+      if (value === null || value === undefined || value === "") {
+        next.delete(key);
+        return;
+      }
+      if (Array.isArray(value)) {
+        if (value.length === 0) next.delete(key);
+        else next.set(key, value.join(","));
+        return;
+      }
+      next.set(key, String(value));
+    });
+    setSearchParams(next, { replace: true });
+  };
+
+  useEffect(() => {
+    setPriceDraft({ min: minPrice, max: maxPrice });
+  }, [minPrice, maxPrice]);
+
+  useEffect(() => {
+    if (debouncedPrice.min === minPrice && debouncedPrice.max === maxPrice) return;
+    updateFilters({ minPrice: debouncedPrice.min, maxPrice: debouncedPrice.max });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedPrice]);
+
   useEffect(() => {
     setLoading(true);
-    setSelectedBrands([]);
+    setError("");
 
     if (isImageSearch) {
-      // Fetch visual search results from local storage
       const cachedResults = sessionStorage.getItem("visual_search_results");
       const cachedImage = sessionStorage.getItem("visual_search_image");
       const cachedCrop = sessionStorage.getItem("visual_search_crop");
 
-      if (cachedResults) {
-        setProducts(JSON.parse(cachedResults));
-      } else {
-        setProducts([]);
-      }
+      setAllProducts(cachedResults ? JSON.parse(cachedResults) : []);
       if (cachedImage) setUploadedImage(cachedImage);
       if (cachedCrop) setCropBox(JSON.parse(cachedCrop));
-
       setLoading(false);
     } else {
       productApi
-        .searchProducts(query)
-        .then(setProducts)
+        .searchProducts(query, 0, 100)
+        .then((result) => setAllProducts(result.items))
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
     }
   }, [query, isImageSearch]);
 
-  const brands = useMemo(() => Array.from(new Set(products.map((p) => p.brand).filter(Boolean))), [products]);
-  const sortedProducts = useMemo(() => {
-    const list = products.filter((product) => selectedBrands.length === 0 || selectedBrands.includes(product.brand));
-    if (sortBy === "price-asc") return [...list].sort((a, b) => a.price - b.price);
-    if (sortBy === "price-desc") return [...list].sort((a, b) => b.price - a.price);
-    if (sortBy === "rating") return [...list].sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    return list;
-  }, [products, selectedBrands, sortBy]);
+  const availableBrands = useMemo(() => {
+    const names = Array.from(new Set(allProducts.map((p) => p.brand).filter(Boolean)));
+    return names.map((name) => ({ id: name, name }));
+  }, [allProducts]);
 
-  const handleBrandChange = (brand) => {
-    setSelectedBrands((prev) => (prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]));
+  const toggleBrand = (brand) => {
+    const next = selectedBrands.includes(brand)
+      ? selectedBrands.filter((b) => b !== brand)
+      : [...selectedBrands, brand];
+    updateFilters({ brand: next });
+  };
+
+  const activePricePreset = useMemo(
+    () => PRICE_PRESETS.find((p) => p.min === minPrice && p.max === maxPrice) || null,
+    [minPrice, maxPrice]
+  );
+
+  const activeFilterCount =
+    selectedBrands.length +
+    (onSale ? 1 : 0) +
+    (minPrice > 0 || maxPrice < DEFAULT_MAX_PRICE ? 1 : 0);
+
+  const filteredProducts = useMemo(() => {
+    return allProducts.filter((product) => {
+      if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) return false;
+      if (onSale) {
+        const isDiscounted = Number(product.oldPrice || 0) > Number(product.price || 0);
+        if (!isDiscounted) return false;
+      }
+      const price = Number(product.price || 0);
+      if (price < minPrice || price > maxPrice) return false;
+      return true;
+    });
+  }, [allProducts, selectedBrands, onSale, minPrice, maxPrice]);
+
+  const sortedProducts = useMemo(() => {
+    const list = [...filteredProducts];
+    if (sort === "price_asc") return list.sort((a, b) => a.price - b.price);
+    if (sort === "price_desc") return list.sort((a, b) => b.price - a.price);
+    if (sort === "rating_desc") return list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    return list;
+  }, [filteredProducts, sort]);
+
+  const filterPanelProps = {
+    brands: availableBrands,
+    selectedBrands,
+    onBrandToggle: toggleBrand,
+    onSale,
+    onSaleChange: (v) => updateFilters({ sale: v ? "1" : null }),
+    minPrice: priceDraft.min,
+    maxPrice: priceDraft.max,
+    onPriceChange: setPriceDraft,
+    pricePreset: activePricePreset,
+    onPricePreset: (preset) => {
+      setPriceDraft({ min: preset.min, max: preset.max });
+      updateFilters({ minPrice: preset.min, maxPrice: preset.max });
+    },
+    dynamicSpecFilters: [],
+    onClearAll: () => {
+      const next = new URLSearchParams();
+      next.set("q", query);
+      setSearchParams(next, { replace: true });
+    },
   };
 
   return (
-    <div className="max-w-container-max w-full mx-auto py-md px-md lg:px-lg min-h-screen text-on-background font-body-lg">
-      
+    <div className="max-w-container-max w-full mx-auto py-6 px-4 lg:px-6 min-h-screen">
       {/* Visual Search Context header */}
       {isImageSearch && uploadedImage ? (
-        <div className="mb-8 p-5 bg-gradient-to-r from-rose-50 to-slate-50 dark:from-slate-900/40 dark:to-slate-900/10 rounded-2xl border border-rose-100 dark:border-slate-800 flex flex-col md:flex-row gap-6 items-center">
+        <div className="mb-6 p-5 bg-gradient-to-r from-rose-50 to-slate-50 dark:from-slate-900/40 dark:to-slate-900/10 rounded-2xl border border-rose-100 dark:border-slate-800 flex flex-col md:flex-row gap-6 items-center">
           <div className="relative w-36 h-36 bg-white dark:bg-slate-950 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800 shrink-0">
             <img src={uploadedImage} alt="Search Query" className="w-full h-full object-contain" />
             {cropBox && (
@@ -90,72 +180,92 @@ export default function SearchPage() {
               <Icon name="center_focus_strong" className="text-xs" />
               Tìm kiếm bằng hình ảnh
             </span>
-            <h1 className="text-headline-md font-black text-slate-800 dark:text-slate-200">
+            <h1 className="text-2xl font-black text-slate-800 dark:text-slate-200">
               Sản phẩm tương đồng với ảnh tải lên
             </h1>
-            <p className="font-body-sm text-secondary">
+            <p className="text-sm text-slate-500">
               Aura AI đã trích xuất đặc trưng hình ảnh bằng mô hình <strong>CLIP ViT-B/32</strong> và tìm kiếm trên chỉ mục <strong>FAISS FlatIP Index</strong>.
             </p>
           </div>
         </div>
       ) : (
-        <div className="mb-md">
-          <h1 className="text-headline-md font-bold mb-xs">Kết quả tìm kiếm: <span className="text-primary">"{query}"</span></h1>
-          <p className="font-body-sm text-secondary">Tìm thấy <strong>{sortedProducts.length}</strong> sản phẩm.</p>
+        <div className="mb-5">
+          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            Kết quả tìm kiếm: <span className="text-[#D70018]">"{query}"</span>
+          </h1>
         </div>
       )}
 
-      {loading && <p className="admin-note">Đang tải kết quả tìm kiếm...</p>}
-      {error && <p className="admin-error">{error}</p>}
-      {!loading && !error && (
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-md items-start">
-          <aside className="md:col-span-3 bg-surface-container-lowest p-md rounded-lg shadow-sm border border-surface-container-highest space-y-md">
-            <h3 className="font-bold text-sm text-on-surface uppercase tracking-wide border-b border-surface-container-highest pb-xs mb-sm flex items-center justify-between">
-              <span>Hãng sản xuất</span>
-              <Icon className="text-secondary text-[16px]" name="filter_alt" />
-            </h3>
-            {brands.map((brand) => (
-              <label key={brand} className="flex items-center gap-sm font-body-sm cursor-pointer text-on-surface-variant hover:text-on-surface">
-                <input type="checkbox" checked={selectedBrands.includes(brand)} onChange={() => handleBrandChange(brand)} />
-                <span>{brand}</span>
-              </label>
-            ))}
-          </aside>
-          
-          <section className="md:col-span-9 space-y-md">
-            <div className="bg-surface-container-lowest p-sm px-md rounded-lg shadow-sm border border-surface-container-highest flex flex-col sm:flex-row items-center justify-between gap-sm">
-              <span className="font-body-sm text-secondary">Sắp xếp</span>
-              <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="relevance">Liên quan nhất</option>
-                <option value="price-asc">Giá tăng dần</option>
-                <option value="price-desc">Giá giảm dần</option>
-                <option value="rating">Đánh giá tốt nhất</option>
-              </select>
-            </div>
-            
-            {sortedProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
-                {sortedProducts.map((product) => (
-                  <div key={product.id} className="relative group">
-                    <ProductCard product={product} />
-                    {isImageSearch && product.matchScore && (
-                      <div className="absolute top-3 left-3 bg-emerald-600 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-md z-10 flex items-center gap-1 select-none">
-                        <Icon name="check_circle" className="text-[10px]" />
-                        Độ khớp: {product.matchScore}%
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-xl text-center">
-                <Icon className="text-[64px] text-secondary opacity-40" name="search_off" />
-                <h3 className="font-bold text-headline-md text-on-surface">Không tìm thấy sản phẩm tương đồng</h3>
-              </div>
-            )}
-          </section>
+      {error && (
+        <div className="text-center py-16 bg-red-50 dark:bg-red-950/20 border border-red-200 rounded-2xl mb-4">
+          <Icon name="error_outline" className="text-4xl text-red-400 mb-2" />
+          <p className="text-red-600 font-semibold">{error}</p>
         </div>
       )}
+
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:block w-[280px] shrink-0">
+          <div className="sticky top-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+            <FilterPanel {...filterPanelProps} />
+          </div>
+        </aside>
+
+        {/* Main content */}
+        <section className="flex-1 min-w-0 space-y-5">
+          <ProductToolbar
+            title={`Kết quả cho "${query}"`}
+            count={sortedProducts.length}
+            sort={sort}
+            onSortChange={(v) => updateFilters({ sort: v })}
+            brands={availableBrands}
+            selectedBrands={selectedBrands}
+            onBrandToggle={toggleBrand}
+            onOpenFilters={() => setFilterDrawerOpen(true)}
+            activeFilterCount={activeFilterCount}
+          />
+
+          {loading ? (
+            <ProductGridSkeleton count={9} />
+          ) : sortedProducts.length === 0 ? (
+            <div className="text-center py-20 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl">
+              <Icon name="search_off" className="text-5xl text-slate-300 mb-3" />
+              <p className="text-slate-600 font-semibold mb-1">Không tìm thấy sản phẩm</p>
+              <p className="text-sm text-slate-400 mb-4">Thử từ khóa khác hoặc điều chỉnh bộ lọc</p>
+              {activeFilterCount > 0 && (
+                <button
+                  type="button"
+                  onClick={filterPanelProps.onClearAll}
+                  className="px-5 py-2 rounded-lg bg-[#D70018] text-white text-sm font-bold border-none cursor-pointer"
+                >
+                  Xóa bộ lọc
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4">
+              {sortedProducts.map((product) => (
+                <div key={product.id} className="relative group">
+                  <ProductCard product={product} />
+                  {isImageSearch && product.matchScore && (
+                    <div className="absolute top-3 left-3 bg-emerald-600 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-md z-10 flex items-center gap-1 select-none">
+                      <Icon name="check_circle" className="text-[10px]" />
+                      Độ khớp: {product.matchScore}%
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+
+      <FilterDrawer
+        open={filterDrawerOpen}
+        onClose={() => setFilterDrawerOpen(false)}
+        resultCount={sortedProducts.length}
+        filterPanelProps={filterPanelProps}
+      />
     </div>
   );
 }

@@ -132,8 +132,6 @@ export default function useWorkflow(showToast) {
       branchParams = { rank: rks.find(r => !used.has(r)) || "SILVER" };
     } else if (t === "Condition_TotalSpending") {
       branchParams = { operator: ">=", amount: 10000000 };
-    } else if (t === "Condition_AntiFraudScore") {
-      branchParams = { operator: "<=", score: 30 };
     } else if (t === "Condition_Location") {
       branchParams = { value: "Danang" };
     } else if (t === "Condition_ContainsCategory") {

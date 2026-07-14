@@ -226,7 +226,6 @@ public class GlobalExceptionHandler {
 *   `NOT_FOUND`: Không tìm thấy tài nguyên (User, Product, Order).
 *   `OUT_OF_STOCK`: Hết hàng trong kho khi đặt hàng.
 *   `BUDGET_EXHAUSTED`: Ngân sách khuyến mãi đã hết.
-*   `FRAUD_DETECTED`: Phát hiện hành vi gian lận ưu đãi.
 
 ---
 

@@ -22,6 +22,7 @@ public class CategoryDto {
 
     private Long parentId;
     private String imageUrl;
+    private String icon;
     private Integer sortOrder;
     private Boolean active;
     private List<CategoryDto> children;

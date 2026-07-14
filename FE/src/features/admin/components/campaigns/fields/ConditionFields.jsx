@@ -138,21 +138,6 @@ export default function ConditionFields({ node, updateProp, lookup }) {
       );
     }
 
-    case "Condition_AntiFraudScore":
-      return (
-        <div className="cb-fg">
-          <label>Điểm rủi ro tối đa (1–100)</label>
-          <input
-            type="number"
-            min={1}
-            max={100}
-            value={node.properties.maxRiskScore ?? 50}
-            onChange={e => updateProp("maxRiskScore", Number(e.target.value))}
-          />
-          <small>Điểm cao hơn ngưỡng → nghi ngờ gian lận.</small>
-        </div>
-      );
-
     default:
       return null;
   }

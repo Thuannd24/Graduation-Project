@@ -15,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,8 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
     @Override
     @Transactional
     public IssueVoucherResult issuePercent(Long userId, Long campaignId,
-                                           BigDecimal discountPercent, BigDecimal maxDiscountAmount, int expireDays) {
+                                           BigDecimal discountPercent, BigDecimal maxDiscountAmount, int expireDays,
+                                           List<Long> restrictedCategoryIds, List<Long> restrictedProductIds) {
         validateUserId(userId);
         validateExpireDays(expireDays);
         if (discountPercent == null || discountPercent.compareTo(BigDecimal.ZERO) <= 0
@@ -49,6 +52,8 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 .discountPercent(discountPercent)
                 .maxDiscountAmount(maxAmt)
                 .expiresAt(LocalDateTime.now().plusDays(expireDays))
+                .restrictedCategoryIds(toCsv(restrictedCategoryIds))
+                .restrictedProductIds(toCsv(restrictedProductIds))
                 .build();
 
         voucher = voucherRepository.save(voucher);
@@ -61,7 +66,8 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
     @Override
     @Transactional
     public IssueVoucherResult issueFixed(Long userId, Long campaignId,
-                                         BigDecimal discountAmount, BigDecimal minOrderValue, int expireDays) {
+                                         BigDecimal discountAmount, BigDecimal minOrderValue, int expireDays,
+                                         List<Long> restrictedCategoryIds, List<Long> restrictedProductIds) {
         validateUserId(userId);
         validateExpireDays(expireDays);
         if (discountAmount == null || discountAmount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -77,6 +83,8 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 .discountAmount(discountAmount)
                 .minOrderValue(minOrderValue != null ? minOrderValue : BigDecimal.ZERO)
                 .expiresAt(LocalDateTime.now().plusDays(expireDays))
+                .restrictedCategoryIds(toCsv(restrictedCategoryIds))
+                .restrictedProductIds(toCsv(restrictedProductIds))
                 .build();
 
         voucher = voucherRepository.save(voucher);
@@ -89,7 +97,8 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
     @Override
     @Transactional
     public IssueVoucherResult issueFreeship(Long userId, Long campaignId,
-                                            BigDecimal maxShippingDiscount, int expireDays) {
+                                            BigDecimal maxShippingDiscount, int expireDays,
+                                            List<Long> restrictedCategoryIds, List<Long> restrictedProductIds) {
         validateUserId(userId);
         validateExpireDays(expireDays);
         if (maxShippingDiscount == null || maxShippingDiscount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -104,6 +113,8 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 .voucherType(VoucherType.FREESHIP)
                 .maxShippingDiscount(maxShippingDiscount)
                 .expiresAt(LocalDateTime.now().plusDays(expireDays))
+                .restrictedCategoryIds(toCsv(restrictedCategoryIds))
+                .restrictedProductIds(toCsv(restrictedProductIds))
                 .build();
 
         voucher = voucherRepository.save(voucher);
@@ -111,6 +122,13 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 voucher.getCode(), userId, campaignId, maxShippingDiscount);
 
         return toResult(voucher);
+    }
+
+    private String toCsv(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return null;
+        }
+        return ids.stream().map(String::valueOf).collect(Collectors.joining(","));
     }
 
     private String generateUniqueCode(String prefix) {

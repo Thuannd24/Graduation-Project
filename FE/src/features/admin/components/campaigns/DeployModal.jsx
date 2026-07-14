@@ -6,6 +6,19 @@ export default function DeployModal({ open, editingId, form, onChangeForm, onClo
 
   const patch = partial => onChangeForm({ ...form, ...partial });
 
+  // BUG FIX: previously only `required` was enforced on start/end date - nothing stopped an
+  // admin from deploying a campaign with endDate <= startDate. findClientValidationErrors()
+  // validates the workflow graph, not this deploy form, so this range check never ran anywhere.
+  const dateRangeInvalid = Boolean(form.startDate) && Boolean(form.endDate) && form.endDate <= form.startDate;
+
+  const handleSubmit = e => {
+    if (dateRangeInvalid) {
+      e.preventDefault();
+      return;
+    }
+    onSubmit(e);
+  };
+
   return (
     <div className="cb-modal-overlay" onClick={onClose}>
       <div className="cb-modal" onClick={e => e.stopPropagation()}>
@@ -18,7 +31,7 @@ export default function DeployModal({ open, editingId, form, onChangeForm, onClo
           <button className="cb-btn cb-btn-secondary cb-btn-sm" onClick={onClose}>✕</button>
         </div>
 
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="cb-fg">
             <label>Tên chiến dịch *</label>
             <input
@@ -48,17 +61,23 @@ export default function DeployModal({ open, editingId, form, onChangeForm, onClo
               <input
                 type="datetime-local"
                 required
+                min={form.startDate || undefined}
                 value={form.endDate}
                 onChange={e => patch({ endDate: e.target.value })}
               />
             </div>
           </div>
+          {dateRangeInvalid && (
+            <small style={{ color: "#dc2626", display: "block", marginTop: -8, marginBottom: 8 }}>
+              Thời gian kết thúc phải sau thời gian bắt đầu.
+            </small>
+          )}
 
           <div className="cb-modal-actions">
             <button type="button" className="cb-btn cb-btn-secondary" onClick={onClose}>
               Hủy Bỏ
             </button>
-            <button type="submit" className="cb-btn cb-btn-primary">
+            <button type="submit" className="cb-btn cb-btn-primary" disabled={dateRangeInvalid}>
               {editingId ? "💾 Xác Nhận Cập Nhật" : "🚀 Xác Nhận & Triển Khai"}
             </button>
           </div>

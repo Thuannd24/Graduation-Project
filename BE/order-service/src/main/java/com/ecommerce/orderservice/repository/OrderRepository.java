@@ -30,6 +30,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.id = :id")
     Optional<Order> findByIdForUpdate(@Param("id") Long id);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT o FROM Order o WHERE o.trackingCode = :trackingCode")
+    Optional<Order> findByTrackingCodeForUpdate(@Param("trackingCode") String trackingCode);
+
     @Query("SELECT COALESCE(SUM(o.finalAmount), 0) FROM Order o WHERE o.userId = :userId AND o.createdAt >= :startDate AND o.status IN ('DELIVERED', 'COMPLETED', 'SHIPPED', 'CONFIRMED')")
     BigDecimal sumFinalAmountByUserIdAndCreatedAtAfter(
             @Param("userId") String userId,

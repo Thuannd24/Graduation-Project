@@ -57,6 +57,19 @@ public class IssuedVoucher {
     @Column(name = "max_shipping_discount")
     private BigDecimal maxShippingDiscount;
 
+    /**
+     * Comma-separated category/product IDs this voucher is restricted to (null/blank = no
+     * restriction). Populated from the issuing campaign's Condition_ContainsCategory /
+     * Condition_ContainsProduct node (if any) so a voucher earned for buying category X can only
+     * be redeemed on an order that also contains category X - previously these conditions only
+     * gated who RECEIVED the voucher, not what it could be REDEEMED against.
+     */
+    @Column(name = "restricted_category_ids", length = 500)
+    private String restrictedCategoryIds;
+
+    @Column(name = "restricted_product_ids", length = 500)
+    private String restrictedProductIds;
+
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 

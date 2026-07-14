@@ -242,6 +242,7 @@ public class CatalogImportServiceImpl implements CatalogImportService {
                     .slug(item.getSlug())
                     .parentId(parentId)
                     .imageUrl(item.getImageUrl())
+                    .icon(item.getIcon())
                     .sortOrder(item.getSortOrder())
                     .active(item.getActive() == null || item.getActive())
                     .build();
@@ -286,6 +287,14 @@ public class CatalogImportServiceImpl implements CatalogImportService {
                     .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
 
+            Optional<Brand> existing = brandRepository.findBySlug(item.getSlug());
+            // Gộp (không thay thế) categoryIds với dữ liệu đã có — mỗi manifest chỉ biết category của riêng nó,
+            // nếu ghi đè sẽ xóa mất liên kết category từ những lần import file khác trước đó (VD Samsung xuất hiện
+            // ở cả samsung-phone.json và tivi.json — import file này không được xóa liên kết của file kia).
+            if (existing.isPresent() && existing.get().getCategoryIds() != null) {
+                categoryIds.addAll(existing.get().getCategoryIds());
+            }
+
             BrandDto dto = BrandDto.builder()
                     .name(item.getName())
                     .slug(item.getSlug())
@@ -295,7 +304,6 @@ public class CatalogImportServiceImpl implements CatalogImportService {
                     .categoryIds(categoryIds)
                     .build();
 
-            Optional<Brand> existing = brandRepository.findBySlug(item.getSlug());
             if (existing.isPresent()) {
                 BrandDto updated = brandService.updateBrand(existing.get().getId(), dto);
                 result.getBrandIdsBySlug().put(item.getSlug(), updated.getId());
@@ -359,6 +367,7 @@ public class CatalogImportServiceImpl implements CatalogImportService {
                     .warrantyPeriod(item.getWarrantyPeriod())
                     .warrantyPolicy(item.getWarrantyPolicy())
                     .attributes(item.getSpecs() != null ? new LinkedHashMap<>(item.getSpecs()) : Map.of())
+                    .specsRaw(item.getSpecsRaw() != null ? new LinkedHashMap<>(item.getSpecsRaw()) : Map.of())
                     .tags(item.getTags())
                     .variants(variants)
                     .build();

@@ -59,6 +59,7 @@ public class CatalogImportManifestDto {
         private String name;
         private String parentSlug;
         private String imageUrl;
+        private String icon;
         private Integer sortOrder;
         private Boolean active;
     }
@@ -110,6 +111,8 @@ public class CatalogImportManifestDto {
         private String warrantyPolicy;
         @Builder.Default
         private Map<String, String> specs = new LinkedHashMap<>();
+        @Builder.Default
+        private Map<String, String> specsRaw = new LinkedHashMap<>();
         @Builder.Default
         private List<String> tags = new ArrayList<>();
         @Builder.Default

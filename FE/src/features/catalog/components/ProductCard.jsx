@@ -8,7 +8,7 @@ const RED = "#D70018";
 const GOLD = "#F59E0B";
 const FONT = "'Inter', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
-/* ========== Star Rating - 1 icon sao đen + số điểm ========== */
+/* ========== Star Rating - 1 icon sao đen + số điểm (mặc định 5 sao khi sản phẩm chưa có đánh giá) ========== */
 function StarRating({ rating }) {
   const score = rating > 0 ? rating : 5;
   return (
@@ -27,7 +27,7 @@ export default function ProductCard({
   showInstallment = true,
   showShipping = true,
   showRating = true,
-  isFlashSale = false,
+  badge,
 }) {
   const { toggleWishlist, isInWishlist } = useWishlist();
   const discount = calculateDiscountPercent(
@@ -104,6 +104,46 @@ export default function ProductCard({
         </div>
       )}
 
+      {/* New arrival badge */}
+      {badge === "new" && (
+        <div style={{
+          position: "absolute",
+          top: discount > 0 ? 14 : 14,
+          left: discount > 0 ? 68 : -4,
+          zIndex: 5,
+          pointerEvents: "none",
+        }}>
+          {!(discount > 0) && (
+            <div style={{
+              position: "absolute",
+              left: 0,
+              bottom: "100%",
+              width: 0,
+              height: 0,
+              borderBottom: "4px solid #004C99",
+              borderLeft: "4px solid transparent",
+            }} />
+          )}
+          <div style={{
+            background: "#0072FF",
+            color: "#fff",
+            fontSize: 11,
+            fontWeight: 700,
+            padding: "4px 8px",
+            borderRadius: discount > 0 ? 6 : "0 6px 6px 6px",
+            lineHeight: 1.2,
+            boxShadow: "2px 2px 4px rgba(0,0,0,0.12)",
+            display: "flex",
+            alignItems: "center",
+            gap: 3,
+            fontFamily: FONT,
+          }}>
+            <Icon name="auto_awesome" style={{ fontSize: 12 }} />
+            NEW
+          </div>
+        </div>
+      )}
+
       {/* Image Container */}
       <Link
         to={`/product/${product.id}`}
@@ -127,7 +167,7 @@ export default function ProductCard({
       >
         <img
           alt={product.name}
-          src={product.image || product.imageUrl}
+          src={product.image || product.imageUrl || `https://placehold.co/200x200/f8f9fb/6b7280?text=${encodeURIComponent("SP")}`}
           style={{
             width: "100%",
             height: "100%",
@@ -269,78 +309,19 @@ export default function ProductCard({
         )}
 
         {/* Bottom Area: Rating + Wishlist Button */}
-        {/* Bottom Area: Rating + Wishlist Button OR Flash Sale Progress */}
-        {isFlashSale ? (
-          <div style={{
-            marginTop: "auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: 8,
-            borderTop: "1px solid #F1F2F4",
-            gap: 6
-          }}>
-            {/* Rating: Star + score */}
-            <div style={{ display: "flex", alignItems: "center", gap: 2, shrink: 0 }}>
-              <Icon name="star" filled style={{ fontSize: 14, color: "#1F2937" }} />
-              <span style={{ fontSize: 12, fontWeight: 800, color: "#1F2937" }}>
-                {rating > 0 ? rating.toFixed(1) : "5.0"}
-              </span>
-            </div>
+        <div style={{
+          marginTop: "auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingTop: 8,
+          borderTop: "1px solid #F1F2F4",
+        }}>
+          {showRating ? (
+            <StarRating rating={rating} />
+          ) : <span />}
 
-            {/* Progress Bar Pill */}
-            <div style={{
-              flex: 1,
-              background: "#FEE2E2",
-              borderRadius: 20,
-              padding: "4px 8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 4,
-              position: "relative",
-              overflow: "hidden"
-            }}>
-              {/* Progress Fill (Mock 15% to look beautiful and active) */}
-              <div style={{
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: "15%",
-                background: "linear-gradient(90deg, #FF4B2B 0%, #FF416C 100%)",
-                borderRadius: 20,
-                opacity: 0.85
-              }} />
-              
-              {/* Flame/Hot Icon */}
-              <Icon name="whatshot" style={{ fontSize: 13, color: RED, zIndex: 1 }} />
-              
-              <span style={{
-                fontSize: 10,
-                fontWeight: 800,
-                color: "#D70018",
-                zIndex: 1,
-                whiteSpace: "nowrap"
-              }}>
-                Đã bán 0/{product.id ? (Number(product.id) % 2 === 0 ? 30 : 10) : 10} suất
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div style={{
-            marginTop: "auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: 8,
-            borderTop: "1px solid #F1F2F4",
-          }}>
-            {showRating ? (
-              <StarRating rating={rating} />
-            ) : <span />}
-
-            <button
+          <button
               type="button"
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product); }}
               style={{
@@ -381,8 +362,7 @@ export default function ProductCard({
               />
               {isLiked ? "Đã thích" : "Yêu thích"}
             </button>
-          </div>
-        )}
+        </div>
       </div>
     </article>
   );

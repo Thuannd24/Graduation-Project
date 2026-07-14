@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: api-gateway
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   security:
     oauth2:
       resourceserver:
@@ -204,13 +208,3 @@ management:
   endpoint:
     health:
       show-details: always
-
----
-spring:
-  config:
-    activate:
-      on-profile: "!docker"
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}

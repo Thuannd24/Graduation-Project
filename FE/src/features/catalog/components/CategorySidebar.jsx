@@ -23,6 +23,7 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
   const [products, setProducts] = useState([]);
   const [allBrands, setAllBrands] = useState([]);
   const [suggestedProducts, setSuggestedProducts] = useState([]);
+  const [brokenLogos, setBrokenLogos] = useState({});
 
   useEffect(() => {
     productApi.listCategories().then(setCategories).catch(() => setCategories([]));
@@ -172,6 +173,8 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
                       >
                         {sub.imageUrl ? (
                           <img src={sub.imageUrl} alt={sub.name} className="w-[18px] h-[18px] object-contain shrink-0 rounded-sm bg-white p-[1px] shadow-sm border border-slate-100 group-hover:scale-110 transition-transform duration-300" />
+                        ) : sub.icon ? (
+                          <Icon name={sub.icon} className="text-[16px] shrink-0 text-slate-400 group-hover:text-red-600 transition-colors" />
                         ) : (
                           <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-red-500 group-hover:w-3 group-hover:rounded-sm transition-all duration-300 shrink-0" />
                         )}
@@ -208,8 +211,13 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
                           to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&brand=${encodeURIComponent(brand.name)}`}
                           className="group flex items-center justify-center w-[92px] h-[38px] border border-slate-200/80 rounded-lg hover:border-red-500 hover:shadow-md bg-white transition-all overflow-hidden p-1"
                         >
-                          {brand.logoUrl ? (
-                            <img src={brand.logoUrl} alt={brand.name} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.08]" />
+                          {brand.logoUrl && !brokenLogos[brand.id] ? (
+                            <img
+                              src={brand.logoUrl}
+                              alt={brand.name}
+                              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.08]"
+                              onError={() => setBrokenLogos((prev) => ({ ...prev, [brand.id]: true }))}
+                            />
                           ) : officialLogo ? (
                             <span className="[&>svg]:h-[24px] [&>svg]:w-auto flex items-center transition-transform duration-300 group-hover:scale-105">{officialLogo}</span>
                           ) : (
@@ -337,6 +345,8 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
                       >
                         {sub.imageUrl ? (
                           <img src={sub.imageUrl} alt={sub.name} className="w-[18px] h-[18px] object-contain shrink-0 rounded-sm bg-white dark:bg-slate-800 p-[1px] shadow-sm border border-slate-100 dark:border-slate-700 group-hover:scale-110 transition-transform duration-300" />
+                        ) : sub.icon ? (
+                          <Icon name={sub.icon} className="text-[16px] shrink-0 text-slate-400 dark:text-slate-500 group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors" />
                         ) : (
                           <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600 group-hover:bg-red-500 group-hover:w-3 group-hover:rounded-sm transition-all duration-300 shrink-0" />
                         )}
@@ -373,8 +383,13 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
                           to={`/category?activeCategory=${activeCategory.slug || encodeURIComponent(activeCategory.name || "")}&brand=${encodeURIComponent(brand.name)}`}
                           className="group flex items-center justify-center w-[92px] h-[38px] border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 hover:shadow-md bg-white dark:bg-slate-800 transition-all overflow-hidden p-1"
                         >
-                          {brand.logoUrl ? (
-                            <img src={brand.logoUrl} alt={brand.name} className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.08]" />
+                          {brand.logoUrl && !brokenLogos[brand.id] ? (
+                            <img
+                              src={brand.logoUrl}
+                              alt={brand.name}
+                              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-[1.08]"
+                              onError={() => setBrokenLogos((prev) => ({ ...prev, [brand.id]: true }))}
+                            />
                           ) : officialLogo ? (
                             <span className="[&>svg]:h-[24px] [&>svg]:w-auto flex items-center transition-transform duration-300 group-hover:scale-105">{officialLogo}</span>
                           ) : (

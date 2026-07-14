@@ -12,6 +12,7 @@ import com.ecommerce.orderservice.dto.response.CheckoutPreviewResponse;
 import com.ecommerce.orderservice.dto.response.OrderItemResponse;
 import com.ecommerce.orderservice.dto.response.OrderResponse;
 import com.ecommerce.orderservice.dto.response.WarrantyItemResponse;
+import com.ecommerce.orderservice.entity.CompensationTask;
 import com.ecommerce.orderservice.entity.Order;
 import com.ecommerce.orderservice.entity.OrderItem;
 import com.ecommerce.orderservice.entity.OutboxEvent;
@@ -26,6 +27,7 @@ import com.ecommerce.orderservice.exception.InvalidOrderStateException;
 import com.ecommerce.orderservice.exception.InsufficientStockException;
 import com.ecommerce.orderservice.exception.ResourceNotFoundException;
 import com.ecommerce.orderservice.exception.ServiceUnavailableException;
+import com.ecommerce.orderservice.repository.CompensationTaskRepository;
 import com.ecommerce.orderservice.repository.OrderItemRepository;
 import com.ecommerce.orderservice.repository.OrderRepository;
 import com.ecommerce.orderservice.repository.OutboxEventRepository;
@@ -67,6 +69,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OutboxEventRepository outboxEventRepository;
+    private final CompensationTaskRepository compensationTaskRepository;
     private final CartService cartService;
     private final InventoryGrpcClient inventoryGrpcClient;
     private final ObjectMapper objectMapper;
@@ -279,7 +282,8 @@ public class OrderServiceImpl implements OrderService {
                     // Call Feign client OUTSIDE the database transaction
                     try {
                         BigDecimal serverShippingFee = ShippingFeeCalculator.calculate(totalAmount);
-                        applyCouponToOrder(finalSavedOrder, userId, couponCode, totalAmount, serverShippingFee);
+                        applyCouponToOrder(finalSavedOrder, userId, couponCode, totalAmount, serverShippingFee,
+                                finalOrderItems);
                     } catch (Exception ex) {
                         log.error("Failed to apply voucher for Order ID {}: {}. Cancelling order.",
                                 finalSavedOrder.getId(), ex.getMessage());
@@ -481,11 +485,15 @@ public class OrderServiceImpl implements OrderService {
 
         if (couponCode != null) {
             BigDecimal serverShippingFee = ShippingFeeCalculator.calculate(subtotal);
+            List<Long> cartProductIds = cart.getItems().stream()
+                    .map(CartItemResponse::getProductId)
+                    .collect(Collectors.toList());
             var response = promotionClient.previewVoucher(PromotionClient.VoucherApplyRequest.builder()
                     .code(couponCode)
                     .userId(userId)
                     .orderTotal(subtotal)
                     .shippingFee(serverShippingFee)
+                    .productIds(cartProductIds)
                     .build());
             if (response != null && response.getData() != null && response.getData().isApplied()) {
                 PromotionClient.VoucherApplyResult result = response.getData();
@@ -625,12 +633,21 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
         // Verify owner or Admin/Staff role
-        if (!order.getUserId().equals(userId) && !isAdminOrStaff(rolesHeader)) {
+        boolean isOwner = order.getUserId().equals(userId);
+        if (!isOwner && !isAdminOrStaff(rolesHeader)) {
             throw new org.springframework.security.access.AccessDeniedException(
                     "You are not authorized to cancel this order");
         }
 
-        cancelOrder(orderId, userId, email);
+        // BUG FIX: When an admin/staff cancels an order on behalf of a customer, the
+        // OrderCancelledEvent (and any downstream notification) must carry the order OWNER's
+        // identity, not the acting admin's - otherwise cancellation emails/business logic keyed
+        // on userId end up pointed at the staff member instead of the customer.
+        if (isOwner) {
+            cancelOrder(orderId, userId, email);
+        } else {
+            cancelOrder(orderId, order.getUserId(), order.getEmail());
+        }
     }
 
     private boolean isAdminOrStaff(String rolesHeader) {
@@ -887,7 +904,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse shipOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
+        // Pessimistic write lock: prevents a concurrent cancelOrder/updateOrderStatus call from
+        // racing with this transition (e.g. shipping an order the customer just cancelled).
+        Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
         if (!"CONFIRMED".equalsIgnoreCase(order.getStatus())) {
@@ -913,7 +932,13 @@ public class OrderServiceImpl implements OrderService {
             saveOutboxEvent(String.valueOf(orderId), "OrderShippedEvent",
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
+            // BUG FIX: previously this only logged and let the SHIPPED transition commit anyway,
+            // so a transient outbox-insert failure would silently drop OrderShippedEvent forever
+            // (no consumer, no notification, no retry). Rethrow so the whole transaction rolls
+            // back and the caller can retry shipping the order.
             log.error("Failed to construct and save outbox event for OrderShippedEvent", e);
+            throw new RuntimeException(
+                    "Không thể lưu sự kiện giao vận vào Outbox. Chuyển trạng thái giao hàng thất bại.", e);
         }
 
         log.info("Order ID {} successfully sent to mock shipping provider. Tracking: {}", orderId, trackingCode);
@@ -923,7 +948,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void handleShippingWebhook(String trackingCode, String status) {
-        Order order = orderRepository.findByTrackingCode(trackingCode)
+        // Pessimistic write lock: prevents this carrier-initiated transition from racing with a
+        // concurrent cancelOrder/shipOrder/updateDeliveryStatusByAdmin call on the same order.
+        Order order = orderRepository.findByTrackingCodeForUpdate(trackingCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Order not found with tracking code: " + trackingCode));
 
@@ -976,17 +1003,26 @@ public class OrderServiceImpl implements OrderService {
         try {
             java.util.Map<String, Object> payload = new java.util.HashMap<>();
             payload.put("eventId", UUID.randomUUID().toString());
-            payload.put("eventType", "DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent");
+            payload.put("eventType", resolveShippingEventType(targetStatus));
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", order.getId());
             payload.put("userId", order.getUserId());
             payload.put("trackingCode", trackingCode);
 
             saveOutboxEvent(String.valueOf(order.getId()),
-                    "DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent",
+                    resolveShippingEventType(targetStatus),
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
+            // BUG FIX: previously this only logged and let the status transition commit anyway.
+            // For CANCELLED that meant the order was marked cancelled in DB but the
+            // OrderCancelledEvent was never persisted to outbox, so inventory-service never got
+            // notified to restore stock - a permanent, silent inventory leak. Rethrow so the
+            // whole transaction (status change + outbox write) rolls back together and the
+            // carrier webhook can be retried/redelivered.
             log.error("Failed to construct and save outbox event for shipping status change: {}", targetStatus, e);
+            throw new RuntimeException(
+                    "Không thể lưu sự kiện outbox cho thay đổi trạng thái giao hàng. Cập nhật thất bại để đảm bảo tính nhất quán.",
+                    e);
         }
 
         log.info("Processed mock shipping webhook for tracking code {}: status updated to {}", trackingCode,
@@ -996,7 +1032,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status) {
-        Order order = orderRepository.findById(orderId)
+        // Pessimistic write lock: prevents this admin-initiated transition from racing with a
+        // concurrent cancelOrder/shipOrder/handleShippingWebhook call on the same order.
+        Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
 
         String targetStatus = status.toUpperCase();
@@ -1045,17 +1083,23 @@ public class OrderServiceImpl implements OrderService {
         try {
             java.util.Map<String, Object> payload = new java.util.HashMap<>();
             payload.put("eventId", UUID.randomUUID().toString());
-            payload.put("eventType", "DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent");
+            payload.put("eventType", resolveShippingEventType(targetStatus));
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", order.getId());
             payload.put("userId", order.getUserId());
             payload.put("trackingCode", order.getTrackingCode());
 
             saveOutboxEvent(String.valueOf(order.getId()),
-                    "DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent",
+                    resolveShippingEventType(targetStatus),
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
+            // BUG FIX: see handleShippingWebhook - silently swallowing this exception let
+            // CANCELLED commit without ever persisting OrderCancelledEvent, permanently leaking
+            // inventory. Rethrow to roll back the whole transaction.
             log.error("Failed to construct and save outbox event for admin shipping status change: {}", targetStatus,
+                    e);
+            throw new RuntimeException(
+                    "Không thể lưu sự kiện outbox cho thay đổi trạng thái giao hàng. Cập nhật thất bại để đảm bảo tính nhất quán.",
                     e);
         }
 
@@ -1067,13 +1111,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void applyCouponToOrder(Order order, String userId, String couponCode,
-            BigDecimal totalAmount, BigDecimal shippingFee) {
+            BigDecimal totalAmount, BigDecimal shippingFee, List<OrderItem> orderItems) {
+        List<Long> productIds = orderItems.stream()
+                .map(OrderItem::getProductId)
+                .collect(Collectors.toList());
         PromotionClient.VoucherApplyRequest request = PromotionClient.VoucherApplyRequest.builder()
                 .code(couponCode)
                 .userId(userId)
                 .orderId(order.getId())
                 .orderTotal(totalAmount)
                 .shippingFee(shippingFee)
+                .productIds(productIds)
                 .build();
 
         var response = promotionClient.applyVoucher(request);
@@ -1164,6 +1212,13 @@ public class OrderServiceImpl implements OrderService {
                 pointDiscount);
     }
 
+    private static final String COMPENSATION_TASK_RELEASE_VOUCHER = "RELEASE_VOUCHER";
+    private static final String COMPENSATION_TASK_REFUND_POINTS = "REFUND_POINTS";
+    private static final String COMPENSATION_STATUS_PENDING = "PENDING";
+    private static final String COMPENSATION_STATUS_COMPLETED = "COMPLETED";
+    private static final String COMPENSATION_STATUS_FAILED_PERMANENT = "FAILED_PERMANENT";
+    private static final int COMPENSATION_MAX_ATTEMPTS = 10;
+
     private void refundPointsForOrder(Order order) {
         // ALWAYS attempt refund using orderId (idempotent) - do not rely on
         // order.getPointsRedeemed()
@@ -1173,6 +1228,8 @@ public class OrderServiceImpl implements OrderService {
             var profileResponse = userClient.getProfileByKeycloakId(order.getUserId());
             if (profileResponse == null || profileResponse.getData() == null) {
                 log.warn("Failed to retrieve user profile for userId {} to refund points", order.getUserId());
+                scheduleCompensationRetry(order.getId(), COMPENSATION_TASK_REFUND_POINTS,
+                        "User profile not found for userId " + order.getUserId());
                 return;
             }
             // User-service refundPoints API MUST be idempotent by orderId
@@ -1181,7 +1238,12 @@ public class OrderServiceImpl implements OrderService {
                     UserClient.PointRefundRequest.builder().orderId(order.getId()).build());
             log.info("Refunded loyalty points for cancelled order {}", order.getId());
         } catch (Exception ex) {
-            log.error("Failed to refund points for order {}: {}", order.getId(), ex.getMessage());
+            // BUG FIX: previously this only logged the failure, so a transient user-service
+            // outage permanently leaked the customer's loyalty points with no retry. Persist a
+            // CompensationTask so CompensationRetryScheduler can retry it until it succeeds.
+            log.error("Failed to refund points for order {}: {}. Scheduling for retry.", order.getId(),
+                    ex.getMessage());
+            scheduleCompensationRetry(order.getId(), COMPENSATION_TASK_REFUND_POINTS, ex.getMessage());
         }
     }
 
@@ -1198,8 +1260,107 @@ public class OrderServiceImpl implements OrderService {
             promotionClient.releaseVoucher(
                     PromotionClient.VoucherOrderActionRequest.builder().orderId(orderId).build());
         } catch (Exception ex) {
-            log.warn("Failed to release voucher for order {}: {}", orderId, ex.getMessage());
+            // BUG FIX: previously this only logged the failure, so a transient promotion-service
+            // outage permanently left the voucher marked as "used" with no retry/compensation.
+            // Persist a CompensationTask so CompensationRetryScheduler can retry it.
+            log.warn("Failed to release voucher for order {}: {}. Scheduling for retry.", orderId, ex.getMessage());
+            scheduleCompensationRetry(orderId, COMPENSATION_TASK_RELEASE_VOUCHER, ex.getMessage());
         }
+    }
+
+    private void scheduleCompensationRetry(Long orderId, String taskType, String errorMessage) {
+        try {
+            transactionTemplate.executeWithoutResult(status -> {
+                boolean alreadyPending = compensationTaskRepository
+                        .existsByOrderIdAndTaskTypeAndStatus(orderId, taskType, COMPENSATION_STATUS_PENDING);
+                if (alreadyPending) {
+                    return;
+                }
+                CompensationTask task = CompensationTask.builder()
+                        .orderId(orderId)
+                        .taskType(taskType)
+                        .status(COMPENSATION_STATUS_PENDING)
+                        .attempts(0)
+                        .lastError(errorMessage)
+                        .build();
+                compensationTaskRepository.save(task);
+            });
+        } catch (Exception ex) {
+            log.error("Failed to persist compensation task for order {} type {}: {}", orderId, taskType,
+                    ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public void retryCompensationTask(Long taskId) {
+        CompensationTask task = compensationTaskRepository.findById(taskId).orElse(null);
+        if (task == null || !COMPENSATION_STATUS_PENDING.equalsIgnoreCase(task.getStatus())) {
+            return;
+        }
+
+        try {
+            if (COMPENSATION_TASK_RELEASE_VOUCHER.equals(task.getTaskType())) {
+                promotionClient.releaseVoucher(
+                        PromotionClient.VoucherOrderActionRequest.builder().orderId(task.getOrderId()).build());
+            } else if (COMPENSATION_TASK_REFUND_POINTS.equals(task.getTaskType())) {
+                Order order = orderRepository.findById(task.getOrderId())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Order not found for compensation task: " + task.getOrderId()));
+                var profileResponse = userClient.getProfileByKeycloakId(order.getUserId());
+                if (profileResponse == null || profileResponse.getData() == null) {
+                    throw new RuntimeException("User profile not found for userId " + order.getUserId());
+                }
+                userClient.refundPoints(
+                        profileResponse.getData().getId(),
+                        UserClient.PointRefundRequest.builder().orderId(order.getId()).build());
+            } else {
+                log.warn("Unknown compensation task type {} for task ID {}. Marking as failed.",
+                        task.getTaskType(), task.getId());
+                markCompensationTaskOutcome(task.getId(), COMPENSATION_STATUS_FAILED_PERMANENT,
+                        "Unknown task type: " + task.getTaskType());
+                return;
+            }
+
+            markCompensationTaskOutcome(task.getId(), COMPENSATION_STATUS_COMPLETED, null);
+            log.info("Compensation task ID {} ({} for order {}) completed successfully on retry.", task.getId(),
+                    task.getTaskType(), task.getOrderId());
+        } catch (Exception ex) {
+            int attempts = task.getAttempts() + 1;
+            if (attempts >= COMPENSATION_MAX_ATTEMPTS) {
+                log.error(
+                        "Compensation task ID {} ({} for order {}) failed permanently after {} attempts. Manual intervention required. Last error: {}",
+                        task.getId(), task.getTaskType(), task.getOrderId(), attempts, ex.getMessage());
+                markCompensationTaskAttempt(task.getId(), attempts, COMPENSATION_STATUS_FAILED_PERMANENT,
+                        ex.getMessage());
+            } else {
+                log.warn("Compensation task ID {} ({} for order {}) retry {} failed: {}", task.getId(),
+                        task.getTaskType(), task.getOrderId(), attempts, ex.getMessage());
+                markCompensationTaskAttempt(task.getId(), attempts, COMPENSATION_STATUS_PENDING, ex.getMessage());
+            }
+        }
+    }
+
+    private void markCompensationTaskOutcome(Long taskId, String finalStatus, String error) {
+        transactionTemplate.executeWithoutResult(status -> {
+            compensationTaskRepository.findByIdForUpdate(taskId).ifPresent(t -> {
+                t.setStatus(finalStatus);
+                if (error != null) {
+                    t.setLastError(error);
+                }
+                compensationTaskRepository.save(t);
+            });
+        });
+    }
+
+    private void markCompensationTaskAttempt(Long taskId, int attempts, String status, String error) {
+        transactionTemplate.executeWithoutResult(txStatus -> {
+            compensationTaskRepository.findByIdForUpdate(taskId).ifPresent(t -> {
+                t.setAttempts(attempts);
+                t.setStatus(status);
+                t.setLastError(error);
+                compensationTaskRepository.save(t);
+            });
+        });
     }
 
     private void redeemVoucherForOrder(Long orderId) {
@@ -1337,6 +1498,15 @@ public class OrderServiceImpl implements OrderService {
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .build();
+    }
+
+    // BUG FIX: handleShippingWebhook/updateDeliveryStatusByAdmin used a binary ternary
+    // ("DELIVERED".equals(targetStatus) ? OrderDeliveredEvent : OrderCancelledEvent) that mislabeled
+    // every SHIPPED transition as OrderCancelledEvent in the outbox/Kafka payload.
+    private String resolveShippingEventType(String targetStatus) {
+        if ("DELIVERED".equals(targetStatus)) return "OrderDeliveredEvent";
+        if ("SHIPPED".equals(targetStatus)) return "OrderShippedEvent";
+        return "OrderCancelledEvent";
     }
 
     private void saveOutboxEvent(String aggregateId, String eventType, String payload) {

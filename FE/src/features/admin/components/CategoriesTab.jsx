@@ -443,10 +443,14 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                     }`}
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <Icon
-                        name={cat.level === 0 ? "folder" : "subdirectory_arrow_right"}
-                        className={`text-sm ${isSelected ? "text-emerald-700" : "text-slate-400"}`}
-                      />
+                      {cat.imageUrl ? (
+                        <img src={cat.imageUrl} alt={cat.name} className="w-4 h-4 object-contain shrink-0 rounded-sm" />
+                      ) : (
+                        <Icon
+                          name={cat.icon || (cat.level === 0 ? "folder" : "subdirectory_arrow_right")}
+                          className={`text-sm ${isSelected ? "text-emerald-700" : "text-slate-400"}`}
+                        />
+                      )}
                       <span className="text-xs font-bold truncate">{cat.name}</span>
                     </div>
 

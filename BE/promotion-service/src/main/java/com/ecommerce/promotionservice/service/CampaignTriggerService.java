@@ -10,15 +10,18 @@ import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,14 @@ public class CampaignTriggerService {
     private final HistoryService historyService;
     private final WorkflowTriggerResolver triggerResolver;
     private final CampaignVariableEnricher variableEnricher;
+    private final StringRedisTemplate stringRedisTemplate;
+
+    // BUG FIX: the "already triggered?" check below was pure check-then-act (Camunda runtime +
+    // history query, then start) with no lock, so two near-simultaneous events for the same
+    // businessKey (e.g. order-events and payment-events both firing Trigger_Event_OrderSuccess
+    // for the same order under Kafka at-least-once delivery) could both see "not yet triggered"
+    // and both start a process instance - double-issuing vouchers/loyalty points for one order.
+    private static final Duration TRIGGER_DEDUPE_LOCK_TTL = Duration.ofSeconds(30);
 
     private String resolveEventUniqueId(String triggerType, Map<String, Object> eventVariables) {
         if ("Trigger_Event_OrderSuccess".equals(triggerType)) {
@@ -83,23 +94,45 @@ public class CampaignTriggerService {
             String eventUniqueId = resolveEventUniqueId(triggerType, eventVariables);
             if (eventUniqueId != null) {
                 String businessKey = campaign.getId() + ":" + triggerType + ":" + eventUniqueId;
-                
-                // Check if a process instance with this business key already exists (active or completed)
-                long activeCount = runtimeService.createProcessInstanceQuery()
-                        .processInstanceBusinessKey(businessKey)
-                        .count();
-                long historicCount = historyService.createHistoricProcessInstanceQuery()
-                        .processInstanceBusinessKey(businessKey)
-                        .count();
-                        
-                if (activeCount > 0 || historicCount > 0) {
-                    log.info("Campaign id={} key={} already triggered for event {}:{}. Skipping duplicate execution.",
-                            campaign.getId(), campaign.getBpmnProcessDefinitionKey(), triggerType, eventUniqueId);
+
+                // BUG FIX: acquire a short-lived distributed lock per businessKey so two
+                // near-simultaneous calls (e.g. duplicate/at-least-once Kafka delivery) can't both
+                // pass the "already triggered?" check below before either has started a process.
+                String lockKey = "campaign-trigger:lock:" + businessKey;
+                String lockValue = UUID.randomUUID().toString();
+                Boolean acquired = stringRedisTemplate.opsForValue()
+                        .setIfAbsent(lockKey, lockValue, TRIGGER_DEDUPE_LOCK_TTL);
+                if (!Boolean.TRUE.equals(acquired)) {
+                    log.info("Another in-flight trigger is already processing businessKey {}. Skipping to avoid duplicate.",
+                            businessKey);
                     continue;
                 }
-                
-                backfillTriggerTypeIfMissing(campaign, triggerType);
-                startCampaignProcess(campaign, businessKey, eventVariables);
+
+                try {
+                    // Check if a process instance with this business key already exists (active or completed)
+                    long activeCount = runtimeService.createProcessInstanceQuery()
+                            .processInstanceBusinessKey(businessKey)
+                            .count();
+                    long historicCount = historyService.createHistoricProcessInstanceQuery()
+                            .processInstanceBusinessKey(businessKey)
+                            .count();
+
+                    if (activeCount > 0 || historicCount > 0) {
+                        log.info("Campaign id={} key={} already triggered for event {}:{}. Skipping duplicate execution.",
+                                campaign.getId(), campaign.getBpmnProcessDefinitionKey(), triggerType, eventUniqueId);
+                        continue;
+                    }
+
+                    backfillTriggerTypeIfMissing(campaign, triggerType);
+                    startCampaignProcess(campaign, businessKey, eventVariables);
+                } finally {
+                    // Only release if we still own the lock (avoid deleting a lock re-acquired by
+                    // another request after TTL expiry)
+                    String currentVal = stringRedisTemplate.opsForValue().get(lockKey);
+                    if (lockValue.equals(currentVal)) {
+                        stringRedisTemplate.delete(lockKey);
+                    }
+                }
             } else {
                 backfillTriggerTypeIfMissing(campaign, triggerType);
                 startCampaignProcess(campaign, eventVariables);
@@ -127,6 +160,21 @@ public class CampaignTriggerService {
         variables.put("campaignWorkflowJson", campaign.getWorkflowJson());
 
         variableEnricher.enrich(variables);
+
+        // Carry this campaign's category/product restriction (if it uses a
+        // Condition_ContainsCategory / Condition_ContainsProduct node) into the process
+        // variables so the voucher-issuance delegates can stamp it onto any voucher they issue -
+        // otherwise a voucher earned for buying category X could be redeemed on any order.
+        List<Long> restrictedCategoryIds = triggerResolver.findConditionTargetIds(
+                campaign.getWorkflowJson(), "Condition_ContainsCategory");
+        if (!restrictedCategoryIds.isEmpty()) {
+            variables.put("voucherRestrictedCategoryIds", restrictedCategoryIds);
+        }
+        List<Long> restrictedProductIds = triggerResolver.findConditionTargetIds(
+                campaign.getWorkflowJson(), "Condition_ContainsProduct");
+        if (!restrictedProductIds.isEmpty()) {
+            variables.put("voucherRestrictedProductIds", restrictedProductIds);
+        }
 
         log.info("Starting Camunda process '{}' with businessKey '{}' for campaign id={} with variables keys={}",
                 campaign.getBpmnProcessDefinitionKey(), businessKey, campaign.getId(), variables.keySet());

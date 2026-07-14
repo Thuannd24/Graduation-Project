@@ -13,10 +13,6 @@ export function formatBranchCondition(nodeType, edge) {
       return parsed.amount != null
         ? `Chi tiêu ${parsed.operator || ">="} ${Number(parsed.amount).toLocaleString("vi-VN")}đ`
         : null;
-    case "Condition_AntiFraudScore":
-      return parsed.score != null
-        ? `Rủi ro ${parsed.operator || "<="} ${parsed.score}`
-        : null;
     case "Condition_Location":
       return parsed.value ? `Tỉnh = ${parsed.value}` : null;
     case "Condition_ContainsCategory":

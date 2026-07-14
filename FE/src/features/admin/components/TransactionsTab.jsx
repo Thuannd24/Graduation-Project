@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import { orderApi } from "../../../services/orderApi";
+import { authApi } from "../../../services/authApi.ts";
 
 export default function TransactionsTab({ orders = [], payments = [], users = [], onRefresh }) {
   const [filterPill, setFilterPill] = useState("all");
@@ -11,6 +12,7 @@ export default function TransactionsTab({ orders = [], payments = [], users = []
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refundReason, setRefundReason] = useState("");
   const [refunding, setRefunding] = useState(false);
+  const [resolvedNames, setResolvedNames] = useState({});
   const itemsPerPage = 8;
 
   // Lấy danh sách giao dịch từ dữ liệu thanh toán thực tế kết hợp đơn hàng
@@ -33,9 +35,10 @@ export default function TransactionsTab({ orders = [], payments = [], users = []
         return {
           id: o.id || `TXN-${idx + 100}`,
           orderId: o.id,
+          userId: o.userId || null,
           custId: mappedCustId,
-          name: relatedUser?.fullName || relatedUser?.username || o.recipientName || "Khách hàng",
-          date: o.createdAt ? new Date(o.createdAt).toLocaleDateString("vi-VN") : "—",
+          name: relatedUser?.fullName || relatedUser?.username || resolvedNames[o.userId] || "Khách hàng",
+          date: o.createdAt ? new Date(o.createdAt).toLocaleString("vi-VN") : "—",
           dateRaw: o.createdAt || null,
           total: (o.finalAmount || 0).toLocaleString("vi-VN") + " đ",
           method: o.paymentMethod || "COD",
@@ -64,10 +67,11 @@ export default function TransactionsTab({ orders = [], payments = [], users = []
       return {
         id: p.id || `TXN-${idx + 100}`,
         orderId: p.orderId,
+        userId: relatedOrder?.userId || null,
         txnRef: p.transactionNo || p.txnRef || "—",
         custId: mappedCustId,
-        name: relatedUser?.fullName || relatedUser?.username || relatedOrder?.recipientName || "Khách hàng",
-        date: p.createdAt ? new Date(p.createdAt).toLocaleDateString("vi-VN") : "—",
+        name: relatedUser?.fullName || relatedUser?.username || resolvedNames[relatedOrder?.userId] || "Khách hàng",
+        date: p.createdAt ? new Date(p.createdAt).toLocaleString("vi-VN") : "—",
         dateRaw: p.createdAt || p.paidAt || relatedOrder?.createdAt || null,
         total: (p.amount || relatedOrder?.finalAmount || 0).toLocaleString("vi-VN") + " đ",
         method: p.paymentMethod || "COD",
@@ -76,7 +80,33 @@ export default function TransactionsTab({ orders = [], payments = [], users = []
         failureCode: p.failureCode || p.gatewayResponse
       };
     });
-  }, [payments, orders, users]);
+  }, [payments, orders, users, resolvedNames]);
+
+  // Với các userId không khớp được trong danh sách users đã tải (VD: quá trang phân trang),
+  // tra cứu trực tiếp qua hồ sơ công khai để hiển thị đúng tên khách hàng thay vì "Khách hàng"
+  useEffect(() => {
+    const unresolvedIds = Array.from(new Set(
+      dynamicTx
+        .filter(tx => tx.name === "Khách hàng" && tx.userId)
+        .map(tx => tx.userId)
+    )).filter(id => !(id in resolvedNames));
+
+    if (unresolvedIds.length === 0) return;
+
+    let cancelled = false;
+    Promise.all(unresolvedIds.map(id =>
+      authApi.getPublicProfile(id).then(profile => [id, profile?.fullName || profile?.username || null]).catch(() => [id, null])
+    )).then(results => {
+      if (cancelled) return;
+      setResolvedNames(prev => {
+        const next = { ...prev };
+        results.forEach(([id, name]) => { next[id] = name; });
+        return next;
+      });
+    });
+
+    return () => { cancelled = true; };
+  }, [dynamicTx]);
 
   // Phân tích phân bổ phương thức thanh toán
   const methodStats = useMemo(() => {

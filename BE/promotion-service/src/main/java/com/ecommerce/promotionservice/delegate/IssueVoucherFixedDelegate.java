@@ -11,6 +11,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Component("issueVoucherFixedDelegate")
 @RequiredArgsConstructor
@@ -33,13 +34,15 @@ public class IssueVoucherFixedDelegate implements JavaDelegate {
         BigDecimal minOrderValue = DelegateVariableHelper.getBigDecimal(execution, "minOrderValue");
         int days = DelegateVariableHelper.getInt(execution, "expireDays", 7);
         Long campaignId = userContextResolver.resolveCampaignId(execution).orElse(null);
+        List<Long> restrictedCategoryIds = DelegateVariableHelper.getLongList(execution, "voucherRestrictedCategoryIds");
+        List<Long> restrictedProductIds = DelegateVariableHelper.getLongList(execution, "voucherRestrictedProductIds");
 
         log.info("[IssueVoucherFixed] userId={} discountAmount={} minOrderValue={} expireDays={}",
                 userDbId.get(), discountAmount, minOrderValue, days);
 
         try {
             IssueVoucherResult result = voucherIssuanceService.issueFixed(
-                    userDbId.get(), campaignId, discountAmount, minOrderValue, days);
+                    userDbId.get(), campaignId, discountAmount, minOrderValue, days, restrictedCategoryIds, restrictedProductIds);
             applyResult(execution, result);
             log.info("[IssueVoucherFixed] Issued voucher {} for user {}", result.getVoucherCode(), userDbId.get());
         } catch (Exception ex) {

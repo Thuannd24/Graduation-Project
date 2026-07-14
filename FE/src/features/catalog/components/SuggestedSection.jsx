@@ -29,7 +29,6 @@ export default function SuggestedSection({ products: apiProducts, loading: apiLo
     return list.slice(0, 10);
   }, [suggested, activeTab]);
 
-  if (!loading && !suggested.length) return null;
 
   return (
     <div 
@@ -296,6 +295,10 @@ export default function SuggestedSection({ products: apiProducts, loading: apiLo
                   }}
                 />
               ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 0", color: "#9CA3AF", fontSize: 13, fontWeight: 600 }}>
+              Chưa có gợi ý dành cho bạn lúc này
             </div>
           ) : (
             <ProductCarousel

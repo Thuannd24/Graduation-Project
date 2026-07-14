@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -20,4 +21,7 @@ public class VoucherApplyRequest {
     private BigDecimal orderTotal;
     /** Dùng cho FREESHIP; nếu null sẽ dùng maxShippingDiscount làm mức trần. */
     private BigDecimal shippingFee;
+    /** Product IDs trong đơn hàng/giỏ hàng hiện tại — dùng để kiểm tra ràng buộc
+     *  danh mục/sản phẩm của voucher (nếu voucher được phát có kèm điều kiện đó). */
+    private List<Long> productIds;
 }

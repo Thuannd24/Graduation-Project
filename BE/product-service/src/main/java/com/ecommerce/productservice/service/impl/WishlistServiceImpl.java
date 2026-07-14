@@ -135,15 +135,22 @@ public class WishlistServiceImpl implements WishlistService {
         // Check Redis cache first (O(1))
         String redisKey = getRedisKey(userId);
         try {
-            Boolean isMember = redisTemplate.opsForSet().isMember(redisKey, String.valueOf(productId));
-            if (isMember != null) {
-                return isMember;
+            // BUG FIX: SISMEMBER on a key that was never warmed (or expired) returns FALSE, not
+            // null - the old code treated that FALSE as an authoritative "not wishlisted" answer
+            // and never fell back to the DB, so a product added to the wishlist without the user
+            // ever opening the wishlist page (cache never warmed) showed as NOT wishlisted.
+            // hasKey() distinguishes "no cache yet" from "cache says no" (Redis auto-removes a
+            // set once it's empty, so an existing key always has at least one real member).
+            Boolean keyExists = redisTemplate.hasKey(redisKey);
+            if (Boolean.TRUE.equals(keyExists)) {
+                Boolean isMember = redisTemplate.opsForSet().isMember(redisKey, String.valueOf(productId));
+                return Boolean.TRUE.equals(isMember);
             }
         } catch (Exception e) {
             log.error("Failed to check wishlist membership in Redis for user {}", userId, e);
         }
 
-        // Fallback to DB
+        // Fallback to DB (cache miss: never warmed, expired, or Redis error)
         boolean exists = wishlistRepository.existsByUserIdAndProductId(userId, productId);
         
         // Repopulate cache

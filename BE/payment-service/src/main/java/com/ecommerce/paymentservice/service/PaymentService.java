@@ -17,5 +17,5 @@ public interface PaymentService {
     void initiateAutoRefund(Long orderId);
     void processPendingRefunds();
     Page<PaymentResponse> getAllPayments(Pageable pageable);
-    PaymentResponse getPaymentByOrderId(Long orderId);
+    PaymentResponse getPaymentByOrderId(Long orderId, String callerUserId, boolean isAdminOrStaff);
 }

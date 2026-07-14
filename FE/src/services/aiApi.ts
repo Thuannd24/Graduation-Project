@@ -118,16 +118,18 @@ export const aiApi = {
   },
 
   // 3. Recommendations (Đề xuất cá nhân hóa & mua kèm)
+  // recs-service chưa triển khai — trả về rỗng để mục "Gợi ý từ AI" tự ẩn (SuggestedSection),
+  // không hiện data giả khi service chưa có thật.
   getPersonalizedRecommendations: async (userId?: string): Promise<AIProduct[]> => {
     if (!hasAuthToken()) {
-      return MOCK_PRODUCTS;
+      return [];
     }
     try {
       const response = await apiClient.get(`/recommendations/personal?user_id=${userId || ""}`);
       return response.data;
     } catch (err) {
-      console.warn("Recommendation API fallback.");
-      return MOCK_PRODUCTS;
+      console.warn("Recommendation API not available yet.", err);
+      return [];
     }
   },
 

@@ -70,34 +70,6 @@ function IfBranchForm({ node, edge, commit, lookup }) {
         </div>
       )}
 
-      {nt === "Condition_AntiFraudScore" && (
-        <div style={ROW_STYLE}>
-          <div className="cb-fg" style={CELL_STYLE}>
-            <label style={{ fontSize: 9 }}>Phép toán</label>
-            <select
-              value={parsed.operator || "<="}
-              onChange={e => commit({ operator: e.target.value, score: parsed.score ?? 50 })}
-            >
-              <option value="<=">≤</option>
-              <option value="<">&lt;</option>
-              <option value=">=">≥</option>
-              <option value=">">&gt;</option>
-              <option value="==">=</option>
-            </select>
-          </div>
-          <div className="cb-fg" style={CELL_STYLE}>
-            <label style={{ fontSize: 9 }}>Điểm (1-100)</label>
-            <input
-              type="number"
-              min={1}
-              max={100}
-              value={parsed.score ?? 50}
-              onChange={e => commit({ operator: parsed.operator || "<=", score: Number(e.target.value) })}
-            />
-          </div>
-        </div>
-      )}
-
       {nt === "Condition_Location" && (
         <div className="cb-fg" style={{ marginBottom: 0 }}>
           <label style={{ fontSize: 9 }}>Khi tỉnh/thành là</label>

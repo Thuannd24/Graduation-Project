@@ -14,8 +14,7 @@ const CONDITION_TYPES = new Set([
   "Condition_TotalSpending",
   "Condition_Location",
   "Condition_ContainsCategory",
-  "Condition_ContainsProduct",
-  "Condition_AntiFraudScore"
+  "Condition_ContainsProduct"
 ]);
 
 const ACTION_TYPES = new Set([
@@ -23,9 +22,6 @@ const ACTION_TYPES = new Set([
   "Action_IssueVoucher_Fixed",
   "Action_IssueVoucher_Freeship",
   "Action_Send_Email",
-  "Action_Send_SMS",
-  "Action_Send_AppPush",
-  "Action_Send_Zalo",
   "Action_Loyalty_Point",
   "Action_Upgrade_MemberRank"
 ]);
@@ -73,6 +69,16 @@ function isNonEmptyStringOrArray(props, field) {
   if (v == null) return false;
   if (Array.isArray(v)) return v.length > 0;
   return String(v).trim() !== "";
+}
+
+// BUG FIX: a list containing only blank strings (e.g. [""], exactly what an unselected
+// Location/ContainsCategory/ContainsProduct dropdown saves) used to pass the old
+// `isNonEmptyStringOrArray` check because `.length > 0` is true for a 1-element array. Every
+// element must now be non-blank for the field to count as "filled in".
+function isNonEmptyEdgeValue(v) {
+  if (v == null) return false;
+  if (Array.isArray(v)) return v.length > 0 && v.every(x => hasText(x));
+  return hasText(v);
 }
 
 function buildAdjacency(nodes, edges) {
@@ -141,9 +147,16 @@ function validateCondition(node, inDeg, outs, props, errors) {
     errors.push(err(node.id, "invalid_connectivity", "out_degree",
       `Condition "${node.name}": cần ít nhất 2 nhánh (IF + Else), hiện có ${outs.length}.`));
   }
-  if (!outs.some(e => e.isDefault)) {
+  // BUG FIX: must be EXACTLY one default/else branch, not just "at least one" - two edges both
+  // marked isDefault would leave the BE compiler picking only one as the gateway's `default`,
+  // and the deploy fails with a confusing Camunda error instead of a clear message here.
+  const defaultCount = outs.filter(e => e.isDefault).length;
+  if (defaultCount === 0) {
     errors.push(err(node.id, "missing_parameter", "isDefault",
       `Condition "${node.name}": thiếu nhánh Else (isDefault = true).`));
+  } else if (defaultCount > 1) {
+    errors.push(err(node.id, "invalid_connectivity", "isDefault",
+      `Condition "${node.name}": chỉ được có ĐÚNG 1 nhánh Else, hiện có ${defaultCount}.`));
   }
   const ifBranches = outs.filter(e => !e.isDefault);
   if (ifBranches.length === 0) {
@@ -181,43 +194,99 @@ function validateCondition(node, inDeg, outs, props, errors) {
           `Condition "${node.name}": targetIds không được trống.`));
       }
       break;
-    case "Condition_AntiFraudScore": {
-      const s = props.maxRiskScore;
-      if (!isNumber(s) || toNum(s) < 1 || toNum(s) > 100) {
-        errors.push(err(node.id, "wrong_data_type", "maxRiskScore",
-          `Condition "${node.name}": maxRiskScore phải từ 1–100.`));
-      }
-      break;
-    }
     default:
       break;
   }
 
-  outs.filter(e => !e.isDefault).forEach(edge => {
+  // BUG FIX: per-branch validation used to be gated behind `needsEdgeConfig && !ep.expression &&
+  // !ep.operator` — since `buildBranchProps()` always fills in `expression`/`operator` as soon as
+  // a branch is created (even with an empty selected value), this condition could basically never
+  // fire, and 2 of the 5 condition types (ContainsCategory/ContainsProduct) were
+  // not even in the `needsEdgeConfig` list. Every non-default branch is now validated
+  // unconditionally, for every condition type, and duplicate/overlapping sibling branches are
+  // flagged too (mirrors BE WorkflowValidatorService).
+  const ifBranchEdges = outs.filter(e => !e.isDefault);
+  const seenSignatures = new Set();
+  let duplicateReported = false;
+
+  ifBranchEdges.forEach(edge => {
     const ep = edge.properties || {};
-    const needsEdgeConfig = ["Condition_MemberRank", "Condition_TotalSpending", "Condition_Location"].includes(node.type);
-    if (needsEdgeConfig && !ep.expression && !ep.operator) {
-      errors.push(err(node.id, "missing_parameter", `edge.${edge.id}`,
-        `Condition "${node.name}": nhánh IF chưa cấu hình điều kiện.`));
+
+    if (!hasText(ep.expression)) {
+      errors.push(err(node.id, "missing_parameter", `edge.${edge.id}.expression`,
+        `Nhánh IF của "${node.name}": chưa có biểu thức điều kiện — kiểm tra lại các trường đã chọn cho nhánh này.`));
     }
-    if (node.type === "Condition_MemberRank" && ep.operator) {
-      const op = String(ep.operator).toUpperCase();
-      if (!["IN", "NOT_IN"].includes(op)) {
-        errors.push(err(node.id, "invalid_data", `edge.${edge.id}.operator`,
-          `Nhánh IF của "${node.name}": operator phải là IN hoặc NOT_IN.`));
+
+    switch (node.type) {
+      case "Condition_MemberRank": {
+        const op = String(ep.operator || "").toUpperCase();
+        if (!["IN", "NOT_IN"].includes(op)) {
+          errors.push(err(node.id, "invalid_data", `edge.${edge.id}.operator`,
+            `Nhánh IF của "${node.name}": operator phải là IN hoặc NOT_IN.`));
+        }
+        if (!isNonEmptyEdgeValue(ep.value)) {
+          errors.push(err(node.id, "missing_parameter", `edge.${edge.id}.value`,
+            `Nhánh IF của "${node.name}": value không được trống.`));
+        }
+        break;
       }
-      const val = ep.value;
-      const empty = val == null || (Array.isArray(val) && !val.length) || (typeof val === "string" && !val.trim());
-      if (empty) {
-        errors.push(err(node.id, "missing_parameter", `edge.${edge.id}.value`,
-          `Nhánh IF của "${node.name}": value không được trống.`));
+      case "Condition_TotalSpending": {
+        const op = String(ep.operator || "").toUpperCase();
+        if (!["GREATER_THAN", "LESS_THAN", "EQUAL"].includes(op)) {
+          errors.push(err(node.id, "invalid_data", `edge.${edge.id}.operator`,
+            `Nhánh IF của "${node.name}": operator không hợp lệ.`));
+        }
+        if (!isNumber(ep.value)) {
+          errors.push(err(node.id, "missing_parameter", `edge.${edge.id}.value`,
+            `Nhánh IF của "${node.name}": value phải là số.`));
+        }
+        break;
       }
+      case "Condition_Location":
+      case "Condition_ContainsCategory":
+      case "Condition_ContainsProduct": {
+        // BUG FIX: ContainsCategory/ContainsProduct previously had no per-branch validation at
+        // all, so a branch with an unselected category/product could be saved as a dead branch.
+        const op = String(ep.operator || "").toUpperCase();
+        if (!["EQUAL", "NOT_EQUAL"].includes(op)) {
+          errors.push(err(node.id, "invalid_data", `edge.${edge.id}.operator`,
+            `Nhánh IF của "${node.name}": operator không hợp lệ.`));
+        }
+        if (!isNonEmptyEdgeValue(ep.value)) {
+          errors.push(err(node.id, "missing_parameter", `edge.${edge.id}.value`,
+            `Nhánh IF của "${node.name}": chưa chọn giá trị cho nhánh này.`));
+        }
+        break;
+      }
+      default:
+        break;
+    }
+
+    const valueForSignature = Array.isArray(ep.value)
+      ? [...ep.value].map(v => String(v).trim().toUpperCase()).sort().join(",")
+      : (ep.value != null ? String(ep.value).trim().toUpperCase() : "");
+    if (valueForSignature) {
+      const signature = `${node.type}|${String(ep.operator || "").toUpperCase()}|${valueForSignature}`;
+      if (seenSignatures.has(signature) && !duplicateReported) {
+        errors.push(err(node.id, "invalid_data", "branches",
+          `Condition "${node.name}": có ít nhất 2 nhánh IF cấu hình điều kiện giống hệt nhau — một trong hai nhánh sẽ không bao giờ được thực thi.`));
+        duplicateReported = true;
+      }
+      seenSignatures.add(signature);
     }
   });
 }
 
 function hasVoucherAction(nodes) {
   return (nodes || []).some(n => VOUCHER_ACTION_TYPES.has(n.type));
+}
+
+// BUG FIX: expireDays feeds Integer.parseInt on the BE (DelegateVariableHelper.getInt), which
+// silently falls back to a default on a decimal value like "7.5" instead of surfacing an error.
+function isPositiveInteger(v) {
+  if (!isNumber(v)) return false;
+  const n = toNum(v);
+  return n > 0 && Number.isInteger(n);
 }
 
 function validateAction(node, inDeg, outDeg, props, allNodes, errors) {
@@ -237,13 +306,15 @@ function validateAction(node, inDeg, outDeg, props, allNodes, errors) {
         errors.push(err(node.id, "wrong_data_type", "discountPercent",
           `Action "${node.name}": discountPercent phải từ 1–100.`));
       }
-      if (!isNumber(props.maxDiscountAmount)) {
-        errors.push(err(node.id, "missing_parameter", "maxDiscountAmount",
-          `Action "${node.name}": maxDiscountAmount là bắt buộc.`));
+      // BUG FIX: maxDiscountAmount<=0 makes the voucher's discount always compute to 0đ (issued
+      // but permanently useless); expireDays must be a positive integer (see isPositiveInteger).
+      if (!isNumber(props.maxDiscountAmount) || toNum(props.maxDiscountAmount) <= 0) {
+        errors.push(err(node.id, "wrong_data_type", "maxDiscountAmount",
+          `Action "${node.name}": maxDiscountAmount phải > 0.`));
       }
-      if (!isNumber(props.expireDays)) {
-        errors.push(err(node.id, "missing_parameter", "expireDays",
-          `Action "${node.name}": expireDays là bắt buộc.`));
+      if (!isPositiveInteger(props.expireDays)) {
+        errors.push(err(node.id, "wrong_data_type", "expireDays",
+          `Action "${node.name}": expireDays phải là số nguyên > 0.`));
       }
       break;
     }
@@ -256,30 +327,29 @@ function validateAction(node, inDeg, outDeg, props, allNodes, errors) {
         errors.push(err(node.id, "missing_parameter", "minOrderValue",
           `Action "${node.name}": minOrderValue là bắt buộc.`));
       }
-      if (!isNumber(props.expireDays)) {
-        errors.push(err(node.id, "missing_parameter", "expireDays",
-          `Action "${node.name}": expireDays là bắt buộc.`));
+      if (!isPositiveInteger(props.expireDays)) {
+        errors.push(err(node.id, "wrong_data_type", "expireDays",
+          `Action "${node.name}": expireDays phải là số nguyên > 0.`));
       }
       break;
     case "Action_IssueVoucher_Freeship":
-      if (!isNumber(props.maxShippingDiscount)) {
-        errors.push(err(node.id, "missing_parameter", "maxShippingDiscount",
-          `Action "${node.name}": maxShippingDiscount là bắt buộc.`));
+      // BUG FIX: maxShippingDiscount<=0 makes voucher issuance throw at runtime (caught and
+      // only logged BE-side) - the campaign "succeeds" but never actually grants a voucher.
+      if (!isNumber(props.maxShippingDiscount) || toNum(props.maxShippingDiscount) <= 0) {
+        errors.push(err(node.id, "wrong_data_type", "maxShippingDiscount",
+          `Action "${node.name}": maxShippingDiscount phải > 0.`));
       }
-      if (!isNumber(props.expireDays)) {
-        errors.push(err(node.id, "missing_parameter", "expireDays",
-          `Action "${node.name}": expireDays là bắt buộc.`));
+      if (!isPositiveInteger(props.expireDays)) {
+        errors.push(err(node.id, "wrong_data_type", "expireDays",
+          `Action "${node.name}": expireDays phải là số nguyên > 0.`));
       }
       break;
     case "Action_Send_Email":
-    case "Action_Send_SMS":
-    case "Action_Send_AppPush":
-    case "Action_Send_Zalo":
       if (!hasText(props.templateId) && !hasText(props.rawContent)) {
         errors.push(err(node.id, "missing_parameter", "templateId",
           `Action "${node.name}": cần templateId hoặc rawContent.`));
       }
-      if (node.type === "Action_Send_Email" && hasText(props.templateId)) {
+      if (hasText(props.templateId)) {
         const templateId = String(props.templateId).trim();
         if (!EMAIL_TEMPLATE_CODES.has(templateId)) {
           errors.push(err(node.id, "invalid_data", "templateId",

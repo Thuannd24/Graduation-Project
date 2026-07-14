@@ -8,6 +8,7 @@ import { useWishlist } from "../../../context/WishlistContext.jsx";
 import { productApi } from "../../../services/productApi";
 import { authApi } from "../../../services/authApi";
 import { calculateDiscountPercent, formatVnd } from "../../../utils/format.js";
+import { resolveProductPrices } from "../../../utils/pricing.ts";
 import keycloak from "../../../services/keycloak.js";
 
 /* ======================== Helper Functions ======================== */
@@ -371,11 +372,29 @@ export default function ProductDetailPage() {
     [categoryAttributes]
   );
 
+  // Map code (VD "storage", "cpu") → tên tiếng Việt thật (VD "Bộ nhớ trong", "Vi xử lý") để hiển thị bảng thông số
+  const attributeNameMap = useMemo(() => {
+    const map = {};
+    (Array.isArray(categoryAttributes) ? categoryAttributes : []).forEach((attr) => {
+      const code = attr?.attributeCode || attr?.code;
+      const name = attr?.attributeName || attr?.name;
+      if (code && name) map[code] = name;
+    });
+    return map;
+  }, [categoryAttributes]);
+
   const variants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : []), [product]);
   const variantGroups = useMemo(() => normalizeVariantOptions(variants, variantAxes), [variants, variantAxes]);
   const selectedVariant = useMemo(() => findMatchingVariant(variants, selectedOptions), [variants, selectedOptions]);
-  const basePrice = Number(selectedVariant?.price ?? product?.price ?? 0);
-  const oldPrice = Number(product?.oldPrice ?? 0);
+  const variantPrices = useMemo(
+    () =>
+      selectedVariant
+        ? resolveProductPrices({ price: selectedVariant.price, salePrice: selectedVariant.salePrice })
+        : null,
+    [selectedVariant]
+  );
+  const basePrice = variantPrices ? variantPrices.price : Number(product?.price ?? 0);
+  const oldPrice = variantPrices ? (variantPrices.oldPrice ?? 0) : Number(product?.oldPrice ?? 0);
   const discount = calculateDiscountPercent(basePrice, oldPrice);
   const gallery = useMemo(() => {
     const images = [selectedVariant?.imageUrl, product?.image, ...(product?.gallery || [])].filter(Boolean);
@@ -857,21 +876,23 @@ export default function ProductDetailPage() {
             transition={{ duration: 0.25 }}
             className="pt-5"
           >
-            <div className="max-w-2xl">
+            <div className="w-full">
               <h2 className="text-lg font-black text-slate-800 dark:text-slate-100 mb-4">
                 Thông số kỹ thuật
               </h2>
               {Object.entries(product.attributes || {}).length > 0 ? (
-                <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden">
+                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
                   {Object.entries(product.attributes).map(([key, value], idx) => (
                     <div
                       key={key}
-                      className={`flex items-center justify-between px-4 py-3 text-sm ${
-                        idx % 2 === 0 ? "bg-slate-50/50 dark:bg-slate-950/30" : "bg-white dark:bg-slate-900"
+                      className={`flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 px-4 sm:px-5 py-3.5 text-sm border-b border-slate-100 dark:border-slate-800 last:border-b-0 ${
+                        idx % 2 === 0 ? "bg-slate-50/60 dark:bg-slate-950/30" : "bg-white dark:bg-slate-900"
                       }`}
                     >
-                      <span className="text-slate-500 font-medium">{humanizeLabel(key)}</span>
-                      <span className="text-slate-800 dark:text-slate-200 font-semibold text-right ml-4">
+                      <span className="w-full sm:w-[38%] shrink-0 text-slate-500 dark:text-slate-400 font-semibold">
+                        {attributeNameMap[key] || humanizeLabel(key)}
+                      </span>
+                      <span className="flex-1 text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
                         {String(value)}
                       </span>
                     </div>

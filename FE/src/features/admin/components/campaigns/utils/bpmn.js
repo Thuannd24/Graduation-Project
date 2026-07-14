@@ -16,10 +16,7 @@ export const DELEGATE_MAP = {
   Action_IssueVoucher_Freeship: "issueVoucherFreeshippingDelegate",
   Action_Upgrade_MemberRank:    "upgradeMemberRankDelegate",
   Action_Loyalty_Point:         "loyaltyPointDelegate",
-  Action_Send_Email:            "sendEmailDelegate",
-  Action_Send_SMS:              "sendSmsDelegate",
-  Action_Send_AppPush:          "sendAppPushDelegate",
-  Action_Send_Zalo:             "sendZaloDelegate"
+  Action_Send_Email:            "sendEmailDelegate"
 };
 
 const TRIGGER_TYPES = new Set([
@@ -34,8 +31,7 @@ const CONDITION_TYPES = new Set([
   "Condition_TotalSpending",
   "Condition_Location",
   "Condition_ContainsCategory",
-  "Condition_ContainsProduct",
-  "Condition_AntiFraudScore"
+  "Condition_ContainsProduct"
 ]);
 
 function isSmallNode(node) {

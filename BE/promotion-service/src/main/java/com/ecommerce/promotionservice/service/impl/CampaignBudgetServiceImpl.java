@@ -25,7 +25,9 @@ public class CampaignBudgetServiceImpl implements CampaignBudgetService {
         if (campaignId == null || amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             return;
         }
-        Campaign campaign = campaignRepository.findById(campaignId)
+        // BUG FIX: pessimistic write lock serializes concurrent reservations against the same
+        // campaign row, closing the lost-update race (see CampaignRepository.findByIdForUpdate).
+        Campaign campaign = campaignRepository.findByIdForUpdate(campaignId)
                 .orElseThrow(() -> new IllegalArgumentException("Campaign không tồn tại: " + campaignId));
 
         BigDecimal remaining = campaign.getRemainingBudget() != null
@@ -53,7 +55,7 @@ public class CampaignBudgetServiceImpl implements CampaignBudgetService {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             return;
         }
-        Campaign campaign = campaignRepository.findById(voucher.getCampaignId()).orElse(null);
+        Campaign campaign = campaignRepository.findByIdForUpdate(voucher.getCampaignId()).orElse(null);
         if (campaign == null) {
             return;
         }

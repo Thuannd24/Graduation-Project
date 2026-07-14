@@ -21,6 +21,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -102,12 +104,26 @@ public class InventoryService {
         inventory = inventoryRepository.save(inventory);
 
         // Create transaction log
-        saveTransaction(productId, vId, null, "RESTOCK", 
-                Math.abs(quantity - oldQuantity), oldQuantity, quantity, 
+        saveTransaction(productId, vId, null, "RESTOCK",
+                Math.abs(quantity - oldQuantity), oldQuantity, quantity,
                 "Admin manual update", null);
 
-        // Sync to Redis
-        syncSingleProductToRedis(productId, vId, quantity - oldQuantity);
+        // BUG FIX: sync to Redis only AFTER the DB transaction actually commits. Previously this
+        // ran synchronously mid-transaction, so if the commit itself failed afterwards (deadlock
+        // detected at commit, connection lost, constraint violation on flush), Redis would already
+        // reflect the new quantity while the DB rolled back to the old one - a silent, hours-long
+        // stock mismatch with no self-healing until the next 2am InventorySyncScheduler run.
+        final Integer delta = quantity - oldQuantity;
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    syncSingleProductToRedis(productId, vId, delta);
+                }
+            });
+        } else {
+            syncSingleProductToRedis(productId, vId, delta);
+        }
 
         return InventoryResponse.builder()
                 .productId(inventory.getProductId())
@@ -154,8 +170,19 @@ public class InventoryService {
                 .build();
         restockRequestRepository.save(restockRequest);
 
-        // Sync to Redis
-        syncSingleProductToRedis(productId, vId, request.getQuantity());
+        // BUG FIX: same as updateInventory() above - defer the Redis sync until after commit so
+        // a failed commit never leaves Redis showing stock the database doesn't actually have.
+        final Integer restockQty = request.getQuantity();
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    syncSingleProductToRedis(productId, vId, restockQty);
+                }
+            });
+        } else {
+            syncSingleProductToRedis(productId, vId, restockQty);
+        }
 
         return RestockResponse.builder()
                 .productId(productId)

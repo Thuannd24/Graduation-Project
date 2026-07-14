@@ -97,10 +97,6 @@ public class CampaignVariableEnricher {
             if (data.get("customerTier") != null) {
                 variables.put("memberRank", data.get("customerTier").toString());
             }
-            if (data.get("isBlacklisted") != null) {
-                boolean isBlacklisted = Boolean.TRUE.equals(data.get("isBlacklisted"));
-                variables.put("antiFraudScore", isBlacklisted ? 99 : 10);
-            }
         } catch (Exception ex) {
             log.warn("Could not fetch user profile from user-service: {}", ex.getMessage());
         }

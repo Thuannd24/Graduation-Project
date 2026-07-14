@@ -30,6 +30,10 @@ public class Category {
     @Column(name = "image_url", columnDefinition = "TEXT")
     private String imageUrl;
 
+    // Tên icon Material Symbols (dùng khi không có imageUrl — icon đường nét đơn giản, không phải ảnh)
+    @Column(name = "icon")
+    private String icon;
+
     @Column(name = "sort_order")
     @Builder.Default
     private Integer sortOrder = 0;

@@ -22,6 +22,16 @@ export default function Header() {
     setIsDropdownOpen(false);
   }, [location]);
 
+  // Đồng bộ ô tìm kiếm với URL: hiện đúng từ khóa khi đang ở /search, xóa trắng khi rời trang
+  useEffect(() => {
+    if (location.pathname === "/search") {
+      const q = new URLSearchParams(location.search).get("q") || "";
+      setSearchQuery(q);
+    } else {
+      setSearchQuery("");
+    }
+  }, [location.pathname, location.search]);
+
   // Click outside detection to close dropdown
   useEffect(() => {
     if (!isDropdownOpen) return;

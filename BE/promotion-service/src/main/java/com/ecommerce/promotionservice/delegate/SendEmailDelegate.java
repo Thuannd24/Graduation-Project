@@ -13,13 +13,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Generic notification delegate for:
- * Action_Send_Email, Action_Send_SMS, Action_Send_AppPush, Action_Send_Zalo
+ * Camunda service-task delegate for the "Action_Send_Email" campaign node — the only
+ * notification channel the campaign builder currently supports (SMS/Zalo/App-Push were
+ * removed: there was never a way to create those nodes from the frontend, so the channel
+ * variants were unreachable dead code).
  */
 @Component("sendEmailDelegate")
 @RequiredArgsConstructor
 @Slf4j
-public class SendNotificationDelegate implements JavaDelegate {
+public class SendEmailDelegate implements JavaDelegate {
 
     private static final Set<String> SKIP_TEMPLATE_VARS = Set.of(
             "campaignWorkflowJson", "actionType", "templateId", "rawContent"
@@ -31,15 +33,10 @@ public class SendNotificationDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
         String userId = getStr(execution, "userId");
         String email = getStr(execution, "email");
-        String actionType = getStr(execution, "actionType");
         String templateId = getStr(execution, "templateId");
         String rawContent = getStr(execution, "rawContent");
 
         Map<String, String> templateVariables = collectTemplateVariables(execution);
-
-        String subject = "Action_Send_Email".equals(actionType)
-                ? "Thông báo khuyến mãi từ E-Commerce"
-                : "Thông báo hệ thống";
 
         Long orderId = null;
         Object orderIdVar = execution.getVariable("orderId");
@@ -51,15 +48,15 @@ public class SendNotificationDelegate implements JavaDelegate {
             }
         }
 
-        log.info("[SendNotification] type={} userId={} email={} templateId={}",
-                actionType, userId, email, templateId.isBlank() ? "(raw)" : templateId);
+        log.info("[SendEmail] userId={} email={} templateId={}",
+                userId, email, templateId.isBlank() ? "(raw)" : templateId);
 
         SendNotificationRequest.SendNotificationRequestBuilder requestBuilder = SendNotificationRequest.builder()
                 .userId(userId)
                 .email(email)
                 .orderId(orderId)
-                .eventType(actionType != null && !actionType.isBlank() ? actionType : "PromotionCampaignEvent")
-                .subject(subject)
+                .eventType("Action_Send_Email")
+                .subject("Thông báo khuyến mãi từ E-Commerce")
                 .templateVariables(templateVariables);
 
         if (!templateId.isBlank()) {
@@ -71,9 +68,9 @@ public class SendNotificationDelegate implements JavaDelegate {
         try {
             notificationClient.sendNotification(requestBuilder.build());
             execution.setVariable("notificationSent", true);
-            log.info("[SendNotification] Sent via notification-service to user {}", userId);
+            log.info("[SendEmail] Sent via notification-service to user {}", userId);
         } catch (Exception ex) {
-            log.error("[SendNotification] Failed to send notification: {}", ex.getMessage());
+            log.error("[SendEmail] Failed to send notification: {}", ex.getMessage());
             execution.setVariable("notificationSent", false);
         }
     }
