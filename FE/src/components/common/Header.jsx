@@ -4,8 +4,8 @@ import { useCart } from "../../context/CartContext.jsx";
 import { useWishlist } from "../../context/WishlistContext.jsx";
 import Icon from "./Icon.jsx";
 import keycloak from "../../services/keycloak.js";
-import logoImg from "../../assets/images/image.png";
 import CategorySidebar from "../../features/catalog/components/CategorySidebar.jsx";
+import VisualSearchModal from "../../features/catalog/components/VisualSearchModal.jsx";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -15,11 +15,22 @@ export default function Header() {
   const { wishlist } = useWishlist();
   const count = items.reduce((total, item) => total + item.qty, 0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isVisualSearchOpen, setIsVisualSearchOpen] = useState(false);
 
   // Close dropdown on route change
   useEffect(() => {
     setIsDropdownOpen(false);
   }, [location]);
+
+  // Đồng bộ ô tìm kiếm với URL: hiện đúng từ khóa khi đang ở /search, xóa trắng khi rời trang
+  useEffect(() => {
+    if (location.pathname === "/search") {
+      const q = new URLSearchParams(location.search).get("q") || "";
+      setSearchQuery(q);
+    } else {
+      setSearchQuery("");
+    }
+  }, [location.pathname, location.search]);
 
   // Click outside detection to close dropdown
   useEffect(() => {
@@ -68,13 +79,13 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full flex flex-col items-center bg-primary dark:bg-primary-container shadow-md">
+    <header className="sticky top-0 z-50 w-full flex flex-col items-center bg-gradient-to-r from-[#c82229] via-[#dd373f] to-[#ec5158] dark:from-[#aa1e24] dark:to-[#d83138] shadow-md">
       <div className="max-w-container-max w-full px-gutter flex items-center justify-between h-16 gap-lg">
         {/* Left Side: Logo & Category Dropdown */}
         <div className="flex items-center gap-lg shrink-0">
-          <Link className="flex items-center gap-3 text-2xl font-black text-white tracking-tighter" to="/">
-            <img src={logoImg} alt="AuraTech Logo" className="h-12 lg:h-14 w-auto object-contain rounded-lg" />
-            <span className="hidden sm:inline font-extrabold text-2xl">AuraTech</span>
+          <Link className="flex items-center select-none hover:opacity-90 transition-opacity font-orbitron text-2xl tracking-wider uppercase" to="/">
+            <span className="font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">Aura</span>
+            <span className="font-light text-rose-100/90 text-lg border-l border-white/20 pl-2 ml-2 tracking-widest">Tech</span>
           </Link>
 
           <div id="category-dropdown-container" className="hidden md:block relative">
@@ -107,7 +118,7 @@ export default function Header() {
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => alert("Tính năng tìm kiếm bằng hình ảnh đang được nâng cấp!")}
+                onClick={() => setIsVisualSearchOpen(true)}
                 className="text-white/70 hover:text-white bg-transparent border-0 p-0 cursor-pointer flex items-center transition-colors"
                 title="Tìm bằng hình ảnh"
               >
@@ -126,7 +137,7 @@ export default function Header() {
 
         {/* Right Side: Navigation Utilities */}
         <nav className="flex items-center gap-2 md:gap-3" aria-label="Tiện ích">
-          <Link className="p-2 text-white hover:bg-white/10 transition-all duration-200 rounded-xl flex flex-col items-center min-w-[56px]" to="/warranty">
+          <Link className="p-2 text-white hover:bg-white/10 transition-all duration-200 rounded-xl flex flex-col items-center min-w-[56px]" to="/profile?tab=warranty">
             <Icon name="local_shipping" className="text-lg" />
             <span className="text-[11px] font-extrabold mt-0.5">Tra cứu</span>
           </Link>
@@ -154,6 +165,8 @@ export default function Header() {
           </Link>
         </nav>
       </div>
+
+      <VisualSearchModal isOpen={isVisualSearchOpen} onClose={() => setIsVisualSearchOpen(false)} />
     </header>
   );
 }

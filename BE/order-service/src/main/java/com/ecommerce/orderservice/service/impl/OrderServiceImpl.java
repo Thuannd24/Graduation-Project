@@ -4,12 +4,15 @@ import com.ecommerce.grpc.inventory.InventoryGrpcResponse;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.client.RestTemplate;
 import com.ecommerce.orderservice.grpc.InventoryGrpcClient;
+import com.ecommerce.orderservice.dto.request.CheckoutPreviewRequest;
 import com.ecommerce.orderservice.dto.request.CheckoutRequest;
 import com.ecommerce.orderservice.dto.response.CartItemResponse;
 import com.ecommerce.orderservice.dto.response.CartResponse;
+import com.ecommerce.orderservice.dto.response.CheckoutPreviewResponse;
 import com.ecommerce.orderservice.dto.response.OrderItemResponse;
 import com.ecommerce.orderservice.dto.response.OrderResponse;
 import com.ecommerce.orderservice.dto.response.WarrantyItemResponse;
+import com.ecommerce.orderservice.entity.CompensationTask;
 import com.ecommerce.orderservice.entity.Order;
 import com.ecommerce.orderservice.entity.OrderItem;
 import com.ecommerce.orderservice.entity.OutboxEvent;
@@ -17,24 +20,31 @@ import com.ecommerce.orderservice.event.OrderCancelledEvent;
 import com.ecommerce.orderservice.event.OrderCreatedEvent;
 import com.ecommerce.orderservice.event.OrderConfirmedEvent;
 import com.ecommerce.orderservice.client.PromotionClient;
+import com.ecommerce.orderservice.client.UserClient;
 import com.ecommerce.orderservice.exception.DuplicateRequestException;
 import com.ecommerce.orderservice.exception.InvalidCouponException;
 import com.ecommerce.orderservice.exception.InvalidOrderStateException;
 import com.ecommerce.orderservice.exception.InsufficientStockException;
 import com.ecommerce.orderservice.exception.ResourceNotFoundException;
 import com.ecommerce.orderservice.exception.ServiceUnavailableException;
+import com.ecommerce.orderservice.repository.CompensationTaskRepository;
 import com.ecommerce.orderservice.repository.OrderItemRepository;
 import com.ecommerce.orderservice.repository.OrderRepository;
 import com.ecommerce.orderservice.repository.OutboxEventRepository;
 import com.ecommerce.orderservice.service.CartService;
 import com.ecommerce.orderservice.service.OrderService;
+import com.ecommerce.orderservice.support.OrderPricingHelper;
+import com.ecommerce.orderservice.support.ShippingFeeCalculator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.data.domain.Sort;
 
 import java.time.Duration;
@@ -42,8 +52,13 @@ import java.time.Duration;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,13 +69,18 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OutboxEventRepository outboxEventRepository;
+    private final CompensationTaskRepository compensationTaskRepository;
     private final CartService cartService;
     private final InventoryGrpcClient inventoryGrpcClient;
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, String> stringRedisTemplate;
     private final TransactionTemplate transactionTemplate;
     private final PromotionClient promotionClient;
+    private final UserClient userClient;
     private final DiscoveryClient discoveryClient;
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final DefaultRedisScript<Long> stockDecrementScript;
+    private final DefaultRedisScript<Long> stockIncrementScript;
 
     @Override
     public OrderResponse createOrder(String userId, CheckoutRequest checkoutRequest, String idempotencyKey,
@@ -87,6 +107,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         List<CartItemResponse> successfullyDecrementedItems = new ArrayList<>();
+        Order savedOrder = null;
+        boolean transaction1Committed = false;
         try {
             String cartKey = "cart:" + userId;
             CartResponse cart = cartService.getCart(cartKey);
@@ -167,13 +189,30 @@ public class OrderServiceImpl implements OrderService {
                     }
                 }
 
-                Long remaining = stringRedisTemplate.opsForValue().decrement(stockKey, item.getQuantity());
-                if (remaining == null || remaining < 0) {
-                    // Rollback current decrement
-                    stringRedisTemplate.opsForValue().increment(stockKey, item.getQuantity());
+                // Use atomic Lua script to decrement stock (prevents race conditions)
+                Long remaining = stringRedisTemplate.execute(
+                        stockDecrementScript,
+                        Collections.singletonList(stockKey),
+                        String.valueOf(item.getQuantity()));
+
+                if (remaining == null) {
+                    throw new ServiceUnavailableException(
+                            "Redis script execution failed for product " + item.getProductId());
+                }
+
+                if (remaining == -1) {
+                    // Cache miss during decrement - key was evicted between check and decrement
+                    throw new ServiceUnavailableException(
+                            "Hệ thống tồn kho đang được cập nhật. Vui lòng thử lại sau.");
+                }
+
+                if (remaining == -2) {
+                    // Insufficient stock
                     throw new InsufficientStockException(
                             "Sản phẩm " + item.getProductName() + " đã hết hàng trên hệ thống (Redis check)");
                 }
+
+                // Success: remaining >= 0
                 successfullyDecrementedItems.add(item);
             }
 
@@ -182,6 +221,7 @@ public class OrderServiceImpl implements OrderService {
             BigDecimal finalAmount = totalAmount;
             String couponCode = normalizeCouponCode(checkoutRequest.getCouponCode());
             String appliedCampaignId = null;
+            Integer pointsToRedeem = checkoutRequest.getPointsToRedeem();
 
             // Calculate total order weight using the weights loaded in the cart response
             BigDecimal totalWeight = BigDecimal.ZERO;
@@ -193,6 +233,7 @@ public class OrderServiceImpl implements OrderService {
             // Save order
             Order order = Order.builder()
                     .userId(userId)
+                    .email(email)
                     .status("PENDING")
                     .totalAmount(totalAmount)
                     .discountAmount(discountAmount)
@@ -224,7 +265,6 @@ public class OrderServiceImpl implements OrderService {
             final List<OrderItem> finalOrderItems = orderItems;
 
             // Execute DB writes outside/inside transactions to protect pool
-            Order savedOrder;
             try {
                 if (couponCode != null) {
                     // Transaction 1: Save Order and OrderItems (fast local DB commit)
@@ -236,17 +276,23 @@ public class OrderServiceImpl implements OrderService {
                         orderItemRepository.saveAll(finalOrderItems);
                         return saved;
                     });
+                    transaction1Committed = true;
+                    final Order finalSavedOrder = savedOrder;
 
                     // Call Feign client OUTSIDE the database transaction
                     try {
-                        applyCouponToOrder(savedOrder, userId, couponCode, totalAmount, checkoutRequest.getShippingFee());
+                        BigDecimal serverShippingFee = ShippingFeeCalculator.calculate(totalAmount);
+                        applyCouponToOrder(finalSavedOrder, userId, couponCode, totalAmount, serverShippingFee,
+                                finalOrderItems);
                     } catch (Exception ex) {
-                        log.error("Failed to apply voucher for Order ID {}: {}. Cancelling order.", savedOrder.getId(), ex.getMessage());
-                        
+                        log.error("Failed to apply voucher for Order ID {}: {}. Cancelling order.",
+                                finalSavedOrder.getId(), ex.getMessage());
+
                         // Compensation: Update order status to CANCELLED
                         transactionTemplate.executeWithoutResult(status -> {
-                            Order orderToCancel = orderRepository.findById(savedOrder.getId())
-                                    .orElseThrow(() -> new RuntimeException("Order not found: " + savedOrder.getId()));
+                            Order orderToCancel = orderRepository.findById(finalSavedOrder.getId())
+                                    .orElseThrow(
+                                            () -> new RuntimeException("Order not found: " + finalSavedOrder.getId()));
                             orderToCancel.setStatus("CANCELLED");
                             orderRepository.save(orderToCancel);
                         });
@@ -254,22 +300,51 @@ public class OrderServiceImpl implements OrderService {
                         throw new InvalidCouponException("Không thể áp dụng mã voucher: " + ex.getMessage());
                     }
 
+                    if (pointsToRedeem != null && pointsToRedeem > 0) {
+                        try {
+                            applyPointsToOrder(finalSavedOrder, userId, pointsToRedeem);
+                        } catch (Exception ex) {
+                            log.error("Failed to redeem points for Order ID {}: {}. Cancelling order.",
+                                    finalSavedOrder.getId(), ex.getMessage());
+                            markOrderCancelledAndReleaseVoucher(finalSavedOrder.getId());
+                            throw new InvalidOrderStateException("Không thể sử dụng điểm: " + ex.getMessage());
+                        }
+                    }
+
                     // Transaction 2: Save the OutboxEvent since Voucher was applied successfully
-                    final Order finalSavedOrder = savedOrder;
                     transactionTemplate.executeWithoutResult(status -> {
                         saveOrderCreatedOutboxEvent(finalSavedOrder, finalOrderItems, userId, email);
                     });
 
                 } else {
-                    // No coupon, save Order, OrderItems and OutboxEvent in a single transaction
+                    // No coupon, save Order and OrderItems first
                     savedOrder = transactionTemplate.execute(status -> {
                         Order saved = orderRepository.save(finalOrder);
                         for (OrderItem item : finalOrderItems) {
                             item.setOrderId(saved.getId());
                         }
                         orderItemRepository.saveAll(finalOrderItems);
-                        saveOrderCreatedOutboxEvent(saved, finalOrderItems, userId, email);
                         return saved;
+                    });
+                    transaction1Committed = true;
+                    final Order finalSavedOrder = savedOrder;
+
+                    if (pointsToRedeem != null && pointsToRedeem > 0) {
+                        try {
+                            applyPointsToOrder(finalSavedOrder, userId, pointsToRedeem);
+                        } catch (Exception ex) {
+                            log.error("Failed to redeem points for Order ID {}: {}. Cancelling order.",
+                                    finalSavedOrder.getId(), ex.getMessage());
+                            markOrderCancelledAndReleaseVoucher(finalSavedOrder.getId());
+                            throw new InvalidOrderStateException("Không thể sử dụng điểm: " + ex.getMessage());
+                        }
+                    } else {
+                        applyPricingToOrder(finalSavedOrder, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                        orderRepository.save(finalSavedOrder);
+                    }
+
+                    transactionTemplate.executeWithoutResult(status -> {
+                        saveOrderCreatedOutboxEvent(finalSavedOrder, finalOrderItems, userId, email);
                     });
                 }
             } catch (RuntimeException ex) {
@@ -296,15 +371,92 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             log.error("Error during checkout process: {}", e.getMessage());
 
-            // Rollback all decremented stocks in Redis
-            for (CartItemResponse item : successfullyDecrementedItems) {
+            // HIGH-01 FIX: Compensation for failed post-checkout steps (e.g. outbox save
+            // failure, network timeouts, etc.)
+            // If Transaction 1 succeeded but checkout failed afterward, we MUST cancel the
+            // order in DB, release voucher, and refund points.
+            if (transaction1Committed && savedOrder != null) {
                 try {
-                    Long vId = item.getVariantId() != null ? item.getVariantId() : 0L;
-                    String stockKey = "product:stock:" + item.getProductId() + ":" + vId;
-                    stringRedisTemplate.opsForValue().increment(stockKey, item.getQuantity());
+                    final Long orderIdToCancel = savedOrder.getId();
+                    final Order finalSavedOrder = savedOrder;
+                    transactionTemplate.executeWithoutResult(status -> {
+                        orderRepository.findById(orderIdToCancel).ifPresent(o -> {
+                            boolean alreadyCancelled = "CANCELLED".equalsIgnoreCase(o.getStatus());
+                            if (!alreadyCancelled) {
+                                o.setStatus("CANCELLED");
+                                orderRepository.save(o);
+                                log.info("Compensated: Order ID {} marked as CANCELLED due to checkout failure.",
+                                        orderIdToCancel);
+                            }
+
+                            // Rethrow on outbox failure so the transaction rolls back — order stays
+                            // non-CANCELLED and OrderExpiryScheduler (V-17) retries within 30 min.
+                            try {
+                                List<OrderCancelledEvent.OrderItemInfo> itemInfos = successfullyDecrementedItems
+                                        .stream()
+                                        .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
+                                                .productId(item.getProductId())
+                                                .variantId(item.getVariantId())
+                                                .quantity(item.getQuantity())
+                                                .build())
+                                        .collect(Collectors.toList());
+
+                                OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
+                                        .eventId(UUID.randomUUID().toString())
+                                        .eventType("OrderCancelledEvent")
+                                        .timestamp(LocalDateTime.now().toString())
+                                        .orderId(orderIdToCancel)
+                                        .userId(userId)
+                                        .email(email)
+                                        .items(itemInfos)
+                                        .build();
+                                saveOutboxEvent(String.valueOf(orderIdToCancel), "OrderCancelledEvent",
+                                        objectMapper.writeValueAsString(cancelledEvent));
+                                log.info("Compensated: Saved OrderCancelledEvent to outbox for Order ID {}",
+                                        orderIdToCancel);
+                            } catch (Exception exOutbox) {
+                                log.error(
+                                        "Failed to save OrderCancelledEvent to outbox during compensation for Order ID {}: {}",
+                                        orderIdToCancel, exOutbox.getMessage());
+                                throw new RuntimeException(
+                                        "Compensation failed: could not save outbox event for Order " + orderIdToCancel,
+                                        exOutbox);
+                            }
+                        });
+                    });
+                    releaseVoucherForOrder(orderIdToCancel);
+                    refundPointsForOrder(finalSavedOrder);
                 } catch (Exception ex) {
-                    log.error("Failed to rollback Redis stock for product: {}, variant: {}", item.getProductId(),
-                            item.getVariantId(), ex);
+                    log.error("Failed to run compensation logic for Order ID {}", savedOrder.getId(), ex);
+                }
+            }
+
+            // Rollback all decremented stocks in Redis ONLY if Transaction 1 didn't commit.
+            // If Transaction 1 did commit, we published OrderCancelledEvent, which will
+            // trigger
+            // the inventory-service to release/increment the Redis stock. Doing both would
+            // cause double-rollback.
+            if (!transaction1Committed) {
+                for (CartItemResponse item : successfullyDecrementedItems) {
+                    try {
+                        Long vId = item.getVariantId() != null ? item.getVariantId() : 0L;
+                        String stockKey = "product:stock:" + item.getProductId() + ":" + vId;
+
+                        // Use atomic Lua script for increment (safe against eviction race)
+                        Long result = stringRedisTemplate.execute(
+                                stockIncrementScript,
+                                Collections.singletonList(stockKey),
+                                String.valueOf(item.getQuantity()));
+
+                        if (result != null && result == -1) {
+                            log.warn(
+                                    "Redis key {} was evicted during rollback. Stock will be loaded from DB on next checkout.",
+                                    stockKey);
+                        }
+                    } catch (Exception ex) {
+                        log.error("Failed to rollback Redis stock for product: {}, variant: {}", item.getProductId(),
+                                item.getVariantId(), ex);
+                    }
                 }
             }
 
@@ -315,6 +467,64 @@ public class OrderServiceImpl implements OrderService {
 
             throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public CheckoutPreviewResponse previewCheckout(String userId, CheckoutPreviewRequest request) {
+        CartResponse cart = cartService.getCart("cart:" + userId);
+        if (cart.getItems() == null || cart.getItems().isEmpty()) {
+            throw new InvalidOrderStateException("Cart is empty");
+        }
+
+        BigDecimal subtotal = cart.getTotalAmount();
+        BigDecimal productDiscount = BigDecimal.ZERO;
+        BigDecimal shippingDiscount = BigDecimal.ZERO;
+        String couponCode = normalizeCouponCode(request != null ? request.getCouponCode() : null);
+        String voucherMessage = null;
+        boolean voucherApplied = false;
+
+        if (couponCode != null) {
+            BigDecimal serverShippingFee = ShippingFeeCalculator.calculate(subtotal);
+            List<Long> cartProductIds = cart.getItems().stream()
+                    .map(CartItemResponse::getProductId)
+                    .collect(Collectors.toList());
+            var response = promotionClient.previewVoucher(PromotionClient.VoucherApplyRequest.builder()
+                    .code(couponCode)
+                    .userId(userId)
+                    .orderTotal(subtotal)
+                    .shippingFee(serverShippingFee)
+                    .productIds(cartProductIds)
+                    .build());
+            if (response != null && response.getData() != null && response.getData().isApplied()) {
+                PromotionClient.VoucherApplyResult result = response.getData();
+                productDiscount = OrderPricingHelper.extractProductDiscount(result);
+                shippingDiscount = OrderPricingHelper.extractShippingDiscount(result);
+                voucherApplied = true;
+                voucherMessage = result.getMessage();
+            } else if (response != null && response.getData() != null) {
+                voucherMessage = response.getData().getMessage();
+            }
+        }
+
+        int pointsToRedeem = request != null && request.getPointsToRedeem() != null ? request.getPointsToRedeem() : 0;
+        BigDecimal payableAfterProduct = subtotal.subtract(productDiscount).max(BigDecimal.ZERO);
+        BigDecimal pointDiscount = OrderPricingHelper.calculatePointDiscount(pointsToRedeem, payableAfterProduct);
+        OrderPricingHelper.PricingBreakdown pricing = OrderPricingHelper.calculate(
+                subtotal, productDiscount, shippingDiscount, pointDiscount);
+
+        return CheckoutPreviewResponse.builder()
+                .subtotal(pricing.getSubtotal())
+                .productDiscount(pricing.getProductDiscount())
+                .shippingDiscount(pricing.getShippingDiscount())
+                .pointDiscount(pricing.getPointDiscount())
+                .shippingFee(pricing.getShippingFee())
+                .vatAmount(pricing.getVatAmount())
+                .totalDiscount(pricing.getTotalDiscount())
+                .finalAmount(pricing.getFinalAmount())
+                .couponCode(couponCode)
+                .voucherApplied(voucherApplied)
+                .voucherMessage(voucherMessage)
+                .build();
     }
 
     @Override
@@ -340,94 +550,220 @@ public class OrderServiceImpl implements OrderService {
         } else {
             orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
         }
+
+        if (orders.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> orderIds = orders.stream().map(Order::getId).collect(Collectors.toList());
+        List<OrderItem> allItems = orderItemRepository.findByOrderIdIn(orderIds);
+        Map<Long, List<OrderItem>> itemsByOrderId = allItems.stream()
+                .collect(Collectors.groupingBy(OrderItem::getOrderId));
+
         return orders.stream()
                 .map(o -> {
-                    List<OrderItem> items = orderItemRepository.findByOrderId(o.getId());
+                    List<OrderItem> items = itemsByOrderId.getOrDefault(o.getId(), Collections.emptyList());
                     return convertToResponse(o, items);
                 })
                 .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional
     public void cancelOrder(Long orderId, String userId, String email) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+        // ── Phase 1: DB writes only (short transaction, releases connection fast) ──
+        final String[] originalStatus = new String[1];
+        final Order order = transactionTemplate.execute(status -> {
+            // Use pessimistic write lock to prevent concurrent status updates
+            Order o = orderRepository.findByIdForUpdate(orderId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
-        if (!"PENDING".equalsIgnoreCase(order.getStatus())
-                && !"AWAITING_PAYMENT".equalsIgnoreCase(order.getStatus())
-                && !"CONFIRMED".equalsIgnoreCase(order.getStatus())) {
-            throw new InvalidOrderStateException("Cannot cancel order in status: " + order.getStatus());
-        }
+            if (!"PENDING".equalsIgnoreCase(o.getStatus())
+                    && !"AWAITING_PAYMENT".equalsIgnoreCase(o.getStatus())
+                    && !"CONFIRMED".equalsIgnoreCase(o.getStatus())) {
+                throw new InvalidOrderStateException("Cannot cancel order in status: " + o.getStatus());
+            }
 
-        order.setStatus("CANCELLED");
-        orderRepository.save(order);
-        releaseVoucherForOrder(orderId);
+            originalStatus[0] = o.getStatus();
+            o.setStatus("CANCELLED");
+            orderRepository.save(o);
 
-        // Save Cancel Outbox Event
-        try {
-            OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
-                    .eventId(UUID.randomUUID().toString())
-                    .eventType("OrderCancelledEvent")
-                    .timestamp(LocalDateTime.now().toString())
-                    .orderId(orderId)
-                    .userId(userId)
-                    .email(email)
-                    .build();
+            // Save Cancel Outbox Event inside the same transaction
+            try {
+                List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
+                List<OrderCancelledEvent.OrderItemInfo> itemInfos = items.stream()
+                        .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
+                                .productId(item.getProductId())
+                                .variantId(item.getVariantId())
+                                .quantity(item.getQuantity())
+                                .build())
+                        .collect(Collectors.toList());
 
-            OutboxEvent outboxEvent = OutboxEvent.builder()
-                    .aggregateId(String.valueOf(orderId))
-                    .aggregateType("Order")
-                    .eventType("OrderCancelledEvent")
-                    .payload(objectMapper.writeValueAsString(cancelledEvent))
-                    .status("PENDING")
-                    .build();
-            outboxEventRepository.save(outboxEvent);
-        } catch (Exception e) {
-            log.error("Failed to construct and save outbox event for OrderCancelledEvent: {}", e.getMessage());
+                OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
+                        .eventId(UUID.randomUUID().toString())
+                        .eventType("OrderCancelledEvent")
+                        .timestamp(LocalDateTime.now().toString())
+                        .orderId(orderId)
+                        .userId(userId)
+                        .email(email)
+                        .items(itemInfos)
+                        .build();
+                saveOutboxEvent(String.valueOf(orderId), "OrderCancelledEvent",
+                        objectMapper.writeValueAsString(cancelledEvent));
+            } catch (Exception e) {
+                log.error("Failed to construct and save outbox event for OrderCancelledEvent: {}", e.getMessage());
+                throw new RuntimeException(
+                        "Không thể lưu sự kiện hủy đơn vào Outbox. Hủy đơn thất bại để đảm bảo tính nhất quán kho.", e);
+            }
+            return o;
+        });
+
+        // ── Phase 2: External Feign calls — AFTER DB transaction committed ──
+        // DB connection is already released here, so these slow calls are safe
+        // NOTE: Redis stock rollback is handled asynchronously by inventory-service via
+        // OrderCancelledEvent.
+        if (order != null) {
+            releaseVoucherForOrder(orderId);
+            refundPointsForOrder(order);
         }
     }
 
     @Override
-    @Transactional
     public void cancelOrder(Long orderId, String userId, String email, String rolesHeader) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
         // Verify owner or Admin/Staff role
-        if (!order.getUserId().equals(userId) && !isAdminOrStaff(rolesHeader)) {
+        boolean isOwner = order.getUserId().equals(userId);
+        if (!isOwner && !isAdminOrStaff(rolesHeader)) {
             throw new org.springframework.security.access.AccessDeniedException(
                     "You are not authorized to cancel this order");
         }
 
-        cancelOrder(orderId, userId, email);
+        // BUG FIX: When an admin/staff cancels an order on behalf of a customer, the
+        // OrderCancelledEvent (and any downstream notification) must carry the order OWNER's
+        // identity, not the acting admin's - otherwise cancellation emails/business logic keyed
+        // on userId end up pointed at the staff member instead of the customer.
+        if (isOwner) {
+            cancelOrder(orderId, userId, email);
+        } else {
+            cancelOrder(orderId, order.getUserId(), order.getEmail());
+        }
     }
 
     private boolean isAdminOrStaff(String rolesHeader) {
         if (rolesHeader == null || rolesHeader.trim().isEmpty()) {
             return false;
         }
-        String lower = rolesHeader.toLowerCase();
-        return lower.contains("admin") || lower.contains("staff");
+        return Arrays.stream(rolesHeader.split(","))
+                .map(String::trim)
+                .map(r -> r.toUpperCase(Locale.ROOT))
+                .anyMatch(r -> "ROLE_ADMIN".equals(r) || "ADMIN".equals(r)
+                        || "ROLE_STAFF".equals(r) || "STAFF".equals(r));
     }
 
     private int getStatusRank(String status) {
-        if (status == null) return 0;
+        if (status == null)
+            return 0;
         switch (status.toUpperCase()) {
-            case "PENDING": return 1;
-            case "AWAITING_PAYMENT": return 2;
-            case "CONFIRMED": return 3;
-            case "SHIPPED": return 4;
-            case "DELIVERED": return 5;
-            case "CANCELLED": return 6;
-            default: return 0;
+            case "PENDING":
+                return 1;
+            case "AWAITING_PAYMENT":
+                return 2;
+            case "CONFIRMED":
+                return 3;
+            case "SHIPPED":
+                return 4;
+            case "DELIVERED":
+                return 5;
+            case "CANCELLED":
+                return 6;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void expireOrder(Long orderId) {
+        log.info("System expiring order due to payment timeout: orderId={}", orderId);
+        Order order = orderRepository.findByIdForUpdate(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+
+        String status = order.getStatus();
+        if (!"PENDING".equalsIgnoreCase(status) && !"AWAITING_PAYMENT".equalsIgnoreCase(status)) {
+            log.info("Order {} is already in status {}. Skipping expiration.", orderId, status);
+            return;
+        }
+
+        order.setStatus("CANCELLED");
+        orderRepository.save(order);
+
+        // Release Voucher & Points asynchronously AFTER transaction commits successfully
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
+                            .exceptionally(ex -> {
+                                log.error("Async releaseVoucher failed for expired order {}: {}", orderId, ex.getMessage());
+                                return null;
+                            });
+                    CompletableFuture.runAsync(() -> refundPointsForOrder(order))
+                            .exceptionally(ex -> {
+                                log.error("Async refundPoints failed for expired order {}: {}", order.getId(), ex.getMessage());
+                                return null;
+                            });
+                }
+            });
+        } else {
+            CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
+                    .exceptionally(ex -> {
+                        log.error("Async releaseVoucher failed for expired order {}: {}", orderId, ex.getMessage());
+                        return null;
+                    });
+            CompletableFuture.runAsync(() -> refundPointsForOrder(order))
+                    .exceptionally(ex -> {
+                        log.error("Async refundPoints failed for expired order {}: {}", order.getId(), ex.getMessage());
+                        return null;
+                    });
+        }
+
+        // Publish OrderCancelledEvent
+        try {
+            List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
+            List<OrderCancelledEvent.OrderItemInfo> itemInfos = items.stream()
+                    .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
+                            .productId(item.getProductId())
+                            .variantId(item.getVariantId())
+                            .quantity(item.getQuantity())
+                            .build())
+                    .collect(Collectors.toList());
+
+            OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
+                    .eventId(UUID.randomUUID().toString())
+                    .eventType("OrderCancelledEvent")
+                    .timestamp(LocalDateTime.now().toString())
+                    .orderId(orderId)
+                    .userId(order.getUserId())
+                    .email(order.getEmail())
+                    .items(itemInfos)
+                    .build();
+
+            saveOutboxEvent(String.valueOf(orderId), "OrderCancelledEvent",
+                    objectMapper.writeValueAsString(cancelledEvent));
+            log.info("Successfully registered OrderCancelledEvent in outbox for expired Order ID {}", orderId);
+        } catch (Exception e) {
+            log.error("Failed to publish OrderCancelledEvent for expired Order ID {}", orderId, e);
+            throw new RuntimeException("Failed to register OrderCancelledEvent", e);
         }
     }
 
     @Override
     @Transactional
     public void updateOrderStatus(Long orderId, String status) {
-        Order order = orderRepository.findById(orderId)
+        // Use pessimistic write lock to prevent concurrent status updates (e.g.,
+        // webhook vs user cancel)
+        Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
         // Idempotency check: if status is already matching, skip processing
@@ -438,13 +774,16 @@ public class OrderServiceImpl implements OrderService {
 
         // Prevent transition downgrades
         if (getStatusRank(status) <= getStatusRank(order.getStatus())) {
-            log.warn("Invalid status transition: cannot update Order ID {} from {} to {}", orderId, order.getStatus(), status);
+            log.warn("Invalid status transition: cannot update Order ID {} from {} to {}", orderId, order.getStatus(),
+                    status);
             return;
         }
 
-        // Guard check: if order is already CANCELLED, we should not transition it to AWAITING_PAYMENT or CONFIRMED
-        if ("CANCELLED".equalsIgnoreCase(order.getStatus())) {
-            log.warn("Order ID {} is already CANCELLED. Cannot update status to {}.", orderId, status);
+        // Guard check: if order is already in a final state, we should block all
+        // modifications
+        if ("DELIVERED".equalsIgnoreCase(order.getStatus()) || "CANCELLED".equalsIgnoreCase(order.getStatus())) {
+            log.warn("Order ID {} is in final state {}. Cannot update status to {}.", orderId, order.getStatus(),
+                    status);
             return;
         }
 
@@ -452,32 +791,77 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
         log.info("Order ID {} status updated to {}", orderId, status);
 
+        // Register side-effects to run AFTER transaction commits successfully
         if ("CONFIRMED".equalsIgnoreCase(status)) {
-            java.util.concurrent.CompletableFuture.runAsync(() -> redeemVoucherForOrder(orderId));
-        }
-        if ("CANCELLED".equalsIgnoreCase(status)) {
-            java.util.concurrent.CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId));
-        }
-
-        // If order gets CANCELLED (e.g. inventory allocation failed), rollback the
-        // stock in Redis and publish OrderCancelledEvent
-        if ("CANCELLED".equalsIgnoreCase(status)) {
-            List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
-            for (OrderItem item : items) {
-                Long vId = item.getVariantId() != null ? item.getVariantId() : 0L;
-                String stockKey = "product:stock:" + item.getProductId() + ":" + vId;
-                try {
-                    stringRedisTemplate.opsForValue().increment(stockKey, item.getQuantity());
-                    log.info(
-                            "Rolled back Redis stock for product {} variant {} by quantity {} due to order cancellation",
-                            item.getProductId(), vId, item.getQuantity());
-                } catch (Exception e) {
-                    log.error("Failed to rollback Redis stock for product: {}, variant: {}", item.getProductId(), vId,
-                            e);
-                }
+            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        CompletableFuture.runAsync(() -> redeemVoucherForOrder(orderId))
+                                .exceptionally(ex -> {
+                                    log.error("Async redeemVoucher failed for order {}: {}", orderId, ex.getMessage());
+                                    return null;
+                                });
+                    }
+                });
+            } else {
+                // Fallback if no active transaction (shouldn't happen with @Transactional)
+                CompletableFuture.runAsync(() -> redeemVoucherForOrder(orderId))
+                        .exceptionally(ex -> {
+                            log.error("Async redeemVoucher failed for order {}: {}", orderId, ex.getMessage());
+                            return null;
+                        });
             }
+        }
 
+        if ("CANCELLED".equalsIgnoreCase(status)) {
+            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
+                                .exceptionally(ex -> {
+                                    log.error("Async releaseVoucher failed for order {}: {}", orderId, ex.getMessage());
+                                    return null;
+                                });
+                        CompletableFuture
+                                .runAsync(
+                                        () -> orderRepository.findById(orderId).ifPresent(o -> refundPointsForOrder(o)))
+                                .exceptionally(ex -> {
+                                    log.error("Async refundPoints failed for order {}: {}", orderId, ex.getMessage());
+                                    return null;
+                                });
+                    }
+                });
+            } else {
+                CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
+                        .exceptionally(ex -> {
+                            log.error("Async releaseVoucher failed for order {}: {}", orderId, ex.getMessage());
+                            return null;
+                        });
+                CompletableFuture
+                        .runAsync(() -> orderRepository.findById(orderId).ifPresent(o -> refundPointsForOrder(o)))
+                        .exceptionally(ex -> {
+                            log.error("Async refundPoints failed for order {}: {}", orderId, ex.getMessage());
+                            return null;
+                        });
+            }
+        }
+
+        // When order is CANCELLED: publish OrderCancelledEvent via Outbox pattern.
+        // NOTE: Redis stock rollback is handled asynchronously by inventory-service via
+        // OrderCancelledEvent.
+        if ("CANCELLED".equalsIgnoreCase(status)) {
             try {
+                List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
+                List<OrderCancelledEvent.OrderItemInfo> itemInfos = items.stream()
+                        .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
+                                .productId(item.getProductId())
+                                .variantId(item.getVariantId())
+                                .quantity(item.getQuantity())
+                                .build())
+                        .collect(Collectors.toList());
+
                 OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
                         .eventId(UUID.randomUUID().toString())
                         .eventType("OrderCancelledEvent")
@@ -485,19 +869,15 @@ public class OrderServiceImpl implements OrderService {
                         .orderId(orderId)
                         .userId(order.getUserId())
                         .email("") // fallback handled by notification-service
+                        .items(itemInfos)
                         .build();
 
-                OutboxEvent outboxEvent = OutboxEvent.builder()
-                        .aggregateId(String.valueOf(orderId))
-                        .aggregateType("Order")
-                        .eventType("OrderCancelledEvent")
-                        .payload(objectMapper.writeValueAsString(cancelledEvent))
-                        .status("PENDING")
-                        .build();
-                outboxEventRepository.save(outboxEvent);
+                saveOutboxEvent(String.valueOf(orderId), "OrderCancelledEvent",
+                        objectMapper.writeValueAsString(cancelledEvent));
             } catch (Exception e) {
                 log.error("Failed to construct and save outbox event for OrderCancelledEvent in updateOrderStatus: {}",
                         e.getMessage());
+                throw new RuntimeException("Lỗi lưu outbox event cho trạng thái CANCELLED", e);
             }
         } else if ("CONFIRMED".equalsIgnoreCase(status)) {
             try {
@@ -511,17 +891,12 @@ public class OrderServiceImpl implements OrderService {
                         .email("") // fallback handled by notification-service
                         .build();
 
-                OutboxEvent outboxEvent = OutboxEvent.builder()
-                        .aggregateId(String.valueOf(orderId))
-                        .aggregateType("Order")
-                        .eventType("OrderConfirmedEvent")
-                        .payload(objectMapper.writeValueAsString(confirmedEvent))
-                        .status("PENDING")
-                        .build();
-                outboxEventRepository.save(outboxEvent);
+                saveOutboxEvent(String.valueOf(orderId), "OrderConfirmedEvent",
+                        objectMapper.writeValueAsString(confirmedEvent));
             } catch (Exception e) {
                 log.error("Failed to construct and save outbox event for OrderConfirmedEvent in updateOrderStatus: {}",
                         e.getMessage());
+                throw new RuntimeException("Lỗi lưu outbox event cho trạng thái CONFIRMED", e);
             }
         }
     }
@@ -529,7 +904,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse shipOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
+        // Pessimistic write lock: prevents a concurrent cancelOrder/updateOrderStatus call from
+        // racing with this transition (e.g. shipping an order the customer just cancelled).
+        Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
         if (!"CONFIRMED".equalsIgnoreCase(order.getStatus())) {
@@ -552,16 +929,16 @@ public class OrderServiceImpl implements OrderService {
             payload.put("userId", order.getUserId());
             payload.put("trackingCode", trackingCode);
 
-            OutboxEvent outboxEvent = OutboxEvent.builder()
-                    .aggregateId(String.valueOf(orderId))
-                    .aggregateType("Order")
-                    .eventType("OrderShippedEvent")
-                    .payload(objectMapper.writeValueAsString(payload))
-                    .status("PENDING")
-                    .build();
-            outboxEventRepository.save(outboxEvent);
+            saveOutboxEvent(String.valueOf(orderId), "OrderShippedEvent",
+                    objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
+            // BUG FIX: previously this only logged and let the SHIPPED transition commit anyway,
+            // so a transient outbox-insert failure would silently drop OrderShippedEvent forever
+            // (no consumer, no notification, no retry). Rethrow so the whole transaction rolls
+            // back and the caller can retry shipping the order.
             log.error("Failed to construct and save outbox event for OrderShippedEvent", e);
+            throw new RuntimeException(
+                    "Không thể lưu sự kiện giao vận vào Outbox. Chuyển trạng thái giao hàng thất bại.", e);
         }
 
         log.info("Order ID {} successfully sent to mock shipping provider. Tracking: {}", orderId, trackingCode);
@@ -571,7 +948,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void handleShippingWebhook(String trackingCode, String status) {
-        Order order = orderRepository.findByTrackingCode(trackingCode)
+        // Pessimistic write lock: prevents this carrier-initiated transition from racing with a
+        // concurrent cancelOrder/shipOrder/updateDeliveryStatusByAdmin call on the same order.
+        Order order = orderRepository.findByTrackingCodeForUpdate(trackingCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Order not found with tracking code: " + trackingCode));
 
@@ -585,33 +964,65 @@ public class OrderServiceImpl implements OrderService {
             return;
         }
 
+        // Guard check: cannot transition from final state DELIVERED or CANCELLED
+        if ("DELIVERED".equalsIgnoreCase(order.getStatus()) || "CANCELLED".equalsIgnoreCase(order.getStatus())) {
+            log.warn(
+                    "Invalid shipping webhook status transition: Order ID {} is in final state {}. Cannot update to {}.",
+                    order.getId(), order.getStatus(), targetStatus);
+            return;
+        }
+
         if (getStatusRank(targetStatus) <= getStatusRank(order.getStatus())) {
-            log.warn("Invalid shipping webhook status transition: cannot update Order ID {} from {} to {}", order.getId(), order.getStatus(), targetStatus);
+            log.warn("Invalid shipping webhook status transition: cannot update Order ID {} from {} to {}",
+                    order.getId(), order.getStatus(), targetStatus);
             return;
         }
 
         order.setStatus(targetStatus);
         orderRepository.save(order);
 
+        // Register side-effects to run AFTER transaction commits
+        if ("CANCELLED".equals(targetStatus)) {
+            final Long orderId = order.getId();
+            final Order finalOrder = order;
+            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        // Release voucher and refund points for carrier-initiated cancellations
+                        releaseVoucherForOrder(orderId);
+                        refundPointsForOrder(finalOrder);
+                    }
+                });
+            } else {
+                releaseVoucherForOrder(orderId);
+                refundPointsForOrder(finalOrder);
+            }
+        }
+
         try {
             java.util.Map<String, Object> payload = new java.util.HashMap<>();
             payload.put("eventId", UUID.randomUUID().toString());
-            payload.put("eventType", "DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent");
+            payload.put("eventType", resolveShippingEventType(targetStatus));
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", order.getId());
             payload.put("userId", order.getUserId());
             payload.put("trackingCode", trackingCode);
 
-            OutboxEvent outboxEvent = OutboxEvent.builder()
-                    .aggregateId(String.valueOf(order.getId()))
-                    .aggregateType("Order")
-                    .eventType("DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent")
-                    .payload(objectMapper.writeValueAsString(payload))
-                    .status("PENDING")
-                    .build();
-            outboxEventRepository.save(outboxEvent);
+            saveOutboxEvent(String.valueOf(order.getId()),
+                    resolveShippingEventType(targetStatus),
+                    objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
+            // BUG FIX: previously this only logged and let the status transition commit anyway.
+            // For CANCELLED that meant the order was marked cancelled in DB but the
+            // OrderCancelledEvent was never persisted to outbox, so inventory-service never got
+            // notified to restore stock - a permanent, silent inventory leak. Rethrow so the
+            // whole transaction (status change + outbox write) rolls back together and the
+            // carrier webhook can be retried/redelivered.
             log.error("Failed to construct and save outbox event for shipping status change: {}", targetStatus, e);
+            throw new RuntimeException(
+                    "Không thể lưu sự kiện outbox cho thay đổi trạng thái giao hàng. Cập nhật thất bại để đảm bảo tính nhất quán.",
+                    e);
         }
 
         log.info("Processed mock shipping webhook for tracking code {}: status updated to {}", trackingCode,
@@ -621,7 +1032,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status) {
-        Order order = orderRepository.findById(orderId)
+        // Pessimistic write lock: prevents this admin-initiated transition from racing with a
+        // concurrent cancelOrder/shipOrder/handleShippingWebhook call on the same order.
+        Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
 
         String targetStatus = status.toUpperCase();
@@ -634,32 +1047,60 @@ public class OrderServiceImpl implements OrderService {
             return convertToResponse(order, orderItemRepository.findByOrderId(orderId));
         }
 
+        // Guard check: cannot transition from final state DELIVERED or CANCELLED
+        if ("DELIVERED".equalsIgnoreCase(order.getStatus()) || "CANCELLED".equalsIgnoreCase(order.getStatus())) {
+            throw new InvalidOrderStateException("Order ID " + orderId + " is in final state " + order.getStatus()
+                    + ". Cannot update status to " + targetStatus);
+        }
+
         if (getStatusRank(targetStatus) <= getStatusRank(order.getStatus())) {
-            throw new InvalidOrderStateException("Invalid status transition: cannot update Order ID " + orderId + " from " + order.getStatus() + " to " + targetStatus);
+            throw new InvalidOrderStateException("Invalid status transition: cannot update Order ID " + orderId
+                    + " from " + order.getStatus() + " to " + targetStatus);
         }
 
         order.setStatus(targetStatus);
         orderRepository.save(order);
 
+        // Register side-effects to run AFTER transaction commits
+        if ("CANCELLED".equals(targetStatus)) {
+            final Long finalOrderId = orderId;
+            final Order finalOrder = order;
+            if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        // Release voucher and refund points for admin-initiated cancellations
+                        releaseVoucherForOrder(finalOrderId);
+                        refundPointsForOrder(finalOrder);
+                    }
+                });
+            } else {
+                releaseVoucherForOrder(finalOrderId);
+                refundPointsForOrder(finalOrder);
+            }
+        }
+
         try {
             java.util.Map<String, Object> payload = new java.util.HashMap<>();
             payload.put("eventId", UUID.randomUUID().toString());
-            payload.put("eventType", "DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent");
+            payload.put("eventType", resolveShippingEventType(targetStatus));
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", order.getId());
             payload.put("userId", order.getUserId());
             payload.put("trackingCode", order.getTrackingCode());
 
-            OutboxEvent outboxEvent = OutboxEvent.builder()
-                    .aggregateId(String.valueOf(order.getId()))
-                    .aggregateType("Order")
-                    .eventType("DELIVERED".equals(targetStatus) ? "OrderDeliveredEvent" : "OrderCancelledEvent")
-                    .payload(objectMapper.writeValueAsString(payload))
-                    .status("PENDING")
-                    .build();
-            outboxEventRepository.save(outboxEvent);
+            saveOutboxEvent(String.valueOf(order.getId()),
+                    resolveShippingEventType(targetStatus),
+                    objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
-            log.error("Failed to construct and save outbox event for admin shipping status change: {}", targetStatus, e);
+            // BUG FIX: see handleShippingWebhook - silently swallowing this exception let
+            // CANCELLED commit without ever persisting OrderCancelledEvent, permanently leaking
+            // inventory. Rethrow to roll back the whole transaction.
+            log.error("Failed to construct and save outbox event for admin shipping status change: {}", targetStatus,
+                    e);
+            throw new RuntimeException(
+                    "Không thể lưu sự kiện outbox cho thay đổi trạng thái giao hàng. Cập nhật thất bại để đảm bảo tính nhất quán.",
+                    e);
         }
 
         log.info("Processed admin shipping status update for order ID {}: status updated to {}", order.getId(),
@@ -670,13 +1111,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void applyCouponToOrder(Order order, String userId, String couponCode,
-                                    BigDecimal totalAmount, BigDecimal shippingFee) {
+            BigDecimal totalAmount, BigDecimal shippingFee, List<OrderItem> orderItems) {
+        List<Long> productIds = orderItems.stream()
+                .map(OrderItem::getProductId)
+                .collect(Collectors.toList());
         PromotionClient.VoucherApplyRequest request = PromotionClient.VoucherApplyRequest.builder()
                 .code(couponCode)
                 .userId(userId)
                 .orderId(order.getId())
                 .orderTotal(totalAmount)
                 .shippingFee(shippingFee)
+                .productIds(productIds)
                 .build();
 
         var response = promotionClient.applyVoucher(request);
@@ -691,14 +1136,115 @@ public class OrderServiceImpl implements OrderService {
         }
 
         PromotionClient.VoucherApplyResult result = response.getData();
-        order.setDiscountAmount(result.getDiscountAmount());
-        order.setFinalAmount(result.getFinalAmount());
+        BigDecimal productDiscount = OrderPricingHelper.extractProductDiscount(result);
+        BigDecimal shippingDiscount = OrderPricingHelper.extractShippingDiscount(result);
+
         order.setCouponCode(result.getVoucherCode());
         if (result.getCampaignId() != null) {
             order.setAppliedCampaignId(String.valueOf(result.getCampaignId()));
         }
+        applyPricingToOrder(order, productDiscount, shippingDiscount, BigDecimal.ZERO);
         orderRepository.save(order);
-        log.info("Applied voucher {} to order {} discount={}", couponCode, order.getId(), result.getDiscountAmount());
+        log.info("Applied voucher {} to order {} totalDiscount={}", couponCode, order.getId(),
+                order.getDiscountAmount());
+    }
+
+    private void applyPricingToOrder(Order order, BigDecimal productDiscount, BigDecimal shippingDiscount,
+            BigDecimal pointDiscount) {
+        OrderPricingHelper.PricingBreakdown pricing = OrderPricingHelper.calculate(
+                order.getTotalAmount(), productDiscount, shippingDiscount, pointDiscount);
+        order.setDiscountAmount(pricing.getTotalDiscount());
+        order.setShippingFee(pricing.getShippingFee());
+        order.setShippingDiscountAmount(pricing.getShippingDiscount());
+        order.setVatAmount(pricing.getVatAmount());
+        order.setPointDiscountAmount(pointDiscount);
+        order.setFinalAmount(pricing.getFinalAmount());
+    }
+
+    private BigDecimal resolveProductDiscount(Order order) {
+        BigDecimal totalDisc = order.getDiscountAmount() != null ? order.getDiscountAmount() : BigDecimal.ZERO;
+        BigDecimal shipDisc = order.getShippingDiscountAmount() != null ? order.getShippingDiscountAmount()
+                : BigDecimal.ZERO;
+        BigDecimal pointDisc = order.getPointDiscountAmount() != null ? order.getPointDiscountAmount()
+                : BigDecimal.ZERO;
+        return totalDisc.subtract(shipDisc).subtract(pointDisc).max(BigDecimal.ZERO);
+    }
+
+    private void applyPointsToOrder(Order order, String keycloakUserId, int pointsToRedeem) {
+        var profileResponse = userClient.getProfileByKeycloakId(keycloakUserId);
+        if (profileResponse == null || profileResponse.getData() == null
+                || !"SUCCESS".equalsIgnoreCase(profileResponse.getCode())) {
+            throw new InvalidOrderStateException("Không thể xác thực tài khoản để đổi điểm.");
+        }
+
+        Long userDbId = profileResponse.getData().getId();
+        BigDecimal productDiscount = resolveProductDiscount(order);
+        BigDecimal shippingDiscount = order.getShippingDiscountAmount() != null
+                ? order.getShippingDiscountAmount()
+                : BigDecimal.ZERO;
+        BigDecimal payableAmount = order.getTotalAmount().subtract(productDiscount).subtract(shippingDiscount)
+                .max(BigDecimal.ZERO);
+
+        var redeemRequest = UserClient.PointRedeemRequest.builder()
+                .pointsToRedeem(pointsToRedeem)
+                .orderId(order.getId())
+                .orderAmount(payableAmount)
+                .build();
+
+        var response = userClient.redeemPoints(userDbId, redeemRequest);
+        if (response == null || response.getData() == null
+                || !"SUCCESS".equalsIgnoreCase(response.getCode())) {
+            String message = response != null && response.getMessage() != null
+                    ? response.getMessage()
+                    : "Không thể đổi điểm thưởng.";
+            throw new InvalidOrderStateException(message);
+        }
+
+        UserClient.PointRedeemResult result = response.getData();
+        BigDecimal pointDiscount = result.getDiscountAmount() != null
+                ? result.getDiscountAmount()
+                : BigDecimal.ZERO;
+
+        order.setPointsRedeemed(result.getPointsRedeemed());
+        applyPricingToOrder(order, productDiscount, shippingDiscount, pointDiscount);
+        orderRepository.save(order);
+        log.info("Applied {} loyalty points to order {} discount={}", result.getPointsRedeemed(), order.getId(),
+                pointDiscount);
+    }
+
+    private static final String COMPENSATION_TASK_RELEASE_VOUCHER = "RELEASE_VOUCHER";
+    private static final String COMPENSATION_TASK_REFUND_POINTS = "REFUND_POINTS";
+    private static final String COMPENSATION_STATUS_PENDING = "PENDING";
+    private static final String COMPENSATION_STATUS_COMPLETED = "COMPLETED";
+    private static final String COMPENSATION_STATUS_FAILED_PERMANENT = "FAILED_PERMANENT";
+    private static final int COMPENSATION_MAX_ATTEMPTS = 10;
+
+    private void refundPointsForOrder(Order order) {
+        // ALWAYS attempt refund using orderId (idempotent) - do not rely on
+        // order.getPointsRedeemed()
+        // This prevents point leakage when applyPointsToOrder() succeeded but timed out
+        // on response
+        try {
+            var profileResponse = userClient.getProfileByKeycloakId(order.getUserId());
+            if (profileResponse == null || profileResponse.getData() == null) {
+                log.warn("Failed to retrieve user profile for userId {} to refund points", order.getUserId());
+                scheduleCompensationRetry(order.getId(), COMPENSATION_TASK_REFUND_POINTS,
+                        "User profile not found for userId " + order.getUserId());
+                return;
+            }
+            // User-service refundPoints API MUST be idempotent by orderId
+            userClient.refundPoints(
+                    profileResponse.getData().getId(),
+                    UserClient.PointRefundRequest.builder().orderId(order.getId()).build());
+            log.info("Refunded loyalty points for cancelled order {}", order.getId());
+        } catch (Exception ex) {
+            // BUG FIX: previously this only logged the failure, so a transient user-service
+            // outage permanently leaked the customer's loyalty points with no retry. Persist a
+            // CompensationTask so CompensationRetryScheduler can retry it until it succeeds.
+            log.error("Failed to refund points for order {}: {}. Scheduling for retry.", order.getId(),
+                    ex.getMessage());
+            scheduleCompensationRetry(order.getId(), COMPENSATION_TASK_REFUND_POINTS, ex.getMessage());
+        }
     }
 
     private void markOrderCancelledAndReleaseVoucher(Long orderId) {
@@ -714,8 +1260,107 @@ public class OrderServiceImpl implements OrderService {
             promotionClient.releaseVoucher(
                     PromotionClient.VoucherOrderActionRequest.builder().orderId(orderId).build());
         } catch (Exception ex) {
-            log.warn("Failed to release voucher for order {}: {}", orderId, ex.getMessage());
+            // BUG FIX: previously this only logged the failure, so a transient promotion-service
+            // outage permanently left the voucher marked as "used" with no retry/compensation.
+            // Persist a CompensationTask so CompensationRetryScheduler can retry it.
+            log.warn("Failed to release voucher for order {}: {}. Scheduling for retry.", orderId, ex.getMessage());
+            scheduleCompensationRetry(orderId, COMPENSATION_TASK_RELEASE_VOUCHER, ex.getMessage());
         }
+    }
+
+    private void scheduleCompensationRetry(Long orderId, String taskType, String errorMessage) {
+        try {
+            transactionTemplate.executeWithoutResult(status -> {
+                boolean alreadyPending = compensationTaskRepository
+                        .existsByOrderIdAndTaskTypeAndStatus(orderId, taskType, COMPENSATION_STATUS_PENDING);
+                if (alreadyPending) {
+                    return;
+                }
+                CompensationTask task = CompensationTask.builder()
+                        .orderId(orderId)
+                        .taskType(taskType)
+                        .status(COMPENSATION_STATUS_PENDING)
+                        .attempts(0)
+                        .lastError(errorMessage)
+                        .build();
+                compensationTaskRepository.save(task);
+            });
+        } catch (Exception ex) {
+            log.error("Failed to persist compensation task for order {} type {}: {}", orderId, taskType,
+                    ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public void retryCompensationTask(Long taskId) {
+        CompensationTask task = compensationTaskRepository.findById(taskId).orElse(null);
+        if (task == null || !COMPENSATION_STATUS_PENDING.equalsIgnoreCase(task.getStatus())) {
+            return;
+        }
+
+        try {
+            if (COMPENSATION_TASK_RELEASE_VOUCHER.equals(task.getTaskType())) {
+                promotionClient.releaseVoucher(
+                        PromotionClient.VoucherOrderActionRequest.builder().orderId(task.getOrderId()).build());
+            } else if (COMPENSATION_TASK_REFUND_POINTS.equals(task.getTaskType())) {
+                Order order = orderRepository.findById(task.getOrderId())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Order not found for compensation task: " + task.getOrderId()));
+                var profileResponse = userClient.getProfileByKeycloakId(order.getUserId());
+                if (profileResponse == null || profileResponse.getData() == null) {
+                    throw new RuntimeException("User profile not found for userId " + order.getUserId());
+                }
+                userClient.refundPoints(
+                        profileResponse.getData().getId(),
+                        UserClient.PointRefundRequest.builder().orderId(order.getId()).build());
+            } else {
+                log.warn("Unknown compensation task type {} for task ID {}. Marking as failed.",
+                        task.getTaskType(), task.getId());
+                markCompensationTaskOutcome(task.getId(), COMPENSATION_STATUS_FAILED_PERMANENT,
+                        "Unknown task type: " + task.getTaskType());
+                return;
+            }
+
+            markCompensationTaskOutcome(task.getId(), COMPENSATION_STATUS_COMPLETED, null);
+            log.info("Compensation task ID {} ({} for order {}) completed successfully on retry.", task.getId(),
+                    task.getTaskType(), task.getOrderId());
+        } catch (Exception ex) {
+            int attempts = task.getAttempts() + 1;
+            if (attempts >= COMPENSATION_MAX_ATTEMPTS) {
+                log.error(
+                        "Compensation task ID {} ({} for order {}) failed permanently after {} attempts. Manual intervention required. Last error: {}",
+                        task.getId(), task.getTaskType(), task.getOrderId(), attempts, ex.getMessage());
+                markCompensationTaskAttempt(task.getId(), attempts, COMPENSATION_STATUS_FAILED_PERMANENT,
+                        ex.getMessage());
+            } else {
+                log.warn("Compensation task ID {} ({} for order {}) retry {} failed: {}", task.getId(),
+                        task.getTaskType(), task.getOrderId(), attempts, ex.getMessage());
+                markCompensationTaskAttempt(task.getId(), attempts, COMPENSATION_STATUS_PENDING, ex.getMessage());
+            }
+        }
+    }
+
+    private void markCompensationTaskOutcome(Long taskId, String finalStatus, String error) {
+        transactionTemplate.executeWithoutResult(status -> {
+            compensationTaskRepository.findByIdForUpdate(taskId).ifPresent(t -> {
+                t.setStatus(finalStatus);
+                if (error != null) {
+                    t.setLastError(error);
+                }
+                compensationTaskRepository.save(t);
+            });
+        });
+    }
+
+    private void markCompensationTaskAttempt(Long taskId, int attempts, String status, String error) {
+        transactionTemplate.executeWithoutResult(txStatus -> {
+            compensationTaskRepository.findByIdForUpdate(taskId).ifPresent(t -> {
+                t.setAttempts(attempts);
+                t.setStatus(status);
+                t.setLastError(error);
+                compensationTaskRepository.save(t);
+            });
+        });
     }
 
     private void redeemVoucherForOrder(Long orderId) {
@@ -753,7 +1398,8 @@ public class OrderServiceImpl implements OrderService {
             items.forEach(item -> productIds.add(item.getProductId()));
         }
 
-        // 3. Lấy warrantyPeriod từ product-service (REST via DiscoveryClient & RestTemplate)
+        // 3. Lấy warrantyPeriod từ product-service (REST via DiscoveryClient &
+        // RestTemplate)
         java.util.Map<Long, Integer> warrantyMap = new java.util.HashMap<>();
         java.util.Map<Long, String> imageMap = new java.util.HashMap<>();
         try {
@@ -762,17 +1408,17 @@ public class OrderServiceImpl implements OrderService {
                 String baseUrl = instances.get(0).getUri().toString();
                 String idsParam = productIds.stream().map(String::valueOf).collect(Collectors.joining(","));
                 String url = baseUrl + "/api/internal/products/price-info?ids=" + idsParam;
-                
-                RestTemplate restTemplate = new RestTemplate();
                 var response = restTemplate.getForObject(url, java.util.Map.class);
                 if (response != null && "SUCCESS".equals(response.get("code"))) {
-                    List<java.util.Map<String, Object>> data = (List<java.util.Map<String, Object>>) response.get("data");
+                    @SuppressWarnings("unchecked")
+                    List<java.util.Map<String, Object>> data = (List<java.util.Map<String, Object>>) response
+                            .get("data");
                     if (data != null) {
                         for (var info : data) {
                             Long id = ((Number) info.get("id")).longValue();
                             Integer period = (Integer) info.get("warrantyPeriod");
                             String img = (String) info.get("imageUrl");
-                            
+
                             warrantyMap.put(id, period != null ? period : 12);
                             imageMap.put(id, img);
                         }
@@ -789,7 +1435,8 @@ public class OrderServiceImpl implements OrderService {
 
         for (Order order : deliveredOrders) {
             java.time.LocalDate purchaseDate = order.getCreatedAt().toLocalDate();
-            java.util.List<OrderItem> items = orderItemsMap.getOrDefault(order.getId(), java.util.Collections.emptyList());
+            java.util.List<OrderItem> items = orderItemsMap.getOrDefault(order.getId(),
+                    java.util.Collections.emptyList());
 
             for (OrderItem item : items) {
                 int months = warrantyMap.getOrDefault(item.getProductId(), 12);
@@ -838,6 +1485,11 @@ public class OrderServiceImpl implements OrderService {
                 .finalAmount(order.getFinalAmount())
                 .couponCode(order.getCouponCode())
                 .appliedCampaignId(order.getAppliedCampaignId())
+                .pointsRedeemed(order.getPointsRedeemed())
+                .pointDiscountAmount(order.getPointDiscountAmount())
+                .shippingFee(order.getShippingFee())
+                .shippingDiscountAmount(order.getShippingDiscountAmount())
+                .vatAmount(order.getVatAmount())
                 .trackingCode(order.getTrackingCode())
                 .shippingAddress(order.getShippingAddress())
                 .phoneNumber(order.getPhoneNumber())
@@ -846,6 +1498,24 @@ public class OrderServiceImpl implements OrderService {
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .build();
+    }
+
+    // BUG FIX: handleShippingWebhook/updateDeliveryStatusByAdmin used a binary ternary
+    // ("DELIVERED".equals(targetStatus) ? OrderDeliveredEvent : OrderCancelledEvent) that mislabeled
+    // every SHIPPED transition as OrderCancelledEvent in the outbox/Kafka payload.
+    private String resolveShippingEventType(String targetStatus) {
+        if ("DELIVERED".equals(targetStatus)) return "OrderDeliveredEvent";
+        if ("SHIPPED".equals(targetStatus)) return "OrderShippedEvent";
+        return "OrderCancelledEvent";
+    }
+
+    private void saveOutboxEvent(String aggregateId, String eventType, String payload) {
+        outboxEventRepository.save(OutboxEvent.builder()
+                .aggregateId(aggregateId)
+                .aggregateType("Order")
+                .eventType(eventType)
+                .payload(payload)
+                .build());
     }
 
     private void saveOrderCreatedOutboxEvent(Order order, List<OrderItem> orderItems, String userId, String email) {
@@ -868,14 +1538,8 @@ public class OrderServiceImpl implements OrderService {
                     .items(eventItems)
                     .build();
 
-            OutboxEvent outboxEvent = OutboxEvent.builder()
-                    .aggregateId(String.valueOf(order.getId()))
-                    .aggregateType("Order")
-                    .eventType("OrderCreatedEvent")
-                    .payload(objectMapper.writeValueAsString(createdEvent))
-                    .status("PENDING")
-                    .build();
-            outboxEventRepository.save(outboxEvent);
+            saveOutboxEvent(String.valueOf(order.getId()), "OrderCreatedEvent",
+                    objectMapper.writeValueAsString(createdEvent));
         } catch (Exception e) {
             log.error("Failed to construct and save outbox event for OrderCreatedEvent: {}", e.getMessage());
             throw new RuntimeException("Order creation failed due to outbox error", e);

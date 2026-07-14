@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification, String> {
     List<Notification> findByUserIdOrderByCreatedAtDesc(String userId);
+
+    // Idempotent consumer check: đã xử lý event này cho order này chưa (chống gửi trùng khi Kafka retry)
+    boolean existsByOrderIdAndEventType(Long orderId, String eventType);
 }

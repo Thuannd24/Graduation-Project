@@ -1,4 +1,5 @@
 import { apiClient } from "./apiClient";
+import { resolveProductPrices } from "../utils/pricing";
 
 export interface Product {
   id: string;
@@ -13,6 +14,7 @@ export interface Product {
   gallery?: string[];
   price: number;
   salePrice?: number;
+  listPrice?: number;
   costPrice?: number;
   oldPrice?: number;
   slug?: string;
@@ -62,6 +64,13 @@ export interface Brand {
 
 export function normalizeProduct(product: Partial<Product>): Product {
   const rawImage = String(product.image ?? product.thumbnail ?? product.imageUrl ?? "");
+  const pricing = resolveProductPrices({
+    price: product.price ?? product.listPrice,
+    salePrice: product.salePrice,
+    oldPrice: product.oldPrice,
+    originalPrice: product.originalPrice as number | string | null | undefined,
+  });
+
   return {
     id: String(product.id ?? product.productId ?? ""),
     name: String(product.name ?? "Sản phẩm chưa có tên"),
@@ -73,10 +82,11 @@ export function normalizeProduct(product: Partial<Product>): Product {
     image: rawImage,
     imageUrl: rawImage,
     gallery: Array.isArray(product.gallery) ? product.gallery : Array.isArray(product.images) ? product.images as string[] : [rawImage].filter(Boolean),
-    price: Number(product.price ?? product.salePrice ?? 0),
-    salePrice: Number(product.salePrice ?? product.price ?? 0),
+    listPrice: pricing.listPrice,
+    price: pricing.price,
+    salePrice: pricing.salePrice,
     costPrice: Number(product.costPrice ?? 0),
-    oldPrice: Number(product.oldPrice ?? product.originalPrice ?? product.price ?? 0),
+    oldPrice: pricing.oldPrice,
     slug: product.slug ? String(product.slug) : undefined,
     status: product.status ? String(product.status) : undefined,
     active: product.active !== false,
@@ -84,7 +94,8 @@ export function normalizeProduct(product: Partial<Product>): Product {
     reviews: Number(product.reviews ?? product.reviewCount ?? 0),
     specs: Array.isArray(product.specs) ? product.specs : [],
     description: String(product.description ?? ""),
-    variants: product.variants || []
+    variants: product.variants || [],
+    attributes: product.attributes || {}
   };
 }
 
@@ -283,6 +294,11 @@ export const productApi = {
     return await apiClient.postAuth("/products/reviews", review);
   },
 
+  async getMyReviews(): Promise<any[]> {
+    const data = await apiClient.get<any[]>("/products/reviews/me", { requireAuth: true });
+    return Array.isArray(data) ? data : [];
+  },
+
   async getReviews(productId: string | number): Promise<any[]> {
     const data = await apiClient.get<any[]>(`/public/products/${productId}/reviews`);
     return Array.isArray(data) ? data : [];
@@ -290,6 +306,12 @@ export const productApi = {
 
   // Review Image Upload
   async uploadReviewImage(file: File): Promise<string> {
-    return this.uploadProductImage(file, "reviews");
+    const formData = new FormData();
+    formData.append("file", file);
+    const result = await apiClient.uploadAuth<{ url: string }>("/products/reviews/images/upload", formData);
+    if (!result?.url) {
+      throw new Error("Server không trả về URL ảnh.");
+    }
+    return result.url;
   }
 };

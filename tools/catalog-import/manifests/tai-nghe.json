@@ -1,0 +1,1429 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:04:40.725Z",
+  "note": "Scraped 10 sản phẩm — danh mục \"Âm thanh, Mic thu âm\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "phone_iphone"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tablet"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "laptop_mac"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "speaker"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "photo_camera"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "watch"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "shield"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "bolt"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "battery_charging_full"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "cable"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "huawei",
+      "name": "Huawei",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/HUAWEI-240x50.png",
+      "description": "Huawei — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe"
+      ]
+    },
+    {
+      "slug": "sony",
+      "name": "Sony",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/SONY-240x50.png",
+      "description": "Sony — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe"
+      ]
+    },
+    {
+      "slug": "oppo",
+      "name": "OPPO",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Oppo-240x50.png",
+      "description": "OPPO — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "tai-nghe-khong-day-huawei-freeclip-2",
+      "name": "Tai nghe không dây HUAWEI FreeClip 2",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "huawei",
+      "description": "Đặc điểm nổi bật Tai nghe không dây Huawei Freeclip 2 với thiết kế dạng mở đột phá cho trải nghiệm sử dụng thoải mái cùng trọng lượng nhẹ, chỉ 5.1 g mỗi bên. Bên trong tai nghe Huawei là màng loa kép nam châm với kích thước 10.8 mm cho âm thanh chất lượng. Tai nghe cũng cho thời lượng sử dụng bền bỉ với dung lượng 60 mAh mỗi bên cho thời gian nghe đến 9 giờ ấn tượng, khi kèm dock sạc thời gian có thể đến 38 tiếng. Huawei Freeclip 2 – Thiết kế độc đáo, âm thanh tối ưu Tai nghe Huawei Freeclip 2 t",
+      "price": 4490000,
+      "salePrice": 3990000,
+      "costPrice": 3032400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/main-1.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-0-2.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-2-4.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-11-13.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-12-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-13-15.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "Tai nghe: 25.4 mm×26.7 mm×18.8 mm Hộp sạc: 50.0 mm×49.6 mm×25.0 mm",
+        "weight": "Mỗi tai: 5.1 g Hộp sạc: 37.8 g",
+        "connectivity": "Type C",
+        "battery": "9 giờ sử dụng mỗi lần sạc đầy 38 giờ sử dụng với hộp sạc"
+      },
+      "specsRaw": {
+        "Kích thước": "Tai nghe: 25.4 mm×26.7 mm×18.8 mm Hộp sạc: 50.0 mm×49.6 mm×25.0 mm",
+        "Trọng lượng": "Mỗi tai: 5.1 g Hộp sạc: 37.8 g",
+        "Micro": "Có",
+        "Cổng kết nối": "Type C",
+        "Thời lượng sử dụng Pin": "Nghe nhạc: Tai nghe: 9 tiếng Tai nghe + hộp sạc: 38 tiếngGọi:Tai nghe: 6 tiếngTai nghe + hộp sạc: 25 tiếng",
+        "Phương thức điều khiển": "Cảm ứng chạm",
+        "Hãng sản xuất": "Huawei",
+        "Tiêu chí": "Huawei Freeclip 2",
+        "Màu sắc": "Xanh dương, Trắng, Đen",
+        "Thiết kế": "Silicone lỏng thân thiện da Chất liệu cấu trúc C-Bridge",
+        "NPU": "Bộ xử lý AI NPU",
+        "Màng loa": "Driver màng kép 10.8 mm mạnh mẽ",
+        "Đàm thoại": "Âm lượng thích ứng Cải thiện giọng nói thích ứng Gọi thoại rõ ràng",
+        "Pin": "9 giờ sử dụng mỗi lần sạc đầy 38 giờ sử dụng với hộp sạc"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "GX98WB-HONG-0",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/main-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-TIM-1",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-0-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-TRANG-2",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-1-3.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-DEN-3",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-2-4.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-DUONG-4",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-3-5.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 3990000
+        }
+      ]
+    },
+    {
+      "slug": "loa-thap-samsung-mx-t40",
+      "name": "Loa tháp Samsung MX-T40",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Loa tháp Samsung MX-T40/XV – Khuấy động mọi bữa tiệc Trên thị trường hiện có rất nhiều sản phẩm âm thanh với kết cấu kỳ dị, nhưng dù gì, thì âm thanh vẫn là chất lượng cần quan tâm hàng đầu. Nếu bạn cần tìm một chiếc loa sở hữu đầy đủ các yếu tố độc, lạ, hay thì hãy chọn loa Samsung MX-T40. Cấu trúc tháp, dễ dàng kết nối bluetooth Loa sở hữu kết cấu đặc biệt, khiến người ta liên tưởng đến các công trình kiến trúc vĩ đại như tháp Eiffel, Tháp Burj Khalifa,... Vì thế không chỉ để ",
+      "price": 2840000,
+      "salePrice": 1790000,
+      "costPrice": 1360400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-2-19.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-3-20.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-4-21.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-5-22.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-6-23.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-7-24.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "6.8kg",
+        "connectivity": "Cổng USB"
+      },
+      "specsRaw": {
+        "Trọng lượng": "6.8kg",
+        "Công nghệ âm thanh": "Bass Booster, Âm thanh đa hướng",
+        "Công suất": "300W",
+        "Cổng kết nối": "Cổng USB",
+        "Số loa kết nối cùng lúc": "10 loa (MX-T70, T50 và T40)",
+        "Tính năng khác": "Đèn led DJHát Karaoke khi kết nối với Mic Bluetooth đầu USB",
+        "Chống nước": "Kháng nước nhẹ",
+        "Hãng sản xuất": "Samsung Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "2XHL75-DEN-0",
+          "price": 2840000,
+          "costPrice": 1360400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1790000
+        }
+      ]
+    },
+    {
+      "slug": "loa-karaoke-xach-tay-acnos-s30",
+      "name": "Loa Karaoke xách tay Acnos S30",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Loa karaoke xách tay Acnos S30 sở hữu công suất RMS 30W cùng 2 loa FULL 7.5 cm, mang đến âm thanh mạnh mẽ trong thiết kế cổ điển với khối lượng chỉ 3 kg. Thiết bị tích hợp công nghệ ngăn hú di tần cao cấp và Boost Bass bùng nổ. Sản phẩm còn hỗ trợ thêm nhiều cổng kết nối tân tiến như MP3 OTG Live hay AUX In. Loa karaoke xách tay Acnos S30 - Bùng nổ âm thanh trong thiết kế nhỏ gọn Loa Acnos S30 nhanh chóng thu hút sự chú ý của người yêu âm nhạc ngay từ khi ra mắt nhờ mang lại trả",
+      "price": 2180000,
+      "salePrice": 1990000,
+      "costPrice": 1512400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/main-25.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-0-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-1-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-2-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-3-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-4-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-5-31.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-6-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-7-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-8-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-9-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-10-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-11-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-12-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-13-39.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "3 kg",
+        "dimensions": "310 x 246 x 205 mm",
+        "connectivity": "MP3 OTG LIVE (jack USB type A), AUX (IN, jack 3.5mm)"
+      },
+      "specsRaw": {
+        "Trọng lượng": "3 kg",
+        "Kích thước": "310 x 246 x 205 mm",
+        "Công nghệ âm thanh": "Chức năng Boost Bass Hiệu ứng Echo-ReverbNâng tiếng ENHANCER",
+        "Công suất": "RMS: 30W PMPO: 120W",
+        "Cổng kết nối": "MP3 OTG LIVE (jack USB type A), AUX (IN, jack 3.5mm)",
+        "Cấu tạo": "2-loa FULL 7.5CM (3\")",
+        "Hãng sản xuất": "Acnos"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "FT87SY-DEN-0",
+          "price": 2180000,
+          "costPrice": 1512400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/main-25.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1990000
+        },
+        {
+          "sku": "FT87SY-NAU-1",
+          "price": 2180000,
+          "costPrice": 1512400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-0-26.png",
+          "active": true,
+          "options": {
+            "color": "Nâu"
+          },
+          "salePrice": 1990000
+        },
+        {
+          "sku": "FT87SY-XAM-2",
+          "price": 2180000,
+          "costPrice": 1512400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-1-27.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 1990000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-khong-day-sony-clip-wf-lc900",
+      "name": "Tai nghe không dây thể thao Sony Clip WF-LC900",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "sony",
+      "description": "Đặc điểm nổi bật Tai nghe không dây thể thao Sony Clip WF-LC900 mang đến trải nghiệm nghe mở với màng loa 10 mm cùng công nghệ DSEE giúp khôi phục âm thanh chân thực. Sản phẩm được trang bị chuẩn kháng nước IPX4 cùng cảm biến truyền âm qua xương, hỗ trợ người dùng đàm thoại dễ dàng. Mức pin 37 giờ phục vụ tốt các nhu cầu dùng xuyên suốt. Tai nghe không dây thể thao Sony Clip WF-LC900 - Trải nghiệm nghe trọn vẹn Mẫu tai nghe Sony này mang đến sự linh hoạt nhờ thiết kế kẹp tai thời trang và các ch",
+      "price": 4990000,
+      "salePrice": 4590000,
+      "costPrice": 3488400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/main-40.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-0-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-1-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-2-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-3-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-4-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-5-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-6-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-7-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-8-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-9-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-10-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-11-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-12-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-13-54.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "50.4x50.4x32.6mm",
+        "weight": "42g",
+        "connectivity": "USB"
+      },
+      "specsRaw": {
+        "Chống nước": "IPX4",
+        "Kích thước": "50.4x50.4x32.6mm",
+        "Trọng lượng": "42g",
+        "Công nghệ âm thanh": "DSEE",
+        "Cổng kết nối": "USB",
+        "Thời lượng sử dụng Pin": "Phát nhạc liên tục: 9 giờ Giao tiếp liên tục: 4 giờ Chế độ chờ: 15 giờHộp sạc: 37 giờ",
+        "Phương thức điều khiển": "Cảm ứng chạm",
+        "Hãng sản xuất": "Sony"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "MRKVGV-DEN-0",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/main-40.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 4590000
+        },
+        {
+          "sku": "MRKVGV-HMINT-1",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-0-41.png",
+          "active": true,
+          "options": {
+            "color": "Xanh mint"
+          },
+          "salePrice": 4590000
+        },
+        {
+          "sku": "MRKVGV-TIM-2",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-1-42.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 4590000
+        },
+        {
+          "sku": "MRKVGV-KEM-3",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-2-43.png",
+          "active": true,
+          "options": {
+            "color": "Kem"
+          },
+          "salePrice": 4590000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-tws-open-ear-oppo-enco-clip-2",
+      "name": "Tai nghe Bluetooth True Wireless Open Ear OPPO Enco Clip2",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật Tai nghe TWS Open Ear OPPO Enco Clip 2 gây ấn tượng mạnh nhờ hệ thống 2 driver dynamic 11mm và 9mm giúp tái tạo chất âm sống động trong mọi dải tần. Tai nghe tích hợp chuẩn Bluetooth 6.1 hiện đại nhằm duy trì đường truyền âm thanh ổn định. Thiết bị đạt chuẩn IP55, không lo hư hỏng khi người dùng vận động ngoài trời. Tai nghe TWS Open Ear OPPO Enco Clip 2 - Thiết kế open-ear độc đáo Tai nghe OPPO Enco Clip 2 mang đến kiểu đeo dạng mở mới lạ, giảm cảm giác khó chịu khi sử dụng lâu",
+      "price": 4990000,
+      "salePrice": 4490000,
+      "costPrice": 3412400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/main-55.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-0-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-1-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-2-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-3-59.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-4-60.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-5-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-6-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-7-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-8-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-9-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-10-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-11-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-12-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-13-69.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "Tai nghe: 27.6 x 25.5 x 17.6 mm Hộp sạc: 61.3 x 55.3 x 26.3 mm",
+        "weight": "Tai nghe: 5.2 ± 0.3g Hộp sạc: 46.3 ± 2g",
+        "connectivity": "Bluetooth 6.1"
+      },
+      "specsRaw": {
+        "Kích thước": "Tai nghe: 27.6 x 25.5 x 17.6 mm Hộp sạc: 61.3 x 55.3 x 26.3 mm",
+        "Trọng lượng": "Tai nghe: 5.2 ± 0.3g Hộp sạc: 46.3 ± 2g",
+        "Micro": "Có",
+        "Thời lượng sử dụng Pin": "Tai nghe: 9.5 giờ Hộp sạc: 40 giờ (Nghe nhạc: 50% âm lượng, tắt AAC+ANC)",
+        "Phương thức điều khiển": "Cảm ứng chạm",
+        "Tính năng khác": "Kháng nước, bụi chuẩn: IP55",
+        "Hãng sản xuất": "OPPO",
+        "Tiêu chí": "OPPO Enco Clip 2",
+        "Thiết kế": "Unibody Ear Cuff, NCVM",
+        "Driver": "Kép: 11mm + 9mm dynamic",
+        "Kết nối": "Bluetooth 6.1",
+        "Codec hỗ trợ": "LHDC 5.0, AAC, SBC",
+        "Khử ồn khi gọi thoại": "Crystal-Clear Bone Calls",
+        "Pin (kèm hộp sạc)": "40 giờ (Chế độ AAC)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "RMKT7K-GOLD-0",
+          "price": 4990000,
+          "costPrice": 3412400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/main-55.png",
+          "active": true,
+          "options": {
+            "color": "Gold"
+          },
+          "salePrice": 4490000
+        },
+        {
+          "sku": "RMKT7K-XAM-1",
+          "price": 4990000,
+          "costPrice": 3412400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-0-56.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 4490000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-samsung-galaxy-buds-4-pro",
+      "name": "Tai nghe Samsung Galaxy Buds 4 Pro",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Samsung Galaxy Buds 4 Pro là tai nghe chống ồn ANC cao cấp với nhiều nâng cấp đáng giá, mang đến trải nghiệm âm thanh vượt trội trong phân khúc. Sản phẩm nổi bật với công nghệ âm thanh Hi-Fi 24-bit sống động, hệ thống loa kép Woofer và Tweeter lớn hơn 20% cho âm thanh chi tiết, rõ nét hơn thế hệ trước. Bên cạnh đó, Galaxy Buds 4 Pro được trang bị Bluetooth 6.1 giúp kết nối nhanh và ổn định, thiết kế mới tối ưu thao tác cùng chuẩn kháng nước, bụi IP57 bền bỉ. Khả năng đàm thoại t",
+      "price": 6790000,
+      "salePrice": 6190000,
+      "costPrice": 4704400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/main-70.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-0-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-1-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-2-73.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-3-74.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-4-75.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-5-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-6-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-7-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-8-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-9-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-10-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-11-82.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-12-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-13-84.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "tai nghe: 18.1x19.6x30.9mm hộp sạc: 51x51x28.3mm",
+        "weight": "tai nghe: 5.1g hộp sạc: 44.3g"
+      },
+      "specsRaw": {
+        "Kích thước": "tai nghe: 18.1x19.6x30.9mm hộp sạc: 51x51x28.3mm",
+        "Trọng lượng": "tai nghe: 5.1g hộp sạc: 44.3g",
+        "Tính năng khác": "Bộ khuếch đại kép",
+        "Hãng sản xuất": "Samsung Chính hãng",
+        "Thông số": "Tai nghe Samsung Galaxy Buds 4 Pro"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "R89RE4-DEN-0",
+          "price": 6790000,
+          "costPrice": 4704400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/main-70.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 6190000
+        },
+        {
+          "sku": "R89RE4-TRANG-1",
+          "price": 6790000,
+          "costPrice": 4704400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-0-71.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 6190000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-khong-day-sony-wf-1000xm6",
+      "name": "Tai nghe Sony không dây chống ồn WF-1000XM6",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "sony",
+      "description": "Đặc điểm nổi bật Cùng tìm hiểu Sony WF-1000XM6 có gì mới, được nâng cấp gì về khả năng chống ồn so với thế hệ tiền nhiệm, chất lượng âm thanh ra sao, ra mắt khi nào và giá bao nhiêu. Là phiên bản kế nhiệm cho dòng tai nghe True Wireless đầu bảng WF-1000XM5, Sony WF-1000XM6 mang trên mình trọng trách tiếp tục khẳng định vị thế dẫn đầu của Sony trong phân khúc tai nghe chống ồn cao cấp. Ở thế hệ mới này, Sony không chỉ thay đổi về mặt ngoại hình mà còn tập trung sâu vào việc nâng cấp thuật toán xử",
+      "price": 7990000,
+      "salePrice": 7490000,
+      "costPrice": 5692400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/main-85.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-0-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-1-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-2-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-3-89.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-4-90.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-5-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-6-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-7-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-8-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-9-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-10-96.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-11-97.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-12-98.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-13-99.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "Tai nghe: 6.5gHộp sạc: 47g",
+        "connectivity": "Bluetooth 5.3 (LE Audio, Auracast, Multipoint)"
+      },
+      "specsRaw": {
+        "Trọng lượng": "Tai nghe: 6.5gHộp sạc: 47g",
+        "Micro": "Có",
+        "Thời lượng sử dụng Pin": "Tai nghe: 5 giờHộp sạc: 5.5 giờ (Bật ANC)Tai nghe: 8 giờHộp sạc: 12 giờ (Tắt ANC)",
+        "Tính năng khác": "Kháng nước: IPX4Kết nối đa điểmDSEE EXTREME",
+        "Hãng sản xuất": "Sony",
+        "Loại tai nghe": "In-ear (Nhét tai) chống ồn True Wireless",
+        "Màng loa": "Dynamic 8.4 mm",
+        "Micro thu âm": "8 micro (4 micro mỗi bên) + Cảm biến truyền âm qua xương",
+        "Bộ xử lý âm thanh": "Bộ xử lý tích hợp V2 (Giải mã 32-bit), HD QN3",
+        "Công nghệ âm thanh": "Hi-Res Audio (LDAC), DSEE Extreme, 360 Reality Audio, Snapdragon Sound",
+        "Kết nối": "Bluetooth 5.3 (LE Audio, Auracast, Multipoint)",
+        "Thời lượng pin (Tai nghe)": "Tối đa 6 giờ (Bật ANC) / 8 giờ (Tắt ANC)",
+        "Thời lượng pin (Kèm hộp)": "Tối đa 24 giờ",
+        "Chuẩn kháng nước": "IPX4",
+        "Ứng dụng quản lý": "Sony Sound Connect"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "NXJPB2-BAC-0",
+          "price": 7990000,
+          "costPrice": 5692400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/main-85.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 7490000
+        },
+        {
+          "sku": "NXJPB2-DEN-1",
+          "price": 7990000,
+          "costPrice": 5692400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-0-86.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 7490000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9s",
+      "name": "OPPO Find X9s 12GB 256GB",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9s 12GB 256GB OPPO Find X9s là mẫu smartphone cận cao cấp thuộc dòng Find X9 series, được ra mắt tại Việt Nam vào tháng 05/2026. Nổi bật với thiết kế mỏng nhẹ 7.99 mm, thời lượng pin siêu khủng 7025mAh và khả năng nhiếp ảnh chuẩn Hasselblad với mức giá dễ tiếp cận hơn so với dòng Ultra. Tại Việt Nam, máy có giá bán khởi điểm 24.990.000đ cho phiên bản 12GB RAM và 256GB bộ nhớ trong. Điện thoại OPPO Find X9s giá bao nhiêu? Tại thị trường Việt Nam, giá OPPO Find X9s ",
+      "price": 24990000,
+      "salePrice": null,
+      "costPrice": 18992400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/main-100.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-0-101.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-1-102.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-2-103.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-3-104.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-4-105.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-5-106.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-6-107.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-7-108.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-8-109.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-9-110.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-10-111.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-11-112.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-12-113.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-13-114.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16.0",
+        "cpu": "MediaTek Dimensity 9500s",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "ARM Immortalis G925 MC12",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "camera_front": "32 MP, f/2.4",
+        "battery": "7025 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "202g",
+        "refresh_rate": "120Hz",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16.0",
+        "Chipset": "MediaTek Dimensity 9500s",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "ARM Immortalis G925 MC12",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 1800 nitsTần số lấy mẫu cảm ứng tối đa 240Hz1.07 tỷ màu460 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "Camera trước": "32 MP, f/2.4",
+        "Pin": "7025 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Sản phẩm": "Giá bán tại Trung Quốc",
+        "OPPO Find X9s 12GB/256GB": "5.699 CNY",
+        "OPPO Find X9s 12GB/512GB": "5.799 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9s",
+        "Thời gian ra mắt": "05/2026",
+        "Màu sắc": "Xám (Midnight Grey), Tím Nhạt (Lavender Sky) và Cam Nhạt (Sunset Orange)",
+        "Thiết kế": "Flagship nhỏ gọn, thân máy cực kỳ mỏng nhẹ (7.99mm), cảm giác cầm nắm gọn gàng",
+        "Kích thước (Cao x Rộng x Dài)": "156.98mm × 73.93mm × 7.99mm",
+        "Trọng lượng": "202g",
+        "Màn hình": "6.59 inch AMOLED, FHD+ (2760×1256 pixels)",
+        "Tần số quét": "120Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kính bảo vệ": "Gorilla Glass 7i",
+        "Hiệu năng": "MediaTek Dimensity 9500s",
+        "RAM & ROM": "12GB+256GB12GB+512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "4K 60fps, Dolby Vision",
+        "Pin & sạc": "7025mAh, sạc nhanh có dây 80W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "2,982,729",
+        "Điểm Geekbench 6": "2,571 điểm đơn nhân7,881 điểm đa nhân",
+        "Yếu tố trải nghiệm": "Điểm đánh giá",
+        "Thời lượng pin (7025mAh)": "9.5 / 10",
+        "Tốc độ sạc nhanh (80W)": "8.5 / 10",
+        "Hiệu năng & Chơi game": "9.0 / 10",
+        "Nút bấm vật lý Snap Key": "9.0 / 10",
+        "Màn hình hiển thị": "8.5 / 10",
+        "Khả năng chụp ảnh": "8.0 / 10",
+        "Độ bền & Cầm nắm": "9.0 / 10",
+        "Thông số": "OPPO Find X9s",
+        "Vi xử lý": "Dimensity 9500s",
+        "RAM / ROM": "12GB/256GB 12GB/512GB",
+        "Quay video": "4K/60fps Dolby Vision",
+        "Pin và Sạc": "7025mAh Sạc có dây 80W",
+        "Vân tay": "Siêu âm trong màn hình",
+        "Tiêu chí": "OPPO Find X9s",
+        "Viền màn hình": "1.15mm (Siêu mỏng công nghệ LIPO)",
+        "Vi xử lý (Chip)": "Dimensity 9500s",
+        "Bảo mật": "Vân tay Siêu âm dưới màn hình"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JAXWEX-XAM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/main-100.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-NHAT-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-0-101.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam nhạt",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-TIM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-1-102.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9-ultra",
+      "name": "OPPO Find X9 Ultra 12GB 512GB",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9 Ultra 12GB 512GB OPPO Find X9 Ultra là dòng siêu phẩm flagship cao cấp nhất của OPPO ra mắt vào tháng 5/2026. Nổi bật với điểm nhấn là hệ thống camera Hasselblad cảm biến chính 200 MP và camera tele zoom quang học 10x. Đi kèm với chip Snapdragon 8 Elite Gen 5, màn hình 2K+ 144Hz, và viên pin dung lượng lớn 7050 mAh hỗ trợ sạc nhanh 100W. Đây cũng là lần đầu tiên phiên bản Ultra được mở bán chính hãng tại Việt Nam với mức giá khởi điểm 49.990.000đ cho phiên bản 1",
+      "price": 49990000,
+      "salePrice": 48990000,
+      "costPrice": 37232400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/main-115.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-0-116.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-1-117.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-2-118.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-3-119.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-4-120.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-5-121.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-6-122.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-7-123.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-8-124.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-9-125.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-10-126.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-11-127.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-12-128.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-13-129.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16 Android 16",
+        "cpu": "Snapdragon 8 Elite Gen 5",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno 840",
+        "screen": "6.82 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "camera_front": "50 MP, f/2.4",
+        "battery": "7050 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "refresh_rate": "1–120Hz, tối đa 144Hz",
+        "weight": "235g (Cam) – 236g (Nâu)",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16 Android 16",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 840",
+        "Kích thước màn hình": "6.82 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "3168 x 1440 pixel",
+        "Tính năng màn hình": "Độ sáng tối đa 3600 nitsTần số lấy mẫu cảm ứng tối đa 300Hz1.07 tỷ màu510 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "Camera trước": "50 MP, f/2.4",
+        "Pin": "7050 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Phiên bản": "Giá bán tại Trung Quốc",
+        "OPPO Find X9 Ultra 12GB/512GB": "7.499 CNY",
+        "OPPO Find X9 Ultra 12GB/256GB": "6.999 CNY",
+        "OPPO Find X9 Ultra 16GB/512GB": "7.999 CNY",
+        "OPPO Find X9 Ultra 16GB/1TB": "8.499 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9 Ultra",
+        "Thời gian ra mắt": "05/2026",
+        "Màn hình": "AMOLED 6.82 inch, Quad HD+ (2K+), độ phân giải 3168×1440 pixels",
+        "Tần số quét": "1–120Hz, tối đa 144Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kích thước (Cao x Rộng x Dài)": "163.16mm × 76.97mm × 8.65mm (Cam)163.16mm × 76.97mm × 9.10mm (Nâu)",
+        "Trọng lượng": "235g (Cam) – 236g (Nâu)",
+        "Kính bảo vệ": "Gorilla Glass Victus 2",
+        "Hiệu năng": "Snapdragon 8 Elite Gen 5",
+        "RAM & ROM": "12GB + 512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "8K 30fps, 4K 120fps, Dolby Vision",
+        "Pin & sạc": "7050mAh, sạc nhanh có dây 100W, sạc không dây 50W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "3808128",
+        "Điểm Geekbench 6": "2950 điểm đơn nhân9507 điểm đa nhân",
+        "Tiêu chí đánh giá": "Điểm đánh giá",
+        "Cảm giác cầm nắm": "8.5 / 10",
+        "Màn hình hiển thị": "9.5 / 10",
+        "Hiệu năng & Chiến game": "9.5 / 10",
+        "Chụp ảnh & Quay phim": "10 / 10",
+        "Thời lượng pin & Sạc": "9.5 / 10",
+        "Tính năng AI đi kèm": "9.0 / 10",
+        "Thông số": "OPPO Find X9 Ultra (2026)",
+        "Vi xử lý": "Snapdragon 8 Elite Gen 5",
+        "Bộ nhớ lưu trữ": "12GB LPDDR5X / 512GB UFS 4.1",
+        "Pin & Sạc": "7050 mAh (Silicon-Carbon)Sạc nhanh: 100W có dây / 50W không dây",
+        "Kháng nước": "IP66 / IP68 / IP69",
+        "Tiêu chí": "OPPO Find X9 Ultra chính hãng",
+        "Bảo hành": "Bảo hành chính hãng 24 tháng + Bảo hiểm rơi vỡ màn hình.",
+        "Thông báo": "Không bị chậm, thông báo tức thời, chạy cực kỳ ổn định.",
+        "Ứng dụng rác": "Máy sạch hoàn toàn, cài sẵn đầy đủ dịch vụ Google.",
+        "Định vị & Bản đồ": "Định vị chuẩn xác 100% ngay khi mở ứng dụng."
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "E2UBAN-CAM-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/main-115.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        },
+        {
+          "sku": "E2UBAN-NAU-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-0-116.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-17t",
+      "name": "Xiaomi 17T 5G 12GB 512GB",
+      "categorySlug": "tai-nghe",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17T 5G 12GB 512GB Xiaomi 17T là mẫu smartphone cận cao cấp mới nhất năm 2026, được ví như \"Flagship Killer\" thực thụ nhờ cấu hình đỉnh cao thách thức phân khúc flagship. Thiết bị sở hữu chip Dimensity 8500-Ultra mạnh mẽ kết hợp cùng giao diện HyperOS 3 (Android 16) mượt mà, tích hợp đảo thông minh Xiaomi HyperIsland độc đáo. Trải nghiệm thực tế cầm trên tay cực kỳ đầm nhờ khung viền nguyên khối. Máy sở hữu màn hình CrystalRes AMOLED 120Hz hỗ trợ Dolby Vision rực rỡ, v",
+      "price": 20990000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-130.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-131.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-1-132.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-2-133.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-3-134.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-4-135.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-5-136.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-6-137.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-7-138.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-8-139.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-9-140.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-10-141.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-11-142.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-12-143.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-13-144.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3",
+        "cpu": "MediaTek Dimensity 8500-Ultra",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Mali-G720 MC8",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "camera_front": "32 MP, f/2.2",
+        "battery": "6500 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "charging": "90W có dây"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3",
+        "Chipset": "MediaTek Dimensity 8500-Ultra",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Mali-G720 MC8",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2756 x 1268 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nits460 PPI100% DCI-P312bit, 68 tỉ màuDolby VisionHDR10+",
+        "Camera sau": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "Camera trước": "32 MP, f/2.2",
+        "Pin": "6500 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 17T 5G 12GB 512GB": "18.990.000đ",
+        "Tiêu chí": "Thông số kỹ thuật",
+        "Vi xử lý (Chipset)": "MediaTek Dimensity 8500 Ultra, GPU Mail-G720 MC8 - Cấu trúc tối ưu hiệu năng nặng",
+        "Bộ nhớ": "RAM 12GB LPDDR5X kết hợp ROM 512GB UFS 4.1",
+        "Màn hình": "Kích thước 6.59 inch AMOLED 1.5K, tần số quét 120Hz, độ sáng tối đa 3500 nits, HDR10+, kính cường lực Gorilla Glass 7i",
+        "Pin & sạc": "Dung lượng pin 6500 mAh, công nghệ sạc nhanh siêu tốc 67W",
+        "Hệ điều hành & AI": "Andriod 16, giao diện HyperOS 3. Tích hợp AI. Gemini9",
+        "Kích thước": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "Kết nối khác": "Kháng nước bụi iP68 - Wifi-6E, NFC, mạng 5G",
+        "Vi xử lý": "MediaTek Dimensity 8500-Ultra",
+        "Tốc độ sạc nhanh": "Sạc nhanh có dây UFS/Turbo Charge 67W (đầy pin khoảng 58 phút)",
+        "Cảm biến camera": "Cảm biến chuẩn Leica Light Fusion 800 (quay phim 4K)",
+        "Đặc điểm": "Xiaomi 15",
+        "Phân khúc": "Flagship nhỏ gọn",
+        "Sạc nhanh": "90W có dây",
+        "Camera": "Leica 50MP + 50MP + 50MP"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "CBNSF2-DEN-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-130.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        },
+        {
+          "sku": "CBNSF2-TIM-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-131.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    }
+  ]
+}

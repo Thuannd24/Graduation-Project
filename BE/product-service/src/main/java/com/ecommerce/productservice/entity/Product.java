@@ -33,6 +33,11 @@ public class Product {
     @Column(columnDefinition = "LONGTEXT")
     private String attributes;
 
+    // Bản chụp nguyên văn toàn bộ thông số từ nguồn crawl (kể cả label không map được vào Attribute chuẩn),
+    // dùng làm nguồn dự phòng để backfill attribute mới sau này mà không cần crawl lại.
+    @Column(name = "specs_raw", columnDefinition = "LONGTEXT")
+    private String specsRaw;
+
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal price;
 

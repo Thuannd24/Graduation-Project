@@ -9,13 +9,29 @@ export const orderApi = {
     return apiClient.get<unknown[]>("/orders", { requireAuth: true });
   },
 
-  createOrder(payload: Record<string, unknown>): Promise<any> {
-    const idempotencyKey = Math.random().toString(36).substring(2, 15);
+  previewCheckout(payload: { couponCode?: string; pointsToRedeem?: number }): Promise<{
+    subtotal: number;
+    productDiscount: number;
+    shippingDiscount: number;
+    pointDiscount: number;
+    shippingFee: number;
+    vatAmount: number;
+    totalDiscount: number;
+    finalAmount: number;
+    couponCode?: string;
+    voucherApplied?: boolean;
+    voucherMessage?: string;
+  }> {
+    return apiClient.postAuth("/orders/checkout/preview", payload);
+  },
+
+  createOrder(payload: Record<string, unknown>, idempotencyKey?: string): Promise<any> {
+    const key = idempotencyKey || crypto.randomUUID();
     return apiClient.request<any>("/orders/checkout", {
       method: "POST",
       requireAuth: true,
       headers: {
-        "Idempotency-Key": idempotencyKey
+        "Idempotency-Key": key
       },
       body: JSON.stringify(payload)
     });
@@ -40,10 +56,6 @@ export const orderApi = {
 
   cancelOrder(orderId: string | number): Promise<unknown> {
     return apiClient.postAuth(`/orders/${orderId}/cancel`);
-  },
-
-  updateShippingStatus(trackingCode: string, status: string): Promise<unknown> {
-    return apiClient.post(`/orders/public/webhook/shipping`, { trackingCode, status });
   },
 
   updateDeliveryStatus(orderId: string | number, status: string): Promise<unknown> {

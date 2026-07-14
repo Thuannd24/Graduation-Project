@@ -1,16 +1,26 @@
 package com.ecommerce.promotionservice.service.impl;
 
 import com.ecommerce.promotionservice.dto.CampaignDto;
+import com.ecommerce.promotionservice.dto.CampaignStatsDto;
+import com.ecommerce.promotionservice.dto.IssuedVoucherDto;
+import com.ecommerce.promotionservice.dto.PromotionDashboardDto;
+import com.ecommerce.promotionservice.dto.PublicCampaignDto;
 import com.ecommerce.promotionservice.dto.ValidationResultDto;
 import com.ecommerce.promotionservice.dto.WorkflowGraphDto;
 import com.ecommerce.promotionservice.entity.Campaign;
+import com.ecommerce.promotionservice.entity.VoucherStatus;
+import com.ecommerce.promotionservice.entity.VoucherType;
 import com.ecommerce.promotionservice.repository.CampaignRepository;
+import com.ecommerce.promotionservice.repository.IssuedVoucherRepository;
 import com.ecommerce.promotionservice.service.BpmnCompilerService;
 import com.ecommerce.promotionservice.service.CampaignService;
 import com.ecommerce.promotionservice.service.CampaignTriggerService;
 import com.ecommerce.promotionservice.service.CampaignVariableEnricher;
+import com.ecommerce.promotionservice.service.VoucherMaintenanceService;
 import com.ecommerce.promotionservice.service.WorkflowTriggerResolver;
 import com.ecommerce.promotionservice.service.WorkflowValidatorService;
+import com.ecommerce.promotionservice.service.support.WorkflowBudgetHelper;
+import com.ecommerce.promotionservice.service.support.BpmnKeyGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +30,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +43,7 @@ import java.util.stream.Collectors;
 public class CampaignServiceImpl implements CampaignService {
 
     private final CampaignRepository  campaignRepository;
+    private final IssuedVoucherRepository voucherRepository;
     private final RuntimeService       runtimeService;
     private final RepositoryService    repositoryService;
     private final HistoryService       historyService;
@@ -41,6 +53,7 @@ public class CampaignServiceImpl implements CampaignService {
     private final CampaignTriggerService campaignTriggerService;
     private final CampaignVariableEnricher variableEnricher;
     private final WorkflowTriggerResolver triggerResolver;
+    private final VoucherMaintenanceService voucherMaintenanceService;
 
     // ── Validate ──────────────────────────────────────────────────────────────
     @Override
@@ -58,9 +71,11 @@ public class CampaignServiceImpl implements CampaignService {
         if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Tên chiến dịch không được để trống.");
         }
-        if (dto.getTotalBudget() == null || dto.getTotalBudget().compareTo(java.math.BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Tổng ngân sách chiến dịch phải lớn hơn 0.");
-        }
+        WorkflowGraphDto workflowGraph = parseWorkflowGraph(dto.getWorkflowJson());
+        BigDecimal normalizedBudget = normalizeBudget(
+                WorkflowBudgetHelper.resolveTotalBudget(workflowGraph, dto.getTotalBudget()),
+                workflowGraph);
+        dto.setTotalBudget(normalizedBudget);
         if (dto.getStartDate() == null) {
             throw new IllegalArgumentException("Ngày bắt đầu chiến dịch không được để trống.");
         }
@@ -70,45 +85,60 @@ public class CampaignServiceImpl implements CampaignService {
         if (dto.getEndDate().isBefore(dto.getStartDate())) {
             throw new IllegalArgumentException("Ngày kết thúc phải sau ngày bắt đầu.");
         }
-        if (dto.getBpmnProcessDefinitionKey() == null || dto.getBpmnProcessDefinitionKey().trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã quy trình Camunda (BPMN Key) không được để trống.");
-        }
-        if (campaignRepository.existsByBpmnProcessDefinitionKey(dto.getBpmnProcessDefinitionKey().trim())) {
-            throw new IllegalArgumentException("Mã quy trình BPMN Key '" + dto.getBpmnProcessDefinitionKey().trim() + "' đã tồn tại trong hệ thống. Vui lòng nhập mã khác.");
-        }
 
-        // ── Determine BPMN XML: compile from workflowJson if not already provided ──
-        String bpmnXml = dto.getBpmnXml();
-
-        if ((bpmnXml == null || bpmnXml.trim().isEmpty()) && dto.getWorkflowJson() != null) {
-            log.info("No pre-compiled BPMN XML supplied. Validating and compiling from workflowJson...");
-            try {
-                WorkflowGraphDto graph = objectMapper.readValue(dto.getWorkflowJson(), WorkflowGraphDto.class);
-
-                // Validate first – reject if invalid
-                ValidationResultDto validation = validatorService.validate(graph);
-                if (!validation.isValid()) {
-                    String errorSummary = validation.getErrors().stream()
-                            .map(e -> "[" + e.getNodeId() + "] " + e.getMessage())
-                            .collect(Collectors.joining("; "));
-                    throw new IllegalArgumentException(
-                            "Workflow không hợp lệ, không thể deploy: " + errorSummary);
-                }
-
-                bpmnXml = compilerService.compile(graph,
-                        dto.getBpmnProcessDefinitionKey(), dto.getName());
-                log.info("Compiled BPMN XML successfully ({} chars)", bpmnXml.length());
-            } catch (IllegalArgumentException e) {
-                throw e;
-            } catch (Exception e) {
-                log.error("Failed to compile workflowJson to BPMN XML: {}", e.getMessage(), e);
-                throw new RuntimeException("Không thể biên dịch workflow JSON sang BPMN: " + e.getMessage());
+        String bpmnKey = dto.getBpmnProcessDefinitionKey();
+        if (bpmnKey == null || bpmnKey.trim().isEmpty()) {
+            bpmnKey = BpmnKeyGenerator.ensureUnique(campaignRepository, dto.getName());
+            dto.setBpmnProcessDefinitionKey(bpmnKey);
+            log.info("Auto-generated BPMN process key: {}", bpmnKey);
+        } else {
+            bpmnKey = bpmnKey.trim();
+            if (campaignRepository.existsByBpmnProcessDefinitionKey(bpmnKey)) {
+                throw new IllegalArgumentException(
+                        "Mã quy trình BPMN Key '" + bpmnKey + "' đã tồn tại trong hệ thống.");
             }
+            dto.setBpmnProcessDefinitionKey(bpmnKey);
         }
 
-        if (bpmnXml == null || bpmnXml.trim().isEmpty()) {
+        // ── Determine BPMN XML: ALWAYS compile+validate from workflowJson ──────────
+        // BUG FIX: previously, if the client supplied `bpmnXml` directly in the request, it was
+        // deployed as-is and WorkflowValidatorService was skipped entirely (the block below only
+        // ran `if bpmnXml is blank`). Since these endpoints are ROLE_ADMIN/ROLE_STAFF-only, this
+        // wasn't exploitable by outside attackers, but it let a raw API call (Postman/script)
+        // bypass every business rule this class enforces (default-branch checks, positive-amount
+        // checks, etc.) by skipping the normal Campaign Builder UI. Any client-supplied bpmnXml is
+        // now ignored - the server always compiles its own from a validated workflowJson.
+        if (dto.getWorkflowJson() == null || dto.getWorkflowJson().trim().isEmpty()) {
             throw new IllegalArgumentException(
-                    "Sơ đồ quy trình BPMN XML không được để trống. Hãy cung cấp workflowJson hoặc bpmnXml.");
+                    "Thiếu workflowJson: hệ thống chỉ triển khai BPMN do chính server biên dịch và validate " +
+                            "từ workflowJson, không chấp nhận bpmnXml gửi trực tiếp từ client.");
+        }
+
+        String bpmnXml;
+        log.info("Validating and compiling BPMN XML from workflowJson...");
+        try {
+            WorkflowGraphDto graph = workflowGraph != null
+                    ? workflowGraph
+                    : objectMapper.readValue(dto.getWorkflowJson(), WorkflowGraphDto.class);
+
+            // Validate first – reject if invalid
+            ValidationResultDto validation = validatorService.validate(graph);
+            if (!validation.isValid()) {
+                String errorSummary = validation.getErrors().stream()
+                        .map(e -> "[" + e.getNodeId() + "] " + e.getMessage())
+                        .collect(Collectors.joining("; "));
+                throw new IllegalArgumentException(
+                        "Workflow không hợp lệ, không thể deploy: " + errorSummary);
+            }
+
+            bpmnXml = compilerService.compile(graph,
+                    dto.getBpmnProcessDefinitionKey(), dto.getName());
+            log.info("Compiled BPMN XML successfully ({} chars)", bpmnXml.length());
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Failed to compile workflowJson to BPMN XML: {}", e.getMessage(), e);
+            throw new RuntimeException("Không thể biên dịch workflow JSON sang BPMN: " + e.getMessage());
         }
 
         // ── Deploy to Camunda engine ──────────────────────────────────────────
@@ -162,11 +192,99 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     @Override
-    public List<CampaignDto> getActiveCampaigns() {
+    public List<PublicCampaignDto> getActiveCampaigns() {
         LocalDateTime now = LocalDateTime.now();
         return campaignRepository.findByActiveTrueAndStartDateBeforeAndEndDateAfter(now, now).stream()
-                .map(this::mapToDto)
+                .map(this::mapToPublicDto)
                 .collect(Collectors.toList());
+    }
+
+    // ── Update ─────────────────────────────────────────────────────────────────
+    @Override
+    @Transactional
+    public CampaignDto updateCampaign(Long id, CampaignDto dto) {
+        Campaign existing = campaignRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy chiến dịch id=" + id));
+
+        // ── Basic field validation ────────────────────────────────────────────
+        if (dto.getName() != null && dto.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên chiến dịch không được để trống.");
+        }
+        WorkflowGraphDto workflowGraph = dto.getWorkflowJson() != null && !dto.getWorkflowJson().isBlank()
+                ? parseWorkflowGraph(dto.getWorkflowJson())
+                : parseWorkflowGraph(existing.getWorkflowJson());
+        if (dto.getTotalBudget() != null) {
+            dto.setTotalBudget(normalizeBudget(
+                    WorkflowBudgetHelper.resolveTotalBudget(workflowGraph, dto.getTotalBudget()),
+                    workflowGraph));
+        }
+        if (dto.getStartDate() != null && dto.getEndDate() != null && dto.getEndDate().isBefore(dto.getStartDate())) {
+            throw new IllegalArgumentException("Ngày kết thúc phải sau ngày bắt đầu.");
+        }
+        if (dto.getBpmnProcessDefinitionKey() != null && !dto.getBpmnProcessDefinitionKey().trim().isEmpty()) {
+            String newKey = dto.getBpmnProcessDefinitionKey().trim();
+            if (!newKey.equals(existing.getBpmnProcessDefinitionKey())
+                    && campaignRepository.existsByBpmnProcessDefinitionKeyAndIdNot(newKey, id)) {
+                throw new IllegalArgumentException("Mã BPMN Key '" + newKey + "' đã tồn tại trong hệ thống.");
+            }
+            existing.setBpmnProcessDefinitionKey(newKey);
+        }
+
+        if (dto.getName() != null) existing.setName(dto.getName());
+        if (dto.getTotalBudget() != null) {
+            BigDecimal oldTotal = existing.getTotalBudget();
+            BigDecimal newTotal = dto.getTotalBudget();
+            BigDecimal used = oldTotal.subtract(existing.getRemainingBudget());
+            existing.setTotalBudget(newTotal);
+            existing.setRemainingBudget(newTotal.subtract(used).max(BigDecimal.ZERO));
+        }
+        if (dto.getStartDate() != null) existing.setStartDate(dto.getStartDate());
+        if (dto.getEndDate() != null) existing.setEndDate(dto.getEndDate());
+        if (dto.getActive() != null) existing.setActive(dto.getActive());
+
+        // ── Redeploy BPMN if workflow changed ─────────────────────────────────
+        if (dto.getWorkflowJson() != null && !dto.getWorkflowJson().trim().isEmpty()
+                && !dto.getWorkflowJson().equals(existing.getWorkflowJson())) {
+            try {
+                WorkflowGraphDto graph = objectMapper.readValue(dto.getWorkflowJson(), WorkflowGraphDto.class);
+                ValidationResultDto validation = validatorService.validate(graph);
+                if (!validation.isValid()) {
+                    String errorSummary = validation.getErrors().stream()
+                            .map(e -> "[" + e.getNodeId() + "] " + e.getMessage())
+                            .collect(Collectors.joining("; "));
+                    throw new IllegalArgumentException("Workflow không hợp lệ: " + errorSummary);
+                }
+                String bpmnXml = compilerService.compile(graph,
+                        existing.getBpmnProcessDefinitionKey(), existing.getName());
+                existing.setWorkflowJson(dto.getWorkflowJson());
+                existing.setBpmnXml(bpmnXml);
+
+                String triggerType = triggerResolver.resolveTriggerType(dto.getWorkflowJson()).orElse(null);
+                existing.setTriggerType(triggerType);
+
+                try {
+                    String resourceName = existing.getBpmnProcessDefinitionKey() + ".bpmn";
+                    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+                            .name(existing.getName())
+                            .addString(resourceName, bpmnXml)
+                            .deploy();
+                    log.info("Redeployed process '{}' revision. Deployment id: {}",
+                            existing.getBpmnProcessDefinitionKey(), deployment.getId());
+                } catch (Exception ex) {
+                    log.error("Camunda re-deployment failed: {}", ex.getMessage(), ex);
+                    throw new RuntimeException("Không thể triển khai lại BPMN: " + ex.getMessage());
+                }
+            } catch (IllegalArgumentException e) {
+                throw e;
+            } catch (Exception e) {
+                log.error("Failed to update workflow: {}", e.getMessage(), e);
+                throw new RuntimeException("Không thể cập nhật workflow: " + e.getMessage());
+            }
+        }
+
+        Campaign updated = campaignRepository.save(existing);
+        log.info("Updated campaign id={}", updated.getId());
+        return mapToDto(updated);
     }
 
     // ── Delete ─────────────────────────────────────────────────────────────────
@@ -175,6 +293,124 @@ public class CampaignServiceImpl implements CampaignService {
     public void deleteCampaign(Long id) {
         campaignRepository.deleteById(id);
         log.info("Deleted campaign id={}", id);
+    }
+
+    // ── Stats ──────────────────────────────────────────────────────────────────
+    @Override
+    public CampaignStatsDto getCampaignStats(Long id) {
+        voucherMaintenanceService.expireStaleVouchers();
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy chiến dịch id=" + id));
+        return buildCampaignStats(campaign);
+    }
+
+    @Override
+    public PromotionDashboardDto getPromotionDashboard() {
+        voucherMaintenanceService.expireStaleVouchers();
+        List<Campaign> campaigns = campaignRepository.findAll();
+        List<CampaignStatsDto> summaries = campaigns.stream()
+                .map(this::buildCampaignStats)
+                .collect(Collectors.toList());
+
+        long totalIssued = summaries.stream().mapToLong(CampaignStatsDto::getTotalIssued).sum();
+        long totalUsed = summaries.stream().mapToLong(CampaignStatsDto::getTotalUsed).sum();
+        long totalUnused = summaries.stream().mapToLong(CampaignStatsDto::getTotalUnused).sum();
+        long totalExpired = summaries.stream().mapToLong(CampaignStatsDto::getTotalExpired).sum();
+        long totalReserved = summaries.stream().mapToLong(CampaignStatsDto::getTotalReserved).sum();
+
+        BigDecimal totalBudget = campaigns.stream()
+                .map(c -> c.getTotalBudget() != null ? c.getTotalBudget() : BigDecimal.ZERO)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal remainingBudget = campaigns.stream()
+                .map(c -> c.getRemainingBudget() != null ? c.getRemainingBudget() : BigDecimal.ZERO)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        double avgConversion = summaries.stream()
+                .mapToDouble(CampaignStatsDto::getConversionRate)
+                .average()
+                .orElse(0.0);
+
+        return PromotionDashboardDto.builder()
+                .totalCampaigns(campaigns.size())
+                .activeCampaigns(campaigns.stream().filter(c -> Boolean.TRUE.equals(c.getActive())).count())
+                .totalIssued(totalIssued)
+                .totalUsed(totalUsed)
+                .totalUnused(totalUnused)
+                .totalExpired(totalExpired)
+                .totalReserved(totalReserved)
+                .totalPercent(voucherRepository.countByVoucherType(VoucherType.PERCENT))
+                .totalFixed(voucherRepository.countByVoucherType(VoucherType.FIXED))
+                .totalFreeship(voucherRepository.countByVoucherType(VoucherType.FREESHIP))
+                .totalBudget(totalBudget)
+                .remainingBudget(remainingBudget)
+                .committedBudget(totalBudget.subtract(remainingBudget).max(BigDecimal.ZERO))
+                .averageConversionRate(Math.round(avgConversion * 100.0) / 100.0)
+                .campaigns(summaries)
+                .build();
+    }
+
+    private CampaignStatsDto buildCampaignStats(Campaign campaign) {
+        Long id = campaign.getId();
+        long totalIssued = voucherRepository.countByCampaignId(id);
+        long totalUnused = voucherRepository.countByCampaignIdAndStatus(id, VoucherStatus.UNUSED);
+        long totalUsed = voucherRepository.countByCampaignIdAndStatus(id, VoucherStatus.USED);
+        long totalExpired = voucherRepository.countByCampaignIdAndStatus(id, VoucherStatus.EXPIRED);
+        long totalReserved = voucherRepository.countByCampaignIdAndStatus(id, VoucherStatus.RESERVED);
+
+        long activeInstances = 0L;
+        try {
+            if (campaign.getBpmnProcessDefinitionKey() != null) {
+                activeInstances = runtimeService.createProcessInstanceQuery()
+                        .processDefinitionKey(campaign.getBpmnProcessDefinitionKey())
+                        .active()
+                        .count();
+            }
+        } catch (Exception ex) {
+            log.warn("Không đọc được số instance đang chạy: {}", ex.getMessage());
+        }
+
+        BigDecimal totalBudget = campaign.getTotalBudget() != null ? campaign.getTotalBudget() : BigDecimal.ZERO;
+        BigDecimal remainingBudget = campaign.getRemainingBudget() != null
+                ? campaign.getRemainingBudget()
+                : totalBudget;
+        BigDecimal committedBudget = totalBudget.subtract(remainingBudget).max(BigDecimal.ZERO);
+        double conversionRate = totalIssued > 0
+                ? Math.round((totalUsed * 10000.0) / totalIssued) / 100.0
+                : 0.0;
+
+        return CampaignStatsDto.builder()
+                .campaignId(id)
+                .campaignName(campaign.getName())
+                .bpmnProcessDefinitionKey(campaign.getBpmnProcessDefinitionKey())
+                .triggerType(campaign.getTriggerType())
+                .active(campaign.getActive())
+                .startDate(campaign.getStartDate())
+                .endDate(campaign.getEndDate())
+                .totalBudget(totalBudget)
+                .remainingBudget(remainingBudget)
+                .committedBudget(committedBudget)
+                .totalIssued(totalIssued)
+                .totalUnused(totalUnused)
+                .totalUsed(totalUsed)
+                .totalExpired(totalExpired)
+                .totalReserved(totalReserved)
+                .totalPercent(voucherRepository.countByCampaignIdAndVoucherType(id, VoucherType.PERCENT))
+                .totalFixed(voucherRepository.countByCampaignIdAndVoucherType(id, VoucherType.FIXED))
+                .totalFreeship(voucherRepository.countByCampaignIdAndVoucherType(id, VoucherType.FREESHIP))
+                .conversionRate(conversionRate)
+                .activeProcessInstances(activeInstances)
+                .build();
+    }
+
+    // ── Vouchers list per campaign ─────────────────────────────────────────────
+    @Override
+    public List<IssuedVoucherDto> listCampaignVouchers(Long id) {
+        if (!campaignRepository.existsById(id)) {
+            throw new IllegalArgumentException("Không tìm thấy chiến dịch id=" + id);
+        }
+        return voucherRepository.findByCampaignIdOrderByCreatedAtDesc(id).stream()
+                .map(IssuedVoucherDto::from)
+                .collect(Collectors.toList());
     }
 
     // ── Evaluate / trigger process instance ───────────────────────────────────
@@ -237,6 +473,34 @@ public class CampaignServiceImpl implements CampaignService {
     }
 
     // ── Mapper ─────────────────────────────────────────────────────────────────
+    private WorkflowGraphDto parseWorkflowGraph(String workflowJson) {
+        if (workflowJson == null || workflowJson.isBlank()) {
+            return null;
+        }
+        try {
+            return objectMapper.readValue(workflowJson, WorkflowGraphDto.class);
+        } catch (Exception ex) {
+            log.warn("Cannot parse workflowJson for budget check: {}", ex.getMessage());
+            return null;
+        }
+    }
+
+    private BigDecimal normalizeBudget(BigDecimal budget, WorkflowGraphDto graph) {
+        boolean requiresBudget = WorkflowBudgetHelper.requiresVoucherBudget(graph);
+        if (requiresBudget) {
+            if (budget == null || budget.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException(
+                        "Quỹ ngân sách chiến dịch phải > 0 khi workflow có node Tặng Voucher. "
+                                + "Thiết lập tại editor (meta.totalBudget).");
+            }
+            return budget;
+        }
+        if (budget == null || budget.compareTo(BigDecimal.ZERO) < 0) {
+            return BigDecimal.ZERO;
+        }
+        return budget;
+    }
+
     private CampaignDto mapToDto(Campaign campaign) {
         return CampaignDto.builder()
                 .id(campaign.getId())
@@ -249,6 +513,16 @@ public class CampaignServiceImpl implements CampaignService {
                 .active(campaign.getActive())
                 .workflowJson(campaign.getWorkflowJson())
                 .bpmnXml(campaign.getBpmnXml())
+                .build();
+    }
+
+    private PublicCampaignDto mapToPublicDto(Campaign campaign) {
+        return PublicCampaignDto.builder()
+                .id(campaign.getId())
+                .name(campaign.getName())
+                .startDate(campaign.getStartDate())
+                .endDate(campaign.getEndDate())
+                .active(campaign.getActive())
                 .build();
     }
 }

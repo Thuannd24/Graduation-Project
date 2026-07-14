@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-@FeignClient(name = "order-service", fallbackFactory = OrderClientFallbackFactory.class)
+import com.ecommerce.promotionservice.config.FeignInternalApiConfig;
+
+@FeignClient(name = "order-service", fallbackFactory = OrderClientFallbackFactory.class, configuration = FeignInternalApiConfig.class)
 public interface OrderClient {
 
     @GetMapping("/api/internal/orders/total-spending")

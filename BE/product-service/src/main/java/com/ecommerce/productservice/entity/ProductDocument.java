@@ -30,6 +30,12 @@ public class ProductDocument {
     @Field(type = FieldType.Double)
     private Double price;
 
+    @Field(type = FieldType.Double)
+    private Double salePrice;
+
+    @Field(type = FieldType.Double)
+    private Double effectivePrice;
+
     @Field(type = FieldType.Keyword)
     private String categoryId;
 

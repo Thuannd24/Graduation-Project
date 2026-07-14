@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
 import OrderSummary from "../../cart/components/OrderSummary.jsx";
+import VoucherPicker from "../components/VoucherPicker.jsx";
 import { useCart } from "../../../context/CartContext.jsx";
 import { orderApi } from "../../../services/orderApi";
 import { authApi } from "../../../services/authApi";
 import { formatVnd } from "../../../utils/format.js";
+import keycloak from "../../../services/keycloak.js";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [successOrder, setSuccessOrder] = useState(null);
+  const idempotencyKeyRef = useRef(crypto.randomUUID());
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Handle pending guest purchase after logging in
   useEffect(() => {
@@ -23,24 +27,39 @@ export default function CheckoutPage() {
           const product = JSON.parse(pendingStr);
           sessionStorage.removeItem("pending_buy_now");
           showToast("Đang thêm sản phẩm vào đơn hàng...");
-          await addToCart(product);
-          reloadCart?.();
+          const success = await addToCart(product);
+          if (success) {
+            reloadCart?.();
+          } else {
+            navigate("/cart");
+          }
         } catch (err) {
           console.error("Failed to add pending buy-now product to cart:", err);
+          navigate("/cart");
         }
       }
     };
     handlePendingBuyNow();
-  }, [addToCart, reloadCart, showToast]);
+  }, [addToCart, reloadCart, showToast, navigate]);
 
   // Controlled fields
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState(() => {
+    const name = keycloak.tokenParsed?.name;
+    return name && name !== "Keycloak User" ? name : "";
+  });
+  const [phoneNumber, setPhoneNumber] = useState(() => {
+    const un = keycloak.tokenParsed?.preferred_username || "";
+    return un.match(/^0[0-9]{9,10}$/) ? un : "";
+  });
+  const [email, setEmail] = useState(() => {
+    const em = keycloak.tokenParsed?.email || "";
+    return em.includes("@placeholder.com") ? "" : em;
+  });
   const [shippingAddress, setShippingAddress] = useState("");
   const [note, setNote] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
 
   // Address book & DB locations state
   const [savedAddresses, setSavedAddresses] = useState([]);
@@ -54,6 +73,7 @@ export default function CheckoutPage() {
   const [detailAddress, setDetailAddress] = useState("");
   const [saveToAddressBook, setSaveToAddressBook] = useState(false);
   const [isNewAddress, setIsNewAddress] = useState(true);
+  const [showAddressSelector, setShowAddressSelector] = useState(false);
 
   // Field validation errors
   const [fieldErrors, setFieldErrors] = useState({});
@@ -82,11 +102,20 @@ export default function CheckoutPage() {
         setProvinces(provList || []);
       } catch (err) {
         console.warn("Failed to load provinces", err);
+      } finally {
+        setIsInitialized(true);
       }
     };
 
     loadAddressData();
   }, []);
+
+  // Redirect to cart if the cart is empty after initialization
+  useEffect(() => {
+    if (isInitialized && !submitting && !successOrder && items.length === 0) {
+      navigate("/cart");
+    }
+  }, [isInitialized, items, successOrder, navigate, submitting]);
 
   // Fetch wards when province changes
   useEffect(() => {
@@ -144,23 +173,54 @@ export default function CheckoutPage() {
     if (code && pct) {
       setCouponCode(code);
       setDiscountPercent(parseFloat(pct));
+      setAppliedVoucher({
+        code: code,
+        discountPercent: parseFloat(pct),
+        title: `Mã ${code} (${parseFloat(pct) * 100}%)`
+      });
     }
   }, []);
 
-  // Calculate local checkout summary taking voucher into account
+  // Sync appliedVoucher changes
+  useEffect(() => {
+    if (appliedVoucher) {
+      setCouponCode(appliedVoucher.code);
+      setDiscountPercent(appliedVoucher.discountPercent);
+    } else {
+      setCouponCode("");
+      setDiscountPercent(0);
+    }
+  }, [appliedVoucher]);
+
+  // Calculate local checkout summary taking voucher and VAT into account
   const localSummary = useMemo(() => {
     const subtotal = summary.subtotal;
-    const discount = discountPercent > 0 ? Math.round(subtotal * discountPercent) : 0;
+    let discount = 0;
+    
+    if (appliedVoucher?.productDiscountAmount !== undefined) {
+      discount = appliedVoucher.productDiscountAmount;
+    } else if (appliedVoucher?.discountAmount !== undefined) {
+      discount = appliedVoucher.discountAmount;
+    } else if (discountPercent > 0) {
+      discount = Math.round(subtotal * discountPercent);
+    }
+    
+    let shipping = summary.shipping !== undefined ? summary.shipping : 30000;
+    if (appliedVoucher?.shippingDiscountAmount > 0) {
+      shipping = Math.max(0, shipping - appliedVoucher.shippingDiscountAmount);
+    }
+    
     const vat = Math.round((subtotal - discount) * 0.1);
-    const total = subtotal - discount + vat;
+    const total = subtotal - discount + shipping + vat;
+    
     return {
       subtotal,
       discount,
-      shipping: 0,
+      shipping,
       vat,
       total
     };
-  }, [summary, discountPercent]);
+  }, [summary, discountPercent, appliedVoucher]);
 
   const validateForm = () => {
     const errors = {};
@@ -187,6 +247,7 @@ export default function CheckoutPage() {
   };
 
   const placeOrder = async () => {
+    if (submitting) return;
     if (!validateForm()) {
       setError("Vui lòng sửa các lỗi trong form trước khi tiếp tục.");
       return;
@@ -223,9 +284,9 @@ export default function CheckoutPage() {
         shippingAddress: finalShippingAddress.trim(),
         phoneNumber: phoneNumber.trim(),
         couponCode: couponCode.trim() || null,
-        shippingFee: 0,
+        shippingFee: localSummary.shipping,
         note: note.trim() || null
-      });
+      }, idempotencyKeyRef.current);
 
       // Clear applied vouchers
       sessionStorage.removeItem("techstore_coupon_code");
@@ -382,199 +443,215 @@ export default function CheckoutPage() {
             </h2>
 
             <div className="space-y-5">
-            {savedAddresses.length > 0 && (
-              <div className="space-y-3 mb-6">
-                <span className="text-xs font-black text-slate-705 dark:text-slate-350 block uppercase tracking-wider">Chọn địa chỉ đã lưu:</span>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {savedAddresses.map((addr) => (
-                    <div
-                      key={addr.id}
-                      onClick={() => handleSelectSavedAddress(addr.id)}
-                      className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                        !isNewAddress && selectedAddressId === addr.id
-                          ? "border-primary bg-red-500/5"
-                          : "border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20 hover:border-slate-200"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-extrabold text-xs text-slate-800 dark:text-slate-250">{addr.recipientName}</span>
-                        {addr.isDefault && (
-                          <span className="bg-emerald-500/10 text-emerald-600 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full">Mặc định</span>
-                        )}
-                      </div>
-                      <p className="text-[10px] text-slate-500 font-bold mb-1">{addr.phoneNumber}</p>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400 font-semibold line-clamp-2">
-                        {addr.detailAddress}, {addr.districtWard}, {addr.province}
-                      </p>
-                    </div>
-                  ))}
-                  
-                  <div
-                    onClick={() => {
-                      setIsNewAddress(true);
-                      setSelectedAddressId("");
-                      setFullName("");
-                      setPhoneNumber("");
-                      setShippingAddress("");
-                      setDetailAddress("");
-                    }}
-                    className={`p-4 rounded-xl border-2 border-dashed cursor-pointer flex flex-col items-center justify-center transition-all ${
-                      isNewAddress
-                        ? "border-primary bg-red-500/5 text-primary"
-                        : "border-slate-200 dark:border-slate-800 hover:border-slate-300 text-slate-400 dark:text-slate-500"
-                    }`}
-                  >
-                    <Icon name="add" className="text-lg mb-1" />
-                    <span className="text-[10px] font-black uppercase">Giao đến địa chỉ mới</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {!isNewAddress && savedAddresses.length > 0 ? (
-              <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/80 rounded-xl p-4 flex flex-col gap-4">
+              <div className="bg-slate-50 dark:bg-slate-950/40 border border-slate-150 dark:border-slate-800 rounded-xl p-4 flex flex-col gap-3 relative">
                 <div className="flex items-start justify-between">
-                  <div className="space-y-1.5">
+                  <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-extrabold text-xs text-slate-850 dark:text-slate-205">Người nhận: {fullName}</span>
+                      <span className="font-extrabold text-sm text-slate-850 dark:text-slate-205">{fullName}</span>
                       <span className="text-slate-300">|</span>
                       <span className="font-bold text-xs text-slate-500">{phoneNumber}</span>
+                      {savedAddresses.find(a => a.id === selectedAddressId)?.isDefault && (
+                        <span className="bg-emerald-500/10 text-emerald-600 text-[9px] font-extrabold px-1.5 py-0.5 rounded-full">Mặc định</span>
+                      )}
                     </div>
-                    <p className="text-xs text-slate-650 dark:text-slate-400 font-semibold">{shippingAddress}</p>
+                    <p className="text-xs text-slate-650 dark:text-slate-400 font-semibold leading-relaxed">{shippingAddress}</p>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowAddressSelector(!showAddressSelector)}
+                    className="text-xs font-bold text-primary hover:underline flex items-center gap-1 bg-transparent border-none cursor-pointer p-0"
+                  >
+                    <Icon name="edit" className="text-sm" />
+                    <span>Thay đổi</span>
+                  </button>
                 </div>
                 
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
+                {showAddressSelector && (
+                  <div className="border-t border-slate-200/50 dark:border-slate-800/80 pt-3 mt-1 space-y-2">
+                    <span className="text-[10px] font-black text-slate-400 block uppercase tracking-wider mb-2">Chọn địa chỉ khác:</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                      {savedAddresses.map((addr) => (
+                        <div
+                          key={addr.id}
+                          onClick={() => {
+                            handleSelectSavedAddress(addr.id);
+                            setShowAddressSelector(false);
+                          }}
+                          className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                            selectedAddressId === addr.id
+                              ? "border-primary bg-red-500/5"
+                              : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-200"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-0.5">
+                            <span className="font-extrabold text-xs text-slate-850 dark:text-slate-205">{addr.recipientName}</span>
+                            {addr.isDefault && (
+                              <span className="bg-emerald-500/10 text-emerald-600 text-[8px] font-extrabold px-1.5 py-0.2 rounded-full">Mặc định</span>
+                            )}
+                          </div>
+                          <p className="text-[9px] text-slate-500 font-bold mb-0.5">{addr.phoneNumber}</p>
+                          <p className="text-[9px] text-slate-650 dark:text-slate-400 font-semibold line-clamp-1">
+                            {addr.detailAddress}, {addr.districtWard}, {addr.province}
+                          </p>
+                        </div>
+                      ))}
+                      
+                      <div
+                        onClick={() => {
+                          setIsNewAddress(true);
+                          setSelectedAddressId("");
+                          setFullName("");
+                          setPhoneNumber("");
+                          setShippingAddress("");
+                          setDetailAddress("");
+                          setShowAddressSelector(false);
+                        }}
+                        className="p-3 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 hover:border-slate-350 cursor-pointer flex items-center justify-center gap-1.5 text-slate-400 hover:text-primary transition-all text-xs font-bold uppercase"
+                      >
+                        <Icon name="add" className="text-sm" />
+                        <span>Giao đến địa chỉ mới</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550 border-t border-slate-200/40 dark:border-slate-800/40 pt-2.5">
                   <span>Ghi chú giao hàng (tùy chọn)</span>
                   <textarea
                     placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi đến..."
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     rows={2}
-                    className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                 </label>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
-                  <span>Họ và tên người nhận <span className="text-red-500">*</span></span>
-                  <input
-                    type="text"
-                    placeholder="Nguyễn Văn A"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
-                      fieldErrors.fullName ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
-                    }`}
-                  />
-                  {fieldErrors.fullName && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.fullName}</span>}
-                </label>
-
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
-                  <span>Số điện thoại <span className="text-red-500">*</span></span>
-                  <input
-                    type="text"
-                    placeholder="0987 654 321"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
-                      fieldErrors.phoneNumber ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
-                    }`}
-                  />
-                  {fieldErrors.phoneNumber && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.phoneNumber}</span>}
-                </label>
-
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550 md:col-span-2">
-                  <span>Địa chỉ email (tùy chọn)</span>
-                  <input
-                    type="email"
-                    placeholder="customer@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
-                      fieldErrors.email ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
-                    }`}
-                  />
-                  {fieldErrors.email && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.email}</span>}
-                </label>
-
-                {/* Province select */}
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
-                  <span>Tỉnh / Thành phố <span className="text-red-500">*</span></span>
-                  <select
-                    value={selectedProvinceCode}
-                    onChange={(e) => {
-                      setSelectedProvinceCode(e.target.value);
-                      setSelectedWardCode("");
+              <div className="space-y-4">
+                {savedAddresses.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsNewAddress(false);
+                      const defaultAddr = savedAddresses.find(a => a.isDefault) || savedAddresses[0];
+                      handleSelectSavedAddress(defaultAddr.id);
                     }}
-                    className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
-                      fieldErrors.province ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
-                    }`}
+                    className="text-xs font-black text-primary hover:underline flex items-center gap-1.5 bg-transparent border-none cursor-pointer p-0 mb-2 uppercase"
                   >
-                    <option value="">-- Chọn Tỉnh/Thành phố --</option>
-                    {provinces.map(p => (
-                      <option key={p.code} value={p.code}>{p.name}</option>
-                    ))}
-                  </select>
-                  {fieldErrors.province && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.province}</span>}
-                </label>
+                    <Icon name="arrow_back" className="text-sm" />
+                    <span>Quay lại chọn địa chỉ đã lưu</span>
+                  </button>
+                )}
 
-                {/* Ward/District select */}
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
-                  <span>Quận/Huyện, Phường/Xã <span className="text-red-500">*</span></span>
-                  <select
-                    value={selectedWardCode}
-                    disabled={!selectedProvinceCode}
-                    onChange={(e) => setSelectedWardCode(e.target.value)}
-                    className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
-                      fieldErrors.ward ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
-                    }`}
-                  >
-                    <option value="">-- Chọn Quận/Huyện, Phường/Xã --</option>
-                    {wards.map(w => (
-                      <option key={w.code} value={w.code}>{w.name}</option>
-                    ))}
-                  </select>
-                  {fieldErrors.ward && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.ward}</span>}
-                </label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
+                    <span>Họ và tên người nhận <span className="text-red-500">*</span></span>
+                    <input
+                      type="text"
+                      placeholder="Nguyễn Văn A"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
+                        fieldErrors.fullName ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
+                      }`}
+                    />
+                    {fieldErrors.fullName && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.fullName}</span>}
+                  </label>
 
-                {/* Detail Address textarea */}
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550 md:col-span-2">
-                  <span>Địa chỉ chi tiết (Số nhà, ngõ/ngách, tên đường...) <span className="text-red-500">*</span></span>
-                  <textarea
-                    placeholder="Ví dụ: Số 123, Ngõ 4, Đường Cầu Giấy"
-                    value={detailAddress}
-                    onChange={(e) => setDetailAddress(e.target.value)}
-                    rows={2}
-                    className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
-                      fieldErrors.detailAddress ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
-                    }`}
-                  />
-                  {fieldErrors.detailAddress && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.detailAddress}</span>}
-                </label>
+                  <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
+                    <span>Số điện thoại <span className="text-red-500">*</span></span>
+                    <input
+                      type="text"
+                      placeholder="0987 654 321"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
+                        fieldErrors.phoneNumber ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
+                      }`}
+                    />
+                    {fieldErrors.phoneNumber && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.phoneNumber}</span>}
+                  </label>
 
-                {/* Save to profile checkbox */}
-                <label className="flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-400 md:col-span-2 mt-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={saveToAddressBook}
-                    onChange={(e) => setSaveToAddressBook(e.target.checked)}
-                    className="rounded text-primary focus:ring-primary accent-primary w-4 h-4"
-                  />
-                  <span>Lưu địa chỉ này vào sổ địa chỉ để dùng cho lần sau</span>
-                </label>
 
-                <label className="flex flex-col gap-1 text-xs font-bold text-slate-550 md:col-span-2">
-                  <span>Ghi chú giao hàng (tùy chọn)</span>
-                  <textarea
-                    placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi đến..."
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                    rows={2}
-                    className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </label>
+
+                  {/* Province select */}
+                  <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
+                    <span>Tỉnh / Thành phố <span className="text-red-500">*</span></span>
+                    <select
+                      value={selectedProvinceCode}
+                      onChange={(e) => {
+                        setSelectedProvinceCode(e.target.value);
+                        setSelectedWardCode("");
+                      }}
+                      className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
+                        fieldErrors.province ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
+                      }`}
+                    >
+                      <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                      {provinces.map(p => (
+                        <option key={p.code} value={p.code}>{p.name}</option>
+                      ))}
+                    </select>
+                    {fieldErrors.province && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.province}</span>}
+                  </label>
+
+                  {/* Ward/District select */}
+                  <label className="flex flex-col gap-1 text-xs font-bold text-slate-550">
+                    <span>Quận/Huyện, Phường/Xã <span className="text-red-500">*</span></span>
+                    <select
+                      value={selectedWardCode}
+                      disabled={!selectedProvinceCode}
+                      onChange={(e) => setSelectedWardCode(e.target.value)}
+                      className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
+                        fieldErrors.ward ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
+                      }`}
+                    >
+                      <option value="">-- Chọn Quận/Huyện, Phường/Xã --</option>
+                      {wards.map(w => (
+                        <option key={w.code} value={w.code}>{w.name}</option>
+                      ))}
+                    </select>
+                    {fieldErrors.ward && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.ward}</span>}
+                  </label>
+
+                  {/* Detail Address textarea */}
+                  <label className="flex flex-col gap-1 text-xs font-bold text-slate-550 md:col-span-2">
+                    <span>Địa chỉ chi tiết (Số nhà, ngõ/ngách, tên đường...) <span className="text-red-500">*</span></span>
+                    <textarea
+                      placeholder="Ví dụ: Số 123, Ngõ 4, Đường Cầu Giấy"
+                      value={detailAddress}
+                      onChange={(e) => setDetailAddress(e.target.value)}
+                      rows={2}
+                      className={`bg-slate-50 dark:bg-slate-950 border rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 ${
+                        fieldErrors.detailAddress ? "border-red-400 focus:ring-red-400" : "border-slate-200 dark:border-slate-800 focus:ring-primary"
+                      }`}
+                    />
+                    {fieldErrors.detailAddress && <span className="text-[10px] text-red-500 mt-0.5">{fieldErrors.detailAddress}</span>}
+                  </label>
+
+                  {/* Save to profile checkbox */}
+                  <label className="flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-400 md:col-span-2 mt-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={saveToAddressBook}
+                      onChange={(e) => setSaveToAddressBook(e.target.checked)}
+                      className="rounded text-primary focus:ring-primary accent-primary w-4 h-4"
+                    />
+                    <span>Lưu địa chỉ này vào sổ địa chỉ để dùng cho lần sau</span>
+                  </label>
+
+                  <label className="flex flex-col gap-1 text-xs font-bold text-slate-550 md:col-span-2">
+                    <span>Ghi chú giao hàng (tùy chọn)</span>
+                    <textarea
+                      placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi đến..."
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                      rows={2}
+                      className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3.5 py-2.5 text-xs text-slate-850 dark:text-slate-250 focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </label>
+                </div>
               </div>
             )}
             </div>
@@ -630,9 +707,17 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right column Summary items */}
-        <aside className="w-full lg:w-[350px] shrink-0 space-y-4">
+        <aside className="w-full lg:w-[380px] shrink-0 space-y-4 lg:sticky lg:top-24">
+          {/* Voucher Picker placed prominently at the top of sidebar */}
+          <VoucherPicker
+            orderTotal={summary.subtotal}
+            appliedVoucher={appliedVoucher}
+            onApplied={setAppliedVoucher}
+            onClear={() => setAppliedVoucher(null)}
+          />
+
           <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
-            <h2 className="text-base font-black text-slate-850 dark:text-slate-200 uppercase tracking-wider pb-2 border-b border-slate-50 dark:border-slate-800/80">
+            <h2 className="text-base font-black text-slate-850 dark:text-slate-205 uppercase tracking-wider pb-2 border-b border-slate-50 dark:border-slate-800/80">
               Sản phẩm mua
             </h2>
             <div className="divide-y divide-slate-100 dark:divide-slate-800/80 max-h-60 overflow-y-auto pr-1">
@@ -641,7 +726,7 @@ export default function CheckoutPage() {
                   <img alt={item.name} src={item.image} className="w-12 h-12 object-contain border border-slate-100 dark:border-slate-800 rounded" />
                   <div className="min-w-0 flex-1 text-xs">
                     <strong className="font-bold text-slate-850 dark:text-slate-250 line-clamp-1 block">{item.name}</strong>
-                    <span className="text-[10px] text-slate-450 mt-0.5 block uppercase">SL: {item.qty} | {item.variant}</span>
+                    <span className="text-[10px] text-slate-455 mt-0.5 block uppercase">SL: {item.qty} | {item.variant}</span>
                   </div>
                   <strong className="text-xs font-black text-slate-800 dark:text-slate-250 shrink-0">{formatVnd(Number(item.price || 0) * item.qty)}</strong>
                 </article>
@@ -657,9 +742,13 @@ export default function CheckoutPage() {
 
           <OrderSummary
             summary={localSummary}
+            hideVoucherSection
+            asDiv
             asButton
+            className="w-full space-y-4"
             actionLabel={submitting ? "Đang xử lý..." : "Xác nhận & Đặt hàng"}
             onAction={placeOrder}
+            disabled={submitting}
           />
         </aside>
       </div>

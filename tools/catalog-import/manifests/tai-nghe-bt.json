@@ -1,0 +1,1241 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:02:20.417Z",
+  "note": "Scraped 9 sản phẩm — danh mục \"Tai nghe\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "phone_iphone"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tablet"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "laptop_mac"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "speaker"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "photo_camera"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "watch"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "shield"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "bolt"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "battery_charging_full"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "cable"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "huawei",
+      "name": "Huawei",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/HUAWEI-240x50.png",
+      "description": "Huawei — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe-bt"
+      ]
+    },
+    {
+      "slug": "sony",
+      "name": "Sony",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/SONY-240x50.png",
+      "description": "Sony — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe-bt"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/XIAOMI-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe-bt"
+      ]
+    },
+    {
+      "slug": "anker",
+      "name": "Anker",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Anker-240x50.png",
+      "description": "Anker — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe-bt"
+      ]
+    },
+    {
+      "slug": "oppo",
+      "name": "OPPO",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Oppo-240x50.png",
+      "description": "OPPO — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe-bt"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tai-nghe-bt"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "tai-nghe-khong-day-huawei-freeclip-2",
+      "name": "Tai nghe không dây HUAWEI FreeClip 2",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "huawei",
+      "description": "Đặc điểm nổi bật Tai nghe không dây Huawei Freeclip 2 với thiết kế dạng mở đột phá cho trải nghiệm sử dụng thoải mái cùng trọng lượng nhẹ, chỉ 5.1 g mỗi bên. Bên trong tai nghe Huawei là màng loa kép nam châm với kích thước 10.8 mm cho âm thanh chất lượng. Tai nghe cũng cho thời lượng sử dụng bền bỉ với dung lượng 60 mAh mỗi bên cho thời gian nghe đến 9 giờ ấn tượng, khi kèm dock sạc thời gian có thể đến 38 tiếng. Huawei Freeclip 2 – Thiết kế độc đáo, âm thanh tối ưu Tai nghe Huawei Freeclip 2 t",
+      "price": 4490000,
+      "salePrice": 3990000,
+      "costPrice": 3032400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/main-1.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-0-2.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-2-4.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-11-13.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-12-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-13-15.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "Tai nghe: 25.4 mm×26.7 mm×18.8 mm Hộp sạc: 50.0 mm×49.6 mm×25.0 mm",
+        "weight": "Mỗi tai: 5.1 g Hộp sạc: 37.8 g",
+        "connectivity": "Type C",
+        "battery": "9 giờ sử dụng mỗi lần sạc đầy 38 giờ sử dụng với hộp sạc"
+      },
+      "specsRaw": {
+        "Kích thước": "Tai nghe: 25.4 mm×26.7 mm×18.8 mm Hộp sạc: 50.0 mm×49.6 mm×25.0 mm",
+        "Trọng lượng": "Mỗi tai: 5.1 g Hộp sạc: 37.8 g",
+        "Micro": "Có",
+        "Cổng kết nối": "Type C",
+        "Thời lượng sử dụng Pin": "Nghe nhạc: Tai nghe: 9 tiếng Tai nghe + hộp sạc: 38 tiếngGọi:Tai nghe: 6 tiếngTai nghe + hộp sạc: 25 tiếng",
+        "Phương thức điều khiển": "Cảm ứng chạm",
+        "Hãng sản xuất": "Huawei",
+        "Tiêu chí": "Huawei Freeclip 2",
+        "Màu sắc": "Xanh dương, Trắng, Đen",
+        "Thiết kế": "Silicone lỏng thân thiện da Chất liệu cấu trúc C-Bridge",
+        "NPU": "Bộ xử lý AI NPU",
+        "Màng loa": "Driver màng kép 10.8 mm mạnh mẽ",
+        "Đàm thoại": "Âm lượng thích ứng Cải thiện giọng nói thích ứng Gọi thoại rõ ràng",
+        "Pin": "9 giờ sử dụng mỗi lần sạc đầy 38 giờ sử dụng với hộp sạc"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "GX98WB-HONG-0",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/main-1.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-TIM-1",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-0-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-TRANG-2",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-1-3.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-DEN-3",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-2-4.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "GX98WB-DUONG-4",
+          "price": 4490000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-3-5.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 3990000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-khong-day-sony-clip-wf-lc900",
+      "name": "Tai nghe không dây thể thao Sony Clip WF-LC900",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "sony",
+      "description": "Đặc điểm nổi bật Tai nghe không dây thể thao Sony Clip WF-LC900 mang đến trải nghiệm nghe mở với màng loa 10 mm cùng công nghệ DSEE giúp khôi phục âm thanh chân thực. Sản phẩm được trang bị chuẩn kháng nước IPX4 cùng cảm biến truyền âm qua xương, hỗ trợ người dùng đàm thoại dễ dàng. Mức pin 37 giờ phục vụ tốt các nhu cầu dùng xuyên suốt. Tai nghe không dây thể thao Sony Clip WF-LC900 - Trải nghiệm nghe trọn vẹn Mẫu tai nghe Sony này mang đến sự linh hoạt nhờ thiết kế kẹp tai thời trang và các ch",
+      "price": 4990000,
+      "salePrice": 4590000,
+      "costPrice": 3488400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/main-16.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-2-19.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-3-20.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-4-21.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-5-22.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-6-23.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-7-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-8-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-9-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-10-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-11-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-12-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-13-30.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "50.4x50.4x32.6mm",
+        "weight": "42g",
+        "connectivity": "USB"
+      },
+      "specsRaw": {
+        "Chống nước": "IPX4",
+        "Kích thước": "50.4x50.4x32.6mm",
+        "Trọng lượng": "42g",
+        "Công nghệ âm thanh": "DSEE",
+        "Cổng kết nối": "USB",
+        "Thời lượng sử dụng Pin": "Phát nhạc liên tục: 9 giờ Giao tiếp liên tục: 4 giờ Chế độ chờ: 15 giờHộp sạc: 37 giờ",
+        "Phương thức điều khiển": "Cảm ứng chạm",
+        "Hãng sản xuất": "Sony"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "MRKVGV-DEN-0",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/main-16.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 4590000
+        },
+        {
+          "sku": "MRKVGV-HMINT-1",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-0-17.png",
+          "active": true,
+          "options": {
+            "color": "Xanh mint"
+          },
+          "salePrice": 4590000
+        },
+        {
+          "sku": "MRKVGV-TIM-2",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-1-18.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 4590000
+        },
+        {
+          "sku": "MRKVGV-KEM-3",
+          "price": 4990000,
+          "costPrice": 3488400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-2-19.png",
+          "active": true,
+          "options": {
+            "color": "Kem"
+          },
+          "salePrice": 4590000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-chup-tai-xiaomi-redmi-neo",
+      "name": "Tai nghe chụp tai không dây chống ồn Xiaomi Redmi Neo",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Tai nghe chụp tai Xiaomi Redmi Neo mang đến trải nghiệm nghe ổn định nhờ driver 40mm, mang lại khả năng tái tạo âm thanh rõ ràng và giàu chi tiết. Đồng thời, tính năng giảm ồn đạt mức 42dB sẽ hỗ trợ người dùng tập trung tốt hơn. Thiết bị còn mang đến thời gian sử dụng lên đến 72 giờ, tùy theo thói quen dùng của mỗi người. Tai nghe chụp tai Xiaomi Redmi Neo - Trải nghiệm âm thanh hiện đại Thế hệ tai nghe Xiaomi này hướng đến trải nghiệm nghe linh hoạt với nhiều tính năng phục vụ ",
+      "price": 2090000,
+      "salePrice": 1990000,
+      "costPrice": 1512400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/main-31.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-0-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-1-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-2-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-3-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-4-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-5-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-6-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-7-39.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-8-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-9-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-10-42.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "202 × 183 × 47 mm",
+        "weight": "263 g"
+      },
+      "specsRaw": {
+        "Kích thước": "202 × 183 × 47 mm",
+        "Trọng lượng": "263 g",
+        "Công nghệ âm thanh": "Hi-Res Audio",
+        "Micro": "Có (3 mic)",
+        "Thời lượng sử dụng Pin": "72 giờ (khi tắt ANC)",
+        "Hãng sản xuất": "Xiaomi"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "7P2KQN-TRANG-0",
+          "price": 2090000,
+          "costPrice": 1512400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/main-31.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 1990000
+        },
+        {
+          "sku": "7P2KQN-DEN-1",
+          "price": 2090000,
+          "costPrice": 1512400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-xiaomi-redmi-neo/gallery-0-32.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1990000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-bluetooth-xiaomi-buds-6-anc",
+      "name": "Tai nghe Bluetooth không dây Xiaomi Buds 6 (ANC)",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật Xiaomi Buds 6 được ra mắt vào tháng 5/2026 nổi bật với công nghệ Qualcomm aptX Lossless, hỗ trợ truyền tải âm thanh chất lượng tốc độ lên đến 2.1Mbps. Tai nghe trang bị pin 35mAh trên mỗi bên tai, đáp ứng nhu cầu sử dụng trong nhiều giờ. Sản phẩm sở hữu trọng lượng nhẹ 4.4g cho từng bên tai nghe cùng với tiêu chuẩn IP54. Tai nghe Xiaomi Buds 6 ra mắt khi nào? Giá bao nhiêu? Xiaomi Buds 6, ra mắt vào tháng 5/2026, là mẫu tai nghe thuộc phân khúc cao cấp được trang bị nhiều công n",
+      "price": 3690000,
+      "salePrice": 3490000,
+      "costPrice": 2652400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/main-43.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-0-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-1-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-2-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-3-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-4-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-5-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-6-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-7-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-8-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-9-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-10-54.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-11-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-12-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-13-57.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "Tai nghe: 31.77 x 17.17 20.56 mmHộp sạc: 52.34 x 25.57 x 24 mm",
+        "weight": "Tai nghe: 4.4 gHộp sạc: 34.5 g",
+        "battery": "Tai nghe 35mAh Hộp sạc 475mAh"
+      },
+      "specsRaw": {
+        "Kích thước": "Tai nghe: 31.77 x 17.17 20.56 mmHộp sạc: 52.34 x 25.57 x 24 mm",
+        "Trọng lượng": "Tai nghe: 4.4 gHộp sạc: 34.5 g",
+        "Công nghệ âm thanh": "Hi-FiChống ồn chủ động ANC",
+        "Micro": "Có (3 micro)",
+        "Thời lượng sử dụng Pin": "Tai nghe: 6 giờHộp sạc: 35 giờ (tắt ANC)",
+        "Tính năng khác": "Ghi âm độc lập bằng tai nghe",
+        "Hãng sản xuất": "Xiaomi",
+        "Tiêu chí": "Xiaomi Buds 6",
+        "Thời lượng pin": "6 giờ/tai nghe 35 giờ có hộp sạc (tắt ANC)",
+        "Dung lượng pin": "Tai nghe 35mAh Hộp sạc 475mAh",
+        "Bluetooth": "5.4",
+        "Màu sắc": "4 màu",
+        "Codec & Hi-Res": "AAC, SBC, aptX Adaptive, aptX Lossless, LC3 (chỉ trên một số kiểu máy) Hi-Res Audio Wireless Harman AudioEFX",
+        "Thời gian sử dụng": "6 giờ/tai nghe 35 giờ kèm hộp sạc (tắt ANC, AAC)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "7UHKV0-EBULA-0",
+          "price": 3690000,
+          "costPrice": 2652400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/main-43.png",
+          "active": true,
+          "options": {
+            "color": "Tím Nebula"
+          },
+          "salePrice": 3490000
+        },
+        {
+          "sku": "7UHKV0-RAMIC-1",
+          "price": 3690000,
+          "costPrice": 2652400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-0-44.png",
+          "active": true,
+          "options": {
+            "color": "Trắng Ceramic"
+          },
+          "salePrice": 3490000
+        },
+        {
+          "sku": "7UHKV0-PHITE-2",
+          "price": 3690000,
+          "costPrice": 2652400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-1-45.png",
+          "active": true,
+          "options": {
+            "color": "Đen Graphite"
+          },
+          "salePrice": 3490000
+        },
+        {
+          "sku": "7UHKV0-TITAN-3",
+          "price": 3690000,
+          "costPrice": 2652400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-bluetooth-xiaomi-buds-6-anc/gallery-2-46.png",
+          "active": true,
+          "options": {
+            "color": "Xám Titan"
+          },
+          "salePrice": 3490000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959",
+      "name": "Tai nghe Bluetooth True Wireless Anker Soundcore R60i NC",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "anker",
+      "description": "Đặc điểm nổi bật Tai nghe không dây Anker Soundcore R60I NC - A3959 trang bị công nghệ Hi-Res Audio mang lại âm thanh chi tiết và sống động hơn khi sử dụng nghe nhạc. Hệ thống tai nghe với 6 micro định hướng với AI Clear Calls đảm bảo giọng nói rõ ràng hơn. Thời lượng pin thiết bị bền bỉ cho phép phát nhạc liên tục đến 10 giờ. Lưu ý: Khuyến khích người dùng không nên sử dụng khi đi bơi, môi trường ẩm ướt để giúp sản phẩm có tuổi thọ cao hơn. Ngoài ra, thời lượng pin thực tế cũng sẽ có sự khác bi",
+      "price": 990000,
+      "salePrice": 650000,
+      "costPrice": 494000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/main-58.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-0-59.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-1-60.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-2-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-3-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-4-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-5-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-6-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-7-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-8-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-9-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-10-69.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-11-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-12-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-13-72.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "Tai nghe: 5g Hộp sạc: 40g"
+      },
+      "specsRaw": {
+        "Công nghệ âm thanh": "Adaptive ANCHi-Res Audio & LDACHiệu ứng âm thanh 3D Spatial",
+        "Micro": "Có (6 micro AI)",
+        "Thời lượng sử dụng Pin": "Tai nghe: 10 giờ Hộp sạc: 50 giờ (Tắt ANC)Tai nghe: 8 giờ Hộp sạc: 40 giờ (Bật ANC)",
+        "Phương thức điều khiển": "Cảm ứng",
+        "Tính năng khác": "Kháng nước, bụi IP55",
+        "Hãng sản xuất": "Anker",
+        "Thông số": "Tai nghe Bluetooth True Wireless Anker Soundcore R50I NC",
+        "Công suất": "6W",
+        "Thời lượng pin": "10 giờ",
+        "Trọng lượng": "Tai nghe: 5g Hộp sạc: 40g"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "NF7GO2-HONG-0",
+          "price": 990000,
+          "costPrice": 494000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/main-58.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 650000
+        },
+        {
+          "sku": "NF7GO2-TRANG-1",
+          "price": 990000,
+          "costPrice": 494000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-0-59.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 650000
+        },
+        {
+          "sku": "NF7GO2-DUONG-2",
+          "price": 990000,
+          "costPrice": 494000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-1-60.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 650000
+        },
+        {
+          "sku": "NF7GO2-DEN-3",
+          "price": 990000,
+          "costPrice": 494000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-r60i-nc-a3959/gallery-2-61.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 650000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-chup-tai-marshall-milton-anc",
+      "name": "Tai nghe Bluetooth chụp tai Marshall Milton A.N.C",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Tai nghe chụp tai Marshall Milton ANC sở hữu thời lượng pin lên đến 80 giờ (ANC tắt) hoặc 50 giờ (ANC bật), driver 32mm mang âm thanh Marshall đặc trưng. Sản phẩm hỗ trợ sạc nhanh, chỉ 15 phút có thể sử dụng thêm 9,5 giờ nghe nhạc. Kiểu dáng tai nghe Marshall xếp gọn cùng khối lượng 231g hỗ trợ đem đi nhiều nơi rất thuận tiện. Tai nghe chụp tai Marshall Milton ANC - Dung lượng pin lớn cùng chế độ xuyên âm hiệu quả Đây là dòng tai nghe chụp tai cao cấp mang phong cách thiết kế đặ",
+      "price": 5990000,
+      "salePrice": null,
+      "costPrice": 4552400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/main-73.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-0-74.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-1-75.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-2-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-3-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-4-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-5-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-6-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-7-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/gallery-8-82.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "231 g",
+        "connectivity": "3.5mm"
+      },
+      "specsRaw": {
+        "Trọng lượng": "231 g",
+        "Công nghệ âm thanh": "Âm thanh MarshallÂm thanh không gian",
+        "Micro": "Có",
+        "Cổng kết nối": "3.5mm",
+        "Thời lượng sử dụng Pin": "Bật ANC: 80 giờTắt ANC: 50 giờ",
+        "Phương thức điều khiển": "Điều khiển bằng nút điều khiển đa hướng, Nút M có thể tuỳ chỉnh",
+        "Hãng sản xuất": "Marshall"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "KKRGNC-DEN-0",
+          "price": 5990000,
+          "costPrice": 4552400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-chup-tai-marshall-milton-anc/main-73.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-tws-open-ear-oppo-enco-clip-2",
+      "name": "Tai nghe Bluetooth True Wireless Open Ear OPPO Enco Clip2",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật Tai nghe TWS Open Ear OPPO Enco Clip 2 gây ấn tượng mạnh nhờ hệ thống 2 driver dynamic 11mm và 9mm giúp tái tạo chất âm sống động trong mọi dải tần. Tai nghe tích hợp chuẩn Bluetooth 6.1 hiện đại nhằm duy trì đường truyền âm thanh ổn định. Thiết bị đạt chuẩn IP55, không lo hư hỏng khi người dùng vận động ngoài trời. Tai nghe TWS Open Ear OPPO Enco Clip 2 - Thiết kế open-ear độc đáo Tai nghe OPPO Enco Clip 2 mang đến kiểu đeo dạng mở mới lạ, giảm cảm giác khó chịu khi sử dụng lâu",
+      "price": 4990000,
+      "salePrice": 4490000,
+      "costPrice": 3412400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/main-83.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-0-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-1-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-2-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-3-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-4-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-5-89.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-6-90.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-7-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-8-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-9-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-10-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-11-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-12-96.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-13-97.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "Tai nghe: 27.6 x 25.5 x 17.6 mm Hộp sạc: 61.3 x 55.3 x 26.3 mm",
+        "weight": "Tai nghe: 5.2 ± 0.3g Hộp sạc: 46.3 ± 2g",
+        "connectivity": "Bluetooth 6.1"
+      },
+      "specsRaw": {
+        "Kích thước": "Tai nghe: 27.6 x 25.5 x 17.6 mm Hộp sạc: 61.3 x 55.3 x 26.3 mm",
+        "Trọng lượng": "Tai nghe: 5.2 ± 0.3g Hộp sạc: 46.3 ± 2g",
+        "Micro": "Có",
+        "Thời lượng sử dụng Pin": "Tai nghe: 9.5 giờ Hộp sạc: 40 giờ (Nghe nhạc: 50% âm lượng, tắt AAC+ANC)",
+        "Phương thức điều khiển": "Cảm ứng chạm",
+        "Tính năng khác": "Kháng nước, bụi chuẩn: IP55",
+        "Hãng sản xuất": "OPPO",
+        "Tiêu chí": "OPPO Enco Clip 2",
+        "Thiết kế": "Unibody Ear Cuff, NCVM",
+        "Driver": "Kép: 11mm + 9mm dynamic",
+        "Kết nối": "Bluetooth 6.1",
+        "Codec hỗ trợ": "LHDC 5.0, AAC, SBC",
+        "Khử ồn khi gọi thoại": "Crystal-Clear Bone Calls",
+        "Pin (kèm hộp sạc)": "40 giờ (Chế độ AAC)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "RMKT7K-GOLD-0",
+          "price": 4990000,
+          "costPrice": 3412400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/main-83.png",
+          "active": true,
+          "options": {
+            "color": "Gold"
+          },
+          "salePrice": 4490000
+        },
+        {
+          "sku": "RMKT7K-XAM-1",
+          "price": 4990000,
+          "costPrice": 3412400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-0-84.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 4490000
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-khong-day-anker-soundcore-liberty-5-pro",
+      "name": "Tai nghe Bluetooth True Wireless Anker Soundcore Liberty 5 Pro",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "anker",
+      "description": "Đặc điểm nổi bật Tai nghe không dây Anker Soundcore Liberty 5 Pro sở hữu driver bass 10.5mm kết hợp màng loa tweeter cùng công nghệ ACAA nâng cao nên chất âm cực chi tiết. Phụ kiện được thiết kế bộ 6 micrô cùng AI khử tiếng ồn thông minh giúp đàm thoại rõ ràng. Chiếc tai nghe mới này có trọng lượng nhẹ, màu sắc thanh lịch và có thêm tính năng chuẩn kháng nước IPX5. Lưu ý: Tai nghe Liberty 5 Pro hiện chưa chính thức xuất hiện trên thị trường, thông tin hiện tại chỉ dựa vào đồn đoán. Chi tiết xác ",
+      "price": 4295000,
+      "salePrice": null,
+      "costPrice": 3264200,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/main-98.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-0-99.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-1-100.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-2-101.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-3-102.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-4-103.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-5-104.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-6-105.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-7-106.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "30 x 22 x 25 mm",
+        "weight": "5.5g",
+        "cpu": "Chip AI ANKER Thus™ Al"
+      },
+      "specsRaw": {
+        "Kích thước": "30 x 22 x 25 mm",
+        "Trọng lượng": "5.5g",
+        "Công nghệ âm thanh": "Driver 9.2 mmDolby AtmosChống ồn cuộc gọi thông minh (ENC AI)Adaptive ANC 4.0Hệ thống 8 micro, cảm biến dẫn truyền qua xươngHearID",
+        "Micro": "Có (8 micro) + 2 VPU + Mô hình AI",
+        "Thời lượng sử dụng Pin": "Tai nghe: Dùng 6.5 giờ (Bật chống ồn) và 12 giờ (Tắt Chống ồn)Hộp sạc: Dùng Khoảng 28 giờ (khi bật ANC) và 50 giờ (khi tắt ANC)",
+        "Phương thức điều khiển": "Chạm cảm ứng",
+        "Tính năng khác": "Kháng nước IP55Màn hình cảm ứng ở hộp sạc",
+        "Chipset": "Chip AI ANKER Thus™ Al",
+        "Hãng sản xuất": "Anker"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "IW40CS-HONG-0",
+          "price": 4295000,
+          "costPrice": 3264200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/main-98.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          }
+        },
+        {
+          "sku": "IW40CS-DEN-1",
+          "price": 4295000,
+          "costPrice": 3264200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-0-99.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        },
+        {
+          "sku": "IW40CS-TRANG-2",
+          "price": 4295000,
+          "costPrice": 3264200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-1-100.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "IW40CS-DUONG-3",
+          "price": 4295000,
+          "costPrice": 3264200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-anker-soundcore-liberty-5-pro/gallery-2-101.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "tai-nghe-samsung-galaxy-buds-3-pro",
+      "name": "Tai nghe Bluetooth True Wireless Samsung Galaxy Buds 3 Pro",
+      "categorySlug": "tai-nghe-bt",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Tai nghe SamSung Galaxy Buds 3 Pro trang bị dải tần âm rộng từ 2.4GHz đến 2.48GHz và phạm vi kết nối lên đến 10-12 mét giúp đảm bảo kết nối ổn định hơn. Sản phẩm trang bị công nghệ Bluetooth 5.0 + EDR kết hợp sạc không dây Qi và tương thích với cả dòng điện thoại thông minh iPhone và Android. Bên cạnh đó, hộp sạc có pin dung lượng là 400mAh , cung cấp thời gian sạc nhanh trong khoảng 1-2 giờ và đủ để sử dụng trong thời gian dài. Các loa được tích hợp bao gồm loa trầm 11mm và loa",
+      "price": 5400000,
+      "salePrice": 3990000,
+      "costPrice": 3032400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/main-107.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-0-108.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-1-109.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-2-110.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-3-111.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-4-112.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-5-113.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-6-114.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-7-115.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-8-116.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-9-117.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-10-118.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-11-119.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-12-120.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-13-121.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "Tai nghe: 18.1 x 19.8 x 33.2mmHộp sạc:58.9 x 48.7 x 24.4mm",
+        "weight": "Tai nghe: 5.4gHộp sạc: 46.5g"
+      },
+      "specsRaw": {
+        "Kích thước": "Tai nghe: 18.1 x 19.8 x 33.2mmHộp sạc:58.9 x 48.7 x 24.4mm",
+        "Trọng lượng": "Tai nghe: 5.4gHộp sạc: 46.5g",
+        "Công nghệ âm thanh": "Chống ồn chủ động ANC Âm thanh Hi-Fi 24 bit Âm thanh vòm 360Âm thanh xung quanhHệ thống âm thanh képHệ thống loa 2 chiều",
+        "Micro": "Có 6 micro",
+        "Thời lượng sử dụng Pin": "Tai nghe: 7 giờ (Tắt ANC) / 6 giờ (Bật ANC)Hộp sạc: 30 giờ (Tắt ANC) / 26 giờ (Bật ANC)",
+        "Phương thức điều khiển": "Cảm ứng chạm Nhấn thanh bar",
+        "Tính năng khác": "Tự động chuyển đổi kết nối giữa các thiết bị GalaxyPhiên dịch viên hỗ trợ nghe bản dịch trực tiếpTự động tinh chỉnh ANCThanh ánh sáng Blade Lights",
+        "Hãng sản xuất": "Samsung Chính hãng",
+        "Thông số": "SamSung Galaxy Buds 3 Pro",
+        "Màu sắc": "Xám bạc, Trắng",
+        "Tiện ích bổ sung": "Phiên dịch văn bản trực tiếp (Khi sử dụng với điện thoại Samsung hỗ trợ AI) Loại bỏ tiếng ồn chủ động ANC Âm thanh vòm Âm thanh xung quanh (Ambient mode) Tự động chuyển đổi giữa các thiết bị Samsung",
+        "Thời lượng sử dụng": "Tắt ANC: 7 giờ nghe nhạc/ 5 giờ đàm thoại Bật ANC: 6 giờ nghe nhạc / 4.5 giờ đàm thoại",
+        "Bluetooth": "Bluetooth 5.4",
+        "Ứng dụng": "Samsung Wearable",
+        "Hệ điều hành thương thích": "Android, iOS"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "4AUJ11-TRANG-0",
+          "price": 5400000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/main-107.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 3990000
+        },
+        {
+          "sku": "4AUJ11-XAM-1",
+          "price": 5400000,
+          "costPrice": 3032400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-3-pro/gallery-0-108.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 3990000
+        }
+      ]
+    }
+  ]
+}

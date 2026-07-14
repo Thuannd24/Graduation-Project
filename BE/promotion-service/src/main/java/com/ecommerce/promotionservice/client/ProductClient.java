@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(name = "product-service", fallbackFactory = ProductClientFallbackFactory.class)
+import com.ecommerce.promotionservice.config.FeignInternalApiConfig;
+
+@FeignClient(name = "product-service", fallbackFactory = ProductClientFallbackFactory.class, configuration = FeignInternalApiConfig.class)
 public interface ProductClient {
 
     @GetMapping("/api/internal/products/bulk")

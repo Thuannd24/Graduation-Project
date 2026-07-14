@@ -37,22 +37,11 @@ public class InventoryGrpcClient {
      */
     public InventoryGrpcResponse getInventory(Long productId, Long variantId) {
         log.debug("[gRPC Client] getInventory productId={}, variantId={}", productId, variantId);
-        try {
-            GetInventoryRequest request = GetInventoryRequest.newBuilder()
-                    .setProductId(productId)
-                    .setVariantId(variantId != null ? variantId : 0L)
-                    .build();
-            return inventoryStub.getInventory(request);
-        } catch (StatusRuntimeException e) {
-            log.error("[gRPC Client] getInventory failed for productId={}: {} - {}", productId, e.getStatus(), e.getMessage());
-            // Trả về response "not found" để caller xử lý thống nhất thay vì throw exception
-            return InventoryGrpcResponse.newBuilder()
-                    .setProductId(productId)
-                    .setVariantId(variantId != null ? variantId : 0L)
-                    .setQuantity(0)
-                    .setFound(false)
-                    .build();
-        }
+        GetInventoryRequest request = GetInventoryRequest.newBuilder()
+                .setProductId(productId)
+                .setVariantId(variantId != null ? variantId : 0L)
+                .build();
+        return inventoryStub.getInventory(request);
     }
 
     /**
@@ -63,14 +52,9 @@ public class InventoryGrpcClient {
      */
     public BatchInventoryGrpcResponse getBatchInventory(List<Long> productIds) {
         log.debug("[gRPC Client] getBatchInventory {} products", productIds.size());
-        try {
-            GetBatchInventoryRequest request = GetBatchInventoryRequest.newBuilder()
-                    .addAllProductIds(productIds)
-                    .build();
-            return inventoryStub.getBatchInventory(request);
-        } catch (StatusRuntimeException e) {
-            log.error("[gRPC Client] getBatchInventory failed: {} - {}", e.getStatus(), e.getMessage());
-            return BatchInventoryGrpcResponse.newBuilder().build(); // empty list
-        }
+        GetBatchInventoryRequest request = GetBatchInventoryRequest.newBuilder()
+                .addAllProductIds(productIds)
+                .build();
+        return inventoryStub.getBatchInventory(request);
     }
 }

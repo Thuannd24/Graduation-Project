@@ -14,11 +14,14 @@ import CustomersTab from "../components/CustomersTab.jsx";
 import ProductsTab from "../components/ProductsTab.jsx";
 import InventoryTab from "../components/InventoryTab.jsx";
 import CampaignsTab from "../components/CampaignsTab.jsx";
+import PromotionStatsTab from "../components/PromotionStatsTab.jsx";
 import CategoriesTab from "../components/CategoriesTab.jsx";
 import TransactionsTab from "../components/TransactionsTab.jsx";
 import AddProductTab from "../components/AddProductTab.jsx";
 import AdminRoleTab from "../components/AdminRoleTab.jsx";
 import BrandsTab from "../components/BrandsTab.jsx";
+import AnalyticsAITab from "../components/AnalyticsAITab.jsx";
+import SupportChatTab from "../components/SupportChatTab.jsx";
 
 export default function AdminDashboardPage() {
   const navigate = useNavigate();
@@ -40,18 +43,8 @@ export default function AdminDashboardPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Form states cho thêm/sửa sản phẩm
-  const [productForm, setProductForm] = useState({
-    name: "",
-    price: 0,
-    oldPrice: 0,
-    category: "",
-    brand: "",
-    image: "",
-    description: "",
-  });
   const [editingProductId, setEditingProductId] = useState(null);
-  const [showProductModal, setShowProductModal] = useState(false);
+  const [quickAddTemplate, setQuickAddTemplate] = useState(null);
 
   useEffect(() => {
     fetchOrders();
@@ -164,56 +157,10 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleProductSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editingProductId) {
-        await productApi.updateProduct(editingProductId, productForm);
-        alert("Cập nhật sản phẩm thành công!");
-      } else {
-        await productApi.createProduct(productForm);
-        alert("Thêm sản phẩm thành công!");
-      }
-      setShowProductModal(false);
-      setEditingProductId(null);
-      setProductForm({
-        name: "",
-        price: 0,
-        oldPrice: 0,
-        category: "",
-        brand: "",
-        image: "",
-        description: "",
-      });
-      fetchProducts();
-    } catch (err) {
-      alert("Lỗi lưu sản phẩm: " + err.message);
-    }
-  };
-
-  const handleDeleteProduct = async (id) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) return;
-    try {
-      await productApi.deleteProduct(id);
-      alert("Xóa sản phẩm thành công!");
-      fetchProducts();
-    } catch (err) {
-      alert("Lỗi khi xóa sản phẩm: " + err.message);
-    }
-  };
-
-  const handleQuickAddTemplate = (templateName, category, price) => {
-    setProductForm({
-      name: templateName,
-      price: price,
-      oldPrice: price + 100000,
-      category: category,
-      brand: "QuickBrand",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300",
-      description: "Sản phẩm được thêm nhanh từ trang tổng quan Admin."
-    });
+  const handleQuickAddTemplate = (templateName, categoryHint, price) => {
     setEditingProductId(null);
-    setShowProductModal(true);
+    setQuickAddTemplate({ name: templateName, categoryHint, price });
+    setActiveTab("add-product");
   };
 
   const handleLogout = () => {
@@ -335,6 +282,10 @@ export default function AdminDashboardPage() {
           <CampaignsTab />
         )}
 
+        {activeTab === "promotion-stats" && (
+          <PromotionStatsTab />
+        )}
+
         {activeTab === "categories" && (
           <CategoriesTab onNavigateToAddProduct={() => setActiveTab("add-product")} />
         )}
@@ -352,6 +303,7 @@ export default function AdminDashboardPage() {
             }}
             editingProductId={editingProductId}
             setEditingProductId={setEditingProductId}
+            initialData={editingProductId ? null : quickAddTemplate}
           />
         )}
 
@@ -361,6 +313,14 @@ export default function AdminDashboardPage() {
 
         {activeTab === "brands" && (
           <BrandsTab />
+        )}
+
+        {activeTab === "analytics-ai" && (
+          <AnalyticsAITab />
+        )}
+
+        {activeTab === "support-chat" && (
+          <SupportChatTab />
         )}
       </main>
     </div>

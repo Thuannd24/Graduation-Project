@@ -53,6 +53,9 @@ public class PromotionKafkaConsumer {
         log.info("[Promotion] payment-events: {}", message);
         try {
             JsonNode payload = objectMapper.readTree(message);
+            if (payload.isTextual()) {
+                payload = objectMapper.readTree(payload.asText());
+            }
             String eventType = textOr(payload, "eventType", "");
             if (!"PaymentSuccessEvent".equalsIgnoreCase(eventType)) {
                 ack.acknowledge();
@@ -83,6 +86,9 @@ public class PromotionKafkaConsumer {
     public void consumeOrderEvent(String message, Acknowledgment ack) {
         try {
             JsonNode payload = objectMapper.readTree(message);
+            if (payload.isTextual()) {
+                payload = objectMapper.readTree(payload.asText());
+            }
             String eventType = textOr(payload, "eventType", "");
             if (!"OrderConfirmedEvent".equalsIgnoreCase(eventType)) {
                 ack.acknowledge();

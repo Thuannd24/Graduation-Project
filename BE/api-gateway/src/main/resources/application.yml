@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: api-gateway
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   security:
     oauth2:
       resourceserver:
@@ -43,7 +47,7 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/api/v1/products/**,/api/v1/public/products/**,/api/v1/brands/**,/api/v1/public/brands/**,/api/v1/admin/brands/**,/api/v1/admin/products/**,/api/v1/admin/categories/**,/api/v1/public/categories/**,/api/v1/wishlist/**,/api/v1/admin/attributes/**
+            - Path=/api/v1/products/**,/api/v1/public/products/**,/api/v1/brands/**,/api/v1/public/brands/**,/api/v1/admin/brands/**,/api/v1/admin/products/**,/api/v1/admin/categories/**,/api/v1/public/categories/**,/api/v1/wishlist/**,/api/v1/admin/attributes/**,/api/v1/admin/import/**
           filters:
             - name: CircuitBreaker
               args:
@@ -100,21 +104,45 @@ spring:
                 name: promotion-service-cb
                 fallbackUri: forward:/fallback/promotion-service
 
-        - id: ai-engine
-          uri: lb://ai-engine-service
+        - id: ai-search
+          uri: ${AI_SEARCH_URL:http://host.docker.internal:8001}
           predicates:
-            - Path=/api/v1/ai/**,/api/v1/public/ai/**
+            - Path=/api/v1/search/**,/api/v1/public/search/**
           filters:
             - name: CircuitBreaker
               args:
                 name: ai-engine-cb
                 fallbackUri: forward:/fallback/ai-engine
-            - name: RequestRateLimiter
+
+        - id: ai-chatbot
+          uri: ${AI_CHATBOT_URL:http://host.docker.internal:8002}
+          predicates:
+            - Path=/api/v1/chatbot/**,/api/v1/public/chatbot/**
+          filters:
+            - name: CircuitBreaker
               args:
-                redis-rate-limiter.replenishRate: 2
-                redis-rate-limiter.burstCapacity: 10
-                redis-rate-limiter.requestedTokens: 1
-                key-resolver: "#{@userKeyResolver}"
+                name: ai-engine-cb
+                fallbackUri: forward:/fallback/ai-engine
+
+        - id: ai-recs
+          uri: ${AI_RECS_URL:http://host.docker.internal:8003}
+          predicates:
+            - Path=/api/v1/recommendations/**,/api/v1/public/recommendations/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ai-engine-cb
+                fallbackUri: forward:/fallback/ai-engine
+
+        - id: ai-forecast
+          uri: ${AI_FORECAST_URL:http://host.docker.internal:8004}
+          predicates:
+            - Path=/api/v1/admin/analytics/**,/api/v1/public/admin/analytics/**,/api/v1/pricing/**,/api/v1/public/pricing/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ai-engine-cb
+                fallbackUri: forward:/fallback/ai-engine
 
 eureka:
   client:
@@ -180,13 +208,3 @@ management:
   endpoint:
     health:
       show-details: always
-
----
-spring:
-  config:
-    activate:
-      on-profile: "!docker"
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}

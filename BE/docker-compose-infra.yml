@@ -12,7 +12,13 @@ services:
     container_name: infra-mariadb
     ports:
       - "3308:3306"
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --server-id=1
+      --binlog-row-image=FULL
     environment:
       - MARIADB_ROOT_PASSWORD=root
     volumes:
@@ -66,6 +72,124 @@ services:
     networks:
       - ecommerce-network
     restart: always
+
+  debezium-connect:
+    image: quay.io/debezium/connect:2.5
+    container_name: infra-debezium-connect
+    ports:
+      - "8088:8083"
+    depends_on:
+      - kafka
+      - mariadb
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: connect-cluster
+      CONFIG_STORAGE_TOPIC: connect-configs
+      OFFSET_STORAGE_TOPIC: connect-offsets
+      STATUS_STORAGE_TOPIC: connect-status
+      KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+    networks:
+      - ecommerce-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  debezium-init:
+    image: curlimages/curl:8.5.0
+    container_name: infra-debezium-init
+    depends_on:
+      debezium-connect:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+    restart: "no"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        # Wait for Debezium Connect to be fully ready
+        sleep 10
+        
+        # Configure Order Service Outbox Connector
+        for i in 1 2 3 4 5 6 7 8 9 10; do
+          curl -sf -X PUT http://debezium-connect:8083/connectors/order-outbox-connector/config \
+            -H "Content-Type: application/json" \
+            -d '{
+              "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+              "database.hostname": "mariadb",
+              "database.port": "3306",
+              "database.user": "root",
+              "database.password": "root",
+              "database.server.id": "184054",
+              "topic.prefix": "order-db",
+              "database.include.list": "ecommerce_order_db",
+              "table.include.list": "ecommerce_order_db.outbox_events",
+              "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
+              "schema.history.internal.kafka.topic": "schema-changes.order",
+              "include.schema.changes": "false",
+              "snapshot.mode": "schema_only",
+              "skipped.operations": "u,d,t",
+              "transforms": "outbox",
+              "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+              "transforms.outbox.route.topic.replacement": "order-events",
+              "transforms.outbox.route.by.field": "aggregate_type",
+              "transforms.outbox.table.field.event.key": "aggregate_id",
+              "transforms.outbox.table.field.event.id": "id",
+              "transforms.outbox.table.field.event.type": "event_type",
+              "transforms.outbox.table.field.event.timestamp": "created_at",
+              "transforms.outbox.table.field.event.payload": "payload",
+              "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+              "key.converter.schemas.enable": "false",
+              "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+              "value.converter.schemas.enable": "false"
+            }' && break
+          sleep 5
+        done
+        
+        # Configure Payment Service Outbox Connector (V-10 FIX)
+        for i in 1 2 3 4 5 6 7 8 9 10; do
+          curl -sf -X PUT http://debezium-connect:8083/connectors/payment-outbox-connector/config \
+            -H "Content-Type: application/json" \
+            -d '{
+              "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+              "database.hostname": "mariadb",
+              "database.port": "3306",
+              "database.user": "root",
+              "database.password": "root",
+              "database.server.id": "184055",
+              "topic.prefix": "payment-db",
+              "database.include.list": "ecommerce_payment_db",
+              "table.include.list": "ecommerce_payment_db.outbox_events",
+              "schema.history.internal.kafka.bootstrap.servers": "kafka:9092",
+              "schema.history.internal.kafka.topic": "schema-changes.payment",
+              "include.schema.changes": "false",
+              "snapshot.mode": "schema_only",
+              "skipped.operations": "u,d,t",
+              "transforms": "outbox",
+              "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+              "transforms.outbox.route.topic.replacement": "payment-events",
+              "transforms.outbox.route.by.field": "aggregate_type",
+              "transforms.outbox.table.field.event.key": "aggregate_id",
+              "transforms.outbox.table.field.event.id": "id",
+              "transforms.outbox.table.field.event.type": "event_type",
+              "transforms.outbox.table.field.event.timestamp": "created_at",
+              "transforms.outbox.table.field.event.payload": "payload",
+              "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+              "key.converter.schemas.enable": "false",
+              "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+              "value.converter.schemas.enable": "false"
+            }' && break
+          sleep 5
+        done
+        
+        echo "Debezium connectors configured successfully"
+        exit 0
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
@@ -135,6 +259,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 180s
 
   api-gateway:
     build:
@@ -177,6 +302,8 @@ services:
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME=debezium
+      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS=http://debezium-connect:8083
     networks:
       - ecommerce-network
     restart: always

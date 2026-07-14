@@ -3,12 +3,12 @@
   --primary-container: #d70018;
   --primary-fixed: #ffdad6;
   --on-primary: #ffffff;
-  --background: #f8f9fb;
+  --background: #fcfbfa;
   --surface-lowest: #ffffff;
-  --surface-low: #f3f4f6;
-  --surface: #edeef0;
-  --surface-high: #e7e8ea;
-  --surface-highest: #e1e2e4;
+  --surface-low: #f6f5f2;
+  --surface: #edece8;
+  --surface-high: #e4e3df;
+  --surface-highest: #dbdad5;
   --on-surface: #191c1e;
   --on-surface-variant: #5e3f3c;
   --secondary: #5f5e5e;
@@ -3043,6 +3043,15 @@ img {
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+}
+
+@keyframes filterDrawerUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* Admin Campaign Builder */

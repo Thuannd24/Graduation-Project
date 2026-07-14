@@ -5,6 +5,7 @@ import com.ecommerce.productservice.entity.ProductDocument;
 import com.ecommerce.productservice.repository.ProductRepository;
 import com.ecommerce.productservice.repository.ProductSearchRepository;
 import com.ecommerce.productservice.service.SearchService;
+import com.ecommerce.productservice.util.ProductPricingUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,10 @@ public class SearchServiceImpl implements SearchService {
                     .id(p.getId())
                     .name(p.getName())
                     .description(p.getDescription())
+                    .imageUrl(p.getImageUrl())
                     .price(p.getPrice() != null ? p.getPrice().doubleValue() : null)
+                    .salePrice(p.getSalePrice() != null ? p.getSalePrice().doubleValue() : null)
+                    .effectivePrice(ProductPricingUtils.getEffectivePrice(p.getPrice(), p.getSalePrice()).doubleValue())
                     .categoryId(p.getCategoryId() != null ? p.getCategoryId().toString() : null)
                     .brand(p.getBrand())
                     .brandId(p.getBrandId())
@@ -67,7 +71,10 @@ public class SearchServiceImpl implements SearchService {
                         .id(p.getId())
                         .name(p.getName())
                         .description(p.getDescription())
+                        .imageUrl(p.getImageUrl())
                         .price(p.getPrice() != null ? p.getPrice().doubleValue() : null)
+                        .salePrice(p.getSalePrice() != null ? p.getSalePrice().doubleValue() : null)
+                        .effectivePrice(ProductPricingUtils.getEffectivePrice(p.getPrice(), p.getSalePrice()).doubleValue())
                         .categoryId(p.getCategoryId() != null ? p.getCategoryId().toString() : null)
                         .brand(p.getBrand())
                         .brandId(p.getBrandId())

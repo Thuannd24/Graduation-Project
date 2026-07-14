@@ -1,13 +1,155 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
 import { formatVnd } from "../../../utils/format.js";
 import keycloak from "../../../services/keycloak.js";
 import { orderApi } from "../../../services/orderApi";
 import { authApi } from "../../../services/authApi";
+import { productApi } from "../../../services/productApi";
+import ProductReviewsTab from "../components/ProductReviewsTab.jsx";
+import VouchersTab from "../components/VouchersTab.jsx";
+import WarrantyTab from "../components/WarrantyTab.jsx";
 
 const defaultAvatar =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuD79xXNOGSw680ZnmFoOr1Dy_SKGF_l02zJLxZZKU1yIZZ0XXuoAI8EJ35l9EI_NLBz_9QJrDdAsEhoX8cJO5u-MnRglpZLEKi4dIRY6CLav92GAkIR4MIgBQu7FklRpruD-BLGpy9KSshBB2tca62rHg-dDiHBevjyQESC8KrI4sgR3re5rjnFSulz_w0Z8_Hy8wyX4Y4R6REXHZ6okF12RRsarQbbK7gDat-8ipJnuQrdhISQFBGRRkDRATBXhRshAIzycAvxymM";
+
+const TIER_CARD_STYLES = {
+  SILVER: {
+    bgGradient: "linear-gradient(135deg, #cbd5e1 0%, #64748b 50%, #334155 100%)",
+    textColor: "text-white",
+    badgeBg: "bg-slate-300 text-slate-800",
+    multiplier: "x1.2 Point Multiplier",
+    shadow: "shadow-[0_10px_25px_-5px_rgba(148,163,184,0.3)]",
+    border: "border-slate-300/40",
+    cardName: "SILVER MEMBERSHIP",
+    glowText: "text-slate-100",
+    accentColor: "rgba(226,232,240,0.2)"
+  },
+  GOLD: {
+    bgGradient: "linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #78350f 100%)",
+    textColor: "text-white",
+    badgeBg: "bg-amber-400 text-amber-950",
+    multiplier: "x1.5 Point Multiplier",
+    shadow: "shadow-[0_10px_30px_-5px_rgba(245,158,11,0.4)]",
+    border: "border-amber-400/40",
+    cardName: "GOLD MEMBERSHIP",
+    glowText: "text-amber-200",
+    accentColor: "rgba(253,230,138,0.2)"
+  },
+  VIP: {
+    bgGradient: "linear-gradient(135deg, #a78bfa 0%, #6d28d9 60%, #1e1b4b 100%)",
+    textColor: "text-white",
+    badgeBg: "bg-purple-400 text-purple-950",
+    multiplier: "x2.0 Point Multiplier",
+    shadow: "shadow-[0_10px_35px_-5px_rgba(139,92,246,0.5)]",
+    border: "border-purple-400/40",
+    cardName: "VIP PLATINUM",
+    glowText: "text-purple-200",
+    accentColor: "rgba(233,213,255,0.2)"
+  },
+  DIAMOND: {
+    bgGradient: "linear-gradient(135deg, #22d3ee 0%, #0891b2 40%, #0f172a 100%)",
+    textColor: "text-white",
+    badgeBg: "bg-cyan-400 text-cyan-950",
+    multiplier: "x2.5 Point Multiplier",
+    shadow: "shadow-[0_10px_35px_-5px_rgba(6,182,212,0.5)]",
+    border: "border-cyan-400/40",
+    cardName: "DIAMOND PRIVILEGE",
+    glowText: "text-cyan-200",
+    accentColor: "rgba(207,250,254,0.2)"
+  },
+  MEMBER: {
+    bgGradient: "linear-gradient(135deg, #64748b 0%, #334155 60%, #0f172a 100%)",
+    textColor: "text-white",
+    badgeBg: "bg-slate-500 text-slate-100",
+    multiplier: "x1.0 Point Multiplier",
+    shadow: "shadow-md",
+    border: "border-slate-500/35",
+    cardName: "STANDARD MEMBER",
+    glowText: "text-slate-300",
+    accentColor: "rgba(241,245,249,0.1)"
+  }
+};
+
+const getTierBadgeClass = (tier = "MEMBER") => {
+  switch (tier.toUpperCase()) {
+    case "SILVER": return "bg-slate-200 text-slate-800 border border-slate-300";
+    case "GOLD": return "bg-amber-100 text-amber-800 border border-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.2)]";
+    case "VIP": return "bg-purple-100 text-purple-800 border border-purple-300 shadow-[0_0_10px_rgba(139,92,246,0.2)]";
+    case "DIAMOND": return "bg-cyan-100 text-cyan-800 border border-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]";
+    default: return "bg-slate-100 text-slate-600 border border-slate-200";
+  }
+};
+
+const getTierHeaderTheme = (tier = "MEMBER") => {
+  switch (tier.toUpperCase()) {
+    case "SILVER":
+      return {
+        cardBg: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)",
+        borderColor: "border-slate-300",
+        shadow: "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+        nameColor: "text-slate-800",
+        subColor: "text-slate-600",
+        iconBg: "bg-slate-200/70 text-slate-700 border border-slate-300/30",
+        dividerColor: "border-slate-300/70",
+        statTitle: "text-slate-500",
+        statValue: "text-slate-800",
+        editIconColor: "text-slate-500"
+      };
+    case "GOLD":
+      return {
+        cardBg: "linear-gradient(135deg, #fffbeb 0%, #fef3c7 45%, #fde68a 100%)",
+        borderColor: "border-amber-300/50",
+        shadow: "shadow-[0_8px_30px_rgba(245,158,11,0.08)]",
+        nameColor: "text-amber-950",
+        subColor: "text-amber-800/80",
+        iconBg: "bg-amber-100 text-amber-700 border border-amber-300/40",
+        dividerColor: "border-amber-300/50",
+        statTitle: "text-amber-800/70",
+        statValue: "text-amber-950",
+        editIconColor: "text-amber-700"
+      };
+    case "VIP":
+      return {
+        cardBg: "linear-gradient(135deg, #faf5ff 0%, #f3e8ff 45%, #e9d5ff 100%)",
+        borderColor: "border-purple-300/50",
+        shadow: "shadow-[0_8px_30px_rgba(139,92,246,0.08)]",
+        nameColor: "text-purple-950",
+        subColor: "text-purple-800/80",
+        iconBg: "bg-purple-100 text-purple-700 border border-purple-300/40",
+        dividerColor: "border-purple-300/50",
+        statTitle: "text-purple-800/70",
+        statValue: "text-purple-950",
+        editIconColor: "text-purple-700"
+      };
+    case "DIAMOND":
+      return {
+        cardBg: "linear-gradient(135deg, #ecfeff 0%, #cffafe 45%, #a5f3fc 100%)",
+        borderColor: "border-cyan-300/50",
+        shadow: "shadow-[0_8px_30px_rgba(6,182,212,0.08)]",
+        nameColor: "text-cyan-950",
+        subColor: "text-cyan-800/80",
+        iconBg: "bg-cyan-100 text-cyan-700 border border-cyan-300/40",
+        dividerColor: "border-cyan-300/50",
+        statTitle: "text-cyan-800/70",
+        statValue: "text-cyan-950",
+        editIconColor: "text-cyan-700"
+      };
+    default:
+      return {
+        cardBg: "linear-gradient(135deg, #ffffff 0%, #fbfbfb 100%)",
+        borderColor: "border-surface-container-highest",
+        shadow: "shadow-[0_8px_30px_rgb(0,0,0,0.03)]",
+        nameColor: "text-on-surface",
+        subColor: "text-on-surface-variant",
+        iconBg: "bg-surface-container-high text-on-surface-variant",
+        dividerColor: "border-surface-container-highest",
+        statTitle: "text-secondary",
+        statValue: "text-on-surface",
+        editIconColor: "text-primary"
+      };
+  }
+};
 
 const emptyAddressForm = {
   recipientName: "",
@@ -19,13 +161,26 @@ const emptyAddressForm = {
 };
 
 function normalizeProfile(data) {
+  const isPlaceholderEmail = data?.email?.includes("@placeholder.com");
+  const isPlaceholderName = data?.fullName === "Keycloak User";
+  
+  const rawUsername = data?.username || keycloak.tokenParsed?.preferred_username || "";
+  const rawPhone = data?.phoneNumber || data?.phone || "";
+  
+  // Nếu số điện thoại trống nhưng username có định dạng số điện thoại (bắt đầu bằng 0)
+  // thì tự động điền SĐT từ username
+  const phoneFallback = !rawPhone && rawUsername.match(/^0[0-9]{9,10}$/) ? rawUsername : rawPhone;
+
   return {
     id: data?.id || data?.userId || "",
-    username: data?.username || keycloak.tokenParsed?.preferred_username || "",
-    name: data?.fullName || data?.name || keycloak.tokenParsed?.name || keycloak.tokenParsed?.preferred_username || "Khách hàng",
-    email: data?.email || keycloak.tokenParsed?.email || "",
-    phone: data?.phoneNumber || data?.phone || "",
+    username: rawUsername && !rawUsername.startsWith("user_") ? rawUsername : "",
+    name: !isPlaceholderName && data?.fullName
+      ? data.fullName : keycloak.tokenParsed?.name || "Khách hàng",
+    email: !isPlaceholderEmail && data?.email
+      ? data.email : keycloak.tokenParsed?.email || "",
+    phone: phoneFallback,
     tier: data?.customerTier || data?.tier || data?.role || "S-MEMBER",
+    loyaltyPoints: Number(data?.loyaltyPoints ?? 0),
     avatarUrl: data?.avatarUrl || defaultAvatar
   };
 }
@@ -98,9 +253,28 @@ function getStatusLabel(status) {
   }
 }
 
+function getLoyaltySourceLabel(sourceType) {
+  const s = String(sourceType || "").toUpperCase();
+  switch (s) {
+    case "REDEMPTION":
+      return "Đổi điểm";
+    case "REFUND":
+      return "Hoàn điểm";
+    case "ORDER":
+      return "Tích từ đơn hàng";
+    case "CAMPAIGN":
+      return "Chiến dịch";
+    case "MANUAL":
+      return "Điều chỉnh";
+    default:
+      return s || "Giao dịch";
+  }
+}
+
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(() => searchParams.get("tab") || "overview");
   const [userProfile, setUserProfile] = useState(() => normalizeProfile({}));
   const [profileForm, setProfileForm] = useState({ fullName: "", phoneNumber: "" });
   const [profileMessage, setProfileMessage] = useState("");
@@ -148,6 +322,9 @@ export default function ProfilePage() {
   const [selectedWardCode, setSelectedWardCode] = useState("");
   const [loadingProvinces, setLoadingProvinces] = useState(false);
   const [loadingWards, setLoadingWards] = useState(false);
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+  const [loyaltyHistory, setLoyaltyHistory] = useState([]);
+  const [loadingLoyalty, setLoadingLoyalty] = useState(false);
 
   const totalSpent = useMemo(
     () => orders.reduce((sum, order) => sum + Number(order.finalAmount || order.totalAmount || 0), 0),
@@ -155,13 +332,6 @@ export default function ProfilePage() {
   );
 
   useEffect(() => {
-    if (!keycloak.authenticated) {
-      keycloak.login({
-        redirectUri: window.location.origin + "/profile"
-      });
-      return;
-    }
-
     authApi.me()
       .then((data) => {
         const profile = normalizeProfile(data);
@@ -177,8 +347,44 @@ export default function ProfilePage() {
 
     setLoadingOrders(true);
     orderApi.listOrders()
-      .then((data) => {
-        setOrders(Array.isArray(data) ? data : []);
+      .then(async (data) => {
+        const orderList = Array.isArray(data) ? data : [];
+        const productIds = new Set();
+        orderList.forEach(order => {
+          (order.items || []).forEach(item => {
+            if (item.productId && !item.productImage) {
+              productIds.add(item.productId);
+            }
+          });
+        });
+
+        const productMap = {};
+        if (productIds.size > 0) {
+          await Promise.all(
+            Array.from(productIds).map(async (prodId) => {
+              try {
+                const prod = await productApi.getProductDetail(prodId);
+                productMap[prodId] = prod.imageUrl || prod.image || prod.thumbnailUrl;
+              } catch (e) {
+                console.warn(`Failed to fetch product details for ${prodId}`, e);
+              }
+            })
+          );
+        }
+
+        const updatedOrders = orderList.map(order => {
+          if (!order.items) return order;
+          const updatedItems = order.items.map(item => {
+            if (item.productImage) return item;
+            return {
+              ...item,
+              productImage: productMap[item.productId] || null
+            };
+          });
+          return { ...order, items: updatedItems };
+        });
+
+        setOrders(updatedOrders);
       })
       .catch((err) => {
         console.error("Failed to load orders", err);
@@ -212,6 +418,16 @@ export default function ProfilePage() {
       .finally(() => {
         setLoadingAddresses(false);
       });
+
+    setLoadingLoyalty(true);
+    authApi.getLoyaltyPoints()
+      .then((balance) => setLoyaltyPoints(Number(balance || 0)))
+      .catch((err) => console.error("Failed to load loyalty points", err));
+
+    authApi.getLoyaltyHistory(0, 10)
+      .then((data) => setLoyaltyHistory(data.content || []))
+      .catch((err) => console.error("Failed to load loyalty history", err))
+      .finally(() => setLoadingLoyalty(false));
   }, []);
 
   useEffect(() => {
@@ -271,26 +487,42 @@ export default function ProfilePage() {
     });
   };
 
-  const navItems = [
-    { id: "overview", label: "Tổng quan", icon: "home" },
-    { id: "orders", label: "Lịch sử mua hàng", icon: "receipt_long" },
-    { id: "addresses", label: "Sổ địa chỉ", icon: "location_on" },
-    { id: "warranty", label: "Tra cứu bảo hành", icon: "verified_user" },
-    { id: "membership", label: "Hạng thành viên và ưu đãi", icon: "workspace_premium" },
-    { id: "business", label: "Ưu đãi và đơn hàng S-Business", icon: "business_center" },
-    { id: "account", label: "Thông tin tài khoản", icon: "manage_accounts" },
-    { id: "policy", label: "Chính sách bảo hành", icon: "policy" },
-    { id: "feedback", label: "Góp ý - Phản hồi - Hỗ trợ", icon: "chat" },
-    { id: "terms", label: "Điều khoản sử dụng", icon: "description" }
+  const navSections = [
+    {
+      title: "Hồ sơ cá nhân",
+      items: [
+        { id: "overview", label: "Tổng quan tài khoản", icon: "home" },
+        { id: "account", label: "Thông tin tài khoản", icon: "manage_accounts" },
+        { id: "addresses", label: "Sổ địa chỉ nhận hàng", icon: "location_on" }
+      ]
+    },
+    {
+      title: "Giao dịch & Ưu đãi",
+      items: [
+        { id: "orders", label: "Lịch sử mua hàng", icon: "receipt_long" },
+        { id: "vouchers", label: "Kho voucher cá nhân", icon: "confirmation_number" },
+        { id: "membership", label: "Điểm thưởng & Hạng thẻ", icon: "workspace_premium" },
+        { id: "warranty", label: "Tra cứu bảo hành", icon: "verified_user" }
+      ]
+    },
+    {
+      title: "Hỗ trợ & Chính sách",
+      items: [
+        { id: "reviews", label: "Đánh giá của bạn", icon: "rate_review" },
+        { id: "policy", label: "Chính sách bảo hành", icon: "policy" }
+      ]
+    }
   ];
 
   const handleNavClick = (itemId) => {
-    if (itemId === "warranty" || itemId === "policy") {
-      navigate("/warranty");
-      return;
-    }
     setActiveTab(itemId);
+    setSearchParams({ tab: itemId });
   };
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab) setActiveTab(tab);
+  }, [searchParams]);
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
@@ -373,90 +605,151 @@ export default function ProfilePage() {
       <main className="w-full max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-12 gap-md">
         <aside className="md:col-span-3">
           <div className="bg-surface-container-lowest rounded-lg shadow-sm flex flex-col w-full py-md overflow-hidden">
-            <nav className="flex flex-col">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center px-lg py-3 font-body-sm text-body-sm transition-colors border-t border-surface-container-highest first:border-t-0 ${
-                    activeTab === item.id
-                      ? "text-primary font-bold bg-surface-container-low"
-                      : "text-on-surface hover:bg-surface-container-low"
-                  }`}
-                  type="button"
-                >
-                  <Icon className="mr-3 text-[20px]" name={item.icon} />
-                  <span>{item.label}</span>
-                </button>
+            <nav className="flex flex-col gap-xs">
+              {navSections.map((section, idx) => (
+                <div key={idx} className="flex flex-col mb-sm last:mb-0">
+                  {/* Section Title */}
+                  <div className="px-lg py-2 text-[10px] font-black uppercase tracking-wider text-secondary opacity-65">
+                    {section.title}
+                  </div>
+                  
+                  {/* Section Navigation Items */}
+                  <div className="flex flex-col gap-[2px]">
+                    {section.items.map((item) => {
+                      const isActive = activeTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => handleNavClick(item.id)}
+                          className={`flex items-center px-lg py-2.5 font-body-sm text-body-sm transition-all duration-150 border-l-4 ${
+                            isActive
+                              ? "text-primary font-bold bg-surface-container-low border-primary"
+                              : "text-on-surface border-transparent hover:bg-surface-container-low/60 hover:text-primary"
+                          }`}
+                          type="button"
+                        >
+                          <Icon 
+                            className={`mr-3 text-[18px] transition-colors ${
+                              isActive ? "text-primary" : "text-secondary"
+                            }`} 
+                            name={item.icon} 
+                          />
+                          <span className="truncate">{item.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               ))}
-              <a
-                href="/"
-                onClick={handleLogout}
-                className="flex items-center px-lg py-3 text-on-surface font-body-sm text-body-sm hover:bg-surface-container-low transition-colors border-t border-surface-container-highest"
-              >
-                <Icon className="mr-3 text-[20px]" name="logout" />
-                <span>Đăng xuất</span>
-              </a>
+              
+              <div className="border-t border-surface-container-highest mt-sm pt-sm">
+                <a
+                  href="/"
+                  onClick={handleLogout}
+                  className="flex items-center px-lg py-2.5 text-on-surface font-body-sm text-body-sm border-l-4 border-transparent hover:bg-surface-container-low/60 hover:text-primary transition-all duration-150"
+                >
+                  <Icon className="mr-3 text-[18px] text-secondary" name="logout" />
+                  <span>Đăng xuất</span>
+                </a>
+              </div>
             </nav>
           </div>
         </aside>
 
         <section className="md:col-span-9 space-y-md">
-          <div className="bg-surface-container-lowest rounded-lg shadow-sm p-md flex flex-col md:flex-row items-center justify-between gap-md">
-            <div className="flex items-center gap-md">
-              <div className="w-[80px] h-[80px] rounded-full overflow-hidden bg-surface-container-high border-2 border-surface-container-lowest shrink-0">
-                <img alt="Ảnh đại diện" className="w-full h-full object-cover" src={userProfile.avatarUrl} />
-              </div>
-              <div>
-                <h2 className="font-headline-md text-headline-md text-on-surface">{userProfile.name}</h2>
-                <p className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
-                  {userProfile.phone || "Chưa cập nhật SĐT"}
-                  <button
-                    className="text-primary hover:opacity-85 inline-flex items-center"
-                    onClick={() => setActiveTab("account")}
-                    title="Chỉnh sửa số điện thoại"
-                    type="button"
-                  >
-                    <Icon className="text-[16px] align-middle" name="edit" />
-                  </button>
-                </p>
-                <div className="inline-block bg-surface-container-low text-on-surface font-label-caps text-[10px] px-2 py-1 rounded-sm mt-1">
-                  {userProfile.tier}
+          {(() => {
+            const theme = getTierHeaderTheme(userProfile.tier);
+            return (
+              <div 
+                className={`rounded-xl border p-md flex flex-col lg:flex-row items-center justify-between gap-md transition-all duration-300 ${theme.shadow} ${theme.borderColor}`}
+                style={{ background: theme.cardBg }}
+              >
+                {/* Left side: Avatar & Info */}
+                <div className="flex items-center gap-md shrink-0">
+                  <div className="w-[64px] h-[64px] rounded-full overflow-hidden bg-surface-container-high border-2 border-white shadow-sm shrink-0">
+                    <img alt="Ảnh đại diện" className="w-full h-full object-cover" src={userProfile.avatarUrl} />
+                  </div>
+                  <div>
+                    <h2 className={`text-[16px] font-bold leading-tight tracking-tight ${theme.nameColor}`}>
+                      {userProfile.name}
+                    </h2>
+                    <p className={`text-[13px] flex items-center gap-1 mt-0.5 ${theme.subColor}`}>
+                      {userProfile.phone || "Chưa cập nhật SĐT"}
+                      <button
+                        className={`${theme.editIconColor} hover:opacity-75 inline-flex items-center transition-opacity`}
+                        onClick={() => setActiveTab("account")}
+                        title="Chỉnh sửa số điện thoại"
+                        type="button"
+                      >
+                        <Icon className="text-[14px] align-middle" name="edit" />
+                      </button>
+                    </p>
+                    <div className={`inline-block font-extrabold text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-full mt-1.5 shadow-sm ${getTierBadgeClass(userProfile.tier)}`}>
+                      {userProfile.tier}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right side: 3 Stats (Compact & Sleek) */}
+                <div className="flex flex-col sm:flex-row gap-md lg:gap-lg w-full lg:w-auto items-center justify-end">
+                  {/* Stat 1 */}
+                  <div className="flex items-center gap-xs px-2 py-1">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
+                      <Icon className="text-[18px]" name="shopping_cart" />
+                    </div>
+                    <div>
+                      <p className={`text-base font-bold leading-tight ${theme.statValue}`}>{orders.length}</p>
+                      <p className="text-[11px] text-secondary leading-tight mt-0.5">Đơn hàng đã mua</p>
+                    </div>
+                  </div>
+
+                  {/* Divider 1 */}
+                  <div className={`hidden sm:block h-8 w-[1px] bg-slate-300/40 ${theme.dividerColor}`}></div>
+
+                  {/* Stat 2 */}
+                  <div className="flex items-center gap-xs px-2 py-1">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
+                      <Icon className="text-[18px]" name="receipt" />
+                    </div>
+                    <div>
+                      <p className={`text-base font-bold leading-tight ${theme.statValue}`}>{formatVnd(totalSpent)}</p>
+                      <p className="text-[11px] text-secondary leading-tight mt-0.5">Tích lũy chi tiêu</p>
+                    </div>
+                  </div>
+
+                  {/* Divider 2 */}
+                  <div className={`hidden sm:block h-8 w-[1px] bg-slate-300/40 ${theme.dividerColor}`}></div>
+
+                  {/* Stat 3 */}
+                  <div className="flex items-center gap-xs px-2 py-1">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
+                      <Icon className="text-[18px]" name="loyalty" />
+                    </div>
+                    <div>
+                      <p className={`text-base font-bold leading-tight ${theme.statValue}`}>{loyaltyPoints.toLocaleString("vi-VN")}</p>
+                      <p className="text-[11px] text-secondary leading-tight mt-0.5">Điểm thưởng tích lũy</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col md:flex-row gap-md border-l-0 md:border-l border-surface-container-highest pl-0 md:pl-md">
-              <div className="flex items-center gap-sm">
-                <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary shrink-0">
-                  <Icon name="shopping_cart" />
-                </div>
-                <div>
-                  <p className="font-headline-md text-[20px] font-bold text-on-surface">{orders.length}</p>
-                  <p className="font-body-sm text-[12px] text-secondary">Tổng số đơn hàng đã mua</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-sm border-l-0 md:border-l border-surface-container-highest pl-0 md:pl-md">
-                <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary shrink-0">
-                  <Icon name="receipt" />
-                </div>
-                <div>
-                  <p className="font-headline-md text-[20px] font-bold text-on-surface">{formatVnd(totalSpent)}</p>
-                  <p className="font-body-sm text-[12px] text-secondary">Tổng tiền chi tiêu tích lũy</p>
-                </div>
-              </div>
-            </div>
-          </div>
+            );
+          })()}
 
           <div className="bg-surface-container-lowest rounded-lg shadow-sm p-sm flex overflow-x-auto hide-scrollbar gap-sm">
             {[
               { id: "overview", label: "Tổng quan", icon: "workspace_premium" },
               { id: "orders", label: "Lịch sử mua hàng", icon: "receipt_long" },
+              { id: "reviews", label: "Đánh giá sản phẩm", icon: "rate_review" },
+              { id: "vouchers", label: "Kho voucher", icon: "confirmation_number" },
+              { id: "membership", label: "Điểm thưởng", icon: "loyalty" },
               { id: "addresses", label: "Sổ địa chỉ", icon: "location_on" },
+              { id: "warranty", label: "Tra cứu bảo hành", icon: "verified_user" },
+              { id: "policy", label: "Chính sách bảo hành", icon: "policy" },
               { id: "account", label: "Thông tin tài khoản", icon: "manage_accounts" }
             ].map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleNavClick(item.id)}
                 className={`flex items-center gap-2 px-4 py-2 border border-surface-container-highest rounded-full whitespace-nowrap hover:bg-surface-container-low transition-colors text-left ${
                   activeTab === item.id ? "bg-surface-container-low text-primary font-bold" : "bg-surface-container-lowest text-on-surface"
                 }`}
@@ -530,55 +823,123 @@ export default function ProfilePage() {
           )}
 
           {activeTab === "orders" && (
-            <div className="bg-surface-container-lowest rounded-lg shadow-sm p-md space-y-md border border-surface-container-highest">
-              <div className="border-b border-surface-container-highest pb-xs mb-sm flex justify-between items-center">
-                <h3 className="font-bold text-headline-md text-on-surface">Lịch sử đơn hàng của bạn</h3>
-                <Icon className="text-primary text-[24px]" name="receipt_long" />
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] p-5 space-y-4 border border-slate-200 dark:border-slate-800">
+              <div className="border-b border-slate-100 dark:border-slate-800/80 pb-3 flex justify-between items-center">
+                <div>
+                  <h3 className="font-bold text-sm text-slate-850 dark:text-slate-200 uppercase tracking-wider">Lịch sử đơn hàng của bạn</h3>
+                  <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Quản lý và theo dõi quá trình giao nhận đơn hàng</p>
+                </div>
+                <Icon className="text-primary text-[20px]" name="receipt_long" />
               </div>
 
               {loadingOrders ? (
-                <p className="text-center py-lg text-secondary">Đang tải lịch sử đơn hàng...</p>
+                <div className="flex flex-col items-center py-12">
+                  <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-slate-500 text-xs mt-3 font-semibold">Đang tải lịch sử đơn hàng...</p>
+                </div>
               ) : orders.length === 0 ? (
-                <div className="text-center py-lg space-y-sm">
-                  <Icon className="text-[48px] text-secondary opacity-40 animate-pulse" name="receipt_long" />
-                  <p className="text-secondary text-sm">Bạn chưa có đơn hàng nào.</p>
-                  <Link to="/" className="inline-block bg-primary text-on-primary font-bold px-lg py-2 rounded-lg text-xs transition-colors shadow-sm">
+                <div className="text-center py-10 space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mx-auto">
+                    <Icon className="text-xl" name="receipt_long" />
+                  </div>
+                  <p className="text-slate-500 text-xs font-bold">Bạn chưa có đơn hàng nào.</p>
+                  <Link to="/" className="inline-flex bg-primary hover:bg-primary/95 text-white font-extrabold px-4 py-1.5 rounded-xl text-xs transition-colors shadow-sm">
                     MUA SẮM NGAY
                   </Link>
                 </div>
               ) : (
-                <div className="divide-y divide-surface-container-highest">
+                <div className="space-y-3.5">
                   {orders.map((order) => {
-                    const productNames = (order.items || []).map((item) => item.productName).join(", ");
+                    const items = order.items || [];
                     const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleString("vi-VN") : "Đang xử lý";
+                    const firstItem = items[0] || {};
+                    const totalQty = items.reduce((sum, it) => sum + (it.quantity || it.qty || 1), 0);
+                    
                     return (
-                      <div key={order.id} className="py-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
-                        <div>
-                          <h4 className="font-bold text-body-sm text-primary">Mã đơn hàng: #{order.id}</h4>
-                          <p className="text-xs text-secondary mt-1">Ngày đặt: {dateStr}</p>
-                          <p className="text-xs text-on-surface mt-1">Sản phẩm: {productNames || "Không rõ sản phẩm"}</p>
-                        </div>
-                        <div className="flex sm:flex-col items-end gap-sm sm:gap-xs text-right">
-                          <span className="font-black text-body-sm text-on-surface">
-                            {formatVnd(Number(order.finalAmount || order.totalAmount || 0))}
-                          </span>
-                          <span className={`font-bold text-[10px] px-2.5 py-0.5 rounded-full border shrink-0 ${getStatusBadgeClass(order.status)}`}>
+                      <div 
+                        key={order.id} 
+                        className="bg-slate-50/40 dark:bg-slate-900/40 hover:bg-slate-50/75 dark:hover:bg-slate-850/20 border border-slate-150 dark:border-slate-850 rounded-2xl p-4 transition-all duration-300 hover:shadow-sm"
+                      >
+                        {/* Top Info row */}
+                        <div className="flex justify-between items-start sm:items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800/60">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-extrabold text-xs text-slate-800 dark:text-slate-200">Đơn hàng #{order.id}</span>
+                              <span className="text-[10px] text-slate-400 dark:text-slate-500">|</span>
+                              <span className="text-[10px] text-slate-450 dark:text-slate-400 font-semibold">{dateStr}</span>
+                            </div>
+                          </div>
+                          <span className={`font-extrabold text-[9px] px-2.5 py-0.5 rounded-full border shrink-0 ${getStatusBadgeClass(order.status)}`}>
                             {getStatusLabel(order.status)}
                           </span>
-                          <div className="flex gap-2 items-center mt-1 justify-end">
-                            <Link to={`/order/${order.id}`} className="text-primary hover:underline text-xs font-semibold">
-                              Xem chi tiết
-                            </Link>
-                            {isOrderCancelable(order) && (
-                              <button
-                                onClick={() => handleCancelOrder(order.id)}
-                                className="text-rose-600 hover:underline text-xs font-semibold border-l border-slate-200 pl-2"
-                                type="button"
-                              >
-                                Hủy đơn
-                              </button>
-                            )}
+                        </div>
+
+                        {/* Mid Section: Product info + Thumbnails */}
+                        <div className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="flex items-center gap-3 min-w-0">
+                            {/* Thumbnails Row */}
+                            <div className="flex -space-x-2 shrink-0">
+                              {items.slice(0, 3).map((item, idx) => (
+                                <div 
+                                  key={item.id || idx}
+                                  className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1 flex items-center justify-center shadow-sm relative z-[3] hover:z-10 transition-all"
+                                  style={{ zIndex: 3 - idx }}
+                                >
+                                  {item.productImage ? (
+                                    <img 
+                                      src={item.productImage} 
+                                      alt={item.productName} 
+                                      className="w-full h-full object-contain"
+                                    />
+                                  ) : (
+                                    <Icon name="image" className="text-slate-350 text-base" />
+                                  )}
+                                </div>
+                              ))}
+                              {items.length > 3 && (
+                                <div className="w-12 h-12 rounded-xl bg-slate-150 dark:bg-slate-700 border border-slate-250 dark:border-slate-650 flex items-center justify-center shadow-sm relative z-[0]">
+                                  <span className="text-[9px] font-black text-slate-600 dark:text-slate-300">+{items.length - 3}</span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Product Name summary */}
+                            <div className="min-w-0">
+                              <h5 className="font-bold text-xs text-slate-800 dark:text-slate-200 truncate leading-snug">
+                                {firstItem.productName || "Chi tiết đơn hàng"}
+                              </h5>
+                              <p className="text-[10px] text-slate-450 dark:text-slate-500 font-semibold mt-0.5">
+                                {items.length > 1 ? `và ${items.length - 1} sản phẩm khác` : `Số lượng: ${totalQty}`}
+                              </p>
+                            </div>
                           </div>
+
+                          {/* Price */}
+                          <div className="sm:text-right shrink-0">
+                            <span className="text-[10px] text-slate-450 dark:text-slate-500 block font-medium">Tổng tiền thanh toán</span>
+                            <strong className="text-sm font-black text-primary block mt-0.5">
+                              {formatVnd(Number(order.finalAmount || order.totalAmount || 0))}
+                            </strong>
+                          </div>
+                        </div>
+
+                        {/* Bottom Actions Row */}
+                        <div className="pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-end gap-2">
+                          {isOrderCancelable(order) && (
+                            <button
+                              onClick={() => handleCancelOrder(order.id)}
+                              className="px-3 py-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-955/15 hover:bg-rose-100/50 dark:hover:bg-rose-955/35 border border-rose-150/40 dark:border-rose-900/30 rounded-xl transition-colors"
+                              type="button"
+                            >
+                              Hủy đơn hàng
+                            </button>
+                          )}
+                          <Link 
+                            to={`/order/${order.id}`} 
+                            className="px-3 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary bg-slate-150/60 dark:bg-slate-800 hover:bg-slate-200/50 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700 rounded-xl transition-all flex items-center gap-1 shadow-sm"
+                          >
+                            Chi tiết <Icon name="chevron_right" className="text-xs" />
+                          </Link>
                         </div>
                       </div>
                     );
@@ -592,7 +953,7 @@ export default function ProfilePage() {
             <form onSubmit={handleProfileSubmit} className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-md space-y-md">
               <div className="border-b border-surface-container-highest pb-xs">
                 <h3 className="font-bold text-headline-md text-on-surface">Thông tin tài khoản</h3>
-                <p className="text-xs text-secondary mt-1">Bạn chỉ có thể cập nhật họ tên và số điện thoại. Email, username và hạng thành viên được đồng bộ từ hệ thống.</p>
+                
               </div>
 
               {profileMessage && <p className="text-sm text-green-600 font-semibold">{profileMessage}</p>}
@@ -621,15 +982,6 @@ export default function ProfilePage() {
                   <strong className="text-secondary block">Email</strong>
                   <input
                     value={userProfile.email}
-                    className="w-full rounded-md border border-surface-container-highest bg-surface-container-low px-3 py-2 text-secondary"
-                    disabled
-                    readOnly
-                  />
-                </label>
-                <label className="space-y-1">
-                  <strong className="text-secondary block">Username</strong>
-                  <input
-                    value={userProfile.username}
                     className="w-full rounded-md border border-surface-container-highest bg-surface-container-low px-3 py-2 text-secondary"
                     disabled
                     readOnly
@@ -783,7 +1135,175 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {activeTab !== "overview" && activeTab !== "orders" && activeTab !== "account" && activeTab !== "addresses" && (
+          {activeTab === "membership" && (
+            <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-md space-y-md">
+              <div className="border-b border-surface-container-highest pb-xs flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-headline-md text-on-surface">Điểm thưởng & ưu đãi</h3>
+                  <p className="text-xs text-secondary mt-1">1 điểm = 1.000đ khi thanh toán. Tích 10.000đ chi tiêu = 1 điểm.</p>
+                </div>
+                <Icon className="text-primary text-[24px]" name="loyalty" />
+              </div>
+
+              {/* Dynamic Metallic Virtual Membership Card */}
+              {(() => {
+                const tierKey = (userProfile.tier || "MEMBER").toUpperCase();
+                const cardStyle = TIER_CARD_STYLES[tierKey] || TIER_CARD_STYLES.MEMBER;
+                return (
+                  <div 
+                    className={`w-full max-w-[400px] h-[220px] mx-auto rounded-2xl relative overflow-hidden p-6 flex flex-col justify-between ${cardStyle.shadow}`}
+                    style={{ 
+                      background: cardStyle.bgGradient,
+                      border: `1px solid ${cardStyle.border}`
+                    }}
+                  >
+                    {/* Shine / gloss light sweep effect */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none"></div>
+
+                    {/* Top Row: Brand & Rank Badge */}
+                    <div className="flex items-start justify-between z-10">
+                      <div>
+                        <p className="text-[10px] font-extrabold uppercase tracking-widest text-white/80">AuraTech Shop</p>
+                        <p className="text-[8px] text-white/50 tracking-wider">MEMBERSHIP CARD</p>
+                      </div>
+                      <span className={`text-[9px] font-bold tracking-widest px-2.5 py-0.5 rounded-full uppercase ${cardStyle.badgeBg}`}>
+                        {cardStyle.cardName}
+                      </span>
+                    </div>
+
+                    {/* Middle Row: Chip & Contactless logo */}
+                    <div className="z-10 flex items-center justify-between">
+                      <div className="w-10 h-7 rounded bg-gradient-to-br from-amber-200 to-amber-400 border border-amber-500/30 relative flex flex-wrap p-[2px]">
+                        <div className="w-1/2 h-1/2 border-r border-b border-amber-600/20"></div>
+                        <div className="w-1/2 h-1/2 border-b border-amber-600/20"></div>
+                        <div className="w-1/2 h-1/2 border-r border-amber-600/20"></div>
+                        <div className="w-1/2 h-1/2"></div>
+                        <div className="absolute inset-x-2 top-1/2 h-[1px] bg-amber-600/30"></div>
+                        <div className="absolute inset-y-1 left-1/2 w-[1px] bg-amber-600/30"></div>
+                      </div>
+                      <Icon className="text-white/40 text-md rotate-90" name="wifi" />
+                    </div>
+
+                    {/* Bottom Row: Holder Name & Multiplier */}
+                    <div className="flex items-end justify-between z-10">
+                      <div>
+                        <p className="text-[8px] uppercase text-white/40 tracking-wider font-semibold">Chủ thẻ</p>
+                        <p className="text-sm font-bold tracking-wider text-white uppercase">{userProfile.name}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`text-[10px] font-bold uppercase tracking-wider ${cardStyle.glowText}`}>
+                          {cardStyle.multiplier}
+                        </p>
+                        <p className="text-[8px] text-white/40">LOYALTY PRIVILEGE</p>
+                      </div>
+                    </div>
+
+                    {/* Background decorations */}
+                    <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-white/5 blur-xl pointer-events-none"></div>
+                    <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
+                  </div>
+                );
+              })()}
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-md pt-sm">
+                <div className="bg-primary-fixed rounded-lg p-md text-center flex flex-col justify-center min-h-[96px]">
+                  <p className="text-xs text-secondary font-bold uppercase">Số dư hiện tại</p>
+                  <p className="text-2xl font-black text-primary mt-1">{loyaltyPoints.toLocaleString("vi-VN")}</p>
+                  <p className="text-xs text-secondary mt-0.5">điểm</p>
+                </div>
+                <div className="bg-surface-container-low rounded-lg p-md text-center flex flex-col justify-center min-h-[96px]">
+                  <p className="text-xs text-secondary font-bold uppercase">Quy đổi</p>
+                  <p className="text-base font-black text-on-surface mt-1">{formatVnd(loyaltyPoints * 1000)}</p>
+                  <p className="text-xs text-secondary mt-0.5">giá trị tối đa</p>
+                </div>
+                <div className="bg-surface-container-low rounded-lg p-md text-center flex flex-col justify-center items-center min-h-[96px]">
+                  <p className="text-xs text-secondary font-bold uppercase mb-1">Hạng thành viên</p>
+                  <span className={`inline-block font-bold text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full ${getTierBadgeClass(userProfile.tier)}`}>
+                    {userProfile.tier}
+                  </span>
+                  <p className="text-xs text-secondary mt-1">hệ số tích điểm theo hạng</p>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-on-surface mb-sm">Lịch sử điểm</h4>
+                {loadingLoyalty ? (
+                  <p className="text-center py-lg text-secondary text-sm">Đang tải...</p>
+                ) : loyaltyHistory.length === 0 ? (
+                  <p className="text-center py-lg text-secondary text-sm">Chưa có giao dịch điểm nào.</p>
+                ) : (
+                  <div className="divide-y divide-surface-container-highest">
+                    {loyaltyHistory.map((tx) => (
+                      <div key={tx.id} className="py-sm flex justify-between items-start gap-md text-sm">
+                        <div>
+                          <p className="font-semibold text-on-surface">{getLoyaltySourceLabel(tx.sourceType)}</p>
+                          <p className="text-xs text-secondary mt-0.5">{tx.description || "—"}</p>
+                          <p className="text-[10px] text-secondary mt-0.5">
+                            {tx.createdAt ? new Date(tx.createdAt).toLocaleString("vi-VN") : ""}
+                          </p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className={`font-black ${tx.delta >= 0 ? "text-emerald-600" : "text-primary"}`}>
+                            {tx.delta >= 0 ? "+" : ""}{tx.delta} điểm
+                          </p>
+                          <p className="text-[10px] text-secondary">Số dư: {tx.balanceAfter}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "reviews" && <ProductReviewsTab />}
+
+          {activeTab === "vouchers" && <VouchersTab />}
+
+          {activeTab === "warranty" && <WarrantyTab defaultPhoneNumber={userProfile.phone} />}
+
+          {activeTab === "policy" && (
+            <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-md space-y-md">
+              <div className="border-b border-surface-container-highest pb-xs flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-headline-md text-on-surface">Chính sách bảo hành AuraTech</h3>
+                  <p className="text-xs text-secondary mt-1">Thông tin chi tiết về chính sách bảo hành và đổi trả của chúng tôi.</p>
+                </div>
+                <Icon className="text-primary text-[24px]" name="policy" />
+              </div>
+              
+              <div className="space-y-sm text-sm text-on-surface">
+                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
+                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
+                    <Icon name="verified" className="text-base" /> 1. Cam kết bảo hành chính hãng
+                  </h4>
+                  <p className="text-xs leading-relaxed text-secondary">
+                    Tất cả sản phẩm điện thoại, laptop, phụ kiện công nghệ mua tại AuraTech đều được cam kết bảo hành chính hãng 12 tháng kể từ ngày giao hàng thành công.
+                  </p>
+                </div>
+
+                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
+                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
+                    <Icon name="swap_horiz" className="text-base" /> 2. Chính sách đổi trả 30 ngày
+                  </h4>
+                  <p className="text-xs leading-relaxed text-secondary">
+                    Đổi mới sản phẩm cùng model hoặc hoàn tiền 100% trong vòng 30 ngày đầu tiên nếu sản phẩm phát sinh lỗi phần cứng do nhà sản xuất.
+                  </p>
+                </div>
+
+                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
+                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
+                    <Icon name="build" className="text-base" /> 3. Quy trình tiếp nhận bảo hành
+                  </h4>
+                  <p className="text-xs leading-relaxed text-secondary">
+                    Quý khách có thể mang sản phẩm trực tiếp đến bất kỳ trung tâm bảo hành ủy quyền của AuraTech trên toàn quốc, hoặc liên hệ Hotline miễn phí <span className="font-bold text-on-surface">1800.2097</span> để được hướng dẫn gửi chuyển phát miễn phí.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab !== "overview" && activeTab !== "orders" && activeTab !== "reviews" && activeTab !== "vouchers" && activeTab !== "account" && activeTab !== "addresses" && activeTab !== "membership" && activeTab !== "warranty" && activeTab !== "policy" && (
             <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-xl text-center flex flex-col items-center justify-center space-y-sm">
               <Icon className="text-[48px] text-secondary opacity-40 animate-pulse" name="construction" />
               <h3 className="font-bold text-body-lg text-on-surface">Tính năng đang cập nhật</h3>

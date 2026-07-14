@@ -8,6 +8,7 @@ import com.ecommerce.grpc.product.ProductVariantInfoGrpc;
 import com.ecommerce.productservice.dto.ProductDto;
 import com.ecommerce.productservice.dto.ProductVariantDto;
 import com.ecommerce.productservice.service.ProductService;
+import com.ecommerce.productservice.util.ProductPricingUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.grpc.stub.StreamObserver;
@@ -61,10 +62,14 @@ public class ProductGrpcServerService extends ProductGrpcServiceGrpc.ProductGrpc
     }
 
     private ProductPriceInfoGrpc toGrpcProductInfo(ProductDto product) {
+        BigDecimal effectivePrice = ProductPricingUtils.getEffectivePrice(product.getPrice(), product.getSalePrice());
+
         ProductPriceInfoGrpc.Builder builder = ProductPriceInfoGrpc.newBuilder()
                 .setId(product.getId())
                 .setName(nullToEmpty(product.getName()))
-                .setPrice(bigDecimalToString(product.getPrice()))
+                .setPrice(bigDecimalToString(effectivePrice))
+                .setListPrice(bigDecimalToString(product.getPrice()))
+                .setSalePrice(product.getSalePrice() != null ? bigDecimalToString(product.getSalePrice()) : "")
                 .setCostPrice(bigDecimalToString(product.getCostPrice()))
                 .setWeight(bigDecimalToString(product.getWeight()))
                 .setImageUrl(nullToEmpty(product.getImageUrl()));
@@ -90,12 +95,14 @@ public class ProductGrpcServerService extends ProductGrpcServiceGrpc.ProductGrpc
             }
         }
 
+        BigDecimal effectivePrice = ProductPricingUtils.getEffectivePrice(variant.getPrice(), variant.getSalePrice());
+
         return ProductVariantInfoGrpc.newBuilder()
                 .setId(variant.getId() != null ? variant.getId() : 0L)
                 .setProductId(variant.getProductId() != null ? variant.getProductId() : 0L)
                 .setSku(nullToEmpty(variant.getSku()))
                 .setVariantAttrJson(variantAttrJson)
-                .setPrice(bigDecimalToString(variant.getPrice()))
+                .setPrice(bigDecimalToString(effectivePrice))
                 .setCostPrice(bigDecimalToString(variant.getCostPrice()))
                 .setWeight(bigDecimalToString(variant.getWeight()))
                 .setImageUrl(nullToEmpty(variant.getImageUrl()))

@@ -18,7 +18,13 @@ public class VoucherApplyResult {
     private String message;
     private String voucherCode;
     private VoucherType voucherType;
+    /** Tổng tiết kiệm (giảm sản phẩm + giảm ship). */
     private BigDecimal discountAmount;
+    /** Giảm trực tiếp trên giá sản phẩm (PERCENT, FIXED). */
+    private BigDecimal productDiscountAmount;
+    /** Giảm phí vận chuyển (FREESHIP). */
+    private BigDecimal shippingDiscountAmount;
+    /** Số tiền sản phẩm sau giảm — không trừ phí ship. */
     private BigDecimal finalAmount;
     private Long campaignId;
     private LocalDateTime expiresAt;

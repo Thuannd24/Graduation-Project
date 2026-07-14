@@ -1,6 +1,8 @@
 package com.ecommerce.promotionservice.service;
 
 import com.ecommerce.promotionservice.dto.*;
+import com.ecommerce.promotionservice.service.support.NotificationTemplateCodes;
+import com.ecommerce.promotionservice.service.support.WorkflowBudgetHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +36,7 @@ public class WorkflowValidatorService {
             "Condition_TotalSpending",
             "Condition_Location",
             "Condition_ContainsCategory",
-            "Condition_ContainsProduct",
-            "Condition_AntiFraudScore"
+            "Condition_ContainsProduct"
     );
 
     private static final Set<String> ACTION_TYPES = Set.of(
@@ -43,11 +44,14 @@ public class WorkflowValidatorService {
             "Action_IssueVoucher_Fixed",
             "Action_IssueVoucher_Freeship",
             "Action_Send_Email",
-            "Action_Send_SMS",
-            "Action_Send_AppPush",
-            "Action_Send_Zalo",
             "Action_Loyalty_Point",
             "Action_Upgrade_MemberRank"
+    );
+
+    private static final Set<String> VOUCHER_ACTION_TYPES = Set.of(
+            "Action_IssueVoucher_Percent",
+            "Action_IssueVoucher_Fixed",
+            "Action_IssueVoucher_Freeship"
     );
 
     private static final String END_TYPE = "End_Event";
@@ -60,10 +64,9 @@ public class WorkflowValidatorService {
         ALL_KNOWN_TYPES.addAll(CONDITION_TYPES);
         ALL_KNOWN_TYPES.addAll(ACTION_TYPES);
         ALL_KNOWN_TYPES.add(END_TYPE);
-    }
-
+    } 
     // ── Public entry point ─────────────────────────────────────────────────────
-    public ValidationResultDto validate(WorkflowGraphDto graph) {
+    public ValidationResultDto validate( WorkflowGraphDto graph) {
         List<ValidationErrorDto> errors = new ArrayList<>();
 
         if (graph == null || graph.getNodes() == null || graph.getEdges() == null) {
@@ -120,6 +123,23 @@ public class WorkflowValidatorService {
                     "Chiến dịch BẮT BUỘC phải có ít nhất 1 Node Kết thúc (End Event)."));
         }
 
+        // 4) Campaign budget pool — only when voucher actions exist (stored in graph meta)
+        if (WorkflowBudgetHelper.requiresVoucherBudget(graph)) {
+            java.math.BigDecimal pool = WorkflowBudgetHelper.metaTotalBudget(graph);
+            if (pool == null || pool.compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                errors.add(global("missing_parameter", "meta.totalBudget",
+                        "Workflow có node Tặng Voucher — cần thiết lập Quỹ ngân sách chiến dịch trên thanh công cụ editor."));
+            } else {
+                java.math.BigDecimal minPool = WorkflowBudgetHelper.estimateMinimumPool(graph);
+                if (minPool.compareTo(java.math.BigDecimal.ZERO) > 0
+                        && pool.compareTo(minPool) < 0) {
+                    errors.add(global("invalid_data", "meta.totalBudget",
+                            String.format("Quỹ ngân sách (%s VNĐ) nên ≥ tổng trừ tối đa/lượt phát (%s VNĐ) của các node voucher.",
+                                    pool.toPlainString(), minPool.toPlainString())));
+                }
+            }
+        }
+
         // ── II. PER-NODE RULES ─────────────────────────────────────────────────
         for (WorkflowNodeDto node : nodes) {
             long inDeg = inDegree.getOrDefault(node.getId(), 0L);
@@ -134,7 +154,7 @@ public class WorkflowValidatorService {
             } else if (CONDITION_TYPES.contains(type)) {
                 validateCondition(node, inDeg, outs, props, edges, errors);
             } else if (ACTION_TYPES.contains(type)) {
-                validateAction(node, inDeg, outDeg, props, errors);
+                validateAction(node, inDeg, outDeg, props, nodes, errors);
             } else if (END_TYPE.equals(type)) {
                 validateEnd(node, inDeg, outDeg, errors);
             }
@@ -194,11 +214,19 @@ public class WorkflowValidatorService {
                     String.format("Node Condition \"%s\": phải có ít nhất 2 nhánh ra (out-degree >= 2), hiện có %d.", node.getName(), outs.size())));
         }
 
-        // Check default branch
-        boolean hasDefault = outs.stream().anyMatch(e -> Boolean.TRUE.equals(e.getIsDefault()));
-        if (!hasDefault) {
+        // BUG FIX: must be EXACTLY one default/else branch, not just "at least one". If a graph
+        // ever has 2 edges both marked isDefault (client bug, or a direct API call bypassing the
+        // FE), BpmnCompilerService's `.findFirst()` silently keeps only one of them as the
+        // gateway's `default=`, leaving the other as a plain unconditional sequence flow that
+        // Camunda's parser rejects at deploy time ("sequence flow without condition which is not
+        // the default flow") - a confusing failure that should be caught here instead.
+        long defaultCount = outs.stream().filter(e -> Boolean.TRUE.equals(e.getIsDefault())).count();
+        if (defaultCount == 0) {
             errors.add(err(node.getId(), "missing_parameter", "isDefault",
                     String.format("Node Condition \"%s\": BẮT BUỘC phải có đúng 1 nhánh ra được đánh dấu \"isDefault = true\" (nhánh Else) để tránh Deadlock trong Camunda.", node.getName())));
+        } else if (defaultCount > 1) {
+            errors.add(err(node.getId(), "invalid_connectivity", "isDefault",
+                    String.format("Node Condition \"%s\": chỉ được có ĐÚNG 1 nhánh Else (isDefault=true), hiện có %d nhánh.", node.getName(), defaultCount)));
         }
 
         // Node-level properties validation
@@ -217,43 +245,94 @@ public class WorkflowValidatorService {
             case "Condition_ContainsProduct":
                 requireStringOrArray(node, props, "targetIds", errors);
                 break;
-            case "Condition_AntiFraudScore":
-                requireNumberInRange(node, props, "maxRiskScore", 1, 100, errors);
-                break;
         }
 
-        // Per-branch parameter check – inspect the edge's edgeProperties
+        // Per-branch parameter check – inspect each non-default edge's properties/condition.
+        // BUG FIX: validation used to be gated behind `if (edgeProps.containsKey("operator"))`,
+        // so a branch saved with an empty properties map (e.g. admin never touched the
+        // dropdown) skipped validation entirely and was treated as valid. It is now
+        // unconditional, and every branch also requires a non-blank JUEL `condition` - the
+        // actual string BpmnCompilerService uses to build the gateway's conditionExpression -
+        // which was never checked here before at all.
+        List<String> branchSignatures = new ArrayList<>();
         for (WorkflowEdgeDto edge : outs) {
             if (Boolean.TRUE.equals(edge.getIsDefault())) continue; // default branch has no conditions
             Map<String, Object> edgeProps = getEdgeProperties(edge, allEdges);
+
+            if (edge.getCondition() == null || edge.getCondition().isBlank()) {
+                errors.add(err(node.getId(), "missing_parameter", "edge[" + edge.getId() + "].condition",
+                        String.format("Nhánh ra \"%s\" của node \"%s\": chưa có biểu thức điều kiện (condition) — kiểm tra lại các trường đã chọn cho nhánh này.",
+                                edge.getId(), node.getName())));
+            }
+
             switch (node.getType()) {
                 case "Condition_MemberRank":
-                    if (edgeProps.containsKey("operator")) {
-                        requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("IN", "NOT_IN"), errors);
-                        requireEdgeArrayNonEmpty(node, edge, edgeProps, "value", errors);
-                        requireEdgeStringValuesSubsets(node, edge, edgeProps, "value", Set.of("DIAMOND", "GOLD", "SILVER", "BRONZE"), errors);
-                    }
+                    requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("IN", "NOT_IN"), errors);
+                    requireEdgeArrayNonEmpty(node, edge, edgeProps, "value", errors);
+                    requireEdgeStringValuesSubsets(node, edge, edgeProps, "value", Set.of("MEMBER", "SILVER", "GOLD", "VIP"), errors);
                     break;
                 case "Condition_TotalSpending":
-                    if (edgeProps.containsKey("operator")) {
-                        requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("GREATER_THAN", "LESS_THAN", "EQUAL"), errors);
-                        requireEdgeNumber(node, edge, edgeProps, "value", errors);
-                        requireEdgeEnum(node, edge, edgeProps, "timeRange", Set.of("CURRENT_MONTH", "LAST_30_DAYS"), errors);
-                    }
+                    requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("GREATER_THAN", "LESS_THAN", "EQUAL"), errors);
+                    requireEdgeNumber(node, edge, edgeProps, "value", errors);
+                    requireEdgeEnum(node, edge, edgeProps, "timeRange", Set.of("CURRENT_MONTH", "LAST_30_DAYS"), errors);
                     break;
                 case "Condition_Location":
-                    if (edgeProps.containsKey("operator")) {
-                        requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("EQUAL", "NOT_EQUAL"), errors);
-                        requireEdgeArrayNonEmpty(node, edge, edgeProps, "value", errors);
-                    }
+                    requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("EQUAL", "NOT_EQUAL"), errors);
+                    requireEdgeArrayNonEmpty(node, edge, edgeProps, "value", errors);
                     break;
+                case "Condition_ContainsCategory":
+                case "Condition_ContainsProduct":
+                    // BUG FIX: these two condition types had NO per-branch validation at all,
+                    // so a branch with an unselected category/product (FE sends value: [""],
+                    // which passes a naive "list is empty?" check since the list has one blank
+                    // element) could be deployed as a dead branch that never matches anything.
+                    requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("EQUAL", "NOT_EQUAL"), errors);
+                    requireEdgeArrayNonEmpty(node, edge, edgeProps, "value", errors);
+                    break;
+            }
+
+            branchSignatures.add(branchSignature(node.getType(), edgeProps));
+        }
+
+        // BUG FIX: detect two sibling IF branches configured with the identical condition
+        // (e.g. two branches both "Hạng = GOLD"). Camunda's exclusive gateway evaluates
+        // outgoing flows in array order and takes the first match, so a duplicate branch is
+        // always unreachable dead logic that silently never fires - the FE had no warning for
+        // this either.
+        Set<String> seenSignatures = new HashSet<>();
+        for (String signature : branchSignatures) {
+            if (signature == null) continue;
+            if (!seenSignatures.add(signature)) {
+                errors.add(err(node.getId(), "invalid_data", "branches",
+                        String.format("Node Condition \"%s\": có ít nhất 2 nhánh IF cấu hình điều kiện giống hệt nhau (%s) — một trong hai nhánh sẽ không bao giờ được thực thi.",
+                                node.getName(), signature)));
+                break; // report once per node, avoid spamming duplicate errors
             }
         }
     }
 
+    /** Normalized signature of a branch's condition config, used to detect duplicate/overlapping siblings. */
+    private String branchSignature(String nodeType, Map<String, Object> edgeProps) {
+        Object operator = edgeProps.get("operator");
+        Object value = edgeProps.get("value");
+        String valueStr;
+        if (value instanceof List<?> list) {
+            valueStr = list.stream().map(String::valueOf).map(String::trim).map(s -> s.toUpperCase(Locale.ROOT))
+                    .sorted().collect(Collectors.joining(","));
+        } else {
+            valueStr = value != null ? value.toString().trim().toUpperCase(Locale.ROOT) : "";
+        }
+        if (valueStr.isBlank()) {
+            return null; // already reported as missing_parameter above; do not also flag as duplicate
+        }
+        return nodeType + "|" + (operator != null ? operator.toString().toUpperCase(Locale.ROOT) : "") + "|" + valueStr;
+    }
+
     // ── Action validation ─────────────────────────────────────────────────────
     private void validateAction(WorkflowNodeDto node, long inDeg, long outDeg,
-                                 Map<String, Object> props, List<ValidationErrorDto> errors) {
+                                 Map<String, Object> props,
+                                 List<WorkflowNodeDto> allNodes,
+                                 List<ValidationErrorDto> errors) {
         if (inDeg < 1) {
             errors.add(err(node.getId(), "invalid_connectivity", "in_degree",
                     String.format("Node Action \"%s\": in-degree phải >= 1, hiện có %d.", node.getName(), inDeg)));
@@ -266,27 +345,47 @@ public class WorkflowValidatorService {
         switch (node.getType()) {
             case "Action_IssueVoucher_Percent":
                 requireNumberInRange(node, props, "discountPercent", 1, 100, errors);
-                requireNumber(node, props, "maxDiscountAmount", errors);
-                requireNumber(node, props, "expireDays", errors);
+                // BUG FIX: maxDiscountAmount/expireDays previously only had to be *a* number
+                // (0, negative, or a decimal like "7.5" all passed). A zero/negative
+                // maxDiscountAmount makes calculatePercentDiscount() always compute a 0đ
+                // discount (voucher issued but permanently useless), and a non-integer
+                // expireDays silently falls back to a default in DelegateVariableHelper.getInt()
+                // (Integer.parseInt throws on "7.5") without telling the admin.
+                requireNumberGt(node, props, "maxDiscountAmount", 0, errors);
+                requireIntegerGt(node, props, "expireDays", 0, errors);
                 break;
             case "Action_IssueVoucher_Fixed":
                 requireNumberGt(node, props, "discountAmount", 0, errors);
                 requireNumber(node, props, "minOrderValue", errors);
-                requireNumber(node, props, "expireDays", errors);
+                requireIntegerGt(node, props, "expireDays", 0, errors);
                 break;
             case "Action_IssueVoucher_Freeship":
-                requireNumber(node, props, "maxShippingDiscount", errors);
-                requireNumber(node, props, "expireDays", errors);
+                // BUG FIX: maxShippingDiscount<=0 makes IssueVoucherFreeshippingDelegate's call
+                // throw IllegalArgumentException at issuance time, which is caught and only
+                // logged (voucherIssued=false) - the campaign "succeeds" but never actually
+                // grants a voucher, with zero signal to whoever configured it.
+                requireNumberGt(node, props, "maxShippingDiscount", 0, errors);
+                requireIntegerGt(node, props, "expireDays", 0, errors);
                 break;
             case "Action_Send_Email":
-            case "Action_Send_SMS":
-            case "Action_Send_AppPush":
-            case "Action_Send_Zalo":
                 boolean hasTemplate = hasNonBlankString(props, "templateId");
                 boolean hasRaw = hasNonBlankString(props, "rawContent");
                 if (!hasTemplate && !hasRaw) {
                     errors.add(err(node.getId(), "missing_parameter", "templateId / rawContent",
                             String.format("Node \"%s\": phải cung cấp \"templateId\" HOẶC \"rawContent\" (không được để trống).", node.getName())));
+                }
+                if (hasTemplate) {
+                    String templateId = props.get("templateId").toString().trim();
+                    if (!NotificationTemplateCodes.isValidEmailTemplate(templateId)) {
+                        errors.add(err(node.getId(), "invalid_data", "templateId",
+                                String.format("Node \"%s\": templateId \"%s\" không tồn tại. Chọn mẫu email có sẵn hoặc dùng rawContent.",
+                                        node.getName(), templateId)));
+                    }
+                    if ("promotion_voucher_template".equals(templateId)
+                            && !hasVoucherAction(allNodes)) {
+                        errors.add(err(node.getId(), "invalid_data", "templateId",
+                                String.format("Node \"%s\": mẫu voucher cần có node Tặng Voucher trong workflow.", node.getName())));
+                    }
                 }
                 break;
             case "Action_Loyalty_Point":
@@ -297,6 +396,12 @@ public class WorkflowValidatorService {
                     if (props.get("pointAmount") != null && !(props.get("pointAmount") instanceof Number)) {
                         errors.add(err(node.getId(), "invalid_data", "pointAmount",
                                 String.format("Node \"%s\": pointAmount phải là số.", node.getName())));
+                    }
+                    String triggerType = resolveTriggerType(allNodes);
+                    if (!"Trigger_Event_OrderSuccess".equals(triggerType)) {
+                        errors.add(err(node.getId(), "invalid_data", "calculationMode",
+                                String.format("Node \"%s\": ORDER_SPEND cần trigger \"Đơn hàng thành công\" (có orderAmount).",
+                                        node.getName())));
                     }
                 } else {
                     requireNumber(node, props, "pointAmount", errors);
@@ -486,6 +591,34 @@ public class WorkflowValidatorService {
         }
     }
 
+    /** Like requireNumberGt, but also rejects non-integer values (e.g. "7.5") - for fields
+     *  consumed downstream via Integer.parseInt (see DelegateVariableHelper.getInt), which
+     *  would otherwise silently fall back to a default instead of surfacing the bad input. */
+    private void requireIntegerGt(WorkflowNodeDto node, Map<String, Object> props,
+                                   String field, double min, List<ValidationErrorDto> errors) {
+        Object val = props.get(field);
+        if (val == null) {
+            errors.add(err(node.getId(), "missing_parameter", field,
+                    String.format("Node \"%s\": trường \"%s\" là bắt buộc (số nguyên > %s).", node.getName(), field, min)));
+            return;
+        }
+        if (!isNumber(val)) {
+            errors.add(err(node.getId(), "wrong_data_type", field,
+                    String.format("Node \"%s\": trường \"%s\" phải là số nguyên.", node.getName(), field)));
+            return;
+        }
+        double d = toDouble(val);
+        if (d <= min) {
+            errors.add(err(node.getId(), "wrong_data_type", field,
+                    String.format("Node \"%s\": trường \"%s\" phải > %s, nhận được %s.", node.getName(), field, min, d)));
+            return;
+        }
+        if (d != Math.floor(d)) {
+            errors.add(err(node.getId(), "wrong_data_type", field,
+                    String.format("Node \"%s\": trường \"%s\" phải là số nguyên (không có phần thập phân), nhận được %s.", node.getName(), field, d)));
+        }
+    }
+
     private void requireNumberInRange(WorkflowNodeDto node, Map<String, Object> props,
                                        String field, double min, double max,
                                        List<ValidationErrorDto> errors) {
@@ -542,9 +675,15 @@ public class WorkflowValidatorService {
                                            Map<String, Object> edgeProps, String field,
                                            List<ValidationErrorDto> errors) {
         Object val = edgeProps.get(field);
+        // BUG FIX: a list containing only blank strings (e.g. [""], which is exactly what an
+        // unselected FE dropdown for Location/ContainsCategory/ContainsProduct sends) used to
+        // pass this check because `List.isEmpty()` is false for a 1-element list - only an
+        // actually-empty list or null tripped the old check. Now every element must be a
+        // non-blank string for the list to count as "filled in".
         boolean empty = (val == null) ||
-                (val instanceof List && ((List<?>) val).isEmpty()) ||
-                (val instanceof String && ((String) val).isBlank());
+                (val instanceof List<?> list && (list.isEmpty()
+                        || list.stream().allMatch(v -> v == null || v.toString().isBlank()))) ||
+                (val instanceof String str && str.isBlank());
         if (empty) {
             errors.add(err(node.getId(), "missing_parameter", "edge[" + edge.getId() + "]." + field,
                     String.format("Nhánh ra \"%s\" của node \"%s\": trường \"%s\" là mảng bắt buộc và không được rỗng.",
@@ -564,6 +703,20 @@ public class WorkflowValidatorService {
     }
 
     // ── Type utilities ────────────────────────────────────────────────────────
+    private boolean hasVoucherAction(List<WorkflowNodeDto> nodes) {
+        return nodes.stream()
+                .map(WorkflowNodeDto::getType)
+                .anyMatch(type -> type != null && VOUCHER_ACTION_TYPES.contains(type));
+    }
+
+    private String resolveTriggerType(List<WorkflowNodeDto> nodes) {
+        return nodes.stream()
+                .map(WorkflowNodeDto::getType)
+                .filter(type -> type != null && TRIGGER_TYPES.contains(type))
+                .findFirst()
+                .orElse(null);
+    }
+
     private boolean hasNonBlankString(Map<String, Object> props, String key) {
         Object v = props.get(key);
         return v != null && !v.toString().isBlank();

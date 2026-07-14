@@ -1,9 +1,8 @@
 package com.ecommerce.productservice.config;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.ecommerce.productservice.dto.ProductDto;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -27,15 +26,17 @@ public class CacheConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        
-        // Kích hoạt polymorphic type handling để Jackson biết cách map JSON về đúng Class cụ thể
-        objectMapper.activateDefaultTyping(
-                LaissezFaireSubTypeValidator.instance,
-                ObjectMapper.DefaultTyping.NON_FINAL,
-                JsonTypeInfo.As.PROPERTY
-        );
 
-        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+        // SECURITY FIX: "products" and "products_slug" only ever cache ProductDto, so we bind the
+        // serializer to that concrete type instead of using GenericJackson2JsonRedisSerializer
+        // with activateDefaultTyping(LaissezFaireSubTypeValidator...). The generic/polymorphic
+        // approach embeds an unrestricted "@class" property in every cached value and deserializes
+        // whatever class name it finds there - an unsafe-deserialization surface if this Redis
+        // keyspace is ever shared/writable by anything else, and it also breaks every cached entry
+        // if ProductDto is ever renamed or moved to a different package. A type-bound serializer
+        // has neither problem.
+        Jackson2JsonRedisSerializer<ProductDto> serializer =
+                new Jackson2JsonRedisSerializer<>(objectMapper, ProductDto.class);
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(24)) // TTL mặc định cho product catalog

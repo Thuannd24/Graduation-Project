@@ -11,6 +11,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Component("issueVoucherPercentDelegate")
 @RequiredArgsConstructor
@@ -33,13 +34,15 @@ public class IssueVoucherPercentDelegate implements JavaDelegate {
         BigDecimal maxAmt = DelegateVariableHelper.getBigDecimal(execution, "maxDiscountAmount");
         int days = DelegateVariableHelper.getInt(execution, "expireDays", 7);
         Long campaignId = userContextResolver.resolveCampaignId(execution).orElse(null);
+        List<Long> restrictedCategoryIds = DelegateVariableHelper.getLongList(execution, "voucherRestrictedCategoryIds");
+        List<Long> restrictedProductIds = DelegateVariableHelper.getLongList(execution, "voucherRestrictedProductIds");
 
         log.info("[IssueVoucherPercent] userId={} discount={}% maxAmt={} expireDays={}",
                 userDbId.get(), percent, maxAmt, days);
 
         try {
             IssueVoucherResult result = voucherIssuanceService.issuePercent(
-                    userDbId.get(), campaignId, percent, maxAmt, days);
+                    userDbId.get(), campaignId, percent, maxAmt, days, restrictedCategoryIds, restrictedProductIds);
             applyResult(execution, result);
             log.info("[IssueVoucherPercent] Issued voucher {} for user {}", result.getVoucherCode(), userDbId.get());
         } catch (Exception ex) {

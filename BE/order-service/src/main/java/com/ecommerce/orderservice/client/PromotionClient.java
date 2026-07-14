@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @FeignClient(name = "promotion-service", fallbackFactory = PromotionClientFallbackFactory.class)
 public interface PromotionClient {
 
     @PostMapping("/api/internal/vouchers/validate")
-    ApiResponse<VoucherApplyResult> validateVoucher(@RequestBody VoucherApplyRequest request);
+    ApiResponse<VoucherApplyResult> previewVoucher(@RequestBody VoucherApplyRequest request);
 
     @PostMapping("/api/internal/vouchers/apply")
     ApiResponse<VoucherApplyResult> applyVoucher(@RequestBody VoucherApplyRequest request);
@@ -37,6 +38,9 @@ public interface PromotionClient {
         private Long orderId;
         private BigDecimal orderTotal;
         private BigDecimal shippingFee;
+        /** Product IDs trong đơn hàng/giỏ hàng hiện tại — dùng để kiểm tra ràng buộc
+         *  danh mục/sản phẩm của voucher ở promotion-service. */
+        private List<Long> productIds;
     }
 
     @Data
@@ -49,6 +53,8 @@ public interface PromotionClient {
         private String voucherCode;
         private String voucherType;
         private BigDecimal discountAmount;
+        private BigDecimal productDiscountAmount;
+        private BigDecimal shippingDiscountAmount;
         private BigDecimal finalAmount;
         private Long campaignId;
         private LocalDateTime expiresAt;

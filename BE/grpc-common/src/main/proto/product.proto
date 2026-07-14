@@ -24,12 +24,14 @@ message GetPriceInfoRequest {
 message ProductPriceInfoGrpc {
   int64 id = 1;
   string name = 2;
-  // Dùng string để tránh mất mát độ chính xác với BigDecimal (price, weight, costPrice)
+  // Giá khách trả (effective price = sale_price nếu có, ngược lại list_price)
   string price = 3;
   string cost_price = 4;
   string weight = 5;
   string image_url = 6;
   repeated ProductVariantInfoGrpc variants = 7;
+  string list_price = 8;
+  string sale_price = 9;
 }
 
 message ProductVariantInfoGrpc {

@@ -103,12 +103,7 @@ export default function OverviewTab({
     });
     const entries = Object.entries(categoryMap).sort((a, b) => b[1] - a[1]);
     if (entries.length === 0) {
-      return [
-        { name: "Điện thoại", value: 35 },
-        { name: "Laptop", value: 28 },
-        { name: "Phụ kiện", value: 12 },
-        { name: "Gia dụng", value: 5 }
-      ];
+      return [];
     }
     return entries.slice(0, 5).map(([name, val]) => ({
       name,
@@ -118,9 +113,10 @@ export default function OverviewTab({
 
   // Tính dữ liệu người dùng trực tuyến từ đơn hàng
   const liveUsersData = useMemo(() => {
+    const base = Math.max(orders.length, 1);
     return Array.from({ length: 30 }, (_, i) => ({
       minute: i + 1,
-      users: Math.max(1, Math.round(orders.length * (0.02 + Math.random() * 0.05)))
+      users: Math.max(0, Math.round(base * 0.03))
     }));
   }, [orders]);
 
@@ -162,9 +158,7 @@ export default function OverviewTab({
     });
     const entries = Object.entries(countryMap).sort((a, b) => b[1] - a[1]);
     if (entries.length === 0) {
-      return [
-        { name: "Việt Nam", flag: "🇻🇳", region: "Đông Nam Á", sales: 52500000, percent: 25.0 },
-      ];
+      return [];
     }
     return entries.slice(0, 4).map(([name, sales]) => {
       const total = entries.reduce((s, e) => s + e[1], 0);

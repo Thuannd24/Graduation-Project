@@ -18,6 +18,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Slice<Product> findByCategoryId(Long categoryId, Pageable pageable);
 
+    Slice<Product> findByCategoryIdIn(List<Long> categoryIds, Pageable pageable);
+
     Optional<Product> findBySlug(String slug);
 
     List<Product> findByIdIn(List<Long> ids);

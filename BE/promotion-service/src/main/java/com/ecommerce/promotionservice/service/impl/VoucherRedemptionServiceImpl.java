@@ -1,5 +1,6 @@
 package com.ecommerce.promotionservice.service.impl;
 
+import com.ecommerce.promotionservice.client.ProductClient;
 import com.ecommerce.promotionservice.dto.VoucherApplyRequest;
 import com.ecommerce.promotionservice.dto.VoucherApplyResult;
 import com.ecommerce.promotionservice.entity.IssuedVoucher;
@@ -7,6 +8,7 @@ import com.ecommerce.promotionservice.entity.VoucherStatus;
 import com.ecommerce.promotionservice.entity.VoucherType;
 import com.ecommerce.promotionservice.repository.IssuedVoucherRepository;
 import com.ecommerce.promotionservice.service.InternalUserIdResolver;
+import com.ecommerce.promotionservice.service.VoucherMaintenanceService;
 import com.ecommerce.promotionservice.service.VoucherRedemptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,8 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
 
     private final IssuedVoucherRepository voucherRepository;
     private final InternalUserIdResolver userIdResolver;
+    private final VoucherMaintenanceService voucherMaintenanceService;
+    private final ProductClient productClient;
 
     @Override
     @Transactional(readOnly = true)
@@ -94,23 +101,49 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
             return VoucherApplyResult.invalid("Mã voucher không tồn tại.");
         }
 
+        // BUG FIX: expireIfNeeded() writes to the DB (status -> EXPIRED, releases campaign
+        // budget). preview() runs in a @Transactional(readOnly = true) transaction — Spring/
+        // Hibernate may set the flush mode to MANUAL/NEVER for read-only transactions, so an
+        // entity mutated here could silently never be flushed to the database at all. Only run
+        // the mutating expiry check on the real (non-read-only) apply() path; preview() instead
+        // relies on the plain date comparison in validateOwnershipAndState() below, which reports
+        // the same "hết hạn" result without writing anything.
+        if (reserve) {
+            voucherMaintenanceService.expireIfNeeded(voucher);
+            if (voucher.getStatus() == VoucherStatus.EXPIRED) {
+                return VoucherApplyResult.invalid("Mã voucher đã hết hạn.");
+            }
+        }
+
         String validationError = validateOwnershipAndState(voucher, userDbId, reserve);
         if (validationError != null) {
             return VoucherApplyResult.invalid(validationError);
         }
 
-        BigDecimal discount;
+        // BUG FIX: previously a voucher's Condition_ContainsCategory/ContainsProduct only gated
+        // who RECEIVED it, not what it could be redeemed against - a voucher earned by buying
+        // category X could be applied to any unrelated order. Now checked against whatever
+        // category/product restriction was stamped onto the voucher at issuance time.
+        String restrictionError = validateProductCategoryRestriction(voucher, request.getProductIds());
+        if (restrictionError != null) {
+            return VoucherApplyResult.invalid(restrictionError);
+        }
+
+        BigDecimal productDiscount;
+        BigDecimal shippingDiscount;
         try {
-            discount = calculateDiscount(voucher, request.getOrderTotal(), request.getShippingFee());
+            productDiscount = calculateProductDiscount(voucher, request.getOrderTotal());
+            shippingDiscount = calculateShippingDiscount(voucher, request.getShippingFee());
         } catch (IllegalArgumentException ex) {
             return VoucherApplyResult.invalid(ex.getMessage());
         }
 
-        if (discount.compareTo(BigDecimal.ZERO) <= 0) {
+        BigDecimal totalDiscount = productDiscount.add(shippingDiscount);
+        if (totalDiscount.compareTo(BigDecimal.ZERO) <= 0) {
             return VoucherApplyResult.invalid("Voucher không áp dụng được cho đơn hàng này.");
         }
 
-        BigDecimal finalAmount = request.getOrderTotal().subtract(discount).max(BigDecimal.ZERO);
+        BigDecimal finalAmount = request.getOrderTotal().subtract(productDiscount).max(BigDecimal.ZERO);
 
         if (reserve) {
             voucher.setStatus(VoucherStatus.RESERVED);
@@ -124,11 +157,73 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
                 .message("Áp dụng voucher thành công.")
                 .voucherCode(voucher.getCode())
                 .voucherType(voucher.getVoucherType())
-                .discountAmount(discount)
+                .discountAmount(totalDiscount)
+                .productDiscountAmount(productDiscount)
+                .shippingDiscountAmount(shippingDiscount)
                 .finalAmount(finalAmount)
                 .campaignId(voucher.getCampaignId())
                 .expiresAt(voucher.getExpiresAt())
                 .build();
+    }
+
+    /** Null = no restriction violated (either the voucher has no restriction, or the current
+     *  order's products/categories satisfy it). Non-null = rejection message. */
+    private String validateProductCategoryRestriction(IssuedVoucher voucher, List<Long> orderProductIds) {
+        List<Long> restrictedProductIds = parseCsvIds(voucher.getRestrictedProductIds());
+        List<Long> restrictedCategoryIds = parseCsvIds(voucher.getRestrictedCategoryIds());
+        if (restrictedProductIds.isEmpty() && restrictedCategoryIds.isEmpty()) {
+            return null;
+        }
+
+        List<Long> productIds = orderProductIds != null ? orderProductIds : List.of();
+        if (productIds.isEmpty()) {
+            return "Voucher này chỉ áp dụng cho một số sản phẩm/danh mục nhất định.";
+        }
+
+        if (!restrictedProductIds.isEmpty() && productIds.stream().anyMatch(restrictedProductIds::contains)) {
+            return null;
+        }
+
+        if (!restrictedCategoryIds.isEmpty()) {
+            List<Long> orderCategoryIds = resolveCategoryIds(productIds);
+            if (orderCategoryIds.stream().anyMatch(restrictedCategoryIds::contains)) {
+                return null;
+            }
+        }
+
+        return "Đơn hàng hiện tại không thuộc danh mục/sản phẩm được áp dụng cho voucher này.";
+    }
+
+    private List<Long> parseCsvIds(String csv) {
+        if (csv == null || csv.isBlank()) {
+            return List.of();
+        }
+        return Arrays.stream(csv.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(Long::parseLong)
+                .toList();
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Long> resolveCategoryIds(List<Long> productIds) {
+        try {
+            Map<String, Object> response = productClient.getBulkProducts(productIds);
+            Object dataObj = response != null ? response.get("data") : null;
+            if (!(dataObj instanceof List<?> products)) {
+                return List.of();
+            }
+            return products.stream()
+                    .filter(p -> p instanceof Map)
+                    .map(p -> ((Map<String, Object>) p).get("categoryId"))
+                    .filter(java.util.Objects::nonNull)
+                    .map(id -> Long.parseLong(id.toString()))
+                    .distinct()
+                    .toList();
+        } catch (Exception ex) {
+            log.warn("Could not resolve category ids for products {}: {}", productIds, ex.getMessage());
+            return List.of();
+        }
     }
 
     private String validateOwnershipAndState(IssuedVoucher voucher, Long userDbId, boolean reserve) {
@@ -160,12 +255,19 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
         return null;
     }
 
-    private BigDecimal calculateDiscount(IssuedVoucher voucher, BigDecimal orderTotal, BigDecimal shippingFee) {
+    private BigDecimal calculateProductDiscount(IssuedVoucher voucher, BigDecimal orderTotal) {
         return switch (voucher.getVoucherType()) {
             case PERCENT -> calculatePercentDiscount(voucher, orderTotal);
             case FIXED -> calculateFixedDiscount(voucher, orderTotal);
-            case FREESHIP -> calculateFreeshipDiscount(voucher, orderTotal, shippingFee);
+            case FREESHIP -> BigDecimal.ZERO;
         };
+    }
+
+    private BigDecimal calculateShippingDiscount(IssuedVoucher voucher, BigDecimal shippingFee) {
+        if (voucher.getVoucherType() != VoucherType.FREESHIP) {
+            return BigDecimal.ZERO;
+        }
+        return calculateFreeshipDiscount(voucher, shippingFee);
     }
 
     private BigDecimal calculatePercentDiscount(IssuedVoucher voucher, BigDecimal orderTotal) {
@@ -192,16 +294,15 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
         return amount.min(orderTotal);
     }
 
-    private BigDecimal calculateFreeshipDiscount(IssuedVoucher voucher, BigDecimal orderTotal,
-                                                   BigDecimal shippingFee) {
+    private BigDecimal calculateFreeshipDiscount(IssuedVoucher voucher, BigDecimal shippingFee) {
         BigDecimal cap = voucher.getMaxShippingDiscount();
         if (cap == null || cap.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Cấu hình voucher freeship không hợp lệ.");
         }
-        BigDecimal shipBase = shippingFee != null && shippingFee.compareTo(BigDecimal.ZERO) > 0
-                ? shippingFee
-                : cap;
-        return shipBase.min(cap).min(orderTotal);
+        if (shippingFee == null || shippingFee.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Đơn hàng không có phí vận chuyển để áp dụng voucher freeship.");
+        }
+        return shippingFee.min(cap);
     }
 
     private String normalizeCode(String code) {

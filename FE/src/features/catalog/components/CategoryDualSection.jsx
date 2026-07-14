@@ -4,6 +4,7 @@ import { productApi } from "../../../services/productApi";
 import ProductCarousel from "./ProductCarousel";
 import { getBrandLogo } from "../../../utils/brandLogo";
 import Icon from "../../../components/common/Icon";
+import leftBanner from "../../../assets/images/left.webp";
 
 const RED = "#D70018";
 const PHONE_BRANDS = ["Apple", "Samsung", "Xiaomi", "OPPO", "HONOR", "TECNO", "realme", "Nokia", "Infinix", "Nothing"];
@@ -72,89 +73,119 @@ export default function CategoryDualSection({ categories }) {
   }, [activeTab, activeBrand, activeSub, loadProducts]);
 
   return (
-    <section style={{
-      display: "flex",
-      gap: 12,
-      backgroundColor: "#fff",
-      borderRadius: 12,
-      border: "1px solid #EDEDED",
-      overflow: "hidden",
-      boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
-    }}>
-      {/* ── Left sidebar ── */}
-      <div style={{
-        width: 200,
-        flexShrink: 0,
+    <section 
+      className="category-shelf-container"
+      style={{
         display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        padding: "12px 0 12px 12px",
-      }}>
-        {/* Promo banner HONOR style */}
-        <div style={{
-          borderRadius: 10,
-          overflow: "hidden",
-          background: "linear-gradient(180deg, #E8F8FF 0%, #C8EEFF 100%)",
-          padding: "14px 12px",
-          minHeight: 280,
-          display: "flex",
-          flexDirection: "column",
-          position: "relative",
-        }}>
-          <div style={{ fontSize: 18, fontWeight: 900, color: "#111827", lineHeight: 1.2 }}>
-            HONOR X7D
-          </div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: RED, marginTop: 4 }}>
-            Chỉ 6.09 Triệu
-          </div>
-          <div style={{ fontSize: 11, color: "#374151", marginTop: 6, lineHeight: 1.5 }}>
-            Tặng Sim 5G<br />
-            Giảm thêm cho S-Student
-          </div>
-          <div style={{
-            marginTop: "auto",
-            paddingTop: 12,
-          }}>
-            <Link to="/category" style={{
-              display: "inline-block",
-              padding: "6px 18px",
-              borderRadius: 6,
-              backgroundColor: "#22C55E",
-              color: "#fff",
-              fontSize: 12,
-              fontWeight: 700,
-              textDecoration: "none",
-            }}>
-              MUA NGAY
-            </Link>
-          </div>
-        </div>
+        gap: 16,
+        backgroundColor: "#fff",
+        borderRadius: "16px",
+        border: "1px solid #EDEDED",
+        overflow: "hidden",
+        boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+        padding: "16px",
+        position: "relative"
+      }}
+    >
+      {/* CSS styling for responsiveness and hover transitions */}
+      <style>{`
+        .category-shelf-container {
+          transition: all 0.3s ease;
+        }
+        @media (max-width: 768px) {
+          .category-shelf-sidebar {
+            display: none !important;
+          }
+          .category-shelf-container {
+            padding: 10px !important;
+            border-radius: 12px !important;
+          }
+          .category-shelf-main {
+            padding: 0 !important;
+          }
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .brand-pill-btn {
+          transition: all 0.15s ease-in-out !important;
+        }
+        .brand-pill-btn:hover {
+          border-color: #D70018 !important;
+          color: #D70018 !important;
+          background-color: #FFF1F2 !important;
+        }
+        .sub-cat-btn {
+          transition: all 0.2s ease !important;
+        }
+        .sub-cat-btn:hover {
+          border-color: #D70018 !important;
+          background-color: #FFF1F2 !important;
+        }
+        .view-all-link:hover {
+          text-decoration: underline !important;
+          color: #1D4ED8 !important;
+        }
+        .sidebar-banner-hover img {
+          transition: transform 0.3s ease, filter 0.3s ease !important;
+        }
+        .sidebar-banner-hover:hover img {
+          transform: scale(1.02);
+          filter: brightness(0.95);
+        }
+      `}</style>
 
-        {/* Bottom slogan banner */}
-        <div style={{
-          borderRadius: 10,
-          overflow: "hidden",
-          background: "linear-gradient(135deg, #E8F4FF 0%, #D0EAFF 100%)",
-          padding: "12px",
-          textAlign: "center",
-        }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: RED, lineHeight: 1.4 }}>
-            Luôn Ở Cạnh.<br />
-            <span style={{ color: "#22C55E" }}>Theo Cách Riêng.</span>
-          </div>
-        </div>
+      {/* ── Left sidebar (Hidden on Mobile) ── */}
+      <div 
+        className="category-shelf-sidebar"
+        style={{
+          width: 210,
+          flexShrink: 0,
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
+        <Link 
+          to="/category?activeCategory=dien-thoai" 
+          style={{ 
+            display: "block",
+            width: "100%",
+            height: "100%",
+            borderRadius: 12,
+            overflow: "hidden",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
+          }}
+          className="sidebar-banner-hover"
+        >
+          <img 
+            src={leftBanner} 
+            alt="Left Promo Banner" 
+            style={{ 
+              width: "100%", 
+              height: "100%", 
+              objectFit: "cover",
+              display: "block"
+            }} 
+          />
+        </Link>
       </div>
 
       {/* ── Main content ── */}
-      <div style={{ flex: 1, minWidth: 0, padding: "12px 16px 16px 0" }}>
-
-        {/* Tab bar */}
+      <div 
+        className="category-shelf-main"
+        style={{ 
+          flex: 1, 
+          minWidth: 0,
+        }}
+      >
+        {/* Tab bar (Red underline, borderless container) */}
         <div style={{
           display: "flex",
-          borderBottom: "2px solid #F0F0F0",
-          marginBottom: 14,
+          borderBottom: "2px solid #E5E7EB",
+          marginBottom: 16,
+          backgroundColor: "#fff"
         }}>
-          {tabs.map(tab => {
+          {tabs.map((tab, idx) => {
             const isActive = activeTab === tab.id;
             return (
               <button
@@ -162,17 +193,23 @@ export default function CategoryDualSection({ categories }) {
                 type="button"
                 onClick={() => { setActiveTab(tab.id); setActiveBrand(null); setActiveSub(null); }}
                 style={{
-                  padding: "8px 20px 10px",
-                  fontSize: 14,
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: 52,
+                  fontSize: "15px",
                   fontWeight: 800,
                   letterSpacing: "0.03em",
-                  color: isActive ? RED : "#374151",
-                  background: "none",
+                  color: isActive ? "#D70018" : "#4B5563",
+                  background: isActive ? "linear-gradient(to top, rgba(215, 0, 24, 0.08) 0%, rgba(255, 255, 255, 0) 100%)" : "none",
                   border: "none",
-                  borderBottom: isActive ? `3px solid ${RED}` : "3px solid transparent",
-                  marginBottom: -2,
+                  borderBottom: isActive ? "2px solid #D70018" : "2px solid transparent",
+                  borderRight: idx < tabs.length - 1 ? "1px solid #E5E7EB" : "none",
+                  marginBottom: "-2px",
                   cursor: "pointer",
-                  transition: "color 0.15s",
+                  textTransform: "uppercase",
+                  transition: "all 0.2s"
                 }}
               >
                 {tab.label}
@@ -181,151 +218,167 @@ export default function CategoryDualSection({ categories }) {
           })}
         </div>
 
-        {/* Subcategory icon row */}
+        {/* Subcategory icons row */}
+        {(activeCategory?.children || []).length > 0 && (
+          <div style={{
+            position: "relative",
+            marginBottom: 14,
+            display: "flex",
+            alignItems: "center"
+          }}>
+            <div 
+              className="hide-scrollbar"
+              style={{
+                display: "flex",
+                gap: 8,
+                overflowX: "auto",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                flex: 1,
+                paddingBottom: 4
+              }}
+            >
+              {(activeCategory?.children || []).map(sub => {
+                const isActive = activeSub?.id === sub.id;
+                return (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    onClick={() => setActiveSub(isActive ? null : sub)}
+                    className="sub-cat-btn"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "6px 12px",
+                      borderRadius: "8px",
+                      border: `1px solid ${isActive ? "#D70018" : "#F3F4F6"}`,
+                      backgroundColor: isActive ? "#FFF1F2" : "#F3F4F6",
+                      cursor: "pointer",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {sub.imageUrl ? (
+                      <img src={sub.imageUrl} alt={sub.name} style={{ width: 22, height: 22, objectFit: "contain" }} />
+                    ) : (
+                      <Icon name={sub.icon || "devices"} style={{ fontSize: 16, color: isActive ? "#D70018" : "#4B5563" }} />
+                    )}
+                    <span style={{
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: isActive ? "#D70018" : "#374151"
+                    }}>
+                      {sub.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Brand pills (Horizontal scrollable with "View All" aligned right) */}
         <div style={{
           display: "flex",
           alignItems: "center",
-          gap: 8,
-          marginBottom: 12,
-          overflow: "hidden",
+          gap: 12,
+          marginBottom: 16,
+          borderTop: (activeCategory?.children || []).length > 0 ? "none" : "none"
         }}>
-          <div style={{
-            display: "flex",
-            gap: 8,
-            overflowX: "auto",
-            scrollbarWidth: "none",
-            flex: 1,
-          }}>
-            {(activeCategory?.children || []).map(sub => {
-              const isActive = activeSub?.id === sub.id;
+          <div 
+            className="hide-scrollbar"
+            style={{
+              display: "flex",
+              gap: 8,
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              flex: 1,
+              paddingBottom: 2
+            }}
+          >
+            {brands.map(brand => {
+              const logo = getBrandLogo(brand.name);
+              const isActive = activeBrand === brand.name;
               return (
                 <button
-                  key={sub.id}
+                  key={brand.id}
                   type="button"
-                  onClick={() => setActiveSub(isActive ? null : sub)}
+                  onClick={() => setActiveBrand(isActive ? null : brand.name)}
+                  className="brand-pill-btn"
                   style={{
                     display: "flex",
-                    flexDirection: "column",
                     alignItems: "center",
-                    gap: 4,
-                    flexShrink: 0,
-                    background: "none",
-                    border: "none",
+                    gap: 6,
+                    padding: "0 18px",
+                    height: 38,
+                    boxSizing: "border-box",
+                    borderRadius: "20px",
+                    border: `1px solid ${isActive ? "#D70018" : "#E5E7EB"}`,
+                    backgroundColor: isActive ? "#FFF1F2" : "#ffffff",
+                    color: isActive ? "#D70018" : "#4B5563",
+                    fontWeight: 700,
+                    fontSize: "13.5px",
                     cursor: "pointer",
-                    padding: 0,
+                    flexShrink: 0,
+                    boxShadow: isActive ? "0 2px 6px rgba(215, 0, 24, 0.06)" : "none",
                   }}
                 >
-                  <div style={{
-                    width: 72,
-                    height: 56,
-                    borderRadius: 8,
-                    border: `1px solid ${isActive ? RED : "#E5E7EB"}`,
-                    backgroundColor: "#F9FAFB",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "border-color 0.15s",
-                    overflow: "hidden"
-                  }}>
-                    {sub.imageUrl ? (
-                      <img src={sub.imageUrl} alt={sub.name} style={{ width: "80%", height: "80%", objectFit: "contain" }} />
-                    ) : (
-                      <Icon name={sub.icon || "devices"} style={{ fontSize: 22, color: isActive ? RED : "#6B7280" }} />
-                    )}
-                  </div>
-                  <span style={{
-                    fontSize: 10,
-                    fontWeight: 600,
-                    color: isActive ? RED : "#6B7280",
-                    textAlign: "center",
-                    maxWidth: 72,
-                    lineHeight: 1.25,
-                  }}>
-                    {sub.name}
-                  </span>
+                  {brand.logoUrl ? (
+                    <img src={brand.logoUrl} alt={brand.name} style={{ maxHeight: 26, maxWidth: 85, objectFit: "contain" }} />
+                  ) : logo ? (
+                    <span style={{ display: "flex", alignItems: "center", height: 26, fontSize: 0 }}>
+                      {logo}
+                    </span>
+                  ) : (
+                    <span>{brand.name}</span>
+                  )}
                 </button>
               );
             })}
           </div>
-          <button type="button" style={{
-            width: 28, height: 28, borderRadius: "50%",
-            border: "1px solid #E5E7EB", backgroundColor: "#fff",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", flexShrink: 0,
-          }}>
-            <Icon name="chevron_right" style={{ fontSize: 18, color: "#6B7280" }} />
-          </button>
-        </div>
 
-        {/* Brand pills */}
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 6,
-          alignItems: "center",
-          marginBottom: 14,
-        }}>
-          {brands.map(brand => {
-            const logo = getBrandLogo(brand.name);
-            const isActive = activeBrand === brand.name;
-            return (
-              <button
-                key={brand.id}
-                type="button"
-                onClick={() => setActiveBrand(isActive ? null : brand.name)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4,
-                  padding: "4px 12px",
-                  borderRadius: 999,
-                  border: `1px solid ${isActive ? RED : "#E5E7EB"}`,
-                  backgroundColor: isActive ? "#FFF1F2" : "#fff",
-                  color: isActive ? RED : "#374151",
-                  fontWeight: 700,
-                  fontSize: 11.5,
-                  cursor: "pointer",
-                  transition: "all 0.15s",
-                }}
-              >
-                {brand.logoUrl ? (
-                  <img src={brand.logoUrl} alt={brand.name} style={{ maxHeight: 16, maxWidth: 60, objectFit: "contain" }} />
-                ) : logo ? (
-                  <span style={{ display: "flex", alignItems: "center", fontSize: 0 }}>
-                    {logo}
-                  </span>
-                ) : brand.name}
-              </button>
-            );
-          })}
           <Link
             to={`/category?activeCategory=${activeCategory?.slug || "dien-thoai"}`}
+            className="view-all-link"
             style={{
-              marginLeft: "auto",
-              fontSize: 12,
+              fontSize: "13px",
               color: "#288AD6",
               fontWeight: 700,
               textDecoration: "none",
               display: "flex",
               alignItems: "center",
               gap: 2,
+              flexShrink: 0,
+              marginLeft: 12
             }}
           >
             Xem tất cả
-            <Icon name="chevron_right" style={{ fontSize: 15 }} />
+            <Icon name="chevron_right" style={{ fontSize: 16 }} />
           </Link>
         </div>
 
-        {/* Product carousel */}
+        {/* Product carousel grid */}
         {loading ? (
-          <ProductCarousel products={[]} visibleCount={4} gap={10} loading />
+          <ProductCarousel products={[]} visibleCount={4} gap={12} loading />
         ) : products.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "32px 0", color: "#9CA3AF", fontSize: 13 }}>Không có sản phẩm</div>
+          <div style={{ 
+            textAlign: "center", 
+            padding: "48px 0", 
+            color: "#9CA3AF", 
+            fontSize: "14px",
+            fontWeight: 500,
+            backgroundColor: "#F9FAFB",
+            borderRadius: "12px",
+            border: "1px dashed #E5E7EB"
+          }}>
+            Không có sản phẩm nào thuộc bộ lọc này
+          </div>
         ) : (
           <ProductCarousel
             products={products}
             visibleCount={4}
-            gap={10}
+            gap={12}
             cardProps={{ showShipping: true }}
           />
         )}

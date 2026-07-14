@@ -40,10 +40,52 @@ public class UserServiceImpl implements UserService {
                     });
         }
         
-        // Nếu user đã tồn tại nhưng chưa có avatarUrl, mà Gateway gửi avatarUrl mới → Cập nhật tự động
-        if (user.getAvatarUrl() == null && avatarUrl != null && !avatarUrl.isEmpty()) {
-            log.info("Auto-syncing avatar for user: {}", keycloakUserId);
+        // ──────────────────────────────────────────────────────────────────────
+        // Đồng bộ thông tin từ Keycloak JWT → DB mỗi lần gọi /users/me
+        // Fix: Trường hợp user được tạo trước đó bởi getUserByKeycloakId()
+        // với dữ liệu placeholder (UUID@placeholder.com, "Keycloak User")
+        // → Khi đăng nhập lại, cần cập nhật lại từ JWT token thực tế.
+        // ──────────────────────────────────────────────────────────────────────
+        boolean changed = false;
+
+        // Sync email: cập nhật nếu JWT khác DB
+        if (email != null && !email.isEmpty() && !email.equals(user.getEmail())) {
+            log.info("Auto-syncing email for user {}: {} → {}", keycloakUserId, user.getEmail(), email);
+            user.setEmail(email);
+            changed = true;
+        }
+
+        // Sync fullName: cập nhật nếu JWT khác DB (ví dụ: Google trả về tên có dấu "Thuân Nguyễn")
+        if (fullName != null && !fullName.isEmpty() && !fullName.equals(user.getFullName())) {
+            log.info("Auto-syncing fullName for user {}: {} → {}", keycloakUserId, user.getFullName(), fullName);
+            user.setFullName(fullName);
+            changed = true;
+        }
+
+        // Sync username: cập nhật nếu JWT khác DB
+        if (username != null && !username.isEmpty() && !username.equals(user.getUsername())) {
+            log.info("Auto-syncing username for user {}: {} → {}", keycloakUserId, user.getUsername(), username);
+            user.setUsername(username);
+            changed = true;
+        }
+
+        // Sync avatar: cập nhật nếu DB chưa có avatar hoặc khác với avatar từ JWT
+        if (avatarUrl != null && !avatarUrl.isEmpty() && !avatarUrl.equals(user.getAvatarUrl())) {
+            log.info("Auto-syncing avatar for user {}: {} → {}", keycloakUserId, user.getAvatarUrl(), avatarUrl);
             user.setAvatarUrl(avatarUrl);
+            changed = true;
+        }
+
+        // Tự động đồng bộ Số điện thoại từ Username nếu DB đang trống số điện thoại
+        // và Username lại là số điện thoại hợp lệ (do đăng ký qua form)
+        if ((user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty())
+                && user.getUsername() != null && user.getUsername().matches("^0[0-9]{9,10}$")) {
+            log.info("Auto-syncing phoneNumber from username for user {}: {}", keycloakUserId, user.getUsername());
+            user.setPhoneNumber(user.getUsername());
+            changed = true;
+        }
+
+        if (changed) {
             user = userRepository.save(user);
         }
 
@@ -109,11 +151,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User getUserByKeycloakId(String keycloakUserId) {
         return userRepository.findByKeycloakUserId(keycloakUserId)
-                .orElseGet(() -> findOrCreateUser(
-                        keycloakUserId,
-                        keycloakUserId + "@placeholder.com",
-                        "user_" + keycloakUserId.substring(0, Math.min(8, keycloakUserId.length()))
-                ));
+                .orElseThrow(() -> {
+                    log.warn("User profile not found for keycloakId={}. "
+                           + "Client must call GET /users/me first to provision the profile.", keycloakUserId);
+                    return new ResourceNotFoundException("User", "keycloakUserId", keycloakUserId);
+                });
     }
 
     @Override

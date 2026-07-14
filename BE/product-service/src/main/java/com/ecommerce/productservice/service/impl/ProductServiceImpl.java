@@ -7,6 +7,7 @@ import com.ecommerce.productservice.exception.ResourceNotFoundException;
 import com.ecommerce.productservice.repository.*;
 import com.ecommerce.productservice.service.ProductService;
 import com.ecommerce.productservice.service.SearchService;
+import com.ecommerce.productservice.util.ProductPricingUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     private final ProductVariantRepository productVariantRepository;
     private final ProductTagRepository productTagRepository;
     private final ProductImageRepository productImageRepository;
@@ -60,9 +62,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Slice<ProductDto> getProductsByCategory(Long categoryId, Pageable pageable) {
-        Slice<Product> products = productRepository.findByCategoryId(categoryId, pageable);
+        List<Long> categoryIds = resolveCategoryIdsWithDescendants(categoryId);
+        Slice<Product> products = categoryIds.size() == 1
+                ? productRepository.findByCategoryId(categoryId, pageable)
+                : productRepository.findByCategoryIdIn(categoryIds, pageable);
         List<ProductDto> dtos = convertToDtoList(products.getContent());
         return new SliceImpl<>(dtos, pageable, products.hasNext());
+    }
+
+    // Danh mục cha hiển thị luôn sản phẩm của mọi danh mục con (đệ quy), không chỉ sản phẩm gán trực tiếp vào nó
+    private List<Long> resolveCategoryIdsWithDescendants(Long categoryId) {
+        List<Long> ids = new ArrayList<>();
+        ids.add(categoryId);
+        Deque<Long> queue = new ArrayDeque<>();
+        queue.add(categoryId);
+        while (!queue.isEmpty()) {
+            Long current = queue.poll();
+            for (Category child : categoryRepository.findByParentId(current)) {
+                ids.add(child.getId());
+                queue.add(child.getId());
+            }
+        }
+        return ids;
     }
 
     @Override
@@ -84,6 +105,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto createProduct(ProductDto productDto) {
+        if (productRepository.findBySlug(productDto.getSlug()).isPresent()) {
+            throw new IllegalArgumentException("Slug sản phẩm đã tồn tại: " + productDto.getSlug());
+        }
+        normalizeProductPricing(productDto);
         String resolvedBrandName = productDto.getBrand();
         if (productDto.getBrandId() != null) {
             resolvedBrandName = brandRepository.findById(productDto.getBrandId())
@@ -97,6 +122,7 @@ public class ProductServiceImpl implements ProductService {
                 .slug(productDto.getSlug())
                 .description(productDto.getDescription())
                 .attributes(null) // Deprecated: attributes now stored in product_attribute_values
+                .specsRaw(serializeSpecsRaw(productDto.getSpecsRaw()))
                 .price(productDto.getPrice())
                 .costPrice(productDto.getCostPrice())
                 .salePrice(productDto.getSalePrice())
@@ -146,6 +172,7 @@ public class ProductServiceImpl implements ProductService {
                         .sku(v.getSku())
                         .variantAttr(null) // Deprecated: variant attributes now stored in variant_option_values
                         .price(v.getPrice())
+                        .salePrice(v.getSalePrice())
                         .costPrice(v.getCostPrice())
                         .weight(v.getWeight())
                         .imageUrl(v.getImageUrl())
@@ -171,6 +198,7 @@ public class ProductServiceImpl implements ProductService {
 
         // Convert to DTO first while we are inside the transaction (loads lazy properties)
         ProductDto responseDto = convertToDto(product);
+        final String newSlug = product.getSlug();
 
         // Index in Elasticsearch (Post DB transaction commit)
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
@@ -182,6 +210,20 @@ public class ProductServiceImpl implements ProductService {
                     } catch (Exception e) {
                         log.error("Failed to index product in Elasticsearch after transaction commit: {}", e.getMessage());
                     }
+
+                    // BUG FIX: getProductBySlug caches a null result (Cache Penetration guard in
+                    // CacheConfig), so if the slug was looked up (e.g. an admin "slug already
+                    // taken?" check) before this product was created, that null stays cached for
+                    // the full 24h TTL and the newly created product would 404 by slug until it
+                    // expires. Evict pre-emptively so the next lookup reads the DB.
+                    try {
+                        Cache slugsCache = cacheManager.getCache("products_slug");
+                        if (slugsCache != null && newSlug != null) {
+                            slugsCache.evict(newSlug);
+                        }
+                    } catch (Exception e) {
+                        log.error("Failed to evict products_slug cache for new product slug: {}", newSlug, e);
+                    }
                 }
             });
         } else {
@@ -189,6 +231,14 @@ public class ProductServiceImpl implements ProductService {
                 searchService.indexProduct(productId);
             } catch (Exception e) {
                 log.error("Failed to index product in Elasticsearch: {}", e.getMessage());
+            }
+            try {
+                Cache slugsCache = cacheManager.getCache("products_slug");
+                if (slugsCache != null && newSlug != null) {
+                    slugsCache.evict(newSlug);
+                }
+            } catch (Exception e) {
+                log.error("Failed to evict products_slug cache for new product slug: {}", newSlug, e);
             }
         }
 
@@ -198,10 +248,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto updateProduct(Long id, ProductDto productDto) {
+        normalizeProductPricing(productDto);
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
 
         final String oldSlug = product.getSlug();
+
+        if (!oldSlug.equals(productDto.getSlug())
+                && productRepository.findBySlug(productDto.getSlug()).isPresent()) {
+            throw new IllegalArgumentException("Slug sản phẩm đã tồn tại: " + productDto.getSlug());
+        }
 
         String resolvedBrandName = productDto.getBrand();
         if (productDto.getBrandId() != null) {
@@ -214,6 +270,9 @@ public class ProductServiceImpl implements ProductService {
         product.setSlug(productDto.getSlug());
         product.setDescription(productDto.getDescription());
         product.setAttributes(null); // Keep legacy column null
+        if (productDto.getSpecsRaw() != null) {
+            product.setSpecsRaw(serializeSpecsRaw(productDto.getSpecsRaw()));
+        }
         product.setPrice(productDto.getPrice());
         product.setCostPrice(productDto.getCostPrice());
         product.setSalePrice(productDto.getSalePrice());
@@ -258,6 +317,7 @@ public class ProductServiceImpl implements ProductService {
                 if (existing != null) {
                     // Update existing variant
                     existing.setPrice(v.getPrice());
+                    existing.setSalePrice(v.getSalePrice());
                     existing.setCostPrice(v.getCostPrice());
                     existing.setWeight(v.getWeight());
                     existing.setImageUrl(v.getImageUrl());
@@ -274,6 +334,7 @@ public class ProductServiceImpl implements ProductService {
                             .sku(sku)
                             .variantAttr(null)
                             .price(v.getPrice())
+                            .salePrice(v.getSalePrice())
                             .costPrice(v.getCostPrice())
                             .weight(v.getWeight())
                             .imageUrl(v.getImageUrl())
@@ -545,6 +606,7 @@ public class ProductServiceImpl implements ProductService {
                             .sku(v.getSku())
                             .variantAttr(optionMap) // Dynamic option values represented as a Map
                             .price(v.getPrice())
+                            .salePrice(v.getSalePrice())
                             .costPrice(v.getCostPrice())
                             .weight(v.getWeight())
                             .imageUrl(v.getImageUrl())
@@ -563,6 +625,7 @@ public class ProductServiceImpl implements ProductService {
                 .slug(product.getSlug())
                 .description(product.getDescription())
                 .attributes(specMap) // Dynamic specifications represented as a Map
+                .specsRaw(deserializeSpecsRaw(product.getSpecsRaw()))
                 .price(product.getPrice())
                 .costPrice(product.getCostPrice())
                 .salePrice(product.getSalePrice())
@@ -665,6 +728,42 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    // Chuyển JSON string trong cột specs_raw ngược lại thành Map để trả ra DTO
+    private Map<String, String> deserializeSpecsRaw(String specsRawJson) {
+        if (specsRawJson == null || specsRawJson.trim().isEmpty()) {
+            return Collections.emptyMap();
+        }
+        try {
+            return objectMapper.readValue(specsRawJson, LinkedHashMap.class);
+        } catch (Exception e) {
+            log.error("Failed to deserialize specs_raw column", e);
+            return Collections.emptyMap();
+        }
+    }
+
+    // Chuyển specsRaw (Map hoặc JSON string từ import) thành JSON string để lưu vào cột specs_raw
+    private String serializeSpecsRaw(Object specsRawObj) {
+        if (specsRawObj == null) {
+            return null;
+        }
+        if (specsRawObj instanceof String) {
+            String str = (String) specsRawObj;
+            return (str.trim().isEmpty() || str.equals("null")) ? null : str;
+        }
+        try {
+            Map<?, ?> map = (specsRawObj instanceof Map)
+                    ? (Map<?, ?>) specsRawObj
+                    : objectMapper.convertValue(specsRawObj, Map.class);
+            if (map.isEmpty()) {
+                return null;
+            }
+            return objectMapper.writeValueAsString(map);
+        } catch (Exception e) {
+            log.error("Failed to serialize specsRaw from class: {}", specsRawObj.getClass().getName(), e);
+            return null;
+        }
+    }
+
     private void saveVariantOptions(Long variantId, Object variantAttrObj, Map<String, Attribute> attributesByCode) {
         if (variantAttrObj == null) {
             return;
@@ -726,6 +825,14 @@ public class ProductServiceImpl implements ProductService {
     private Map<Long, Attribute> getAttributesMap() {
         return attributeRepository.findAll().stream()
                 .collect(Collectors.toMap(Attribute::getId, a -> a));
+    }
+
+    private void normalizeProductPricing(ProductDto productDto) {
+        if (productDto == null) {
+            return;
+        }
+        productDto.setSalePrice(
+                ProductPricingUtils.normalizeSalePrice(productDto.getPrice(), productDto.getSalePrice()));
     }
 
     private Map<String, Attribute> getAttributesByCodeMap() {

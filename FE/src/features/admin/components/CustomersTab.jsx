@@ -51,7 +51,7 @@ export default function CustomersTab({ orders = [] }) {
         const d = new Date(o.createdAt);
         return d >= dayStart && d <= dayEnd;
       }).length;
-      return { name, value: count > 0 ? count * 1000 : Math.round(Math.random() * 5000 + 1000) };
+      return { name, value: count > 0 ? count * 1000 : 0 };
     }).reverse();
   }, [orders]);
 

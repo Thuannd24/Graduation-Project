@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "notification-service", fallbackFactory = NotificationClientFallbackFactory.class)
+import com.ecommerce.promotionservice.config.FeignInternalApiConfig;
+
+@FeignClient(name = "notification-service", fallbackFactory = NotificationClientFallbackFactory.class, configuration = FeignInternalApiConfig.class)
 public interface NotificationClient {
 
     @PostMapping("/api/internal/notifications/send")

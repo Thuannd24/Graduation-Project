@@ -1,9 +1,12 @@
 package com.ecommerce.userservice.service.impl;
 
 import com.ecommerce.userservice.domain.LoyaltyPointPolicy;
+import com.ecommerce.userservice.dto.request.PointRedeemRequest;
 import com.ecommerce.userservice.dto.request.PointUpdateRequest;
 import com.ecommerce.userservice.dto.response.LoyaltyPointResponse;
 import com.ecommerce.userservice.dto.response.LoyaltyTransactionDto;
+import com.ecommerce.userservice.dto.response.PointRedeemResult;
+import com.ecommerce.userservice.dto.response.RedeemPreviewResponse;
 import com.ecommerce.userservice.entity.LoyaltyPointTransaction;
 import com.ecommerce.userservice.entity.User;
 import com.ecommerce.userservice.exception.ResourceNotFoundException;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -125,6 +129,111 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
                         .description(tx.getDescription())
                         .createdAt(tx.getCreatedAt())
                         .build());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public RedeemPreviewResponse redeemPreview(Long userId, BigDecimal orderAmount) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        int balance = user.getLoyaltyPoints() != null ? user.getLoyaltyPoints() : 0;
+        int maxPoints = LoyaltyPointPolicy.calculateMaxRedeemablePoints(balance, orderAmount);
+
+        return RedeemPreviewResponse.builder()
+                .currentBalance(balance)
+                .maxRedeemablePoints(maxPoints)
+                .maxDiscountAmount(LoyaltyPointPolicy.calculateDiscountFromPoints(maxPoints))
+                .vndPerPoint(LoyaltyPointPolicy.VND_PER_REDEEM_POINT)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public PointRedeemResult redeemForOrder(Long userId, PointRedeemRequest request) {
+        Optional<LoyaltyPointTransaction> existing = transactionRepository
+                .findFirstByOrderIdAndSourceType(request.getOrderId(), LoyaltyPointPolicy.SOURCE_REDEMPTION);
+        if (existing.isPresent()) {
+            LoyaltyPointTransaction tx = existing.get();
+            int redeemed = Math.abs(tx.getDelta());
+            return PointRedeemResult.builder()
+                    .userId(userId)
+                    .pointsRedeemed(redeemed)
+                    .discountAmount(LoyaltyPointPolicy.calculateDiscountFromPoints(redeemed))
+                    .newPointBalance(tx.getBalanceAfter())
+                    .build();
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        int balance = user.getLoyaltyPoints() != null ? user.getLoyaltyPoints() : 0;
+        int pointsToRedeem = request.getPointsToRedeem();
+        int maxAllowed = LoyaltyPointPolicy.calculateMaxRedeemablePoints(balance, request.getOrderAmount());
+
+        if (pointsToRedeem <= 0) {
+            throw new IllegalArgumentException("Số điểm đổi phải lớn hơn 0.");
+        }
+        if (pointsToRedeem > maxAllowed) {
+            throw new IllegalArgumentException(
+                    "Chỉ có thể dùng tối đa " + maxAllowed + " điểm cho đơn hàng này.");
+        }
+
+        BigDecimal discountAmount = LoyaltyPointPolicy.calculateDiscountFromPoints(pointsToRedeem);
+
+        PointUpdateRequest updateRequest = new PointUpdateRequest();
+        updateRequest.setPointAmount(-pointsToRedeem);
+        updateRequest.setCalculationMode(LoyaltyPointPolicy.MODE_FIXED);
+        updateRequest.setOrderId(request.getOrderId());
+        updateRequest.setSourceType(LoyaltyPointPolicy.SOURCE_REDEMPTION);
+        updateRequest.setReason("Đổi " + pointsToRedeem + " điểm → giảm " + discountAmount + " VND (đơn #"
+                + request.getOrderId() + ")");
+
+        LoyaltyPointResponse adjusted = adjustPoints(userId, updateRequest);
+
+        return PointRedeemResult.builder()
+                .userId(userId)
+                .pointsRedeemed(pointsToRedeem)
+                .discountAmount(discountAmount)
+                .newPointBalance(adjusted.getNewPointBalance())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public LoyaltyPointResponse refundForOrder(Long userId, Long orderId) {
+        Optional<LoyaltyPointTransaction> redemption = transactionRepository
+                .findFirstByOrderIdAndSourceType(orderId, LoyaltyPointPolicy.SOURCE_REDEMPTION);
+        if (redemption.isEmpty()) {
+            return LoyaltyPointResponse.builder()
+                    .userId(userId)
+                    .pointsApplied(0)
+                    .newPointBalance(getBalance(userId))
+                    .calculationMode(LoyaltyPointPolicy.MODE_FIXED)
+                    .calculationDetail("Không có điểm đã đổi cho đơn #" + orderId)
+                    .build();
+        }
+
+        if (transactionRepository.findFirstByOrderIdAndSourceType(orderId, LoyaltyPointPolicy.SOURCE_REFUND).isPresent()) {
+            return LoyaltyPointResponse.builder()
+                    .userId(userId)
+                    .pointsApplied(0)
+                    .newPointBalance(getBalance(userId))
+                    .calculationMode(LoyaltyPointPolicy.MODE_FIXED)
+                    .calculationDetail("Điểm đã được hoàn cho đơn #" + orderId)
+                    .build();
+        }
+
+        int pointsToRefund = Math.abs(redemption.get().getDelta());
+
+        PointUpdateRequest updateRequest = new PointUpdateRequest();
+        updateRequest.setPointAmount(pointsToRefund);
+        updateRequest.setCalculationMode(LoyaltyPointPolicy.MODE_FIXED);
+        updateRequest.setOrderId(orderId);
+        updateRequest.setSourceType(LoyaltyPointPolicy.SOURCE_REFUND);
+        updateRequest.setReason("Hoàn " + pointsToRefund + " điểm do hủy đơn #" + orderId);
+
+        return adjustPoints(userId, updateRequest);
     }
 
     private String normalizeMode(String mode) {

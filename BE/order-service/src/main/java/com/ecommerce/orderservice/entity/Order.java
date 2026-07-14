@@ -21,6 +21,9 @@ public class Order {
     @Column(name = "user_id", nullable = false, length = 100)
     private String userId;
 
+    @Column(name = "email", length = 255)
+    private String email;
+
     @Column(name = "status", nullable = false)
     @Builder.Default
     private String status = "PENDING"; // PENDING, AWAITING_PAYMENT, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
@@ -44,6 +47,26 @@ public class Order {
 
     @Column(name = "applied_campaign_id", length = 50)
     private String appliedCampaignId;
+
+    @Column(name = "points_redeemed")
+    @Builder.Default
+    private Integer pointsRedeemed = 0;
+
+    @Column(name = "point_discount_amount", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal pointDiscountAmount = BigDecimal.ZERO;
+
+    @Column(name = "shipping_fee", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal shippingFee = BigDecimal.ZERO;
+
+    @Column(name = "shipping_discount_amount", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal shippingDiscountAmount = BigDecimal.ZERO;
+
+    @Column(name = "vat_amount", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal vatAmount = BigDecimal.ZERO;
 
     @Column(name = "tracking_code", length = 100)
     private String trackingCode;
@@ -69,6 +92,11 @@ public class Order {
         this.updatedAt = LocalDateTime.now();
         if (this.status == null) this.status = "PENDING";
         if (this.discountAmount == null) this.discountAmount = BigDecimal.ZERO;
+        if (this.pointDiscountAmount == null) this.pointDiscountAmount = BigDecimal.ZERO;
+        if (this.shippingFee == null) this.shippingFee = BigDecimal.ZERO;
+        if (this.shippingDiscountAmount == null) this.shippingDiscountAmount = BigDecimal.ZERO;
+        if (this.vatAmount == null) this.vatAmount = BigDecimal.ZERO;
+        if (this.pointsRedeemed == null) this.pointsRedeemed = 0;
         if (this.totalWeight == null) this.totalWeight = BigDecimal.ZERO;
     }
 

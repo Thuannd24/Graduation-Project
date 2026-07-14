@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Icon from "../../../components/common/Icon.jsx";
@@ -6,7 +6,9 @@ import ProductCard from "../components/ProductCard.jsx";
 import { useCart } from "../../../context/CartContext.jsx";
 import { useWishlist } from "../../../context/WishlistContext.jsx";
 import { productApi } from "../../../services/productApi";
+import { authApi } from "../../../services/authApi";
 import { calculateDiscountPercent, formatVnd } from "../../../utils/format.js";
+import { resolveProductPrices } from "../../../utils/pricing.ts";
 import keycloak from "../../../services/keycloak.js";
 
 /* ======================== Helper Functions ======================== */
@@ -177,58 +179,6 @@ function StarRating({ rating, size = "sm", interactive = false, onChange }) {
   );
 }
 
-/* ======================== Review Image Upload ======================== */
-
-function ReviewImageUpload({ images, onImagesChange }) {
-  const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    const newImages = [...images];
-    for (const file of files) {
-      if (newImages.length >= 5) break;
-      try {
-        const url = await productApi.uploadProductImage(file, "reviews");
-        newImages.push(url);
-      } catch (err) {
-        console.error("Upload image failed:", err);
-      }
-    }
-    onImagesChange(newImages);
-    e.target.value = "";
-  };
-
-  const removeImage = (index) => {
-    onImagesChange(images.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div className="flex flex-wrap items-center gap-2">
-      {images.map((img, idx) => (
-        <div key={idx} className="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 group flex-shrink-0">
-          <img src={img} alt="" className="w-full h-full object-cover" />
-          <button
-            type="button"
-            onClick={() => removeImage(idx)}
-            className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border-none cursor-pointer"
-          >
-            <Icon name="close" className="text-white text-sm" />
-          </button>
-        </div>
-      ))}
-      {images.length < 5 && (
-        <label className="w-16 h-16 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all flex-shrink-0">
-          <Icon name="add_photo_alternate" className="text-slate-400 text-xl" />
-          <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileChange} />
-        </label>
-      )}
-      {images.length > 0 && images.length < 5 && (
-        <span className="text-[10px] text-slate-400 font-medium ml-1">Tối đa 5 ảnh</span>
-      )}
-    </div>
-  );
-}
-
 /* ======================== Review Stats Summary ======================== */
 
 function ReviewStatsSummary({ reviews }) {
@@ -315,9 +265,17 @@ function ReviewCard({ review }) {
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-full ${avatarColor} flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0`}>
-            {initial}
-          </div>
+          {review.avatarUrl ? (
+            <img
+              src={review.avatarUrl}
+              alt={review.username}
+              className="w-10 h-10 rounded-full object-cover shadow-sm flex-shrink-0 border border-slate-100 dark:border-slate-800"
+            />
+          ) : (
+            <div className={`w-10 h-10 rounded-full ${avatarColor} flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0`}>
+              {initial}
+            </div>
+          )}
           <div>
             <div className="flex items-center gap-2">
               <h5 className="font-bold text-sm text-slate-800 dark:text-slate-200">
@@ -387,174 +345,6 @@ function ReviewCard({ review }) {
   );
 }
 
-/* ======================== Review Form ======================== */
-
-function ReviewForm({ productId, onReviewSubmitted }) {
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState("");
-  const [images, setImages] = useState([]);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
-  const [expanded, setExpanded] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!comment.trim()) {
-      setError("Vui lòng nhập nội dung đánh giá.");
-      return;
-    }
-    if (!keycloak.authenticated) {
-      keycloak.login({ redirectUri: window.location.href });
-      return;
-    }
-
-    setSubmitting(true);
-    setError("");
-
-    try {
-      await productApi.createReview({
-        productId: Number(productId),
-        rating,
-        comment: comment.trim(),
-        imageUrls: images.length > 0 ? images : undefined
-      });
-
-      // Refresh reviews after successful submission
-      const reviewList = await productApi.getReviews(productId);
-      const normalizedReviews = (reviewList || []).map((review) => ({
-        id: review.id,
-        username: review.username || review.userId || "Khách hàng",
-        author: review.username || review.userId || "Khách hàng",
-        createdAt: review.createdAt,
-        date: review.createdAt,
-        rating: review.rating || 5,
-        content: review.comment || "",
-        comment: review.comment || "",
-        imageUrls: review.imageUrls || [],
-        helpfulCount: 0
-      }));
-      onReviewSubmitted(normalizedReviews);
-
-      setComment("");
-      setRating(5);
-      setImages([]);
-      setExpanded(false);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Gửi đánh giá thất bại");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-all">
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-4 sm:p-5 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-950 border-none cursor-pointer text-left"
-        type="button"
-      >
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-            <Icon name="rate_review" className="text-primary text-lg" />
-          </div>
-          <div>
-            <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200">
-              Viết đánh giá của bạn
-            </h4>
-            <p className="text-[11px] text-slate-500 font-medium">
-              Chia sẻ trải nghiệm về sản phẩm này
-            </p>
-          </div>
-        </div>
-        <motion.div
-          animate={{ rotate: expanded ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <Icon name="expand_more" className="text-slate-400 text-xl" />
-        </motion.div>
-      </button>
-
-      <AnimatePresence>
-        {expanded && (
-          <motion.form
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            onSubmit={handleSubmit}
-            className="overflow-hidden"
-          >
-            <div className="px-4 sm:px-5 pb-5 space-y-4 border-t border-slate-100 dark:border-slate-800 pt-4">
-              {/* Star Rating Selector */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-2 uppercase tracking-wider">
-                  Chất lượng sản phẩm
-                </label>
-                <StarRating rating={rating} size="md" interactive onChange={setRating} />
-              </div>
-
-              {/* Comment */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-2 uppercase tracking-wider">
-                  Nội dung đánh giá <span className="text-primary">*</span>
-                </label>
-                <textarea
-                  placeholder="Sản phẩm này thế nào? Chất lượng có tốt không? Bạn có hài lòng không?"
-                  value={comment}
-                  onChange={(e) => { setComment(e.target.value); setError(""); }}
-                  rows={3}
-                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg p-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all resize-none placeholder:text-slate-400"
-                  maxLength={1000}
-                />
-                <div className="flex justify-between mt-1">
-                  <span className="text-xs text-red-500 font-medium">{error}</span>
-                  <span className="text-[11px] text-slate-400">{comment.length}/1000</span>
-                </div>
-              </div>
-
-              {/* Image Upload */}
-              <div>
-                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-2 uppercase tracking-wider">
-                  Thêm hình ảnh (tùy chọn)
-                </label>
-                <ReviewImageUpload images={images} onImagesChange={setImages} />
-              </div>
-
-              {/* Submit */}
-              <div className="flex items-center gap-3 pt-1">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-6 py-2.5 bg-primary text-white font-extrabold text-sm rounded-lg hover:bg-red-700 transition-all shadow-md shadow-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border-none flex items-center gap-2"
-                >
-                  {submitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Đang gửi...
-                    </>
-                  ) : (
-                    <>
-                      <Icon name="send" className="text-sm" />
-                      Gửi đánh giá
-                    </>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExpanded(false)}
-                  className="px-4 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 bg-transparent border-none cursor-pointer transition-colors"
-                >
-                  Hủy
-                </button>
-              </div>
-            </div>
-          </motion.form>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 /* ======================== Main Page Component ======================== */
 
 export default function ProductDetailPage() {
@@ -582,11 +372,29 @@ export default function ProductDetailPage() {
     [categoryAttributes]
   );
 
+  // Map code (VD "storage", "cpu") → tên tiếng Việt thật (VD "Bộ nhớ trong", "Vi xử lý") để hiển thị bảng thông số
+  const attributeNameMap = useMemo(() => {
+    const map = {};
+    (Array.isArray(categoryAttributes) ? categoryAttributes : []).forEach((attr) => {
+      const code = attr?.attributeCode || attr?.code;
+      const name = attr?.attributeName || attr?.name;
+      if (code && name) map[code] = name;
+    });
+    return map;
+  }, [categoryAttributes]);
+
   const variants = useMemo(() => (Array.isArray(product?.variants) ? product.variants : []), [product]);
   const variantGroups = useMemo(() => normalizeVariantOptions(variants, variantAxes), [variants, variantAxes]);
   const selectedVariant = useMemo(() => findMatchingVariant(variants, selectedOptions), [variants, selectedOptions]);
-  const basePrice = Number(selectedVariant?.price ?? product?.price ?? 0);
-  const oldPrice = Number(product?.oldPrice ?? product?.salePrice ?? product?.price ?? basePrice);
+  const variantPrices = useMemo(
+    () =>
+      selectedVariant
+        ? resolveProductPrices({ price: selectedVariant.price, salePrice: selectedVariant.salePrice })
+        : null,
+    [selectedVariant]
+  );
+  const basePrice = variantPrices ? variantPrices.price : Number(product?.price ?? 0);
+  const oldPrice = variantPrices ? (variantPrices.oldPrice ?? 0) : Number(product?.oldPrice ?? 0);
   const discount = calculateDiscountPercent(basePrice, oldPrice);
   const gallery = useMemo(() => {
     const images = [selectedVariant?.imageUrl, product?.image, ...(product?.gallery || [])].filter(Boolean);
@@ -612,38 +420,58 @@ export default function ProductDetailPage() {
     setLoading(true);
     Promise.all([
       productApi.getProduct(productId),
-      productApi.listProducts(),
       productApi.getReviews(productId)
     ])
-      .then(async ([detail, products, reviewList]) => {
+      .then(async ([detail, reviewList]) => {
         setProduct(detail);
-        setRelated((Array.isArray(products) ? products : []).filter((item) => item.id !== detail.id).slice(0, 8));
 
-        const normalizedReviews = (reviewList || []).map((review) => ({
-          id: review.id,
-          username: review.username || review.userId || "Khách hàng",
-          author: review.username || review.userId || "Khách hàng",
-          createdAt: review.createdAt,
-          date: review.createdAt,
-          rating: review.rating || 5,
-          content: review.comment || "",
-          comment: review.comment || "",
-          imageUrls: review.imageUrls || [],
-          helpfulCount: 0
-        }));
+        // Non-blocking: related products don't block the main render
+        productApi.listProducts()
+          .then((products) => setRelated((Array.isArray(products) ? products : []).filter((item) => item.id !== detail.id).slice(0, 8)))
+          .catch(() => {});
+
+        const userIds = Array.from(new Set((reviewList || []).map((r) => r.userId).filter(Boolean)));
+
+        // Parallel: user profiles + category attributes
+        const [userProfileResults, attrs] = await Promise.all([
+          Promise.all(
+            userIds.map((uid) =>
+              authApi.getPublicProfile(uid)
+                .then((p) => ({ uid, profile: p }))
+                .catch(() => ({ uid, profile: null }))
+            )
+          ),
+          detail?.categoryId
+            ? productApi.getCategoryAttributes(detail.categoryId).catch(() => [])
+            : Promise.resolve([])
+        ]);
+
+        const userMap = {};
+        userProfileResults.forEach(({ uid, profile }) => {
+          if (profile) userMap[uid] = {
+            username: profile.fullName || profile.username || "Khách hàng",
+            avatarUrl: profile.avatarUrl || null
+          };
+        });
+
+        const normalizedReviews = (reviewList || []).map((review) => {
+          const uInfo = userMap[review.userId];
+          return {
+            id: review.id,
+            username: uInfo?.username || "Khách hàng",
+            author: uInfo?.username || "Khách hàng",
+            avatarUrl: uInfo?.avatarUrl || null,
+            createdAt: review.createdAt,
+            date: review.createdAt,
+            rating: review.rating || 5,
+            content: review.comment || "",
+            comment: review.comment || "",
+            imageUrls: review.imageUrls || [],
+            helpfulCount: 0
+          };
+        });
         setReviews(normalizedReviews);
-
-        if (detail?.categoryId) {
-          try {
-            const attrs = await productApi.getCategoryAttributes(detail.categoryId);
-            setCategoryAttributes(Array.isArray(attrs) ? attrs : []);
-          } catch (attrError) {
-            console.warn("Failed to load category attributes", attrError);
-            setCategoryAttributes([]);
-          }
-        } else {
-          setCategoryAttributes([]);
-        }
+        setCategoryAttributes(Array.isArray(attrs) ? attrs : []);
 
         const firstImage = detail?.gallery?.[0] || detail?.image || detail?.imageUrl || selectedVariant?.imageUrl || "";
         setActiveImage(firstImage);
@@ -684,8 +512,10 @@ export default function ProductDetailPage() {
       keycloak.login({ redirectUri: window.location.origin + "/checkout" });
       return;
     }
-    await addToCart(checkoutProduct, selectedVariant || null);
-    navigate("/checkout");
+    const success = await addToCart(checkoutProduct, selectedVariant || null);
+    if (success) {
+      navigate("/checkout");
+    }
   };
 
   const handleAddToCart = async () => {
@@ -694,10 +524,6 @@ export default function ProductDetailPage() {
       await addToCart({ ...product, selectedVariant: selectedVariant || null }, selectedVariant || null);
     }
   };
-
-  const handleReviewSubmitted = useCallback((newReviews) => {
-    setReviews(newReviews);
-  }, []);
 
   // Loading State
   if (loading) {
@@ -1050,21 +876,23 @@ export default function ProductDetailPage() {
             transition={{ duration: 0.25 }}
             className="pt-5"
           >
-            <div className="max-w-2xl">
+            <div className="w-full">
               <h2 className="text-lg font-black text-slate-800 dark:text-slate-100 mb-4">
                 Thông số kỹ thuật
               </h2>
               {Object.entries(product.attributes || {}).length > 0 ? (
-                <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden">
+                <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
                   {Object.entries(product.attributes).map(([key, value], idx) => (
                     <div
                       key={key}
-                      className={`flex items-center justify-between px-4 py-3 text-sm ${
-                        idx % 2 === 0 ? "bg-slate-50/50 dark:bg-slate-950/30" : "bg-white dark:bg-slate-900"
+                      className={`flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 px-4 sm:px-5 py-3.5 text-sm border-b border-slate-100 dark:border-slate-800 last:border-b-0 ${
+                        idx % 2 === 0 ? "bg-slate-50/60 dark:bg-slate-950/30" : "bg-white dark:bg-slate-900"
                       }`}
                     >
-                      <span className="text-slate-500 font-medium">{humanizeLabel(key)}</span>
-                      <span className="text-slate-800 dark:text-slate-200 font-semibold text-right ml-4">
+                      <span className="w-full sm:w-[38%] shrink-0 text-slate-500 dark:text-slate-400 font-semibold">
+                        {attributeNameMap[key] || humanizeLabel(key)}
+                      </span>
+                      <span className="flex-1 text-slate-800 dark:text-slate-200 font-bold leading-relaxed">
                         {String(value)}
                       </span>
                     </div>
@@ -1091,8 +919,27 @@ export default function ProductDetailPage() {
             {/* Review Summary */}
             {reviews.length > 0 && <ReviewStatsSummary reviews={reviews} />}
 
-            {/* Review Form */}
-            <ReviewForm productId={productId} onReviewSubmitted={handleReviewSubmitted} />
+            {keycloak.authenticated && (
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <Icon name="info" className="text-primary text-lg" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                    Muốn đánh giá sản phẩm này?
+                  </p>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Sau khi nhận hàng, vào Tài khoản → Đánh giá sản phẩm để chia sẻ trải nghiệm.
+                  </p>
+                </div>
+                <Link
+                  to="/profile?tab=reviews"
+                  className="shrink-0 px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Đánh giá
+                </Link>
+              </div>
+            )}
 
             {/* Filter & Sort */}
             {reviews.length > 0 && (
@@ -1149,7 +996,7 @@ export default function ProductDetailPage() {
                 <p className="text-sm text-slate-400 font-medium mb-4">
                   {reviewFilter > 0
                     ? `Chưa có đánh giá ${reviewFilter} sao cho sản phẩm này.`
-                    : "Hãy là người đầu tiên đánh giá sản phẩm này!"}
+                    : "Sản phẩm chưa có đánh giá từ khách hàng."}
                 </p>
                 {reviewFilter > 0 && (
                   <button

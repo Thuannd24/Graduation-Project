@@ -1,0 +1,766 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:02:23.725Z",
+  "note": "Scraped 5 sản phẩm — danh mục \"Loa\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "phone_iphone"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tablet"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "laptop_mac"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "speaker"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "photo_camera"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "watch"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "shield"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "bolt"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "battery_charging_full"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "cable"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "loa"
+      ]
+    },
+    {
+      "slug": "jbl",
+      "name": "JBL",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/JBL-240x50.png",
+      "description": "JBL — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "loa"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "loa-thap-samsung-mx-t40",
+      "name": "Loa tháp Samsung MX-T40",
+      "categorySlug": "loa",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Loa tháp Samsung MX-T40/XV – Khuấy động mọi bữa tiệc Trên thị trường hiện có rất nhiều sản phẩm âm thanh với kết cấu kỳ dị, nhưng dù gì, thì âm thanh vẫn là chất lượng cần quan tâm hàng đầu. Nếu bạn cần tìm một chiếc loa sở hữu đầy đủ các yếu tố độc, lạ, hay thì hãy chọn loa Samsung MX-T40. Cấu trúc tháp, dễ dàng kết nối bluetooth Loa sở hữu kết cấu đặc biệt, khiến người ta liên tưởng đến các công trình kiến trúc vĩ đại như tháp Eiffel, Tháp Burj Khalifa,... Vì thế không chỉ để ",
+      "price": 2840000,
+      "salePrice": 1790000,
+      "costPrice": 1360400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-2-19.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-3-20.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-4-21.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-5-22.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-6-23.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-7-24.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "6.8kg",
+        "connectivity": "Cổng USB"
+      },
+      "specsRaw": {
+        "Trọng lượng": "6.8kg",
+        "Công nghệ âm thanh": "Bass Booster, Âm thanh đa hướng",
+        "Công suất": "300W",
+        "Cổng kết nối": "Cổng USB",
+        "Số loa kết nối cùng lúc": "10 loa (MX-T70, T50 và T40)",
+        "Tính năng khác": "Đèn led DJHát Karaoke khi kết nối với Mic Bluetooth đầu USB",
+        "Chống nước": "Kháng nước nhẹ",
+        "Hãng sản xuất": "Samsung Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "2XHL75-DEN-0",
+          "price": 2840000,
+          "costPrice": 1360400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1790000
+        }
+      ]
+    },
+    {
+      "slug": "loa-jbl-go-5",
+      "name": "Loa Bluetooth JBL Go 5",
+      "categorySlug": "loa",
+      "brandSlug": "jbl",
+      "description": "Đặc điểm nổi bật JBL Go 5 là mẫu loa Bluetooth di động thế hệ mới nổi bật với thiết kế siêu nhỏ gọn chỉ 230g, dễ dàng mang theo trong mọi chuyến đi. JBL Go 5 được trang bị kết nối Bluetooth 6.0 ổn định, chuẩn kháng nước và bụi IP68 bền bỉ cùng thời lượng pin lên đến 8 giờ sử dụng. Bên cạnh chất âm JBL Pro Sound mạnh mẽ từ driver 45mm và công suất 4,8W RMS, loa còn hỗ trợ công nghệ Auracast, ghép nối stereo tự động và codec AAC/LC3, mang đến trải nghiệm nghe nhạc linh hoạt và sống động hơn.",
+      "price": 1290000,
+      "salePrice": null,
+      "costPrice": 980400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/main-25.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-0-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-1-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-2-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-3-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-4-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-5-31.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-6-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-7-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-8-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-9-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-10-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-11-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-12-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-13-39.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "230 g",
+        "dimensions": "101 x 77.4 x 43 mm"
+      },
+      "specsRaw": {
+        "Trọng lượng": "230 g",
+        "Kích thước": "101 x 77.4 x 43 mm",
+        "Công suất": "4.8 W RMS",
+        "Thời lượng pin": "8 giờ + 2 giờ cùng Playtime Boost",
+        "Số loa kết nối cùng lúc": "Ghép nối đa loa không giới hạn với Auracast™",
+        "Tính năng khác": "Auracast™",
+        "Hãng sản xuất": "JBL",
+        "Tên sản phẩm": "Giá bán",
+        "Loa Bluetooth JBL Go 5": "1.290.000đ",
+        "Đặc điểm": "JBL Go 4",
+        "Giá niêm yết": "1.070.000đ",
+        "Màu sắc": "Đen, Xanh, Đỏ, Hồng, Vàng, Trắng, Camo",
+        "Màng loa": "45mm",
+        "Tần số đáp ứng": "90 Hz - 20 kHz",
+        "Thời gian sạc": "3 giờ",
+        "Kháng nước": "IP67",
+        "Kết nối Bluetooth": "Bluetooth 5.3"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "IESX65-ANDOI-0",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/main-25.png",
+          "active": true,
+          "options": {
+            "color": "Xanh quân đội"
+          }
+        },
+        {
+          "sku": "IESX65-DUONG-1",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-0-26.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          }
+        },
+        {
+          "sku": "IESX65-TRANG-2",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-1-27.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "IESX65-VANG-3",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-2-28.png",
+          "active": true,
+          "options": {
+            "color": "Vàng"
+          }
+        },
+        {
+          "sku": "IESX65-CAM-4",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-3-29.png",
+          "active": true,
+          "options": {
+            "color": "Cam"
+          }
+        },
+        {
+          "sku": "IESX65-DO-5",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-4-30.png",
+          "active": true,
+          "options": {
+            "color": "Đỏ"
+          }
+        },
+        {
+          "sku": "IESX65-HONG-6",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-5-31.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          }
+        },
+        {
+          "sku": "IESX65-DEN-7",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-6-32.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        },
+        {
+          "sku": "IESX65-TIM-8",
+          "price": 1290000,
+          "costPrice": 980400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-7-33.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "loa-keo-party-marshall-bromley-450",
+      "name": "Loa kéo party Marshall Bromley 450",
+      "categorySlug": "loa",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Loa kéo Party Marshall Bromley 450 sở hữu công nghệ True Stereophonic 360°, gồm 2 loa woofer và 4 loa full-range, giúp lan tỏa âm thanh tới mọi vị trí. Mẫu loa Marshall này có thời lượng pin hơn 40 giờ và khả năng kháng nước, bụi IP55. Hệ thống đèn mô phỏng sân khấu của loa giúp các buổi tiệc sôi động hơn. Loa kéo Party Marshall Bromley 450 - Sức mạnh âm nhạc đỉnh cao Marshall Bromley 450 được thiết kế để lan tỏa âm thanh mạnh mẽ tới mọi nơi và khuấy động buổi tiệc. Sản phẩm còn",
+      "price": 21900000,
+      "salePrice": null,
+      "costPrice": 16644000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/main-40.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-0-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-1-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-2-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-3-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-4-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-5-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-6-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-7-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-8-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-9-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-10-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-11-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-12-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-13-54.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "12.32 kg",
+        "dimensions": "366 x 492 x 261 mm",
+        "connectivity": "Âm thanh: AUX 3.5mm (Đầu vào và Đầu ra) USB-C RCA Mic/Nhạc cụ: 2 giắc cắm kết hợp XLR/6.35 mm"
+      },
+      "specsRaw": {
+        "Trọng lượng": "12.32 kg",
+        "Kích thước": "366 x 492 x 261 mm",
+        "Công nghệ âm thanh": "Công nghệ True Stereophonic: Âm thanh nổi 360° sắc nét",
+        "Công suất": "400W",
+        "Thời lượng pin": "40 giờ",
+        "Cổng kết nối": "Âm thanh: AUX 3.5mm (Đầu vào và Đầu ra) USB-C RCA Mic/Nhạc cụ: 2 giắc cắm kết hợp XLR/6.35 mm",
+        "Tính năng khác": "Tích hợp đèn Led phong cách sân khấu Cổng nguồn cho micro & nhạc cụChống bụi & nước bắn IP55Quay xách tích hợpPin có thể tháo rời và sạc ngược",
+        "Cấu tạo": "2 x loa trầm 6.5 inch 40 W4 x loa toàn dải 2 inch 6 W2 x bộ tản nhiệt thụ động",
+        "Chống nước": "IP55",
+        "Hãng sản xuất": "Marshall",
+        "Thông số": "Loa kéo party Marshall Bromley 450"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QR2TOS-NVANG-0",
+          "price": 21900000,
+          "costPrice": 16644000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/main-40.png",
+          "active": true,
+          "options": {
+            "color": "Đen Vàng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "loa-bluetooth-fender-riff",
+      "name": "Loa Bluetooth Fender Riff",
+      "categorySlug": "loa",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Loa Bluetooth Fender Riff trang bị công suất lớn đến 60W, bao gồm 2 loa trầm toàn dải, 2 loa tép cùng 2 bộ tản nhiệt âm trầm cho âm thanh đầy mạnh mẽ. Sản phẩm cho thời gian đến 30 giờ hỗ trợ sạc nhanh trong 30 phút có thể phát nhạc 8 giờ. Loa hỗ trợ thêm công nghệ Bluetooth 5.2, mang đến kết nối ổn định với độ trễ thấp. Loa Bluetooth Fender Riff - Âm thanh sống động, pin bền bỉ Loa Fender mang lại chất âm sống động, phù hợp cho nhiều thể loại âm nhạc khác nhau. Sản phẩm có kiểu",
+      "price": 10900000,
+      "salePrice": 4990000,
+      "costPrice": 3792400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/main-55.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-0-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-1-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-2-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-3-59.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-4-60.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-5-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-6-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-7-63.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "weight": "2.41 kg",
+        "dimensions": "20 x 20 x 30 cm",
+        "connectivity": "Line guitar 6.3mm AUX IN 3.5mm"
+      },
+      "specsRaw": {
+        "Trọng lượng": "2.41 kg",
+        "Kích thước": "20 x 20 x 30 cm",
+        "Công suất": "60W",
+        "Thời lượng pin": "30 giờ",
+        "Cổng kết nối": "Line guitar 6.3mm AUX IN 3.5mm",
+        "Cấu tạo": "2 x loa trầm toàn dải 2 x loa tweeter 2 x bộ tản nhiệt âm trầm",
+        "Chống nước": "IP54",
+        "Hãng sản xuất": "Fender"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9F8UKF-DEN-0",
+          "price": 10900000,
+          "costPrice": 3792400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/main-55.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 4990000
+        }
+      ]
+    }
+  ]
+}

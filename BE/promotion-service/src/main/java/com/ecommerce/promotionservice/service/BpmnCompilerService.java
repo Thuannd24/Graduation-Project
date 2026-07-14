@@ -34,9 +34,6 @@ public class BpmnCompilerService {
             Map.entry("Action_IssueVoucher_Fixed",    "${issueVoucherFixedDelegate}"),
             Map.entry("Action_IssueVoucher_Freeship", "${issueVoucherFreeshippingDelegate}"),
             Map.entry("Action_Send_Email",             "${sendEmailDelegate}"),
-            Map.entry("Action_Send_SMS",               "${sendSmsDelegate}"),
-            Map.entry("Action_Send_AppPush",           "${sendAppPushDelegate}"),
-            Map.entry("Action_Send_Zalo",              "${sendZaloDelegate}"),
             Map.entry("Action_Loyalty_Point",          "${loyaltyPointDelegate}"),
             Map.entry("Action_Upgrade_MemberRank",     "${upgradeMemberRankDelegate}")
     );
@@ -53,8 +50,7 @@ public class BpmnCompilerService {
             "Condition_TotalSpending",
             "Condition_Location",
             "Condition_ContainsCategory",
-            "Condition_ContainsProduct",
-            "Condition_AntiFraudScore"
+            "Condition_ContainsProduct"
     );
 
     public String compile(WorkflowGraphDto graph, String processKey, String processName) {

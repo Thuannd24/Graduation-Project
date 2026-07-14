@@ -1,0 +1,1898 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T09:36:08.908Z",
+  "note": "Scraped 20 sản phẩm — danh mục \"Phụ kiện\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "phone_iphone"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "laptop_mac"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "watch"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "cable"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tablet"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "apple",
+      "name": "Apple",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/iPhone-240x50.png",
+      "description": "Apple — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "phu-kien"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "phu-kien"
+      ]
+    },
+    {
+      "slug": "oppo",
+      "name": "OPPO",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Oppo-240x50.png",
+      "description": "OPPO — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "phu-kien"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Xiaomi-240x50.png",
+      "description": "Xiaomi — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "phu-kien"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "op-lung-iphone-14-spigen-thin-fit",
+      "name": "Ốp lưng iPhone 14 Spigen Thin Fit",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ngay Ốp lưng iPhone 14 Spigen Thin Fit chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 650000,
+      "salePrice": 455000,
+      "costPrice": 345800,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/main-1.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-0-2.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-1-3.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-2-4.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-5-7.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-6-8.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-7-9.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-8-10.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-9-11.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-10-12.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 14",
+        "Phân loại ốp": "Chống sốc, Ốp dẻo",
+        "Tính năng": "Chống sốc, va đập",
+        "Dùng được cho": "iPhone 13",
+        "Hãng sản xuất": "Spigen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "KR6E6I-BACHA-0",
+          "price": 650000,
+          "costPrice": 345800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/main-1.png",
+          "active": true,
+          "options": {
+            "color": "Xanh bạc hà"
+          },
+          "salePrice": 455000
+        },
+        {
+          "sku": "KR6E6I-VANG-1",
+          "price": 650000,
+          "costPrice": 345800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-0-2.jpg",
+          "active": true,
+          "options": {
+            "color": "Vàng"
+          },
+          "salePrice": 455000
+        },
+        {
+          "sku": "KR6E6I-DEN-2",
+          "price": 650000,
+          "costPrice": 345800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-1-3.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 455000
+        },
+        {
+          "sku": "KR6E6I-DUONG-3",
+          "price": 650000,
+          "costPrice": 345800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-2-4.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 455000
+        },
+        {
+          "sku": "KR6E6I-XAM-4",
+          "price": 650000,
+          "costPrice": 345800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-3-5.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 455000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-15-plus-14-plus-mipow-soft-transparent",
+      "name": "Ốp lưng iPhone 15 Plus/ 14 Plus Mipow Soft Transparent",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ốp lưng iPhone 15 Plus/ 14 Plus Mipow Soft Transparent chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, bảo hành uy tín, giao hàng tận nơi toàn quốc.",
+      "price": 250000,
+      "salePrice": 200000,
+      "costPrice": 152000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/main-13.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-0-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-1-15.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-2-16.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-3-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-4-18.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 15 Plus",
+        "Phân loại ốp": "Chống sốc, Ốp trong, Ốp dẻo",
+        "Tính năng": "Chống sốc, va đập, Chống trầy xước",
+        "Dùng được cho": "iPhone 15 Plus/ 14 Plus",
+        "Hãng sản xuất": "Mipow"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "F8DXB7-GSUOT-0",
+          "price": 250000,
+          "costPrice": 152000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/main-13.png",
+          "active": true,
+          "options": {
+            "color": "Trong suốt"
+          },
+          "salePrice": 200000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe",
+      "name": "Ốp lưng iPhone 16 Pro Max Spigen Crystal Hybrid With Magsafe White",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua Ốp lưng iPhone 16 Pro Max Spigen Crystal Hybrid With Magsafe White (Trắng) chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 1150000,
+      "salePrice": 805000,
+      "costPrice": 611800,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/main-19.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-0-20.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-1-21.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-2-22.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-3-23.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-4-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-5-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-6-26.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 16 Pro Max",
+        "Phân loại ốp": "Chống sốc",
+        "Tính năng": "Chống sốc, va đập, Chống trầy xước",
+        "Dùng được cho": "iPhone 16 Pro Max",
+        "Hãng sản xuất": "Spigen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "S7U1T5-TRANG-0",
+          "price": 1150000,
+          "costPrice": 611800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/main-19.png",
+          "active": true,
+          "options": {
+            "color": "Trong suốt/Trắng"
+          },
+          "salePrice": 805000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe",
+      "name": "Ốp lưng iPhone 16 Plus Mipow Premium Slim With Magsafe",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ngay Ốp lưng iPhone 16 Plus Mipow Premium Slim With Magsafe chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 390000,
+      "salePrice": 351000,
+      "costPrice": 266760,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/main-27.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-0-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-1-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-2-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-3-31.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-4-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-5-33.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 16 Plus",
+        "Phân loại ốp": "Chống sốc, Ốp trong",
+        "Tính năng": "Hỗ trợ sạc MagSafe, Hỗ trợ sạc không dây, Chống sốc, va đập, Chống trầy xước",
+        "Hãng sản xuất": "Mipow"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QDUPAX-NNHAM-0",
+          "price": 390000,
+          "costPrice": 266760,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/main-27.png",
+          "active": true,
+          "options": {
+            "color": "Đen nhám"
+          },
+          "salePrice": 351000
+        },
+        {
+          "sku": "QDUPAX-GNHAM-1",
+          "price": 390000,
+          "costPrice": 266760,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-0-28.png",
+          "active": true,
+          "options": {
+            "color": "Trắng/Nhám"
+          },
+          "salePrice": 351000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot",
+      "name": "Ốp lưng iPhone 16 Plus Mipow Soft Transparent",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ngay Ốp lưng iPhone 16 Plus Mipow Soft Transparent chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 250000,
+      "salePrice": 225000,
+      "costPrice": 171000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/main-34.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-0-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-1-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-2-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-3-38.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 16 Plus",
+        "Phân loại ốp": "Chống sốc, Ốp trong, Ốp dẻo",
+        "Tính năng": "Chống sốc, va đập, Chống trầy xước",
+        "Hãng sản xuất": "Mipow"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "74LG0G-GSUOT-0",
+          "price": 250000,
+          "costPrice": 171000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/main-34.png",
+          "active": true,
+          "options": {
+            "color": "Trong suốt"
+          },
+          "salePrice": 225000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-samsung-galaxy-a35-silicon",
+      "name": "Ốp lưng Samsung Galaxy A35 2024 Samsung Silicon",
+      "categorySlug": "phu-kien",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Ốp lưng Samsung Galaxy A35 2024 Silicon là dòng ốp lưng chống sốc, dẻo dành cho Galaxy A35 khá nhỏ gọn với kích thước chỉ từ 82.5 x 166.2 x 11.1 mm. Nhờ được hoàn thiện từ vật liệu Silicon chất lượng cao, dòng ốp lưng Samsung Galaxy A cao cấp này không chỉ tương thích với Galaxy A35 mà còn cung cấp khả năng bảo vệ tối đa trước các tác động bên ngoài như va đập và trầy xước. Đồng thời, ốp cũng được đánh giá cao với bề mặt mịn màng, đem tới cảm giác êm ái, mềm mại khi cầm nắm. Ốp ",
+      "price": 183000,
+      "salePrice": 110000,
+      "costPrice": 83600,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/main-39.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-0-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-1-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-2-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-3-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-4-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-5-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-6-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-7-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-8-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-9-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-10-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-11-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-12-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-13-53.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "dimensions": "82.5 x 166.2 x 11.1 mm"
+      },
+      "specsRaw": {
+        "Kích thước": "82.5 x 166.2 x 11.1 mm",
+        "Dòng sản phẩm": "Galaxy A35",
+        "Phân loại ốp": "Chống sốc, Ốp dẻo",
+        "Tính năng": "Chống sốc, va đập, Chống trầy xước",
+        "Hãng sản xuất": "Samsung Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "XPCXHT-DUONG-0",
+          "price": 183000,
+          "costPrice": 83600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/main-39.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 110000
+        },
+        {
+          "sku": "XPCXHT-ANHLA-1",
+          "price": 183000,
+          "costPrice": 83600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-0-40.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá"
+          },
+          "salePrice": 110000
+        },
+        {
+          "sku": "XPCXHT-DEN-2",
+          "price": 183000,
+          "costPrice": 83600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-1-41.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 110000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-16-plus-wiwu-mcc-201-clear",
+      "name": "Ốp lưng iPhone 16 Plus Wiwu MCC-201 trong suốt",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ngay Ốp lưng iPhone 16 Plus Wiwu MCC-201 trong suốt chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 300000,
+      "salePrice": 270000,
+      "costPrice": 205200,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/main-54.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/gallery-0-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/gallery-1-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/gallery-2-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/gallery-3-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/gallery-4-59.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/gallery-5-60.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/gallery-6-61.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 16 Plus",
+        "Phân loại ốp": "Chống sốc, Ốp trong",
+        "Tính năng": "Chống sốc, va đập",
+        "Hãng sản xuất": "Wiwu"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "1D6K7H-GSUOT-0",
+          "price": 300000,
+          "costPrice": 205200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-wiwu-mcc-201-clear/main-54.png",
+          "active": true,
+          "options": {
+            "color": "Trong suốt"
+          },
+          "salePrice": 270000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-16-pro-mipow-premium-slim",
+      "name": "Ốp lưng iPhone 16 Pro Mipow Premium Slim",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ngay Ốp lưng iPhone 16 Pro Mipow Premium Slim chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 440000,
+      "salePrice": 396000,
+      "costPrice": 300960,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/main-62.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/gallery-0-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/gallery-1-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/gallery-2-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/gallery-3-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/gallery-4-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/gallery-5-68.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 16 Pro",
+        "Phân loại ốp": "Chống sốc, Ốp trong",
+        "Tính năng": "Siêu mỏng, Chống sốc, va đập, Chống trầy xước",
+        "Hãng sản xuất": "Mipow"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "28SXVY-NNHAM-0",
+          "price": 440000,
+          "costPrice": 300960,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/main-62.png",
+          "active": true,
+          "options": {
+            "color": "Đen nhám"
+          },
+          "salePrice": 396000
+        },
+        {
+          "sku": "28SXVY-GNHAM-1",
+          "price": 440000,
+          "costPrice": 300960,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-mipow-premium-slim/gallery-0-63.png",
+          "active": true,
+          "options": {
+            "color": "Trắng/Nhám"
+          },
+          "salePrice": 396000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-17-pro-max-apple-with-magsafe-clear-mgfw4fe-a",
+      "name": "Ốp lưng iPhone 17 Pro Max Apple With Magsafe Clear - MGFW4FE/A",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua Ốp lưng iPhone 17 Pro Max Apple With Magsafe Clear - MGFW4FE/A chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 1400000,
+      "salePrice": null,
+      "costPrice": 1064000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-with-magsafe-clear-mgfw4fe-a/main-69.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-with-magsafe-clear-mgfw4fe-a/gallery-0-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-with-magsafe-clear-mgfw4fe-a/gallery-1-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-with-magsafe-clear-mgfw4fe-a/gallery-2-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-with-magsafe-clear-mgfw4fe-a/gallery-3-73.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "material": "Polycarbonate trong suốt và chất liệu dẻo"
+      },
+      "specsRaw": {
+        "Phân loại ốp": "Ốp trong",
+        "Dùng được cho": "iPhone 17 Pro Max",
+        "Tính năng": "Mỏng, nhẹ và dễ cầmỐp lưng vừa khít với các nút bấm của điện thoạiBề mặt bên ngoài và cả bên trong đều được phủ một lớp chống trầyVật liệu và lớp phủ được tối ưu hóa để ngăn chặn ngả vàngNam châm tích hợp có thể cân chỉnh hoàn hảo và thuận tiện và sạc không dâyBảo vệ iPhone khi va quẹt, rơi rớtỐp sở hữu mặt kính sapphire, kết hợp với lớp dẫn truyền để chuyển động của ngón tay có thể truyền đến điều khiển Camera",
+        "Chất liệu": "Polycarbonate trong suốt và chất liệu dẻo",
+        "Hãng sản xuất": "Apple Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "HTCWQR-GSUOT-0",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-with-magsafe-clear-mgfw4fe-a/main-69.png",
+          "active": true,
+          "options": {
+            "color": "MGFW4FE/A-Trong suốt"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-17-apple-silicone-with-magsafe",
+      "name": "Ốp lưng iPhone 17 Apple Silicone With Magsafe",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ốp lưng iPhone 17 Apple Silicone With Magsafe chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 1400000,
+      "salePrice": null,
+      "costPrice": 1064000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/main-74.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-0-75.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-1-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-2-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-3-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-4-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-5-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-6-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-7-82.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-8-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-9-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-10-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-11-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-12-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-13-88.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "material": "Silicon tái chế và có lớp vỏ ngoài êm ái, mượt màBên trong là lớp lót microfiber mềm mại"
+      },
+      "specsRaw": {
+        "Dùng được cho": "iPhone 17",
+        "Tính năng": "Nam châm tích hợp có thể cân chỉnh hoàn hảo, thuận tiện và sạc không dâyBảo vệ iPhone khi va quẹt, rơi rớtSở hữu mặt kính sapphire, kết hợp với lớp dẫn truyền để chuyển động của ngón tay có thể truyền đến điều khiển Camera",
+        "Chất liệu": "Silicon tái chế và có lớp vỏ ngoài êm ái, mượt màBên trong là lớp lót microfiber mềm mại",
+        "Hãng sản xuất": "Apple Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "H2HT6K-KEM-0",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/main-74.png",
+          "active": true,
+          "options": {
+            "color": "Kem"
+          }
+        },
+        {
+          "sku": "H2HT6K-NGCAM-1",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-0-75.png",
+          "active": true,
+          "options": {
+            "color": "Hồng cam"
+          }
+        },
+        {
+          "sku": "H2HT6K-GNHAT-2",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-1-76.png",
+          "active": true,
+          "options": {
+            "color": "Hồng nhạt"
+          }
+        },
+        {
+          "sku": "H2HT6K-MONEO-3",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-2-77.png",
+          "active": true,
+          "options": {
+            "color": "Xanh Mỏ Neo"
+          }
+        },
+        {
+          "sku": "H2HT6K-REUDA-4",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-3-78.png",
+          "active": true,
+          "options": {
+            "color": "Rêu Đá"
+          }
+        },
+        {
+          "sku": "H2HT6K-DEN-5",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-4-79.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        },
+        {
+          "sku": "H2HT6K-QUANG-6",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-5-80.png",
+          "active": true,
+          "options": {
+            "color": "Vàng Dạ Quang"
+          }
+        },
+        {
+          "sku": "H2HT6K-GKHOI-7",
+          "price": 1400000,
+          "costPrice": 1064000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-apple-silicone-with-magsafe/gallery-6-81.png",
+          "active": true,
+          "options": {
+            "color": "Tím Sương Khói"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-15-plus-14-plus-esr-project-zero-clear",
+      "name": "Ốp lưng iPhone 15 Plus/14 Plus ESR Project Zero Clear",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ốp lưng iPhone 15 Plus/14 Plus ESR Project Zero Clear chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 250000,
+      "salePrice": 150000,
+      "costPrice": 114000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/main-89.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-0-90.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-1-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-2-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-3-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-4-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-5-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-6-96.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-7-97.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/gallery-8-98.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "material": "TPU cao cấp",
+        "dimensions": "Dày 1.6mm"
+      },
+      "specsRaw": {
+        "Phân loại ốp": "Ốp trong",
+        "Dùng được cho": "iPhone 15 Plus/14 Plus",
+        "Tính năng": "Thiết kế cạnh viền màn hình nhô cao 1.2mm và nhô cao viền camera 0.5mm so với mặt phẳng",
+        "Đạt chứng nhận": "Chứng nhận chuẩn chống sốc quân đội Mỹ (Military Grade)",
+        "Chất liệu": "TPU cao cấp",
+        "Kích thước": "Dày 1.6mm",
+        "Hãng sản xuất": "ESR"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9JJA84-GSUOT-0",
+          "price": 250000,
+          "costPrice": 114000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-esr-project-zero-clear/main-89.png",
+          "active": true,
+          "options": {
+            "color": "Trong suốt"
+          },
+          "salePrice": 150000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe",
+      "name": "Ốp lưng iPhone 17 Pro Max Apple Techwoven With Magsafe",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ốp lưng iPhone 17 Pro Max Apple Techwoven With Magsafe chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, bảo hành uy tín, giao hàng tận nơi toàn quốc.",
+      "price": 1670000,
+      "salePrice": null,
+      "costPrice": 1269200,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/main-99.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-0-100.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-1-101.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-2-102.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-3-103.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-4-104.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-5-105.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-6-106.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-7-107.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-8-108.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-9-109.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "material": "Polyester tái chế + TPU"
+      },
+      "specsRaw": {
+        "Dùng được cho": "iPhone 17 Pro Max",
+        "Tính năng": "Nam châm tích hợp có thể cân chỉnh hoàn hảo, thuận tiện và sạc không dâyBảo vệ iPhone khi va quẹt, rơi rớt",
+        "Chất liệu": "Polyester tái chế + TPU",
+        "Hãng sản xuất": "Apple Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "W07SOM-TIM-0",
+          "price": 1670000,
+          "costPrice": 1269200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/main-99.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          }
+        },
+        {
+          "sku": "W07SOM-ANHLA-1",
+          "price": 1670000,
+          "costPrice": 1269200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-0-100.png",
+          "active": true,
+          "options": {
+            "color": "Xanh lá"
+          }
+        },
+        {
+          "sku": "W07SOM-IENNA-2",
+          "price": 1670000,
+          "costPrice": 1269200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-1-101.png",
+          "active": true,
+          "options": {
+            "color": "Nâu Sienna"
+          }
+        },
+        {
+          "sku": "W07SOM-DEN-3",
+          "price": 1670000,
+          "costPrice": 1269200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-2-102.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        },
+        {
+          "sku": "W07SOM-DUONG-4",
+          "price": 1670000,
+          "costPrice": 1269200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-apple-techwoven-with-magsafe/gallery-3-103.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-14-uniq-hybird-lifepro-xtreme",
+      "name": "Ốp lưng iPhone 13/14 Uniq Hybird Lifepro Xtreme",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ngay Ốp lưng iPhone 13/14 Uniq Hybird Lifepro Xtreme chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 391000,
+      "salePrice": 234600,
+      "costPrice": 178296,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/main-110.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-0-111.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-1-112.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-2-113.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-3-114.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-4-115.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-5-116.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-6-117.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-7-118.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-8-119.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-9-120.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 14",
+        "Phân loại ốp": "Ốp trong",
+        "Tính năng": "Chống sốc, va đập",
+        "Dùng được cho": "iPhone 13/14/15/16e/17e",
+        "Hãng sản xuất": "Uniq"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "ZC0FTS-PLANH-0",
+          "price": 391000,
+          "costPrice": 178296,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/main-110.jpg",
+          "active": true,
+          "options": {
+            "color": "Lấp lánh"
+          },
+          "salePrice": 234600
+        },
+        {
+          "sku": "ZC0FTS-EUMAU-1",
+          "price": 391000,
+          "costPrice": 178296,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-0-111.jpg",
+          "active": true,
+          "options": {
+            "color": "Trong nhiều màu"
+          },
+          "salePrice": 234600
+        },
+        {
+          "sku": "ZC0FTS-GSUOT-2",
+          "price": 391000,
+          "costPrice": 178296,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-uniq-hybird-lifepro-xtreme/gallery-1-112.jpg",
+          "active": true,
+          "options": {
+            "color": "Trong suốt"
+          },
+          "salePrice": 234600
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-17-mutural-pure-with-magsafe",
+      "name": "Ốp lưng iPhone 17 Mutural Pure With Magsafe",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua Ốp lưng iPhone 17 Mutural Pure With Magsafe chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 400000,
+      "salePrice": 360000,
+      "costPrice": 273600,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/main-121.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-0-122.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-1-123.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-2-124.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-3-125.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-4-126.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-5-127.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-6-128.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-7-129.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-8-130.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-9-131.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 17",
+        "Phân loại ốp": "Chống sốc",
+        "Tính năng": "Hỗ trợ sạc MagSafe, Hỗ trợ sạc không dây, Chống sốc, va đập, Chống trầy xước",
+        "Dùng được cho": "iPhone 17",
+        "Hãng sản xuất": "Mutural"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "E8M09E-TIM-0",
+          "price": 400000,
+          "costPrice": 273600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/main-121.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 360000
+        },
+        {
+          "sku": "E8M09E-XANH-1",
+          "price": 400000,
+          "costPrice": 273600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-0-122.png",
+          "active": true,
+          "options": {
+            "color": "Xanh"
+          },
+          "salePrice": 360000
+        },
+        {
+          "sku": "E8M09E-TRANG-2",
+          "price": 400000,
+          "costPrice": 273600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-1-123.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 360000
+        },
+        {
+          "sku": "E8M09E-HONG-3",
+          "price": 400000,
+          "costPrice": 273600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-2-124.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 360000
+        },
+        {
+          "sku": "E8M09E-XAM-4",
+          "price": 400000,
+          "costPrice": 273600,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-mutural-pure-with-magsafe/gallery-3-125.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 360000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-ipad-pro-11-2024-zagg-hampton-folio",
+      "name": "Ốp lưng iPad Pro 11 (M4/M5) ZAGG Hampton Folio",
+      "categorySlug": "phu-kien",
+      "brandSlug": "",
+      "description": "Mua Ốp lưng iPad Pro 11 (M4/M5) ZAGG Hampton Folio chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, bảo hành uy tín, giao hàng tận nơi toàn quốc.",
+      "price": 690000,
+      "salePrice": 621000,
+      "costPrice": 471960,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/main-132.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-0-133.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-1-134.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-2-135.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-3-136.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-4-137.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-5-138.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-6-139.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-7-140.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPad Pro 11 2024",
+        "Tính năng": "Chống sốc, va đập",
+        "Dùng được cho": "iPad Pro 11 (M4/M5)",
+        "Hãng sản xuất": "ZAGG"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "0NB6S4-XAM-0",
+          "price": 690000,
+          "costPrice": 471960,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/main-132.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 621000
+        },
+        {
+          "sku": "0NB6S4-XANH-1",
+          "price": 690000,
+          "costPrice": 471960,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-ipad-pro-11-2024-zagg-hampton-folio/gallery-0-133.png",
+          "active": true,
+          "options": {
+            "color": "Xanh"
+          },
+          "salePrice": 621000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe",
+      "name": "Ốp lưng iPhone 17 Pro Max Slimcase Standout With Magsafe",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua Ốp lưng iPhone 17 Pro Max Slimcase Standout With Magsafe chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, bảo hành uy tín, giao hàng tận nơi toàn quốc.",
+      "price": 750000,
+      "salePrice": 675000,
+      "costPrice": 513000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/main-141.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-0-142.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-1-143.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-2-144.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-3-145.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-4-146.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-5-147.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-6-148.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-7-149.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-8-150.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-9-151.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dùng được cho": "iPhone 17 Pro Max",
+        "Tính năng": "Siêu mỏngCó chân đứng dựng máy để quay video, livestream và xem phim ở bất cứ đâuChân đứng có thể quay 360 độChống bẩn vượt trộiKết cấu chắc chắnViền camera nâng caoNút bấm kim loại cao cấpHỗ trợ sạc Magsafe",
+        "Hãng sản xuất": "Slimcase"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "8WI5DO-DEN-0",
+          "price": 750000,
+          "costPrice": 513000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/main-141.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 675000
+        },
+        {
+          "sku": "8WI5DO-TRANG-1",
+          "price": 750000,
+          "costPrice": 513000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-pro-max-slimcase-standout-with-magsafe/gallery-0-142.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 675000
+        }
+      ]
+    },
+    {
+      "slug": "op-lung-iphone-17-switcheasy-ultra-slim",
+      "name": "Ốp lưng iPhone 17 Switcheasy Ultra Slim",
+      "categorySlug": "phu-kien",
+      "brandSlug": "apple",
+      "description": "Mua ngay Ốp lưng iPhone 17 Switcheasy Ultra Slim chính hãng - Giá rẻ, đảm bảo chất lượng, độ bền cao, hỗ trợ giao hàng tận nơi toàn quốc.",
+      "price": 350000,
+      "salePrice": 315000,
+      "costPrice": 239400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/main-152.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-0-153.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-1-154.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-2-155.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-3-156.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-4-157.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-5-158.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-6-159.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-7-160.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-8-161.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-9-162.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-10-163.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-11-164.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-12-165.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-13-166.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Dòng sản phẩm": "iPhone 17",
+        "Phân loại ốp": "Chống sốc",
+        "Tính năng": "Chống sốc, va đập, Chống trầy xước",
+        "Dùng được cho": "iPhone 17",
+        "Hãng sản xuất": "SwitchEasy"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "8P6B3W-GNHAM-0",
+          "price": 350000,
+          "costPrice": 239400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/main-152.png",
+          "active": true,
+          "options": {
+            "color": "Trong Nhám"
+          },
+          "salePrice": 315000
+        },
+        {
+          "sku": "8P6B3W-MKHOI-1",
+          "price": 350000,
+          "costPrice": 239400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-17-switcheasy-ultra-slim/gallery-0-153.png",
+          "active": true,
+          "options": {
+            "color": "Xám khói"
+          },
+          "salePrice": 315000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9s",
+      "name": "OPPO Find X9s 12GB 256GB",
+      "categorySlug": "phu-kien",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9s 12GB 256GB OPPO Find X9s là mẫu smartphone cận cao cấp thuộc dòng Find X9 series, được ra mắt tại Việt Nam vào tháng 05/2026. Nổi bật với thiết kế mỏng nhẹ 7.99 mm, thời lượng pin siêu khủng 7025mAh và khả năng nhiếp ảnh chuẩn Hasselblad với mức giá dễ tiếp cận hơn so với dòng Ultra. Tại Việt Nam, máy có giá bán khởi điểm 24.990.000đ cho phiên bản 12GB RAM và 256GB bộ nhớ trong. Điện thoại OPPO Find X9s giá bao nhiêu? Tại thị trường Việt Nam, giá OPPO Find X9s ",
+      "price": 24990000,
+      "salePrice": null,
+      "costPrice": 18992400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/main-167.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-0-168.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-1-169.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-2-170.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-3-171.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-4-172.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-5-173.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-6-174.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-7-175.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-8-176.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-9-177.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-10-178.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-11-179.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-12-180.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-13-181.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16.0",
+        "cpu": "MediaTek Dimensity 9500s",
+        "ram": "12 GB",
+        "storage": "256 GB",
+        "gpu": "ARM Immortalis G925 MC12",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "camera_front": "32 MP, f/2.4",
+        "battery": "7025 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "weight": "202g",
+        "refresh_rate": "120Hz",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16.0",
+        "Chipset": "MediaTek Dimensity 9500s",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "256 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "ARM Immortalis G925 MC12",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "1256 x 2760 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 1800 nitsTần số lấy mẫu cảm ứng tối đa 240Hz1.07 tỷ màu460 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 50 MP, f/1.8Telephoto 50 MP, f/2.6",
+        "Camera trước": "32 MP, f/2.4",
+        "Pin": "7025 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "Dual nano-SIM hoặc 1 nano-SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Sản phẩm": "Giá bán tại Trung Quốc",
+        "OPPO Find X9s 12GB/256GB": "5.699 CNY",
+        "OPPO Find X9s 12GB/512GB": "5.799 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9s",
+        "Thời gian ra mắt": "05/2026",
+        "Màu sắc": "Xám (Midnight Grey), Tím Nhạt (Lavender Sky) và Cam Nhạt (Sunset Orange)",
+        "Thiết kế": "Flagship nhỏ gọn, thân máy cực kỳ mỏng nhẹ (7.99mm), cảm giác cầm nắm gọn gàng",
+        "Kích thước (Cao x Rộng x Dài)": "156.98mm × 73.93mm × 7.99mm",
+        "Trọng lượng": "202g",
+        "Màn hình": "6.59 inch AMOLED, FHD+ (2760×1256 pixels)",
+        "Tần số quét": "120Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kính bảo vệ": "Gorilla Glass 7i",
+        "Hiệu năng": "MediaTek Dimensity 9500s",
+        "RAM & ROM": "12GB+256GB12GB+512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "4K 60fps, Dolby Vision",
+        "Pin & sạc": "7025mAh, sạc nhanh có dây 80W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.1, USB Type-C, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "2,982,729",
+        "Điểm Geekbench 6": "2,571 điểm đơn nhân7,881 điểm đa nhân",
+        "Yếu tố trải nghiệm": "Điểm đánh giá",
+        "Thời lượng pin (7025mAh)": "9.5 / 10",
+        "Tốc độ sạc nhanh (80W)": "8.5 / 10",
+        "Hiệu năng & Chơi game": "9.0 / 10",
+        "Nút bấm vật lý Snap Key": "9.0 / 10",
+        "Màn hình hiển thị": "8.5 / 10",
+        "Khả năng chụp ảnh": "8.0 / 10",
+        "Độ bền & Cầm nắm": "9.0 / 10",
+        "Thông số": "OPPO Find X9s",
+        "Vi xử lý": "Dimensity 9500s",
+        "RAM / ROM": "12GB/256GB 12GB/512GB",
+        "Quay video": "4K/60fps Dolby Vision",
+        "Pin và Sạc": "7025mAh Sạc có dây 80W",
+        "Vân tay": "Siêu âm trong màn hình",
+        "Tiêu chí": "OPPO Find X9s",
+        "Viền màn hình": "1.15mm (Siêu mỏng công nghệ LIPO)",
+        "Vi xử lý (Chip)": "Dimensity 9500s",
+        "Bảo mật": "Vân tay Siêu âm dưới màn hình"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JAXWEX-XAM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/main-167.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-NHAT-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-0-168.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam nhạt",
+            "storage": "256GB"
+          }
+        },
+        {
+          "sku": "JAXWEX-TIM-256GB",
+          "price": 24990000,
+          "costPrice": 18992400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-1-169.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "256GB"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-find-x9-ultra",
+      "name": "OPPO Find X9 Ultra 12GB 512GB",
+      "categorySlug": "phu-kien",
+      "brandSlug": "oppo",
+      "description": "Đặc điểm nổi bật của OPPO Find X9 Ultra 12GB 512GB OPPO Find X9 Ultra là dòng siêu phẩm flagship cao cấp nhất của OPPO ra mắt vào tháng 5/2026. Nổi bật với điểm nhấn là hệ thống camera Hasselblad cảm biến chính 200 MP và camera tele zoom quang học 10x. Đi kèm với chip Snapdragon 8 Elite Gen 5, màn hình 2K+ 144Hz, và viên pin dung lượng lớn 7050 mAh hỗ trợ sạc nhanh 100W. Đây cũng là lần đầu tiên phiên bản Ultra được mở bán chính hãng tại Việt Nam với mức giá khởi điểm 49.990.000đ cho phiên bản 1",
+      "price": 49990000,
+      "salePrice": 48990000,
+      "costPrice": 37232400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/main-182.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-0-183.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-1-184.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-2-185.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-3-186.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-4-187.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-5-188.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-6-189.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-7-190.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-8-191.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-9-192.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-10-193.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-11-194.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-12-195.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-13-196.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "ColorOS 16 Android 16",
+        "cpu": "Snapdragon 8 Elite Gen 5",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Adreno 840",
+        "screen": "6.82 inches",
+        "display_tech": "AMOLED",
+        "camera": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "camera_front": "50 MP, f/2.4",
+        "battery": "7050 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "refresh_rate": "1–120Hz, tối đa 144Hz",
+        "weight": "235g (Cam) – 236g (Nâu)",
+        "connectivity": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "ColorOS 16 Android 16",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Adreno 840",
+        "Kích thước màn hình": "6.82 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "3168 x 1440 pixel",
+        "Tính năng màn hình": "Độ sáng tối đa 3600 nitsTần số lấy mẫu cảm ứng tối đa 300Hz1.07 tỷ màu510 PPI100% DCI-P3",
+        "Camera sau": "Góc siêu rộng 50 MP, f/2.0Góc rộng 200 MP, f/1.5Tele 200 MP, f/2.2Tele siêu xa 50 MP, f/3.5Đơn sắc 3.2 MP, f/2.4",
+        "Camera trước": "50 MP, f/2.4",
+        "Pin": "7050 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Phiên bản": "Giá bán tại Trung Quốc",
+        "OPPO Find X9 Ultra 12GB/512GB": "7.499 CNY",
+        "OPPO Find X9 Ultra 12GB/256GB": "6.999 CNY",
+        "OPPO Find X9 Ultra 16GB/512GB": "7.999 CNY",
+        "OPPO Find X9 Ultra 16GB/1TB": "8.499 CNY",
+        "Thông số kỹ thuật": "OPPO Find X9 Ultra",
+        "Thời gian ra mắt": "05/2026",
+        "Màn hình": "AMOLED 6.82 inch, Quad HD+ (2K+), độ phân giải 3168×1440 pixels",
+        "Tần số quét": "1–120Hz, tối đa 144Hz",
+        "Độ sáng": "800 nits (thường), 1800 nits (HBM), 3600 nits (tối đa)",
+        "Kích thước (Cao x Rộng x Dài)": "163.16mm × 76.97mm × 8.65mm (Cam)163.16mm × 76.97mm × 9.10mm (Nâu)",
+        "Trọng lượng": "235g (Cam) – 236g (Nâu)",
+        "Kính bảo vệ": "Gorilla Glass Victus 2",
+        "Hiệu năng": "Snapdragon 8 Elite Gen 5",
+        "RAM & ROM": "12GB + 512GB",
+        "Chuẩn bộ nhớ": "LPDDR5X, UFS 4.1",
+        "Video": "8K 30fps, 4K 120fps, Dolby Vision",
+        "Pin & sạc": "7050mAh, sạc nhanh có dây 100W, sạc không dây 50W",
+        "Hệ điều hành": "ColorOS 16.0",
+        "Kháng nước & bụi": "IP66 / IP68 / IP69",
+        "Kết nối": "5G, Wi-Fi 7, Bluetooth 6.0, USB Type-C, USB 3.2 Gen 1, NFC",
+        "Sinh trắc học": "Cảm biến vân tay dưới màn hìnhNhận diện khuôn mặt",
+        "Điểm Antutu": "3808128",
+        "Điểm Geekbench 6": "2950 điểm đơn nhân9507 điểm đa nhân",
+        "Tiêu chí đánh giá": "Điểm đánh giá",
+        "Cảm giác cầm nắm": "8.5 / 10",
+        "Màn hình hiển thị": "9.5 / 10",
+        "Hiệu năng & Chiến game": "9.5 / 10",
+        "Chụp ảnh & Quay phim": "10 / 10",
+        "Thời lượng pin & Sạc": "9.5 / 10",
+        "Tính năng AI đi kèm": "9.0 / 10",
+        "Thông số": "OPPO Find X9 Ultra (2026)",
+        "Vi xử lý": "Snapdragon 8 Elite Gen 5",
+        "Bộ nhớ lưu trữ": "12GB LPDDR5X / 512GB UFS 4.1",
+        "Pin & Sạc": "7050 mAh (Silicon-Carbon)Sạc nhanh: 100W có dây / 50W không dây",
+        "Kháng nước": "IP66 / IP68 / IP69",
+        "Tiêu chí": "OPPO Find X9 Ultra chính hãng",
+        "Bảo hành": "Bảo hành chính hãng 24 tháng + Bảo hiểm rơi vỡ màn hình.",
+        "Thông báo": "Không bị chậm, thông báo tức thời, chạy cực kỳ ổn định.",
+        "Ứng dụng rác": "Máy sạch hoàn toàn, cài sẵn đầy đủ dịch vụ Google.",
+        "Định vị & Bản đồ": "Định vị chuẩn xác 100% ngay khi mở ứng dụng."
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "E2UBAN-CAM-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/main-182.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        },
+        {
+          "sku": "E2UBAN-NAU-512GB",
+          "price": 49990000,
+          "costPrice": 37232400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-0-183.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "storage": "512GB"
+          },
+          "salePrice": 48990000
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-17t",
+      "name": "Xiaomi 17T 5G 12GB 512GB",
+      "categorySlug": "phu-kien",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17T 5G 12GB 512GB Xiaomi 17T là mẫu smartphone cận cao cấp mới nhất năm 2026, được ví như \"Flagship Killer\" thực thụ nhờ cấu hình đỉnh cao thách thức phân khúc flagship. Thiết bị sở hữu chip Dimensity 8500-Ultra mạnh mẽ kết hợp cùng giao diện HyperOS 3 (Android 16) mượt mà, tích hợp đảo thông minh Xiaomi HyperIsland độc đáo. Trải nghiệm thực tế cầm trên tay cực kỳ đầm nhờ khung viền nguyên khối. Máy sở hữu màn hình CrystalRes AMOLED 120Hz hỗ trợ Dolby Vision rực rỡ, v",
+      "price": 20990000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-197.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-198.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-1-199.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-2-200.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-3-201.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-4-202.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-5-203.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-6-204.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-7-205.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-8-206.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-9-207.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-10-208.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-11-209.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-12-210.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-13-211.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3",
+        "cpu": "MediaTek Dimensity 8500-Ultra",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Mali-G720 MC8",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "camera_front": "32 MP, f/2.2",
+        "battery": "6500 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "charging": "90W có dây"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3",
+        "Chipset": "MediaTek Dimensity 8500-Ultra",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Mali-G720 MC8",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2756 x 1268 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nits460 PPI100% DCI-P312bit, 68 tỉ màuDolby VisionHDR10+",
+        "Camera sau": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "Camera trước": "32 MP, f/2.2",
+        "Pin": "6500 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 17T 5G 12GB 512GB": "18.990.000đ",
+        "Tiêu chí": "Thông số kỹ thuật",
+        "Vi xử lý (Chipset)": "MediaTek Dimensity 8500 Ultra, GPU Mail-G720 MC8 - Cấu trúc tối ưu hiệu năng nặng",
+        "Bộ nhớ": "RAM 12GB LPDDR5X kết hợp ROM 512GB UFS 4.1",
+        "Màn hình": "Kích thước 6.59 inch AMOLED 1.5K, tần số quét 120Hz, độ sáng tối đa 3500 nits, HDR10+, kính cường lực Gorilla Glass 7i",
+        "Pin & sạc": "Dung lượng pin 6500 mAh, công nghệ sạc nhanh siêu tốc 67W",
+        "Hệ điều hành & AI": "Andriod 16, giao diện HyperOS 3. Tích hợp AI. Gemini9",
+        "Kích thước": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "Kết nối khác": "Kháng nước bụi iP68 - Wifi-6E, NFC, mạng 5G",
+        "Vi xử lý": "MediaTek Dimensity 8500-Ultra",
+        "Tốc độ sạc nhanh": "Sạc nhanh có dây UFS/Turbo Charge 67W (đầy pin khoảng 58 phút)",
+        "Cảm biến camera": "Cảm biến chuẩn Leica Light Fusion 800 (quay phim 4K)",
+        "Đặc điểm": "Xiaomi 15",
+        "Phân khúc": "Flagship nhỏ gọn",
+        "Sạc nhanh": "90W có dây",
+        "Camera": "Leica 50MP + 50MP + 50MP"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "CBNSF2-TIM-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-197.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        },
+        {
+          "sku": "CBNSF2-DEN-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-198.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import "./assets/styles.css";
 import keycloak from "./services/keycloak.js";
 import { setAuthToken, clearAuthToken } from "./services/apiClient.ts";
 
+import { authApi } from "./services/authApi.ts";
+
 keycloak
   .init({
     onLoad: "check-sso",
@@ -16,10 +18,11 @@ keycloak
     if (authenticated) {
       setAuthToken(keycloak.token);
 
-      // Retrieve and consume the 'just_logged_in' flag
+      // Provision user in DB only on actual login (not every SSO session restore)
       const isJustLoggedIn = sessionStorage.getItem("just_logged_in") === "true";
       if (isJustLoggedIn) {
         sessionStorage.removeItem("just_logged_in");
+        authApi.me().catch(console.warn);
       }
 
       // 1. Admin Role Redirection

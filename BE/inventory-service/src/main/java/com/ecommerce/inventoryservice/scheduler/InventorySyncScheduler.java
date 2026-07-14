@@ -10,9 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,19 @@ public class InventorySyncScheduler {
     private final InventoryService inventoryService;
     private final InventoryRepository inventoryRepository;
     private final InventoryDailySnapshotRepository snapshotRepository;
+    private final StringRedisTemplate stringRedisTemplate;
 
-    // Sync Redis with database during off-peak hours (2 AM daily)
+    // V-14 FIX: Sync Redis with database during off-peak hours (2 AM daily) with distributed lock
     // This prevents active checkouts/Flash Sales from having their Redis cache overwritten with stale DB values due to Kafka queue lag
     @Scheduled(cron = "0 0 2 * * ?")
     public void syncRedisWithDatabase() {
+        String lockKey = "scheduler:lock:syncRedisWithDatabase";
+        Boolean locked = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "locked", Duration.ofMinutes(30));
+        if (!Boolean.TRUE.equals(locked)) {
+            log.debug("Another instance is running syncRedisWithDatabase scheduler task. Skipping.");
+            return;
+        }
+
         log.info("Starting scheduled Redis sync");
         try {
             inventoryService.syncRedisFromDatabase();
@@ -41,9 +51,16 @@ public class InventorySyncScheduler {
         }
     }
 
-    // Take daily snapshot at 11 PM
+    // V-14 FIX: Take daily snapshot at 11 PM with distributed lock
     @Scheduled(cron = "0 0 23 * * ?")
     public void takeDailySnapshot() {
+        String lockKey = "scheduler:lock:takeDailySnapshot";
+        Boolean locked = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "locked", Duration.ofMinutes(30));
+        if (!Boolean.TRUE.equals(locked)) {
+            log.debug("Another instance is running takeDailySnapshot scheduler task. Skipping.");
+            return;
+        }
+
         log.info("Starting daily inventory snapshot");
         try {
             LocalDate today = LocalDate.now();

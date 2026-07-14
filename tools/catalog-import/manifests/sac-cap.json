@@ -1,0 +1,1339 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:38:29.228Z",
+  "note": "Scraped 15 sản phẩm — danh mục \"Sạc & Cáp\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "phone_iphone"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tablet"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "laptop_mac"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "speaker"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "photo_camera"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "watch"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "shield"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "bolt"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "battery_charging_full"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "cable"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "tivi",
+      "name": "Tivi",
+      "parentSlug": null,
+      "sortOrder": 7,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tv"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "anker",
+      "name": "Anker",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Anker-240x50.png",
+      "description": "Anker — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
+    },
+    {
+      "slug": "apple",
+      "name": "Apple",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/iPhone-240x50.png",
+      "description": "Apple — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
+    },
+    {
+      "slug": "ugreen",
+      "name": "UGREEN",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/UGREEN-240x50.png",
+      "description": "UGREEN — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
+    },
+    {
+      "slug": "baseus",
+      "name": "Baseus",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Baseus-240x50.png",
+      "description": "Baseus — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger",
+      "name": "Sạc nhanh Belkin 50W 2 cổng USB-C PD/PPS Cubic Wall Charger",
+      "categorySlug": "sac-cap",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Củ sạc Belkin Type-C 50W PD/PPS Cubic Wall Charger sở hữu công nghệ GaN cho hiệu suất sạc nhanh, tiết kiệm năng lượng và hạn chế tỏa nhiệt khi hoạt động. Sản phẩm củ sạc nhanh có 2 cổng USB-C hỗ trợ PD/PPS, công suất tối đa 50W. Sạc tương thích đa dạng thiết bị, vẻ ngoài nhỏ gọn với chân gập và được hoàn thiện từ vật liệu tái chế. Củ sạc Belkin Type-C 50W PD/PPS Cubic Wall Charger - Sức mạnh nhỏ gọn cho mọi thiết bị hiện đại Củ sạc Belkin Type-C 50W PD/PPS Cubic Wall Charger nổi",
+      "price": 890000,
+      "salePrice": 590000,
+      "costPrice": 448400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/main-1.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-0-2.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-2-4.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-5-7.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/gallery-11-13.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "50W",
+        "Sử dụng tối đa": "2 thiết bị",
+        "Đầu ra": "2 x USB-C",
+        "Tiện ích": "Sạc nhanhCó chân gập",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ GaN",
+        "Hãng sản xuất": "Belkin"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QDDXIH-TRANG-0",
+          "price": 890000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger/main-1.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 590000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-anker-nano-45w-a121d",
+      "name": "Sạc Anker Nano thông minh 1C 45W màn hình led A121D",
+      "categorySlug": "sac-cap",
+      "brandSlug": "anker",
+      "description": "Đặc điểm nổi bật Củ sạc Anker Nano 45W A121D ứng dụng chip GaN hiện đại, có khả năng nhận diện iPhone và hỗ trợ sạc nhanh an toàn với công suất 45W được tối ưu theo thiết bị. Phụ kiện sở hữu màn hình LED cập nhật tình trạng sạc, nổi bật với 4 phiên bản gồm màu đen, trắng, vàng và xanh. Củ sạc có chân cắm gập gọn 90°-180° tiện lợi. Củ sạc Anker Nano 45W A121D - Sạc nhanh thông minh với chip GaN tiên tiến Củ sạc Anker này mang lại trải nghiệm ấn tượng với công nghệ sạc nhanh, màn hình LED và hạn c",
+      "price": 850000,
+      "salePrice": 550000,
+      "costPrice": 418000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/main-14.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-0-15.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-1-16.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-2-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-3-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-4-19.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-5-20.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-6-21.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-7-22.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-8-23.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-9-24.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "45W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu ra": "Type C",
+        "Tiện ích": "Sạc nhanhMàn hình LED tích hợpChân gập 180 độCông suất / kiểm soát nhiệt độ theo dõi theo thời gian thựcChế độ bảo vệ khi sạc ban đêm",
+        "Công nghệ/Đạt chứng nhận": "Chứng nhận TUV RheinlandCông nghệ PowerIQ",
+        "Hãng sản xuất": "Anker"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "L8IB3H-DEN-0",
+          "price": 850000,
+          "costPrice": 418000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/main-14.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 550000
+        },
+        {
+          "sku": "L8IB3H-CAM-1",
+          "price": 850000,
+          "costPrice": 418000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-0-15.png",
+          "active": true,
+          "options": {
+            "color": "Cam"
+          },
+          "salePrice": 550000
+        },
+        {
+          "sku": "L8IB3H-TRANG-2",
+          "price": 850000,
+          "costPrice": 418000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-1-16.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 550000
+        },
+        {
+          "sku": "L8IB3H-DUONG-3",
+          "price": 850000,
+          "costPrice": 418000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-45w-a121d/gallery-2-17.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 550000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-nhanh-iphone-20w-pd-type-c",
+      "name": "Sạc nhanh Apple 20w USB-C chính hãng Apple Việt Nam",
+      "categorySlug": "sac-cap",
+      "brandSlug": "apple",
+      "description": "Đặc điểm nổi bật Sạc nhanh Apple 20w USB-C chính hãng Apple Việt Nam tiết kiệm tối đa thời gian sạc điện thoại Nhanh chóng, tiết kiệm tối đa thời gian là những gì mà người dùng iPhone mong đợi ở chiếc sạc pin của mình. Để có thể làm được điều đó thì việc sử dụng củ Sạc nhanh Apple 20w USB-C chính hãng Apple Việt Nam là điều cần thiết mà bạn không nên bỏ qua. Thiết kế nhỏ gọn, an toàn dòng điện Củ Sạc nhanh Apple 20w USB-C chính hãng Apple Việt Nam được thiết kế siêu nhỏ gọn, tinh tế giúp bạn có ",
+      "price": 890000,
+      "salePrice": 520000,
+      "costPrice": 395200,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/main-25.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/gallery-0-26.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/gallery-1-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/gallery-2-28.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/gallery-3-29.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/gallery-4-30.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/gallery-5-31.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "20W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu ra": "USB-C",
+        "Tiện ích": "Sạc nhanhBảo vệ sản phẩm tránh quá dòng, quá điện áp hay hiện tượng mạch điện bị chập và quá nhiệt trong quá trình sạc",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ Power Delivery (PD)Chứng nhận ROSH, CE, FCC",
+        "Hãng sản xuất": "Apple Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "R8UPYF-HHANG-0",
+          "price": 890000,
+          "costPrice": 395200,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-iphone-20w-pd-type-c/main-25.png",
+          "active": true,
+          "options": {
+            "color": "Chính hãng"
+          },
+          "salePrice": 520000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-nhanh-samsung-25w-ep-t2510nbegww",
+      "name": "Củ sạc nhanh Samsung 25W không kèm cáp (EP-T2510NBEGWW)",
+      "categorySlug": "sac-cap",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Sạc nhanh Samsung 25W EP-T2510NBEGWW với thiết kế nhỏ gọn cùng hai màu sắc đen và trắng sang trọng, sạc cũng được trang bị công suất sạc nhanh 25W. Cùng với đó, củ sạc còn được trang bị công nghệ sạc GaN giúp mang lại một thiết kế nhỏ gọn nhưng vẫn đảm bảo được công suất sạc. Củ sạc với cổng USB-C giúp mang lại khả năng tương thích cao, phù hợp với nhiều thiết bị. Sạc nhanh Samsung 25W EP-T2510NBEGWW – sạc nhanh tiện lợi Sạc nhanh Samsung 25W EP-T2510NBEGWW với thiết kế nhỏ gọn ",
+      "price": 380000,
+      "salePrice": 330000,
+      "costPrice": 250800,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/main-32.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-0-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-1-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-2-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-3-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-4-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-5-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-6-39.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-7-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-8-41.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "25W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu ra": "Type-C",
+        "Tiện ích": "Công nghệ sạc GaNSạc nhanhKhông lo dòng điện quá tải cho phép, đoản mạch, nhiệt độ cao, rò rỉ điện,…Giảm thiểu năng lượng khi ở chế độ sạc chờ",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ PD 3.0, PPS",
+        "Hãng sản xuất": "Samsung Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "72WOM2-TRANG-0",
+          "price": 380000,
+          "costPrice": 250800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/main-32.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 330000
+        },
+        {
+          "sku": "72WOM2-DEN-1",
+          "price": 380000,
+          "costPrice": 250800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-samsung-25w-ep-t2510nbegww/gallery-0-33.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 330000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-cuktech-gan-1c-20w-cn-ha716c",
+      "name": "Sạc Cuktech GAN 1C 20W (CN) HA716C",
+      "categorySlug": "sac-cap",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Củ sạc Cuktech GaN 1C 20W CN HA716C sử dụng công nghệ GaN thế hệ 3, hỗ trợ chuẩn USB-C PD công suất tối đa 20W và có kích thước nhỏ gọn 38x22,3x43mm. Nhờ các mức điện áp 5V-3A, 9V-2.22A và 12V-1.67A, củ sạc đáp ứng tốt các thiết bị dùng USB-C. Sạc Cuktech tích hợp nhiều lớp bảo vệ an toàn, giúp duy trì dòng điện ổn định và bảo vệ tuổi thọ pin. Củ sạc Cuktech GaN 1C 20W CN HA716C – Sạc tiện lợi, hiệu suất mạnh mẽ Củ sạc Cuktech GaN 1C 20W CN HA716C là một phụ kiện tiện lợi, có th",
+      "price": 146000,
+      "salePrice": 125000,
+      "costPrice": 95000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/main-42.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/gallery-0-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/gallery-1-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/gallery-2-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/gallery-3-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/gallery-4-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/gallery-5-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/gallery-6-49.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "20W MAX",
+        "Đầu ra": "1 x USB-C",
+        "Tiện ích": "Sạc nhanh) Bảo vệ quá áp) Bảo vệ quá dòng đầu vào/đầu ra) Bảo vệ ngắt mạch) Bảo vệ quá nhiệt) Nhiễu điện từ thấp) Độ gợn sóng thấp",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ Power Delivery (PD) Công Nghệ GaN",
+        "Hãng sản xuất": "Cuktech"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "8EKSZE-XAM-0",
+          "price": 146000,
+          "costPrice": 95000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-gan-1c-20w-cn-ha716c/main-42.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 125000
+        }
+      ]
+    },
+    {
+      "slug": "sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c",
+      "name": "Sạc Anker Zolo 3C1A 140W kèm cáp USB-C B2697",
+      "categorySlug": "sac-cap",
+      "brandSlug": "anker",
+      "description": "Đặc điểm nổi bật Sạc Anker Zolo B2697 3C1A 140W kèm cáp USB-C sử dụng công nghệ GaN, hỗ trợ sạc nhanh PD 3.1 với ba cổng USB-C và một cổng USB-A cho tổng công suất sạc lên đến 140W, sạc được 4 thiết bị. Mẫu sạc nhanh này có màn hình hiển thị chi tiết trạng thái sạc và trang bị ActiveShield 2.0 để giám sát nhiệt độ. Đi kèm là cáp USB-C tiện lợi trong quá trình sử dụng. Sạc Anker Zolo B2697 3C1A 140W kèm cáp USB-C - Sạc ổn định, kèm cáp tiện lợi Sạc Anker Zolo B2697 kèm cáp USB-C là giải pháp mạnh",
+      "price": 1700000,
+      "salePrice": 1190000,
+      "costPrice": 904400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/main-50.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-0-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-1-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-2-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-3-54.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-4-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-5-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-6-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-7-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-8-59.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "140W",
+        "Sử dụng tối đa": "4 thiết bị",
+        "Đầu ra": "3 x USB-C, 1 x USB-A",
+        "Tiện ích": "Sạc nhanhMàn hình thông minh kép hiển thị nhiệt độKhi nhiệt độ cao hơn ngưỡng, hệ thống điều chỉnh để giảm nhiệt",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ Power IQ 3.0",
+        "Chiều dài dây": "1.5m",
+        "Hãng sản xuất": "Anker"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3C224K-BAC-0",
+          "price": 1700000,
+          "costPrice": 904400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/main-50.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 1190000
+        },
+        {
+          "sku": "3C224K-DEN-1",
+          "price": 1700000,
+          "costPrice": 904400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/sac-anker-zolo-b2697-3c1a-140w-kem-cap-usb-c/gallery-0-51.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1190000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-mophie-essentials-1c-gan-45w",
+      "name": "Sạc Mophie Essentials 1C GaN 45W - 978",
+      "categorySlug": "sac-cap",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Củ sạc Mophie Essentials 1C GaN 45W được trang bị công nghệ GaN và PPS hỗ trợ sạc nhanh hiệu suất cao, đồng thời tương thích thiết bị sử dụng cổng USB-C. Mẫu sạc nhanh này còn có thiết kế chân gập linh hoạt, kèm theo kích thước nhỏ gọn. Ngoài ra, công nghệ Power Delivery công suất 45W cũng cho phép nạp năng lượng trong thời gian ngắn. Củ sạc Mophie Essentials 1C GaN 45W - Sạc nhanh và an toàn Củ sạc Mophie Essentials 1C GaN 45W là một sự lựa chọn lý tưởng trong quá trình sạc pin",
+      "price": 648000,
+      "salePrice": 590000,
+      "costPrice": 448400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/main-60.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-0-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-1-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-2-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-3-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-4-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-5-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-6-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/gallery-7-68.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "45W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu ra": "1 x USB-C",
+        "Tiện ích": "Thiết kế chân gập tiện lợi",
+        "Công nghệ/Đạt chứng nhận": "Power DeliveryCông nghệ GaN (Gallium Nitride)Công nghệ PPS (Programmable Power Supply)",
+        "Hãng sản xuất": "Mophie"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "51WFS9-TRANG-0",
+          "price": 648000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-mophie-essentials-1c-gan-45w/main-60.png",
+          "active": true,
+          "options": {
+            "color": "978-Trắng"
+          },
+          "salePrice": 590000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-ugreen-gan-30w-us-x513-55530",
+      "name": "Củ sạc Ugreen GAN 1C 30W (US) X513 55530",
+      "categorySlug": "sac-cap",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Củ sạc Ugreen GaN 30W (US) X513 55530 sở hữu cổng Type-C 30W đầu ra, hỗ trợ PD/PPS và chuẩn sạc nhanh, đáp ứng nhu cầu sạc linh hoạt cho máy (US-Plug). Công nghệ GaN II của sản phẩm sạc nhanh này giúp tối ưu hiệu suất, giảm tỏa nhiệt khi vận hành. Thiết kế phích cắm cứng cáp, phù hợp nhiều ổ cắm phổ biến và dễ bảo quản. Củ sạc Ugreen GaN 30W (US) X513 55530 – Thiết kế nhỏ gọn, hỗ trợ sạc nhanh Củ sạc Ugreen này hướng tới trải nghiệm gọn nhẹ, giảm chiếm chỗ trong balo và ổ cắm tạ",
+      "price": 345000,
+      "salePrice": 190000,
+      "costPrice": 144400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/main-69.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-0-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-1-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-2-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-3-73.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-4-74.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-5-75.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-6-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-7-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-8-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/gallery-9-79.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "30W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu ra": "100-240V~50/60Hz, tối đa 500mA",
+        "Tiện ích": "Sạc nhanhTương thích với: PD3.0 (PD2.0), QC4.0+ (QC4.0/QC3.0/QC2.0), FCP/SCP, BC1.2--5V1.5AChống đoản mạch, quá áp, quá nhiệt và quá dòng",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ GaN",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "IM3Y3M-XAM-0",
+          "price": 345000,
+          "costPrice": 144400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-30w-us-x513-55530/main-69.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 190000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-ugreen-gan-45w-us-x524-65050b",
+      "name": "Củ sạc Ugreen GAN 1C 45W (US) X524 65050B",
+      "categorySlug": "sac-cap",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Củ sạc Ugreen GaN 45W (US) X524 65050B cung cấp công suất 45W ưu việt, giúp người dùng không mất nhiều thời gian để làm đầy năng lượng cho các thiết bị. Với hệ thống Power Dispenser, điện áp trên sản phẩm được kiểm soát hiệu quả. Sạc dùng chân cắm US (US Plug) thẳng, kết nối ổn định với ổ điện. Củ sạc Ugreen GaN 45W (US) X524 65050B - Hiệu năng cao, an toàn tối ưu GaN 45W (US) X524 65050B là củ sạc nổi bật trong dòng sạc hiện đại của nhà Ugreen. Với thiết kế có độ an toàn cao, s",
+      "price": 490000,
+      "salePrice": 380000,
+      "costPrice": 288800,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/main-80.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/gallery-0-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/gallery-1-82.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/gallery-2-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/gallery-3-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/gallery-4-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/gallery-5-86.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "45W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu ra": "1 x USB-C",
+        "Tiện ích": "Sạc nhanhBảo vệ các thiết bị của bạn khỏi bị đoản mạch, quá áp, quá nhiệt và quá dòng",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "2SDO2Y-XAM-0",
+          "price": 490000,
+          "costPrice": 288800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-ugreen-gan-45w-us-x524-65050b/main-80.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 380000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-anker-nano-a2692-1c-45w",
+      "name": "Sạc Anker Nano 1C 45W A2692",
+      "categorySlug": "sac-cap",
+      "brandSlug": "anker",
+      "description": "Đặc điểm nổi bật Củ sạc Anker Nano A2692 1C 45W sử dụng công nghệ GaN cho công suất lên đến 45W, kết hợp hệ thống kiểm soát nhiệt độ kép ActiveShield cho phép sạc an toàn. Thêm vào đó, củ sạc nhanh này còn hỗ trợ cho nhiều thiết bị Samsung và Apple. Ngoài ra, kích thước nhỏ gọn cũng thuận tiện mang theo khi di chuyển. Củ sạc Anker Nano A2692 1C 45W - Sạc nhanh vượt trội Củ sạc Anker Nano A2692 1C 45W là phụ kiện sạc chất lượng, phù hợp với đa dạng đối tượng. Qua các đặc điểm hiện đại, củ sạc Ank",
+      "price": 550000,
+      "salePrice": 390000,
+      "costPrice": 296400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/main-87.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-0-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-1-89.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-2-90.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-3-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-4-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-5-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-6-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-7-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-8-96.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "45W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu vào": "Cáp sạc: USB-C",
+        "Tiện ích": "Sạc nhanh",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ GaNCông nghệ ActiveShieldCông nghệ kiểm soát nhiệt độ kép",
+        "Hãng sản xuất": "Anker"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "OLF9CD-TRANG-0",
+          "price": 550000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/main-87.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 390000
+        },
+        {
+          "sku": "OLF9CD-DEN-1",
+          "price": 550000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-anker-nano-a2692-1c-45w/gallery-0-88.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 390000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u",
+      "name": "Sạc Cuktech 3C1A No.10 màn hình ultra 120W kèm cáp C-C (CN) AD1204U",
+      "categorySlug": "sac-cap",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Củ sạc Cuktech 3C1A No.10 màn hình Ultra kèm cáp C to C 120W AD1204U là giải pháp nạp năng lượng hiện đại với công nghệ GaN cùng thiết kế 4 cổng đa năng. Màn hình LED 1.57 inch hỗ trợ theo dõi thông số dòng điện và trạng thái sạc của các thiết bị một cách trực quan. Phụ kiện còn sở hữu công suất sạc 120W mạnh mẽ. Củ sạc Cuktech 3C1A No.10 màn hình Ultra kèm cáp C to C 120W AD1204U - Trạm sạc tiên tiến với màn hình TFT và công nghệ GaN Cuktech AD1204U ứng dụng công nghệ GaN thế h",
+      "price": 1260000,
+      "salePrice": 1139000,
+      "costPrice": 865640,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/main-97.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-0-98.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-1-99.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-2-100.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-3-101.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-4-102.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-5-103.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-6-104.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-7-105.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-8-106.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-9-107.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/gallery-10-108.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "120W",
+        "Sử dụng tối đa": "4 thiết bị",
+        "Đầu vào": "AC",
+        "Đầu ra": "3 x USB-C1 x USB-A",
+        "Tiện ích": "Sạc nhanhSạc cùng lúc nhiều thiết bịMàn hình LED 1.57 inch hiển thị thông số sạcHỗ trợ ứng dụng Mi Home theo dõi công suấtTích hợp cảm biến nhiệt NTC kiểm tra 36.000 lần/giờ",
+        "Công nghệ/Đạt chứng nhận": "PD3.1, PPS, UFCS, QC, Huawei SCP/FCP, Xiaomi Turbo 120W",
+        "Hãng sản xuất": "Cuktech"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "C96QWO-XAM-0",
+          "price": 1260000,
+          "costPrice": 865640,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u/main-97.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 1139000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-nhanh-mophie-20w-pd-type-c",
+      "name": "Củ sạc Mophie 20W PD Type-C",
+      "categorySlug": "sac-cap",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Củ sạc Mophie 20w PD Type C – Tiết kiệm thời gian sạc tối đa Mophie là thương hiệu có độ tin cậy cao chuyên sản xuất các phụ kiện dành cho điện thoại di động. Củ sạc nhanh Mophie 20w PD Type-C hoàn toàn tương thích với để sạc nhanh tối đa với những chiếc điện thoại thông minh. Ngoài khả năng sạc nhanh Mophie còn có hệ thống nào tân tiến, hãy xem bài viết dưới nhé. Kích thước nhỏ gọn, tích hợp cổng USB-C Mophie 20w sở hữu thiết kế nhỏ gọn với kích thước cụ thể đạt 36 x 36 x 25 mm",
+      "price": 490000,
+      "salePrice": 290000,
+      "costPrice": 220400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/main-109.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-0-110.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-1-111.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-2-112.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-3-113.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-4-114.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-5-115.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-6-116.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-7-117.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-8-118.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-9-119.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-10-120.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-11-121.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "20 W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu ra": "USB-C",
+        "Tiện ích": "Sạc nhanhTích hợp chip thông minh, giúp tự điều chỉnh dòng điện phù hợp trong quá trình sạc thiết bị",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ Power Delivery",
+        "Hãng sản xuất": "Mophie"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "G338O0-DEN-0",
+          "price": 490000,
+          "costPrice": 220400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/main-109.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 290000
+        },
+        {
+          "sku": "G338O0-TRANG-1",
+          "price": 490000,
+          "costPrice": 220400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-mophie-20w-pd-type-c/gallery-0-110.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 290000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w",
+      "name": "Sạc Cuktech CP6 GaN 2C1A 67W tích hợp cáp USB-C rút gọn AD653W",
+      "categorySlug": "sac-cap",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Củ sạc Cuktech CP6 GaN 2C1A kèm cáp USB-C 67W - AD653W sở hữu công nghệ tản nhiệt GaN tiên tiến cùng sợi dây cáp dài 0.7m có thể rút gọn linh hoạt. Công suất 67W hỗ trợ sạc nhanh cho đa dạng các dòng máy điện tử. Nhờ thiết kế chân cắm gập và bảo vệ nhiều lớp, sản phẩm mang lại sự an tâm cùng không gian sạc gọn gàng. Củ sạc Cuktech CP6 GaN 2C1A kèm cáp USB-C 67W - AD653W - Hiệu suất cao, thiết kế thông minh Thiết bị củ sạc nhanh thu hút sự chú ý nhờ sự hợp nhất giữa công suất tru",
+      "price": 809000,
+      "salePrice": 750000,
+      "costPrice": 570000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/main-122.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-0-123.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-1-124.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-2-125.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-3-126.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-4-127.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-5-128.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-6-129.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-7-130.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-8-131.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-9-132.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-10-133.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-11-134.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-12-135.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-13-136.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "67W",
+        "Sử dụng tối đa": "3 thiết bị",
+        "Đầu vào": "AC",
+        "Đầu ra": "1 x USB-C1 x cáp USB-C1 x USB-A",
+        "Tiện ích": "Sạc nhanhSạc cùng lúc nhiều thiết bịCáp tích hợp trên sạc có độ bền lên tới 10000 lần uốn",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ GaN",
+        "Chiều dài dây": "0.7 mét",
+        "Hãng sản xuất": "Cuktech"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "M60E48-TRANG-0",
+          "price": 809000,
+          "costPrice": 570000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/main-122.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 750000
+        },
+        {
+          "sku": "M60E48-DEN-1",
+          "price": 809000,
+          "costPrice": 570000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w/gallery-0-123.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 750000
+        }
+      ]
+    },
+    {
+      "slug": "cu-sac-nhanh-type-c-samssung-t4510-45w",
+      "name": "Củ sạc Samsung Type-C 45W kèm cáp C-C 5A 1.8M EP-T4511X",
+      "categorySlug": "sac-cap",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Củ sạc Samsung Type-C 45W kèm cáp C-C 5A 1.8M EP-T4511X sở hữu công suất lớn cùng khả năng tương thích với nhiều thiết bị và nguồn điện, giúp tối ưu hiệu suất sạc. Mẫu sạc Samsung chính hãng này còn được tích hợp kèm cáp USB-C to USB-C 1.8m để tiện lợi hơn khi sử dụng. Củ sạc 45W Samsung còn sở hữu khả năng chống quá nhiệt, quá dòng và đoản mạch. Củ sạc Samsung Type-C 45W kèm cáp C-C 5A 1.8M EP-T4511X - Tối ưu thời gian, sạc nhanh an toàn Củ sạc siêu nhanh Samsung 45W T4510 là l",
+      "price": 1190000,
+      "salePrice": 850000,
+      "costPrice": 646000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/main-137.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-0-138.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-1-139.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-2-140.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-3-141.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-4-142.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-5-143.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-6-144.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/gallery-7-145.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "45W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu vào": "Type-C",
+        "Đầu ra": "Type-C",
+        "Tiện ích": "Sạc nhanhKhông còn nỗi lo quá dòng, đoản mạch, dao động nhiệt độ",
+        "Công nghệ/Đạt chứng nhận": "Công nghệ PD 3.0, PDO/PPS max. 45W",
+        "Chiều dài dây": "1.8m",
+        "Hãng sản xuất": "Samsung Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "7ANEHO-DEN-0",
+          "price": 1190000,
+          "costPrice": 646000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cu-sac-nhanh-type-c-samssung-t4510-45w/main-137.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 850000
+        }
+      ]
+    },
+    {
+      "slug": "cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m",
+      "name": "Cáp sạc nhanh Baseus Cafule PD 2.0 100W Type-C to Type-C (20V 5A) 2M",
+      "categorySlug": "sac-cap",
+      "brandSlug": "baseus",
+      "description": "Đặc điểm nổi bật Cáp sạc nhanh Baseus Cafule PD 2.0 100W Type-C to Type-C (20V 5A) 2M hỗ trợ công suất sạc lên đến 100W từ chuẩn PD 2.0 và tốc độ truyền tải 480Mbps. Thời gian sạc sẽ được rút ngắn trên mọi thiết bị tương thích. Phần dây cáp cũng sẽ được bện chắc chắn, chống mài mòn, chống đứt và bên trong là lõi đồng chống oxy hóa. Cáp sạc nhanh Baseus Cafule PD 2.0 100W Type-C to Type-C (20V 5A) 2M - Sự lựa chọn đáng tin cậy Dây Type C to Type C Baseus Cafule PD 2.0 100W (20V 5A) 2M mang đến mộ",
+      "price": 160000,
+      "salePrice": 150000,
+      "costPrice": 114000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/main-146.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-0-147.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-1-148.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-2-149.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-3-150.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-4-151.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-5-152.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-6-153.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-7-154.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-8-155.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-9-156.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-10-157.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-11-158.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-12-159.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-13-160.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {},
+      "specsRaw": {
+        "Công suất sạc": "100W",
+        "Sử dụng tối đa": "1 thiết bị",
+        "Đầu vào": "Type-C",
+        "Đầu ra": "Type-C",
+        "Tiện ích": "Hỗ trợ sạc nhanhCáp vải dùĐầu kim loại siêu bềnTruyền dữ liệu nhanh 480MbpsChip quản lý thông minh",
+        "Công nghệ/Đạt chứng nhận": "Power Delivery / QC 3.0",
+        "Chiều dài dây": "2 mét",
+        "Hãng sản xuất": "Baseus"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "F9XDP4-ENXAM-0",
+          "price": 160000,
+          "costPrice": 114000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/main-146.png",
+          "active": true,
+          "options": {
+            "color": "Đen/Xám"
+          },
+          "salePrice": 150000
+        },
+        {
+          "sku": "F9XDP4-DENDO-1",
+          "price": 160000,
+          "costPrice": 114000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/cap-sac-nhanh-baseus-cafule-pd-2-0-100w-type-c-to-type-c-20v-5a-2m/gallery-0-147.png",
+          "active": true,
+          "options": {
+            "color": "Đen/Đỏ"
+          },
+          "salePrice": 150000
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2139 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:38:56.161Z",
+  "note": "Scraped 23 sản phẩm — danh mục \"Pin dự phòng\" từ cellphones.com.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": "[{\"name\":\"Đen\",\"hex\":\"#1a1a1a\"},{\"name\":\"Trắng\",\"hex\":\"#f8fafc\"},{\"name\":\"Bạc\",\"hex\":\"#94a3b8\"},{\"name\":\"Xám\",\"hex\":\"#6b7280\"},{\"name\":\"Xanh\",\"hex\":\"#2563eb\"},{\"name\":\"Tím\",\"hex\":\"#7c3aed\"},{\"name\":\"Hồng\",\"hex\":\"#ec4899\"},{\"name\":\"Đỏ\",\"hex\":\"#dc2626\"},{\"name\":\"Vàng\",\"hex\":\"#f59e0b\"},{\"name\":\"Cam\",\"hex\":\"#f97316\"},{\"name\":\"Nâu\",\"hex\":\"#92400e\"},{\"name\":\"Xanh lá\",\"hex\":\"#16a34a\"},{\"name\":\"Xanh navy\",\"hex\":\"#1e3a5f\"},{\"name\":\"Xanh da trời\",\"hex\":\"#38bdf8\"},{\"name\":\"Titan Đen\",\"hex\":\"#1c1917\"},{\"name\":\"Titan Trắng\",\"hex\":\"#fafaf9\"},{\"name\":\"Titan Bạc\",\"hex\":\"#e2e8f0\"},{\"name\":\"Titan Tự nhiên\",\"hex\":\"#d6cfc4\"},{\"name\":\"Tím Cobalt\",\"hex\":\"#5b4b8a\"},{\"name\":\"Đen Classic\",\"hex\":\"#1a1a1a\"},{\"name\":\"Xanh Sky Blue\",\"hex\":\"#38bdf8\"},{\"name\":\"Trắng Classic\",\"hex\":\"#f8fafc\"},{\"name\":\"Xanh lam\",\"hex\":\"#1d4ed8\"},{\"name\":\"Cam nhạt\",\"hex\":\"#fed7aa\"},{\"name\":\"Xanh bạc hà\",\"hex\":\"#6ee7b7\"},{\"name\":\"Chính hãng\",\"hex\":\"#64748b\"}]"
+    },
+    {
+      "code": "storage",
+      "name": "Bộ nhớ trong",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"32GB\"},{\"name\":\"64GB\"},{\"name\":\"128GB\"},{\"name\":\"256GB\"},{\"name\":\"512GB\"},{\"name\":\"1TB\"},{\"name\":\"2TB\"}]"
+    },
+    {
+      "code": "ram",
+      "name": "RAM",
+      "valueType": "select",
+      "allowedValues": "[{\"name\":\"4GB\"},{\"name\":\"6GB\"},{\"name\":\"8GB\"},{\"name\":\"12GB\"},{\"name\":\"16GB\"},{\"name\":\"32GB\"},{\"name\":\"64GB\"}]"
+    },
+    {
+      "code": "cpu",
+      "name": "Vi xử lý",
+      "valueType": "text"
+    },
+    {
+      "code": "gpu",
+      "name": "Card đồ họa",
+      "valueType": "text"
+    },
+    {
+      "code": "screen",
+      "name": "Màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "battery",
+      "name": "Pin",
+      "valueType": "text"
+    },
+    {
+      "code": "camera",
+      "name": "Camera sau",
+      "valueType": "text"
+    },
+    {
+      "code": "camera_front",
+      "name": "Camera trước",
+      "valueType": "text"
+    },
+    {
+      "code": "os",
+      "name": "Hệ điều hành",
+      "valueType": "text"
+    },
+    {
+      "code": "connectivity",
+      "name": "Kết nối",
+      "valueType": "text"
+    },
+    {
+      "code": "weight",
+      "name": "Trọng lượng",
+      "valueType": "text"
+    },
+    {
+      "code": "refresh_rate",
+      "name": "Tần số quét",
+      "valueType": "text"
+    },
+    {
+      "code": "sim",
+      "name": "SIM",
+      "valueType": "text"
+    },
+    {
+      "code": "nfc",
+      "name": "NFC",
+      "valueType": "text"
+    },
+    {
+      "code": "charging",
+      "name": "Sạc",
+      "valueType": "text"
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text"
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text"
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "display_tech",
+      "name": "Công nghệ màn hình",
+      "valueType": "text"
+    },
+    {
+      "code": "network",
+      "name": "Hỗ trợ mạng",
+      "valueType": "text"
+    }
+  ],
+  "categories": [
+    {
+      "slug": "iphone",
+      "name": "iPhone",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "phone_iphone"
+    },
+    {
+      "slug": "samsung-phone",
+      "name": "Samsung",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "xiaomi-phone",
+      "name": "Xiaomi",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "oppo-phone",
+      "name": "OPPO",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai",
+      "name": "Điện thoại, Tablet",
+      "parentSlug": null,
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "tablet",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai",
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tablet"
+    },
+    {
+      "slug": "laptop",
+      "name": "Laptop",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "laptop_mac"
+    },
+    {
+      "slug": "tai-nghe-bt",
+      "name": "Tai nghe",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "loa",
+      "name": "Loa",
+      "parentSlug": "tai-nghe",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "speaker"
+    },
+    {
+      "slug": "tai-nghe",
+      "name": "Âm thanh, Mic thu âm",
+      "parentSlug": null,
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "headphones"
+    },
+    {
+      "slug": "may-anh",
+      "name": "Máy ảnh, Máy quay",
+      "parentSlug": "dong-ho",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "photo_camera"
+    },
+    {
+      "slug": "dong-ho",
+      "name": "Đồng hồ, Camera",
+      "parentSlug": null,
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "watch"
+    },
+    {
+      "slug": "op-lung",
+      "name": "Ốp lưng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "shield"
+    },
+    {
+      "slug": "sac-cap",
+      "name": "Sạc & Cáp",
+      "parentSlug": "phu-kien",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "bolt"
+    },
+    {
+      "slug": "pin-du-phong",
+      "name": "Pin dự phòng",
+      "parentSlug": "phu-kien",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "battery_charging_full"
+    },
+    {
+      "slug": "phu-kien",
+      "name": "Phụ kiện",
+      "parentSlug": null,
+      "sortOrder": 5,
+      "active": true,
+      "imageUrl": "",
+      "icon": "cable"
+    },
+    {
+      "slug": "may-tinh-de-ban",
+      "name": "PC, Máy tính để bàn",
+      "parentSlug": "man-hinh",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "man-hinh",
+      "name": "PC, Màn hình, Máy in",
+      "parentSlug": null,
+      "sortOrder": 6,
+      "active": true,
+      "imageUrl": "",
+      "icon": "desktop_windows"
+    },
+    {
+      "slug": "tivi",
+      "name": "Tivi",
+      "parentSlug": null,
+      "sortOrder": 7,
+      "active": true,
+      "imageUrl": "",
+      "icon": "tv"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "battery",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "camera",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai",
+      "attributeCode": "os",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "iphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "samsung-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "xiaomi-phone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "cpu",
+      "isVariant": false,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "gpu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "laptop",
+      "attributeCode": "screen",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    },
+    {
+      "categorySlug": "tablet",
+      "attributeCode": "ram",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "tai-nghe",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dong-ho",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": true
+    }
+  ],
+  "brands": [
+    {
+      "slug": "anker",
+      "name": "Anker",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Anker-240x50.png",
+      "description": "Anker — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    },
+    {
+      "slug": "baseus",
+      "name": "Baseus",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Baseus-240x50.png",
+      "description": "Baseus — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    },
+    {
+      "slug": "ugreen",
+      "name": "UGREEN",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/UGREEN-240x50.png",
+      "description": "UGREEN — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Samsung-240x50.png",
+      "description": "Samsung — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    },
+    {
+      "slug": "apple",
+      "name": "Apple",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/iPhone-240x50.png",
+      "description": "Apple — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon",
+      "name": "Pin dự phòng Anker 25.000mAh 165W tích hợp cáp rút gọn A1695",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "anker",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Anker A1695 25000mAh 165W kèm cáp rút gọn sở hữu dung lượng 25,000mAh, mang đến khả năng cung cấp năng lượng dài lâu cho người dùng. Công suất tối đa lên tới 165W giúp sạc nhanh nhiều thiết bị, tối ưu hóa thời gian sử dụng. Ngoài ra, thiết bị còn sở hữu công nghệ ActiveShield 2.0, đảm bảo an toàn cao trong suốt quá trình sạc. Pin sạc dự phòng Anker A1695 25000mAh 165W kèm cáp rút gọn – Dung lượng pin cực lớn Pin sạc dự phòng Anker A1695 25000mAh 165W mang đến gi",
+      "price": 2850000,
+      "salePrice": 1750000,
+      "costPrice": 1330000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/main-1.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-0-2.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-2-4.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-11-13.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-12-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-13-15.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "25000 mAh",
+        "dimensions": "15.7 × 5.4 × 4.9 cm",
+        "weight": "595g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "25000 mAh",
+        "Công suất sạc": "165W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-A2 dây cáp USB-C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhanh Chống cháy nổ, chập điện Hiển thị thông số sạc",
+        "Kích thước": "15.7 × 5.4 × 4.9 cm",
+        "Trọng lượng": "595g",
+        "Hãng sản xuất": "Anker"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "H5DXWQ-BAC-0",
+          "price": 2850000,
+          "costPrice": 1330000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/main-1.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 1750000
+        },
+        {
+          "sku": "H5DXWQ-DEN-1",
+          "price": 2850000,
+          "costPrice": 1330000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-0-2.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1750000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c",
+      "name": "Pin sạc dự phòng Anker Zolo 20000mAh 45W 1A1C tích hợp 2 cáp Type-C A1681",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "anker",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Anker Zolo A1681 20000mAh 45W 1A1C trang bị dung lượng 20000mAh, đáp ứng nhu cầu sạc liên tục và hỗ trợ sạc nhanh 45W qua cổng USB-C. Thiết kế nhỏ gọn, trọng lượng nhẹ, dễ dàng mang theo khi di chuyển. Thiết bị còn được trang bị tính năng nhắc nhở sạc khi pin gần cạn và đảm bảo an toàn điện áp. Pin sạc dự phòng Anker Zolo A1681 20000mAh 45W 1A1C – Sạc nhanh chóng, dung lượng lớn Pin sạc dự phòng Anker Zolo A1681 20000mAh 45W 1A1C sở hữu thiết kế gọn gàng, dung l",
+      "price": 1290000,
+      "salePrice": 890000,
+      "costPrice": 676400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/main-16.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-2-19.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-3-20.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-4-21.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-5-22.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-6-23.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-7-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-8-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-9-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-10-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-11-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-12-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-13-30.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "20000mAh",
+        "dimensions": "12 x 3.14 x 7.34 cm"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "20000mAh",
+        "Công suất sạc": "45W",
+        "Cổng sạc ra": "1 x USB-C: 45W 1 x USB-A: 22.5W 1 x USB-C cable: 45W",
+        "Cổng sạc vào": "1 x USB-C: 20W 1 x USB-C cable: 20W",
+        "Tiện ích": "Nhắc nhở sạc thông minh khi hết pin",
+        "Kích thước": "12 x 3.14 x 7.34 cm",
+        "Hãng sản xuất": "Anker"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "PX6LPB-DUONG-0",
+          "price": 1290000,
+          "costPrice": 676400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/main-16.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 890000
+        },
+        {
+          "sku": "PX6LPB-TRANG-1",
+          "price": 1290000,
+          "costPrice": 676400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-0-17.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 890000
+        },
+        {
+          "sku": "PX6LPB-DEN-2",
+          "price": 1290000,
+          "costPrice": 676400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-1-18.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 890000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w",
+      "name": "Pin dự phòng StarGO Star X2 Lite 20000mAh 22.5W",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng StarGO Star X2 Lite 20000mAh 22.5W sở hữu dung lượng pin lớn, hỗ trợ sạc nhanh 22.5W và tích hợp 3 cổng đầu ra cho nhiều thiết bị. Sản phẩm sở hữu vỏ ngoài bền bỉ, chống va đập tốt và trang bị màn hình LED hiển thị dung lượng. Ngoài ra, StarGO Star X2 Lite còn sở hữu các tính năng bảo vệ an toàn với kiểu dáng nhỏ gọn. Pin sạc dự phòng StarGO Star X2 Lite 20000mAh 22.5W - Sạc nhanh 22,5W, 3 cổng đầu ra Pin sạc dự phòng StarGO Star X2 Lite 20000mAh 22.5W là giải p",
+      "price": 430000,
+      "salePrice": 390000,
+      "costPrice": 296400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/main-31.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-0-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-1-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-2-34.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-3-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-4-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-5-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-6-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-7-39.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-8-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-9-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-10-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-11-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-12-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-13-45.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "20.000 mAh",
+        "dimensions": "14.6 x 6.8 x 2.8 cm"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "20.000 mAh",
+        "Công suất sạc": "22.5W",
+        "Cổng sạc ra": "2 x USB-A1 x USB-C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Tích hợp màn hình LED hiển thị lượng pinSạc nhiều thiết bị cùng lúcCó chứng nhận CCC (Tùy phiên bản)",
+        "Lõi pin": "Polymer",
+        "Kích thước": "14.6 x 6.8 x 2.8 cm",
+        "Hãng sản xuất": "StarGO"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "DU4T08-ANCCC-0",
+          "price": 430000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/main-31.png",
+          "active": true,
+          "options": {
+            "color": "Đen (Có chứng nhận CCC)"
+          },
+          "salePrice": 390000
+        },
+        {
+          "sku": "DU4T08-DEN-1",
+          "price": 430000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-0-32.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 390000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w",
+      "name": "Pin dự phòng Baseus Enerfill FC11 màn hình 10.000mAh 22.5W tích hợp cáp C+L",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "baseus",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Baseus Enerfill FC11 10000mAh 22.5W với công suất sạc lên tới 22.5W sẽ giúp nạp năng lượng cho nhiều thiết bị di động một cách nhanh chóng. Mẫu pin dự phòng Baseus này mang tới sự tiện lợi khi được trang bị sẵn 2 cáp sạc Type-C và Lightning. Sản phẩm còn được tích hợp đầy đủ các công nghệ bảo vệ quá dòng, quá áp, đoản mạch và nhiệt độ. Pin sạc dự phòng Baseus Enerfill FC11 10000mAh 22.5W – Tích hợp chip AI, sạc nhanh Pin sạc dự phòng Baseus Enerfill FC11 10.000m",
+      "price": 790000,
+      "salePrice": 440000,
+      "costPrice": 334400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/main-46.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-0-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-1-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-2-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-3-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-4-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-5-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-6-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-7-54.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-8-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-9-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-10-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-11-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-12-59.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10.000mAh",
+        "dimensions": "11.1 x 6.82 x 3.2 cm",
+        "weight": "340g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10.000mAh",
+        "Công suất sạc": "22.5W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-AKèm 1 cáp sạc Type C - 1 cáp sạc lightning",
+        "Cổng sạc vào": "USB-C",
+        "Tiện ích": "Sạc nhanhMàn hình LEDChip AI giám sát nhiệt độ 18.000 lần mỗi giờBảo vệ quá sạcBảo vệ đoản mạchBảo vệ quá ápBảo vệ nhiệt độ cao/thấpBảo vệ quá dòngBảo vệ xả quá mứcAn toàn trên máy bay",
+        "Kích thước": "11.1 x 6.82 x 3.2 cm",
+        "Trọng lượng": "340g",
+        "Hãng sản xuất": "Baseus"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "41COOZ-DUONG-0",
+          "price": 790000,
+          "costPrice": 334400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/main-46.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 440000
+        },
+        {
+          "sku": "41COOZ-BE-1",
+          "price": 790000,
+          "costPrice": 334400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-0-47.png",
+          "active": true,
+          "options": {
+            "color": "Be"
+          },
+          "salePrice": 440000
+        },
+        {
+          "sku": "41COOZ-DEN-2",
+          "price": 790000,
+          "costPrice": 334400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-1-48.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 440000
+        },
+        {
+          "sku": "41COOZ-HONG-3",
+          "price": 790000,
+          "costPrice": 334400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-2-49.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 440000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s",
+      "name": "Pin sạc dự phòng Aukey 10000MAH PD 20W & QC 3.0 (PB-N83S)",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Aukey 10000mAh PD 20W PB-N83S có trọng lượng nhẹ chỉ 174g, công suất sạc 22.5W với công nghệ Qualcomm Quick Charge 3.0 và Power Delivery. Lõi pin bền bỉ, kết hợp nhiều cổng sạc, hỗ trợ điện thoại, tai nghe và đồng hồ. Phụ kiện sạc dự phòng Aukey này có hệ thống bảo vệ, chống đoản mạch, quá dòng đảm bảo an toàn tối đa. Pin sạc dự phòng Aukey 10000mAh PD 20W PB-N83S - Kích thước nhỏ gọn, sạc pin an toàn Pin sạc dự phòng Aukey 10000mAh PD 20W PB-N83S là trợ thủ cần",
+      "price": 590000,
+      "salePrice": 390000,
+      "costPrice": 296400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/main-60.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-0-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-1-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-2-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-3-64.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-4-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-5-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-6-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-7-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-8-69.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-9-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-10-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-11-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-12-73.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-13-74.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10000 mAh",
+        "dimensions": "27.0 x 57.7 x 80.5mm",
+        "weight": "174g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10000 mAh",
+        "Công suất sạc": "22.5 W",
+        "Cổng sạc ra": "1 x USB-A1 x USB-C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Bảo vệ Thông minhĐèn báo LED hiện thị dung lượng pin",
+        "Lõi pin": "Lithium-Polymer",
+        "Kích thước": "27.0 x 57.7 x 80.5mm",
+        "Trọng lượng": "174g",
+        "Hãng sản xuất": "Aukey"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "GWMRI6-NGDEN-0",
+          "price": 590000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/main-60.png",
+          "active": true,
+          "options": {
+            "color": "Hồng Đen"
+          },
+          "salePrice": 390000
+        },
+        {
+          "sku": "GWMRI6-TRANG-1",
+          "price": 590000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-0-61.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 390000
+        },
+        {
+          "sku": "GWMRI6-KPINK-2",
+          "price": 590000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-1-62.png",
+          "active": true,
+          "options": {
+            "color": "BlackPink"
+          },
+          "salePrice": 390000
+        },
+        {
+          "sku": "GWMRI6-DUONG-3",
+          "price": 590000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-2-63.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 390000
+        },
+        {
+          "sku": "GWMRI6-DEN-4",
+          "price": 590000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-3-64.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 390000
+        },
+        {
+          "sku": "GWMRI6-HONG-5",
+          "price": 590000,
+          "costPrice": 296400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-4-65.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 390000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p",
+      "name": "Pin dự phòng Cuktech P+Series 2C1A 15000mAh 100W có màn hình No.10 Plus PB150P",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Cuktech P Series No-10 Plus 2C1A 15000mAh 100W PB150P sở hữu dung lượng lớn lên đến 15.000mAh và sử dụng viên pin Lithium-ion bền bỉ. Thiết bị mang đến hiệu suất sạc mạnh mẽ thông qua 2 cổng USB-C và 1 cổng USB-A. Sản phẩm sạc dự phòng Cuktech này có trọng lượng chỉ 345g, giúp người dùng có thể dễ dàng mang theo ra ngoài. Pin sạc dự phòng Cuktech P Series No-10 Plus 2C1A 15000mAh 100W PB150P - Sạc nhanh, công suất mạnh mẽ Pin sạc dự phòng Cuktech P Series No-10 ",
+      "price": 1400000,
+      "salePrice": 1329000,
+      "costPrice": 1010040,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/main-75.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-0-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-1-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-2-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-3-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-4-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-5-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-6-82.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-7-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-8-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-9-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-10-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-11-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-12-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-13-89.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "15000mAh",
+        "dimensions": "15.37 x 3.48 x 5.1 cm",
+        "weight": "345g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "15000mAh",
+        "Công suất sạc": "100W",
+        "Cổng sạc ra": "2 x USB-C1 x USB-A",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhanh Cơ chế bảo vệ an ninh 9 lớpChứng nhận CCC",
+        "Hiệu suất sạc": "8300mAh (5V-2A)",
+        "Lõi pin": "Pin lithium ion",
+        "Kích thước": "15.37 x 3.48 x 5.1 cm",
+        "Trọng lượng": "345g",
+        "Hãng sản xuất": "Cuktech"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "70NHDM-DEN-0",
+          "price": 1400000,
+          "costPrice": 1010040,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/main-75.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 1329000
+        },
+        {
+          "sku": "70NHDM-XAM-1",
+          "price": 1400000,
+          "costPrice": 1010040,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-0-76.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 1329000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51",
+      "name": "Pin dự phòng Baseus Enerfill Bipow 2 Pro 10.000mAh 22.5W tích hợp cáp FC51",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "baseus",
+      "description": "Đặc điểm nổi bật Pin dự phòng Baseus Enerfill Bipow 2 Pro 10000mAh 22W FC51 có công suất sạc nhanh 22.5W, với 2 cổng sạc ra (USB-A và USB-C) và 1 dây sạc vào USB-C. Phụ kiện cho phép sạc cùng lúc nhiều thiết bị, tương thích với nhiều thiết bị điện tử khác nhau. Sản phẩm pin dự phòng Baseus còn tích hợp màn hình LED hiển thị thông số sạc, giúp dễ dàng theo dõi tình trạng pin. Pin dự phòng Baseus Enerfill Bipow 2 Pro 10000mAh 22W FC51 - Dung lượng cao, hỗ trợ sạc nhanh Pin dự phòng Baseus Enerfill",
+      "price": 830000,
+      "salePrice": 450000,
+      "costPrice": 342000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/main-90.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-0-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-1-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-2-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-3-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-4-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-5-96.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-6-97.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-7-98.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-8-99.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-9-100.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-10-101.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-11-102.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10.000mAh"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10.000mAh",
+        "Công suất sạc": "22.5W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-AKèm 1 cáp sạc Type C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhanh Hiển thị thông số sạc",
+        "Hãng sản xuất": "Baseus"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "EASJMJ-TRANG-0",
+          "price": 830000,
+          "costPrice": 342000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/main-90.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 450000
+        },
+        {
+          "sku": "EASJMJ-DEN-1",
+          "price": 830000,
+          "costPrice": 342000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-0-91.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 450000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w",
+      "name": "Pin dự phòng StarGO Star X1 Lite 10000mAh 10.5W",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Stargo Star X1 Lite 10W nổi bật với dung lượng 10.000mAh, đi kèm hệ thống cổng USB kép 5V/2.1A và cổng Type-C 5V/2A. Sản phẩm có kích thước 146 x 68 x 16 mm, vỏ ngoài làm từ vật liệu ABS+PC. Pin sạc dùng pin Li-Polymer chất lượng cao, màu đen sang trọng, thuận tiện trong việc di chuyển. Pin sạc dự phòng Stargo Star X1 Lite 10000mAh 10W - Nguồn năng lượng di động tiện lợi, an toàn Pin sạc dự phòng Stargo Star X1 Lite 10000mAh 10W là lựa chọn hấp dẫn cho người dùn",
+      "price": 290000,
+      "salePrice": 190000,
+      "costPrice": 144400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/main-103.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-0-104.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-1-105.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-2-106.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-3-107.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10.000 mAh",
+        "dimensions": "14.6 x 6.8 x 1.6 cm"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10.000 mAh",
+        "Công suất sạc": "10.5W",
+        "Cổng sạc ra": "2 x USB-A",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhiều thiết bị cùng lúc Chứng nhận CCC (tùy sản phẩm)",
+        "Lõi pin": "2 viên pin Lithium-Polymer",
+        "Kích thước": "14.6 x 6.8 x 1.6 cm",
+        "Hãng sản xuất": "StarGO"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "VXPJVV-ANCCC-0",
+          "price": 290000,
+          "costPrice": 144400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/main-103.png",
+          "active": true,
+          "options": {
+            "color": "Đen (Có chứng nhận CCC)"
+          },
+          "salePrice": 190000
+        },
+        {
+          "sku": "VXPJVV-DEN-1",
+          "price": 290000,
+          "costPrice": 144400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-0-104.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 190000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-stargo-hypercharge-25000mah-100w",
+      "name": "Pin dự phòng StarGO Hypercharge 25000mAh 100W tích hợp màn hình + cáp Type-C",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Stargo Hypercharge 25000mAh 100W sử dụng pin Li-Polymer 5 cell, hỗ trợ sạc ra tối đa 100W và sạc vào 65W thông qua cổng USB-C và cáp Type-C. Mẫu pin dự phòng Stargo này hỗ trợ sạc nhanh đa giao thức PD 3.0, QC 3.0, PPS. Cùng với đó sản phẩm còn được trang bị màn hình TFT hiển thị phần trăm pin, điện áp, dòng điện, công suất sạc. Pin sạc dự phòng Stargo Hypercharge 25000mAh 100W – Công suất sạc nhanh 100W Sản phẩm phù hợp với người dùng thường xuyên di chuyển và ",
+      "price": 1290000,
+      "salePrice": 990000,
+      "costPrice": 752400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/main-108.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-0-109.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-1-110.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-2-111.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-3-112.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-4-113.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-5-114.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-6-115.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-7-116.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-8-117.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-9-118.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "25.000 mAh"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "25.000 mAh",
+        "Công suất sạc": "100W",
+        "Cổng sạc ra": "1 x USB-A1 x USB-CKèm cáp Type C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhiều thiết bị cùng lúcSạc nhanhMàn hình hiển thị thông số sạcChứng nhận CCC(tùy sản phẩm)",
+        "Lõi pin": "Pin Lithium-Polymer",
+        "Hãng sản xuất": "StarGO"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "ASX0S8-ANCCC-0",
+          "price": 1290000,
+          "costPrice": 752400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/main-108.png",
+          "active": true,
+          "options": {
+            "color": "Xám (Có chứng nhận CCC)"
+          },
+          "salePrice": 990000
+        },
+        {
+          "sku": "ASX0S8-BAC-1",
+          "price": 1290000,
+          "costPrice": 752400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-0-109.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          },
+          "salePrice": 990000
+        },
+        {
+          "sku": "ASX0S8-XAM-2",
+          "price": 1290000,
+          "costPrice": 752400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-1-110.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 990000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958",
+      "name": "Pin dự phòng Magsafe Ugreen MagFlow 10000mAh 25W 65958",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng MagSafe Ugreen MagFlow 10000mAh 25W 65958 có kích thước 110,8x70x21mm, nặng khoảng 254g, nhỏ gọn để người dùng mang theo ra ngoài. Với 2 chuẩn đầu ra USB-C và 1 vị trí sạc không dây, mẫu pin dự phòng Ugreen này cho phép nạp pin 3 thiết bị cùng một thời điểm. Phần vỏ ngoài được hoàn thiện bằng kim loại và silicone nhằm nâng cao độ bền trong khi sử dụng. Pin sạc dự phòng MagSafe Ugreen MagFlow 10000mAh 25W 65958 - Sạc nhanh, bền bỉ Pin dự phòng MagSafe Ugreen MagF",
+      "price": 1590000,
+      "salePrice": 1275000,
+      "costPrice": 969000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/main-119.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-0-120.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-1-121.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-2-122.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-3-123.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-4-124.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-5-125.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-6-126.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-7-127.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-8-128.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-9-129.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10000 mAh",
+        "dimensions": "110.8 x 70 x 21 mm",
+        "weight": "254 g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10000 mAh",
+        "Công suất sạc": "Có dây: 30WKhông dây: 25W",
+        "Cổng sạc ra": "1 x USB-C1 x cáp USB-C1 x Magsafe",
+        "Cổng sạc vào": "1 x USB-C1 x cáp USB-C",
+        "Tiện ích": "Tích hợp màn hình LED trắng hiển thị lượng pinSạc nhiều thiết bị cùng một lúc",
+        "Lõi pin": "Lithium Polymer",
+        "Kích thước": "110.8 x 70 x 21 mm",
+        "Trọng lượng": "254 g",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "JMIJ8I-XANH-0",
+          "price": 1590000,
+          "costPrice": 969000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/main-119.png",
+          "active": true,
+          "options": {
+            "color": "Xanh"
+          },
+          "salePrice": 1275000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w",
+      "name": "Pin dự phòng Ugreen không dây Ugreen Qi2 10000mAh 30W PB761",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Magsafe Ugreen QI2 10000mAh 30W có dung lượng lớn, cung cấp 1.9 lần sạc với iPhone 15 Pro, 0.6 lần cho iPad mini và 1.5 lần cho Samsung S24 Ultra. Với công suất hỗ trợ tối đa 30W, mẫu pin dự phòng Ugreen này sẽ nạp đầy năng lượng cho các thiết bị cá nhân nhanh chóng và hiệu quả. Sản phẩm hỗ trợ sạc tiện lợi với các ốp từ tính vô cùng tiện lợi. Pin sạc dự phòng Magsafe Ugreen QI2 10000mAh 30W - Công suất mạnh mẽ, tiết kiệm thời gian Nếu bạn đang tìm sạc dự phòng ",
+      "price": 1200000,
+      "salePrice": 990000,
+      "costPrice": 752400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/main-130.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-0-131.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-1-132.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-2-133.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-3-134.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-4-135.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-5-136.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-6-137.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-7-138.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10000mAh",
+        "dimensions": "105 x 69 x 20 mm",
+        "weight": "222 g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10000mAh",
+        "Công suất sạc": "Có dây: 30WKhông dây: 15W",
+        "Cổng sạc ra": "1 x USB-C1 x Magsafe",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Tích hợp đèn LED trắng hiển thị lượng pinSạc nhiều thiết bị cùng lúc",
+        "Lõi pin": "Lithium Polymer",
+        "Kích thước": "105 x 69 x 20 mm",
+        "Trọng lượng": "222 g",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TA3HGH-DEN-0",
+          "price": 1200000,
+          "costPrice": 752400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/main-130.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 990000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah",
+      "name": "Pin dự phòng Ugreen 20000mAh 130W PB721 35524B",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Pin dự phòng Ugreen PB721 35524B 130W 20000mAh được ưa chuộng khi sở hữu công suất sạc lớn với hai cổng USB-C là 100W và 30W cùng 1 cổng USB-A 22.5W. Dung lượng pin 20000mAh trong sản phẩm hỗ trợ sạc đầy nhiều thiết bị chỉ với 1 lần sạc. Ngoài ra, mẫu sạc dự phòng Ugreen này cũng hỗ trợ theo dõi các chỉ số kỹ thuật với màn hình LED đi kèm. Pin dự phòng Ugreen PB721 35524B 130W 20000mAh - Viên pin lớn với công suất sạc ấn tượng Pin dự phòng Ugreen PB721 35524B 130W là giải pháp s",
+      "price": 2100000,
+      "salePrice": 1590000,
+      "costPrice": 1208400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/main-139.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-0-140.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-1-141.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-2-142.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-3-143.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-4-144.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-5-145.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-6-146.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-7-147.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-8-148.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-9-149.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-10-150.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "20000mAh",
+        "dimensions": "131 x 54 x 50.8 mm",
+        "weight": "476 g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "20000mAh",
+        "Công suất sạc": "130W",
+        "Cổng sạc ra": "2 x USB-C1 x USB-A",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Hỗ trợ các giao thức sạc UFC / PD / PPS / QC / SCPTích hợp màn hình TFT màu hiển thị lượng pin và công suấtTích hợp chế độ đa bảo vệ",
+        "Lõi pin": "Lithium Ion",
+        "Kích thước": "131 x 54 x 50.8 mm",
+        "Trọng lượng": "476 g",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "SFJJWY-XAM-0",
+          "price": 2100000,
+          "costPrice": 1208400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/main-139.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 1590000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w",
+      "name": "Pin dự phòng Ugreen không dây Magnetic PB561 10000mAh 20W",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Pin dự phòng không dây Ugreen Magnetic PB561 trang bị dung lượng lớn lên đến 10.000mAh kết hợp hỗ trợ sạc nhanh 20W với cổng USB-C cho mọi thiết bị. Người dùng hoàn toàn có thể sạc không dây và sạc điện thoại di động khác cùng một lúc. Bên cạnh đó, sản phẩm sạc dự phòng Ugreen trang bị nam châm mặt sau giúp giữ kết nối an toàn và chắc chắn. Pin dự phòng không dây Ugreen Magnetic PB561 10.000MAH 20W - Nhanh chóng, tiện lợi Pin dự phòng Ugreen Magnetic PB561 cung cấp một nguồn năn",
+      "price": 900000,
+      "salePrice": 690000,
+      "costPrice": 524400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/main-151.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-0-152.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-1-153.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-2-154.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-3-155.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-4-156.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-5-157.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-6-158.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-7-159.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-8-160.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-9-161.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-10-162.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-11-163.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-12-164.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-13-165.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10.000 mAh",
+        "dimensions": "105.8 x 68.7 x 19.3mm",
+        "weight": "221 g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10.000 mAh",
+        "Công suất sạc": "Có dây: 20WKhông dây: 15W",
+        "Cổng sạc ra": "1 x USB-C1 x Magsafe",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Tích hợp đèn LED trắng hiển thị lượng pinSạc cùng lúc tối đa 2 thiết bị",
+        "Lõi pin": "Lithium Polymer",
+        "Kích thước": "105.8 x 68.7 x 19.3mm",
+        "Trọng lượng": "221 g",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "T4OTJ0-DUONG-0",
+          "price": 900000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/main-151.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 690000
+        },
+        {
+          "sku": "T4OTJ0-DEN-1",
+          "price": 900000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-0-152.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 690000
+        },
+        {
+          "sku": "T4OTJ0-TIM-2",
+          "price": 900000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-1-153.png",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          },
+          "salePrice": 690000
+        },
+        {
+          "sku": "T4OTJ0-HONG-3",
+          "price": 900000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-2-154.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 690000
+        },
+        {
+          "sku": "T4OTJ0-BE-4",
+          "price": 900000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-3-155.png",
+          "active": true,
+          "options": {
+            "color": "Be"
+          },
+          "salePrice": 690000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11",
+      "name": "Pin dự phòng Baseus Enerfill 10.000mAh 15W FP11",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "baseus",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Baseus Enerfill 10.000mAh 15W FP11 sở hữu dung lượng lớn, hỗ trợ sạc nhanh 15W cùng thiết kế 2 cổng giúp sạc đồng thời hai thiết bị. Sản phẩm pin dự phòng Baseus có kiểu dáng gọn nhẹ, mang theo tiện lợi. Đặc biệt, Baseus Enerfill tích hợp nhiều lớp bảo vệ an toàn, đảm bảo thiết bị và pin luôn hoạt động ổn định. Pin sạc dự phòng Baseus Enerfill 10.000mAh 15W FP11 - Sạc nhanh tiện lợi, dùng lâu bền bỉ Pin sạc dự phòng Baseus Enerfill 10.000mAh 15W FP11 là lựa chọn",
+      "price": 690000,
+      "salePrice": 290000,
+      "costPrice": 220400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/main-166.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-0-167.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-1-168.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-2-169.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-3-170.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-4-171.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-5-172.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-6-173.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-7-174.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-8-175.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-9-176.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-10-177.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10.000mAh",
+        "dimensions": "10.9 x 6.87 x 1.75 cm",
+        "weight": "181g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10.000mAh",
+        "Công suất sạc": "15W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-A",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhanh Bảo vệ an toàn như chống quá tải, quá nhiệt và ngắn mạch Có thể mang lên máy bay",
+        "Kích thước": "10.9 x 6.87 x 1.75 cm",
+        "Trọng lượng": "181g",
+        "Hãng sản xuất": "Baseus"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "3SOV72-DEN-0",
+          "price": 690000,
+          "costPrice": 220400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/main-166.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 290000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah",
+      "name": "Pin sạc dự phòng Innostyle PowerMax 10.000mAh 20W IP20PD",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Sạc dự phòng Innostyle PowerMax 20W 10.000mAh IP20PD - Dung lượng lớn lưu trữ tốt hơn Sạc dự phòng Innostyle PowerMax 20W 10.000mAh IP20PD là phụ kiện quan trọng nên trang bị để luôn kịp thời nạp đầy năng lượng cho smartphone. Chiếc pin dự phòng này trở nên cần thiết hơn nếu bạn muốn đi du lịch, đi công tác. Hãy xem đoạn mô tả dưới đây để hiểu rõ hơn về chiếc pin dự phòng Innostyle này! Dung lượng siêu lớn, thiết kế gọn nhẹ đạt chuẩn an toàn Pin dự phòng Innostyle Powermax có du",
+      "price": 650000,
+      "salePrice": 380000,
+      "costPrice": 288800,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/main-178.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-0-179.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-1-180.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-2-181.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-3-182.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-4-183.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-5-184.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-6-185.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-7-186.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-8-187.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-9-188.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-10-189.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10000mAh"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10000mAh",
+        "Công suất sạc": "20 W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-A",
+        "Cổng sạc vào": "1 x USB-C1 x Micro-USB",
+        "Tiện ích": "Đèn LED hiển thị dung lượng pinSạc nhiều thiết bị cùng lúc",
+        "Lõi pin": "Lithium polymer",
+        "Hãng sản xuất": "Innostyle"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "Z6Q75H-TRANG-0",
+          "price": 650000,
+          "costPrice": 288800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/main-178.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 380000
+        },
+        {
+          "sku": "Z6Q75H-DEN-1",
+          "price": 650000,
+          "costPrice": 288800,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-0-179.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 380000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w",
+      "name": "Pin sạc dự phòng Samsung EB-P4520X 20000 mAh 45W",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "samsung",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Samsung EB-P4520X 20.000 mAh 45W sở hữu dung lượng pin lớn để có thể cung cấp nguồn năng lượng lớn cho nhiều loại thiết bị di động. Với 3 cổng sạc Type C, phụ kiện sạc dự phòng Samsung này có khả năng hỗ trợ sạc nhanh với công suất lên tới 45W nhằm rút ngắn thời gian chờ đợi của người dùng. Pin sạc dự phòng Samsung EB-P4520X 20.000 mAh 45W - Dung lượng lớn, tốc độ sạc nhanh Pin sạc dự phòng Samsung EB-P4520X 20.000 mAh 45W là mẫu pin sạc dự phòng dành cho đa dạn",
+      "price": 1490000,
+      "salePrice": 990000,
+      "costPrice": 752400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/main-190.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-0-191.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-1-192.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-2-193.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-3-194.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-4-195.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-5-196.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "20000mAh",
+        "dimensions": "76 x 152 x 26 mm",
+        "weight": "402 g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "20000mAh",
+        "Công suất sạc": "45W",
+        "Cổng sạc ra": "3 x USB-C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc cùng lúc 3 thiết bịĐèn LED hiển thị dung lượng pin",
+        "Hiệu suất sạc": "60%",
+        "Lõi pin": "Li-Ion",
+        "Kích thước": "76 x 152 x 26 mm",
+        "Trọng lượng": "402 g",
+        "Hãng sản xuất": "Samsung Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "R5E9RK-BE-0",
+          "price": 1490000,
+          "costPrice": 752400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/main-190.png",
+          "active": true,
+          "options": {
+            "color": "Be"
+          },
+          "salePrice": 990000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c",
+      "name": "Pin dự phòng Baseus Enerfill FC11 màn hình 20.000mAh 22.5W kèm cáp Type-C - Lightning",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "baseus",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Baseus Enerfill FC11 20000mAh 22.5W kèm cáp Type-C + Lightning cung cấp dung lượng 20000mAh, cộng thêm khả năng sạc nhanh 22.5W ấn tượng. Bên cạnh đó, mẫu pin dự phòng này được trang bị 2 cổng thông dụng đi kèm cáp Type-C và Lightning. Thiết kế gọn nhẹ của sản phẩm cũng cho người dùng thuận tiện mang theo. Pin sạc dự phòng Baseus Enerfill FC11 20000mAh 22.5W kèm cáp Type-C - Tiện lợi, an toàn Pin sạc dự phòng Baseus Enerfill FC11 20000mAh 22.5W kèm cáp Type-C đe",
+      "price": 990000,
+      "salePrice": 690000,
+      "costPrice": 524400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/main-197.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-0-198.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-1-199.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-2-200.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-3-201.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-4-202.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-5-203.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-6-204.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-7-205.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-8-206.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-9-207.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-10-208.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-11-209.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-12-210.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-13-211.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "20.000mAh",
+        "dimensions": "16.3 x 11.1 x 3.7 cm",
+        "weight": "398g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "20.000mAh",
+        "Công suất sạc": "22.5W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-AKèm 1 cáp sạc Type C - 1 cáp sạc lightning",
+        "Cổng sạc vào": "USB-C",
+        "Tiện ích": "Sạc nhanh Màn hình LED Chip AI giám sát nhiệt độ 18.000 lần mỗi giờ Bảo vệ quá sạc Bảo vệ đoản mạch Bảo vệ quá áp Bảo vệ nhiệt độ cao/thấp Bảo vệ quá dòng Bảo vệ xả quá mức An toàn trên máy bay",
+        "Kích thước": "16.3 x 11.1 x 3.7 cm",
+        "Trọng lượng": "398g",
+        "Hãng sản xuất": "Baseus"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "QUAZDE-HONG-0",
+          "price": 990000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/main-197.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 690000
+        },
+        {
+          "sku": "QUAZDE-BE-1",
+          "price": 990000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-0-198.png",
+          "active": true,
+          "options": {
+            "color": "Be"
+          },
+          "salePrice": 690000
+        },
+        {
+          "sku": "QUAZDE-DUONG-2",
+          "price": 990000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-1-199.png",
+          "active": true,
+          "options": {
+            "color": "Xanh dương"
+          },
+          "salePrice": 690000
+        },
+        {
+          "sku": "QUAZDE-DEN-3",
+          "price": 990000,
+          "costPrice": 524400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-2-200.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 690000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w",
+      "name": "Pin sạc dự phòng Ugreen sạc nhanh hai chiều 20000mAh 20W PB312 25683",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Ugreen 2 chiều PB312 25683 20000mAh 20W là một thiết bị cung cấp năng lượng với dung lượng 20.000mAh. Mẫu sạc dự phòng Ugreen này có 2 cổng USB-A và 1 cổng USB-C, cả ba cổng đều hỗ trợ sạc nhanh với công suất tối đa 22.5W để rút ngắn thời gian nạp năng lượng cho thiết bị. Pin sạc dự phòng Ugreen 2 chiều PB312 25683 20000mAh 20W - Dung lượng lớn, hai cổng sạc linh hoạt Pin sạc dự phòng Ugreen 2 chiều PB312 25683 20000mAh 20W là sự lựa chọn thích hợp cho những ai ",
+      "price": 696000,
+      "salePrice": 590000,
+      "costPrice": 448400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/main-212.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-0-213.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-1-214.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-2-215.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-3-216.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-4-217.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-5-218.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-6-219.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-7-220.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-8-221.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "20000 mAh",
+        "dimensions": "147 × 72 × 27 mm"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "20000 mAh",
+        "Công suất sạc": "20W",
+        "Cổng sạc ra": "2 x USB-A1 x USB-C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Màn hình LED trắng hiển thị lượng pin",
+        "Lõi pin": "Li-iOn",
+        "Kích thước": "147 × 72 × 27 mm",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "9VWFJB-DEN-0",
+          "price": 696000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/main-212.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 590000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100",
+      "name": "Pin dự phòng Cuktech CP133L 10000mAh 33W tích hợp cáp Type-C LPB100",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Cuktech CP133L 10000mAh 33W LPB100 sở hữu công suất định mức 35,28Wh/36Wh, mang lại khả năng sạc nhanh và tiện lợi cho nhiều thiết bị. Trọng lượng của sạc dự phòng Cuktech này chỉ khoảng 215g, nhỏ gọn như một chiếc thẻ ngân hàng nhưng đủ mạnh mẽ để sạc cùng lúc nhiều thiết bị. Pin còn hỗ trợ công nghệ sạc nhanh PD3, PPS và QC3.0. Pin sạc dự phòng Cuktech CP133L 10000mAh 33W LPB100 – Nhỏ gọn, mạnh mẽ, tiện lợi Sản phẩm gây ấn tượng không chỉ bởi thiết kế nhỏ gọn,",
+      "price": 667000,
+      "salePrice": 590000,
+      "costPrice": 448400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/main-222.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-0-223.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-1-224.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-2-225.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-3-226.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-4-227.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-5-228.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-6-229.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-7-230.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-8-231.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-9-232.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-10-233.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-11-234.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-12-235.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-13-236.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10000mAh",
+        "dimensions": "9 x 5.85 x 2.9 cm",
+        "weight": "215g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10000mAh",
+        "Công suất sạc": "33W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-ATích hợp cáp Type-C",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhanh Công nghệ PD3.0/PPS/QC3.0/QC Chống quá nhiệt Chống quá áp Chống quá dòng Chống ngắn mạch Chống sạc ngược Quản lý nhiệt thông minhChứng nhận CCC",
+        "Hiệu suất sạc": "5800mAh (5V–2A)",
+        "Lõi pin": "Pin lithium ion",
+        "Kích thước": "9 x 5.85 x 2.9 cm",
+        "Trọng lượng": "215g",
+        "Hãng sản xuất": "Cuktech"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "56OZQM-TRONG-0",
+          "price": 667000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/main-222.png",
+          "active": true,
+          "options": {
+            "color": "Trắng/trong"
+          },
+          "salePrice": 590000
+        },
+        {
+          "sku": "56OZQM-HONG-1",
+          "price": 667000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-0-223.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 590000
+        },
+        {
+          "sku": "56OZQM-XAM-2",
+          "price": 667000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-1-224.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 590000
+        },
+        {
+          "sku": "56OZQM-DEN-3",
+          "price": 667000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-2-225.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 590000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap",
+      "name": "Pin dự phòng Baseus Enerfill Bipow 2 Pro màn hình số 20.000mAh 22.5W kèm cáp",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "baseus",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Baseus Enerfill Bipow2 Pro 20000mAh 22.5W kèm cáp có công suất sạc nhanh 22.5W, hỗ trợ 3 cổng sạc ra (USB-A, USB-C, cáp liền USB-C). Mẫu pin dự phòng Baseus này có thể sạc cùng lúc 3 thiết bị và tương thích đa dạng. Sản phẩm còn được tích hợp màn hình LED để người dùng theo dõi dung lượng pin tiện lợi. Pin sạc dự phòng Baseus Enerfill Bipow2 Pro 20000mAh 22.5W kèm cáp - Tiện lợi, dung lượng cao Pin sạc dự phòng Baseus Enerfill Bipow2 Pro 20000mAh 22.5W kèm cáp l",
+      "price": 790000,
+      "salePrice": 590000,
+      "costPrice": 448400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/main-237.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-0-238.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-1-239.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-2-240.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-3-241.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-4-242.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-5-243.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-6-244.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-7-245.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-8-246.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-9-247.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-10-248.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-11-249.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-12-250.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "20.000mAh",
+        "dimensions": "12.2 x 6.9 x 3.2 cm",
+        "weight": "356g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "20.000mAh",
+        "Công suất sạc": "22.5W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-AKèm 1 cáp sạc Type C dài 22cm",
+        "Cổng sạc vào": "1 x USB-C",
+        "Kích thước": "12.2 x 6.9 x 3.2 cm",
+        "Trọng lượng": "356g",
+        "Hãng sản xuất": "Baseus"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "803N99-TRANG-0",
+          "price": 790000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/main-237.png",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          },
+          "salePrice": 590000
+        },
+        {
+          "sku": "803N99-DEN-1",
+          "price": 790000,
+          "costPrice": 448400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-0-238.png",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          },
+          "salePrice": 590000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-apple-iphone-air-magsafe",
+      "name": "Pin dự phòng Apple iPhone Air Magsafe chính hãng - MGPG4VN/A",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "apple",
+      "description": "Mua ngay Pin dự phòng Apple iPhone Air Magsafe chính hãng - MGPG4VN/A, giá rẻ nhất, bảo hành 12 tháng, miễn phí giao hàng tận nơi",
+      "price": 3490000,
+      "salePrice": 2600000,
+      "costPrice": 1976000,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/main-251.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-0-252.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-1-253.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-2-254.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-3-255.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "Sạc thêm tới 65% cho iPhone Air"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "Sạc thêm tới 65% cho iPhone Air",
+        "Công suất sạc": "Sạc nhanh không dây lên đến 12W",
+        "Cổng sạc ra": "Sạc Magsafe",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Thiết kế mỏng và nhẹ Tự động chọn thời điểm sạc phù hợp nhất Gắn Pin MagSafe và kết nối nó với bộ chuyển đổi nguồn 20W để sạc nhanh",
+        "Hãng sản xuất": "Apple Chính hãng"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "7Y1GUQ-TRANG-0",
+          "price": 3490000,
+          "costPrice": 1976000,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/main-251.png",
+          "active": true,
+          "options": {
+            "color": "MGPG4VN/A-Trắng"
+          },
+          "salePrice": 2600000
+        }
+      ]
+    },
+    {
+      "slug": "pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b",
+      "name": "Pin dự phòng Ugreen 10000mAh 55W 1C1A QC 3.0 màn hình + tích hợp cáp Type-C PB727 75701B",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "ugreen",
+      "description": "Đặc điểm nổi bật Pin dự phòng UGREEN 10000mAh 55W 1C1A QC 3.0 màn hình tích hợp cáp Type-C PB727 75701B với thông số dày, rộng, cao lần lượt 3.35 x 5.05 x 9.03 cm. Thiết bị cung cấp nguồn năng lượng lớn với dung lượng 10000mAh từ lõi Li-Ion. Pin hỗ trợ sạc qua cổng USB-A, USB-C và cáp Type-C tích hợp sẵn tiện lợi, an toàn. Pin dự phòng UGREEN 10000mAh 55W 1C1A QC 3.0 màn hình tích hợp cáp Type-C PB727 75701B - Duy trì hiệu suất 56%, bố trí 3 cổng sạc an toàn Pin sạc dự phòng Ugreen là lựa chọn s",
+      "price": 990000,
+      "salePrice": 890000,
+      "costPrice": 676400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/main-256.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-0-257.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-1-258.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-2-259.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-3-260.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-4-261.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-5-262.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-6-263.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-7-264.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10.000 mAh",
+        "dimensions": "3.35 x 5.05 x 9.03 cm (Dày - Rộng - Dài)",
+        "weight": "325 g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10.000 mAh",
+        "Công suất sạc": "55W (tối đa)",
+        "Cổng sạc vào": "USB-C",
+        "Tiện ích": "Kiểm soát nhiệt độ Chống quá tải Màn hình LED báo hiệu Power Delivery Quick Charge 3.0",
+        "Hiệu suất sạc": "56%",
+        "Lõi pin": "Li-Ion",
+        "Kích thước": "3.35 x 5.05 x 9.03 cm (Dày - Rộng - Dài)",
+        "Trọng lượng": "325 g",
+        "Cổng sạc ra": "1 x USB-A, 1 x Type-C",
+        "Hãng sản xuất": "Ugreen"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "0MK8JH-MXANH-0",
+          "price": 990000,
+          "costPrice": 676400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/main-256.png",
+          "active": true,
+          "options": {
+            "color": "Xám xanh"
+          },
+          "salePrice": 890000
+        }
+      ]
+    },
+    {
+      "slug": "pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100",
+      "name": "Pin dự phòng Cuktech 1C1A 10000mAh 30W (CP13) PB100",
+      "categorySlug": "pin-du-phong",
+      "brandSlug": "",
+      "description": "Đặc điểm nổi bật Pin sạc dự phòng Cuktech 1C1A 10000mAh 30W CP13 PB100 có dung lượng 10.000mAh, hỗ trợ sạc nhanh công suất 30W, đi kèm đèn LED hiển thị pin trực quan. Sản phẩm mang đến khả năng sạc nhanh ổn định cho nhiều thiết bị, giúp người dùng yên tâm khi di chuyển bên ngoài. Phụ kiện sạc dự phòng Cuktech này còn có trọng lượng nhẹ khoảng 195g, dễ bỏ túi hay balo, thuận tiện mang theo khắp nơi. Pin sạc dự phòng Cuktech 1C1A 10000mAh 30W CP13 PB100 - Thiết kế gọn nhẹ, sạc nhanh Pin sạc dự phò",
+      "price": 645000,
+      "salePrice": 509000,
+      "costPrice": 386840,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/main-265.png",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-0-266.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-1-267.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-2-268.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-3-269.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-4-270.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-5-271.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-6-272.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-7-273.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-8-274.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-9-275.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-10-276.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-11-277.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-12-278.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-13-279.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "battery": "10000mAh",
+        "dimensions": "5.77 x 8 x 2.84 cm",
+        "weight": "~195g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "10000mAh",
+        "Công suất sạc": "30W",
+        "Cổng sạc ra": "1 x USB-C1 x USB-A",
+        "Cổng sạc vào": "1 x USB-C",
+        "Tiện ích": "Sạc nhanh Hỗ trợ sạc dòng điện thấp Được phép mang lên máy bay Cảm biến nhiệt NTC tích hợp Theo dõi nhiệt độ lõi pin, đảm bảo an toàn khi sạc Chống quá nhiệt Chống quá áp Chống quá dòng Chống ngắn mạch Chống sạc ngược Quản lý nhiệt thông minhChứng nhận CCC",
+        "Hiệu suất sạc": "5500mAh (5V/6A)",
+        "Lõi pin": "Pin lithium ion",
+        "Kích thước": "5.77 x 8 x 2.84 cm",
+        "Trọng lượng": "~195g",
+        "Hãng sản xuất": "Cuktech"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "SGGBWN-HONG-0",
+          "price": 645000,
+          "costPrice": 386840,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/main-265.png",
+          "active": true,
+          "options": {
+            "color": "Hồng"
+          },
+          "salePrice": 509000
+        },
+        {
+          "sku": "SGGBWN-CAM-1",
+          "price": 645000,
+          "costPrice": 386840,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-0-266.jpg",
+          "active": true,
+          "options": {
+            "color": "Cam"
+          },
+          "salePrice": 509000
+        },
+        {
+          "sku": "SGGBWN-XAM-2",
+          "price": 645000,
+          "costPrice": 386840,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-1-267.png",
+          "active": true,
+          "options": {
+            "color": "Xám"
+          },
+          "salePrice": 509000
+        }
+      ]
+    }
+  ]
+}
