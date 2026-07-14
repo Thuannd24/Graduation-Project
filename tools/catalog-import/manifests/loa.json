@@ -120,7 +120,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "phone_iphone"
     },
     {
       "slug": "samsung-phone",
@@ -128,7 +129,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "xiaomi-phone",
@@ -136,7 +138,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "oppo-phone",
@@ -144,7 +147,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "dien-thoai",
@@ -152,7 +156,8 @@
       "parentSlug": null,
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "tablet",
@@ -160,7 +165,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+      "imageUrl": "",
+      "icon": "tablet"
     },
     {
       "slug": "laptop",
@@ -168,7 +174,8 @@
       "parentSlug": null,
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+      "imageUrl": "",
+      "icon": "laptop_mac"
     },
     {
       "slug": "tai-nghe-bt",
@@ -176,7 +183,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "loa",
@@ -184,7 +192,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "speaker"
     },
     {
       "slug": "tai-nghe",
@@ -192,7 +201,8 @@
       "parentSlug": null,
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "may-anh",
@@ -200,7 +210,8 @@
       "parentSlug": "dong-ho",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+      "imageUrl": "",
+      "icon": "photo_camera"
     },
     {
       "slug": "dong-ho",
@@ -208,7 +219,8 @@
       "parentSlug": null,
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+      "imageUrl": "",
+      "icon": "watch"
     },
     {
       "slug": "op-lung",
@@ -216,7 +228,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "shield"
     },
     {
       "slug": "sac-cap",
@@ -224,7 +237,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "bolt"
     },
     {
       "slug": "pin-du-phong",
@@ -232,7 +246,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "battery_charging_full"
     },
     {
       "slug": "phu-kien",
@@ -240,7 +255,8 @@
       "parentSlug": null,
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "cable"
     },
     {
       "slug": "may-tinh-de-ban",
@@ -248,7 +264,8 @@
       "parentSlug": "man-hinh",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "man-hinh",
@@ -256,7 +273,8 @@
       "parentSlug": null,
       "sortOrder": 6,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     }
   ],
   "categoryAttributes": [
@@ -429,75 +447,6 @@
   ],
   "products": [
     {
-      "slug": "loa-harman-kardon-soundstick-5-wifi",
-      "name": "Loa Harman Kardon SoundStick 5 WiFi",
-      "categorySlug": "loa",
-      "brandSlug": "",
-      "description": "Đặc điểm nổi bật Loa Harman Kardon SoundStick 5 Wifi mang đến dải âm ba đường tiếng sắc nét kết hợp cùng hệ thống đèn nền chuyển động theo từng nhịp điệu đầy ấn tượng. Thiết bị sở hữu tổng công suất 190W giúp tái hiện dải âm thanh vô cùng uy lực. Bên cạnh đó, chuẩn Wifi băng tần kép sẽ đảm bảo quá trình truyền tải nhạc luôn mượt mà. Loa Harman Kardon SoundStick 5 Wifi - Thiết kế bắt mắt, âm thanh bùng nổ Mẫu loa mới này tiếp tục kế thừa kiểu dáng vòm trong suốt, kết hợp cùng những nâng cấp sáng ",
-      "price": 11500000,
-      "salePrice": null,
-      "costPrice": 8740000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product",
-      "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_3__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_15_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_16_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_9_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_11_.png"
-      ],
-      "status": "PUBLISHED",
-      "active": true,
-      "warrantyPeriod": 12,
-      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
-      "specs": {
-        "weight": "Loa vệ tinh (mỗi bên): 0.8kg Loa subwoofer: 3.7kg",
-        "dimensions": "Loa vệ tinh (Satellite): 95.5 x 281.1 x 95.5 mm Loa subwoofer: 237.5 x 283.4 x 237.5 mm",
-        "connectivity": "USB-C"
-      },
-      "specsRaw": {
-        "Trọng lượng": "Loa vệ tinh (mỗi bên): 0.8kg Loa subwoofer: 3.7kg",
-        "Kích thước": "Loa vệ tinh (Satellite): 95.5 x 281.1 x 95.5 mm Loa subwoofer: 237.5 x 283.4 x 237.5 mm",
-        "Công suất": "190W RMS",
-        "Cổng kết nối": "USB-C",
-        "Tính năng khác": "Kết nối đa loa cùng Auracast™ Wi-Fi",
-        "Cấu tạo": "6 x loa Mid-range 40mm, 2 x loa Tweeter 25 mm, 1 x loa subwoofer 5.25\"",
-        "Hãng sản xuất": "Harman Kardon",
-        "Thông số": "Loa Harman Kardon SoundStick 5 WiFi"
-      },
-      "tags": [],
-      "variants": [
-        {
-          "sku": "4BODHN-DEN-0",
-          "price": 11500000,
-          "costPrice": 8740000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product",
-          "active": true,
-          "options": {
-            "color": "Đen"
-          }
-        },
-        {
-          "sku": "4BODHN-TRANG-1",
-          "price": 11500000,
-          "costPrice": 8740000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-harman-kardon-soundstick-5-wifi_3__1.png",
-          "active": true,
-          "options": {
-            "color": "Trắng"
-          }
-        }
-      ]
-    },
-    {
       "slug": "loa-thap-samsung-mx-t40",
       "name": "Loa tháp Samsung MX-T40",
       "categorySlug": "loa",
@@ -506,16 +455,16 @@
       "price": 2840000,
       "salePrice": 1790000,
       "costPrice": 1360400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4_1.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_321_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-thap-samsung-mx-t40-new.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0004_vn-giga-party-audio-mx-t40-mx-t4_5_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0003_vn-giga-party-audio-mx-t40-mx-t4_4_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0001_vn-giga-party-audio-mx-t40-mx-t4_2_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0002_vn-giga-party-audio-mx-t40-mx-t4_3_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0000_vn-giga-party-audio-mx-t40-mx-t4_1_.jpg"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-2-19.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-3-20.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-4-21.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-5-22.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-6-23.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-7-24.jpg"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -541,7 +490,7 @@
           "sku": "2XHL75-DEN-0",
           "price": 2840000,
           "costPrice": 1360400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
           "active": true,
           "options": {
             "color": "Đen"
@@ -559,22 +508,22 @@
       "price": 1290000,
       "salePrice": null,
       "costPrice": 980400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_7_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/main-25.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_2__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_9_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_1__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-spa.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_9_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_18_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5_26_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-0-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-1-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-2-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-3-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-4-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-5-31.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-6-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-7-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-8-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-9-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-10-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-11-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-12-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-13-39.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -609,7 +558,7 @@
           "sku": "IESX65-ANDOI-0",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_7_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/main-25.png",
           "active": true,
           "options": {
             "color": "Xanh quân đội"
@@ -619,7 +568,7 @@
           "sku": "IESX65-DUONG-1",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_2__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-0-26.png",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -629,7 +578,7 @@
           "sku": "IESX65-TRANG-2",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_9_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-1-27.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -639,7 +588,7 @@
           "sku": "IESX65-VANG-3",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_10_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-2-28.png",
           "active": true,
           "options": {
             "color": "Vàng"
@@ -649,7 +598,7 @@
           "sku": "IESX65-CAM-4",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_3_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-3-29.png",
           "active": true,
           "options": {
             "color": "Cam"
@@ -659,7 +608,7 @@
           "sku": "IESX65-DO-5",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_6_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-4-30.png",
           "active": true,
           "options": {
             "color": "Đỏ"
@@ -669,7 +618,7 @@
           "sku": "IESX65-HONG-6",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_4_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-5-31.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -679,7 +628,7 @@
           "sku": "IESX65-DEN-7",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5-_1__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-6-32.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -689,7 +638,7 @@
           "sku": "IESX65-TIM-8",
           "price": 1290000,
           "costPrice": 980400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-jbl-go-5--_5_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-jbl-go-5/gallery-7-33.png",
           "active": true,
           "options": {
             "color": "Tím"
@@ -706,22 +655,22 @@
       "price": 21900000,
       "salePrice": null,
       "costPrice": 16644000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_17__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/main-40.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450-spa.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450-.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_13_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_12_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_11_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_14_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_15_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_16_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_17_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_18_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_19_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_20_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_21_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_22_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-0-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-1-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-2-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-3-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-4-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-5-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-6-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-7-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-8-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-9-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-10-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-11-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-12-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/gallery-13-54.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -751,7 +700,7 @@
           "sku": "QR2TOS-NVANG-0",
           "price": 21900000,
           "costPrice": 16644000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-keo-party-marshall-bromley-450_17__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-keo-party-marshall-bromley-450/main-40.png",
           "active": true,
           "options": {
             "color": "Đen Vàng"
@@ -768,16 +717,16 @@
       "price": 10900000,
       "salePrice": 4990000,
       "costPrice": 3792400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_5__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/main-55.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-0-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-1-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-2-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-3-59.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-4-60.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-5-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-6-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/gallery-7-63.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -804,7 +753,7 @@
           "sku": "9F8UKF-DEN-0",
           "price": 10900000,
           "costPrice": 3792400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-bluetooth-fender-riff_5__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-bluetooth-fender-riff/main-55.png",
           "active": true,
           "options": {
             "color": "Đen"

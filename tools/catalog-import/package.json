@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Import catalog data into AuraTech product-service (dry-run by default)",
+  "description": "Scrape, mirror ảnh lên R2, và import catalog vào AuraTech product-service",
   "scripts": {
-    "validate": "node import.mjs --file data/sample-manifest.json",
-    "validate:100": "node import.mjs --file data/catalog-100.json",
-    "generate:100": "node generate-realistic-catalog.mjs --count 100 --out data/catalog-100.json",
-    "import": "node import.mjs --file data/sample-manifest.json --apply",
-    "import:100": "node import.mjs --file data/catalog-100.json --apply",
-    "generate": "node generate-manifest.mjs --count 200 --out data/generated-manifest.json",
-    "csv": "node csv-to-manifest.mjs --dir templates/csv --out data/from-csv-manifest.json"
+    "setup": "node setup.mjs",
+    "setup:dry-run": "node setup.mjs --dry-run",
+    "seed-inventory": "node seed-inventory.mjs",
+    "clean": "node clean-broken-products.mjs",
+    "scrape": "node scrape-cellphones.mjs --per-category",
+    "mirror": "node mirror-images.mjs --all",
+    "backup": "node backup-manifests.mjs"
   },
   "dependencies": {
-    "cheerio": "^1.2.0"
+    "cheerio": "^1.2.0",
+    "@aws-sdk/client-s3": "^3.700.0"
   }
 }

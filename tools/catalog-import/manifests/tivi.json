@@ -120,7 +120,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "phone_iphone"
     },
     {
       "slug": "samsung-phone",
@@ -128,7 +129,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "xiaomi-phone",
@@ -136,7 +138,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "oppo-phone",
@@ -144,7 +147,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "dien-thoai",
@@ -152,7 +156,8 @@
       "parentSlug": null,
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "tablet",
@@ -160,7 +165,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+      "imageUrl": "",
+      "icon": "tablet"
     },
     {
       "slug": "laptop",
@@ -168,7 +174,8 @@
       "parentSlug": null,
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+      "imageUrl": "",
+      "icon": "laptop_mac"
     },
     {
       "slug": "tai-nghe-bt",
@@ -176,7 +183,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "loa",
@@ -184,7 +192,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "speaker"
     },
     {
       "slug": "tai-nghe",
@@ -192,7 +201,8 @@
       "parentSlug": null,
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "may-anh",
@@ -200,7 +210,8 @@
       "parentSlug": "dong-ho",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+      "imageUrl": "",
+      "icon": "photo_camera"
     },
     {
       "slug": "dong-ho",
@@ -208,7 +219,8 @@
       "parentSlug": null,
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+      "imageUrl": "",
+      "icon": "watch"
     },
     {
       "slug": "op-lung",
@@ -216,7 +228,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "shield"
     },
     {
       "slug": "sac-cap",
@@ -224,7 +237,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "bolt"
     },
     {
       "slug": "pin-du-phong",
@@ -232,7 +246,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "battery_charging_full"
     },
     {
       "slug": "phu-kien",
@@ -240,7 +255,8 @@
       "parentSlug": null,
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "cable"
     },
     {
       "slug": "may-tinh-de-ban",
@@ -248,7 +264,8 @@
       "parentSlug": "man-hinh",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "man-hinh",
@@ -256,7 +273,8 @@
       "parentSlug": null,
       "sortOrder": 6,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "tivi",
@@ -264,7 +282,8 @@
       "parentSlug": null,
       "sortOrder": 7,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi.png"
+      "imageUrl": "",
+      "icon": "tv"
     }
   ],
   "categoryAttributes": [
@@ -455,22 +474,22 @@
       "price": 15590000,
       "salePrice": 10900000,
       "costPrice": 8284000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/main-1.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55ua8055psa_-_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-0-2.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-2-4.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-11-13.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-12-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/gallery-13-15.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -499,7 +518,7 @@
           "sku": "16713E-HHANG-0",
           "price": 15590000,
           "costPrice": 8284000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55ua8055psa/main-1.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -517,13 +536,13 @@
       "price": 5490000,
       "salePrice": 4890000,
       "costPrice": 3716400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_5__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-coocaa-fhd-43-inch-43s3u-plus/main-16.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_1__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_2__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_4__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_3_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-coocaa-fhd-43-inch-43s3u-plus/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-coocaa-fhd-43-inch-43s3u-plus/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-coocaa-fhd-43-inch-43s3u-plus/gallery-2-19.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-coocaa-fhd-43-inch-43s3u-plus/gallery-3-20.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-coocaa-fhd-43-inch-43s3u-plus/gallery-4-21.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -549,7 +568,7 @@
           "sku": "QI61Q0-HHANG-0",
           "price": 5490000,
           "costPrice": 3716400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-coocaa-fhd-43-inch-43s3u-plus_5__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-coocaa-fhd-43-inch-43s3u-plus/main-16.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -567,17 +586,17 @@
       "price": 10900000,
       "salePrice": 7790000,
       "costPrice": 5920400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/main-22.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_4__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_3__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_2__1.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-0-23.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-1-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-2-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-3-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-4-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-5-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-6-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-7-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/gallery-8-31.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -604,7 +623,7 @@
           "sku": "J67355-HHANG-0",
           "price": 10900000,
           "costPrice": 5920400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-43ua7350-4k-43-inch-2025/main-22.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -622,12 +641,12 @@
       "price": 14900000,
       "salePrice": 10990000,
       "costPrice": 8352400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025/main-32.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_2__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_1__1.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025/gallery-0-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025/gallery-1-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025/gallery-2-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025/gallery-3-36.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -658,7 +677,7 @@
           "sku": "HDU9EP-HHANG-0",
           "price": 14900000,
           "costPrice": 8352400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-55ua7350-4k-55-inch-2025/main-32.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -676,22 +695,22 @@
       "price": 14900000,
       "salePrice": null,
       "costPrice": 11324000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/main-37.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_55_inch_2026_55nu805bpsb_-_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-0-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-1-39.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-2-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-3-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-4-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-5-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-6-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-7-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-8-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-9-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-10-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-11-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-12-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/gallery-13-51.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -721,7 +740,7 @@
           "sku": "PCH7NL-HHANG-0",
           "price": 14900000,
           "costPrice": 11324000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-55-inch-55nu805bpsb/main-37.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -738,14 +757,14 @@
       "price": 14500000,
       "salePrice": 10390000,
       "costPrice": 7896400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/main-52.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/gallery-0-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/gallery-1-54.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/gallery-2-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/gallery-3-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/gallery-4-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/gallery-5-58.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -775,7 +794,7 @@
           "sku": "DM4ZPM-HHANG-0",
           "price": 14500000,
           "costPrice": 7896400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-qled-55q6fa-4k-55-inch.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-qled-55q6fa-4k-55-inch/main-52.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -793,22 +812,22 @@
       "price": 15500000,
       "salePrice": 11990000,
       "costPrice": 9112400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/main-59.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_1_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_55_inch_2026_55u8500h_-_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_1__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h_2_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-0-60.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-1-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-2-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-3-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-4-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-5-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-6-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-7-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-8-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-9-69.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-10-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-11-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-12-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/gallery-13-73.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -838,7 +857,7 @@
           "sku": "0NDPAB-HHANG-0",
           "price": 15500000,
           "costPrice": 9112400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-4k-55-inch-55u8500h.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-4k-55-inch-55u8500h/main-59.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -856,22 +875,22 @@
       "price": 29900000,
       "salePrice": 18990000,
       "costPrice": 14432400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/main-74.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_khung_tranh_4k_55_inch_2025_55ls03f_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_7_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-0-75.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-1-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-2-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-3-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-4-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-5-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-6-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-7-82.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-8-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-9-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-10-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-11-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-12-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/gallery-13-88.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -900,7 +919,7 @@
           "sku": "U68AAD-HHANG-0",
           "price": 29900000,
           "costPrice": 14432400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55ls03f-4k-55_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-khung-tranh-samsung-55ls03f-4k-55-inch/main-74.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -918,22 +937,22 @@
       "price": 10690000,
       "salePrice": 8690000,
       "costPrice": 6604400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/main-89.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_43_inch_2026_43ua8055psa_-_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-0-90.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-1-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-2-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-3-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-4-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-5-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-6-96.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-7-97.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-8-98.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-9-99.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-10-100.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-11-101.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-12-102.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/gallery-13-103.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -962,7 +981,7 @@
           "sku": "89XDRU-HHANG-0",
           "price": 10690000,
           "costPrice": 6604400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-43-inch-43ua8055psa/main-89.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -980,22 +999,22 @@
       "price": 19490000,
       "salePrice": 13190000,
       "costPrice": 10024400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/main-104.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2026_65ua8055psa_-_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-0-105.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-1-106.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-2-107.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-3-108.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-4-109.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-5-110.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-6-111.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-7-112.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-8-113.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-9-114.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-10-115.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-11-116.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-12-117.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/gallery-13-118.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1024,7 +1043,7 @@
           "sku": "BBCXNI-HHANG-0",
           "price": 19490000,
           "costPrice": 10024400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-65-inch-65ua8055psa/main-104.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1042,22 +1061,22 @@
       "price": 13590000,
       "salePrice": 9990000,
       "costPrice": 7592400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/main-119.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_50_inch_2026_50ua8055psa_-_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa_3_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-0-120.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-1-121.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-2-122.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-3-123.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-4-124.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-5-125.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-6-126.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-7-127.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-8-128.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-9-129.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-10-130.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-11-131.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-12-132.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/gallery-13-133.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1086,7 +1105,7 @@
           "sku": "3T6LBI-HHANG-0",
           "price": 13590000,
           "costPrice": 7592400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-4k-50-inch-50ua8055psa/main-119.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1104,19 +1123,19 @@
       "price": 19900000,
       "salePrice": 12990000,
       "costPrice": 9872400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/main-134.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_uhd_4k_65_inch_2025_65ua8450psa_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_1__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_4_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-0-135.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-1-136.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-2-137.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-3-138.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-4-139.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-5-140.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-6-141.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-7-142.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-8-143.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-9-144.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/gallery-10-145.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1147,7 +1166,7 @@
           "sku": "BCIBJ3-HHANG-0",
           "price": 19900000,
           "costPrice": 9872400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-uhd-65ua8450-4k-65-inch-2025/main-134.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1165,16 +1184,16 @@
       "price": 9400000,
       "salePrice": 6390000,
       "costPrice": 4856400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_oled_lg_4k_48_inch_oled48a3psa_4.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/main-146.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_43_inch_2024_7000_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_43_inch_2024_7000_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_samsung_uhd_4k_43_inch_2024_7000_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_9756_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_976_1_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_977_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_978_7.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-0-147.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-1-148.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-2-149.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-3-150.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-4-151.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-5-152.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-6-153.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/gallery-7-154.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1203,7 +1222,7 @@
           "sku": "N6JQP8-HHANG-0",
           "price": 9400000,
           "costPrice": 4856400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_oled_lg_4k_48_inch_oled48a3psa_4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-43du7000-4k-43-inch-2024/main-146.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1221,22 +1240,22 @@
       "price": 4490000,
       "salePrice": 4190000,
       "costPrice": 3184400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_91__2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/main-155.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi_xiaomi_a_pro_hd_32_inch_qled_2026_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-fhd-a-pro-32-inch-2026.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_83__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_82__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_81__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t140821.203.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t134302.850_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t120408.711_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-05-02t134219.164_2.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-0-156.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-1-157.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-2-158.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-3-159.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-4-160.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-5-161.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-6-162.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-7-163.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-8-164.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-9-165.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-10-166.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-11-167.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-12-168.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/gallery-13-169.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1264,7 +1283,7 @@
           "sku": "7PNF3L-HHANG-0",
           "price": 4490000,
           "costPrice": 3184400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_15_91__2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-hd-a-pro-32-inch-2026/main-155.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1282,13 +1301,13 @@
       "price": 15900000,
       "salePrice": 9990000,
       "costPrice": 7592400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_1__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025/main-170.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_2__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_3__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_4__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_5__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_6__1.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025/gallery-0-171.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025/gallery-1-172.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025/gallery-2-173.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025/gallery-3-174.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025/gallery-4-175.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1317,7 +1336,7 @@
           "sku": "939I35-HHANG-0",
           "price": 15900000,
           "costPrice": 7592400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/v/tv-ss-55u8500f-uhd-4k-55_1__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-samsung-uhd-55u8500f-4k-55-inch-2025/main-170.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1335,20 +1354,20 @@
       "price": 19400000,
       "salePrice": 13290000,
       "costPrice": 10100400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/main-176.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart_tivi_lg_qned_4k_55_inch_2025_55qned80asa_-_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_5_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-0-177.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-1-178.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-2-179.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-3-180.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-4-181.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-5-182.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-6-183.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-7-184.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-8-185.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-9-186.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-10-187.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/gallery-11-188.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1379,7 +1398,7 @@
           "sku": "A13XEG-HHANG-0",
           "price": 19400000,
           "costPrice": 10100400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/m/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/smart-tivi-lg-qned-55qned80asa-4k-55-inch-2025/main-176.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1397,22 +1416,22 @@
       "price": 7990000,
       "salePrice": 7390000,
       "costPrice": 5616400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-4k-a-pro-43-inch-2026_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/main-189.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-4k-a-pro-43-inch-2026.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115926.235.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115939.203.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115951.405.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_y_c_o_r_u_12_-_2025-05-02t115900.941.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/1/2/12_47_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/1/_/1_718_45.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/3/_/3_629_39.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/2/_/2_691_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/5/_/5_483_27.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/4/_/4_557_34.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/6/_/6_399_26.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/7/_/7_276_21.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/8/_/8_174_18.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-0-190.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-1-191.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-2-192.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-3-193.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-4-194.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-5-195.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-6-196.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-7-197.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-8-198.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-9-199.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-10-200.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-11-201.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-12-202.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/gallery-13-203.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1440,7 +1459,7 @@
           "sku": "NJW29I-HHANG-0",
           "price": 7990000,
           "costPrice": 5616400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi-xiaomi-qled-4k-a-pro-43-inch-2026_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tivi-xiaomi-qled-4k-a-pro-43-inch-2026/main-189.png",
           "active": true,
           "options": {
             "color": "Chính hãng"

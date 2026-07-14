@@ -120,7 +120,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "phone_iphone"
     },
     {
       "slug": "samsung-phone",
@@ -128,7 +129,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "xiaomi-phone",
@@ -136,7 +138,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "oppo-phone",
@@ -144,7 +147,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "dien-thoai",
@@ -152,7 +156,8 @@
       "parentSlug": null,
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "tablet",
@@ -160,7 +165,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+      "imageUrl": "",
+      "icon": "tablet"
     },
     {
       "slug": "laptop",
@@ -168,7 +174,8 @@
       "parentSlug": null,
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+      "imageUrl": "",
+      "icon": "laptop_mac"
     },
     {
       "slug": "tai-nghe-bt",
@@ -176,7 +183,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "loa",
@@ -184,7 +192,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "speaker"
     },
     {
       "slug": "tai-nghe",
@@ -192,7 +201,8 @@
       "parentSlug": null,
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "may-anh",
@@ -200,7 +210,8 @@
       "parentSlug": "dong-ho",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+      "imageUrl": "",
+      "icon": "photo_camera"
     },
     {
       "slug": "dong-ho",
@@ -208,7 +219,8 @@
       "parentSlug": null,
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+      "imageUrl": "",
+      "icon": "watch"
     },
     {
       "slug": "op-lung",
@@ -216,7 +228,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "shield"
     },
     {
       "slug": "sac-cap",
@@ -224,7 +237,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "bolt"
     },
     {
       "slug": "pin-du-phong",
@@ -232,7 +246,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "battery_charging_full"
     },
     {
       "slug": "phu-kien",
@@ -240,7 +255,8 @@
       "parentSlug": null,
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "cable"
     },
     {
       "slug": "may-tinh-de-ban",
@@ -248,7 +264,8 @@
       "parentSlug": "man-hinh",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "man-hinh",
@@ -256,7 +273,8 @@
       "parentSlug": null,
       "sortOrder": 6,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "tivi",
@@ -264,7 +282,8 @@
       "parentSlug": null,
       "sortOrder": 7,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi.png"
+      "imageUrl": "",
+      "icon": "tv"
     }
   ],
   "categoryAttributes": [
@@ -437,7 +456,7 @@
     {
       "slug": "garmin",
       "name": "Garmin",
-      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Garmin-240x50.png",
+      "logoUrl": "",
       "description": "Garmin — phân phối chính hãng tại CellphoneS.",
       "active": true,
       "categorySlugs": [
@@ -455,22 +474,22 @@
       "price": 3690000,
       "salePrice": 3290000,
       "costPrice": 2500400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_16__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/main-1.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_5__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_14.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_10__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/p/apple_lte_3_65.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_127.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_89.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_72.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__12_60.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__7_47.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__11.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__11.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_3__9.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4__4.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-0-2.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-2-4.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-11-13.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-12-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-13-15.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -525,7 +544,7 @@
           "sku": "BZRFZ9-TRANG-0",
           "price": 3690000,
           "costPrice": 2500400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_16__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/main-1.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -536,7 +555,7 @@
           "sku": "BZRFZ9-ANHLA-1",
           "price": 3690000,
           "costPrice": 2500400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_5__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-0-2.png",
           "active": true,
           "options": {
             "color": "Xanh lá"
@@ -547,7 +566,7 @@
           "sku": "BZRFZ9-DEN-2",
           "price": 3690000,
           "costPrice": 2500400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_14.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-1-3.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -558,7 +577,7 @@
           "sku": "BZRFZ9-TIM-3",
           "price": 3690000,
           "costPrice": 2500400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_10__3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-huawei-watch-fit-5/gallery-2-4.png",
           "active": true,
           "options": {
             "color": "Tím"
@@ -576,22 +595,22 @@
       "price": 1090000,
       "salePrice": 990000,
       "costPrice": 752400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_33__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/main-16.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_9__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_21__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_15__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_389.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/v/_/v_ng_eo_tay_th_ng_minh_huawei_band_11_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/v/_/v_ng_eo_tay_th_ng_minh_huawei_band_11_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/v/_/v_ng_eo_tay_th_ng_minh_huawei_band_11_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_3__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_4_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-2-19.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-3-20.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-4-21.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-5-22.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-6-23.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-7-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-8-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-9-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-10-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-11-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-12-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-13-30.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -639,7 +658,7 @@
           "sku": "K7O3QQ-DEN-0",
           "price": 1090000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_33__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/main-16.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -650,7 +669,7 @@
           "sku": "K7O3QQ-TRANG-1",
           "price": 1090000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_3_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-0-17.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -661,7 +680,7 @@
           "sku": "K7O3QQ-ANHLA-2",
           "price": 1090000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_9__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-1-18.png",
           "active": true,
           "options": {
             "color": "Xanh lá"
@@ -672,7 +691,7 @@
           "sku": "K7O3QQ-TIM-3",
           "price": 1090000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_21__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-2-19.png",
           "active": true,
           "options": {
             "color": "Tím"
@@ -683,7 +702,7 @@
           "sku": "K7O3QQ-VANG-4",
           "price": 1090000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_band_11_15__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-huawei-band-11/gallery-3-20.png",
           "active": true,
           "options": {
             "color": "Vàng"
@@ -701,21 +720,21 @@
       "price": 5290000,
       "salePrice": 4890000,
       "costPrice": 3716400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_3.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/main-31.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_574_2_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_134.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_96.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__12_67.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__7_54.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_79.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_1__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_2__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_4__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_5__4.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-0-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-1-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-2-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-3-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-4-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-5-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-6-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-7-39.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-8-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-9-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-10-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-11-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-12-44.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -782,7 +801,7 @@
           "sku": "9JENPG-TRANG-0",
           "price": 5290000,
           "costPrice": 3716400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/main-31.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -793,7 +812,7 @@
           "sku": "9JENPG-DEN-1",
           "price": 5290000,
           "costPrice": 3716400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_6.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-xiaomi-watch-s5/gallery-0-32.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -811,22 +830,22 @@
       "price": 7190000,
       "salePrice": null,
       "costPrice": 5464400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_30__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/main-45.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_18__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_24__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_22.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_12__6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_6__7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_2_32.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/n/_ng_h_th_ng_minh_garmin_forerunner_70_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/n/_ng_h_th_ng_minh_garmin_forerunner_70_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/n/_ng_h_th_ng_minh_garmin_forerunner_70_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_21.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__15.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__15.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_3__12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4__7.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-0-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-1-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-2-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-3-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-4-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-5-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-6-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-7-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-8-54.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-9-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-10-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-11-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-12-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-13-59.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -882,7 +901,7 @@
           "sku": "4306IH-NHDEN-0",
           "price": 7190000,
           "costPrice": 5464400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_30__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/main-45.png",
           "active": true,
           "options": {
             "color": "Xanh Đen"
@@ -892,7 +911,7 @@
           "sku": "4306IH-TIM-1",
           "price": 7190000,
           "costPrice": 5464400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_18__2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-0-46.png",
           "active": true,
           "options": {
             "color": "Tím"
@@ -902,7 +921,7 @@
           "sku": "4306IH-HONG-2",
           "price": 7190000,
           "costPrice": 5464400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_24__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-1-47.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -912,7 +931,7 @@
           "sku": "4306IH-DEN-3",
           "price": 7190000,
           "costPrice": 5464400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_22.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-2-48.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -922,7 +941,7 @@
           "sku": "4306IH-VANG-4",
           "price": 7190000,
           "costPrice": 5464400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_12__6.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-3-49.png",
           "active": true,
           "options": {
             "color": "Vàng"
@@ -932,7 +951,7 @@
           "sku": "4306IH-TRANG-5",
           "price": 7190000,
           "costPrice": 5464400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_6__7.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-garmin-forerunner-70/gallery-4-50.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -949,14 +968,14 @@
       "price": 2190000,
       "salePrice": 2090000,
       "costPrice": 1588400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/main-60.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_534_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__3.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-0-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-1-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-2-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-3-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-4-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-5-66.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -982,7 +1001,7 @@
           "sku": "J4SEBP-DEN-0",
           "price": 2190000,
           "costPrice": 1588400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/main-60.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -993,7 +1012,7 @@
           "sku": "J4SEBP-HONG-1",
           "price": 2190000,
           "costPrice": 1588400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_1__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-0-61.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -1004,7 +1023,7 @@
           "sku": "J4SEBP-BAC-2",
           "price": 2190000,
           "costPrice": 1588400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnn_2__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/vong-deo-tay-thong-minh-xiaomi-miband-10-pro/gallery-1-62.png",
           "active": true,
           "options": {
             "color": "Bạc"
@@ -1022,22 +1041,22 @@
       "price": 14990000,
       "salePrice": 11990000,
       "costPrice": 9112400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_17.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/main-67.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/m/amazfit_3_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__14_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__14_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_84.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__12_72.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__7_59.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__7_44.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_16.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_2__11.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_1__10.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_5__8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_3__1_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_4__7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_6__10.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-0-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-1-69.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-2-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-3-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-4-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-5-73.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-6-74.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-7-75.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-8-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-9-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-10-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-11-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-12-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/gallery-13-81.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1064,7 +1083,7 @@
           "sku": "I2CR4C-DEN-0",
           "price": 14990000,
           "costPrice": 9112400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dhnnk_17.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-cheetah-2-pro/main-67.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1082,22 +1101,22 @@
       "price": 16990000,
       "salePrice": 14990000,
       "costPrice": 11392400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_1__18.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/main-82.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/a/m/amazfit_2_20.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_1__17.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_5__13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_22.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_4__1_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_6__1_9.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_7__8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_10__8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_11__6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_9__9.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_8__9.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_16_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_17__9_53.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_375.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-0-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-1-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-2-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-3-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-4-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-5-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-6-89.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-7-90.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-8-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-9-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-10-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-11-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-12-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/gallery-13-96.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1125,7 +1144,7 @@
           "sku": "6NMINT-DEN-0",
           "price": 16990000,
           "costPrice": 11392400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/h/dh_1__18.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dong-ho-thong-minh-amazfit-t-rex-ultra-2/main-82.png",
           "active": true,
           "options": {
             "color": "Đen"

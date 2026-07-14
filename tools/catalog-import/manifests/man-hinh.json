@@ -120,7 +120,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "phone_iphone"
     },
     {
       "slug": "samsung-phone",
@@ -128,7 +129,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "xiaomi-phone",
@@ -136,7 +138,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "oppo-phone",
@@ -144,7 +147,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "dien-thoai",
@@ -152,7 +156,8 @@
       "parentSlug": null,
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "tablet",
@@ -160,7 +165,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+      "imageUrl": "",
+      "icon": "tablet"
     },
     {
       "slug": "laptop",
@@ -168,7 +174,8 @@
       "parentSlug": null,
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+      "imageUrl": "",
+      "icon": "laptop_mac"
     },
     {
       "slug": "tai-nghe-bt",
@@ -176,7 +183,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "loa",
@@ -184,7 +192,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "speaker"
     },
     {
       "slug": "tai-nghe",
@@ -192,7 +201,8 @@
       "parentSlug": null,
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "may-anh",
@@ -200,7 +210,8 @@
       "parentSlug": "dong-ho",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+      "imageUrl": "",
+      "icon": "photo_camera"
     },
     {
       "slug": "dong-ho",
@@ -208,7 +219,8 @@
       "parentSlug": null,
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+      "imageUrl": "",
+      "icon": "watch"
     },
     {
       "slug": "op-lung",
@@ -216,7 +228,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "shield"
     },
     {
       "slug": "sac-cap",
@@ -224,7 +237,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "bolt"
     },
     {
       "slug": "pin-du-phong",
@@ -232,7 +246,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "battery_charging_full"
     },
     {
       "slug": "phu-kien",
@@ -240,7 +255,8 @@
       "parentSlug": null,
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "cable"
     },
     {
       "slug": "may-tinh-de-ban",
@@ -248,7 +264,8 @@
       "parentSlug": "man-hinh",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "man-hinh",
@@ -256,7 +273,8 @@
       "parentSlug": null,
       "sortOrder": 6,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "tivi",
@@ -264,7 +282,8 @@
       "parentSlug": null,
       "sortOrder": 7,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi.png"
+      "imageUrl": "",
+      "icon": "tv"
     }
   ],
   "categoryAttributes": [
@@ -495,19 +514,19 @@
       "price": 3190000,
       "salePrice": 2790000,
       "costPrice": 2120400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_7.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/main-1.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lenovo_legion_r27s_68ccgac1vn_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lenovo_legion_r27s_68ccgac1vn_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lenovo_legion_r27s_68ccgac1vn_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_6__1_11.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_7__1_10.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-0-2.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-2-4.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/gallery-10-12.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -537,7 +556,7 @@
           "sku": "A1AI99-HHANG-0",
           "price": 3190000,
           "costPrice": 2120400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_7.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lenovo-legion-r27s-68ccgac1vn-27-inch/main-1.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -555,16 +574,16 @@
       "price": 3990000,
       "salePrice": 2790000,
       "costPrice": 2120400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_895_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/main-13.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g411a-b_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g411a-b_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g411a-b_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_87.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__70.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__66.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__64.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__58.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-0-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-1-15.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-2-16.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-3-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-4-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-5-19.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-6-20.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/gallery-7-21.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -594,7 +613,7 @@
           "sku": "8Z6G13-HHANG-0",
           "price": 3990000,
           "costPrice": 2120400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_895_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-ultragear-27g411a-b-27-inch/main-13.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -612,17 +631,17 @@
       "price": 2790000,
       "salePrice": 2490000,
       "costPrice": 1892400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_17.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/main-22.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg249qe5a_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg249qe5a_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg249qe5a_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__9_40.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__6_36.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__4_32.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__4_36.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_32.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__5_57.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-0-23.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-1-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-2-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-3-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-4-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-5-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-6-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-7-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/gallery-8-31.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -652,7 +671,7 @@
           "sku": "S3CV7P-HHANG-0",
           "price": 2790000,
           "costPrice": 1892400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_17.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg249qe5a-24-inch/main-22.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -670,17 +689,17 @@
       "price": 3490000,
       "salePrice": 3190000,
       "costPrice": 2424400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_185_1_4.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/main-32.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_25g523-b_25_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_25g523-b_25_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_25g523-b_25_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_75.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_77.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_63.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_71.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_73.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_75.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-0-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-1-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-2-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-3-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-4-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-5-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-6-39.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-7-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/gallery-8-41.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -706,7 +725,7 @@
           "sku": "5L5IWM-HHANG-0",
           "price": 3490000,
           "costPrice": 2424400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_185_1_4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-25g523-b-25-inch/main-32.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -724,16 +743,16 @@
       "price": 3990000,
       "salePrice": 3090000,
       "costPrice": 2348400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_942_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/main-42.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245pf_x24_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245pf_x24_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245pf_x24_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_30.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_31.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_31.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_31.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_31.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-0-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-1-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-2-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-3-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-4-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-5-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-6-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/gallery-7-50.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -764,7 +783,7 @@
           "sku": "DG5QHI-HHANG-0",
           "price": 3990000,
           "costPrice": 2348400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_942_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245pf-x24-24-inch/main-42.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -782,16 +801,16 @@
       "price": 4990000,
       "salePrice": 4390000,
       "costPrice": 3336400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_880_1_4.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/main-51.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_e20_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_e20_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_e20_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_63.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_63.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_65.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_61.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_61.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-0-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-1-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-2-54.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-3-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-4-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-5-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-6-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/gallery-7-59.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -822,7 +841,7 @@
           "sku": "3Z9GK0-HHANG-0",
           "price": 4990000,
           "costPrice": 3336400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_880_1_4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-e20-27-inch/main-51.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -840,22 +859,22 @@
       "price": 6990000,
       "salePrice": 4790000,
       "costPrice": 3640400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_18.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/main-60.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g5_g50f_ls27fg502eexxv_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g5_g50f_ls27fg502eexxv_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g5_g50f_ls27fg502eexxv_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_6__1_10.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_7__1_9.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_8__1_9.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_9__1_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_10__1_6.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-0-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-1-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-2-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-3-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-4-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-5-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-6-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-7-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-8-69.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-9-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-10-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-11-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-12-73.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/gallery-13-74.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -885,7 +904,7 @@
           "sku": "WDWQ71-HHANG-0",
           "price": 6990000,
           "costPrice": 3640400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_18.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-samsung-odyssey-g5-g50f-ls27fg502eexxv-27-inch/main-60.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -903,22 +922,22 @@
       "price": 4490000,
       "salePrice": 3490000,
       "costPrice": 2652400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_14.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/main-75.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g3_g30d_ls27dg302eexxv_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g3_g30d_ls27dg302eexxv_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_samsung_odyssey_g3_g30d_ls27dg302eexxv_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_120.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_94.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_106.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_88.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__5_76.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_327.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__9_160.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_104.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_285.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__8_71.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__8_152.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-0-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-1-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-2-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-3-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-4-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-5-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-6-82.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-7-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-8-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-9-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-10-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-11-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-12-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/gallery-13-89.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -948,7 +967,7 @@
           "sku": "3F923R-HHANG-0",
           "price": 4490000,
           "costPrice": 2652400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_14.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-samsung-odyssey-g3-g30d-ls27dg302eexxv-27-inch/main-75.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -966,14 +985,14 @@
       "price": 8390000,
       "salePrice": 7490000,
       "costPrice": 5692400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/main-90.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_xiaomi_g34wqi_2026_34_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_xiaomi_g34wqi_2026_34_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_xiaomi_g34wqi_2026_34_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_84.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_86.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_84.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/gallery-0-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/gallery-1-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/gallery-2-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/gallery-3-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/gallery-4-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/gallery-5-96.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1003,7 +1022,7 @@
           "sku": "4ZCT1C-HHANG-0",
           "price": 8390000,
           "costPrice": 5692400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-g34wqi-34-inch/main-90.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1021,22 +1040,22 @@
       "price": 4290000,
       "salePrice": 2790000,
       "costPrice": 2120400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_6.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/main-97.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_viewsonic_vx2479a-hd-pro_240hz_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_viewsonic_vx2479a-hd-pro_240hz_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_viewsonic_vx2479a-hd-pro_240hz_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__7_24.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__7_37.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_20.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__8_20.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_185.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__6_21.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__6_87.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_113.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__4_171.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__5_137.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__4_182.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-0-98.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-1-99.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-2-100.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-3-101.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-4-102.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-5-103.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-6-104.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-7-105.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-8-106.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-9-107.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-10-108.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-11-109.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-12-110.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/gallery-13-111.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1067,7 +1086,7 @@
           "sku": "JP28WT-HHANG-0",
           "price": 4290000,
           "costPrice": 2120400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_6.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-viewsonic-vx2479a-hd-pro-240hz-24-inch/main-97.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1085,16 +1104,16 @@
       "price": 5290000,
       "salePrice": 4590000,
       "costPrice": 3488400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_5_3.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/main-112.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_27_inch_-_1_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_27_inch_-_2_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_275qf_27_inch_-_3_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_11__5_112.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__5_108.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__6_100.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_15__7_88.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_14__6_60.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-0-113.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-1-114.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-2-115.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-3-116.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-4-117.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-5-118.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-6-119.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/gallery-7-120.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1124,7 +1143,7 @@
           "sku": "PXCE4S-HHANG-0",
           "price": 5290000,
           "costPrice": 3488400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_5_3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-275qf-27-inch/main-112.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1142,17 +1161,17 @@
       "price": 4490000,
       "salePrice": 3790000,
       "costPrice": 2880400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_60.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/main-121.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27qi_2026_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27qi_2026_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27qi_2026_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__88.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_115.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__91.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__10_5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_10.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_6.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-0-122.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-1-123.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-2-124.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-3-125.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-4-126.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-5-127.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-6-128.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-7-129.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/gallery-8-130.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1182,7 +1201,7 @@
           "sku": "VVCN8I-HHANG-0",
           "price": 4490000,
           "costPrice": 2880400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_60.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27qi-2026-27-inch/main-121.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1200,22 +1219,22 @@
       "price": 2999000,
       "salePrice": 2290000,
       "costPrice": 1740400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_41.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/main-131.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_lg_24u411a-b_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_lg_24u411a-b_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_lg_24u411a-b_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_73.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_61.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_66.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_58.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_11__7_184.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_13__8_139.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_12__8_165.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_58.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__5_48.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__9_267.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__8_48.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-0-132.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-1-133.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-2-134.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-3-135.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-4-136.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-5-137.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-6-138.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-7-139.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-8-140.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-9-141.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-10-142.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-11-143.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-12-144.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/gallery-13-145.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1241,7 +1260,7 @@
           "sku": "81PXO1-HHANG-0",
           "price": 2999000,
           "costPrice": 1740400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_179_6_41.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-lg-24u411a-b-24-inch/main-131.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1259,18 +1278,18 @@
       "price": 3090000,
       "salePrice": 2590000,
       "costPrice": 1968400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/main-146.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_msi_pro_mp165_e6_16_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_msi_pro_mp165_e6_16_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_msi_pro_mp165_e6_16_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__8_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__5_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_2.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-0-147.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-1-148.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-2-149.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-3-150.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-4-151.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-5-152.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-6-153.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-7-154.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-8-155.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/gallery-9-156.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1301,7 +1320,7 @@
           "sku": "AKNBUL-HHANG-0",
           "price": 3090000,
           "costPrice": 1968400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-msi-pro-mp165-e6-16-inch/main-146.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1319,16 +1338,16 @@
       "price": 5290000,
       "salePrice": 4990000,
       "costPrice": 3792400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_180_1_13.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/main-157.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg27aq5a_27_inch_-_1_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg27aq5a_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_asus_tuf_vg27aq5a_27_inch_-_3_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__9_234.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__9_274.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_281.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__7_228.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__4_244.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-0-158.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-1-159.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-2-160.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-3-161.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-4-162.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-5-163.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-6-164.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/gallery-7-165.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1358,7 +1377,7 @@
           "sku": "BP9B7W-HHANG-0",
           "price": 5290000,
           "costPrice": 3792400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_180_1_13.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-asus-tuf-vg27aq5a-27-inch/main-157.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1376,17 +1395,17 @@
       "price": 4490000,
       "salePrice": 3790000,
       "costPrice": 2880400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/main-166.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_76.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_30.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_31.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_36.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_38.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_40.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-0-167.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-1-168.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-2-169.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-3-170.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-4-171.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-5-172.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-6-173.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-7-174.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/gallery-8-175.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1416,7 +1435,7 @@
           "sku": "VX4DZG-HHANG-0",
           "price": 4490000,
           "costPrice": 2880400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1612ws1-16-inch/main-166.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1434,14 +1453,14 @@
       "price": 2590000,
       "salePrice": 1790000,
       "costPrice": 1360400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_24.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/main-176.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_e-dra_egm24f120pv_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_e-dra_egm24f120pv_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_e-dra_egm24f120pv_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_23__3_74.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_24__3_68.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_25__7_65.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/gallery-0-177.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/gallery-1-178.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/gallery-2-179.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/gallery-3-180.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/gallery-4-181.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/gallery-5-182.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1470,7 +1489,7 @@
           "sku": "WONWXW-HHANG-0",
           "price": 2590000,
           "costPrice": 1360400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_24.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-e-dra-egm24f120pv-24-inch/main-176.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1488,17 +1507,17 @@
       "price": 3490000,
       "salePrice": 2990000,
       "costPrice": 2272400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/main-183.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1614ws1_16_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1612ws1_16_inch_-_2_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_gp1614ws1_16_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_77.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__1_31.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__1_32.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__1_37.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_41.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_39.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-0-184.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-1-185.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-2-186.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-3-187.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-4-188.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-5-189.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-6-190.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-7-191.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/gallery-8-192.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1528,7 +1547,7 @@
           "sku": "5MLG9M-HHANG-0",
           "price": 3490000,
           "costPrice": 2272400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-gp1614ws1-16-inch/main-183.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1546,17 +1565,17 @@
       "price": 3090000,
       "salePrice": 2590000,
       "costPrice": 1968400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_950_3.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/main-193.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27i_2026_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27i_2026_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_xiaomi_a27i_2026_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_55.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_53.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__10_61.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_16_29.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__9_183.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__13_91.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-0-194.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-1-195.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-2-196.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-3-197.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-4-198.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-5-199.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-6-200.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-7-201.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/gallery-8-202.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1586,7 +1605,7 @@
           "sku": "I6EZ6D-HHANG-0",
           "price": 3090000,
           "costPrice": 1968400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_950_3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-xiaomi-a27i-2026-27-inch/main-193.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1604,16 +1623,16 @@
       "price": 2490000,
       "salePrice": 1890000,
       "costPrice": 1436400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/main-203.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_msi_pro_mp242l_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_msi_pro_mp242l_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_msi_pro_mp242l_24_inch_-_3_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__7_24.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__7_12.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__7_16.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__8_13.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__6_13.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-0-204.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-1-205.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-2-206.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-3-207.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-4-208.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-5-209.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-6-210.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/gallery-7-211.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1638,7 +1657,7 @@
           "sku": "5ISCDB-HHANG-0",
           "price": 2490000,
           "costPrice": 1436400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_635_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-msi-pro-mp242l-24-inch/main-203.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1656,14 +1675,14 @@
       "price": 2490000,
       "salePrice": 1690000,
       "costPrice": 1284400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_1_.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/main-212.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_vp1560fs1_15.6_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_vp1560fs1_15.6_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_vsp_vp1560fs1_15.6_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__1_39.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2_75.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__1_37.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/gallery-0-213.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/gallery-1-214.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/gallery-2-215.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/gallery-3-216.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/gallery-4-217.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/gallery-5-218.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1693,7 +1712,7 @@
           "sku": "5BCYTY-HHANG-0",
           "price": 2490000,
           "costPrice": 1284400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_921_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-vsp-vp1560fs1-15-6-inch/main-212.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1711,18 +1730,18 @@
       "price": 6990000,
       "salePrice": 5250000,
       "costPrice": 3990000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-dell-u2424h-24-inch_7__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/main-219.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-dell-u2424h-24-inch-10.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_v_n_ph_ng_dell_u2424h_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_v_n_ph_ng_dell_u2424h_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_v_n_ph_ng_dell_u2424h_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__2.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-0-220.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-1-221.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-2-222.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-3-223.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-4-224.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-5-225.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-6-226.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-7-227.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-8-228.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/gallery-9-229.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1748,7 +1767,7 @@
           "sku": "WVOV2D-XAM-0",
           "price": 6990000,
           "costPrice": 3990000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/a/man-hinh-dell-u2424h-24-inch_7__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-dell-u2424h-24-inch/main-219.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -1766,16 +1785,16 @@
       "price": 3990000,
       "salePrice": 2990000,
       "costPrice": 2272400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_876_2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/main-230.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245f_x24_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245f_x24_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_msi_mag_245f_x24_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__10_228.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__10_163.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__8_181.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__8_180.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__5_146.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-0-231.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-1-232.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-2-233.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-3-234.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-4-235.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-5-236.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-6-237.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/gallery-7-238.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1806,7 +1825,7 @@
           "sku": "SRW9PC-HHANG-0",
           "price": 3990000,
           "costPrice": 2272400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_876_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-msi-mag-245f-x24-24-inch/main-230.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1824,18 +1843,18 @@
       "price": 2690000,
       "salePrice": 1790000,
       "costPrice": 1360400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_907_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/main-239.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_e-dra_epm16f60_16_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_e-dra_epm16f60_16_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_di_ng_e-dra_epm16f60_16_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1__92.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_1_117.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_2__89.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_4__79.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_3__85.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_5__66.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/s/ssss_6__55.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-0-240.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-1-241.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-2-242.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-3-243.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-4-244.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-5-245.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-6-246.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-7-247.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-8-248.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/gallery-9-249.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1864,7 +1883,7 @@
           "sku": "BC8ELT-HHANG-0",
           "price": 2690000,
           "costPrice": 1360400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_907_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-di-dong-e-dra-epm16f60-16-inch/main-239.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1882,21 +1901,21 @@
       "price": 4290000,
       "salePrice": 2990000,
       "costPrice": 2272400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_5.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/main-250.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_24gs65f_24_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_24gs65f_24_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_24gs65f_24_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_1__6_115.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_3__5_120.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_2__6_132.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_4__6_115.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_10__4_109.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_6__2_151.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_7__2_138.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_5__7_109.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_9__4_153.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_8__4_139.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-0-251.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-1-252.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-2-253.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-3-254.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-4-255.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-5-256.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-6-257.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-7-258.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-8-259.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-9-260.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-10-261.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-11-262.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/gallery-12-263.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1924,7 +1943,7 @@
           "sku": "85LKIV-HHANG-0",
           "price": 4290000,
           "costPrice": 2272400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_183_1_5.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-24gs65f-24-inch/main-250.png",
           "active": true,
           "options": {
             "color": "Chính hãng"
@@ -1942,22 +1961,22 @@
       "price": 6990000,
       "salePrice": 5190000,
       "costPrice": 3944400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/main-264.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g610a-b_27_inch_-_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g610a-b_27_inch_-_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/_/m_n_h_nh_gaming_lg_ultragear_27g610a-b_27_inch_-_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1_27.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_13__1_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_2__1_28.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_1__1_28.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_14__1_7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_3__1_28.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_4__1_28.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_5__1_28.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_12__1_8.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_11__1_10.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/h/mhv_8__1_21.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-0-265.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-1-266.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-2-267.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-3-268.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-4-269.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-5-270.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-6-271.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-7-272.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-8-273.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-9-274.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-10-275.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-11-276.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-12-277.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/gallery-13-278.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1983,7 +2002,7 @@
           "sku": "2B23PG-HHANG-0",
           "price": 6990000,
           "costPrice": 3944400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_923_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/man-hinh-gaming-lg-ultragear-27g610a-b-27-inch/main-264.png",
           "active": true,
           "options": {
             "color": "Chính hãng"

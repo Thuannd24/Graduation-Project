@@ -120,7 +120,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "phone_iphone"
     },
     {
       "slug": "samsung-phone",
@@ -128,7 +129,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "xiaomi-phone",
@@ -136,7 +138,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "oppo-phone",
@@ -144,7 +147,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "dien-thoai",
@@ -152,7 +156,8 @@
       "parentSlug": null,
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "tablet",
@@ -160,7 +165,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+      "imageUrl": "",
+      "icon": "tablet"
     },
     {
       "slug": "laptop",
@@ -168,7 +174,8 @@
       "parentSlug": null,
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+      "imageUrl": "",
+      "icon": "laptop_mac"
     },
     {
       "slug": "tai-nghe-bt",
@@ -176,7 +183,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "loa",
@@ -184,7 +192,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "speaker"
     },
     {
       "slug": "tai-nghe",
@@ -192,7 +201,8 @@
       "parentSlug": null,
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "may-anh",
@@ -200,7 +210,8 @@
       "parentSlug": "dong-ho",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+      "imageUrl": "",
+      "icon": "photo_camera"
     },
     {
       "slug": "dong-ho",
@@ -208,7 +219,8 @@
       "parentSlug": null,
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+      "imageUrl": "",
+      "icon": "watch"
     },
     {
       "slug": "op-lung",
@@ -216,7 +228,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "shield"
     },
     {
       "slug": "sac-cap",
@@ -224,7 +237,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "bolt"
     },
     {
       "slug": "pin-du-phong",
@@ -232,7 +246,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "battery_charging_full"
     },
     {
       "slug": "phu-kien",
@@ -240,7 +255,8 @@
       "parentSlug": null,
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "cable"
     },
     {
       "slug": "may-tinh-de-ban",
@@ -248,7 +264,8 @@
       "parentSlug": "man-hinh",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "man-hinh",
@@ -256,7 +273,8 @@
       "parentSlug": null,
       "sortOrder": 6,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "tivi",
@@ -264,7 +282,8 @@
       "parentSlug": null,
       "sortOrder": 7,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/tivi.png"
+      "imageUrl": "",
+      "icon": "tv"
     }
   ],
   "categoryAttributes": [
@@ -475,22 +494,22 @@
       "price": 2850000,
       "salePrice": 1750000,
       "costPrice": 1330000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_44__4.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/main-1.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_45__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_511_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_45__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_44__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_46__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_47__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_48__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_49__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_50__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-04-17t144722.999.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-04-17t144753.192.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-04-17t144803.459.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider_b_n_i_-_2025-04-17t144737.349.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-0-2.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-2-4.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-11-13.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-12-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-13-15.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -517,7 +536,7 @@
           "sku": "H5DXWQ-BAC-0",
           "price": 2850000,
           "costPrice": 1330000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_44__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/main-1.png",
           "active": true,
           "options": {
             "color": "Bạc"
@@ -528,7 +547,7 @@
           "sku": "H5DXWQ-DEN-1",
           "price": 2850000,
           "costPrice": 1330000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_45__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-a1695-25000mah-165w-kem-cap-rut-gon/gallery-0-2.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -546,22 +565,22 @@
       "price": 1290000,
       "salePrice": 890000,
       "costPrice": 676400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1774421505470.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/main-16.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141245.371_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_13__1_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141207.175.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_13__1_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141245.371.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1774421505470_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141309.831.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141455.976.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141413.232.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141436.528.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141532.913.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141351.284.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141322.801.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-2-19.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-3-20.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-4-21.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-5-22.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-6-23.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-7-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-8-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-9-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-10-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-11-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-12-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-13-30.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -586,7 +605,7 @@
           "sku": "PX6LPB-DUONG-0",
           "price": 1290000,
           "costPrice": 676400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/i/m/image_1774421505470.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/main-16.jpg",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -597,7 +616,7 @@
           "sku": "PX6LPB-TRANG-1",
           "price": 1290000,
           "costPrice": 676400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-11-03t141245.371_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-0-17.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -608,7 +627,7 @@
           "sku": "PX6LPB-DEN-2",
           "price": 1290000,
           "costPrice": 676400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_13__1_4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-anker-zolo-a1681-20000mah-45w-1a1c/gallery-1-18.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -626,22 +645,22 @@
       "price": 430000,
       "salePrice": 390000,
       "costPrice": 296400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_75__2_2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/main-31.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_75__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_511_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_75__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_76__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_77__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_79__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_78__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_83__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_80__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_81__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_84__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_82__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_47__1_3.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-0-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-1-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-2-34.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-3-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-4-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-5-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-6-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-7-39.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-8-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-9-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-10-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-11-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-12-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-13-45.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -667,7 +686,7 @@
           "sku": "DU4T08-ANCCC-0",
           "price": 430000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_75__2_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/main-31.png",
           "active": true,
           "options": {
             "color": "Đen (Có chứng nhận CCC)"
@@ -678,7 +697,7 @@
           "sku": "DU4T08-DEN-1",
           "price": 430000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_75__3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w/gallery-0-32.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -696,21 +715,21 @@
       "price": 790000,
       "salePrice": 440000,
       "costPrice": 334400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_3__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/main-46.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_6__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_10__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_4__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_9_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_7_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-0-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-1-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-2-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-3-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-4-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-5-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-6-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-7-54.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-8-55.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-9-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-10-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-11-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-12-59.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -737,7 +756,7 @@
           "sku": "41COOZ-DUONG-0",
           "price": 790000,
           "costPrice": 334400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_3__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/main-46.png",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -748,7 +767,7 @@
           "sku": "41COOZ-BE-1",
           "price": 790000,
           "costPrice": 334400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_6__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-0-47.png",
           "active": true,
           "options": {
             "color": "Be"
@@ -759,7 +778,7 @@
           "sku": "41COOZ-DEN-2",
           "price": 790000,
           "costPrice": 334400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_10__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-1-48.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -770,7 +789,7 @@
           "sku": "41COOZ-HONG-3",
           "price": 790000,
           "costPrice": 334400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w_4__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-10000mah-22-5w/gallery-2-49.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -788,22 +807,22 @@
       "price": 590000,
       "salePrice": 390000,
       "costPrice": 296400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/_/h_ng_en_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/main-60.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/n/8/n830.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/e/_en_h_ng_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_3__3_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-aukey-pb-n83s-18w-pd-10000mah-1_5.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/_/h_ng_1_4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_1__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_2__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_3__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_4__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_5__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_7__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_10__1.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-0-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-1-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-2-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-3-64.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-4-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-5-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-6-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-7-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-8-69.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-9-70.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-10-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-11-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-12-73.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-13-74.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -831,7 +850,7 @@
           "sku": "GWMRI6-NGDEN-0",
           "price": 590000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/_/h_ng_en_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/main-60.png",
           "active": true,
           "options": {
             "color": "Hồng Đen"
@@ -842,7 +861,7 @@
           "sku": "GWMRI6-TRANG-1",
           "price": 590000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/n/8/n830.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-0-61.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -853,7 +872,7 @@
           "sku": "GWMRI6-KPINK-2",
           "price": 590000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/e/_en_h_ng_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-1-62.png",
           "active": true,
           "options": {
             "color": "BlackPink"
@@ -864,7 +883,7 @@
           "sku": "GWMRI6-DUONG-3",
           "price": 590000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_3__3_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-2-63.png",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -875,7 +894,7 @@
           "sku": "GWMRI6-DEN-4",
           "price": 590000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-aukey-pb-n83s-18w-pd-10000mah-1_5.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-3-64.jpg",
           "active": true,
           "options": {
             "color": "Đen"
@@ -886,7 +905,7 @@
           "sku": "GWMRI6-HONG-5",
           "price": 590000,
           "costPrice": 296400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/_/h_ng_1_4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s/gallery-4-65.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -904,22 +923,22 @@
       "price": 1400000,
       "salePrice": 1329000,
       "costPrice": 1010040,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/2/0/20250929-165558_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/main-75.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_31__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_524_2__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/2/0/20250929-165558.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_31__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_78__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_68__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_69__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_70__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_71__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_72__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_73__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_74__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_75__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_379_77__2.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-0-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-1-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-2-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-3-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-4-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-5-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-6-82.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-7-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-8-84.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-9-85.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-10-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-11-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-12-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-13-89.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -948,7 +967,7 @@
           "sku": "70NHDM-DEN-0",
           "price": 1400000,
           "costPrice": 1010040,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/2/0/20250929-165558_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/main-75.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -959,7 +978,7 @@
           "sku": "70NHDM-XAM-1",
           "price": 1400000,
           "costPrice": 1010040,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_31__2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p/gallery-0-76.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -977,20 +996,20 @@
       "price": 830000,
       "salePrice": 450000,
       "costPrice": 342000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_41__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/main-90.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_40__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_524_16_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_40_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_41_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_42_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_43_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_46__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_47__7.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_48__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_51__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_50__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_49__3.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-0-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-1-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-2-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-3-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-4-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-5-96.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-6-97.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-7-98.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-8-99.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-9-100.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-10-101.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-11-102.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1013,7 +1032,7 @@
           "sku": "EASJMJ-TRANG-0",
           "price": 830000,
           "costPrice": 342000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_41__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/main-90.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -1024,7 +1043,7 @@
           "sku": "EASJMJ-DEN-1",
           "price": 830000,
           "costPrice": 342000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_40__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-10000mah-22w-fc51/gallery-0-91.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1042,12 +1061,12 @@
       "price": 290000,
       "salePrice": 190000,
       "costPrice": 144400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/download_22__1_2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/main-103.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t095905.381_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_512_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t095905.381.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t095918.875.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-0-104.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-1-105.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-2-106.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-3-107.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1073,7 +1092,7 @@
           "sku": "VXPJVV-ANCCC-0",
           "price": 290000,
           "costPrice": 144400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/download_22__1_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/main-103.png",
           "active": true,
           "options": {
             "color": "Đen (Có chứng nhận CCC)"
@@ -1084,7 +1103,7 @@
           "sku": "VXPJVV-DEN-1",
           "price": 290000,
           "costPrice": 144400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t095905.381_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w/gallery-0-104.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1102,18 +1121,18 @@
       "price": 1290000,
       "salePrice": 990000,
       "costPrice": 752400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/download_28__3.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/main-108.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_26__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t102529.540_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_524_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_26__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t102529.540.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t101145.197_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t101159.610_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t101223.874_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t101309.542_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t101333.732_1.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-0-109.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-1-110.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-2-111.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-3-112.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-4-113.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-5-114.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-6-115.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-7-116.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-8-117.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-9-118.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1137,7 +1156,7 @@
           "sku": "ASX0S8-ANCCC-0",
           "price": 1290000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/download_28__3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/main-108.png",
           "active": true,
           "options": {
             "color": "Xám (Có chứng nhận CCC)"
@@ -1148,7 +1167,7 @@
           "sku": "ASX0S8-BAC-1",
           "price": 1290000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_26__3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-0-109.png",
           "active": true,
           "options": {
             "color": "Bạc"
@@ -1159,7 +1178,7 @@
           "sku": "ASX0S8-XAM-2",
           "price": 1290000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-07-28t102529.540_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-stargo-hypercharge-25000mah-100w/gallery-1-110.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -1177,18 +1196,18 @@
       "price": 1590000,
       "salePrice": 1275000,
       "costPrice": 969000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/main-119.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_9_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958_2_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-0-120.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-1-121.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-2-122.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-3-123.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-4-124.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-5-125.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-6-126.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-7-127.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-8-128.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/gallery-9-129.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1216,7 +1235,7 @@
           "sku": "JMIJ8I-XANH-0",
           "price": 1590000,
           "costPrice": 969000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-magflow-10000mah-25w-65958/main-119.png",
           "active": true,
           "options": {
             "color": "Xanh"
@@ -1234,16 +1253,16 @@
       "price": 1200000,
       "salePrice": 990000,
       "costPrice": 752400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_17__1_2.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/main-130.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_17__1_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_3__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_4__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_5__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_8__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_7__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_6__2.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-0-131.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-1-132.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-2-133.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-3-134.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-4-135.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-5-136.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-6-137.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/gallery-7-138.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1271,7 +1290,7 @@
           "sku": "TA3HGH-DEN-0",
           "price": 1200000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_2_17__1_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-magsafe-ugreen-qi2-10000mah-30w/main-130.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1289,19 +1308,19 @@
       "price": 2100000,
       "salePrice": 1590000,
       "costPrice": 1208400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_6__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/main-139.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_9_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-0-140.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-1-141.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-2-142.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-3-143.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-4-144.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-5-145.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-6-146.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-7-147.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-8-148.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-9-149.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/gallery-10-150.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1329,7 +1348,7 @@
           "sku": "SFJJWY-XAM-0",
           "price": 2100000,
           "costPrice": 1208400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah_6__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-pb721-35524b-130w-20000mah/main-139.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -1347,22 +1366,22 @@
       "price": 900000,
       "salePrice": 690000,
       "costPrice": 524400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_647_4__6.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/main-151.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-07-14t134805.064_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-magnetic-pb561-10-000mah-20w_1__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-magnetic-pb561-10-000mah-20w_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w_2__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-07-14t134805.064.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-magnetic-pb561-10-000mah-20w.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-magnetic-pb561-10-000mah-20w_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_647_4__5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_469_17_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-0-152.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-1-153.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-2-154.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-3-155.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-4-156.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-5-157.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-6-158.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-7-159.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-8-160.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-9-161.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-10-162.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-11-163.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-12-164.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-13-165.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1390,7 +1409,7 @@
           "sku": "T4OTJ0-DUONG-0",
           "price": 900000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_647_4__6.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/main-151.png",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -1401,7 +1420,7 @@
           "sku": "T4OTJ0-DEN-1",
           "price": 900000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-07-14t134805.064_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-0-152.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1412,7 +1431,7 @@
           "sku": "T4OTJ0-TIM-2",
           "price": 900000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-magnetic-pb561-10-000mah-20w_1__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-1-153.png",
           "active": true,
           "options": {
             "color": "Tím"
@@ -1423,7 +1442,7 @@
           "sku": "T4OTJ0-HONG-3",
           "price": 900000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-magnetic-pb561-10-000mah-20w_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-2-154.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -1434,7 +1453,7 @@
           "sku": "T4OTJ0-BE-4",
           "price": 900000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w_2__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-khong-day-ugreen-magnetic-pb561-10-000mah-20w/gallery-3-155.png",
           "active": true,
           "options": {
             "color": "Be"
@@ -1452,19 +1471,19 @@
       "price": 690000,
       "salePrice": 290000,
       "costPrice": 220400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_40__3.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/main-166.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_524_7__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_40__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_64_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_65_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_66_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_67_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_68_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_69_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_71_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_70_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_561_72_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-0-167.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-1-168.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-2-169.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-3-170.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-4-171.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-5-172.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-6-173.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-7-174.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-8-175.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-9-176.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/gallery-10-177.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1491,7 +1510,7 @@
           "sku": "3SOV72-DEN-0",
           "price": 690000,
           "costPrice": 220400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_40__3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-10000mah-15w-fp11/main-166.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1509,19 +1528,19 @@
       "price": 650000,
       "salePrice": 380000,
       "costPrice": 288800,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/5/_/5_201_3.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/main-178.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/4/_/4_237_3.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/4/_/4_237_2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/5/_/5_201_2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/6/_/6_158_2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/7/_/7_107_2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-0-179.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-1-180.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-2-181.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-3-182.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-4-183.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-5-184.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-6-185.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-7-186.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-8-187.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-9-188.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-10-189.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1545,7 +1564,7 @@
           "sku": "Z6Q75H-TRANG-0",
           "price": 650000,
           "costPrice": 288800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/5/_/5_201_3.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/main-178.jpg",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -1556,7 +1575,7 @@
           "sku": "Z6Q75H-DEN-1",
           "price": 650000,
           "costPrice": 288800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/4/_/4_237_3.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah/gallery-0-179.jpg",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1574,14 +1593,14 @@
       "price": 1490000,
       "salePrice": 990000,
       "costPrice": 752400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w-1_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/main-190.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w-1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w-2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w-3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w-4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w-5.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-0-191.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-1-192.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-2-193.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-3-194.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-4-195.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/gallery-5-196.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1610,7 +1629,7 @@
           "sku": "R5E9RK-BE-0",
           "price": 1490000,
           "costPrice": 752400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w-1_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-samsung-eb-p4520x-20-000-mah-45w/main-190.png",
           "active": true,
           "options": {
             "color": "Be"
@@ -1628,22 +1647,22 @@
       "price": 990000,
       "salePrice": 690000,
       "costPrice": 524400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162322.765_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/main-197.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162309.814_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162315.880_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162303.936_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_647_-_2025-09-16t162241.374.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162303.936.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162315.880.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162322.765.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162309.814.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162400.704.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-09-09t113957.223.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-09-09t114005.052.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-09-09t114014.191.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-09-09t114023.258.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-09-09t114031.341.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-0-198.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-1-199.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-2-200.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-3-201.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-4-202.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-5-203.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-6-204.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-7-205.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-8-206.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-9-207.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-10-208.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-11-209.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-12-210.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-13-211.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1670,7 +1689,7 @@
           "sku": "QUAZDE-HONG-0",
           "price": 990000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162322.765_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/main-197.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -1681,7 +1700,7 @@
           "sku": "QUAZDE-BE-1",
           "price": 990000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162309.814_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-0-198.png",
           "active": true,
           "options": {
             "color": "Be"
@@ -1692,7 +1711,7 @@
           "sku": "QUAZDE-DUONG-2",
           "price": 990000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162315.880_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-1-199.png",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -1703,7 +1722,7 @@
           "sku": "QUAZDE-DEN-3",
           "price": 990000,
           "costPrice": 524400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-16t162303.936_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-fc11-20000mah-22-5w-kem-cap-type-c/gallery-2-200.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1721,17 +1740,17 @@
       "price": 696000,
       "salePrice": 590000,
       "costPrice": 448400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_6__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/main-212.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_4_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-0-213.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-1-214.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-2-215.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-3-216.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-4-217.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-5-218.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-6-219.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-7-220.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/gallery-8-221.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1757,7 +1776,7 @@
           "sku": "9VWFJB-DEN-0",
           "price": 696000,
           "costPrice": 448400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w_6__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-ugreen-2-chieu-pb312-25683-20000mah-20w/main-212.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1775,22 +1794,22 @@
       "price": 667000,
       "salePrice": 590000,
       "costPrice": 448400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_730_26__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/main-222.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_39__5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_38__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_37__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_524_14_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_37__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_39__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_730_26_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_38__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-12t102154.888.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-12t102203.833.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-12t102212.272.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-12t102234.648.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-12t102230.400.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-12t102327.840.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-0-223.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-1-224.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-2-225.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-3-226.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-4-227.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-5-228.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-6-229.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-7-230.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-8-231.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-9-232.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-10-233.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-11-234.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-12-235.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-13-236.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1819,7 +1838,7 @@
           "sku": "56OZQM-TRONG-0",
           "price": 667000,
           "costPrice": 448400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_730_26__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/main-222.png",
           "active": true,
           "options": {
             "color": "Trắng/trong"
@@ -1830,7 +1849,7 @@
           "sku": "56OZQM-HONG-1",
           "price": 667000,
           "costPrice": 448400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_39__5.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-0-223.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -1841,7 +1860,7 @@
           "sku": "56OZQM-XAM-2",
           "price": 667000,
           "costPrice": 448400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_38__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-1-224.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -1852,7 +1871,7 @@
           "sku": "56OZQM-DEN-3",
           "price": 667000,
           "costPrice": 448400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_37__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100/gallery-2-225.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1870,21 +1889,21 @@
       "price": 790000,
       "salePrice": 590000,
       "costPrice": 448400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_51__1_4.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/main-237.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_50__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_511_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_50__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_51__1_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_52__1_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_54__4.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_53__1_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_495_46_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_495_47_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_495_48_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_495_49_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_495_50_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_495_51_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-0-238.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-1-239.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-2-240.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-3-241.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-4-242.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-5-243.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-6-244.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-7-245.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-8-246.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-9-247.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-10-248.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-11-249.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-12-250.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1910,7 +1929,7 @@
           "sku": "803N99-TRANG-0",
           "price": 790000,
           "costPrice": 448400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_51__1_4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/main-237.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -1921,7 +1940,7 @@
           "sku": "803N99-DEN-1",
           "price": 790000,
           "costPrice": 448400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_1_50__3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-baseus-enerfill-bipow2-pro-20000mah-22-5w-kem-cap/gallery-0-238.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1939,12 +1958,12 @@
       "price": 3490000,
       "salePrice": 2600000,
       "costPrice": 1976000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-19t113538.593_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/main-251.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-19t113527.785.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-19t113538.593.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-19t113550.599.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-19t113603.126.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-0-252.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-1-253.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-2-254.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/gallery-3-255.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1967,7 +1986,7 @@
           "sku": "7Y1GUQ-TRANG-0",
           "price": 3490000,
           "costPrice": 1976000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-09-19t113538.593_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-apple-iphone-air-magsafe/main-251.png",
           "active": true,
           "options": {
             "color": "MGPG4VN/A-Trắng"
@@ -1985,16 +2004,16 @@
       "price": 990000,
       "salePrice": 890000,
       "costPrice": 676400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_5__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/main-256.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_1_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-0-257.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-1-258.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-2-259.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-3-260.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-4-261.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-5-262.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-6-263.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/gallery-7-264.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -2023,7 +2042,7 @@
           "sku": "0MK8JH-MXANH-0",
           "price": 990000,
           "costPrice": 676400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/p/i/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b_5__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-du-phong-ugreen-10000mah-55w-1c1a-qc-3-0-man-hinh-tich-hop-cap-type-c-pb727-75701b/main-256.png",
           "active": true,
           "options": {
             "color": "Xám xanh"
@@ -2041,22 +2060,22 @@
       "price": 645000,
       "salePrice": 509000,
       "costPrice": 386840,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_35__4.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/main-265.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/i/file_6_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_34__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_524_4__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_34__2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_35__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_36__3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_1__1_3.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-11t222747.279.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-11t222802.514.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-11t222818.434.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_-_2025-08-11t222834.845.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_2__6.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_563_3__4.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-0-266.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-1-267.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-2-268.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-3-269.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-4-270.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-5-271.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-6-272.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-7-273.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-8-274.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-9-275.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-10-276.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-11-277.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-12-278.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-13-279.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -2085,7 +2104,7 @@
           "sku": "SGGBWN-HONG-0",
           "price": 645000,
           "costPrice": 386840,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_35__4.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/main-265.png",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -2096,7 +2115,7 @@
           "sku": "SGGBWN-CAM-1",
           "price": 645000,
           "costPrice": 386840,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/i/file_6_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-0-266.jpg",
           "active": true,
           "options": {
             "color": "Cam"
@@ -2107,7 +2126,7 @@
           "sku": "SGGBWN-XAM-2",
           "price": 645000,
           "costPrice": 386840,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_3_34__3.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100/gallery-1-267.png",
           "active": true,
           "options": {
             "color": "Xám"

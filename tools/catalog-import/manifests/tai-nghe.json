@@ -120,7 +120,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "phone_iphone"
     },
     {
       "slug": "samsung-phone",
@@ -128,7 +129,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "xiaomi-phone",
@@ -136,7 +138,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "oppo-phone",
@@ -144,7 +147,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "dien-thoai",
@@ -152,7 +156,8 @@
       "parentSlug": null,
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "tablet",
@@ -160,7 +165,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+      "imageUrl": "",
+      "icon": "tablet"
     },
     {
       "slug": "laptop",
@@ -168,7 +174,8 @@
       "parentSlug": null,
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+      "imageUrl": "",
+      "icon": "laptop_mac"
     },
     {
       "slug": "tai-nghe-bt",
@@ -176,7 +183,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "loa",
@@ -184,7 +192,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "speaker"
     },
     {
       "slug": "tai-nghe",
@@ -192,7 +201,8 @@
       "parentSlug": null,
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "may-anh",
@@ -200,7 +210,8 @@
       "parentSlug": "dong-ho",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+      "imageUrl": "",
+      "icon": "photo_camera"
     },
     {
       "slug": "dong-ho",
@@ -208,7 +219,8 @@
       "parentSlug": null,
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+      "imageUrl": "",
+      "icon": "watch"
     },
     {
       "slug": "op-lung",
@@ -216,7 +228,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "shield"
     },
     {
       "slug": "sac-cap",
@@ -224,7 +237,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "bolt"
     },
     {
       "slug": "pin-du-phong",
@@ -232,7 +246,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "battery_charging_full"
     },
     {
       "slug": "phu-kien",
@@ -240,7 +255,8 @@
       "parentSlug": null,
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "cable"
     },
     {
       "slug": "may-tinh-de-ban",
@@ -248,7 +264,8 @@
       "parentSlug": "man-hinh",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "man-hinh",
@@ -256,7 +273,8 @@
       "parentSlug": null,
       "sortOrder": 6,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     }
   ],
   "categoryAttributes": [
@@ -467,22 +485,22 @@
       "price": 4490000,
       "salePrice": 3990000,
       "costPrice": 3032400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-huawei-freeclip-2-1.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/main-1.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-huawei-freeclip-2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/freeclip_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/freeclip_2_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-huawei-freeclip-2-spa.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_12_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_14_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_39_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_20_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_13_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_15_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_16_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_17_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_19_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-0-2.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-1-3.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-2-4.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-5-7.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-6-8.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-7-9.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-8-10.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-9-11.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-10-12.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-11-13.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-12-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-13-15.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -516,7 +534,7 @@
           "sku": "GX98WB-HONG-0",
           "price": 4490000,
           "costPrice": 3032400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-huawei-freeclip-2-1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/main-1.jpg",
           "active": true,
           "options": {
             "color": "Hồng"
@@ -527,7 +545,7 @@
           "sku": "GX98WB-TIM-1",
           "price": 4490000,
           "costPrice": 3032400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-huawei-freeclip-2.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-0-2.jpg",
           "active": true,
           "options": {
             "color": "Tím"
@@ -538,7 +556,7 @@
           "sku": "GX98WB-TRANG-2",
           "price": 4490000,
           "costPrice": 3032400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/h/u/huawei_freeclip_2_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-1-3.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -549,7 +567,7 @@
           "sku": "GX98WB-DEN-3",
           "price": 4490000,
           "costPrice": 3032400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/freeclip_2.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-2-4.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -560,7 +578,7 @@
           "sku": "GX98WB-DUONG-4",
           "price": 4490000,
           "costPrice": 3032400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/freeclip_2_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-huawei-freeclip-2/gallery-3-5.png",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -578,16 +596,16 @@
       "price": 2840000,
       "salePrice": 1790000,
       "costPrice": 1360400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4_1.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_321_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-thap-samsung-mx-t40-new.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0004_vn-giga-party-audio-mx-t40-mx-t4_5_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0003_vn-giga-party-audio-mx-t40-mx-t4_4_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0001_vn-giga-party-audio-mx-t40-mx-t4_2_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0002_vn-giga-party-audio-mx-t40-mx-t4_3_.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0000_vn-giga-party-audio-mx-t40-mx-t4_1_.jpg"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-0-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-1-18.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-2-19.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-3-20.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-4-21.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-5-22.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-6-23.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/gallery-7-24.jpg"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -613,7 +631,7 @@
           "sku": "2XHL75-DEN-0",
           "price": 2840000,
           "costPrice": 1360400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/_/0/_0005_vn-giga-party-audio-mx-t40-mx-t4_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-thap-samsung-mx-t40/main-16.jpg",
           "active": true,
           "options": {
             "color": "Đen"
@@ -631,22 +649,22 @@
       "price": 2180000,
       "salePrice": 1990000,
       "costPrice": 1512400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_5__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/main-25.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_10__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_15_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30-1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_13_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_12_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_11_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_14_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_9_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-0-26.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-1-27.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-2-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-3-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-4-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-5-31.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-6-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-7-33.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-8-34.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-9-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-10-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-11-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-12-38.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-13-39.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -672,7 +690,7 @@
           "sku": "FT87SY-DEN-0",
           "price": 2180000,
           "costPrice": 1512400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_5__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/main-25.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -683,7 +701,7 @@
           "sku": "FT87SY-NAU-1",
           "price": 2180000,
           "costPrice": 1512400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-0-26.png",
           "active": true,
           "options": {
             "color": "Nâu"
@@ -694,7 +712,7 @@
           "sku": "FT87SY-XAM-2",
           "price": 2180000,
           "costPrice": 1512400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-karaoke-xach-tay-acnos-s30_10__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/loa-karaoke-xach-tay-acnos-s30/gallery-1-27.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -712,22 +730,22 @@
       "price": 4990000,
       "salePrice": 4590000,
       "costPrice": 3488400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_black_caseopen-mid_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/main-40.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_green_caseopen1-mid_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_lavender_caseopen1-mid_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_greige_caseopen1-mid_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-clip-wf-lc900.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-clip-wf-lc900-_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-clip-wf-lc900-.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/h/thumbnail_5_1_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-clip-wf-lc900-_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-clip-wf-lc900-_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_black_caseclose_w_shadow-mid.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_black_caseopen2-mid.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_black_caseopen-mid.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_black_kv-mid.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_black_front_l-mid.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-0-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-1-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-2-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-3-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-4-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-5-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-6-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-7-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-8-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-9-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-10-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-11-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-12-53.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-13-54.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -754,7 +772,7 @@
           "sku": "MRKVGV-DEN-0",
           "price": 4990000,
           "costPrice": 3488400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_black_caseopen-mid_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/main-40.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -765,7 +783,7 @@
           "sku": "MRKVGV-HMINT-1",
           "price": 4990000,
           "costPrice": 3488400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_green_caseopen1-mid_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-0-41.png",
           "active": true,
           "options": {
             "color": "Xanh mint"
@@ -776,7 +794,7 @@
           "sku": "MRKVGV-TIM-2",
           "price": 4990000,
           "costPrice": 3488400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_lavender_caseopen1-mid_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-1-42.png",
           "active": true,
           "options": {
             "color": "Tím"
@@ -787,7 +805,7 @@
           "sku": "MRKVGV-KEM-3",
           "price": 4990000,
           "costPrice": 3488400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/i/linkbudsclip_greige_caseopen1-mid_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-clip-wf-lc900/gallery-2-43.png",
           "active": true,
           "options": {
             "color": "Kem"
@@ -805,22 +823,22 @@
       "price": 4990000,
       "salePrice": 4490000,
       "costPrice": 3412400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_11__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/main-55.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-chup-tai-havit-h603bt-pro-anc_3__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2-spa.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-chup-tai-havit-h603bt-pro-anc_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_9_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_11_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_12_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_13_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_6_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_4_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-0-56.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-1-57.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-2-58.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-3-59.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-4-60.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-5-61.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-6-62.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-7-63.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-8-64.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-9-65.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-10-66.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-11-67.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-12-68.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-13-69.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -853,7 +871,7 @@
           "sku": "RMKT7K-GOLD-0",
           "price": 4990000,
           "costPrice": 3412400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-tws-open-ear-oppo-enco-clip-2_11__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/main-55.png",
           "active": true,
           "options": {
             "color": "Gold"
@@ -864,7 +882,7 @@
           "sku": "RMKT7K-XAM-1",
           "price": 4990000,
           "costPrice": 3412400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-chup-tai-havit-h603bt-pro-anc_3__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-tws-open-ear-oppo-enco-clip-2/gallery-0-56.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -882,22 +900,22 @@
       "price": 6790000,
       "salePrice": 6190000,
       "costPrice": 4704400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_15__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/main-70.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_1__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_20_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/b/u/buds4_pro_1200x670_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_12_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_13_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_14_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_18_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_15_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_17_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_19_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_11_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_16_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-0-71.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-1-72.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-2-73.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-3-74.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-4-75.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-5-76.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-6-77.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-7-78.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-8-79.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-9-80.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-10-81.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-11-82.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-12-83.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-13-84.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -920,7 +938,7 @@
           "sku": "R89RE4-DEN-0",
           "price": 6790000,
           "costPrice": 4704400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_15__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/main-70.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -931,7 +949,7 @@
           "sku": "R89RE4-TRANG-1",
           "price": 6790000,
           "costPrice": 4704400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung_buds4_pro_1__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-samsung-galaxy-buds-4-pro/gallery-0-71.png",
           "active": true,
           "options": {
             "color": "Trắng"
@@ -949,22 +967,22 @@
       "price": 7990000,
       "salePrice": 7490000,
       "costPrice": 5692400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai_nghe_sony_kh_ng_d_y_ch_ng_n_wf-1000xm6.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/main-85.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai_nghe_sony_kh_ng_d_y_ch_ng_n_wf-1000xm6_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/f/r/frame_430.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_1_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_8__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_6__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_7__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_5__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_4__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_3__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_2__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-_1__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai-nghe-khong-day-sony-wf-1000xm6-.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai_nghe_sony_kh_ng_d_y_ch_ng_n_wf-1000xm6_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai_nghe_sony_kh_ng_d_y_ch_ng_n_wf-1000xm6_11_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-0-86.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-1-87.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-2-88.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-3-89.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-4-90.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-5-91.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-6-92.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-7-93.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-8-94.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-9-95.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-10-96.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-11-97.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-12-98.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-13-99.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -997,7 +1015,7 @@
           "sku": "NXJPB2-BAC-0",
           "price": 7990000,
           "costPrice": 5692400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai_nghe_sony_kh_ng_d_y_ch_ng_n_wf-1000xm6.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/main-85.png",
           "active": true,
           "options": {
             "color": "Bạc"
@@ -1008,7 +1026,7 @@
           "sku": "NXJPB2-DEN-1",
           "price": 7990000,
           "costPrice": 5692400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/a/tai_nghe_sony_kh_ng_d_y_ch_ng_n_wf-1000xm6_1_.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/tai-nghe-khong-day-sony-wf-1000xm6/gallery-0-86.png",
           "active": true,
           "options": {
             "color": "Đen"
@@ -1026,22 +1044,22 @@
       "price": 24990000,
       "salePrice": null,
       "costPrice": 18992400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-24_1.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/main-100.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-26_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-3.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9s-12gb-256gb-4.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-19.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-20.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-21.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-16.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-17.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-18.jpg"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-0-101.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-1-102.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-2-103.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-3-104.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-4-105.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-5-106.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-6-107.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-7-108.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-8-109.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-9-110.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-10-111.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-11-112.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-12-113.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-13-114.jpg"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1131,7 +1149,7 @@
           "sku": "JAXWEX-XAM-256GB",
           "price": 24990000,
           "costPrice": 18992400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-24_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/main-100.jpg",
           "active": true,
           "options": {
             "color": "Xám",
@@ -1142,7 +1160,7 @@
           "sku": "JAXWEX-NHAT-256GB",
           "price": 24990000,
           "costPrice": 18992400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-25_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-0-101.jpg",
           "active": true,
           "options": {
             "color": "Cam nhạt",
@@ -1153,7 +1171,7 @@
           "sku": "JAXWEX-TIM-256GB",
           "price": 24990000,
           "costPrice": 18992400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x9s-26_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9s/gallery-1-102.jpg",
           "active": true,
           "options": {
             "color": "Tím",
@@ -1171,22 +1189,22 @@
       "price": 49990000,
       "salePrice": 48990000,
       "costPrice": 37232400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8_1.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/main-115.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-nau-8_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-3.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-oppo-find-x9-ultra-4.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-3.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-4.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-5.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-6.jpg"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-0-116.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-1-117.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-2-118.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-3-119.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-4-120.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-5-121.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-6-122.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-7-123.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-8-124.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-9-125.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-10-126.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-11-127.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-12-128.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-13-129.jpg"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1275,7 +1293,7 @@
           "sku": "E2UBAN-CAM-512GB",
           "price": 49990000,
           "costPrice": 37232400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-cam-8_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/main-115.jpg",
           "active": true,
           "options": {
             "color": "Cam",
@@ -1287,7 +1305,7 @@
           "sku": "E2UBAN-NAU-512GB",
           "price": 49990000,
           "costPrice": 37232400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/i/dien-thoai-oppo-find-x9-ultra-nau-8_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-oppo-find-x9-ultra/gallery-0-116.jpg",
           "active": true,
           "options": {
             "color": "Nâu",
@@ -1306,22 +1324,22 @@
       "price": 20990000,
       "salePrice": 18990000,
       "costPrice": 14432400,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-2_1.jpg",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-130.jpg",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-2.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-3.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/l/slider-xiaomi-17t-5g-4.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-30.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-24.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-26.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-33.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-23.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-32.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-31.jpg"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-131.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-1-132.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-2-133.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-3-134.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-4-135.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-5-136.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-6-137.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-7-138.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-8-139.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-9-140.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-10-141.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-11-142.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-12-143.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-13-144.jpg"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -1385,7 +1403,7 @@
           "sku": "CBNSF2-DEN-512GB",
           "price": 20990000,
           "costPrice": 14432400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t-2_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-130.jpg",
           "active": true,
           "options": {
             "color": "Đen",
@@ -1397,7 +1415,7 @@
           "sku": "CBNSF2-TIM-512GB",
           "price": 20990000,
           "costPrice": 14432400,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-17t_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-131.jpg",
           "active": true,
           "options": {
             "color": "Tím",

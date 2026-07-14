@@ -120,7 +120,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "phone_iphone"
     },
     {
       "slug": "samsung-phone",
@@ -128,7 +129,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/a/samsung-galaxy-s24-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "xiaomi-phone",
@@ -136,7 +138,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/x/i/xiaomi-14-ultra-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "oppo-phone",
@@ -144,7 +147,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/oppo-find-x8-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "dien-thoai",
@@ -152,7 +156,8 @@
       "parentSlug": null,
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/i/p/iphone-15-menu-0001.png"
+      "imageUrl": "",
+      "icon": "smartphone"
     },
     {
       "slug": "tablet",
@@ -160,7 +165,8 @@
       "parentSlug": "dien-thoai",
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/tmp/catalog/product/t/_/t_i_xu_ng_9__3.png"
+      "imageUrl": "",
+      "icon": "tablet"
     },
     {
       "slug": "laptop",
@@ -168,7 +174,8 @@
       "parentSlug": null,
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-laptop.png"
+      "imageUrl": "",
+      "icon": "laptop_mac"
     },
     {
       "slug": "tai-nghe-bt",
@@ -176,7 +183,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "loa",
@@ -184,7 +192,8 @@
       "parentSlug": "tai-nghe",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/l/o/loa-samsung-menu-thumbnail-0001.png"
+      "imageUrl": "",
+      "icon": "speaker"
     },
     {
       "slug": "tai-nghe",
@@ -192,7 +201,8 @@
       "parentSlug": null,
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/wysiwyg/icon-am-thanh.png"
+      "imageUrl": "",
+      "icon": "headphones"
     },
     {
       "slug": "may-anh",
@@ -200,7 +210,8 @@
       "parentSlug": "dong-ho",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-camera.png"
+      "imageUrl": "",
+      "icon": "photo_camera"
     },
     {
       "slug": "dong-ho",
@@ -208,7 +219,8 @@
       "parentSlug": null,
       "sortOrder": 4,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/o/dong-ho.png"
+      "imageUrl": "",
+      "icon": "watch"
     },
     {
       "slug": "op-lung",
@@ -216,7 +228,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "shield"
     },
     {
       "slug": "sac-cap",
@@ -224,7 +237,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 2,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "bolt"
     },
     {
       "slug": "pin-du-phong",
@@ -232,7 +246,8 @@
       "parentSlug": "phu-kien",
       "sortOrder": 3,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "battery_charging_full"
     },
     {
       "slug": "phu-kien",
@@ -240,7 +255,8 @@
       "parentSlug": null,
       "sortOrder": 5,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-accessories.png"
+      "imageUrl": "",
+      "icon": "cable"
     },
     {
       "slug": "may-tinh-de-ban",
@@ -248,7 +264,8 @@
       "parentSlug": "man-hinh",
       "sortOrder": 1,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     },
     {
       "slug": "man-hinh",
@@ -256,7 +273,8 @@
       "parentSlug": null,
       "sortOrder": 6,
       "active": true,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/m/b/mb-monitor-pc.png"
+      "imageUrl": "",
+      "icon": "desktop_windows"
     }
   ],
   "categoryAttributes": [
@@ -409,7 +427,7 @@
     {
       "slug": "spigen",
       "name": "Spigen",
-      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Spigen-240x50.png",
+      "logoUrl": "",
       "description": "Spigen — phân phối chính hãng tại CellphoneS.",
       "active": true,
       "categorySlugs": [
@@ -419,7 +437,7 @@
     {
       "slug": "mipow",
       "name": "Mipow",
-      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/Mipow-240x50.png",
+      "logoUrl": "",
       "description": "Mipow — phân phối chính hãng tại CellphoneS.",
       "active": true,
       "categorySlugs": [
@@ -447,19 +465,19 @@
       "price": 650000,
       "salePrice": 455000,
       "costPrice": 345800,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/p/spigen-1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/main-1.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/p/spigen.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/title_iphone_61_thinfit_blk_01-768x768_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/title_iphone_61_thinfit_nvy_01-768x768_1.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2023-05-30t005550.808.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-14-spigen-thin-fit.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/title_iphone_61_thinfit_bge_01-768x768.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/e/detail_iphone_61_thinfit_bge_01-768x768.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/title_iphone_61_thinfit_nvy_01-768x768.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/e/detail_iphone_61_thinfit_nvy_01-768x768.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/title_iphone_61_thinfit_blk_01-768x768.jpg",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/d/e/detail_iphone_61_thinfit_blk_01-768x768.jpg"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-0-2.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-1-3.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-2-4.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-3-5.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-4-6.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-5-7.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-6-8.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-7-9.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-8-10.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-9-11.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-10-12.jpg"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -479,7 +497,7 @@
           "sku": "KR6E6I-BACHA-0",
           "price": 650000,
           "costPrice": 345800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/p/spigen-1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/main-1.png",
           "active": true,
           "options": {
             "color": "Xanh bạc hà"
@@ -490,7 +508,7 @@
           "sku": "KR6E6I-VANG-1",
           "price": 650000,
           "costPrice": 345800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/s/p/spigen.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-0-2.jpg",
           "active": true,
           "options": {
             "color": "Vàng"
@@ -501,7 +519,7 @@
           "sku": "KR6E6I-DEN-2",
           "price": 650000,
           "costPrice": 345800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/title_iphone_61_thinfit_blk_01-768x768_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-1-3.jpg",
           "active": true,
           "options": {
             "color": "Đen"
@@ -512,7 +530,7 @@
           "sku": "KR6E6I-DUONG-3",
           "price": 650000,
           "costPrice": 345800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/i/title_iphone_61_thinfit_nvy_01-768x768_1.jpg",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-2-4.jpg",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -523,7 +541,7 @@
           "sku": "KR6E6I-XAM-4",
           "price": 650000,
           "costPrice": 345800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2023-05-30t005550.808.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-14-spigen-thin-fit/gallery-3-5.png",
           "active": true,
           "options": {
             "color": "Xám"
@@ -541,13 +559,13 @@
       "price": 250000,
       "salePrice": 200000,
       "costPrice": 152000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-05-13t161016.172_1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/main-13.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-05-13t160950.482.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-05-13t161016.172.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_604_82__5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_604_83__5.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/r/group_604_84__2.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-0-14.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-1-15.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-2-16.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-3-17.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/gallery-4-18.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -567,7 +585,7 @@
           "sku": "F8DXB7-GSUOT-0",
           "price": 250000,
           "costPrice": 152000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/t/e/text_ng_n_-_2025-05-13t161016.172_1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-15-plus-14-plus-mipow-soft-transparent/main-13.png",
           "active": true,
           "options": {
             "color": "Trong suốt"
@@ -585,15 +603,15 @@
       "price": 1150000,
       "salePrice": 805000,
       "costPrice": 611800,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/main-19.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_45__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_47__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_50__1_1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_51__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_46__1_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_48__1_2.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/g/a/garmin_49_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-0-20.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-1-21.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-2-22.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-3-23.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-4-24.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-5-25.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/gallery-6-26.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -613,7 +631,7 @@
           "sku": "S7U1T5-TRANG-0",
           "price": 1150000,
           "costPrice": 611800,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-pro-max-spigen-crystal-hybrid-with-magsafe/main-19.png",
           "active": true,
           "options": {
             "color": "Trong suốt/Trắng"
@@ -631,14 +649,14 @@
       "price": 390000,
       "salePrice": 351000,
       "costPrice": 266760,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_3__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/main-27.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_4__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-iphone-16-plus-mipow-premium-slim-with-magsafe.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_3_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_5_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_2_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-0-28.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-1-29.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-2-30.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-3-31.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-4-32.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-5-33.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -657,7 +675,7 @@
           "sku": "QDUPAX-NNHAM-0",
           "price": 390000,
           "costPrice": 266760,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_3__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/main-27.png",
           "active": true,
           "options": {
             "color": "Đen nhám"
@@ -668,7 +686,7 @@
           "sku": "QDUPAX-GNHAM-1",
           "price": 390000,
           "costPrice": 266760,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe_4__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-premium-slim-with-magsafe/gallery-0-28.png",
           "active": true,
           "options": {
             "color": "Trắng/Nhám"
@@ -686,12 +704,12 @@
       "price": 250000,
       "salePrice": 225000,
       "costPrice": 171000,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot_2__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/main-34.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-iphone-16-plus-mipow-soft-transparent.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot_2_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot_4_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot_3_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-0-35.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-1-36.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-2-37.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/gallery-3-38.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -710,7 +728,7 @@
           "sku": "74LG0G-GSUOT-0",
           "price": 250000,
           "costPrice": 171000,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot_2__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-iphone-16-plus-mipow-soft-transparent-trong-suot/main-34.png",
           "active": true,
           "options": {
             "color": "Trong suốt"
@@ -728,22 +746,22 @@
       "price": 183000,
       "salePrice": 110000,
       "costPrice": 83600,
-      "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_6__1.png",
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/main-39.png",
       "images": [
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_11__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_17__1.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_17_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_16_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_12_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_13_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_14_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_11_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_10_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_7_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_8_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_9_.png",
-        "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_6_.png"
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-0-40.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-1-41.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-2-42.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-3-43.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-4-44.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-5-45.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-6-46.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-7-47.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-8-48.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-9-49.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-10-50.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-11-51.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-12-52.png",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-13-53.png"
       ],
       "status": "PUBLISHED",
       "active": true,
@@ -765,7 +783,7 @@
           "sku": "XPCXHT-DUONG-0",
           "price": 183000,
           "costPrice": 83600,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_6__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/main-39.png",
           "active": true,
           "options": {
             "color": "Xanh dương"
@@ -776,7 +794,7 @@
           "sku": "XPCXHT-ANHLA-1",
           "price": 183000,
           "costPrice": 83600,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_11__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-0-40.png",
           "active": true,
           "options": {
             "color": "Xanh lá"
@@ -787,7 +805,7 @@
           "sku": "XPCXHT-DEN-2",
           "price": 183000,
           "costPrice": 83600,
-          "imageUrl": "https://cdn2.cellphones.com.vn/x/media/catalog/product/o/p/op-lung-samsung-galaxy-a35-silicon_17__1.png",
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/op-lung-samsung-galaxy-a35-silicon/gallery-1-41.png",
           "active": true,
           "options": {
             "color": "Đen"

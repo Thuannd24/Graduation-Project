@@ -25,16 +25,21 @@ const DELAY_MS = 700;
 
 // ─── Danh mục & giới hạn sản phẩm ────────────────────────────────────────────
 // urls[] lets a category scrape multiple source pages (merged into one slug)
+// Bị bỏ qua ở mọi danh mục: hàng cũ / trưng bày / đã kích hoạt (không phải hàng mới cho catalog)
+const SECONDHAND_RE = /(^|-)cu(-|$)|da-kich-hoat|hang-trung-bay|tray-xuoc|xuoc-can/;
+// Dùng để loại phụ kiện/tablet/đồng hồ lẫn trong prefix thương hiệu điện thoại (vd "oppo-pad-", "samsung-galaxy-watch-")
+const NON_PHONE_RE = /-tab(-|$)|-watch|-buds|-ring(-|$)|-book(-|$)|-pad(-|$)|-band(-|$)|-box(-|$)|dan-bao-ve|op-lung|bao-da|tai-nghe|-sac-|cap-sac|-loa-/;
+
 const CATEGORIES = [
   // ── Điện thoại ──────────────────────────────────────────────────────────────
-  { url: "/mobile/apple.html",                slug: "iphone",          name: "iPhone",               parentSlug: "dien-thoai", sortOrder: 1, limit: 50,  urlPrefixes: ["dien-thoai-apple-"] },
-  { url: "/mobile/samsung.html",              slug: "samsung-phone",   name: "Samsung",              parentSlug: "dien-thoai", sortOrder: 2, limit: 150, urlPrefixes: ["dien-thoai-samsung-"] },
-  { url: "/mobile/xiaomi.html",               slug: "xiaomi-phone",    name: "Xiaomi",               parentSlug: "dien-thoai", sortOrder: 3, limit: 150, urlPrefixes: ["dien-thoai-xiaomi-","dien-thoai-poco-"] },
-  { url: "/mobile/oppo.html",                 slug: "oppo-phone",      name: "OPPO",                 parentSlug: "dien-thoai", sortOrder: 4, limit: 50,  urlPrefixes: ["dien-thoai-oppo-"] },
+  { url: "/mobile/apple.html",                slug: "iphone",          name: "iPhone",               parentSlug: "dien-thoai", sortOrder: 1, limit: 120, urlPrefixes: ["iphone-"] },
+  { url: "/mobile/samsung.html",              slug: "samsung-phone",   name: "Samsung",              parentSlug: "dien-thoai", sortOrder: 2, limit: 150, urlPrefixes: ["samsung-galaxy-"], excludePatterns: [NON_PHONE_RE] },
+  { url: "/mobile/xiaomi.html",               slug: "xiaomi-phone",    name: "Xiaomi",               parentSlug: "dien-thoai", sortOrder: 3, limit: 150, urlPrefixes: ["xiaomi-","redmi-","poco-"], excludePatterns: [NON_PHONE_RE] },
+  { url: "/mobile/oppo.html",                 slug: "oppo-phone",      name: "OPPO",                 parentSlug: "dien-thoai", sortOrder: 4, limit: 120, urlPrefixes: ["oppo-"], excludePatterns: [NON_PHONE_RE] },
   { url: "/mobile.html",                      slug: "dien-thoai",      name: "Điện thoại, Tablet",   sortOrder: 1,             limit: 150 },
-  { url: "/tablet.html",                      slug: "tablet",          name: "Máy tính bảng",        parentSlug: "dien-thoai", sortOrder: 5, limit: 50,  urlPrefixes: ["may-tinh-bang-"] },
+  { url: "/tablet.html",                      slug: "tablet",          name: "Máy tính bảng",        parentSlug: "dien-thoai", sortOrder: 5, limit: 120, urlPrefixes: ["ipad-","samsung-galaxy-tab-","xiaomi-pad-","xiaomi-mi-pad-","may-tinh-bang-"] },
   // ── Laptop ──────────────────────────────────────────────────────────────────
-  { url: "/laptop.html",                      slug: "laptop",          name: "Laptop",               sortOrder: 2,             limit: 150, urlPrefixes: ["laptop-","may-tinh-xach-tay-"] },
+  { url: "/laptop.html",                      slug: "laptop",          name: "Laptop",               sortOrder: 2,             limit: 200, urlPrefixes: ["laptop-","may-tinh-xach-tay-"] },
   // ── Âm thanh ────────────────────────────────────────────────────────────────
   { url: "/thiet-bi-am-thanh/tai-nghe.html",  slug: "tai-nghe-bt",     name: "Tai nghe",             parentSlug: "tai-nghe",   sortOrder: 1, limit: 50,  urlPrefixes: ["tai-nghe-"] },
   { url: "/thiet-bi-am-thanh/loa.html",       slug: "loa",             name: "Loa",                  parentSlug: "tai-nghe",   sortOrder: 2, limit: 50,  urlPrefixes: ["loa-"] },
@@ -49,12 +54,37 @@ const CATEGORIES = [
   { url: "/phu-kien/pin-du-phong.html",       slug: "pin-du-phong",    name: "Pin dự phòng",         parentSlug: "phu-kien",   sortOrder: 3, limit: 50,  urlPrefixes: ["pin-du-phong-","pin-sac-du-phong-"] },
   { url: "/phu-kien/bao-da-op-lung.html",     slug: "phu-kien",        name: "Phụ kiện",             sortOrder: 5,             limit: 50,  urlPrefixes: ["op-lung-","bao-da-"] },
   // ── PC, Màn hình ────────────────────────────────────────────────────────────
-  { url: "/may-tinh-de-ban.html",             slug: "may-tinh-de-ban", name: "PC, Máy tính để bàn",  parentSlug: "man-hinh",   sortOrder: 1, limit: 50,  urlPrefixes: ["may-tinh-de-ban-","pc-"] },
+  { url: "/may-tinh-de-ban.html",             slug: "may-tinh-de-ban", name: "PC, Máy tính để bàn",  parentSlug: "man-hinh",   sortOrder: 1, limit: 120, urlPrefixes: ["may-tinh-de-ban-","pc-"] },
   { urls: ["/man-hinh.html","/may-in-may-scan.html"],
                                               slug: "man-hinh",        name: "PC, Màn hình, Máy in", sortOrder: 6,             limit: 80,  urlPrefixes: ["man-hinh-","may-in-","may-scan-","monitor-"] },
   // ── Tivi ────────────────────────────────────────────────────────────────────
   { url: "/tivi.html",                        slug: "tivi",            name: "Tivi",                 sortOrder: 7,             limit: 50,  urlPrefixes: ["tivi-","smart-tivi-"] },
 ];
+
+// ─── Icon danh mục cấp cha (Material Symbols — đường nét đơn giản như sidebar cellphones.com.vn) ──
+// Category có icon ở đây sẽ không dùng imageUrl (ảnh chụp) — FE tự fallback sang icon font.
+const CATEGORY_ICONS = {
+  "dien-thoai": "smartphone",
+  "laptop": "laptop_mac",
+  "tai-nghe": "headphones",
+  "dong-ho": "watch",
+  "phu-kien": "cable",
+  "man-hinh": "desktop_windows",
+  "tivi": "tv",
+  // Danh mục con — cũng dùng icon (không dùng ảnh) vì URL ảnh đoán tạm lúc scrape hay bị 404/generic/sai
+  "iphone": "phone_iphone",
+  "samsung-phone": "smartphone",
+  "xiaomi-phone": "smartphone",
+  "oppo-phone": "smartphone",
+  "tablet": "tablet",
+  "tai-nghe-bt": "headphones",
+  "loa": "speaker",
+  "may-anh": "photo_camera",
+  "op-lung": "shield",
+  "sac-cap": "bolt",
+  "pin-du-phong": "battery_charging_full",
+  "may-tinh-de-ban": "desktop_windows",
+};
 
 // ─── Ảnh danh mục (icon thực từ cellphones.com.vn) ───────────────────────────
 const CDN_CAT = "https://cdn2.cellphones.com.vn/x";
@@ -111,7 +141,6 @@ const BRAND_LOGOS = {
   lg:          `${CDN_BRAND}/LG-240x50.png`,
   jbl:         `${CDN_BRAND}/JBL-240x50.png`,
   anker:       `${CDN_BRAND}/Anker-240x50.png`,
-  garmin:      `${CDN_BRAND}/Garmin-240x50.png`,
   baseus:      `${CDN_BRAND}/Baseus-240x50.png`,
   ugreen:      `${CDN_BRAND}/UGREEN-240x50.png`,
   energizer:   `${CDN_BRAND}/Energizer-240x50.png`,
@@ -161,18 +190,21 @@ const MANIFEST_ATTRIBUTES = [
       {name:"4GB"},{name:"6GB"},{name:"8GB"},{name:"12GB"},{name:"16GB"},{name:"32GB"},{name:"64GB"},
     ]),
   },
-  { code:"cpu",         name:"Vi xử lý",        valueType:"text" },
-  { code:"gpu",         name:"Card đồ họa",     valueType:"text" },
-  { code:"screen",      name:"Màn hình",        valueType:"text" },
+  { code:"cpu",         name:"Loại CPU",        valueType:"text" },
+  { code:"chipset",     name:"Chipset",         valueType:"text" },
+  { code:"npu",         name:"Chip AI",         valueType:"text" },
+  { code:"gpu",         name:"GPU",             valueType:"text" },
+  { code:"ram_type",    name:"Loại RAM",        valueType:"text" },
+  { code:"screen",      name:"Kích thước màn hình", valueType:"text" },
   { code:"battery",     name:"Pin",             valueType:"text" },
   { code:"camera",      name:"Camera sau",      valueType:"text" },
   { code:"camera_front",name:"Camera trước",    valueType:"text" },
-  { code:"os",          name:"Hệ điều hành",    valueType:"text" },
-  { code:"connectivity",name:"Kết nối",         valueType:"text" },
+  { code:"os",          name:"Hệ điều hành khi ra mắt", valueType:"text" },
+  { code:"connectivity",name:"Cổng giao tiếp",  valueType:"text" },
   { code:"weight",      name:"Trọng lượng",     valueType:"text" },
   { code:"refresh_rate",name:"Tần số quét",     valueType:"text" },
-  { code:"sim",         name:"SIM",             valueType:"text" },
-  { code:"nfc",         name:"NFC",             valueType:"text" },
+  { code:"sim",         name:"Thẻ SIM",         valueType:"text" },
+  { code:"nfc",         name:"Công nghệ NFC",   valueType:"text" },
   { code:"charging",    name:"Sạc",             valueType:"text" },
   { code:"material",    name:"Chất liệu",       valueType:"text" },
   { code:"dimensions",  name:"Kích thước",      valueType:"text" },
@@ -200,7 +232,12 @@ const CATEGORY_ATTRIBUTES = [
   { categorySlug:"laptop",       attributeCode:"storage", isVariant:true,  isRequired:true  },
   { categorySlug:"laptop",       attributeCode:"cpu",     isVariant:false, isRequired:true  },
   { categorySlug:"laptop",       attributeCode:"gpu",     isVariant:false, isRequired:false },
+  { categorySlug:"laptop",       attributeCode:"ram_type",isVariant:false, isRequired:false },
   { categorySlug:"laptop",       attributeCode:"screen",  isVariant:false, isRequired:false },
+  { categorySlug:"dien-thoai",   attributeCode:"chipset", isVariant:false, isRequired:false },
+  { categorySlug:"iphone",       attributeCode:"chipset", isVariant:false, isRequired:false },
+  { categorySlug:"samsung-phone",attributeCode:"chipset", isVariant:false, isRequired:false },
+  { categorySlug:"xiaomi-phone", attributeCode:"chipset", isVariant:false, isRequired:false },
   { categorySlug:"tablet",       attributeCode:"storage", isVariant:true,  isRequired:true  },
   { categorySlug:"tablet",       attributeCode:"color",   isVariant:true,  isRequired:true  },
   { categorySlug:"tablet",       attributeCode:"ram",     isVariant:false, isRequired:false },
@@ -260,34 +297,6 @@ const PRODUCT_PREFIXES = [
   "may-anh-","may-quay-","camera-hanh-trinh-","may-tinh-de-ban-","pc-","may-in-","may-scan-",
   "tivi-","smart-tivi-",
 ];
-
-function parseProductLinks(html, urlPrefixes = null) {
-  const $ = cheerio.load(html);
-  const links = new Set();
-  const prefixes = urlPrefixes || PRODUCT_PREFIXES;
-
-  function tryAdd(full) {
-    if (!full || !full.startsWith(BASE + "/") || !full.endsWith(".html")) return;
-    if (full.includes("?") || full.includes("#")) return;
-    const p = full.slice(BASE.length + 1);
-    if (p.includes("/")) return;
-    const slug = p.slice(0, -5);
-    if (prefixes.some(px => slug.startsWith(px))) links.add(full);
-  }
-
-  // 1. Standard <a href> links
-  $("a[href]").each((_, el) => {
-    const href = $(el).attr("href") || "";
-    tryAdd(href.startsWith("http") ? href : href.startsWith("/") ? BASE + href : null);
-  });
-
-  // 2. URLs embedded in JSON/script data (e.g. banner JSON in Next.js pages)
-  const urlRe = /https?:\/\/cellphones\.com\.vn\/([a-z0-9][a-z0-9-]+\.html)/g;
-  let m;
-  while ((m = urlRe.exec(html)) !== null) tryAdd(`${BASE}/${m[1]}`);
-
-  return [...links];
-}
 
 // ─── Parse product detail page ────────────────────────────────────────────────
 function parseProductDetail(html, productUrl, categorySlug) {
@@ -387,20 +396,26 @@ function parseProductDetail(html, productUrl, categorySlug) {
   // Map label chuẩn hóa → attribute code
   const SPEC_MAP = {
     "hệ điều hành": "os", "hệ điều hành khi ra mắt": "os", "os": "os",
-    "chip": "cpu", "chipset": "cpu", "cpu": "cpu", "vi xử lý": "cpu",
-    "bộ vi xử lý": "cpu", "loại cpu": "cpu",
+    // "Loại CPU" = mô tả CPU đầy đủ (dài) — "Chipset" = tên chip ngắn gọn — 2 attribute khác nhau,
+    // không được gộp chung kẻo giá trị dài của "Loại CPU" bị "Chipset" (đứng trước trong bảng) che mất
+    "loại cpu": "cpu", "cpu": "cpu", "vi xử lý": "cpu", "bộ vi xử lý": "cpu",
+    "chip": "chipset", "chipset": "chipset",
+    "chip ai": "npu", "npu": "npu",
     "ram": "ram", "dung lượng ram": "ram",
-    "bộ nhớ trong": "storage", "dung lượng": "storage", "dung lượng lưu trữ": "storage",
+    "loại ram": "ram_type",
+    "bộ nhớ trong": "storage", "dung lượng": "storage", "dung lượng lưu trữ": "storage", "ổ cứng": "storage",
     "màn hình": "screen", "kích thước màn hình": "screen", "công nghệ màn hình": "display_tech",
-    "độ phân giải": "resolution", "tần số quét": "refresh_rate", "tốc độ làm mới": "refresh_rate",
+    "tính năng màn hình": "display_tech",
+    "độ phân giải": "resolution", "độ phân giải màn hình": "resolution",
+    "tần số quét": "refresh_rate", "tốc độ làm mới": "refresh_rate",
     "camera sau": "camera", "camera chính": "camera", "độ phân giải camera sau": "camera",
     "camera trước": "camera_front", "camera selfie": "camera_front",
     "pin": "battery", "dung lượng pin": "battery", "công suất pin": "battery",
-    "cổng kết nối": "connectivity", "kết nối": "connectivity",
+    "cổng kết nối": "connectivity", "kết nối": "connectivity", "cổng giao tiếp": "connectivity",
     "nfc": "nfc", "công nghệ nfc": "nfc",
     "trọng lượng": "weight", "khối lượng": "weight",
-    "card đồ họa": "gpu", "gpu": "gpu", "card màn hình": "gpu",
-    "sim": "sim", "loại sim": "sim", "số sim": "sim",
+    "card đồ họa": "gpu", "gpu": "gpu", "card màn hình": "gpu", "loại card đồ họa": "gpu",
+    "sim": "sim", "loại sim": "sim", "số sim": "sim", "thẻ sim": "sim",
     "sạc": "charging", "công nghệ sạc": "charging", "sạc nhanh": "charging",
     "chất liệu": "material", "mặt lưng": "material",
     "kích thước": "dimensions", "kích thước (d x r x c)": "dimensions",
@@ -648,71 +663,96 @@ function parseProductDetail(html, productUrl, categorySlug) {
   };
 }
 
-// ─── Scrape 1 category ────────────────────────────────────────────────────────
-async function scrapeCategory(cat, limit, visitedUrls, brands) {
-  const products = [];
-  const usedSlugs = new Set();
-  const sourceUrls = cat.urls ? cat.urls : [cat.url];
-  console.log(`\n📂  ${cat.name}  (${sourceUrls.join(", ")})  — giới hạn ${limit} sp`);
+// ─── Sitemap: nguồn URL sản phẩm đầy đủ (thay cho phân trang ?p=N — không hoạt động) ──
+// cellphones.com.vn render danh sách sản phẩm phía client (JS), nên /category.html?p=2
+// trả về y hệt trang 1 (SSR chỉ render trang đầu). Sitemap XML là nguồn tĩnh, đầy đủ, đáng tin cậy.
+let _sitemapUrlsCache = null;
 
-  outer:
-  for (const catUrl of sourceUrls) {
-  for (let page = 1; page <= 10; page++) {
-    if (products.length >= limit) break outer;
-    const pageUrl = page === 1 ? `${BASE}${catUrl}` : `${BASE}${catUrl}?p=${page}`;
+async function fetchAllProductUrlsFromSitemap() {
+  if (_sitemapUrlsCache) return _sitemapUrlsCache;
+  console.log(`\n🗺️   Đang tải sitemap sản phẩm...`);
+  const idxXml = await fetchHtml(`${BASE}/sitemap/sitemap_index.xml?v=google`);
+  const sitemapFiles = [...idxXml.matchAll(/<loc>(https:\/\/cellphones\.com\.vn\/sitemap\/product-sitemap\d*\.xml)<\/loc>/g)]
+    .map(m => m[1]);
 
-    let html;
-    try { html = await fetchHtml(pageUrl); }
-    catch (e) { console.warn(`  ⚠️  ${pageUrl}: ${e.message}`); break; }
-
-    const links = parseProductLinks(html, cat.urlPrefixes || null).filter(u => !visitedUrls.has(u));
-    if (!links.length) { if (page > 1) break; continue; }
-    console.log(`  ${catUrl} trang ${page}: ${links.length} sản phẩm`);
-
-    for (const productUrl of links) {
-      if (products.length >= limit) break outer;
-      visitedUrls.add(productUrl);
-      await sleep(DELAY_MS);
-
-      let detail;
-      try {
-        const html2 = await fetchHtml(productUrl);
-        detail = parseProductDetail(html2, productUrl, cat.slug);
-      } catch (e) {
-        process.stdout.write(`  ❌ ${productUrl.split("/").pop()} — ${e.message}\n`);
-        continue;
+  const urls = new Set();
+  for (const sm of sitemapFiles) {
+    await sleep(300);
+    try {
+      const xml = await fetchHtml(sm);
+      for (const m of xml.matchAll(/<loc>(https:\/\/cellphones\.com\.vn\/[a-z0-9][a-z0-9-]+\.html)<\/loc>/g)) {
+        urls.add(m[1]);
       }
-      if (!detail || !detail.name) continue;
-
-      // Deduplicate slug
-      let finalSlug = detail.slug;
-      let n = 2;
-      while (usedSlugs.has(finalSlug)) finalSlug = `${detail.slug}-${n++}`;
-      usedSlugs.add(finalSlug);
-      detail.slug = finalSlug;
-
-      // Accumulate brands
-      if (detail.brandName && detail.brandSlug && !brands.has(detail.brandSlug)) {
-        brands.set(detail.brandSlug, {
-          slug: detail.brandSlug,
-          name: detail.brandName,
-          logoUrl: BRAND_LOGOS[detail.brandSlug] || `https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/${detail.brandName}-240x50.png`,
-          description: `${detail.brandName} — phân phối chính hãng tại CellphoneS.`,
-          active: true,
-          categorySlugs: [],
-        });
-      }
-      if (detail.brandSlug && brands.has(detail.brandSlug)) {
-        const b = brands.get(detail.brandSlug);
-        if (!b.categorySlugs.includes(cat.slug)) b.categorySlugs.push(cat.slug);
-      }
-      delete detail.brandName;
-
-      products.push(detail);
-      process.stdout.write(`  ✅ [${products.length}/${limit}] ${detail.name.slice(0, 55)}\n`);
+    } catch (e) {
+      console.warn(`  ⚠️  ${sm}: ${e.message}`);
     }
   }
-  } // end sourceUrls loop
+  console.log(`  ✅  ${urls.size} URL sản phẩm từ ${sitemapFiles.length} sitemap file`);
+  _sitemapUrlsCache = urls;
+  return urls;
+}
+
+// ─── Scrape 1 category ────────────────────────────────────────────────────────
+async function scrapeCategory(cat, limit, visitedUrls, brands, allProductUrls) {
+  const products = [];
+  const usedSlugs = new Set();
+  const prefixes = cat.urlPrefixes || PRODUCT_PREFIXES;
+
+  const excludePatterns = cat.excludePatterns || [];
+  const candidates = [...allProductUrls].filter(u => {
+    if (visitedUrls.has(u)) return false;
+    const slug = u.slice(BASE.length + 1, -5);
+    if (SECONDHAND_RE.test(slug)) return false;
+    if (excludePatterns.some(re => re.test(slug))) return false;
+    return prefixes.some(px => slug.startsWith(px));
+  });
+  console.log(`\n📂  ${cat.name}  — ${candidates.length} ứng viên từ sitemap, giới hạn ${limit} sp`);
+
+  for (const productUrl of candidates) {
+    if (products.length >= limit) break;
+    visitedUrls.add(productUrl);
+    await sleep(DELAY_MS);
+
+    let detail;
+    try {
+      const html2 = await fetchHtml(productUrl);
+      detail = parseProductDetail(html2, productUrl, cat.slug);
+    } catch (e) {
+      process.stdout.write(`  ❌ ${productUrl.split("/").pop()} — ${e.message}\n`);
+      continue;
+    }
+    if (!detail || !detail.name) continue;
+
+    // Deduplicate slug
+    let finalSlug = detail.slug;
+    let n = 2;
+    while (usedSlugs.has(finalSlug)) finalSlug = `${detail.slug}-${n++}`;
+    usedSlugs.add(finalSlug);
+    detail.slug = finalSlug;
+
+    // Accumulate brands
+    if (detail.brandName && detail.brandSlug && !brands.has(detail.brandSlug)) {
+      brands.set(detail.brandSlug, {
+        slug: detail.brandSlug,
+        name: detail.brandName,
+        // Chỉ dùng logo nếu có trong BRAND_LOGOS đã xác nhận tồn tại thật — không đoán URL theo brandName
+        // (đoán dễ sai chính tả/định dạng tên file thật trên site, gây 404 khi hiển thị). Để trống thì FE tự
+        // fallback sang icon/chữ (xem CategorySidebar.jsx: brand.logoUrl ? <img> : officialLogo ? <svg> : <span>{name}</span>).
+        logoUrl: BRAND_LOGOS[detail.brandSlug] || "",
+        description: `${detail.brandName} — phân phối chính hãng tại CellphoneS.`,
+        active: true,
+        categorySlugs: [],
+      });
+    }
+    if (detail.brandSlug && brands.has(detail.brandSlug)) {
+      const b = brands.get(detail.brandSlug);
+      if (!b.categorySlugs.includes(cat.slug)) b.categorySlugs.push(cat.slug);
+    }
+    delete detail.brandName;
+
+    products.push(detail);
+    process.stdout.write(`  ✅ [${products.length}/${limit}] ${detail.name.slice(0, 55)}\n`);
+  }
   return products;
 }
 
@@ -757,8 +797,11 @@ async function main() {
     slug: c.slug, name: c.name,
     parentSlug: c.parentSlug || null,
     sortOrder: c.sortOrder, active: true,
-    imageUrl: CAT_IMAGES[c.slug] || catImg(c.slug.replace(/-/g, ","), 200 + i),
+    icon: CATEGORY_ICONS[c.slug] || null,
+    imageUrl: CATEGORY_ICONS[c.slug] ? "" : (CAT_IMAGES[c.slug] || catImg(c.slug.replace(/-/g, ","), 200 + i)),
   }));
+
+  const sitemapUrls = await fetchAllProductUrlsFromSitemap();
 
   if (args.perCategory) {
     // ── Chế độ tách file riêng từng danh mục ──────────────────────────────────
@@ -771,7 +814,7 @@ async function main() {
 
     for (const cat of CATEGORIES) {
       const brands = new Map(globalBrands);
-      const products = await scrapeCategory(cat, cat.limit, globalVisited, brands);
+      const products = await scrapeCategory(cat, cat.limit, globalVisited, brands, sitemapUrls);
       // Merge brands back
       for (const [k, v] of brands) globalBrands.set(k, v);
 
@@ -797,7 +840,7 @@ async function main() {
     const limit = args.limit || cat.limit;
     console.log(`\n🕷️  Scraping "${cat.name}" — ${limit} sản phẩm → ${args.out}`);
     const brands = new Map();
-    const products = await scrapeCategory(cat, limit, new Set(), brands);
+    const products = await scrapeCategory(cat, limit, new Set(), brands, sitemapUrls);
     const manifest = buildManifest(products, brands, categoryDefs,
       `Scraped ${products.length} sản phẩm — danh mục "${cat.name}" từ cellphones.com.vn`);
     const outPath = path.resolve(__dirname, args.out);
@@ -817,7 +860,7 @@ async function main() {
     for (const cat of CATEGORIES) {
       if (allProducts.length >= limit) break;
       const catLimit = Math.min(cat.limit, limit - allProducts.length);
-      const products = await scrapeCategory(cat, catLimit, visited, brands);
+      const products = await scrapeCategory(cat, catLimit, visited, brands, sitemapUrls);
       allProducts.push(...products);
     }
 

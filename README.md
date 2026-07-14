@@ -1,140 +1,114 @@
-# TechStore - Hệ Thống Thương Mại Điện Tử Phân Tán (Microservices)
+# AuraTech — Hệ Thống Thương Mại Điện Tử Phân Tán (Microservices)
 
-TechStore là hệ thống thương mại điện tử kiến trúc Microservices hiệu năng cao, sử dụng giao tiếp gRPC và Event-Driven với Apache Kafka để đảm bảo tính nhất quán dữ liệu.
+Kiến trúc Microservices hiệu năng cao, giao tiếp qua **gRPC** và **Event-Driven Kafka**, đảm bảo tính nhất quán dữ liệu phân tán.
 
----
-
-## 🛠️ KIẾN TRÚC & CÔNG NGHỆ
-
-*   **Backend:** Spring Boot 3.x, Spring Cloud Gateway, Netflix Eureka, FastAPI.
-*   **Frontend:** ReactJS, Vite, Vanilla CSS.
-*   **Databases & Caches:** MariaDB, MongoDB, Redis.
-*   **Middlewares:** Apache Kafka, Elasticsearch, MinIO.
-*   **IAM:** Keycloak 24.x (OpenID Connect).
+**Stack:** Spring Boot 3.x · Spring Cloud Gateway · Netflix Eureka · FastAPI · ReactJS · Vite · MariaDB · MongoDB · Redis · Kafka · Elasticsearch · MinIO · Keycloak 24.x
 
 ---
 
-## 🚀 HƯỚNG DẪN CÀI ĐẶT NHANH
+## ⚙️ CẤU HÌNH CHUNG (thực hiện trước cả hai hướng)
 
-### Bước chung: Cấu hình biến môi trường (.env)
-
-1.  **Backend (.env):** Vào thư mục `BE/`, copy file `.env.example` thành `.env`:
-    ```bash
-    cd BE
-    cp .env.example .env
-    ```
-2.  **Frontend (.env):** Vào thư mục `FE/`, copy file `.env.example` thành `.env`:
-    ```bash
-    cd FE
-    cp .env.example .env
-    ```
-
----
-
-### HƯỚNG 1: CHẠY TOÀN BỘ BẰNG DOCKER (FULL DOCKER)
-*Phù hợp để demo nhanh toàn bộ hệ thống.*
-
-1.  **Build file JAR trên máy Host:**
-    ```bash
-    cd BE
-    mvn clean package -DskipTests
-    ```
-2.  **Khởi động các dịch vụ bằng Docker Compose:**
-    ```bash
-    docker-compose up -d --build
-    ```
-3.  **Khởi động Frontend:**
-    ```bash
-    cd ../FE
-    npm install
-    npm run dev
-    ```
-
----
-
-### HƯỚNG 2: CHẠY HYBRID (INFRA DOCKER + CODE INTELLIJ)
-*Phù hợp cho môi trường phát triển (Development) để debug dễ dàng.*
-
-1.  **Khởi động hạ tầng lõi trên Docker:**
-    ```bash
-    cd BE
-    docker-compose -f docker-compose-infra.yml up -d --build
-    ```
-2.  **Chạy các service nghiệp vụ trên IntelliJ:**
-    Mở dự án `BE` và chạy các class Spring Boot Application tương ứng:
-    *   `user-service` (Port `8085`)
-    *   `product-service` (Port `8089`)
-    *   `order-service` (Port `8082`)
-    *   `inventory-service` (Port `8093`)
-    *   `payment-service` (Port `8084`)
-    *   `notification-service` (Port `8086`)
-    *   `promotion-service` (Port `8087`)
-3.  **Khởi động Frontend:**
-    ```bash
-    cd ../FE
-   
-    
-    ```
-
----
-
-## 💡 CÁC LỆNH DOCKER & BUILD THƯỜNG DÙNG
-
-### 1. Khi bật máy tính (Khởi động lại hệ thống đã có)
-Nếu hệ thống đã được build từ trước, bạn chỉ cần khởi động lại container mà không cần build lại:
-*   **Chạy Full Docker:**
-    ```bash
-    cd BE
-    docker-compose start
-    ```
-*   **Chạy Hybrid (Chỉ chạy Infra):**
-    ```bash
-    cd BE
-    docker-compose -f docker-compose-infra.yml start
-    ```
-
-### 2. Khi cập nhật code của một Service cụ thể
-Ví dụ khi chỉnh sửa code trong `product-service`, để cập nhật lên Docker mà không cần rebuild lại toàn bộ dự án:
 ```bash
-# B1: Build lại file JAR của riêng service đó
-mvn clean package -pl product-service -am -DskipTests
-
-# B2: Recreate và restart riêng container đó
-docker-compose up -d --build product-service
+cp BE/.env.example BE/.env
+cp FE/.env.example FE/.env
 ```
 
-### 3. Xem Log của các Service nghiệp vụ
-```bash
-# Xem log thời gian thực
-docker-compose logs -f --tail=100 <service-name>
+---
 
-# Ví dụ:
-docker-compose logs -f --tail=100 product-service
-docker-compose logs -f --tail=100 api-gateway
+## 🖥️ BACKEND (BE)
+
+### Hướng 1 — Full Docker *(demo nhanh)*
+
+```bash
+cd BE
+mvn clean package -DskipTests      # build JAR trên host
+cd ..
+docker-compose up -d --build        # khởi động toàn bộ hệ thống
 ```
 
-### 4. Dừng toàn bộ hệ thống
-*   **Tạm dừng (Giữ nguyên trạng thái):**
-    ```bash
-    docker-compose stop
-    ```
-*   **Dừng hoàn toàn (Giải phóng tài nguyên):**
-    ```bash
-    docker-compose down
-    ```
+### Hướng 2 — Hybrid: Infra Docker + Service trên IntelliJ *(phát triển / debug)*
+
+```bash
+# 1. Build JAR cho Eureka + Gateway
+cd BE && mvn clean package -DskipTests
+
+# 2. Khởi động hạ tầng lõi (DB, Kafka, Redis, MinIO, Keycloak...)
+docker-compose -f docker-compose-infra.yml up -d --build
+```
+
+Sau đó chạy từng service trong IntelliJ (Run Spring Boot Application):
+
+| Service | Port |
+|---|---|
+| `user-service` | 8085 |
+| `product-service` | 8089 |
+| `order-service` | 8082 |
+| `inventory-service` | 8093 |
+| `payment-service` | 8084 |
+| `notification-service` | 8086 |
+| `promotion-service` | 8087 |
+
+> 💡 **IntelliJ Maven:** `Settings → Build → Maven → Runner → JRE → Java 21`, sau đó chạy `clean` → `package` từ tab Maven.
 
 ---
 
-## 📊 THÔNG TIN CỔNG DỊCH VỤ & QUẢN TRỊ
+## 🌐 FRONTEND (FE)
 
-| Dịch vụ / Công cụ | Port / URL | Tài khoản / Mật khẩu |
+```bash
+cd FE
+npm install
+npm run dev     # http://localhost:5173
+```
+
+---
+
+## 🔧 TOOLS — Khởi Tạo Dữ Liệu DB
+
+Sau khi hệ thống chạy, import ~1.100 sản phẩm (categories, brands, products, variants, ảnh R2, tồn kho) bằng công cụ tại `tools/catalog-import/`.
+
+> 📄 Hướng dẫn chi tiết: [`tools/catalog-import/README.md`](tools/catalog-import/README.md)
+
+```bash
+cd tools/catalog-import
+npm install
+cp .env.example .env     # điền ADMIN_TOKEN (xem bên dưới)
+
+npm run setup            # import toàn bộ catalog
+npm run seed-inventory   # set tồn kho mặc định = 10/variant
+```
+
+**Lấy `ADMIN_TOKEN`:** Đăng nhập admin → F12 → Application → Local Storage → copy `access_token`.
+> ⚠️ Token hết hạn sau **15 phút**. Nếu gặp lỗi `401` — lấy token mới, dán vào `.env`, chạy lại (an toàn, dữ liệu cũ sẽ được **update** thay vì tạo trùng).
+
+**Reset DB trước khi import lại (nếu cần):**
+```bash
+docker exec -i infra-mariadb mariadb -u root -proot ecommerce_product_db -e "
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE variant_option_values; TRUNCATE TABLE product_variants;
+TRUNCATE TABLE product_images; TRUNCATE TABLE product_tags;
+TRUNCATE TABLE product_attribute_values; TRUNCATE TABLE products;
+TRUNCATE TABLE brand_categories; TRUNCATE TABLE brands;
+TRUNCATE TABLE category_attributes; TRUNCATE TABLE categories; TRUNCATE TABLE attributes;
+SET FOREIGN_KEY_CHECKS=1;"
+
+docker exec -i infra-mariadb mariadb -u root -proot ecommerce_inventory_db -e "
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE inventories; TRUNCATE TABLE inventory_transactions;
+SET FOREIGN_KEY_CHECKS=1;"
+```
+
+---
+
+## 📊 CỔNG DỊCH VỤ & QUẢN TRỊ
+
+| Dịch vụ | URL / Port | Tài khoản |
 |---|---|---|
-| **Frontend** | http://localhost:5173 | Đăng ký trực tiếp hoặc qua Google OAuth |
-| **Eureka Dashboard** | http://localhost:8761 | - |
-| **API Gateway Entry** | http://localhost:8080 | - |
+| **Frontend** | http://localhost:5173 | Đăng ký trực tiếp / Google OAuth |
+| **API Gateway** | http://localhost:8080 | — |
+| **Eureka Dashboard** | http://localhost:8761 | — |
 | **Keycloak Admin** | http://localhost:8083 | `admin` / `admin` |
 | **MinIO Console** | http://localhost:9001 | `minio` / `12345678a@` |
-| **Kafka UI** | http://localhost:8090 | - |
-| **Redis Insight** | http://localhost:5540 | - |
+| **Kafka UI** | http://localhost:8090 | — |
+| **Redis Insight** | http://localhost:5540 | — |
 | **MariaDB** | localhost:3308 | `root` / `root` |
-| **MongoDB** | localhost:27017 | - |
+| **MongoDB** | localhost:27017 | — |
