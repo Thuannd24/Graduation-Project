@@ -10,6 +10,7 @@ export default function VisualSearchModal({ isOpen, onClose }) {
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState("");
+  const [error, setError] = useState("");
   const [cropBox, setCropBox] = useState({ x: 10, y: 10, width: 80, height: 80 }); // Percentage-based crop box
   const dragRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -36,6 +37,7 @@ export default function VisualSearchModal({ isOpen, onClose }) {
   };
 
   const loadImage = (file) => {
+    setError("");
     setImageFile(file);
     const reader = new FileReader();
     reader.onload = () => {
@@ -47,6 +49,7 @@ export default function VisualSearchModal({ isOpen, onClose }) {
   const handleSearch = async () => {
     if (!imageFile) return;
 
+    setError("");
     setLoading(true);
     try {
       // Step 1: Detect
@@ -61,15 +64,17 @@ export default function VisualSearchModal({ isOpen, onClose }) {
       setCurrentStep("Đang khớp vector trên FAISS Index (ANN Search)...");
       const results = await aiApi.searchByImage(imageFile);
 
-      // Save to sessionStorage for SearchPage to retrieve
+      // Save to sessionStorage for SearchPage to retrieve.
+      // Ưu tiên cropBox từ backend (YOLO); nếu YOLO tắt (null) thì dùng khung người dùng chọn.
       sessionStorage.setItem("visual_search_results", JSON.stringify(results.items));
       sessionStorage.setItem("visual_search_image", imageSrc || "");
-      sessionStorage.setItem("visual_search_crop", JSON.stringify(cropBox));
+      sessionStorage.setItem("visual_search_crop", JSON.stringify(results.cropBox ?? cropBox));
 
       onClose();
       navigate("/search?imageSearch=true");
     } catch (err) {
-      alert("Lỗi phân tích hình ảnh: " + err);
+      // Không điều hướng khi lỗi — giữ modal mở và hiện thông báo lỗi inline để người dùng thử lại.
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
       setCurrentStep("");
@@ -198,6 +203,16 @@ export default function VisualSearchModal({ isOpen, onClose }) {
                   </button>
                 </div>
               </div>
+
+              {/* Error State — hiện lỗi thật khi call AI thất bại (thay vì âm thầm trả mock) */}
+              {error && (
+                <div className="flex items-start gap-2 text-[11px] text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/30 p-3 rounded-lg border border-rose-200 dark:border-rose-900">
+                  <Icon name="error" className="text-rose-600 text-sm shrink-0 mt-0.5" />
+                  <span>
+                    <b className="font-black">Tìm kiếm hình ảnh thất bại.</b> {error}
+                  </span>
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -1,82 +1,91 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+
+from app.core.config import search_settings
 from app.services.text_search import text_search_service
+from app.services import catalog
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
 
+
 class HybridSearchService:
-    def __init__(self):
-        pass
+    """
+    Hybrid Search = BM25 (Elasticsearch, sparse) + Dense (e5-large, FAISS) fuse bằng
+    Reciprocal Rank Fusion (RRF). Công thức: score(d) = Σ 1/(k + rank_i(d)), k=60.
+    """
 
-    def reciprocal_rank_fusion(self, bm25_results: List[Dict[str, Any]], dense_results: List[Dict[str, Any]], k: int = 60) -> List[Dict[str, Any]]:
+    def reciprocal_rank_fusion(
+        self,
+        ranked_lists: Dict[str, List[int]],
+        k: int = 60,
+    ) -> List[Dict[str, Any]]:
         """
-        Reciprocal Rank Fusion (RRF) algorithm.
-        bm25_results and dense_results are lists of dicts containing at least 'id'.
+        ranked_lists: {source_name: [productId theo thứ hạng]}.
+        Trả list [{id, score, match_reason}] đã sắp giảm dần theo RRF score.
         """
-        logger.info("Fusing BM25 and Dense search results using RRF...")
-        rrf_scores = {}
-        
-        # Helper to compute and accumulate RRF scores
-        def accum_scores(results):
-            for rank, item in enumerate(results):
-                item_id = item['id']
-                score = 1.0 / (k + rank + 1)
-                if item_id in rrf_scores:
-                    rrf_scores[item_id]['rrf_score'] += score
-                    # Keep other metadata
-                    rrf_scores[item_id]['sources'].append(item.get('source', 'unknown'))
-                else:
-                    rrf_scores[item_id] = {
-                        'id': item_id,
-                        'name': item.get('name', 'Product'),
-                        'price': item.get('price', 0.0),
-                        'rrf_score': score,
-                        'sources': [item.get('source', 'unknown')]
-                    }
-
-        # Tag sources
-        for item in bm25_results:
-            item['source'] = 'bm25'
-        for item in dense_results:
-            item['source'] = 'dense'
-
-        accum_scores(bm25_results)
-        accum_scores(dense_results)
-
-        # Sort by RRF score descending
-        sorted_items = sorted(rrf_scores.values(), key=lambda x: x['rrf_score'], reverse=True)
-        
-        # Convert RRF scores back to a normalized-like score
-        for item in sorted_items:
-            item['score'] = float(item['rrf_score'])
-            item['match_reason'] = "+".join(item['sources'])
-            del item['rrf_score']
-            del item['sources']
-
-        return sorted_items
-
-    def search(self, query: str, top_k: int = 10, min_price: float = None, max_price: float = None) -> List[Dict[str, Any]]:
-        logger.info(f"Performing hybrid search for query: '{query}'")
-        
-        # 1. Get Dense/Semantic results
-        query_vector = text_search_service.encode_query(query)
-        dense_res = text_search_service.search_semantic(query_vector, top_k=top_k * 2)
-        
-        # 2. Get Sparse/BM25 results (mocked here, in production queries Elasticsearch)
-        bm25_res = [
-            {"id": f"prod_{i}", "name": f"Mock Keyword Product {i}", "price": 450000.0}
-            for i in range(5, 5 + top_k * 2)
+        scores: Dict[int, float] = {}
+        sources: Dict[int, List[str]] = {}
+        for source, ids in ranked_lists.items():
+            for rank, pid in enumerate(ids):
+                scores[pid] = scores.get(pid, 0.0) + 1.0 / (k + rank + 1)
+                sources.setdefault(pid, []).append(source)
+        fused = [
+            {"id": pid, "score": sc, "match_reason": "+".join(sorted(set(sources[pid])))}
+            for pid, sc in scores.items()
         ]
-        
-        # 3. Fuse results
-        fused = self.reciprocal_rank_fusion(bm25_res, dense_res)
-        
-        # Filter by price if provided
-        if min_price is not None:
-            fused = [x for x in fused if x['price'] >= min_price]
-        if max_price is not None:
-            fused = [x for x in fused if x['price'] <= max_price]
-            
-        return fused[:top_k]
+        fused.sort(key=lambda x: x["score"], reverse=True)
+        return fused
+
+    def search(
+        self,
+        query: str,
+        top_k: int = 10,
+        min_price: Optional[float] = None,
+        max_price: Optional[float] = None,
+    ) -> List[Dict[str, Any]]:
+        pool = top_k * 3
+
+        # 1) Dense (semantic) — e5-large + FAISS text index
+        dense = text_search_service.search(query, top_k=pool)
+        dense_ids = [d["id"] for d in dense]
+
+        # 2) Sparse (keyword) — BM25 trên Elasticsearch index `products`
+        bm25 = catalog.bm25_search(query, size=pool)
+        bm25_ids = [b["id"] for b in bm25]
+
+        if not dense_ids and not bm25_ids:
+            logger.warning("Cả dense lẫn BM25 đều rỗng (index/ES chưa sẵn sàng?).")
+            return []
+
+        # 3) Fuse bằng RRF
+        fused = self.reciprocal_rank_fusion(
+            {"dense": dense_ids, "bm25": bm25_ids},
+            k=search_settings.RRF_K,
+        )
+
+        # 4) Fetch metadata + lọc giá
+        meta = catalog.get_products_by_ids([f["id"] for f in fused])
+        results: List[Dict[str, Any]] = []
+        for f in fused:
+            m = meta.get(f["id"])
+            if not m:
+                continue
+            price = m["price"]
+            if min_price is not None and price < min_price:
+                continue
+            if max_price is not None and price > max_price:
+                continue
+            results.append({
+                "id": str(f["id"]),
+                "name": m["name"],
+                "price": price,
+                "image": m.get("image"),
+                "score": round(float(f["score"]), 6),
+                "match_reason": f["match_reason"],
+            })
+            if len(results) >= top_k:
+                break
+        return results
+
 
 hybrid_search_service = HybridSearchService()

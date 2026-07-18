@@ -116,10 +116,13 @@ async function request<T>(path: string, options: RequestInit & { requireAuth?: b
   const token = getAuthToken();
   const { requireAuth: _requireAuth, headers: customHeaders, ...requestOptions } = options;
   const url = `${API_BASE_URL}${path}`;
+  // FormData (upload ảnh) phải để trình duyệt tự set Content-Type kèm boundary multipart —
+  // KHÔNG ép application/json, nếu không server không parse được file.
+  const isFormData = typeof FormData !== "undefined" && requestOptions.body instanceof FormData;
 
   const response = await fetch(url, {
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(customHeaders as Record<string, string> || {})
     },
@@ -168,6 +171,12 @@ export const apiClient = {
     request<T>(path, {
       method: "POST",
       body: body === undefined ? undefined : JSON.stringify(body)
+    }),
+  postForm: <T>(path: string, formData: FormData, options?: { requireAuth?: boolean }) =>
+    request<T>(path, {
+      method: "POST",
+      body: formData,
+      requireAuth: options?.requireAuth
     }),
   postAuth: <T, B = unknown>(path: string, body?: B) =>
     request<T>(path, {

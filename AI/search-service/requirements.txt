@@ -6,4 +6,12 @@ elasticsearch>=8.0.0
 sentence-transformers>=2.2.2
 pillow>=9.5.0
 python-multipart>=0.0.6
+# Visual search: ANN index + object detection/crop
+faiss-cpu>=1.7.4
+ultralytics>=8.0.0
+# Catalog metadata (MariaDB via shared-common) + item-to-item (MongoDB)
+pymongo>=4.3.0
+# Tải ảnh sản phẩm từ CDN/cloud khi build index
+requests>=2.31.0
+tqdm>=4.66.0
 -e ../shared-common
