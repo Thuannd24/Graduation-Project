@@ -102,7 +102,7 @@ async function main() {
 
   let ok = 0;
   let failed = 0;
-  await mapPool(tasks, 3, async (t) => {
+  await mapPool(tasks, 1, async (t) => {
     const result = await setInventory(baseUrl, headers, t.productId, t.variantId, qty);
     if (result.ok) {
       ok++;

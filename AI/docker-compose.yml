@@ -16,6 +16,14 @@ services:
       - ELASTICSEARCH_HOST=http://infra-elasticsearch:9200
       - DB_HOST=infra-mariadb
       - DB_PORT=3306
+      - DB_NAME=ecommerce_product_db
+      - CATALOG_SOURCE=mariadb
+      - DATA_DIR=/data
+      - YOLO_ENABLED=false
+      - PRELOAD_MODELS=false
+    volumes:
+      # Giữ FAISS index + cache ảnh sau khi build (không mất khi restart container)
+      - search-index-data:/data
     networks:
       - ecommerce-network
 
@@ -74,5 +82,8 @@ services:
 
 networks:
   ecommerce-network:
-    name: be_ecommerce-network
+    name: ecommerce-network
     external: true
+
+volumes:
+  search-index-data:

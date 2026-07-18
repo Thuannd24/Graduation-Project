@@ -12,6 +12,14 @@ export interface AIProduct {
   matchScore?: number;
 }
 
+export interface CropBox {
+  // Vùng sản phẩm YOLO nhận diện — đơn vị % (0–100), khớp cách FE vẽ khung overlay.
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export interface ChatMessage {
   id: string;
   sender: "user" | "assistant" | "system";
@@ -92,28 +100,28 @@ export const aiApi = {
   },
 
   // 2. Visual Search (Tìm kiếm bằng hình ảnh)
-  searchByImage: async (imageFile: File): Promise<{ items: AIProduct[]; cropBox: { x1: number; y1: number; x2: number; y2: number } }> => {
+  // search-service trả { total, items, cropBox } — cropBox = {x,y,width,height} theo % (có thể null
+  // khi YOLO tắt). apiClient.postForm gửi multipart đúng chuẩn và đã bóc sẵn lớp .data.
+  searchByImage: async (imageFile: File): Promise<{ items: AIProduct[]; cropBox: CropBox | null }> => {
     try {
       const formData = new FormData();
       formData.append("image", imageFile);
-      const response = await apiClient.post("/search/image", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
-      return response.data;
+      const data = await apiClient.postForm<{ total: number; items: AIProduct[]; cropBox: CropBox | null }>(
+        "/public/search/image?top_k=50",
+        formData
+      );
+      // total=0 (không tìm thấy sản phẩm khớp) là kết quả HỢP LỆ — trả mảng rỗng để hiện empty state,
+      // KHÔNG fallback mock. Chỉ khi call thật lỗi (service chết/timeout/500) mới ném lỗi ở catch bên dưới.
+      return { items: data.items ?? [], cropBox: data.cropBox ?? null };
     } catch (err) {
-      console.warn("Visual Search API not ready. Simulating image retrieval.", err);
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            items: [
-              { ...MOCK_PRODUCTS[0], matchScore: 96.8 },
-              { ...MOCK_PRODUCTS[4], matchScore: 84.2 },
-              { ...MOCK_PRODUCTS[2], matchScore: 61.5 }
-            ],
-            cropBox: { x1: 50, y1: 50, x2: 450, y2: 450 } // Simulated crop rectangle
-          });
-        }, 1200);
-      });
+      // Không nuốt lỗi thành data giả: mock che mất việc AI service chết/timeout, khiến UI trông
+      // như đang chạy nhưng thực ra là dữ liệu ảo. Ném lỗi để tầng UI báo cho người dùng biết.
+      console.error("Visual Search API error:", err);
+      throw new Error(
+        err instanceof Error && err.message
+          ? err.message
+          : "Không thể kết nối dịch vụ tìm kiếm hình ảnh. Vui lòng thử lại sau."
+      );
     }
   },
 

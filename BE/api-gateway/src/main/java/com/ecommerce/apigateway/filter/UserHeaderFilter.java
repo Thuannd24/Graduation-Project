@@ -1,6 +1,5 @@
 package com.ecommerce.apigateway.filter;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
@@ -17,7 +16,9 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Đọc JWT từ Security Context sau khi đã xác thực,
  * trích xuất thông tin User và inject vào HTTP Headers
@@ -124,9 +125,9 @@ public class UserHeaderFilter implements WebFilter {
                             .then();
                 })
                 .onErrorResume(e -> {
-                    log.warn("Auto-provision thất bại cho user {}: {}", userId, e.getMessage());
-                    return Mono.empty();
-                });
+                        System.out.println("Auto-provision thất bại: " + e.getMessage());
+                return Mono.empty();
+});
     }
 
     private String encodeFullName(String fullName) {
