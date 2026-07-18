@@ -47,6 +47,8 @@ public interface UserService {
 
     InternalUserProfileResponse getInternalProfileByKeycloakId(String keycloakUserId);
 
+    InternalUserProfileResponse getInternalProfileById(Long userId);
+
     /**
      * Lấy danh sách toàn bộ users có phân trang (dành cho Admin/Staff).
      */

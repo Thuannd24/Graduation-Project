@@ -10,6 +10,7 @@ import com.ecommerce.promotionservice.service.VoucherIssuanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -30,10 +31,17 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
     private final CampaignBudgetService budgetService;
 
     @Override
-    @Transactional
+    // REQUIRES_NEW: isolates voucher issuance so a budget failure doesn't poison the shared
+    // Camunda job transaction (which would otherwise fail unrelated steps in the same process).
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public IssueVoucherResult issuePercent(Long userId, Long campaignId,
                                            BigDecimal discountPercent, BigDecimal maxDiscountAmount, int expireDays,
-                                           List<Long> restrictedCategoryIds, List<Long> restrictedProductIds) {
+                                           List<Long> restrictedCategoryIds, List<Long> restrictedProductIds,
+                                           String idempotencyKey) {
+        IssueVoucherResult existing = findExisting(idempotencyKey);
+        if (existing != null) {
+            return existing;
+        }
         validateUserId(userId);
         validateExpireDays(expireDays);
         if (discountPercent == null || discountPercent.compareTo(BigDecimal.ZERO) <= 0
@@ -54,6 +62,7 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 .expiresAt(LocalDateTime.now().plusDays(expireDays))
                 .restrictedCategoryIds(toCsv(restrictedCategoryIds))
                 .restrictedProductIds(toCsv(restrictedProductIds))
+                .idempotencyKey(idempotencyKey)
                 .build();
 
         voucher = voucherRepository.save(voucher);
@@ -64,10 +73,17 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
     }
 
     @Override
-    @Transactional
+    // REQUIRES_NEW: isolates voucher issuance so a budget failure doesn't poison the shared
+    // Camunda job transaction (which would otherwise fail unrelated steps in the same process).
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public IssueVoucherResult issueFixed(Long userId, Long campaignId,
                                          BigDecimal discountAmount, BigDecimal minOrderValue, int expireDays,
-                                         List<Long> restrictedCategoryIds, List<Long> restrictedProductIds) {
+                                         List<Long> restrictedCategoryIds, List<Long> restrictedProductIds,
+                                         String idempotencyKey) {
+        IssueVoucherResult existing = findExisting(idempotencyKey);
+        if (existing != null) {
+            return existing;
+        }
         validateUserId(userId);
         validateExpireDays(expireDays);
         if (discountAmount == null || discountAmount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -85,6 +101,7 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 .expiresAt(LocalDateTime.now().plusDays(expireDays))
                 .restrictedCategoryIds(toCsv(restrictedCategoryIds))
                 .restrictedProductIds(toCsv(restrictedProductIds))
+                .idempotencyKey(idempotencyKey)
                 .build();
 
         voucher = voucherRepository.save(voucher);
@@ -95,10 +112,17 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
     }
 
     @Override
-    @Transactional
+    // REQUIRES_NEW: isolates voucher issuance so a budget failure doesn't poison the shared
+    // Camunda job transaction (which would otherwise fail unrelated steps in the same process).
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public IssueVoucherResult issueFreeship(Long userId, Long campaignId,
                                             BigDecimal maxShippingDiscount, int expireDays,
-                                            List<Long> restrictedCategoryIds, List<Long> restrictedProductIds) {
+                                            List<Long> restrictedCategoryIds, List<Long> restrictedProductIds,
+                                            String idempotencyKey) {
+        IssueVoucherResult existing = findExisting(idempotencyKey);
+        if (existing != null) {
+            return existing;
+        }
         validateUserId(userId);
         validateExpireDays(expireDays);
         if (maxShippingDiscount == null || maxShippingDiscount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -115,6 +139,7 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 .expiresAt(LocalDateTime.now().plusDays(expireDays))
                 .restrictedCategoryIds(toCsv(restrictedCategoryIds))
                 .restrictedProductIds(toCsv(restrictedProductIds))
+                .idempotencyKey(idempotencyKey)
                 .build();
 
         voucher = voucherRepository.save(voucher);
@@ -122,6 +147,19 @@ public class VoucherIssuanceServiceImpl implements VoucherIssuanceService {
                 voucher.getCode(), userId, campaignId, maxShippingDiscount);
 
         return toResult(voucher);
+    }
+
+    private IssueVoucherResult findExisting(String idempotencyKey) {
+        if (idempotencyKey == null || idempotencyKey.isBlank()) {
+            return null;
+        }
+        return voucherRepository.findByIdempotencyKey(idempotencyKey)
+                .map(v -> {
+                    log.info("Voucher issuance for key {} already done (voucher {}) - skipping duplicate issue on retry.",
+                            idempotencyKey, v.getCode());
+                    return toResult(v);
+                })
+                .orElse(null);
     }
 
     private String toCsv(List<Long> ids) {

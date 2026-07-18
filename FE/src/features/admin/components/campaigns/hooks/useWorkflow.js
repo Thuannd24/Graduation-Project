@@ -23,16 +23,13 @@ export default function useWorkflow(showToast) {
     [nodes, selected]
   );
 
-  const insertNodeIntoEdge = useCallback((edgeId, type, forcedId) => {
+  const applyInsert = useCallback((type, buildEdges) => {
     const meta = NODE_TYPES[type];
     if (!meta || meta.cat === "trigger") {
       showToast("Không thể chèn Trigger vào giữa sơ đồ", "error");
       return;
     }
-    const edgeIdx = edges.findIndex(e => e.id === edgeId);
-    if (edgeIdx === -1) return;
-    const target = edges[edgeIdx];
-    const id = forcedId || ("n_" + Date.now() + "_" + nextCounter());
+    const id = "n_" + Date.now() + "_" + nextCounter();
     const properties = clone(meta.def || {});
 
     setNodes(prev => {
@@ -42,38 +39,7 @@ export default function useWorkflow(showToast) {
     });
 
     setEdges(prev => {
-      const next = [...prev];
-      next.splice(edgeIdx, 1);
-      if (meta.cat === "condition") {
-        const ifProps = createDefaultBranchProps(type);
-        const downstream = target.target;
-        next.push({
-          id: "edge_" + target.source + "_to_" + id,
-          source: target.source, target: id,
-          isDefault: target.isDefault, properties: clone(target.properties || {})
-        });
-        next.push({
-          id: "edge_" + id + "_to_end_default",
-          source: id, target: "end",
-          isDefault: true, properties: {}
-        });
-        next.push({
-          id: "edge_" + id + "_to_" + downstream + "_if",
-          source: id, target: downstream,
-          isDefault: false, properties: clone(ifProps)
-        });
-      } else {
-        next.push({
-          id: "edge_" + target.source + "_to_" + id,
-          source: target.source, target: id,
-          isDefault: target.isDefault, properties: clone(target.properties || {})
-        });
-        next.push({
-          id: "edge_" + id + "_to_" + target.target,
-          source: id, target: target.target,
-          isDefault: false, properties: {}
-        });
-      }
+      const next = buildEdges(prev, meta, id);
       const endNode = { id: "end", name: "Kết thúc", type: "End_Event", properties: {} };
       const draftNodes = [...nodes.filter(n => n.id !== "end"), { id, name: meta.name, type, properties }, endNode];
       return ensureConditionBranches(draftNodes, dedupeEdges(next));
@@ -82,7 +48,55 @@ export default function useWorkflow(showToast) {
     setSelected(id);
     setInsertEdgeId(null);
     showToast("Đã chèn khối: " + meta.name, "success");
-  }, [edges, nodes, showToast]);
+  }, [nodes, showToast]);
+
+  const insertNodeIntoEdge = useCallback((edgeId, type) => {
+    const edgeIdx = edges.findIndex(e => e.id === edgeId);
+    if (edgeIdx === -1) return;
+    const target = edges[edgeIdx];
+
+    applyInsert(type, (prev, meta, id) => {
+      const next = [...prev];
+      next.splice(edgeIdx, 1);
+      if (meta.cat === "condition") {
+        const ifProps = createDefaultBranchProps(type);
+        const downstream = target.target;
+        next.push(
+          { id: "edge_" + target.source + "_to_" + id, source: target.source, target: id, isDefault: target.isDefault, properties: clone(target.properties || {}) },
+          { id: "edge_" + id + "_to_" + downstream + "_default", source: id, target: downstream, isDefault: true, properties: {} },
+          { id: "edge_" + id + "_to_" + downstream + "_if", source: id, target: downstream, isDefault: false, properties: clone(ifProps) }
+        );
+      } else {
+        next.push(
+          { id: "edge_" + target.source + "_to_" + id, source: target.source, target: id, isDefault: target.isDefault, properties: clone(target.properties || {}) },
+          { id: "edge_" + id + "_to_" + target.target, source: id, target: target.target, isDefault: false, properties: {} }
+        );
+      }
+      return next;
+    });
+  }, [edges, applyInsert]);
+
+  // Relinks EVERY real edge in `edgeIds` (resolved by flowLayout.js's collectRealExitEdges) to
+  // the new node - covers a condition's shared merge "+" where multiple branches reconverge.
+  const insertNodeAfterMerge = useCallback((edgeIds, downstreamId, type) => {
+    if (!edgeIds?.length) return;
+    const matchedIds = new Set(edgeIds);
+    if (!edges.some(e => matchedIds.has(e.id))) return;
+
+    applyInsert(type, (prev, meta, id) => {
+      let next = prev.map(e => matchedIds.has(e.id) ? { ...e, target: id } : e);
+      if (meta.cat === "condition") {
+        const ifProps = createDefaultBranchProps(type);
+        next.push(
+          { id: "edge_" + id + "_to_" + downstreamId + "_default", source: id, target: downstreamId, isDefault: true, properties: {} },
+          { id: "edge_" + id + "_to_" + downstreamId + "_if", source: id, target: downstreamId, isDefault: false, properties: clone(ifProps) }
+        );
+      } else {
+        next.push({ id: "edge_" + id + "_to_" + downstreamId, source: id, target: downstreamId, isDefault: false, properties: {} });
+      }
+      return next;
+    });
+  }, [edges, applyInsert]);
 
   const addNodeAtEnd = useCallback(type => {
     const meta = NODE_TYPES[type];
@@ -249,6 +263,7 @@ export default function useWorkflow(showToast) {
     // operations
     addNodeAtEnd,
     insertNodeIntoEdge,
+    insertNodeAfterMerge,
     deleteNode,
     addBranch,
     deleteBranch,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import Icon from "../../../components/common/Icon.jsx";
+import Pagination from "../../../components/common/Pagination.jsx";
 import { productApi } from "../../../services/productApi.ts";
 
 export default function CategoriesTab({ onNavigateToAddProduct }) {
@@ -69,7 +70,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
       setLoading(true);
       const [catsTree, prodsList, attrsList] = await Promise.all([
         productApi.listCategories(),
-        productApi.listProducts(),
+        productApi.listAllProducts(),
         productApi.listAttributes()
       ]);
 
@@ -339,9 +340,25 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
     }
   };
 
+  // Danh mục cha gộp cả sản phẩm ở danh mục con (vd "Điện thoại, Tablet" gồm cả iPhone/Samsung/Xiaomi...)
+  const categoryDescendantIds = useMemo(() => {
+    const map = new Map();
+    function collect(node) {
+      const ids = [Number(node.id)];
+      if (Array.isArray(node.children)) {
+        node.children.forEach(child => ids.push(...collect(child)));
+      }
+      map.set(Number(node.id), new Set(ids));
+      return ids;
+    }
+    categories.forEach(root => collect(root));
+    return map;
+  }, [categories]);
+
   // Filter Products for Tab 2
   const filteredProducts = products.filter(p => {
-    const matchesCategory = selectedCategoryCard === "all" || Number(p.categoryId) === Number(selectedCategoryCard);
+    const matchesCategory = selectedCategoryCard === "all" ||
+      categoryDescendantIds.get(Number(selectedCategoryCard))?.has(Number(p.categoryId));
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
@@ -831,7 +848,8 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
               {/* Cards from database */}
               {categories.map((cat) => {
                 const isSelected = String(selectedCategoryCard) === String(cat.id);
-                const count = products.filter(p => p.categoryId === cat.id).length;
+                const descendantIds = categoryDescendantIds.get(Number(cat.id));
+                const count = products.filter(p => descendantIds?.has(Number(p.categoryId))).length;
                 return (
                   <div
                     key={cat.id}
@@ -945,35 +963,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
 
             {/* Phân trang */}
             <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-white">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors"
-              >
-                ← Trước
-              </button>
-              <div className="flex gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                      currentPage === page
-                        ? "bg-emerald-600 text-white shadow-sm"
-                        : "border border-slate-200 text-slate-500 hover:bg-slate-50"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors"
-              >
-                Sau →
-              </button>
+              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
             </div>
           </div>
         </div>

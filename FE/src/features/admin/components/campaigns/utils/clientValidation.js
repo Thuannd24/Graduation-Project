@@ -64,13 +64,6 @@ function isNonEmptyArray(v) {
   return Array.isArray(v) && v.length > 0;
 }
 
-function isNonEmptyStringOrArray(props, field) {
-  const v = props?.[field];
-  if (v == null) return false;
-  if (Array.isArray(v)) return v.length > 0;
-  return String(v).trim() !== "";
-}
-
 // BUG FIX: a list containing only blank strings (e.g. [""], exactly what an unselected
 // Location/ContainsCategory/ContainsProduct dropdown saves) used to pass the old
 // `isNonEmptyStringOrArray` check because `.length > 0` is true for a 1-element array. Every
@@ -165,35 +158,14 @@ function validateCondition(node, inDeg, outs, props, errors) {
   }
 
   switch (node.type) {
-    case "Condition_MemberRank":
-      if (!isNonEmptyStringOrArray(props, "allowedRanks")) {
-        errors.push(err(node.id, "missing_parameter", "allowedRanks",
-          `Condition "${node.name}": allowedRanks không được trống.`));
-      }
-      break;
+    // Only daysLookback is required - the rest is per-branch (see ConditionFields.jsx).
     case "Condition_TotalSpending":
-      if (!isNumber(props.minSpendingAmount)) {
-        errors.push(err(node.id, "missing_parameter", "minSpendingAmount",
-          `Condition "${node.name}": minSpendingAmount là bắt buộc.`));
-      }
       if (!isNumber(props.daysLookback)) {
         errors.push(err(node.id, "missing_parameter", "daysLookback",
           `Condition "${node.name}": daysLookback là bắt buộc.`));
       }
       break;
-    case "Condition_Location":
-      if (!isNonEmptyStringOrArray(props, "targetProvinces")) {
-        errors.push(err(node.id, "missing_parameter", "targetProvinces",
-          `Condition "${node.name}": targetProvinces không được trống.`));
-      }
-      break;
-    case "Condition_ContainsCategory":
-    case "Condition_ContainsProduct":
-      if (!isNonEmptyStringOrArray(props, "targetIds")) {
-        errors.push(err(node.id, "missing_parameter", "targetIds",
-          `Condition "${node.name}": targetIds không được trống.`));
-      }
-      break;
+    // targetIds is optional - empty means "no redemption restriction", a valid state.
     default:
       break;
   }

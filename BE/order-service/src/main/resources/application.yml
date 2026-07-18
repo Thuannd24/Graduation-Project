@@ -47,9 +47,6 @@ eureka:
 app:
   internal:
     api-key: ${INTERNAL_API_KEY:dev-internal-api-key}
-  warranty:
-    otp:
-      expose-in-response: ${WARRANTY_OTP_EXPOSE:true}
   shipping:
     webhook-secret: ${SHIPPING_WEBHOOK_SECRET:dev-shipping-webhook-secret}
 

@@ -19,6 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
+    Page<User> findByActiveTrue(Pageable pageable);
+
     // ──────────────────────────────────────────────────────────────────────────
     // Admin search/filter
     // ──────────────────────────────────────────────────────────────────────────

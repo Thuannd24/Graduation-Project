@@ -181,6 +181,33 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
                 "EMAIL"
         );
         seedOrUpdate(
+                "vip_membership_promo_template",
+                "Email mời dùng thử gói thành viên VIP",
+                "🌟 Tặng bạn gói thành viên AuraTech VIP — MIỄN PHÍ 14 ngày!",
+                emailShell(
+                        "#f59e0b",
+                        "🌟",
+                        "Trải nghiệm AuraTech VIP miễn phí 14 ngày",
+                        """
+                        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#334155;">
+                          Xin chào {{customerName}},
+                        </p>
+                        <p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#334155;">
+                          AuraTech vừa gửi tặng bạn gói thành viên <strong style="color:#d97706;">AuraTech VIP</strong> hoàn toàn
+                          <strong>MIỄN PHÍ trong 14 ngày</strong>. Đặc quyền nổi bật nhất: hoàn <strong>{{cashbackPercent}}% điểm thưởng</strong>
+                          cho tất cả đơn hàng, không giới hạn danh mục sản phẩm.
+                        </p>
+                        """
+                        + featureList(
+                                "🛒", "Hoàn điểm mọi đơn hàng", "Áp dụng cho tất cả danh mục sản phẩm, không chỉ mặt hàng quen thuộc",
+                                "⚡", "Ưu tiên xử lý đơn", "Đơn hàng VIP được ưu tiên đóng gói và giao nhanh hơn",
+                                "🎁", "Ưu đãi độc quyền", "Nhận voucher và deal riêng dành cho thành viên VIP"
+                        )
+                        + ctaButton("Kích hoạt VIP ngay", frontendUrl + "/vip")
+                ),
+                "EMAIL"
+        );
+        seedOrUpdate(
                 "payment_failed_template",
                 "Email thông báo thanh toán thất bại",
                 "⚠️ Thanh toán thất bại — Đơn #{{orderId}}",
@@ -223,27 +250,27 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
                   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                   <title>%s</title>
                 </head>
-                <body style="margin:0;padding:0;background-color:#f1f5f9;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-                  <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9;padding:32px 16px;">
+                <body style="margin:0;padding:0;background-color:#eef2f7;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                  <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background-color:#eef2f7;padding:40px 16px;">
                     <tr>
                       <td align="center">
                         <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%%;">
                           %s
                           <tr>
-                            <td style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(15,23,42,0.08);">
+                            <td style="background-color:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(15,23,42,0.10);border:1px solid #f1f5f9;">
                               <table role="presentation" width="100%%" cellpadding="0" cellspacing="0">
                                 <tr>
-                                  <td style="background-color:%s;height:4px;font-size:0;line-height:0;">&nbsp;</td>
+                                  <td style="background:linear-gradient(90deg,%s 0%%,%s 100%%);height:5px;font-size:0;line-height:0;">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                  <td style="padding:36px 40px 32px;">
+                                  <td style="padding:40px 40px 36px;">
                                     <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
                                       <tr>
-                                        <td style="width:52px;height:52px;background-color:%s;border-radius:14px;text-align:center;vertical-align:middle;">
-                                          <span style="font-size:26px;line-height:52px;">%s</span>
+                                        <td style="width:56px;height:56px;background:linear-gradient(135deg,%s 0%%,%s 100%%);border-radius:16px;text-align:center;vertical-align:middle;box-shadow:0 4px 14px %s55;">
+                                          <span style="font-size:28px;line-height:56px;">%s</span>
                                         </td>
-                                        <td style="padding-left:16px;vertical-align:middle;">
-                                          <h1 style="margin:0;font-size:22px;font-weight:800;color:#0f172a;line-height:1.3;">%s</h1>
+                                        <td style="padding-left:18px;vertical-align:middle;">
+                                          <h1 style="margin:0;font-size:23px;font-weight:800;color:#0f172a;line-height:1.35;letter-spacing:-0.3px;">%s</h1>
                                         </td>
                                       </tr>
                                     </table>
@@ -260,21 +287,25 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
                   </table>
                 </body>
                 </html>
-                """.formatted(brandName, brandHeader(), accentColor, accentColor + "18", emoji, heading, bodyContent, brandFooter());
+                """.formatted(brandName, brandHeader(), accentColor, accentColor, accentColor, shade(accentColor), accentColor, emoji, heading, bodyContent, brandFooter());
+    }
+
+    private static String shade(String hexColor) {
+        return hexColor + "cc";
     }
 
     private String brandHeader() {
         return """
                 <tr>
-                  <td style="padding-bottom:24px;">
+                  <td style="padding-bottom:20px;">
                     <table role="presentation" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td style="width:56px;height:56px;vertical-align:middle;">
-                          <img src="%s" alt="%s Logo" width="56" height="56" style="display:block;width:56px;height:56px;border-radius:14px;object-fit:contain;background:#ffffff;border:1px solid #e2e8f0;"/>
+                        <td style="width:52px;height:52px;vertical-align:middle;">
+                          <img src="%s" alt="%s Logo" width="52" height="52" style="display:block;width:52px;height:52px;border-radius:13px;object-fit:contain;background:#ffffff;border:1px solid #e2e8f0;"/>
                         </td>
                         <td style="padding-left:14px;vertical-align:middle;">
-                          <div style="font-size:20px;font-weight:800;color:#0f172a;letter-spacing:-0.3px;">%s</div>
-                          <div style="font-size:11px;color:#64748b;margin-top:2px;">%s</div>
+                          <div style="font-size:19px;font-weight:800;color:#0f172a;letter-spacing:-0.3px;">%s</div>
+                          <div style="font-size:11px;color:#94a3b8;margin-top:2px;">%s</div>
                         </td>
                       </tr>
                     </table>
@@ -287,7 +318,12 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
         String siteLabel = frontendUrl.replace("https://", "").replace("http://", "");
         return """
                 <tr>
-                  <td style="padding-top:24px;text-align:center;">
+                  <td style="padding-top:28px;text-align:center;">
+                    <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+                      <tr>
+                        <td style="border-top:1px solid #e2e8f0;font-size:0;line-height:0;">&nbsp;</td>
+                      </tr>
+                    </table>
                     <p style="margin:0 0 8px;font-size:13px;color:#64748b;">
                       Cần hỗ trợ? Liên hệ <a href="mailto:%s" style="color:#4f46e5;text-decoration:none;font-weight:600;">%s</a>
                     </p>
@@ -306,10 +342,10 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
         return """
                 <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
                   <tr>
-                    <td style="background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px 24px;">
-                      <p style="margin:0 0 6px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">%s</p>
+                    <td style="background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:22px 24px;">
+                      <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.6px;">%s</p>
                       <p style="margin:0 0 8px;font-size:18px;font-weight:700;color:#0f172a;">%s</p>
-                      <p style="margin:0;font-size:13px;color:#94a3b8;line-height:1.5;">%s</p>
+                      <p style="margin:0;font-size:13px;color:#94a3b8;line-height:1.6;">%s</p>
                     </td>
                   </tr>
                 </table>
@@ -320,9 +356,9 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
         return """
                 <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
                   <tr>
-                    <td style="background:linear-gradient(135deg,#6366f1 0%%,#8b5cf6 100%%);border-radius:12px;padding:28px;text-align:center;">
-                      <p style="margin:0 0 8px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.8);text-transform:uppercase;letter-spacing:1px;">Mã voucher của bạn</p>
-                      <p style="margin:0;font-size:28px;font-weight:900;color:#ffffff;letter-spacing:4px;font-family:'Courier New',monospace;">%s</p>
+                    <td style="background:linear-gradient(135deg,#6366f1 0%%,#8b5cf6 100%%);border-radius:16px;padding:30px;text-align:center;box-shadow:0 10px 24px rgba(99,102,241,0.28);">
+                      <p style="margin:0 0 10px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.85);text-transform:uppercase;letter-spacing:1.5px;">Mã voucher của bạn</p>
+                      <p style="margin:0;font-size:30px;font-weight:900;color:#ffffff;letter-spacing:5px;font-family:'Courier New',monospace;">%s</p>
                     </td>
                   </tr>
                 </table>
@@ -333,15 +369,15 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
         return """
                 <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
                   <tr>
-                    <td style="background-color:%s;border:1px solid %s;border-radius:12px;padding:20px 24px;">
+                    <td style="background-color:%s;border:1px solid %s;border-radius:14px;padding:22px 24px;">
                       <table role="presentation" width="100%%" cellpadding="0" cellspacing="0">
                         <tr>
                           <td>
-                            <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Mã đơn hàng</p>
+                            <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.6px;">Mã đơn hàng</p>
                             <p style="margin:0;font-size:22px;font-weight:800;color:#0f172a;">#%s</p>
                           </td>
                           <td align="right" valign="middle">
-                            <span style="display:inline-block;background-color:%s;color:#ffffff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">%s</span>
+                            <span style="display:inline-block;background-color:%s;color:#ffffff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:20px;letter-spacing:0.2px;">%s</span>
                           </td>
                         </tr>
                       </table>
@@ -369,13 +405,13 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
         String border = last ? "" : "border-bottom:1px solid #f1f5f9;";
         return """
                 <tr>
-                  <td style="padding:14px 0;%s">
+                  <td style="padding:16px 0;%s">
                     <table role="presentation" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td style="width:36px;font-size:20px;vertical-align:top;padding-top:2px;">%s</td>
-                        <td style="vertical-align:top;">
-                          <p style="margin:0 0 2px;font-size:14px;font-weight:700;color:#0f172a;">%s</p>
-                          <p style="margin:0;font-size:13px;color:#64748b;line-height:1.5;">%s</p>
+                        <td style="width:40px;height:40px;background-color:#f8fafc;border-radius:11px;text-align:center;vertical-align:middle;font-size:18px;">%s</td>
+                        <td style="padding-left:14px;vertical-align:middle;">
+                          <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:#0f172a;">%s</p>
+                          <p style="margin:0;font-size:13px;color:#64748b;line-height:1.55;">%s</p>
                         </td>
                       </tr>
                     </table>
@@ -388,8 +424,8 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
         return """
                 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
                   <tr>
-                    <td style="background-color:#4f46e5;border-radius:10px;">
-                      <a href="%s" target="_blank" style="display:inline-block;padding:14px 32px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:0.2px;">%s →</a>
+                    <td style="background:linear-gradient(135deg,#4f46e5 0%%,#6366f1 100%%);border-radius:12px;box-shadow:0 8px 20px rgba(79,70,229,0.30);">
+                      <a href="%s" target="_blank" style="display:inline-block;padding:15px 34px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:0.2px;">%s →</a>
                     </td>
                   </tr>
                 </table>

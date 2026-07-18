@@ -19,13 +19,11 @@ import BottomPanel from "./BottomPanel.jsx";
 import CampaignsList from "./CampaignsList.jsx";
 import DeployModal from "./DeployModal.jsx";
 import CampaignBudgetBar from "./CampaignBudgetBar.jsx";
-import EvaluateModal from "./EvaluateModal.jsx";
 
 const EMPTY_DEPLOY_FORM = { name: "", startDate: "", endDate: "" };
-const EMPTY_EVAL_FORM   = { processKey: "", campaignName: "", userId: "", location: "", categories: "", products: "", raw: "{}" };
 
 // Orchestrator for the whole campaign builder screen. Owns the "list vs
-// editor" view switch, cross-cutting state (deploy/eval modals, validation,
+// editor" view switch, cross-cutting state (deploy modal, validation,
 // which campaign is being edited) and wires together the three specialised
 // hooks (toast / workflow / campaigns) with the presentational components.
 export default function CampaignsTab() {
@@ -43,9 +41,6 @@ export default function CampaignsTab() {
   // ── Modal state ────────────────────────────────────────────────────────────
   const [showDeploy, setShowDeploy] = useState(false);
   const [deployForm, setDeployForm] = useState(EMPTY_DEPLOY_FORM);
-  const [showEvaluate, setShowEvaluate] = useState(false);
-  const [evalForm, setEvalForm] = useState(EMPTY_EVAL_FORM);
-  const [evalResult, setEvalResult] = useState(null);
 
   // ── Hooks ──────────────────────────────────────────────────────────────────
   const canvasRef = useRef(null);
@@ -225,40 +220,6 @@ export default function CampaignsTab() {
     }
   }, [showToast, wf]);
 
-  const openEvaluateModal = camp => {
-    setEvalForm({
-      ...EMPTY_EVAL_FORM,
-      processKey: camp.bpmnProcessDefinitionKey || "",
-      campaignName: camp.name || ""
-    });
-    setEvalResult(null);
-    setShowEvaluate(true);
-  };
-
-  const runEvaluate = async e => {
-    e.preventDefault();
-    let vars = {};
-    if (evalForm.userId)     vars.userId = evalForm.userId;
-    if (evalForm.location)   vars.location = evalForm.location;
-    if (evalForm.categories) vars.categories = evalForm.categories.split(",").map(s => s.trim()).filter(Boolean);
-    if (evalForm.products)   vars.products   = evalForm.products.split(",").map(s => s.trim()).filter(Boolean);
-    try {
-      const raw = evalForm.raw.trim();
-      if (raw) vars = { ...vars, ...JSON.parse(raw) };
-    } catch {
-      showToast("JSON biến bổ sung không hợp lệ", "error");
-      return;
-    }
-    try {
-      const res = await campaignApi.evaluateCampaign(evalForm.processKey, vars);
-      setEvalResult(res);
-      showToast("Chạy giả lập hoàn tất", "success");
-    } catch (err) {
-      setEvalResult({ error: err.message });
-      showToast("Lỗi giả lập: " + err.message, "error");
-    }
-  };
-
   const copyText = (txt, label) => {
     navigator.clipboard.writeText(txt)
       .then(() => showToast("Đã sao chép " + label, "success"))
@@ -282,44 +243,45 @@ export default function CampaignsTab() {
   //                              LIST VIEW
   // ═══════════════════════════════════════════════════════════════════════════
   if (view === "list") {
+    const activeCount = campaigns.filter(c => c.active).length;
+    const suspendedCount = campaigns.length - activeCount;
     return (
       <div className="cb-app">
         <Toast toast={toast} />
-        <header className="cb-header">
-          <div className="cb-logo">
-            <div className="cb-logo-icon">CE</div>
-            <div>
-              <h1>CampaignEngine</h1>
-              <span>Trình Thiết Kế Chiến Dịch Tiếp Thị Tự Động</span>
-            </div>
-          </div>
+        <header className="cb-header cb-header-end">
           <div className="cb-header-actions">
             <button className="cb-btn cb-btn-primary" onClick={openNewCampaign}>
-              Tạo chiến dịch mới
+              <span aria-hidden="true">➕</span> Tạo chiến dịch mới
             </button>
           </div>
         </header>
 
-        <div style={{ overflow: "auto", padding: 16 }}>
-          <CampaignsList
-            loading={loading}
-            campaigns={campaigns}
-            onEdit={loadForEdit}
-            onToggleActive={toggleActive}
-            onEvaluate={openEvaluateModal}
-            onDelete={removeCampaign}
-          />
-        </div>
+        <div className="cb-list-page">
+          <div className="cb-list-stats">
+            <div className="cb-stat-chip cb-stat-chip-total">
+              <span className="cb-stat-num">{campaigns.length}</span>
+              <span className="cb-stat-label">Tổng chiến dịch</span>
+            </div>
+            <div className="cb-stat-chip cb-stat-chip-active">
+              <span className="cb-stat-num">{activeCount}</span>
+              <span className="cb-stat-label">Đang kích hoạt</span>
+            </div>
+            <div className="cb-stat-chip cb-stat-chip-suspended">
+              <span className="cb-stat-num">{suspendedCount}</span>
+              <span className="cb-stat-label">Tạm ngưng</span>
+            </div>
+          </div>
 
-        <EvaluateModal
-          open={showEvaluate}
-          form={evalForm}
-          result={evalResult}
-          onChangeForm={setEvalForm}
-          onClose={() => setShowEvaluate(false)}
-          onSubmit={runEvaluate}
-          lookup={lookup}
-        />
+          <div className="cb-list-card">
+            <CampaignsList
+              loading={loading}
+              campaigns={campaigns}
+              onEdit={loadForEdit}
+              onToggleActive={toggleActive}
+              onDelete={removeCampaign}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -398,6 +360,7 @@ export default function CampaignsTab() {
           }}
           onSelectNode={id => { wf.setSelected(id); wf.setInsertEdgeId(null); }}
           onInsertNode={wf.insertNodeIntoEdge}
+          onInsertNodeAfterMerge={wf.insertNodeAfterMerge}
           onChangeTriggerType={wf.changeTriggerType}
           onRenameNode={wf.updateNodeName}
           onCloseInsert={() => wf.setInsertEdgeId(null)}
@@ -441,7 +404,6 @@ export default function CampaignsTab() {
         onDownloadBpmn={downloadBpmn}
         onEdit={loadForEdit}
         onToggleActive={toggleActive}
-        onEvaluate={openEvaluateModal}
         onDelete={removeCampaign}
       />
 
@@ -452,16 +414,6 @@ export default function CampaignsTab() {
         onChangeForm={setDeployForm}
         onClose={() => setShowDeploy(false)}
         onSubmit={submitDeploy}
-      />
-
-      <EvaluateModal
-        open={showEvaluate}
-        form={evalForm}
-        result={evalResult}
-        onChangeForm={setEvalForm}
-        onClose={() => setShowEvaluate(false)}
-        onSubmit={runEvaluate}
-        lookup={lookup}
       />
     </div>
   );

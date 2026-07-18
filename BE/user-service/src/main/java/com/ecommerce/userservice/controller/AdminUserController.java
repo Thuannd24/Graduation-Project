@@ -126,9 +126,6 @@ public class AdminUserController {
         log.info("PUT /api/v1/admin/users/{}/blacklist - blacklisted: {}", userId, request.getBlacklisted());
         userService.updateBlacklist(userId, request.getBlacklisted());
 
-        // Đồng bộ trạng thái lên Keycloak
-        userService.adminGetUserDetail(userId); // refresh
-
         String message = Boolean.TRUE.equals(request.getBlacklisted())
                 ? "Tài khoản đã bị khóa" : "Tài khoản đã được mở khóa";
         return ResponseEntity.ok(ApiResponse.success(message, null));

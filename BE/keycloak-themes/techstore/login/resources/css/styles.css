@@ -45,8 +45,12 @@ div.pf-c-card:has(.techstore-login-grid) {
     padding: 0 !important;
 }
 
-/* Hide default Keycloak header since we customize it inside */
-#kc-header, .pf-c-login__header {
+/* Hide default Keycloak header since we customize it inside.
+   Note: the plain "Sign in to your account" title is a SEPARATE element
+   (.login-pf-header > #kc-page-title) from #kc-header (realm name) — both
+   must be hidden or the redundant title still shows above our own card title. */
+#kc-header, .pf-c-login__header,
+.login-pf-header, #kc-page-title {
     display: none !important;
 }
 
@@ -186,21 +190,6 @@ div.pf-c-card:has(.techstore-login-grid) {
     font-weight: 700;
 }
 
-.promo-footer-link {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.promo-footer-link a {
-    font-size: 13px !important;
-    color: #d70018 !important;
-    font-weight: 700 !important;
-}
-
-.promo-footer-link a:hover {
-    text-decoration: underline !important;
-}
-
 /* Right Column: Form Col */
 .techstore-form-col {
     padding: 40px;
@@ -270,6 +259,26 @@ input[type="password"].pf-c-form-control:focus,
 .password-input-wrapper {
     position: relative;
     width: 100%;
+}
+
+.show-password-checkbox-container {
+    text-align: left;
+    margin: 10px 0 15px 0;
+}
+
+.show-password-checkbox-container label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0 !important;
+}
+
+.show-password-checkbox-container input[type="checkbox"] {
+    accent-color: #d70018;
 }
 
 .pf-c-button.pf-m-control {

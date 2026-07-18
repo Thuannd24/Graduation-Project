@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -113,17 +112,5 @@ public class CampaignController {
             @PathVariable Long id,
             @RequestParam("active") boolean active) {
         return ApiResponse.success(campaignService.toggleCampaignActive(id, active));
-    }
-
-    /**
-     * POST /api/v1/admin/campaigns/evaluate
-     * Chỉ ADMIN/STAFF được trigger workflow — tránh phát voucher trái phép qua endpoint public.
-     */
-    @PostMapping("/api/v1/admin/campaigns/evaluate")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
-    public ApiResponse<Map<String, Object>> evaluateCampaign(
-            @RequestParam("processKey") String processKey,
-            @RequestBody Map<String, Object> variables) {
-        return ApiResponse.success(campaignService.evaluateCampaign(processKey, variables));
     }
 }

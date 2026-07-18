@@ -51,9 +51,6 @@ public class ProductDocument {
     @Field(type = FieldType.Keyword)
     private String imageUrl;
 
-    @Field(type = FieldType.Keyword)
-    private String status; // DRAFT, PUBLISHED, OUT_OF_STOCK, ARCHIVED
-
     @Field(type = FieldType.Boolean)
     private Boolean active;
 

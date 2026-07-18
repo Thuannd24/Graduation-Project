@@ -157,9 +157,12 @@ public class CampaignTriggerService {
     public Map<String, Object> startCampaignProcess(Campaign campaign, String businessKey, Map<String, Object> inputVariables) {
         Map<String, Object> variables = new HashMap<>(inputVariables);
         variables.put("campaignId", campaign.getId());
-        variables.put("campaignWorkflowJson", campaign.getWorkflowJson());
 
         variableEnricher.enrich(variables);
+
+        // Fetched per-campaign (see enrichTotalSpending) so each campaign's own daysLookback applies.
+        triggerResolver.findTotalSpendingDaysLookback(campaign.getWorkflowJson())
+                .ifPresent(daysLookback -> variableEnricher.enrichTotalSpending(variables, daysLookback));
 
         // Carry this campaign's category/product restriction (if it uses a
         // Condition_ContainsCategory / Condition_ContainsProduct node) into the process

@@ -1,7 +1,5 @@
 import React from "react";
-import { MEMBER_RANKS } from "../constants.js";
-import { OptionChecklist, MultiSelect } from "./OptionList.jsx";
-import MoneyField from "./MoneyField.jsx";
+import { MultiSelect } from "./OptionList.jsx";
 
 const INFO_BOX_STYLE = {
   background: "#e8f4fd",
@@ -11,44 +9,21 @@ const INFO_BOX_STYLE = {
 };
 const INFO_TEXT_STYLE = { color: "#0277bd", fontWeight: 600 };
 
-function provinceOptions(provinces) {
-  if (!Array.isArray(provinces)) return [];
-  return provinces.map(p => {
-    if (typeof p === "string") return { value: p, label: p };
-    const name = p?.name || p?.provinceName || String(p?.code ?? "");
-    return { value: name, label: name };
-  }).filter(o => o.value);
-}
-
 export default function ConditionFields({ node, updateProp, lookup }) {
-  const provinces = lookup?.provinces || [];
   const categories = lookup?.categories || [];
 
   switch (node.type) {
-    case "Condition_MemberRank": {
-      const arr = Array.isArray(node.properties.allowedRanks) ? node.properties.allowedRanks : [];
+    // Rank is configured per-branch below, not here.
+    case "Condition_MemberRank":
       return (
-        <>
-          <div className="cb-fg" style={INFO_BOX_STYLE}>
-            <small style={INFO_TEXT_STYLE}>
-              Cấu hình từng hạng IF ở mục &quot;Điều kiện rẽ nhánh&quot;. Else khi không khớp.
-            </small>
-          </div>
-          <div className="cb-fg">
-            <label>Hạng thành viên được phép</label>
-            <OptionChecklist
-              options={MEMBER_RANKS}
-              value={arr}
-              onChange={next => updateProp("allowedRanks", next)}
-            />
-            {!arr.length && (
-              <small style={{ color: "#dc2626", fontSize: 10 }}>Chọn ít nhất 1 hạng</small>
-            )}
-          </div>
-        </>
+        <div className="cb-fg" style={INFO_BOX_STYLE}>
+          <small style={INFO_TEXT_STYLE}>
+            Cấu hình từng hạng IF ở mục &quot;Điều kiện rẽ nhánh&quot;. Else khi không khớp.
+          </small>
+        </div>
       );
-    }
 
+    // Threshold amount is configured per-branch below; daysLookback stays here (BE reads it).
     case "Condition_TotalSpending":
       return (
         <>
@@ -57,12 +32,6 @@ export default function ConditionFields({ node, updateProp, lookup }) {
               Cấu hình ngưỡng IF ở mục &quot;Điều kiện rẽ nhánh&quot;. Else khi không đạt.
             </small>
           </div>
-          <MoneyField
-            label="Ngưỡng chi tiêu tham chiếu (VNĐ)"
-            value={node.properties.minSpendingAmount ?? 5000000}
-            onChange={v => updateProp("minSpendingAmount", v)}
-            min={0}
-          />
           <div className="cb-fg">
             <label>Khoảng thống kê</label>
             <select
@@ -77,33 +46,17 @@ export default function ConditionFields({ node, updateProp, lookup }) {
         </>
       );
 
-    case "Condition_Location": {
-      const arr = Array.isArray(node.properties.targetProvinces) ? node.properties.targetProvinces : [];
-      const options = provinceOptions(provinces);
-      return (
-        <div className="cb-fg">
-          <label>Tỉnh/Thành áp dụng</label>
-          <MultiSelect
-            options={options}
-            value={arr}
-            onChange={next => updateProp("targetProvinces", next)}
-            emptyText="Không tải được danh sách tỉnh/thành"
-            size={8}
-          />
-          <small>Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều tỉnh.</small>
-          {!arr.length && (
-            <small style={{ color: "#dc2626", fontSize: 10 }}>Chọn ít nhất 1 tỉnh/thành</small>
-          )}
-        </div>
-      );
-    }
+    // Province is configured per-branch, not here.
+    case "Condition_Location":
+      return null;
 
+    // targetIds restricts voucher redemption scope - separate from branch routing.
     case "Condition_ContainsCategory": {
       const arr = Array.isArray(node.properties.targetIds) ? node.properties.targetIds.map(String) : [];
       const options = categories.map(c => ({ value: String(c.id), label: c.path }));
       return (
         <div className="cb-fg">
-          <label>Danh mục sản phẩm bắt buộc</label>
+          <label>Giới hạn redeem: danh mục được phép</label>
           <MultiSelect
             options={options}
             value={arr}
@@ -111,10 +64,7 @@ export default function ConditionFields({ node, updateProp, lookup }) {
             emptyText="Không tải được danh mục"
             size={8}
           />
-          <small>Giữ Ctrl/Cmd để chọn nhiều danh mục.</small>
-          {!arr.length && (
-            <small style={{ color: "#dc2626", fontSize: 10 }}>Chọn ít nhất 1 danh mục</small>
-          )}
+          <small>Voucher chiến dịch này chỉ redeem được cho đơn có 1 trong các danh mục đã chọn. Để trống = không giới hạn.</small>
         </div>
       );
     }
@@ -123,17 +73,17 @@ export default function ConditionFields({ node, updateProp, lookup }) {
       const arr = Array.isArray(node.properties.targetIds) ? node.properties.targetIds.map(String) : [];
       return (
         <div className="cb-fg">
-          <label>Mã sản phẩm bắt buộc (ID)</label>
+          <label>Giới hạn redeem: mã sản phẩm được phép (ID)</label>
           <input
             type="text"
             value={arr.join(", ")}
-            placeholder="Chọn từng nhánh IF bên dưới hoặc nhập ID"
+            placeholder="Để trống = không giới hạn, hoặc nhập ID cách nhau bằng dấu phẩy"
             onChange={e => updateProp(
               "targetIds",
               e.target.value.split(",").map(s => s.trim()).filter(Boolean)
             )}
           />
-          <small>Dùng ô tìm kiếm ở từng nhánh IF để chọn sản phẩm chính xác.</small>
+          <small>Voucher chiến dịch này chỉ redeem được cho đơn có 1 trong các sản phẩm đã chọn. Để trống = không giới hạn.</small>
         </div>
       );
     }

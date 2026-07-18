@@ -57,6 +57,12 @@ public class OrderController {
                 userResolver.resolveRolesHeader(rolesHeader)));
     }
 
+    @GetMapping("/warranty/me")
+    public ApiResponse<List<WarrantyItemResponse>> getMyWarranty(
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
+        return ApiResponse.success(orderService.getMyWarranty(userResolver.resolveUserId(userId)));
+    }
+
     @PostMapping("/{id}/cancel")
     public ApiResponse<Void> cancelOrder(
             @RequestHeader(value = "X-User-Id", required = false) String userId,

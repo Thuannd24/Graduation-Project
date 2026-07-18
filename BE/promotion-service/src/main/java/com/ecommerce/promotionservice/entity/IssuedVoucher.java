@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "issued_vouchers", indexes = {
         @Index(name = "idx_voucher_code", columnList = "code", unique = true),
-        @Index(name = "idx_voucher_user", columnList = "user_id")
+        @Index(name = "idx_voucher_user", columnList = "user_id"),
+        @Index(name = "idx_voucher_idempotency_key", columnList = "idempotency_key", unique = true)
 })
 @Data
 @Builder
@@ -81,6 +82,16 @@ public class IssuedVoucher {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    /**
+     * "<processInstanceId>:<activityId>" of the Camunda service task that issued this voucher.
+     * Nullable (older rows / non-Camunda issuance paths have none). Lets issuance be retried
+     * safely - Camunda job retries re-run a delegate's execute() from scratch, and without this
+     * guard a retry would issue a second real voucher and debit the campaign budget twice for one
+     * customer action.
+     */
+    @Column(name = "idempotency_key", unique = true, length = 100)
+    private String idempotencyKey;
 
     @PrePersist
     protected void onCreate() {

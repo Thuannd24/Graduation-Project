@@ -54,9 +54,6 @@ public class ProductDto {
     private Integer salesCount;
     private BigDecimal ratingAvg;
 
-    @NotBlank(message = "Trạng thái sản phẩm không được để trống")
-    private String status; // DRAFT, PUBLISHED, OUT_OF_STOCK, ARCHIVED
-
     private Integer warrantyPeriod;
     private String warrantyPolicy;
     private Boolean active;

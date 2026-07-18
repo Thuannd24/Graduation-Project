@@ -25,22 +25,10 @@ function formatPrice(value) {
   return Number(value || 0).toLocaleString("vi-VN") + "đ";
 }
 
-function statusBadge(status, active) {
-  if (active === false) {
-    return { label: "Ngừng bán", cls: "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" };
-  }
-  switch (status) {
-    case "PUBLISHED":
-      return { label: "Đang bán", cls: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" };
-    case "DRAFT":
-      return { label: "Nháp", cls: "bg-amber-50 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300" };
-    case "OUT_OF_STOCK":
-      return { label: "Hết hàng", cls: "bg-rose-50 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300" };
-    case "ARCHIVED":
-      return { label: "Lưu trữ", cls: "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400" };
-    default:
-      return { label: status || "—", cls: "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" };
-  }
+function statusBadge(active) {
+  return active === false
+    ? { label: "Ngừng bán", cls: "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" }
+    : { label: "Đang bán", cls: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" };
 }
 
 export default function ProductsTab({ setActiveTab, setEditingProductId }) {
@@ -53,12 +41,11 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
 
   const [flatCategories, setFlatCategories] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [stats, setStats] = useState({ total: 0, active: 0, published: 0, variants: 0 });
+  const [stats, setStats] = useState({ total: 0, active: 0, variants: 0 });
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategoryId, setFilterCategoryId] = useState("");
   const [filterBrandId, setFilterBrandId] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
   const [filterActive, setFilterActive] = useState("");
 
   const categoryMap = useMemo(() => {
@@ -80,7 +67,6 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
       setStats({
         total: statsPage.hasNext ? `${items.length}+` : items.length,
         active: items.filter(p => p.active !== false).length,
-        published: items.filter(p => p.status === "PUBLISHED").length,
         variants: items.reduce((sum, p) => sum + (Array.isArray(p.variants) ? p.variants.length : 0), 0)
       });
     } catch (err) {
@@ -113,9 +99,6 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
       if (filterBrandId) {
         items = items.filter(p => String(p.brandId) === String(filterBrandId));
       }
-      if (filterStatus) {
-        items = items.filter(p => p.status === filterStatus);
-      }
 
       setProducts(items);
       setHasNext(result.hasNext);
@@ -126,7 +109,7 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
     } finally {
       setLoading(false);
     }
-  }, [page, searchQuery, filterCategoryId, filterBrandId, filterStatus, filterActive, categoryMap]);
+  }, [page, searchQuery, filterCategoryId, filterBrandId, filterActive, categoryMap]);
 
   useEffect(() => {
     loadMeta();
@@ -140,7 +123,6 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
     setSearchQuery("");
     setFilterCategoryId("");
     setFilterBrandId("");
-    setFilterStatus("");
     setFilterActive("");
     setPage(0);
   };
@@ -168,11 +150,10 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
   return (
     <div className="space-y-6 animate-fadeIn p-6 pb-10">
       {/* Thống kê */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {[
           { icon: "inventory_2", label: "Tổng sản phẩm", value: stats.total, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-900/30" },
           { icon: "check_circle", label: "Đang kinh doanh", value: stats.active, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-900/30" },
-          { icon: "storefront", label: "Đã xuất bản", value: stats.published, color: "text-violet-600", bg: "bg-violet-50 dark:bg-violet-900/30" },
           { icon: "layers", label: "Tổng biến thể SKU", value: stats.variants, color: "text-amber-600", bg: "bg-amber-50 dark:bg-amber-900/30" }
         ].map((s) => (
           <div key={s.label} className={`${cardCls} p-5 flex items-center gap-4`}>
@@ -244,27 +225,15 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
               <option key={b.id} value={b.id}>{b.name}</option>
             ))}
           </select>
-          <div className="flex gap-2">
-            <select
-              value={filterStatus}
-              onChange={(e) => { setFilterStatus(e.target.value); setPage(0); }}
-              className={`${inputCls} flex-1`}
-            >
-              <option value="">Trạng thái</option>
-              <option value="PUBLISHED">Đang bán</option>
-              <option value="DRAFT">Nháp</option>
-              <option value="OUT_OF_STOCK">Hết hàng</option>
-              <option value="ARCHIVED">Lưu trữ</option>
-            </select>
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-              title="Xóa bộ lọc"
-            >
-              <Icon name="refresh" className="text-lg" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-1.5 text-xs font-bold"
+            title="Xóa bộ lọc"
+          >
+            <Icon name="refresh" className="text-lg" />
+            Xóa lọc
+          </button>
         </div>
       </div>
 
@@ -305,7 +274,7 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                 {products.map((p, idx) => {
-                  const badge = statusBadge(p.status, p.active);
+                  const badge = statusBadge(p.active);
                   const variantCount = Array.isArray(p.variants) ? p.variants.length : 0;
                   return (
                     <tr key={p.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-700/30 transition-colors">

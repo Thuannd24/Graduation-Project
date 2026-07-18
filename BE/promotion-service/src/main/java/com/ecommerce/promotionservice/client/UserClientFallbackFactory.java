@@ -33,6 +33,15 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
             }
 
             @Override
+            public Map<String, Object> getProfileById(Long userId) {
+                log.error("User service unavailable for id lookup {}: {}", userId, cause.getMessage());
+                Map<String, Object> fallback = new HashMap<>();
+                fallback.put("code", "FALLBACK");
+                fallback.put("data", null);
+                return fallback;
+            }
+
+            @Override
             public void updateTier(Long userId, Map<String, Object> request) {
                 log.error("User service is unavailable, fallback tier update skipped for userId: {}. Error: {}", userId, cause.getMessage());
             }

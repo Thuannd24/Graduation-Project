@@ -75,7 +75,8 @@ async function setInventory(baseUrl, headers, productId, variantId, qty, retries
 
 async function main() {
   loadEnvFile();
-  const baseUrl = process.env.API_BASE_URL || "http://localhost:8080/api/v1";
+  const productUrl = process.env.PRODUCT_SERVICE_URL || process.env.API_BASE_URL || "http://localhost:8080/api/v1";
+  const inventoryUrl = process.env.INVENTORY_SERVICE_URL || process.env.API_BASE_URL || "http://localhost:8080/api/v1";
   const token = process.env.ADMIN_TOKEN || "";
   const qtyArgIdx = process.argv.indexOf("--qty");
   const qty = qtyArgIdx !== -1 ? Number(process.argv[qtyArgIdx + 1]) : 10;
@@ -88,7 +89,7 @@ async function main() {
   const headers = { Authorization: `Bearer ${token}` };
 
   console.log(`\n📦 Lấy danh sách sản phẩm...`);
-  const products = await fetchAllProducts(baseUrl, headers);
+  const products = await fetchAllProducts(productUrl, headers);
   console.log(`  → ${products.length} sản phẩm`);
 
   const tasks = [];
@@ -103,7 +104,7 @@ async function main() {
   let ok = 0;
   let failed = 0;
   await mapPool(tasks, 3, async (t) => {
-    const result = await setInventory(baseUrl, headers, t.productId, t.variantId, qty);
+    const result = await setInventory(inventoryUrl, headers, t.productId, t.variantId, qty);
     if (result.ok) {
       ok++;
     } else {

@@ -362,7 +362,6 @@ public class CatalogImportServiceImpl implements CatalogImportService {
                     .brand(brandName)
                     .imageUrl(item.getImageUrl())
                     .images(item.getImages())
-                    .status(StringUtils.hasText(item.getStatus()) ? item.getStatus() : "PUBLISHED")
                     .active(item.getActive() == null || item.getActive())
                     .warrantyPeriod(item.getWarrantyPeriod())
                     .warrantyPolicy(item.getWarrantyPolicy())

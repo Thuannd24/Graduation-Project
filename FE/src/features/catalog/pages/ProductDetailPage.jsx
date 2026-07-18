@@ -315,6 +315,22 @@ function ReviewCard({ review }) {
         </div>
       )}
 
+      {/* Staff Reply */}
+      {review.staffReplyContent && (
+        <div className="mb-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700">
+          <div className="flex items-center gap-1.5 mb-1">
+            <Icon name="storefront" className="text-xs text-primary" />
+            <span className="text-xs font-bold text-primary">Phản hồi từ cửa hàng</span>
+            {review.staffReplyAt && (
+              <span className="text-[10px] text-slate-400 font-medium">· {timeAgo(review.staffReplyAt)}</span>
+            )}
+          </div>
+          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            {review.staffReplyContent}
+          </p>
+        </div>
+      )}
+
       {/* Actions */}
       <div className="flex items-center gap-4 pt-2 border-t border-slate-50 dark:border-slate-800/60">
         <button
@@ -467,6 +483,8 @@ export default function ProductDetailPage() {
             content: review.comment || "",
             comment: review.comment || "",
             imageUrls: review.imageUrls || [],
+            staffReplyContent: review.staffReplyContent || null,
+            staffReplyAt: review.staffReplyAt || null,
             helpfulCount: 0
           };
         });
@@ -809,10 +827,12 @@ export default function ProductDetailPage() {
                 <Icon name="swap_horiz" className="text-primary text-xs" />
                 Đổi trả 30 ngày
               </span>
-              <span className="flex items-center gap-1 bg-slate-50 dark:bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                <Icon name="shield" className="text-primary text-xs" />
-                Bảo hành 12 tháng
-              </span>
+              {Number(product.warrantyPeriod) > 0 && (
+                <span className="flex items-center gap-1 bg-slate-50 dark:bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
+                  <Icon name="shield" className="text-primary text-xs" />
+                  Bảo hành {product.warrantyPeriod} tháng
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -825,6 +845,7 @@ export default function ProductDetailPage() {
           {[
             { id: "details", label: "Mô tả sản phẩm", icon: "description" },
             { id: "specs", label: "Thông số kỹ thuật", icon: "settings" },
+            { id: "warranty", label: "Bảo hành", icon: "shield" },
             { id: "comments", label: `Đánh giá (${reviews.length})`, icon: "chat" }
           ].map((tab) => (
             <button
@@ -905,6 +926,51 @@ export default function ProductDetailPage() {
                 </div>
               )}
             </div>
+          </motion.div>
+        )}
+
+        {/* ---------- Tab: Warranty ---------- */}
+        {activeTab === "warranty" && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="pt-5"
+          >
+            <h2 className="text-lg font-black text-slate-800 dark:text-slate-100 mb-4">
+              Chính sách bảo hành
+            </h2>
+            {product.warrantyPeriod || product.warrantyPolicy ? (
+              <div className="space-y-4">
+                {Number(product.warrantyPeriod) > 0 && (
+                  <div className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0">
+                      <Icon name="shield" className="text-emerald-600 text-lg" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-emerald-800 dark:text-emerald-200">
+                        Thời hạn bảo hành: {product.warrantyPeriod} tháng
+                      </p>
+                      <p className="text-xs text-emerald-700/80 dark:text-emerald-300/80 mt-0.5">
+                        Tính từ ngày mua hàng thành công.
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {product.warrantyPolicy && (
+                  <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5">
+                    <p className="whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {product.warrantyPolicy}
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center py-10 text-center">
+                <Icon name="shield" className="text-slate-300 text-3xl mb-3" />
+                <p className="text-slate-500 text-sm font-medium">Chưa có thông tin bảo hành cho sản phẩm này.</p>
+              </div>
+            )}
           </motion.div>
         )}
 

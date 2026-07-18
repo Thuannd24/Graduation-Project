@@ -2,6 +2,7 @@ package com.ecommerce.promotionservice.delegate;
 
 import com.ecommerce.promotionservice.client.NotificationClient;
 import com.ecommerce.promotionservice.dto.SendNotificationRequest;
+import com.ecommerce.promotionservice.service.IdempotencyGuardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -28,9 +29,18 @@ public class SendEmailDelegate implements JavaDelegate {
     );
 
     private final NotificationClient notificationClient;
+    private final IdempotencyGuardService idempotencyGuard;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+        // Guards against duplicate email send on Camunda job retry.
+        String idempotencyKey = execution.getProcessInstanceId() + ":" + execution.getCurrentActivityId();
+        if (idempotencyGuard.alreadyExecuted(idempotencyKey)) {
+            log.info("[SendEmail] Already sent for {} - skipping duplicate on retry.", idempotencyKey);
+            execution.setVariable("notificationSent", true);
+            return;
+        }
+
         String userId = getStr(execution, "userId");
         String email = getStr(execution, "email");
         String templateId = getStr(execution, "templateId");
@@ -67,6 +77,7 @@ public class SendEmailDelegate implements JavaDelegate {
 
         try {
             notificationClient.sendNotification(requestBuilder.build());
+            idempotencyGuard.markExecuted(idempotencyKey, "SEND_EMAIL");
             execution.setVariable("notificationSent", true);
             log.info("[SendEmail] Sent via notification-service to user {}", userId);
         } catch (Exception ex) {

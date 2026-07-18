@@ -22,7 +22,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Optional<Order> findByTrackingCode(String trackingCode);
 
-    List<Order> findByPhoneNumberAndStatus(String phoneNumber, String status);
+    List<Order> findByUserIdAndStatus(String userId, String status);
     
     List<Order> findAllByStatusInAndCreatedAtBefore(List<String> statuses, LocalDateTime dateTime);
     

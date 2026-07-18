@@ -5,7 +5,8 @@ export const EMAIL_TEMPLATE_CODES = new Set([
   "order_confirmed_template",
   "order_cancelled_template",
   "payment_success_template",
-  "payment_failed_template"
+  "payment_failed_template",
+  "vip_membership_promo_template"
 ]);
 
 export const EMAIL_TEMPLATES = [
@@ -13,6 +14,11 @@ export const EMAIL_TEMPLATES = [
     code: "promotion_voucher_template",
     label: "Thông báo voucher khuyến mãi",
     hint: "Biến: voucherCode, userId, email…"
+  },
+  {
+    code: "vip_membership_promo_template",
+    label: "Mời dùng thử gói thành viên VIP",
+    hint: "Biến: customerName, cashbackPercent"
   },
   {
     code: "welcome_template",

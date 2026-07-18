@@ -34,8 +34,7 @@ public final class LoyaltyPointPolicy {
             case "SILVER" -> 1.2;
             case "GOLD" -> 1.5;
             case "VIP" -> 2.0;
-            case "DIAMOND" -> 2.5;
-            default -> 1.0; // MEMBER, BRONZE, ...
+            default -> 1.0; // MEMBER, ...
         };
     }
 

@@ -4,6 +4,7 @@ import com.ecommerce.userservice.client.KeycloakAdminClient;
 import com.ecommerce.userservice.dto.request.*;
 import com.ecommerce.userservice.dto.response.*;
 import com.ecommerce.userservice.entity.User;
+import com.ecommerce.userservice.exception.KeycloakSyncException;
 import com.ecommerce.userservice.exception.ResourceNotFoundException;
 import com.ecommerce.userservice.repository.UserRepository;
 import com.ecommerce.userservice.service.UserService;
@@ -35,6 +36,20 @@ public class UserServiceImpl implements UserService {
         synchronized (keycloakUserId.intern()) {
             user = userRepository.findByKeycloakUserId(keycloakUserId)
                     .orElseGet(() -> {
+                        // Cùng 1 người có thể đăng nhập qua nhiều phương thức khác nhau (password, Google...)
+                        // → Keycloak sinh ra keycloakUserId khác nhau cho mỗi identity nhưng chung email.
+                        // Nếu email đã tồn tại dưới keycloakUserId khác, liên kết lại bản ghi cũ sang
+                        // keycloakUserId hiện tại thay vì tạo mới (sẽ vi phạm UNIQUE constraint trên email).
+                        if (email != null && !email.isEmpty()) {
+                            Optional<User> existingByEmail = userRepository.findByEmail(email);
+                            if (existingByEmail.isPresent()) {
+                                User existing = existingByEmail.get();
+                                log.info("Phát hiện đăng nhập bằng phương thức khác cho email {}: liên kết keycloakUserId {} → {}",
+                                        email, existing.getKeycloakUserId(), keycloakUserId);
+                                existing.setKeycloakUserId(keycloakUserId);
+                                return userRepository.save(existing);
+                            }
+                        }
                         log.info("User profile not found. Auto-provisioning profile for: {}", keycloakUserId);
                         return createUserFromKeycloak(keycloakUserId, email, username, fullName, avatarUrl);
                     });
@@ -201,9 +216,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public InternalUserProfileResponse getInternalProfileById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        return InternalUserProfileResponse.builder()
+                .id(user.getId())
+                .keycloakUserId(user.getKeycloakUserId())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .customerTier(user.getCustomerTier())
+                .loyaltyPoints(user.getLoyaltyPoints() != null ? user.getLoyaltyPoints() : 0)
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<UserProfileResponse> getAllUsers(Pageable pageable) {
         log.info("Getting all users - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
-        return userRepository.findAll(pageable)
+        return userRepository.findByActiveTrue(pageable)
                 .map(this::mapToProfileResponse);
     }
 
@@ -215,6 +245,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         user.setIsBlacklisted(blacklisted);
         userRepository.save(user);
+
+        // Đồng bộ lên Keycloak: khóa = vô hiệu hóa đăng nhập thật sự
+        try {
+            keycloakAdminClient.setEnabled(user.getKeycloakUserId(), !Boolean.TRUE.equals(blacklisted));
+        } catch (Exception e) {
+            log.warn("Cannot sync enabled status to Keycloak for user {}: {}", userId, e.getMessage());
+        }
     }
 
     @Override
@@ -305,7 +342,12 @@ public class UserServiceImpl implements UserService {
             user.setFullName(request.getFullName());
             changed = true;
         }
-        if (request.getEmail() != null) {
+        if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
+            userRepository.findByEmail(request.getEmail()).ifPresent(existing -> {
+                if (!existing.getId().equals(userId)) {
+                    throw new IllegalArgumentException("Email đã được sử dụng bởi tài khoản khác");
+                }
+            });
             user.setEmail(request.getEmail());
             changed = true;
         }
@@ -383,7 +425,7 @@ public class UserServiceImpl implements UserService {
             log.info("Password reset for user: {}", userId);
         } catch (Exception e) {
             log.error("Failed to reset password for user {}: {}", userId, e.getMessage());
-            throw new RuntimeException("Cannot reset password in Keycloak: " + e.getMessage());
+            throw new KeycloakSyncException("Không thể đặt lại mật khẩu trên Keycloak: " + e.getMessage());
         }
     }
 
@@ -424,7 +466,7 @@ public class UserServiceImpl implements UserService {
             log.info("Roles updated for user {}: {}", userId, roles);
         } catch (Exception e) {
             log.error("Failed to set roles for user {}: {}", userId, e.getMessage());
-            throw new RuntimeException("Cannot set roles in Keycloak: " + e.getMessage());
+            throw new KeycloakSyncException("Không thể gán quyền trên Keycloak: " + e.getMessage());
         }
     }
 
@@ -435,7 +477,7 @@ public class UserServiceImpl implements UserService {
         long blacklistedUsers = userRepository.countByIsBlacklistedTrue();
 
         Map<String, Long> tierDistribution = new LinkedHashMap<>();
-        tierDistribution.put("DIAMOND", userRepository.countByCustomerTier("DIAMOND"));
+        tierDistribution.put("VIP", userRepository.countByCustomerTier("VIP"));
         tierDistribution.put("GOLD", userRepository.countByCustomerTier("GOLD"));
         tierDistribution.put("SILVER", userRepository.countByCustomerTier("SILVER"));
         tierDistribution.put("MEMBER", userRepository.countByCustomerTier("MEMBER"));

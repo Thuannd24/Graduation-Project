@@ -2,6 +2,7 @@ package com.ecommerce.userservice.exception;
 
 import com.ecommerce.userservice.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,6 +30,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error("INVALID_PARAM", ex.getMessage()));
+    }
+
+    @ExceptionHandler(KeycloakSyncException.class)
+    public ResponseEntity<ApiResponse<Void>> handleKeycloakSync(KeycloakSyncException ex) {
+        log.warn("Keycloak sync failed: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(ApiResponse.error("KEYCLOAK_SYNC_FAILED", ex.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        log.warn("Data integrity violation: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error("DATA_CONFLICT", "Dữ liệu bị trùng lặp (email/username đã tồn tại)"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -23,7 +23,13 @@ public interface IssuedVoucherRepository extends JpaRepository<IssuedVoucher, Lo
 
     boolean existsByCode(String code);
 
+    Optional<IssuedVoucher> findByIdempotencyKey(String idempotencyKey);
+
     Optional<IssuedVoucher> findByUsedOrderId(Long usedOrderId);
+
+    // Locked variant to avoid a lost-update race with the expiry sweep on the same row.
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<IssuedVoucher> findWithLockByUsedOrderId(Long usedOrderId);
 
     long countByCampaignId(Long campaignId);
 
@@ -35,6 +41,8 @@ public interface IssuedVoucherRepository extends JpaRepository<IssuedVoucher, Lo
 
     List<IssuedVoucher> findByStatusAndExpiresAtBefore(VoucherStatus status, LocalDateTime expiresAt);
 
+    // Locked up front so a concurrent redemption/release can't interleave with the sweep.
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<IssuedVoucher> findByStatusInAndExpiresAtBefore(Collection<VoucherStatus> statuses, LocalDateTime expiresAt);
 
     List<IssuedVoucher> findByCampaignIdOrderByCreatedAtDesc(Long campaignId);

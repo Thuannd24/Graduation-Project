@@ -35,7 +35,7 @@ public class User {
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
 
-    // hạng thành viên (DIAMOND, GOLD, SILVER, BRONZE, MEMBER)
+    // hạng thành viên (VIP, GOLD, SILVER, MEMBER)
     @Column(name = "customer_tier")
     @Builder.Default
     private String customerTier = "MEMBER";

@@ -640,8 +640,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // BUG FIX: When an admin/staff cancels an order on behalf of a customer, the
-        // OrderCancelledEvent (and any downstream notification) must carry the order OWNER's
-        // identity, not the acting admin's - otherwise cancellation emails/business logic keyed
+        // OrderCancelledEvent (and any downstream notification) must carry the order
+        // OWNER's
+        // identity, not the acting admin's - otherwise cancellation emails/business
+        // logic keyed
         // on userId end up pointed at the staff member instead of the customer.
         if (isOwner) {
             cancelOrder(orderId, userId, email);
@@ -698,19 +700,22 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus("CANCELLED");
         orderRepository.save(order);
 
-        // Release Voucher & Points asynchronously AFTER transaction commits successfully
+        // Release Voucher & Points asynchronously AFTER transaction commits
+        // successfully
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
                     CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
                             .exceptionally(ex -> {
-                                log.error("Async releaseVoucher failed for expired order {}: {}", orderId, ex.getMessage());
+                                log.error("Async releaseVoucher failed for expired order {}: {}", orderId,
+                                        ex.getMessage());
                                 return null;
                             });
                     CompletableFuture.runAsync(() -> refundPointsForOrder(order))
                             .exceptionally(ex -> {
-                                log.error("Async refundPoints failed for expired order {}: {}", order.getId(), ex.getMessage());
+                                log.error("Async refundPoints failed for expired order {}: {}", order.getId(),
+                                        ex.getMessage());
                                 return null;
                             });
                 }
@@ -904,8 +909,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse shipOrder(Long orderId) {
-        // Pessimistic write lock: prevents a concurrent cancelOrder/updateOrderStatus call from
-        // racing with this transition (e.g. shipping an order the customer just cancelled).
+        // Pessimistic write lock: prevents a concurrent cancelOrder/updateOrderStatus
+        // call from
+        // racing with this transition (e.g. shipping an order the customer just
+        // cancelled).
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
@@ -932,9 +939,12 @@ public class OrderServiceImpl implements OrderService {
             saveOutboxEvent(String.valueOf(orderId), "OrderShippedEvent",
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
-            // BUG FIX: previously this only logged and let the SHIPPED transition commit anyway,
-            // so a transient outbox-insert failure would silently drop OrderShippedEvent forever
-            // (no consumer, no notification, no retry). Rethrow so the whole transaction rolls
+            // BUG FIX: previously this only logged and let the SHIPPED transition commit
+            // anyway,
+            // so a transient outbox-insert failure would silently drop OrderShippedEvent
+            // forever
+            // (no consumer, no notification, no retry). Rethrow so the whole transaction
+            // rolls
             // back and the caller can retry shipping the order.
             log.error("Failed to construct and save outbox event for OrderShippedEvent", e);
             throw new RuntimeException(
@@ -948,8 +958,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void handleShippingWebhook(String trackingCode, String status) {
-        // Pessimistic write lock: prevents this carrier-initiated transition from racing with a
-        // concurrent cancelOrder/shipOrder/updateDeliveryStatusByAdmin call on the same order.
+        // Pessimistic write lock: prevents this carrier-initiated transition from
+        // racing with a
+        // concurrent cancelOrder/shipOrder/updateDeliveryStatusByAdmin call on the same
+        // order.
         Order order = orderRepository.findByTrackingCodeForUpdate(trackingCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Order not found with tracking code: " + trackingCode));
@@ -1013,10 +1025,13 @@ public class OrderServiceImpl implements OrderService {
                     resolveShippingEventType(targetStatus),
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
-            // BUG FIX: previously this only logged and let the status transition commit anyway.
+            // BUG FIX: previously this only logged and let the status transition commit
+            // anyway.
             // For CANCELLED that meant the order was marked cancelled in DB but the
-            // OrderCancelledEvent was never persisted to outbox, so inventory-service never got
-            // notified to restore stock - a permanent, silent inventory leak. Rethrow so the
+            // OrderCancelledEvent was never persisted to outbox, so inventory-service never
+            // got
+            // notified to restore stock - a permanent, silent inventory leak. Rethrow so
+            // the
             // whole transaction (status change + outbox write) rolls back together and the
             // carrier webhook can be retried/redelivered.
             log.error("Failed to construct and save outbox event for shipping status change: {}", targetStatus, e);
@@ -1032,8 +1047,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status) {
-        // Pessimistic write lock: prevents this admin-initiated transition from racing with a
-        // concurrent cancelOrder/shipOrder/handleShippingWebhook call on the same order.
+        // Pessimistic write lock: prevents this admin-initiated transition from racing
+        // with a
+        // concurrent cancelOrder/shipOrder/handleShippingWebhook call on the same
+        // order.
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
 
@@ -1094,7 +1111,8 @@ public class OrderServiceImpl implements OrderService {
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
             // BUG FIX: see handleShippingWebhook - silently swallowing this exception let
-            // CANCELLED commit without ever persisting OrderCancelledEvent, permanently leaking
+            // CANCELLED commit without ever persisting OrderCancelledEvent, permanently
+            // leaking
             // inventory. Rethrow to roll back the whole transaction.
             log.error("Failed to construct and save outbox event for admin shipping status change: {}", targetStatus,
                     e);
@@ -1239,8 +1257,10 @@ public class OrderServiceImpl implements OrderService {
             log.info("Refunded loyalty points for cancelled order {}", order.getId());
         } catch (Exception ex) {
             // BUG FIX: previously this only logged the failure, so a transient user-service
-            // outage permanently leaked the customer's loyalty points with no retry. Persist a
-            // CompensationTask so CompensationRetryScheduler can retry it until it succeeds.
+            // outage permanently leaked the customer's loyalty points with no retry.
+            // Persist a
+            // CompensationTask so CompensationRetryScheduler can retry it until it
+            // succeeds.
             log.error("Failed to refund points for order {}: {}. Scheduling for retry.", order.getId(),
                     ex.getMessage());
             scheduleCompensationRetry(order.getId(), COMPENSATION_TASK_REFUND_POINTS, ex.getMessage());
@@ -1260,8 +1280,10 @@ public class OrderServiceImpl implements OrderService {
             promotionClient.releaseVoucher(
                     PromotionClient.VoucherOrderActionRequest.builder().orderId(orderId).build());
         } catch (Exception ex) {
-            // BUG FIX: previously this only logged the failure, so a transient promotion-service
-            // outage permanently left the voucher marked as "used" with no retry/compensation.
+            // BUG FIX: previously this only logged the failure, so a transient
+            // promotion-service
+            // outage permanently left the voucher marked as "used" with no
+            // retry/compensation.
             // Persist a CompensationTask so CompensationRetryScheduler can retry it.
             log.warn("Failed to release voucher for order {}: {}. Scheduling for retry.", orderId, ex.getMessage());
             scheduleCompensationRetry(orderId, COMPENSATION_TASK_RELEASE_VOUCHER, ex.getMessage());
@@ -1380,9 +1402,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public java.util.List<WarrantyItemResponse> lookupWarrantyByPhone(String phoneNumber) {
-        // 1. Lấy các đơn hàng đã DELIVERED theo số điện thoại
-        java.util.List<Order> deliveredOrders = orderRepository.findByPhoneNumberAndStatus(phoneNumber, "DELIVERED");
+    public java.util.List<WarrantyItemResponse> getMyWarranty(String userId) {
+        // 1. Lấy các đơn hàng đã DELIVERED của user đang đăng nhập
+        java.util.List<Order> deliveredOrders = orderRepository.findByUserIdAndStatus(userId, "DELIVERED");
 
         if (deliveredOrders.isEmpty()) {
             return java.util.Collections.emptyList();
@@ -1500,12 +1522,16 @@ public class OrderServiceImpl implements OrderService {
                 .build();
     }
 
-    // BUG FIX: handleShippingWebhook/updateDeliveryStatusByAdmin used a binary ternary
-    // ("DELIVERED".equals(targetStatus) ? OrderDeliveredEvent : OrderCancelledEvent) that mislabeled
+    // BUG FIX: handleShippingWebhook/updateDeliveryStatusByAdmin used a binary
+    // ternary
+    // ("DELIVERED".equals(targetStatus) ? OrderDeliveredEvent :
+    // OrderCancelledEvent) that mislabeled
     // every SHIPPED transition as OrderCancelledEvent in the outbox/Kafka payload.
     private String resolveShippingEventType(String targetStatus) {
-        if ("DELIVERED".equals(targetStatus)) return "OrderDeliveredEvent";
-        if ("SHIPPED".equals(targetStatus)) return "OrderShippedEvent";
+        if ("DELIVERED".equals(targetStatus))
+            return "OrderDeliveredEvent";
+        if ("SHIPPED".equals(targetStatus))
+            return "OrderShippedEvent";
         return "OrderCancelledEvent";
     }
 

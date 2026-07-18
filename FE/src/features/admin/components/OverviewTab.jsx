@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import {
   AreaChart,
@@ -16,9 +16,25 @@ import {
   Legend
 } from "recharts";
 
+const ORDER_STATUS_FILTERS = [
+  { value: "all", label: "Tất cả" },
+  { value: "pending", label: "Đang chờ" },
+  { value: "paid", label: "Đã thanh toán" },
+  { value: "cancelled", label: "Đã hủy" }
+];
+
+const CATEGORY_COLOR_CLASSES = [
+  "bg-emerald-50 text-emerald-600",
+  "bg-sky-50 text-sky-600",
+  "bg-amber-50 text-amber-600",
+  "bg-violet-50 text-violet-600",
+  "bg-rose-50 text-rose-600"
+];
+
 export default function OverviewTab({
   orders,
   products,
+  categories,
   loading,
   setActiveTab,
   handleQuickAddTemplate,
@@ -28,10 +44,10 @@ export default function OverviewTab({
   newOrdersCount,
   completedOrdersCount,
   canceledOrdersCount,
-  pendingOrdersCount,
-  productSearch,
-  setProductSearch
+  pendingOrdersCount
 }) {
+  const [transactionFilter, setTransactionFilter] = useState("all");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   // Tính dữ liệu báo cáo tuần từ đơn hàng thực tế
   const dailyReportData = useMemo(() => {
     const today = new Date();
@@ -92,12 +108,17 @@ export default function OverviewTab({
 
   // Phân tích doanh số theo danh mục sản phẩm từ đơn hàng thực tế
   const categorySalesData = useMemo(() => {
+    const categoryNameById = {};
+    (categories || []).forEach(c => {
+      if (c && c.id != null) categoryNameById[String(c.id)] = c.name || c.label || "Khác";
+    });
+
     const categoryMap = {};
     orders.forEach(o => {
       const items = o.items || [];
       items.forEach(item => {
-        const prod = products.find(p => p.id === item.productId);
-        const cat = prod?.category || "Khác";
+        const prod = products.find(p => String(p.id) === String(item.productId));
+        const cat = (prod?.categoryId != null && categoryNameById[String(prod.categoryId)]) || prod?.category || "Khác";
         categoryMap[cat] = (categoryMap[cat] || 0) + (item.subtotal || (item.unitPrice || 0) * (item.quantity || 0));
       });
     });
@@ -109,16 +130,27 @@ export default function OverviewTab({
       name,
       value: parseFloat((val / 1000000).toFixed(1))
     }));
-  }, [orders, products]);
+  }, [orders, products, categories]);
 
-  // Tính dữ liệu người dùng trực tuyến từ đơn hàng
-  const liveUsersData = useMemo(() => {
-    const base = Math.max(orders.length, 1);
-    return Array.from({ length: 30 }, (_, i) => ({
-      minute: i + 1,
-      users: Math.max(0, Math.round(base * 0.03))
-    }));
+  // Đơn hàng mới trong 30 phút gần nhất, tính theo từng phút từ thời gian tạo đơn thực tế
+  const recentOrdersData = useMemo(() => {
+    const now = new Date();
+    const buckets = Array.from({ length: 30 }, (_, i) => ({ minute: 30 - i, count: 0 }));
+    orders.forEach(o => {
+      if (!o.createdAt) return;
+      const diffMs = now - new Date(o.createdAt);
+      const diffMin = Math.floor(diffMs / 60000);
+      if (diffMin >= 0 && diffMin < 30) {
+        buckets[29 - diffMin].count += 1;
+      }
+    });
+    return buckets;
   }, [orders]);
+
+  const recentOrdersCount = useMemo(
+    () => recentOrdersData.reduce((sum, b) => sum + b.count, 0),
+    [recentOrdersData]
+  );
 
   // So sánh doanh thu 7 ngày trước
   const prevWeekData = useMemo(() => {
@@ -143,39 +175,55 @@ export default function OverviewTab({
     };
   }, [orders]);
 
-  // Tính dữ liệu doanh số theo quốc gia (từ đơn hàng)
-  const countrySales = useMemo(() => {
-    const countryMap = {};
+  // Doanh số theo tỉnh/thành, trích xuất từ địa chỉ giao hàng thực tế của đơn hàng
+  const regionSales = useMemo(() => {
+    const regionMap = {};
     orders.forEach(o => {
-      const addr = o.shippingAddress || "";
-      let country = "Việt Nam";
-      if (addr.includes("USA") || addr.includes("US") || addr.includes("New York")) country = "Mỹ";
-      else if (addr.includes("UK") || addr.includes("London")) country = "Anh";
-      else if (addr.includes("JP") || addr.includes("Tokyo")) country = "Nhật Bản";
-      else if (addr.includes("KR") || addr.includes("Seoul")) country = "Hàn Quốc";
-      else if (addr.includes("AU") || addr.includes("Sydney")) country = "Úc";
-      countryMap[country] = (countryMap[country] || 0) + (o.finalAmount || 0);
+      const addr = (o.shippingAddress || "").trim();
+      if (!addr) return;
+      const parts = addr.split(",").map(p => p.trim()).filter(Boolean);
+      const region = parts.length > 0 ? parts[parts.length - 1] : "Khác";
+      regionMap[region] = (regionMap[region] || 0) + (o.finalAmount || 0);
     });
-    const entries = Object.entries(countryMap).sort((a, b) => b[1] - a[1]);
-    if (entries.length === 0) {
-      return [];
-    }
-    return entries.slice(0, 4).map(([name, sales]) => {
-      const total = entries.reduce((s, e) => s + e[1], 0);
-      return {
-        name,
-        flag: name === "Mỹ" ? "🇺🇸" : name === "Anh" ? "🇬🇧" : name === "Nhật Bản" ? "🇯🇵" : name === "Hàn Quốc" ? "🇰🇷" : name === "Úc" ? "🇦🇺" : "🇻🇳",
-        region: name === "Việt Nam" ? "Đông Nam Á" : name === "Mỹ" ? "Bắc Mỹ" : name === "Anh" ? "Châu Âu" : name === "Nhật Bản" ? "Đông Á" : name === "Hàn Quốc" ? "Đông Á" : name === "Úc" ? "Châu Đại Dương" : "Khác",
-        sales: Math.round(sales / 1000) + "k",
-        percent: total > 0 ? ((sales / total) * 100).toFixed(1) : "0"
-      };
-    });
+    const entries = Object.entries(regionMap).sort((a, b) => b[1] - a[1]);
+    if (entries.length === 0) return [];
+    const total = entries.reduce((s, e) => s + e[1], 0);
+    return entries.slice(0, 4).map(([name, sales], idx) => ({
+      name,
+      colorClass: ["bg-blue-500", "bg-purple-500", "bg-sky-400", "bg-emerald-400"][idx] || "bg-slate-400",
+      sales: sales >= 1000000 ? (sales / 1000000).toFixed(1) + "M" : Math.round(sales / 1000) + "k",
+      percent: total > 0 ? ((sales / total) * 100).toFixed(1) : "0"
+    }));
   }, [orders]);
 
+  // Danh mục để "Thêm sản phẩm nhanh", lấy trực tiếp từ danh mục thực tế của hệ thống
+  const quickAddCategories = useMemo(() => {
+    return (categories || [])
+      .filter(c => c && (c.name || c.label))
+      .slice(0, 3)
+      .map((c, idx) => {
+        const name = c.name || c.label;
+        return {
+          id: c.id,
+          name,
+          initials: name.slice(0, 2).toUpperCase(),
+          colorClasses: CATEGORY_COLOR_CLASSES[idx % CATEGORY_COLOR_CLASSES.length]
+        };
+      });
+  }, [categories]);
+
   // Dùng products từ API, không có fallback
-  const filteredProductsForList = (products || []).filter(p =>
-    p && p.name && String(p.name).toLowerCase().includes((productSearch || "").toLowerCase())
-  ).slice(0, 4);
+  const filteredProductsForList = (products || []).filter(p => p && p.name).slice(0, 4);
+
+  const isPaidStatus = (status) => ["DELIVERED", "CONFIRMED", "SHIPPED"].includes(status);
+
+  const filteredOrdersForTable = orders.filter(o => {
+    if (transactionFilter === "all") return true;
+    if (transactionFilter === "paid") return isPaidStatus(o.status);
+    if (transactionFilter === "cancelled") return o.status === "CANCELLED";
+    if (transactionFilter === "pending") return !isPaidStatus(o.status) && o.status !== "CANCELLED";
+    return true;
+  }).slice(0, 5);
 
 
 
@@ -358,55 +406,74 @@ export default function OverviewTab({
           </div>
         </div>
 
-        {/* Người dùng trực tuyến & Quốc gia (6 Cột) */}
+        {/* Đơn hàng mới & Doanh số theo khu vực (6 Cột) */}
         <div className="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md transition-all">
           <div className="flex justify-between items-start mb-1">
             <div>
-              <h4 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Người dùng trực tuyến (30p)</h4>
-              <span className="text-3xl font-extrabold text-slate-850 tracking-tight">{orders.length > 0 ? (orders.length * 1.5).toFixed(0) : "0"}</span>
+              <h4 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Đơn hàng mới (30 phút qua)</h4>
+              <span className="text-3xl font-extrabold text-slate-850 tracking-tight">{recentOrdersCount}</span>
             </div>
             <button className="text-slate-450 hover:text-slate-650">
               <Icon name="more_vert" />
             </button>
           </div>
 
-          <span className="text-[10px] text-slate-400 font-medium">Lượt truy cập mỗi phút</span>
+          <span className="text-[10px] text-slate-400 font-medium">Số đơn hàng tạo mới mỗi phút</span>
 
-          <div className="w-full mt-3">
+          <div className="w-full mt-3 relative">
             <ResponsiveContainer width="100%" height={64} minWidth={0}>
-              <BarChart data={liveUsersData}>
-                <Bar dataKey="users" fill="#10b981" radius={[2, 2, 0, 0]} barSize={4} />
-              </BarChart>
+              <AreaChart data={recentOrdersData} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorRecentOrders" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <Tooltip
+                  contentStyle={{ backgroundColor: "#1e293b", borderRadius: "10px", border: "none", color: "#fff", fontSize: "10px", fontWeight: "700", padding: "4px 8px" }}
+                  labelFormatter={(m) => `${m} phút trước`}
+                  formatter={(v) => [`${v} đơn`, "Số đơn"]}
+                />
+                <Area type="monotone" dataKey="count" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorRecentOrders)" isAnimationActive={false} />
+              </AreaChart>
             </ResponsiveContainer>
+            {recentOrdersCount === 0 && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span className="text-[10px] text-slate-300 font-semibold">Chưa có đơn hàng mới</span>
+              </div>
+            )}
           </div>
 
-          {/* Doanh số quốc gia */}
+          {/* Doanh số theo khu vực */}
           <div className="mt-6 space-y-4 pt-4 border-t border-slate-50">
             <div className="flex justify-between items-center text-xs font-bold text-slate-800">
-              <span>Doanh Số Theo Quốc Gia</span>
+              <span>Doanh Số Theo Khu Vực</span>
               <span>Doanh Số</span>
             </div>
 
-            {countrySales.map((c, idx) => (
-              <div key={idx} className="space-y-1">
-                <div className="flex justify-between items-center text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{c.flag}</span>
-                    <div>
-                      <span className="font-extrabold text-slate-700 block text-xs">{c.name}</span>
-                      <span className="text-[9px] text-slate-400 font-medium">{c.region}</span>
+            {regionSales.length === 0 ? (
+              <p className="text-[10px] text-slate-400 font-medium py-2">Chưa có dữ liệu địa chỉ giao hàng.</p>
+            ) : (
+              regionSales.map((r, idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="flex justify-between items-center text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] ${r.colorClass}`}>
+                        <Icon name="location_on" className="text-xs" />
+                      </span>
+                      <span className="font-extrabold text-slate-700 block text-xs">{r.name}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-extrabold text-slate-850 block text-xs">{r.sales}đ</span>
+                      <span className="text-[9px] text-emerald-600 font-bold">{r.percent}%</span>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="font-extrabold text-slate-850 block text-xs">{c.sales}</span>
-                    <span className="text-[9px] text-emerald-600 font-bold">▲ {c.percent}%</span>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${r.colorClass}`} style={{ width: `${Math.max(20, r.percent)}%` }}></div>
                   </div>
                 </div>
-                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${idx === 0 ? 'bg-blue-500' : idx === 1 ? 'bg-purple-500' : idx === 2 ? 'bg-sky-400' : 'bg-emerald-400'}`} style={{ width: `${Math.max(20, 100 - idx * 15)}%` }}></div>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
@@ -415,17 +482,37 @@ export default function OverviewTab({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Bảng Giao Dịch Gần Đây (8 Cột) */}
         <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden hover:shadow-md transition-all flex flex-col justify-between">
-          <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-white">
+          <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-white relative">
             <h4 className="text-sm font-extrabold text-slate-800">Giao dịch gần đây</h4>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100/60 rounded-lg text-xs font-bold text-emerald-700 transition-colors">
-              <Icon name="filter_list" className="text-sm" />
-              <span>Bộ Lọc</span>
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setIsFilterOpen(prev => !prev)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100/60 rounded-lg text-xs font-bold text-emerald-700 transition-colors"
+              >
+                <Icon name="filter_list" className="text-sm" />
+                <span>{ORDER_STATUS_FILTERS.find(f => f.value === transactionFilter)?.label || "Bộ Lọc"}</span>
+              </button>
+              {isFilterOpen && (
+                <div className="absolute right-0 mt-1 w-36 bg-white border border-slate-200 rounded-lg shadow-lg z-10 overflow-hidden">
+                  {ORDER_STATUS_FILTERS.map(f => (
+                    <button
+                      key={f.value}
+                      onClick={() => { setTransactionFilter(f.value); setIsFilterOpen(false); }}
+                      className={`w-full text-left px-3 py-2 text-xs font-semibold hover:bg-slate-50 transition-colors ${
+                        transactionFilter === f.value ? "text-emerald-700 bg-emerald-50/60" : "text-slate-600"
+                      }`}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {loading ? (
             <div className="p-8 text-center text-xs text-slate-400">Đang tải danh sách giao dịch...</div>
-          ) : orders.length === 0 ? (
+          ) : filteredOrdersForTable.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-400">Không có dữ liệu giao dịch.</div>
           ) : (
             <div className="overflow-x-auto">
@@ -440,7 +527,7 @@ export default function OverviewTab({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {orders.slice(0, 5).map((o, idx) => (
+                  {filteredOrdersForTable.map((o, idx) => (
                     <tr key={o.id} className="hover:bg-slate-50/30 transition-colors">
                       <td className="p-4 font-semibold text-slate-400">{idx + 1}.</td>
                       <td className="p-4 font-extrabold text-slate-700">#{o.id}</td>
@@ -499,17 +586,6 @@ export default function OverviewTab({
               </button>
             </div>
 
-            <div className="relative mb-4">
-              <input
-                type="text"
-                placeholder="Tìm sản phẩm nhanh..."
-                value={productSearch}
-                onChange={(e) => setProductSearch(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-1.5 pl-8 text-xs font-semibold text-slate-705 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-              />
-              <Icon name="search" className="absolute left-2.5 top-2 text-slate-400 text-sm" />
-            </div>
-
             <div className="space-y-4">
               {filteredProductsForList.map((p) => (
                 <div key={p.id} className="flex items-center justify-between">
@@ -543,66 +619,36 @@ export default function OverviewTab({
                 </button>
               </div>
 
-              {/* Các mẫu sản phẩm */}
+              {/* Danh mục thực tế lấy từ hệ thống */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-slate-50/70 hover:bg-slate-100/60 rounded-xl border border-slate-100/60 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-xs">
-                      EL
-                  </div>
-                    <div>
-                      <span className="font-extrabold text-slate-700 text-xs block">Điện tử</span>
-                      <span className="text-[9px] text-slate-400 font-medium">Bản mẫu Laptop / Điện thoại</span>
+                {quickAddCategories.length === 0 ? (
+                  <p className="text-[10px] text-slate-400 font-medium py-2">Chưa có danh mục nào.</p>
+                ) : (
+                  quickAddCategories.map((cat) => (
+                    <div key={cat.id ?? cat.name} className="flex items-center justify-between p-3 bg-slate-50/70 hover:bg-slate-100/60 rounded-xl border border-slate-100/60 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${cat.colorClasses}`}>
+                          {cat.initials}
+                        </div>
+                        <div>
+                          <span className="font-extrabold text-slate-700 text-xs block">{cat.name}</span>
+                          <span className="text-[9px] text-slate-400 font-medium">Thêm sản phẩm vào danh mục này</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleQuickAddTemplate("", cat.name)}
+                        className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-extrabold text-slate-600 shadow-sm transition-colors"
+                      >
+                        + Thêm
+                      </button>
                     </div>
-                  </div>
-                  <button
-                    onClick={() => handleQuickAddTemplate("Laptop ThinkPad X1 Carbon", "Electronic", 32000000)}
-                    className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-extrabold text-slate-600 shadow-sm transition-colors"
-                  >
-                    + Thêm
-                </button>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-slate-50/70 hover:bg-slate-100/60 rounded-xl border border-slate-100/60 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-xs">
-                      FA
-                  </div>
-                    <div>
-                      <span className="font-extrabold text-slate-700 text-xs block">Thời trang</span>
-                      <span className="text-[9px] text-slate-400 font-medium">Bản mẫu Giày / Áo khoác</span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleQuickAddTemplate("Giày Thể Thao Sneaker Pro", "Fashion", 1250000)}
-                    className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-extrabold text-slate-600 shadow-sm transition-colors"
-                  >
-                    + Thêm
-                </button>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-slate-50/70 hover:bg-slate-100/60 rounded-xl border border-slate-100/60 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold text-xs">
-                      HO
-                  </div>
-                    <div>
-                      <span className="font-extrabold text-slate-700 text-xs block">Gia dụng</span>
-                      <span className="text-[9px] text-slate-400 font-medium">Bản mẫu Đèn / Ghế công thái học</span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleQuickAddTemplate("Đèn Led Thông Minh SmartLux", "Home", 680000)}
-                    className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-extrabold text-slate-600 shadow-sm transition-colors"
-                  >
-                    + Thêm
-                </button>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
   );
 }

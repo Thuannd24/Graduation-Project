@@ -23,9 +23,12 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    listener:
+      ack-mode: manual_immediate
     consumer:
       group-id: payment-service-group
       auto-offset-reset: earliest
+      enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:

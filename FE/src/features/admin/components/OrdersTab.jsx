@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Icon from "../../../components/common/Icon.jsx";
+import Pagination from "../../../components/common/Pagination.jsx";
 import { orderApi } from "../../../services/orderApi.ts";
 
 export default function OrdersTab({
@@ -12,8 +13,6 @@ export default function OrdersTab({
   setIsDrawerOpen,
   orderFilter,
   setOrderFilter,
-  orderSearchQuery,
-  setOrderSearchQuery,
   currentPage,
   setCurrentPage,
   itemsPerPage,
@@ -54,11 +53,7 @@ export default function OrdersTab({
   // Lọc danh sách đơn hàng cho bảng
   const filteredOrders = orders.filter(o => {
     if (!o) return false;
-    const orderIdStr = String(o.id || "").toLowerCase();
-    const searchQueryLower = (orderSearchQuery || "").toLowerCase();
-    const matchesSearch = orderIdStr.includes(searchQueryLower) ||
-                          String(o.phoneNumber || "").includes(orderSearchQuery);
-    
+
     let matchesStatus = true;
     if (orderFilter === "completed") matchesStatus = o.status === "DELIVERED";
     else if (orderFilter === "pending") matchesStatus = ["PENDING", "AWAITING_PAYMENT", "CONFIRMED", "SHIPPED"].includes(o.status);
@@ -73,7 +68,7 @@ export default function OrdersTab({
       matchesPaymentMethod = method === "VNPAY";
     }
 
-    return matchesSearch && matchesStatus && matchesPaymentMethod;
+    return matchesStatus && matchesPaymentMethod;
   });
 
   const sortedOrders = useMemo(() => {
@@ -98,24 +93,9 @@ export default function OrdersTab({
 
   return (
     <div className="space-y-6 animate-fadeIn p-6">
-      {/* Tiêu đề & Nút thao tác của danh sách đơn hàng */}
+      {/* Tiêu đề danh sách đơn hàng */}
       <div className="flex justify-between items-center">
         <span className="font-extrabold text-xl text-slate-800">Danh Sách Đơn Hàng</span>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              alert("Tính năng thêm đơn hàng thủ công dành cho Admin đang được phát triển.");
-            }}
-            className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors"
-          >
-            <Icon name="add_circle" className="text-sm" />
-            <span>Thêm Đơn Hàng</span>
-          </button>
-          <button className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1 transition-colors">
-            <span>Thao Tác Khác</span>
-            <Icon name="more_vert" className="text-sm" />
-          </button>
-        </div>
       </div>
 
       {/* Hàng 4 thẻ thống kê của tab Đơn Hàng (Theo ảnh thứ 2) */}
@@ -250,23 +230,6 @@ export default function OrdersTab({
               <option value="vnpay">Online (VNPAY)</option>
             </select>
 
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Tìm mã đơn, SĐT..."
-                value={orderSearchQuery}
-                onChange={(e) => { setOrderSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="bg-slate-50 border border-slate-200/80 focus:ring-1 focus:ring-emerald-500 focus:bg-white rounded-lg px-3 py-1.5 pl-8 text-xs font-semibold text-slate-700 placeholder-slate-400 w-52 transition-all"
-              />
-              <Icon name="search" className="absolute left-2.5 top-2 text-slate-400 text-sm" />
-            </div>
-
-            <button className="p-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 rounded-lg text-xs font-bold transition-colors">
-              <Icon name="tune" className="text-sm" />
-            </button>
-            <button className="p-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 rounded-lg text-xs font-bold transition-colors">
-              <Icon name="swap_vert" className="text-sm" />
-            </button>
           </div>
         </div>
 
@@ -302,7 +265,7 @@ export default function OrdersTab({
                   const payment = payments?.find(p => p.orderId === o.id);
                   const paymentMethod = payment ? payment.paymentMethod?.toUpperCase() : (o.status === "PENDING" || o.status === "AWAITING_PAYMENT" ? "COD" : "N/A");
                   const paymentStatus = payment ? payment.status?.toUpperCase() : (["DELIVERED", "CONFIRMED", "SHIPPED"].includes(o.status) ? "SUCCESS" : "PENDING");
-                  const isPaid = paymentStatus === "SUCCESS" || o.status === "DELIVERED";
+                  const isPaid = paymentStatus === "SUCCESS";
 
                   return (
                     <tr
@@ -401,37 +364,7 @@ export default function OrdersTab({
 
         {/* Phân trang */}
         <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-white">
-          <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors"
-          >
-            ← Trước
-          </button>
-          
-          <div className="flex gap-1.5">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                  currentPage === page
-                    ? "bg-emerald-600 text-white shadow-sm"
-                    : "border border-slate-200 text-slate-500 hover:bg-slate-50"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
-
-          <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors"
-          >
-            Sau →
-          </button>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>
       </div>
 

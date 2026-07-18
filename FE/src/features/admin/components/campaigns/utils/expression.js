@@ -17,12 +17,17 @@ export function parseExpression(nodeType, expr) {
     return { value: m ? m[1] : "Hanoi" };
   }
   if (nodeType === "Condition_ContainsCategory") {
-    const m = expr.match(/containsCategory\s*==\s*['"]([^'"]+)['"]/);
-    return { value: m ? m[1] : "" };
+    // Also parses the legacy `containsCategory == 'X'` form from older deployed campaigns.
+    const listMatch = expr.match(/orderCategoryIds.*?contains\((\d+)\)/);
+    if (listMatch) return { value: listMatch[1] };
+    const legacyMatch = expr.match(/containsCategory\s*==\s*['"]([^'"]+)['"]/);
+    return { value: legacyMatch ? legacyMatch[1] : "" };
   }
   if (nodeType === "Condition_ContainsProduct") {
-    const m = expr.match(/containsProduct\s*==\s*['"]([^'"]+)['"]/);
-    return { value: m ? m[1] : "" };
+    const listMatch = expr.match(/orderProductIds.*?contains\((\d+)\)/);
+    if (listMatch) return { value: listMatch[1] };
+    const legacyMatch = expr.match(/containsProduct\s*==\s*['"]([^'"]+)['"]/);
+    return { value: legacyMatch ? legacyMatch[1] : "" };
   }
   return { raw: expr };
 }
@@ -51,12 +56,22 @@ export function buildBranchProps(nodeType, params) {
     return { expression: "${targetProvince == '" + v + "'}", operator: "EQUAL", value: [v] };
   }
   if (nodeType === "Condition_ContainsCategory") {
-    const v = params.value || "";
-    return { expression: "${containsCategory == '" + v + "'}", operator: "EQUAL", value: [v] };
+    // Checks the order's full category list, not just the first item. `value` stays raw (not
+    // coerced to 0) so a blank branch still validates as blank.
+    const raw = params.value != null ? String(params.value) : "";
+    const n = Number(raw);
+    const expr = raw.trim() !== "" && Number.isFinite(n)
+      ? "${orderCategoryIds != null && orderCategoryIds.contains(" + n + ")}"
+      : "";
+    return { expression: expr, operator: "EQUAL", value: [raw] };
   }
   if (nodeType === "Condition_ContainsProduct") {
-    const v = params.value || "";
-    return { expression: "${containsProduct == '" + v + "'}", operator: "EQUAL", value: [v] };
+    const raw = params.value != null ? String(params.value) : "";
+    const n = Number(raw);
+    const expr = raw.trim() !== "" && Number.isFinite(n)
+      ? "${orderProductIds != null && orderProductIds.contains(" + n + ")}"
+      : "";
+    return { expression: expr, operator: "EQUAL", value: [raw] };
   }
   return { expression: "" };
 }

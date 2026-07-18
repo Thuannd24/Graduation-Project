@@ -109,6 +109,17 @@ async function enrichProductsWithVariants(products) {
   return products.map(p => detailMap.get(String(p.id)) || p);
 }
 
+async function getBatchByProductIdsChunked(productIds, chunkSize = 300) {
+  const chunks = [];
+  for (let i = 0; i < productIds.length; i += chunkSize) {
+    chunks.push(productIds.slice(i, i + chunkSize));
+  }
+  const results = await Promise.all(
+    chunks.map(chunk => inventoryApi.getBatchByProductIds(chunk).catch(() => []))
+  );
+  return results.flat();
+}
+
 export default function InventoryTab() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
@@ -120,6 +131,11 @@ export default function InventoryTab() {
   const [hasNext, setHasNext] = useState(false);
   const [hasPrevious, setHasPrevious] = useState(false);
   const pageSize = 20;
+
+  // Dữ liệu TOÀN BỘ danh mục (không giới hạn theo trang) — dùng riêng để tính thống kê & vẽ biểu đồ,
+  // vì các con số này phải phản ánh cả kho hàng chứ không chỉ 20 SKU đang hiển thị ở trang hiện tại.
+  const [globalRows, setGlobalRows] = useState([]);
+  const [loadingGlobalStats, setLoadingGlobalStats] = useState(true);
 
   const [threshold, setThreshold] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
@@ -196,6 +212,38 @@ export default function InventoryTab() {
     loadLowStock(threshold);
   }, [threshold, loadLowStock]);
 
+  // Tải TOÀN BỘ sản phẩm + tồn kho một lần (không phụ thuộc trang đang xem) để thống kê/biểu đồ đúng trên cả kho hàng.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoadingGlobalStats(true);
+      try {
+        // Danh sách sản phẩm công khai đã trả kèm variants theo lô (xem ProductServiceImpl.convertToDtoList),
+        // nên KHÔNG gọi enrichProductsWithVariants ở đây — tránh bắn hàng trăm/nghìn request chi tiết riêng lẻ
+        // cho từng sản phẩm không có biến thể (buildRows đã tự fallback 1 SKU đơn cho trường hợp đó).
+        const allProducts = await productApi.listAllProducts();
+        const ids = allProducts.map(p => Number(p.id)).filter(id => id > 0);
+        const inv = ids.length ? await getBatchByProductIdsChunked(ids) : [];
+        if (!cancelled) {
+          setGlobalRows(buildRows(allProducts, inv, threshold));
+        }
+      } catch (err) {
+        console.error("Global inventory stats load failed:", err);
+        if (!cancelled) setGlobalRows([]);
+      } finally {
+        if (!cancelled) setLoadingGlobalStats(false);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Ngưỡng cảnh báo thay đổi thì chỉ cần tính lại mức tồn (level), không cần gọi lại API.
+  const globalRowsWithThreshold = useMemo(
+    () => globalRows.map(r => ({ ...r, level: getStockLevel(r.quantity, threshold) })),
+    [globalRows, threshold]
+  );
+
   const allRows = useMemo(
     () => buildRows(products, inventoryList, threshold),
     [products, inventoryList, threshold]
@@ -207,12 +255,13 @@ export default function InventoryTab() {
   }, [allRows, stockFilter]);
 
   const stats = useMemo(() => {
-    const totalQty = allRows.reduce((s, r) => s + r.quantity, 0);
-    const low = allRows.filter(r => r.level === "low").length;
-    const out = allRows.filter(r => r.level === "out").length;
-    const healthy = allRows.filter(r => r.level === "healthy").length;
-    return { skuCount: allRows.length, totalQty, low, out, healthy, alertCount: lowStockItems.length };
-  }, [allRows, lowStockItems]);
+    const rows = globalRowsWithThreshold;
+    const totalQty = rows.reduce((s, r) => s + r.quantity, 0);
+    const low = rows.filter(r => r.level === "low").length;
+    const out = rows.filter(r => r.level === "out").length;
+    const healthy = rows.filter(r => r.level === "healthy").length;
+    return { skuCount: rows.length, totalQty, low, out, healthy, alertCount: lowStockItems.length };
+  }, [globalRowsWithThreshold, lowStockItems]);
 
   const chartHealth = useMemo(() => [
     { name: "Ổn định", value: stats.healthy, color: STOCK_COLORS.healthy },
@@ -221,15 +270,18 @@ export default function InventoryTab() {
   ].filter(d => d.value > 0), [stats]);
 
   const chartLowBar = useMemo(() => {
-    return [...allRows]
+    return [...globalRowsWithThreshold]
+      .filter(r => r.level !== "healthy")
       .sort((a, b) => a.quantity - b.quantity)
-      .slice(0, 8)
+      .slice(0, 10)
+      .reverse() // recharts vertical bar layout vẽ từ dưới lên, reverse để SKU thấp nhất nằm trên cùng
       .map(r => ({
-        name: r.sku?.length > 12 ? r.sku.slice(0, 12) + "…" : r.sku,
+        name: r.sku?.length > 16 ? r.sku.slice(0, 16) + "…" : r.sku,
+        productName: r.productName,
         quantity: r.quantity,
         fill: r.level === "out" ? STOCK_COLORS.out : STOCK_COLORS.low
       }));
-  }, [allRows]);
+  }, [globalRowsWithThreshold]);
 
   const openAdjust = (row) => {
     setModal({ type: "adjust", row });
@@ -417,44 +469,80 @@ export default function InventoryTab() {
         ))}
       </div>
 
-      {/* Biểu đồ */}
+      {/* Biểu đồ — tính trên TOÀN BỘ kho hàng, không chỉ trang đang xem */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className={`${card} p-5`}>
           <p className="text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide mb-4 flex items-center gap-2">
             <Icon name="donut_large" className="text-teal-600" /> Phân bổ tình trạng tồn
+            <span className="text-[9px] font-semibold text-slate-400 normal-case">(toàn bộ {stats.skuCount} SKU)</span>
           </p>
-          {chartHealth.length === 0 ? (
+          {loadingGlobalStats ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="w-8 h-8 border-3 border-slate-200 border-t-teal-600 rounded-full animate-spin" />
+            </div>
+          ) : chartHealth.length === 0 ? (
             <p className="text-xs text-slate-400 text-center py-16">Chưa có dữ liệu tồn kho</p>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie data={chartHealth} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3}>
-                  {chartHealth.map((entry, i) => (
-                    <Cell key={i} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(v, name) => [v, name]} contentStyle={{ borderRadius: 12, fontSize: 12 }} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="relative">
+              <ResponsiveContainer width="100%" height={220}>
+                <PieChart>
+                  <Pie data={chartHealth} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} stroke="#fff" strokeWidth={2}>
+                    {chartHealth.map((entry, i) => (
+                      <Cell key={i} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(v, name) => [`${v} SKU (${((v / stats.skuCount) * 100).toFixed(0)}%)`, name]}
+                    contentStyle={{ borderRadius: 12, fontSize: 12 }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ marginBottom: 28 }}>
+                <span className="text-2xl font-black text-slate-800 dark:text-white">{stats.skuCount}</span>
+                <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-widest">SKU</span>
+              </div>
+            </div>
           )}
         </div>
         <div className={`${card} p-5`}>
           <p className="text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wide mb-4 flex items-center gap-2">
-            <Icon name="bar_chart" className="text-amber-600" /> Top SKU tồn thấp nhất
+            <Icon name="bar_chart" className="text-amber-600" /> Top SKU cần nhập hàng gấp
           </p>
-          {chartLowBar.length === 0 ? (
-            <p className="text-xs text-slate-400 text-center py-16">Không có dữ liệu</p>
+          {loadingGlobalStats ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="w-8 h-8 border-3 border-slate-200 border-t-teal-600 rounded-full animate-spin" />
+            </div>
+          ) : chartLowBar.length === 0 ? (
+            <p className="text-xs text-slate-400 text-center py-16">Không có SKU nào sắp hết hoặc hết hàng 🎉</p>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={chartLowBar} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.5} />
-                <XAxis dataKey="name" tick={{ fontSize: 9 }} />
-                <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip contentStyle={{ borderRadius: 12, fontSize: 12 }} />
-                <Bar dataKey="quantity" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <>
+              <ResponsiveContainer width="100%" height={Math.max(180, chartLowBar.length * 26)}>
+                <BarChart data={chartLowBar} layout="vertical" margin={{ top: 5, right: 16, left: 0, bottom: 5 }} barCategoryGap={6}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.5} horizontal={false} />
+                  <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={110} />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, fontSize: 12 }}
+                    formatter={(v) => [`${v} sản phẩm`, "Tồn kho"]}
+                    labelFormatter={(_, payload) => payload?.[0]?.payload?.productName || ""}
+                  />
+                  <Bar dataKey="quantity" radius={[0, 4, 4, 0]} barSize={14}>
+                    {chartLowBar.map((entry, i) => (
+                      <Cell key={i} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+              <div className="flex items-center gap-4 mt-2 pt-2 border-t border-slate-50 dark:border-slate-800">
+                <span className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: STOCK_COLORS.low }} /> Sắp hết
+                </span>
+                <span className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: STOCK_COLORS.out }} /> Hết hàng
+                </span>
+              </div>
+            </>
           )}
         </div>
       </div>

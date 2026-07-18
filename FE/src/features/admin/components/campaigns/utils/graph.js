@@ -53,20 +53,22 @@ export function clone(o) {
   return JSON.parse(JSON.stringify(o));
 }
 
-// BFS levels (rank of each node from "start")
+// Longest path from "start", relaxed to a fixpoint (a single BFS pass can undercount a node
+// reached by both a short and a long path, since the short path may finalize it before the
+// long path's update arrives).
 export function getLevels(nodes, edges) {
-  const lv = {};
-  const visited = new Set();
-  const q = ["start"];
-  lv["start"] = 0;
-  while (q.length) {
-    const c = q.shift();
-    const cl = lv[c] || 0;
-    edges.filter(e => e.source === c).forEach(e => {
-      lv[e.target] = Math.max(lv[e.target] || 0, cl + 1);
-      if (!visited.has(e.target)) q.push(e.target);
+  const lv = { start: 0 };
+  let changed = true;
+  while (changed) {
+    changed = false;
+    edges.forEach(e => {
+      if (lv[e.source] === undefined) return;
+      const proposed = lv[e.source] + 1;
+      if ((lv[e.target] ?? -1) < proposed) {
+        lv[e.target] = proposed;
+        changed = true;
+      }
     });
-    visited.add(c);
   }
   nodes.forEach(n => { if (lv[n.id] === undefined) lv[n.id] = 1; });
   const maxLv = Math.max(...Object.values(lv).filter(x => x !== lv["end"]), 0);

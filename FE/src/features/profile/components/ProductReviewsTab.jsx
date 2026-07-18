@@ -333,6 +333,18 @@ export default function ProductReviewsTab() {
                     ))}
                   </div>
                 )}
+                {review.staffReplyContent && (
+                  <div className="mt-3 p-3 rounded-lg bg-surface-container-high border border-surface-container-highest">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Icon name="storefront" className="text-xs text-primary" />
+                      <span className="text-xs font-bold text-primary">Phản hồi từ cửa hàng</span>
+                      {review.staffReplyAt && (
+                        <span className="text-[10px] text-secondary font-medium">· {formatDate(review.staffReplyAt)}</span>
+                      )}
+                    </div>
+                    <p className="text-sm text-on-surface leading-relaxed">{review.staffReplyContent}</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>

@@ -229,21 +229,11 @@ public class WorkflowValidatorService {
                     String.format("Node Condition \"%s\": chỉ được có ĐÚNG 1 nhánh Else (isDefault=true), hiện có %d nhánh.", node.getName(), defaultCount)));
         }
 
-        // Node-level properties validation
+        // Node-level properties validation. Only daysLookback is required here - rank/amount/
+        // province are per-branch, and targetIds is optional (empty = no redemption restriction).
         switch (node.getType()) {
-            case "Condition_MemberRank":
-                requireStringOrArray(node, props, "allowedRanks", errors);
-                break;
             case "Condition_TotalSpending":
-                requireNumber(node, props, "minSpendingAmount", errors);
                 requireNumber(node, props, "daysLookback", errors);
-                break;
-            case "Condition_Location":
-                requireStringOrArray(node, props, "targetProvinces", errors);
-                break;
-            case "Condition_ContainsCategory":
-            case "Condition_ContainsProduct":
-                requireStringOrArray(node, props, "targetIds", errors);
                 break;
         }
 
@@ -540,18 +530,6 @@ public class WorkflowValidatorService {
     private void requireString(WorkflowNodeDto node, Map<String, Object> props,
                                 String field, List<ValidationErrorDto> errors) {
         if (!hasNonBlankString(props, field)) {
-            errors.add(err(node.getId(), "missing_parameter", field,
-                    String.format("Node \"%s\": trường \"%s\" là bắt buộc và không được để trống.", node.getName(), field)));
-        }
-    }
-
-    private void requireStringOrArray(WorkflowNodeDto node, Map<String, Object> props,
-                                      String field, List<ValidationErrorDto> errors) {
-        Object val = props.get(field);
-        boolean empty = (val == null) ||
-                (val instanceof java.util.List && ((java.util.List<?>) val).isEmpty()) ||
-                (val instanceof String && ((String) val).isBlank());
-        if (empty) {
             errors.add(err(node.getId(), "missing_parameter", field,
                     String.format("Node \"%s\": trường \"%s\" là bắt buộc và không được để trống.", node.getName(), field)));
         }

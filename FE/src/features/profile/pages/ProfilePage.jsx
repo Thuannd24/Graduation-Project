@@ -47,17 +47,6 @@ const TIER_CARD_STYLES = {
     glowText: "text-purple-200",
     accentColor: "rgba(233,213,255,0.2)"
   },
-  DIAMOND: {
-    bgGradient: "linear-gradient(135deg, #22d3ee 0%, #0891b2 40%, #0f172a 100%)",
-    textColor: "text-white",
-    badgeBg: "bg-cyan-400 text-cyan-950",
-    multiplier: "x2.5 Point Multiplier",
-    shadow: "shadow-[0_10px_35px_-5px_rgba(6,182,212,0.5)]",
-    border: "border-cyan-400/40",
-    cardName: "DIAMOND PRIVILEGE",
-    glowText: "text-cyan-200",
-    accentColor: "rgba(207,250,254,0.2)"
-  },
   MEMBER: {
     bgGradient: "linear-gradient(135deg, #64748b 0%, #334155 60%, #0f172a 100%)",
     textColor: "text-white",
@@ -76,7 +65,6 @@ const getTierBadgeClass = (tier = "MEMBER") => {
     case "SILVER": return "bg-slate-200 text-slate-800 border border-slate-300";
     case "GOLD": return "bg-amber-100 text-amber-800 border border-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.2)]";
     case "VIP": return "bg-purple-100 text-purple-800 border border-purple-300 shadow-[0_0_10px_rgba(139,92,246,0.2)]";
-    case "DIAMOND": return "bg-cyan-100 text-cyan-800 border border-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]";
     default: return "bg-slate-100 text-slate-600 border border-slate-200";
   }
 };
@@ -121,19 +109,6 @@ const getTierHeaderTheme = (tier = "MEMBER") => {
         statTitle: "text-purple-800/70",
         statValue: "text-purple-950",
         editIconColor: "text-purple-700"
-      };
-    case "DIAMOND":
-      return {
-        cardBg: "linear-gradient(135deg, #ecfeff 0%, #cffafe 45%, #a5f3fc 100%)",
-        borderColor: "border-cyan-300/50",
-        shadow: "shadow-[0_8px_30px_rgba(6,182,212,0.08)]",
-        nameColor: "text-cyan-950",
-        subColor: "text-cyan-800/80",
-        iconBg: "bg-cyan-100 text-cyan-700 border border-cyan-300/40",
-        dividerColor: "border-cyan-300/50",
-        statTitle: "text-cyan-800/70",
-        statValue: "text-cyan-950",
-        editIconColor: "text-cyan-700"
       };
     default:
       return {
@@ -1260,7 +1235,7 @@ export default function ProfilePage() {
 
           {activeTab === "vouchers" && <VouchersTab />}
 
-          {activeTab === "warranty" && <WarrantyTab defaultPhoneNumber={userProfile.phone} />}
+          {activeTab === "warranty" && <WarrantyTab />}
 
           {activeTab === "policy" && (
             <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-md space-y-md">

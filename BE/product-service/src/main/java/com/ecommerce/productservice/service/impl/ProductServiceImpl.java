@@ -134,9 +134,6 @@ public class ProductServiceImpl implements ProductService {
                 .brandId(productDto.getBrandId())
                 .brand(resolvedBrandName)
                 .imageUrl(productDto.getImageUrl())
-                .status(productDto.getStatus() != null
-                        ? ProductStatus.valueOf(productDto.getStatus())
-                        : ProductStatus.DRAFT)
                 .warrantyPeriod(productDto.getWarrantyPeriod())
                 .warrantyPolicy(productDto.getWarrantyPolicy())
                 .active(productDto.getActive() != null ? productDto.getActive() : true)
@@ -284,9 +281,6 @@ public class ProductServiceImpl implements ProductService {
         product.setBrandId(productDto.getBrandId());
         product.setBrand(resolvedBrandName);
         product.setImageUrl(productDto.getImageUrl());
-        if (productDto.getStatus() != null) {
-            product.setStatus(ProductStatus.valueOf(productDto.getStatus()));
-        }
         product.setWarrantyPeriod(productDto.getWarrantyPeriod());
         product.setWarrantyPolicy(productDto.getWarrantyPolicy());
         if (productDto.getActive() != null) {
@@ -640,7 +634,6 @@ public class ProductServiceImpl implements ProductService {
                 .images(imageUrls)
                 .salesCount(product.getSalesCount())
                 .ratingAvg(product.getRatingAvg())
-                .status(product.getStatus() != null ? product.getStatus().name() : null)
                 .warrantyPeriod(product.getWarrantyPeriod())
                 .warrantyPolicy(product.getWarrantyPolicy())
                 .active(product.getActive())

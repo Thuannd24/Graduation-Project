@@ -53,6 +53,18 @@ public class InternalUserController {
     }
 
     /**
+     * [Promotion Service] Lấy email/phone theo ID nội bộ - dùng để enrich biến process khi
+     * event trigger (order-events, product-reviewed-events...) chỉ mang theo ID số nội bộ
+     * thay vì Keycloak UUID, nên nhánh tra cứu theo keycloak không chạy được.
+     */
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse<InternalUserProfileResponse>> getProfileById(@PathVariable Long userId) {
+        log.info("GET /api/internal/users/{}", userId);
+        return ResponseEntity.ok(ApiResponse.success(
+                userService.getInternalProfileById(userId)));
+    }
+
+    /**
      * [API Gateway] Đảm bảo profile user đã tồn tại trong DB ngay khi có request
      * xác thực đầu tiên (thay vì chờ FE gọi GET /users/me). Idempotent — an toàn gọi nhiều lần.
      */

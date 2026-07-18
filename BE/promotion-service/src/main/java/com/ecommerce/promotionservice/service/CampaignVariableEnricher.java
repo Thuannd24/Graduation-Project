@@ -40,6 +40,7 @@ public class CampaignVariableEnricher {
 
         if (userDbId != null) {
             enrichUserProfile(userDbId, variables);
+            enrichContactInfo(userDbId, variables);
         }
 
         enrichOrderContext(variables);
@@ -101,23 +102,68 @@ public class CampaignVariableEnricher {
             log.warn("Could not fetch user profile from user-service: {}", ex.getMessage());
         }
 
-        try {
-            String keycloakUserId = variables.containsKey("keycloakUserId")
-                    ? variables.get("keycloakUserId").toString()
-                    : (variables.get("userId") != null ? variables.get("userId").toString() : null);
+        // totalSpending is fetched per-campaign now - see enrichTotalSpending below, called from
+        // CampaignTriggerService.startCampaignProcess with that campaign's own daysLookback.
+    }
 
-            if (keycloakUserId != null && keycloakUserId.contains("-")) {
-                Map<String, Object> spendingRes = orderClient.getTotalSpending(keycloakUserId, 30);
-                Map<String, Object> data = extractData(spendingRes);
-                if (data != null) {
-                    variables.put("totalSpending", data);
-                }
-            } else {
-                log.warn("Cannot fetch total spending: keycloakUserId is missing or invalid: {}", keycloakUserId);
+    /**
+     * Fetches total spending over the given campaign-specific lookback window and stamps it onto
+     * the process variables, overwriting whatever was there before. Called once per campaign
+     * (not per event) so multiple campaigns with different daysLookback each get the right number.
+     */
+    public void enrichTotalSpending(Map<String, Object> variables, int daysLookback) {
+        String keycloakUserId = variables.containsKey("keycloakUserId")
+                ? variables.get("keycloakUserId").toString()
+                : (variables.get("userId") != null ? variables.get("userId").toString() : null);
+
+        if (keycloakUserId == null || !keycloakUserId.contains("-")) {
+            log.warn("Cannot fetch total spending: keycloakUserId is missing or invalid: {}", keycloakUserId);
+            return;
+        }
+        try {
+            Map<String, Object> spendingRes = orderClient.getTotalSpending(keycloakUserId, daysLookback);
+            // order-service wraps a plain BigDecimal in "data" - extractData() expects a nested
+            // object and would return the whole envelope instead, so unwrap it directly here.
+            BigDecimal spending = spendingRes != null ? toBigDecimal(spendingRes.get("data")) : null;
+            if (spending != null) {
+                variables.put("totalSpending", spending);
             }
         } catch (Exception ex) {
             log.warn("Could not fetch total spending from order-service: {}", ex.getMessage());
         }
+    }
+
+    // resolveUserDbId only backfills email/phone when the incoming userId is a Keycloak UUID
+    // (it calls getProfileByKeycloakId). Triggers that carry the internal numeric user id instead
+    // (e.g. Trigger_Event_OrderSuccess via order-events, whose payload uses the DB id) skip that
+    // branch entirely, so email/phone are left blank and SendEmailDelegate ends up asking
+    // notification-service to mail a fabricated "<id>@ecommerce.com" address that always bounces.
+    // Backfill by internal id here whenever either field is still missing.
+    private void enrichContactInfo(Long userDbId, Map<String, Object> variables) {
+        boolean needsEmail = isBlank(variables.get("email"));
+        boolean needsPhone = isBlank(variables.get("phone"));
+        if (!needsEmail && !needsPhone) {
+            return;
+        }
+        try {
+            Map<String, Object> response = userClient.getProfileById(userDbId);
+            Map<String, Object> data = extractData(response);
+            if (data == null) {
+                return;
+            }
+            if (needsEmail && data.get("email") != null) {
+                variables.put("email", data.get("email").toString());
+            }
+            if (needsPhone && data.get("phoneNumber") != null) {
+                variables.put("phone", data.get("phoneNumber").toString());
+            }
+        } catch (Exception ex) {
+            log.warn("Could not fetch contact info for userDbId {}: {}", userDbId, ex.getMessage());
+        }
+    }
+
+    private boolean isBlank(Object value) {
+        return value == null || value.toString().isBlank();
     }
 
     @SuppressWarnings("unchecked")
@@ -226,6 +272,23 @@ public class CampaignVariableEnricher {
             return (List<Map<String, Object>>) dataObj;
         }
         return List.of();
+    }
+
+    private BigDecimal toBigDecimal(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof BigDecimal bd) {
+            return bd;
+        }
+        if (value instanceof Number n) {
+            return BigDecimal.valueOf(n.doubleValue());
+        }
+        try {
+            return new BigDecimal(value.toString());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private Long toLong(Object value) {

@@ -91,6 +91,37 @@ public class WorkflowTriggerResolver {
         }
     }
 
+    /**
+     * daysLookback of this workflow's Condition_TotalSpending node, if any (7/30/90, admin-
+     * configurable in the campaign builder). Empty if the workflow has no such node - callers
+     * should skip fetching total spending entirely in that case rather than defaulting silently.
+     */
+    public Optional<Integer> findTotalSpendingDaysLookback(String workflowJson) {
+        if (workflowJson == null || workflowJson.isBlank()) {
+            return Optional.empty();
+        }
+        try {
+            WorkflowGraphDto graph = objectMapper.readValue(workflowJson, WorkflowGraphDto.class);
+            if (graph.getNodes() == null) {
+                return Optional.empty();
+            }
+            return graph.getNodes().stream()
+                    .filter(n -> "Condition_TotalSpending".equals(n.getType()) && n.getProperties() != null)
+                    .findFirst()
+                    .map(n -> n.getProperties().get("daysLookback"))
+                    .map(v -> {
+                        try {
+                            return Integer.parseInt(v.toString());
+                        } catch (NumberFormatException e) {
+                            return 30;
+                        }
+                    });
+        } catch (Exception e) {
+            log.warn("Cannot parse workflowJson for daysLookback: {}", e.getMessage());
+            return Optional.empty();
+        }
+    }
+
     private Long toLongOrNull(Object value) {
         if (value == null) {
             return null;

@@ -54,7 +54,7 @@ async function importFile(baseUrl, token, dryRun, filePath) {
 async function main() {
   loadEnvFile();
   const dryRun = process.argv.includes("--dry-run");
-  const baseUrl = process.env.API_BASE_URL || "http://localhost:8080/api/v1";
+  const baseUrl = process.env.PRODUCT_SERVICE_URL || process.env.API_BASE_URL || "http://localhost:8080/api/v1";
   const token = process.env.ADMIN_TOKEN || "";
 
   if (!dryRun && !token) {

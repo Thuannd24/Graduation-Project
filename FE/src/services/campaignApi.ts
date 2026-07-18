@@ -153,12 +153,5 @@ export const campaignApi = {
 
   listCampaignVouchers(id: number): Promise<IssuedVoucher[]> {
     return apiClient.get<IssuedVoucher[]>(`/admin/campaigns/${id}/vouchers`, { requireAuth: true });
-  },
-
-  evaluateCampaign(processKey: string, variables: Record<string, unknown>): Promise<Record<string, unknown>> {
-    return apiClient.postAuth<Record<string, unknown>>(
-      `/admin/campaigns/evaluate?processKey=${encodeURIComponent(processKey)}`,
-      variables
-    );
   }
 };

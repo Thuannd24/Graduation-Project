@@ -2,59 +2,27 @@ import { useState, useEffect } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import { shopApi } from "../../../services/shopApi";
 
-export default function WarrantyTab({ defaultPhoneNumber = "" }) {
-  const [phoneNumber, setPhoneNumber] = useState(defaultPhoneNumber);
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [devOtpHint, setDevOtpHint] = useState("");
-  const [otpLoading, setOtpLoading] = useState(false);
+export default function WarrantyTab() {
   const [results, setResults] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searched, setSearched] = useState(false);
 
-  useEffect(() => {
-    if (defaultPhoneNumber) {
-      setPhoneNumber(defaultPhoneNumber);
-    }
-  }, [defaultPhoneNumber]);
-
-  const handleRequestOtp = async () => {
-    if (!phoneNumber.trim()) return;
-    setOtpLoading(true);
-    setError("");
-    setDevOtpHint("");
-    try {
-      const res = await shopApi.requestWarrantyOtp(phoneNumber.trim());
-      setOtpSent(true);
-      if (res?.devOtp) {
-        setDevOtpHint(res.devOtp);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Không thể gửi OTP. Vui lòng thử lại.");
-    } finally {
-      setOtpLoading(false);
-    }
-  };
-
-  const handleSearch = async (event) => {
-    event.preventDefault();
-    if (!phoneNumber.trim() || !otp.trim()) return;
-
+  const loadWarranty = async () => {
     setLoading(true);
     setError("");
-    setResults(null);
-    setSearched(true);
-
     try {
-      const data = await shopApi.checkWarranty(phoneNumber.trim(), otp.trim());
+      const data = await shopApi.getMyWarranty();
       setResults(data || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Không thể tra cứu bảo hành. Vui lòng kiểm tra lại OTP.");
+      setError(err instanceof Error ? err.message : "Không thể tra cứu bảo hành. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadWarranty();
+  }, []);
 
   const parseVariantAttr = (attr) => {
     if (!attr) return null;
@@ -95,93 +63,19 @@ export default function WarrantyTab({ defaultPhoneNumber = "" }) {
         </div>
       </div>
 
-      {/* Input Form */}
-      <div className="bg-surface-container-low rounded-xl p-md border border-surface-container-highest">
-        <form className="space-y-md" onSubmit={handleSearch}>
-          <div className="space-y-xs">
-            <label className="block text-xs font-bold text-on-surface uppercase tracking-wider">
-              Số điện thoại mua hàng
-            </label>
-            <div className="relative rounded-md shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary">
-                <Icon name="phone" className="text-lg" />
-              </div>
-              <input
-                type="tel"
-                pattern="[0-9]*"
-                inputMode="numeric"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ""))}
-                placeholder="Ví dụ: 0909123456"
-                required
-                className="block w-full pl-10 pr-3 py-2 bg-surface-container-lowest border border-surface-container-highest focus:ring-2 focus:ring-primary/30 rounded-md text-on-surface placeholder-secondary font-semibold outline-none transition-all text-sm"
-              />
-            </div>
-            <p className="text-[11px] text-secondary">
-              Bước 1: Nhận OTP qua số điện thoại. Bước 2: Nhập OTP để tra cứu.
-            </p>
-          </div>
-
-          {!otpSent ? (
-            <button
-              type="button"
-              onClick={handleRequestOtp}
-              disabled={otpLoading || !phoneNumber.trim()}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-on-primary rounded-md font-bold text-xs shadow-sm disabled:opacity-50 transition-colors"
-            >
-              {otpLoading ? "Đang gửi OTP..." : "Gửi mã OTP"}
-            </button>
-          ) : (
-            <div className="space-y-md">
-              <div className="space-y-xs">
-                <label className="block text-xs font-bold text-on-surface uppercase tracking-wider">
-                  Mã OTP
-                </label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={6}
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ""))}
-                  placeholder="Nhập 6 chữ số"
-                  required
-                  className="block w-full px-3 py-2 bg-surface-container-lowest border border-surface-container-highest focus:ring-2 focus:ring-primary/30 rounded-md text-on-surface font-semibold outline-none text-sm"
-                />
-                {devOtpHint && (
-                  <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                    Mã OTP thử nghiệm (Dev Mode): <span className="font-mono font-bold text-sm bg-amber-50 dark:bg-amber-950/20 px-1.5 py-0.5 rounded">{devOtpHint}</span>
-                  </p>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading || !otp.trim()}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-on-primary rounded-md font-bold text-xs shadow-sm disabled:opacity-50 transition-colors"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></div>
-                    <span>Đang kiểm tra dữ liệu...</span>
-                  </>
-                ) : (
-                  <>
-                    <Icon name="search" className="text-base" />
-                    <span>Tra cứu bảo hành</span>
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-          
-          {error && (
-            <div className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-950/20 text-primary rounded-md border border-red-100 dark:border-red-950/30 text-xs">
-              <Icon name="error_outline" className="text-lg shrink-0 mt-0.5" />
-              <span className="font-semibold">{error}</span>
-            </div>
-          )}
-        </form>
-      </div>
+      {error && (
+        <div className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-950/20 text-primary rounded-md border border-red-100 dark:border-red-950/30 text-xs">
+          <Icon name="error_outline" className="text-lg shrink-0 mt-0.5" />
+          <span className="font-semibold">{error}</span>
+          <button
+            type="button"
+            onClick={loadWarranty}
+            className="ml-auto shrink-0 font-bold underline"
+          >
+            Thử lại
+          </button>
+        </div>
+      )}
 
       {/* Loading Skeleton */}
       {loading && (
@@ -204,15 +98,12 @@ export default function WarrantyTab({ defaultPhoneNumber = "" }) {
       )}
 
       {/* Results presentation */}
-      {searched && !loading && results && (
+      {!loading && results && (
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
             <h4 className="text-sm font-bold text-on-surface">
               Tìm thấy {results.length} sản phẩm tương ứng
             </h4>
-            <span className="text-xs text-secondary">
-              Số điện thoại tra cứu: <span className="font-semibold text-on-surface">{phoneNumber}</span>
-            </span>
           </div>
 
           {results.length === 0 ? (
@@ -223,7 +114,7 @@ export default function WarrantyTab({ defaultPhoneNumber = "" }) {
               <div className="space-y-1">
                 <h5 className="text-sm font-bold text-on-surface">Không tìm thấy dữ liệu bảo hành</h5>
                 <p className="text-xs text-secondary max-w-sm mx-auto">
-                  Số điện thoại này chưa có sản phẩm nào được giao thành công trên hệ thống. Vui lòng kiểm tra lại số điện thoại hoặc trạng thái đơn hàng của bạn.
+                  Bạn chưa có sản phẩm nào được giao thành công trên hệ thống.
                 </p>
               </div>
             </div>
