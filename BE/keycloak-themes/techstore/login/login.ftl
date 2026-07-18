@@ -4,49 +4,38 @@
         ${msg("loginAccountTitle")}
     <#elseif section = "form">
     <div class="techstore-login-grid">
-        <!-- Left Column: TechStore Member Promo -->
+        <!-- Left Column: AuraTech Member Promo -->
         <div class="techstore-promo-col">
             <div class="techstore-logo-row">
-                <span class="techstore-badge">TECHSTORE</span>
+                <span class="techstore-badge">AURATECH</span>
                 <span class="techstore-sub-badge">MEMBER</span>
             </div>
-            <h2 class="promo-title">Nhập hội khách hàng thành viên TECHSTORE</h2>
-            <p class="promo-subtitle">Để không bỏ lỡ các ưu đãi hấp dẫn từ TechStore</p>
-            
+            <h2 class="promo-title">Nhập hội khách hàng thành viên AuraTech</h2>
+            <p class="promo-subtitle">Tích điểm mỗi đơn hàng, thăng hạng nhận nhiều ưu đãi hơn</p>
+
             <div class="promo-box">
                 <ul class="promo-list">
                     <li>
-                        <span class="promo-icon">🎁</span>
-                        <span class="promo-text"><strong>Chiết khấu đến 5%</strong> khi mua các sản phẩm tại TechStore</span>
-                    </li>
-                    <li>
-                        <span class="promo-icon">🚚</span>
-                        <span class="promo-text"><strong>Miễn phí giao hàng</strong> cho thành viên, SVIP từ 300.000đ</span>
-                    </li>
-                    <li>
-                        <span class="promo-icon">🎂</span>
-                        <span class="promo-text"><strong>Tặng voucher sinh nhật</strong> đến 500.000đ cho khách hàng thành viên</span>
-                    </li>
-                    <li>
-                        <span class="promo-icon">🔄</span>
-                        <span class="promo-text"><strong>Trợ giá thu cũ lên đời</strong> đến 2 triệu đồng</span>
+                        <span class="promo-icon">🎯</span>
+                        <span class="promo-text"><strong>Tích điểm mọi đơn hàng</strong> — 1 điểm = 1.000đ, cứ 10.000đ chi tiêu tích 1 điểm</span>
                     </li>
                     <li>
                         <span class="promo-icon">📈</span>
-                        <span class="promo-text"><strong>Thăng hạng nhận voucher</strong> đến 300.000đ</span>
+                        <span class="promo-text"><strong>Thăng hạng nhân điểm</strong> — SILVER x1.2, GOLD x1.5, VIP Platinum x2.0</span>
                     </li>
                     <li>
-                        <span class="promo-icon">🎓</span>
-                        <span class="promo-text"><strong>Đặc quyền S-Student/S-Teacher</strong> ưu đãi thêm đến 10%</span>
+                        <span class="promo-icon">🛡️</span>
+                        <span class="promo-text"><strong>Bảo hành chính hãng 12 tháng</strong>, đổi 1 đổi 1 trong 30 ngày nếu lỗi nhà sản xuất</span>
                     </li>
                     <li>
-                        <span class="promo-icon">💼</span>
-                        <span class="promo-text"><strong>S-Business: Chiết khấu đến 8%</strong> dành riêng cho khách hàng doanh nghiệp</span>
+                        <span class="promo-icon">🚚</span>
+                        <span class="promo-text"><strong>Gửi bảo hành 2 chiều miễn phí</strong> vận chuyển toàn quốc</span>
+                    </li>
+                    <li>
+                        <span class="promo-icon">🤖</span>
+                        <span class="promo-text"><strong>Trợ lý Aura AI</strong> tìm sản phẩm bằng văn bản hoặc hình ảnh, tư vấn 24/7</span>
                     </li>
                 </ul>
-                <div class="promo-footer-link">
-                    <a href="#">Xem chi tiết chính sách ưu đãi TechStore Member ➔</a>
-                </div>
             </div>
         </div>
 
@@ -89,7 +78,7 @@
                     }, 1000);
                 </script>
             <#else>
-                <h2 class="form-title">Đăng nhập TECHSTORE</h2>
+                <h2 class="form-title">Đăng nhập AuraTech</h2>
                 
                 <div id="kc-form">
                   <div id="kc-form-wrapper">
@@ -119,9 +108,9 @@
                                 </#if>
                             </div>
 
-                            <div class="show-password-checkbox-container" style="text-align: left; margin: 10px 0 15px 0;">
-                                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; font-weight: 600; color: #4a5568;">
-                                    <input type="checkbox" id="togglePasswordVisibility" style="accent-color: #d70018;" /> Hiển thị mật khẩu
+                            <div class="show-password-checkbox-container">
+                                <label>
+                                    <input type="checkbox" id="togglePasswordVisibility" /> Hiển thị mật khẩu
                                 </label>
                             </div>
 

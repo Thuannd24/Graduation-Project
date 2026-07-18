@@ -40,9 +40,11 @@ public class IssueVoucherPercentDelegate implements JavaDelegate {
         log.info("[IssueVoucherPercent] userId={} discount={}% maxAmt={} expireDays={}",
                 userDbId.get(), percent, maxAmt, days);
 
+        String idempotencyKey = execution.getProcessInstanceId() + ":" + execution.getCurrentActivityId();
         try {
             IssueVoucherResult result = voucherIssuanceService.issuePercent(
-                    userDbId.get(), campaignId, percent, maxAmt, days, restrictedCategoryIds, restrictedProductIds);
+                    userDbId.get(), campaignId, percent, maxAmt, days, restrictedCategoryIds, restrictedProductIds,
+                    idempotencyKey);
             applyResult(execution, result);
             log.info("[IssueVoucherPercent] Issued voucher {} for user {}", result.getVoucherCode(), userDbId.get());
         } catch (Exception ex) {
@@ -52,9 +54,13 @@ public class IssueVoucherPercentDelegate implements JavaDelegate {
     }
 
     private void applyResult(DelegateExecution execution, IssueVoucherResult result) {
+        String expiresAt = result.getExpiresAt() != null ? result.getExpiresAt().toString() : null;
         execution.setVariable("voucherCode", result.getVoucherCode());
         execution.setVariable("voucherId", result.getVoucherId());
-        execution.setVariable("voucherExpiresAt", result.getExpiresAt() != null ? result.getExpiresAt().toString() : null);
+        execution.setVariable("voucherExpiresAt", expiresAt);
+        execution.setVariable("percentVoucherCode", result.getVoucherCode());
+        execution.setVariable("percentVoucherId", result.getVoucherId());
+        execution.setVariable("percentVoucherExpiresAt", expiresAt);
         execution.setVariable("voucherIssued", true);
     }
 }

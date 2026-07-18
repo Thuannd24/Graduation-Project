@@ -25,7 +25,6 @@ export default function BottomPanel({
   onDownloadBpmn,
   onEdit,
   onToggleActive,
-  onEvaluate,
   onDelete,
   onSelectErrorNode
 }) {
@@ -92,7 +91,6 @@ export default function BottomPanel({
             campaigns={campaigns}
             onEdit={onEdit}
             onToggleActive={onToggleActive}
-            onEvaluate={onEvaluate}
             onDelete={onDelete}
           />
         </div>

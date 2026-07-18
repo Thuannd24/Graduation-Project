@@ -40,9 +40,11 @@ public class IssueVoucherFixedDelegate implements JavaDelegate {
         log.info("[IssueVoucherFixed] userId={} discountAmount={} minOrderValue={} expireDays={}",
                 userDbId.get(), discountAmount, minOrderValue, days);
 
+        String idempotencyKey = execution.getProcessInstanceId() + ":" + execution.getCurrentActivityId();
         try {
             IssueVoucherResult result = voucherIssuanceService.issueFixed(
-                    userDbId.get(), campaignId, discountAmount, minOrderValue, days, restrictedCategoryIds, restrictedProductIds);
+                    userDbId.get(), campaignId, discountAmount, minOrderValue, days, restrictedCategoryIds, restrictedProductIds,
+                    idempotencyKey);
             applyResult(execution, result);
             log.info("[IssueVoucherFixed] Issued voucher {} for user {}", result.getVoucherCode(), userDbId.get());
         } catch (Exception ex) {
@@ -52,9 +54,13 @@ public class IssueVoucherFixedDelegate implements JavaDelegate {
     }
 
     private void applyResult(DelegateExecution execution, IssueVoucherResult result) {
+        String expiresAt = result.getExpiresAt() != null ? result.getExpiresAt().toString() : null;
         execution.setVariable("voucherCode", result.getVoucherCode());
         execution.setVariable("voucherId", result.getVoucherId());
-        execution.setVariable("voucherExpiresAt", result.getExpiresAt() != null ? result.getExpiresAt().toString() : null);
+        execution.setVariable("voucherExpiresAt", expiresAt);
+        execution.setVariable("fixedVoucherCode", result.getVoucherCode());
+        execution.setVariable("fixedVoucherId", result.getVoucherId());
+        execution.setVariable("fixedVoucherExpiresAt", expiresAt);
         execution.setVariable("voucherIssued", true);
     }
 }

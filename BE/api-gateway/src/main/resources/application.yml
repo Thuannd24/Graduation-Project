@@ -47,7 +47,7 @@ spring:
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/api/v1/products/**,/api/v1/public/products/**,/api/v1/brands/**,/api/v1/public/brands/**,/api/v1/admin/brands/**,/api/v1/admin/products/**,/api/v1/admin/categories/**,/api/v1/public/categories/**,/api/v1/wishlist/**,/api/v1/admin/attributes/**,/api/v1/admin/import/**
+            - Path=/api/v1/products/**,/api/v1/public/products/**,/api/v1/brands/**,/api/v1/public/brands/**,/api/v1/admin/brands/**,/api/v1/admin/products/**,/api/v1/admin/categories/**,/api/v1/public/categories/**,/api/v1/wishlist/**,/api/v1/admin/attributes/**,/api/v1/admin/import/**,/api/v1/admin/reviews/**
           filters:
             - name: CircuitBreaker
               args:

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Icon from "../../../components/common/Icon.jsx";
+import Pagination from "../../../components/common/Pagination.jsx";
 import { productApi } from "../../../services/productApi.ts";
 
 export default function BrandsTab() {
@@ -26,13 +27,12 @@ export default function BrandsTab() {
   const fetchBrands = async () => {
     try {
       setLoading(true);
-      const data = await productApi.listBrands();
+      const data = await productApi.listAllBrandsForAdmin();
       // Chuyển đổi định dạng nếu cần
       const formatted = data.map(b => ({
         id: b.id,
         name: b.name,
         origin: b.description || "N/A", // Bản chất description lưu thông tin mô tả/xuất xứ
-        count: b.productCount || 0,
         status: b.active ? "Active" : "Inactive",
         logo: b.logoUrl || "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=100",
         categoryIds: b.categoryIds || []
@@ -132,6 +132,18 @@ export default function BrandsTab() {
     }
   };
 
+  // Quốc gia xuất xứ xuất hiện nhiều nhất trong danh sách thương hiệu (mode, không phải alphabet)
+  const topOrigin = (() => {
+    const counts = {};
+    brands.forEach(b => {
+      const origin = (b.origin || "").trim();
+      if (!origin || origin === "N/A") return;
+      counts[origin] = (counts[origin] || 0) + 1;
+    });
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    return entries[0]?.[0] || "—";
+  })();
+
   // Lọc
   const filteredBrands = brands.filter(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()) || b.origin.toLowerCase().includes(searchQuery.toLowerCase()));
   const totalPages = Math.ceil(filteredBrands.length / itemsPerPage) || 1;
@@ -153,7 +165,7 @@ export default function BrandsTab() {
       <div className="flex justify-between items-center bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
         <div>
           <h4 className="text-sm font-extrabold text-slate-800">Quản Lý Thương Hiệu (Brand Hub)</h4>
-          <span className="text-[10px] text-slate-400 font-medium">Quản lý các thương hiệu đối tác, quốc gia xuất xứ và số lượng sản phẩm được liên kết</span>
+          <span className="text-[10px] text-slate-400 font-medium">Quản lý các thương hiệu đối tác và quốc gia xuất xứ</span>
         </div>
         <button
           onClick={() => {
@@ -168,8 +180,8 @@ export default function BrandsTab() {
         </button>
       </div>
 
-      {/* Grid 3 thẻ chỉ số thương hiệu */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Grid 2 thẻ chỉ số thương hiệu */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
           <div className="flex justify-between items-start">
             <div>
@@ -191,26 +203,8 @@ export default function BrandsTab() {
         <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
           <div className="flex justify-between items-start">
             <div>
-              <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Thương hiệu bán chạy nhất</h4>
-              <span className="text-2xl font-extrabold text-slate-800 tracking-tight block mt-1">{brands.length > 0 ? brands.sort((a, b) => (b.count || 0) - (a.count || 0))[0]?.name : "—"}</span>
-            </div>
-            <div className="p-1 rounded bg-slate-50 border border-slate-100 text-slate-400">
-              <Icon name="stars" className="text-sm" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-center justify-between text-[10px] font-bold text-slate-400">
-            <span>Thị phần AuraTech</span>
-            <span className="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-lg">
-              {brands.length > 0 ? Math.round((brands.sort((a, b) => (b.count || 0) - (a.count || 0))[0]?.count || 0) / Math.max(...brands.map(b => b.count || 0), 1) * 100) : 0}% tổng đơn
-            </span>
-          </div>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm relative flex flex-col justify-between hover:shadow-md transition-all">
-          <div className="flex justify-between items-start">
-            <div>
-              <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Quốc gia xuất xứ hàng đầu</h4>
-              <span className="text-2xl font-extrabold text-slate-800 tracking-tight block mt-1">{brands.length > 0 ? brands.map(b => b.origin).filter(Boolean).sort((a, b) => a.localeCompare(b))[0] || "Việt Nam" : "—"}</span>
+              <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Quốc gia xuất xứ phổ biến nhất</h4>
+              <span className="text-2xl font-extrabold text-slate-800 tracking-tight block mt-1">{topOrigin}</span>
             </div>
             <div className="p-1 rounded bg-slate-50 border border-slate-100 text-slate-400">
               <Icon name="public" className="text-sm" />
@@ -236,7 +230,7 @@ export default function BrandsTab() {
               </div>
               <div>
                 <span className="font-extrabold text-xs text-slate-800 block">{b.name}</span>
-                <span className="text-[9px] text-slate-400 font-bold block mt-0.5">{b.count} sản phẩm liên kết</span>
+                <span className="text-[9px] text-slate-400 font-bold block mt-0.5">{b.origin}</span>
               </div>
             </div>
           ))}
@@ -270,7 +264,6 @@ export default function BrandsTab() {
                 <th className="p-4 font-bold text-[10px] uppercase w-20">Logo</th>
                 <th className="p-4 font-bold text-[10px] uppercase">Thương hiệu</th>
                 <th className="p-4 font-bold text-[10px] uppercase w-48">Quốc gia xuất xứ</th>
-                <th className="p-4 font-bold text-[10px] uppercase w-32 text-center">Sản phẩm liên kết</th>
                 <th className="p-4 font-bold text-[10px] uppercase w-28 text-center">Trạng thái</th>
                 <th className="p-4 font-bold text-[10px] uppercase w-24 text-center">Thao tác</th>
               </tr>
@@ -288,7 +281,6 @@ export default function BrandsTab() {
                   </td>
                   <td className="p-4 font-extrabold text-slate-750">{b.name}</td>
                   <td className="p-4 text-slate-500 font-semibold">{b.origin}</td>
-                  <td className="p-4 text-slate-550 font-bold text-center">{b.count}</td>
                   <td className="p-4 text-center">
                     <button
                       onClick={() => handleToggleStatus(b.id)}
@@ -338,35 +330,7 @@ export default function BrandsTab() {
 
         {/* Phân trang */}
         <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-white">
-          <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors"
-          >
-            ← Trước
-          </button>
-          <div className="flex gap-1">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                  currentPage === page
-                    ? "bg-emerald-600 text-white shadow-sm"
-                    : "border border-slate-200 text-slate-500 hover:bg-slate-50"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors"
-          >
-            Sau →
-          </button>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>
 
       </div>

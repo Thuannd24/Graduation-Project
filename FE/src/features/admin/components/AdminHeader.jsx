@@ -35,17 +35,6 @@ export default function AdminHeader({ activeTab, darkMode, onToggleDarkMode }) {
         {getTabTitle()}
       </span>
 
-      <div className="flex-1 max-w-md mx-8 hidden md:block">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Tìm kiếm dữ liệu, người dùng hoặc báo cáo..."
-            className="w-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100/70 dark:hover:bg-slate-700/70 border-0 focus:ring-2 focus:ring-emerald-500 rounded-full px-5 py-2 pr-10 text-xs font-semibold text-slate-700 dark:text-slate-200 placeholder-slate-400 transition-all focus:bg-white dark:focus:bg-slate-800"
-          />
-          <Icon name="search" className="absolute right-4 top-2 text-slate-400 text-lg pointer-events-none" />
-        </div>
-      </div>
-
       <div className="flex items-center gap-3">
         <button
           type="button"

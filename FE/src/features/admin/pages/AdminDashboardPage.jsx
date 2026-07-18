@@ -20,6 +20,7 @@ import TransactionsTab from "../components/TransactionsTab.jsx";
 import AddProductTab from "../components/AddProductTab.jsx";
 import AdminRoleTab from "../components/AdminRoleTab.jsx";
 import BrandsTab from "../components/BrandsTab.jsx";
+import ReviewsTab from "../components/ReviewsTab.jsx";
 import AnalyticsAITab from "../components/AnalyticsAITab.jsx";
 import SupportChatTab from "../components/SupportChatTab.jsx";
 
@@ -37,9 +38,7 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [productSearch, setProductSearch] = useState("");
   const [orderFilter, setOrderFilter] = useState("all");
-  const [orderSearchQuery, setOrderSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -87,7 +86,7 @@ export default function AdminDashboardPage() {
 
   const fetchProducts = async () => {
     try {
-      const data = await productApi.listProducts();
+      const data = await productApi.listAllProducts();
       setProducts(data || []);
     } catch (err) {
       console.error("Failed to fetch products:", err);
@@ -227,6 +226,7 @@ export default function AdminDashboardPage() {
           <OverviewTab
             orders={orders}
             products={products}
+            categories={categories}
             loading={loading}
             setActiveTab={setActiveTab}
             handleQuickAddTemplate={handleQuickAddTemplate}
@@ -237,8 +237,6 @@ export default function AdminDashboardPage() {
             completedOrdersCount={completedOrdersCount}
             canceledOrdersCount={canceledOrdersCount}
             pendingOrdersCount={pendingOrdersCount}
-            productSearch={productSearch}
-            setProductSearch={setProductSearch}
           />
         )}
 
@@ -253,8 +251,6 @@ export default function AdminDashboardPage() {
             setIsDrawerOpen={setIsDrawerOpen}
             orderFilter={orderFilter}
             setOrderFilter={setOrderFilter}
-            orderSearchQuery={orderSearchQuery}
-            setOrderSearchQuery={setOrderSearchQuery}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             itemsPerPage={itemsPerPage}
@@ -313,6 +309,10 @@ export default function AdminDashboardPage() {
 
         {activeTab === "brands" && (
           <BrandsTab />
+        )}
+
+        {activeTab === "reviews" && (
+          <ReviewsTab />
         )}
 
         {activeTab === "analytics-ai" && (

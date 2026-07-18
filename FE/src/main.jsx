@@ -25,10 +25,10 @@ keycloak
         authApi.me().catch(console.warn);
       }
 
-      // 1. Admin Role Redirection
-      // Admin is NEVER allowed to view the storefront. If they are on a storefront path,
+      // 1. Admin/Staff Role Redirection
+      // Admin and Staff are NEVER allowed to view the storefront. If they are on a storefront path,
       // redirect them immediately to the admin portal.
-      if (keycloak.hasRealmRole("ROLE_ADMIN")) {
+      if (keycloak.hasRealmRole("ROLE_ADMIN") || keycloak.hasRealmRole("ROLE_STAFF")) {
         if (!window.location.pathname.startsWith("/admin")) {
           window.location.replace(window.location.origin + "/admin");
           return;

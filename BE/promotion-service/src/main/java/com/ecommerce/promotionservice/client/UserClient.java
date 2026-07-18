@@ -21,6 +21,9 @@ public interface UserClient {
     @GetMapping("/api/internal/users/keycloak/{keycloakUserId}")
     Map<String, Object> getProfileByKeycloakId(@PathVariable("keycloakUserId") String keycloakUserId);
 
+    @GetMapping("/api/internal/users/{userId}")
+    Map<String, Object> getProfileById(@PathVariable("userId") Long userId);
+
     @PutMapping("/api/internal/users/{userId}/tier")
     void updateTier(@PathVariable("userId") Long userId, @RequestBody Map<String, Object> request);
 

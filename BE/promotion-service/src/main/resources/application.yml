@@ -41,7 +41,7 @@ camunda:
   bpm:
     admin-user:
       id: admin
-      password: admin
+      password: ${CAMUNDA_ADMIN_PASSWORD:dev-camunda-admin-password}
       firstName: Admin
       lastName: ECommerce
     database:

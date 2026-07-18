@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ReactFlow,
   Background,
@@ -49,17 +49,30 @@ function CanvasFlowInner({
   onCanvasClick,
   onSelectNode,
   onInsertNode,
+  onInsertNodeAfterMerge,
   onCloseInsert,
   onSetInsertEdgeId
 }) {
+  const [pendingMergeInsert, setPendingMergeInsert] = useState(null);
+
+  useEffect(() => {
+    if (!insertEdgeId) setPendingMergeInsert(null);
+  }, [insertEdgeId]);
+
   const onInsertClick = useCallback(
-    edgeId => onSetInsertEdgeId(prev => (prev === edgeId ? null : edgeId)),
+    (edgeId, mergeInsert) => {
+      onSetInsertEdgeId(prev => (prev === edgeId ? null : edgeId));
+      setPendingMergeInsert(mergeInsert || null);
+    },
     [onSetInsertEdgeId]
   );
 
   const onInsertDrop = useCallback(
-    (edgeId, type) => onInsertNode(edgeId, type),
-    [onInsertNode]
+    (edgeId, type, mergeInsert) => {
+      if (mergeInsert) onInsertNodeAfterMerge?.(mergeInsert.edgeIds, mergeInsert.downstreamId, type);
+      else onInsertNode(edgeId, type);
+    },
+    [onInsertNode, onInsertNodeAfterMerge]
   );
 
   const built = useMemo(
@@ -173,7 +186,10 @@ function CanvasFlowInner({
             edges={wfEdges}
             canvasRef={canvasRef}
             onClose={onCloseInsert}
-            onPick={type => onInsertNode(insertEdgeId, type)}
+            onPick={type => {
+              if (pendingMergeInsert) onInsertNodeAfterMerge?.(pendingMergeInsert.edgeIds, pendingMergeInsert.downstreamId, type);
+              else onInsertNode(insertEdgeId, type);
+            }}
           />
         )}
       </div>

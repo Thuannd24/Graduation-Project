@@ -6,14 +6,18 @@ import com.ecommerce.productservice.dto.ProductReviewDto;
 import com.ecommerce.productservice.entity.Product;
 import com.ecommerce.productservice.entity.ProductReview;
 import com.ecommerce.productservice.event.producer.ProductEventProducer;
+import com.ecommerce.productservice.exception.ResourceNotFoundException;
 import com.ecommerce.productservice.repository.ProductRepository;
 import com.ecommerce.productservice.repository.ProductReviewRepository;
 import com.ecommerce.productservice.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
@@ -103,6 +107,29 @@ public class ReviewServiceImpl implements ReviewService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Page<ProductReviewDto> getAllReviews(Pageable pageable) {
+        return reviewRepository.findAll(pageable).map(this::convertToDto);
+    }
+
+    @Override
+    @Transactional
+    public ProductReviewDto replyToReview(Long reviewId, String staffUserId, String content) {
+        ProductReview review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("ProductReview", "id", reviewId));
+
+        if (review.getStaffReplyContent() != null) {
+            throw new IllegalStateException("Đánh giá này đã được phản hồi rồi.");
+        }
+
+        review.setStaffReplyContent(content);
+        review.setStaffReplierId(staffUserId);
+        review.setStaffReplyAt(LocalDateTime.now());
+
+        review = reviewRepository.save(review);
+        return convertToDto(review);
+    }
+
     private ProductReviewDto convertToDto(ProductReview review) {
         List<String> images = review.getImageUrls() != null && !review.getImageUrls().trim().isEmpty()
                 ? Arrays.asList(review.getImageUrls().split(","))
@@ -117,6 +144,9 @@ public class ReviewServiceImpl implements ReviewService {
                 .comment(review.getComment())
                 .imageUrls(images)
                 .createdAt(review.getCreatedAt())
+                .staffReplyContent(review.getStaffReplyContent())
+                .staffReplyAt(review.getStaffReplyAt())
+                .staffReplierId(review.getStaffReplierId())
                 .build();
     }
 }

@@ -18,7 +18,6 @@ export default function CampaignsList({
   compact = false,
   onEdit,
   onToggleActive,
-  onEvaluate,
   onDelete
 }) {
   if (loading) {
@@ -55,28 +54,27 @@ export default function CampaignsList({
           const tot = Number(c.totalBudget || 0).toLocaleString("vi-VN");
           const badge = (
             <span className={"cb-badge " + (c.active ? "cb-badge-active" : "cb-badge-suspended")}>
+              <span className="cb-badge-dot" />
               {c.active ? "KÍCH HOẠT" : "TẠM NGỪNG"}
             </span>
           );
           const actions = (
             <div className="cb-flex-gap">
-              <button className="cb-btn cb-btn-secondary cb-btn-sm" onClick={() => onEdit(c)}>
-                {compact ? "✏️" : "✏️ Sửa"}
+              <button className="cb-btn cb-btn-secondary cb-btn-sm" title="Sửa chiến dịch" onClick={() => onEdit(c)}>
+                {compact ? "✏️" : <>✏️ Sửa</>}
               </button>
               <button
                 className="cb-btn cb-btn-sm"
                 style={toggleBtnStyle(c.active)}
+                title={c.active ? "Tạm ngưng chiến dịch" : "Kích hoạt chiến dịch"}
                 onClick={() => onToggleActive(c.id, c.active)}
               >
                 {compact
                   ? (c.active ? "⏸" : "▶")
                   : (c.active ? "⏸ Tạm ngưng" : "▶ Kích hoạt")}
               </button>
-              <button className="cb-btn cb-btn-primary cb-btn-sm" onClick={() => onEvaluate(c)}>
-                {compact ? "⚡" : "⚡ Test"}
-              </button>
-              <button className="cb-btn cb-btn-danger cb-btn-sm" onClick={() => onDelete(c.id, c.name)}>
-                {compact ? "🗑️" : "🗑️ Xóa"}
+              <button className="cb-btn cb-btn-danger cb-btn-sm" title="Xóa chiến dịch" onClick={() => onDelete(c.id, c.name)}>
+                {compact ? "🗑️" : <>🗑️ Xóa</>}
               </button>
             </div>
           );
@@ -95,10 +93,15 @@ export default function CampaignsList({
           }
           return (
             <tr key={c.id}>
-              <td>{c.id}</td>
-              <td style={{ fontWeight: 600 }}>{c.name}</td>
+              <td className="cb-id-cell">#{c.id}</td>
+              <td style={{ fontWeight: 700 }}>{c.name}</td>
               <td><code style={KEY_STYLE}>{c.bpmnProcessDefinitionKey}</code></td>
-              <td>{rem} / {tot} đ</td>
+              <td>
+                <div className="cb-budget-cell">
+                  <span className="cb-budget-rem">{rem}đ</span>
+                  <span className="cb-budget-sep">/ {tot}đ</span>
+                </div>
+              </td>
               <td style={DATE_CELL_STYLE}>
                 <div>Bắt đầu: {c.startDate ? new Date(c.startDate).toLocaleString("vi-VN") : ""}</div>
                 <div>Kết thúc: {c.endDate ? new Date(c.endDate).toLocaleString("vi-VN") : ""}</div>

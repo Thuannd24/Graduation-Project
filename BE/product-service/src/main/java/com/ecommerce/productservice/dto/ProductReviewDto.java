@@ -20,4 +20,7 @@ public class ProductReviewDto {
     private String comment;
     private List<String> imageUrls;
     private LocalDateTime createdAt;
+    private String staffReplyContent;
+    private LocalDateTime staffReplyAt;
+    private String staffReplierId;
 }

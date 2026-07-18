@@ -11,7 +11,8 @@ public final class NotificationTemplateCodes {
             "order_confirmed_template",
             "order_cancelled_template",
             "payment_success_template",
-            "payment_failed_template"
+            "payment_failed_template",
+            "vip_membership_promo_template"
     );
 
     private NotificationTemplateCodes() {

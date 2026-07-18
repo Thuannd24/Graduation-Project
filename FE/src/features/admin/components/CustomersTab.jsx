@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Icon from "../../../components/common/Icon.jsx";
+import Pagination from "../../../components/common/Pagination.jsx";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import { authApi } from "../../../services/authApi.ts";
 
-const TIERS = ["MEMBER", "SILVER", "GOLD", "VIP", "DIAMOND"];
-const TIER_COLORS = { MEMBER: "#94a3b8", SILVER: "#a8a29e", GOLD: "#f59e0b", VIP: "#8b5cf6", DIAMOND: "#06b6d4" };
+const TIERS = ["MEMBER", "SILVER", "GOLD", "VIP"];
+const TIER_COLORS = { MEMBER: "#94a3b8", SILVER: "#a8a29e", GOLD: "#f59e0b", VIP: "#8b5cf6" };
 const ALL_ROLES = ["ROLE_CUSTOMER", "ROLE_STAFF", "ROLE_ADMIN"];
 
 export default function CustomersTab({ orders = [] }) {
@@ -68,7 +69,7 @@ export default function CustomersTab({ orders = [] }) {
   const fetchUsers = useCallback(async (search, tier, blacklisted) => {
     try {
       setLoading(true);
-      const params = { page: customerCurrentPage - 1, size: itemsPerPage };
+      const params = { page: customerCurrentPage - 1, size: itemsPerPage, active: true };
       if (search) params.search = search;
       if (tier) params.tier = tier;
       if (blacklisted === "true" || blacklisted === "false") params.blacklisted = blacklisted === "true";
@@ -499,13 +500,7 @@ export default function CustomersTab({ orders = [] }) {
 
           {/* Pagination */}
           <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-white">
-            <button onClick={() => setCustomerCurrentPage(prev => Math.max(prev - 1, 1))} disabled={customerCurrentPage === 1} className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors">← Trước</button>
-            <div className="flex gap-1">
-              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + 1).map((page) => (
-                <button key={page} onClick={() => setCustomerCurrentPage(page)} className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${customerCurrentPage === page ? "bg-emerald-600 text-white shadow-sm" : "border border-slate-200 text-slate-500 hover:bg-slate-50"}`}>{page}</button>
-              ))}
-            </div>
-            <button onClick={() => setCustomerCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={customerCurrentPage === totalPages} className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-colors">Sau →</button>
+            <Pagination currentPage={customerCurrentPage} totalPages={totalPages} onPageChange={setCustomerCurrentPage} />
           </div>
         </div>
 

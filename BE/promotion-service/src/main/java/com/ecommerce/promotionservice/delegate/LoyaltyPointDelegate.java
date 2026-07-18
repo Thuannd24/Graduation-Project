@@ -3,6 +3,7 @@ package com.ecommerce.promotionservice.delegate;
 import com.ecommerce.promotionservice.client.UserClient;
 import com.ecommerce.promotionservice.delegate.support.CampaignUserContextResolver;
 import com.ecommerce.promotionservice.delegate.support.DelegateVariableHelper;
+import com.ecommerce.promotionservice.service.IdempotencyGuardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -20,9 +21,18 @@ public class LoyaltyPointDelegate implements JavaDelegate {
 
     private final UserClient userClient;
     private final CampaignUserContextResolver userContextResolver;
+    private final IdempotencyGuardService idempotencyGuard;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+        // Guards against duplicate point credit on Camunda job retry.
+        String idempotencyKey = execution.getProcessInstanceId() + ":" + execution.getCurrentActivityId();
+        if (idempotencyGuard.alreadyExecuted(idempotencyKey)) {
+            log.info("[LoyaltyPoint] Already applied for {} - skipping duplicate on retry.", idempotencyKey);
+            execution.setVariable("loyaltyPointApplied", true);
+            return;
+        }
+
         var userDbId = userContextResolver.resolveUserDbId(execution);
         String calculationMode = DelegateVariableHelper.getStr(execution, "calculationMode");
         if (calculationMode.isBlank()) {
@@ -82,6 +92,7 @@ public class LoyaltyPointDelegate implements JavaDelegate {
                 log.warn("[LoyaltyPoint] user-service fallback — points not applied for user {}", userDbId.get());
                 return;
             }
+            idempotencyGuard.markExecuted(idempotencyKey, "LOYALTY_POINT");
             Map<String, Object> data = extractData(response);
             if (data != null) {
                 if (data.get("newPointBalance") != null) {

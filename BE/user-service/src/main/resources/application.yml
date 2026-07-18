@@ -53,7 +53,7 @@ keycloak:
     server-url: ${KEYCLOAK_ADMIN_URL:http://localhost:8083}
     realm: ${KEYCLOAK_REALM:ecommerce-realm}
     client-id: ${KEYCLOAK_ADMIN_CLIENT_ID:ecommerce-backend}
-    client-secret: ${KEYCLOAK_ADMIN_CLIENT_SECRET:ZAyFzRoBJY8nWNg5dN5XMc3fRngDIei6}
+    client-secret: ${KEYCLOAK_ADMIN_CLIENT_SECRET}
 
 location:
   api-url: ${LOCATION_API_URL:https://provinces.open-api.vn/api/v2}

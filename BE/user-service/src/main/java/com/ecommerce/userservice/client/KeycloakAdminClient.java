@@ -99,6 +99,14 @@ public class KeycloakAdminClient {
         getUsersResource().get(userId).remove();
     }
 
+    /** Bật/tắt đăng nhập của user trong Keycloak (dùng cho khóa/mở khóa tài khoản). */
+    public void setEnabled(String userId, boolean enabled) {
+        UserResource resource = getUsersResource().get(userId);
+        UserRepresentation user = resource.toRepresentation();
+        user.setEnabled(enabled);
+        resource.update(user);
+    }
+
     /** Đặt mật khẩu mới cho user. */
     public void setPassword(String userId, String newPassword) {
         CredentialRepresentation credential = new CredentialRepresentation();

@@ -28,7 +28,6 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
     brandId: "",
     imageUrl: "",
     images: [],
-    status: "PUBLISHED", // DRAFT, PUBLISHED, OUT_OF_STOCK, ARCHIVED
     active: true,
     warrantyPeriod: "12",
     warrantyPolicy: "Bảo hành chính hãng 12 tháng.",
@@ -204,7 +203,6 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
         brandId: "",
         imageUrl: "",
         images: [],
-        status: "PUBLISHED",
         active: true,
         warrantyPeriod: "12",
         warrantyPolicy: "Bảo hành chính hãng 12 tháng.",
@@ -281,7 +279,6 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
             brandId: detail.brandId || "",
             imageUrl: detail.imageUrl || detail.image || "",
             images: detail.images || detail.gallery || [],
-            status: detail.status || "PUBLISHED",
             active: detail.active !== false,
             warrantyPeriod: detail.warrantyPeriod || "12",
             warrantyPolicy: detail.warrantyPolicy || "Bảo hành chính hãng 12 tháng.",
@@ -640,7 +637,6 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
         brandId: Number(basicInfo.brandId),
         imageUrl: basicInfo.imageUrl,
         images: basicInfo.images,
-        status: basicInfo.status,
         warrantyPeriod: Number(basicInfo.warrantyPeriod || 12),
         warrantyPolicy: basicInfo.warrantyPolicy,
         active: basicInfo.active,
@@ -1316,21 +1312,6 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
                 {brands.map(b => (
                   <option key={b.id} value={b.id}>{b.name}</option>
                 ))}
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Trạng thái phát hành *</label>
-              <select
-                required
-                value={basicInfo.status}
-                onChange={(e) => setBasicInfo(prev => ({ ...prev, status: e.target.value }))}
-                className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:bg-white rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-800 outline-none"
-              >
-                <option value="DRAFT">Lưu Nháp (DRAFT)</option>
-                <option value="PUBLISHED">Công Khai (PUBLISHED)</option>
-                <option value="OUT_OF_STOCK">Hết Hàng (OUT_OF_STOCK)</option>
-                <option value="ARCHIVED">Lưu Trữ (ARCHIVED)</option>
               </select>
             </div>
 

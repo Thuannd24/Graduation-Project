@@ -53,7 +53,7 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
         if (orderId == null) {
             return;
         }
-        voucherRepository.findByUsedOrderId(orderId).ifPresent(voucher -> {
+        voucherRepository.findWithLockByUsedOrderId(orderId).ifPresent(voucher -> {
             if (voucher.getStatus() == VoucherStatus.RESERVED) {
                 voucher.setStatus(VoucherStatus.USED);
                 voucher.setUsedAt(LocalDateTime.now());
@@ -69,7 +69,7 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
         if (orderId == null) {
             return;
         }
-        voucherRepository.findByUsedOrderId(orderId).ifPresent(voucher -> {
+        voucherRepository.findWithLockByUsedOrderId(orderId).ifPresent(voucher -> {
             if (voucher.getStatus() == VoucherStatus.RESERVED) {
                 voucher.setStatus(VoucherStatus.UNUSED);
                 voucher.setUsedOrderId(null);

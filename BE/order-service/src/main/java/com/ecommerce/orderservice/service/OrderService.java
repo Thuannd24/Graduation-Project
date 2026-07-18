@@ -18,7 +18,7 @@ public interface OrderService {
     OrderResponse shipOrder(Long orderId);
     void handleShippingWebhook(String trackingCode, String status);
     OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status);
-    List<WarrantyItemResponse> lookupWarrantyByPhone(String phoneNumber);
+    List<WarrantyItemResponse> getMyWarranty(String userId);
     void expireOrder(Long orderId);
     void retryCompensationTask(Long taskId);
 }

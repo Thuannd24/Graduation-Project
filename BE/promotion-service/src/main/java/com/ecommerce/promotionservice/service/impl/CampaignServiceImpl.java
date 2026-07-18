@@ -14,8 +14,6 @@ import com.ecommerce.promotionservice.repository.CampaignRepository;
 import com.ecommerce.promotionservice.repository.IssuedVoucherRepository;
 import com.ecommerce.promotionservice.service.BpmnCompilerService;
 import com.ecommerce.promotionservice.service.CampaignService;
-import com.ecommerce.promotionservice.service.CampaignTriggerService;
-import com.ecommerce.promotionservice.service.CampaignVariableEnricher;
 import com.ecommerce.promotionservice.service.VoucherMaintenanceService;
 import com.ecommerce.promotionservice.service.WorkflowTriggerResolver;
 import com.ecommerce.promotionservice.service.WorkflowValidatorService;
@@ -24,7 +22,6 @@ import com.ecommerce.promotionservice.service.support.BpmnKeyGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.stereotype.Service;
@@ -32,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,12 +42,9 @@ public class CampaignServiceImpl implements CampaignService {
     private final IssuedVoucherRepository voucherRepository;
     private final RuntimeService       runtimeService;
     private final RepositoryService    repositoryService;
-    private final HistoryService       historyService;
     private final WorkflowValidatorService validatorService;
     private final BpmnCompilerService  compilerService;
     private final ObjectMapper         objectMapper;
-    private final CampaignTriggerService campaignTriggerService;
-    private final CampaignVariableEnricher variableEnricher;
     private final WorkflowTriggerResolver triggerResolver;
     private final VoucherMaintenanceService voucherMaintenanceService;
 
@@ -411,39 +404,6 @@ public class CampaignServiceImpl implements CampaignService {
         return voucherRepository.findByCampaignIdOrderByCreatedAtDesc(id).stream()
                 .map(IssuedVoucherDto::from)
                 .collect(Collectors.toList());
-    }
-
-    // ── Evaluate / trigger process instance ───────────────────────────────────
-    @Override
-    @Transactional
-    public Map<String, Object> evaluateCampaign(String processKey, Map<String, Object> variables) {
-        log.info("Evaluating campaign process '{}' with variables: {}", processKey, variables);
-
-        Map<String, Object> vars = new HashMap<>(variables);
-        List<Campaign> campaigns = campaignRepository.findByBpmnProcessDefinitionKeyAndActiveTrue(processKey);
-        if (!campaigns.isEmpty()) {
-            return campaignTriggerService.startCampaignProcess(campaigns.get(0), vars);
-        }
-
-        variableEnricher.enrich(vars);
-        var processInstance = runtimeService.startProcessInstanceByKey(processKey, vars);
-        Map<String, Object> resultVariables = getVariablesSafe(processInstance.getId());
-        log.info("Evaluation result variables: {}", resultVariables);
-        return resultVariables;
-    }
-
-    private Map<String, Object> getVariablesSafe(String processInstanceId) {
-        long count = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).count();
-        if (count > 0) {
-            return runtimeService.getVariables(processInstanceId);
-        } else {
-            Map<String, Object> result = new HashMap<>();
-            historyService.createHistoricVariableInstanceQuery()
-                    .processInstanceId(processInstanceId)
-                    .list()
-                    .forEach(varInstance -> result.put(varInstance.getName(), varInstance.getValue()));
-            return result;
-        }
     }
 
     @Override

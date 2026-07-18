@@ -41,6 +41,15 @@ public class ProductReview {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "staff_reply_content", columnDefinition = "TEXT")
+    private String staffReplyContent;
+
+    @Column(name = "staff_reply_at")
+    private LocalDateTime staffReplyAt;
+
+    @Column(name = "staff_replier_id")
+    private String staffReplierId;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

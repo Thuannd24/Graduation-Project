@@ -18,7 +18,6 @@ export interface Product {
   costPrice?: number;
   oldPrice?: number;
   slug?: string;
-  status?: string;
   active?: boolean;
   rating?: number;
   reviews?: number;
@@ -88,7 +87,6 @@ export function normalizeProduct(product: Partial<Product>): Product {
     costPrice: Number(product.costPrice ?? 0),
     oldPrice: pricing.oldPrice,
     slug: product.slug ? String(product.slug) : undefined,
-    status: product.status ? String(product.status) : undefined,
     active: product.active !== false,
     rating: Number(product.rating ?? product.ratingAvg ?? 0),
     reviews: Number(product.reviews ?? product.reviewCount ?? 0),
@@ -132,6 +130,21 @@ export const productApi = {
     return parseSliceProducts(data);
   },
 
+  /** Lấy TOÀN BỘ sản phẩm bằng cách duyệt hết các trang, thay vì chỉ trang đầu (mặc định 10 sp/trang ở BE). */
+  async listAllProducts(): Promise<Product[]> {
+    const all: Product[] = [];
+    let page = 0;
+    const size = "200";
+    const MAX_PAGES = 50; // an toàn: chặn vòng lặp vô hạn nếu API trả sai
+    while (page < MAX_PAGES) {
+      const result = await this.listProductsPaged({ page: String(page), size });
+      all.push(...result.items);
+      if (!result.hasNext || result.items.length === 0) break;
+      page += 1;
+    }
+    return all;
+  },
+
   async getProduct(productId: string): Promise<Product> {
     return this.getProductDetail(productId);
   },
@@ -166,7 +179,6 @@ export const productApi = {
           brand: doc.brand,
           categoryId: doc.categoryId,
           slug: doc.slug,
-          status: doc.status,
           active: doc.active
         })
       ),
@@ -183,6 +195,11 @@ export const productApi = {
 
   async listBrands(): Promise<Brand[]> {
     return normalizeCollection(await apiClient.get<Brand[] | { content?: Brand[]; brands?: Brand[] }>("/public/brands?active=true"));
+  },
+
+  // Dùng cho trang quản trị: lấy TẤT CẢ brand (kể cả Inactive) để có thể quản lý/kích hoạt lại.
+  async listAllBrandsForAdmin(): Promise<Brand[]> {
+    return normalizeCollection(await apiClient.get<Brand[] | { content?: Brand[]; brands?: Brand[] }>("/public/brands?size=1000"));
   },
 
   async listBrandsByCategory(categoryId: string | number): Promise<Brand[]> {
@@ -313,5 +330,14 @@ export const productApi = {
       throw new Error("Server không trả về URL ảnh.");
     }
     return result.url;
+  },
+
+  // Admin/Staff Review Reply
+  async getAdminReviews(page = 0, size = 10): Promise<any> {
+    return await apiClient.get<any>(`/admin/reviews?page=${page}&size=${size}`, { requireAuth: true });
+  },
+
+  async replyToReview(reviewId: string | number, content: string): Promise<any> {
+    return await apiClient.postAuth(`/admin/reviews/${reviewId}/reply`, { content });
   }
 };

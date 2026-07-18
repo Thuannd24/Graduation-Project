@@ -81,20 +81,33 @@ function StatCard({ icon, label, value, sub, accent = "emerald" }) {
     blue: "from-blue-500/10 to-blue-600/5 border-blue-200/60 text-blue-700",
     violet: "from-violet-500/10 to-violet-600/5 border-violet-200/60 text-violet-700",
     amber: "from-amber-500/10 to-amber-600/5 border-amber-200/60 text-amber-700",
-    rose: "from-rose-500/10 to-rose-600/5 border-rose-200/60 text-rose-700"
+    rose: "from-rose-500/10 to-rose-600/5 border-rose-200/60 text-rose-700",
+    cyan: "from-cyan-500/10 to-cyan-600/5 border-cyan-200/60 text-cyan-700"
   };
   return (
-    <div className={`rounded-2xl border bg-gradient-to-br p-4 shadow-sm dark:border-slate-700/60 dark:from-slate-800 dark:to-slate-800/80 ${accents[accent]}`}>
+    <div className={`rounded-2xl border bg-gradient-to-br p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all dark:border-slate-700/60 dark:from-slate-800 dark:to-slate-800/80 ${accents[accent]}`}>
       <div className="flex items-start justify-between gap-2">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest opacity-70">{label}</p>
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-widest opacity-70 truncate">{label}</p>
           <p className="text-2xl font-extrabold mt-1 text-slate-800 dark:text-white">{value}</p>
-          {sub && <p className="text-[11px] font-semibold mt-1 opacity-80">{sub}</p>}
+          {sub && <p className="text-[11px] font-semibold mt-1 opacity-80 truncate">{sub}</p>}
         </div>
         <div className="w-10 h-10 rounded-xl bg-white/70 dark:bg-slate-900/50 flex items-center justify-center shrink-0">
           <Icon name={icon} className="text-xl" />
         </div>
       </div>
+    </div>
+  );
+}
+
+function EmptyState({ icon, title, hint }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 text-center text-slate-400">
+      <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-900/60 flex items-center justify-center mb-3">
+        <Icon name={icon} className="text-2xl" />
+      </div>
+      <p className="text-sm font-bold text-slate-500 dark:text-slate-400">{title}</p>
+      {hint && <p className="text-[11px] mt-1 max-w-[220px]">{hint}</p>}
     </div>
   );
 }
@@ -234,13 +247,7 @@ export default function PromotionStatsTab() {
 
       {dashboard && (
         <>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-extrabold text-slate-800 dark:text-white">Thống kê Promotion</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Ngân sách cam kết khi phát voucher · Tỷ lệ chuyển đổi = đã dùng / đã phát
-              </p>
-            </div>
+          <div className="flex justify-end">
             <button
               type="button"
               onClick={loadDashboard}
@@ -251,49 +258,62 @@ export default function PromotionStatsTab() {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
             <StatCard icon="campaign" label="Chiến dịch" value={dashboard.totalCampaigns}
               sub={`${dashboard.activeCampaigns} đang hoạt động`} accent="emerald" />
             <StatCard icon="confirmation_number" label="Voucher đã phát" value={dashboard.totalIssued.toLocaleString("vi-VN")}
               sub={`${dashboard.averageConversionRate}% tỷ lệ dùng TB`} accent="blue" />
+            <StatCard icon="task_alt" label="Chưa dùng" value={dashboard.totalUnused.toLocaleString("vi-VN")}
+              sub={`${dashboard.totalUsed.toLocaleString("vi-VN")} đã redeem`} accent="cyan" />
             <StatCard icon="payments" label="Ngân sách tổng" value={formatMoney(dashboard.totalBudget)}
               sub={`Còn ${formatMoney(dashboard.remainingBudget)}`} accent="violet" />
             <StatCard icon="account_balance" label="Đã cam kết" value={formatMoney(dashboard.committedBudget)}
               sub={`${budgetPercent(dashboard.committedBudget, dashboard.totalBudget)}% ngân sách`} accent="amber" />
             <StatCard icon="schedule" label="Hết hạn / Giữ" value={`${dashboard.totalExpired} / ${dashboard.totalReserved}`}
-              sub={`${dashboard.totalUsed} voucher đã redeem`} accent="rose" />
+              sub={`${dashboard.totalUsed.toLocaleString("vi-VN")} voucher đã redeem`} accent="rose" />
           </div>
 
           <div className="grid lg:grid-cols-3 gap-4">
             <div className={`${card} p-4 lg:col-span-1`}>
               <h3 className="text-sm font-extrabold text-slate-800 dark:text-white mb-3">Trạng thái voucher</h3>
               {statusChart.length === 0 ? (
-                <p className="text-xs text-slate-400 py-8 text-center">Chưa có voucher</p>
+                <EmptyState icon="pie_chart" title="Chưa có voucher" hint="Số liệu sẽ xuất hiện khi chiến dịch bắt đầu phát voucher." />
               ) : (
-                <ResponsiveContainer width="100%" height={220}>
-                  <PieChart>
-                    <Pie data={statusChart} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3}>
-                      {statusChart.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                    </Pie>
-                    <Tooltip formatter={v => [v, "Số lượng"]} />
-                    <Legend wrapperStyle={{ fontSize: 11, fontWeight: 600 }} />
-                  </PieChart>
-                </ResponsiveContainer>
+                <div className="relative">
+                  <ResponsiveContainer width="100%" height={220}>
+                    <PieChart>
+                      <Pie data={statusChart} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3}>
+                        {statusChart.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                      </Pie>
+                      <Tooltip formatter={(v, n) => [
+                        `${v}${dashboard.totalIssued > 0 ? ` (${((v / dashboard.totalIssued) * 100).toFixed(1)}%)` : ""}`,
+                        n
+                      ]} />
+                      <Legend wrapperStyle={{ fontSize: 11, fontWeight: 600 }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-x-0 top-[86px] flex flex-col items-center pointer-events-none">
+                    <span className="text-xl font-extrabold text-slate-800 dark:text-white">{dashboard.totalIssued.toLocaleString("vi-VN")}</span>
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Tổng voucher</span>
+                  </div>
+                </div>
               )}
             </div>
 
             <div className={`${card} p-4 lg:col-span-1`}>
               <h3 className="text-sm font-extrabold text-slate-800 dark:text-white mb-3">Loại voucher</h3>
               {typeChart.length === 0 ? (
-                <p className="text-xs text-slate-400 py-8 text-center">Chưa có dữ liệu</p>
+                <EmptyState icon="sell" title="Chưa có dữ liệu" hint="Sẽ hiển thị khi có voucher PERCENT/FIXED/FREESHIP được phát." />
               ) : (
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart data={typeChart} layout="vertical" margin={{ left: 8, right: 16 }}>
                     <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
-                    <XAxis type="number" tick={{ fontSize: 10 }} />
+                    <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
                     <YAxis type="category" dataKey="name" width={72} tick={{ fontSize: 10, fontWeight: 600 }} />
                     <Tooltip />
-                    <Bar dataKey="value" radius={[0, 6, 6, 0]} />
+                    <Bar dataKey="value" radius={[0, 6, 6, 0]}>
+                      {typeChart.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               )}
@@ -302,7 +322,7 @@ export default function PromotionStatsTab() {
             <div className={`${card} p-4 lg:col-span-1`}>
               <h3 className="text-sm font-extrabold text-slate-800 dark:text-white mb-3">Top chiến dịch (đã phát)</h3>
               {campaignBarChart.length === 0 ? (
-                <p className="text-xs text-slate-400 py-8 text-center">Chưa có chiến dịch</p>
+                <EmptyState icon="leaderboard" title="Chưa có chiến dịch" hint="Tạo và kích hoạt chiến dịch để bắt đầu theo dõi hiệu quả." />
               ) : (
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart data={campaignBarChart} margin={{ bottom: 4 }}>
@@ -332,6 +352,13 @@ export default function PromotionStatsTab() {
                 />
               </div>
               <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+                {filteredCampaigns.length === 0 && (
+                  <EmptyState
+                    icon="search_off"
+                    title={campaignSearch ? "Không tìm thấy chiến dịch" : "Chưa có chiến dịch nào"}
+                    hint={campaignSearch ? "Thử từ khóa khác." : "Tạo chiến dịch mới ở tab CampaignEngine."}
+                  />
+                )}
                 {filteredCampaigns.map(c => {
                   const pct = budgetPercent(c.committedBudget, c.totalBudget);
                   const active = c.campaignId === selectedCampaignId;
@@ -433,9 +460,16 @@ export default function PromotionStatsTab() {
                   </div>
 
                   {vouchersLoading ? (
-                    <p className="text-xs text-slate-400 py-6 text-center">Đang tải voucher…</p>
+                    <div className="flex items-center justify-center gap-2 py-8 text-slate-400">
+                      <Icon name="hourglass_empty" className="text-lg animate-pulse" />
+                      <span className="text-xs font-bold">Đang tải voucher…</span>
+                    </div>
                   ) : filteredVouchers.length === 0 ? (
-                    <p className="text-xs text-slate-400 py-6 text-center">Không có voucher phù hợp bộ lọc.</p>
+                    <EmptyState
+                      icon="confirmation_number"
+                      title="Không có voucher phù hợp"
+                      hint={voucherFilter === "all" ? "Chiến dịch này chưa phát voucher nào." : "Thử đổi bộ lọc trạng thái."}
+                    />
                   ) : (
                     <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700">
                       <table className="w-full text-left text-xs">
@@ -480,7 +514,11 @@ export default function PromotionStatsTab() {
                   )}
                 </>
               ) : (
-                <p className="text-sm text-slate-400 py-16 text-center">Chọn một chiến dịch để xem chi tiết</p>
+                <EmptyState
+                  icon="ads_click"
+                  title={dashboard.campaigns?.length ? "Chọn một chiến dịch để xem chi tiết" : "Chưa có chiến dịch nào"}
+                  hint={dashboard.campaigns?.length ? "Nhấn vào một thẻ ở danh sách bên trái." : "Tạo chiến dịch mới để bắt đầu theo dõi hiệu quả."}
+                />
               )}
             </div>
           </div>

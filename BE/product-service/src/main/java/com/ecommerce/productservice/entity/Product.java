@@ -75,12 +75,6 @@ public class Product {
     @Builder.Default
     private BigDecimal height = BigDecimal.ZERO;
 
-    // Trạng thái sản phẩm
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private ProductStatus status = ProductStatus.DRAFT;
-
     // Thông tin bảo hành
     @Column(name = "warranty_period")
     private Integer warrantyPeriod; // số tháng bảo hành

@@ -38,8 +38,14 @@ export const authApi = {
     return apiClient.get<AuthUser>(`/users/public/${keycloakUserId}`);
   },
 
-  updateProfile(payload: { fullName?: string; phoneNumber?: string }): Promise<AuthUser> {
+  updateProfile(payload: { fullName?: string; phoneNumber?: string; avatarUrl?: string }): Promise<AuthUser> {
     return apiClient.putAuth<AuthUser>("/users/me", payload);
+  },
+
+  uploadAvatar(file: File): Promise<AuthUser> {
+    const formData = new FormData();
+    formData.append("file", file);
+    return apiClient.uploadAuth<AuthUser>("/users/me/avatar", formData);
   },
 
   getAddresses(): Promise<any[]> {

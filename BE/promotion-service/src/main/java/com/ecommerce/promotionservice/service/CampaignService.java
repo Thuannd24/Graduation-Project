@@ -9,7 +9,6 @@ import com.ecommerce.promotionservice.dto.ValidationResultDto;
 import com.ecommerce.promotionservice.dto.WorkflowGraphDto;
 
 import java.util.List;
-import java.util.Map;
 
 public interface CampaignService {
 
@@ -38,9 +37,6 @@ public interface CampaignService {
 
     /** Active/Suspend campaign and synchronize with Camunda process definition. */
     CampaignDto toggleCampaignActive(Long id, boolean active);
-
-    /** Start a Camunda process instance for the given processKey with runtime variables. */
-    Map<String, Object> evaluateCampaign(String processKey, Map<String, Object> variables);
 
     /** Return runtime statistics for a campaign (issued/used vouchers, budget usage). */
     CampaignStatsDto getCampaignStats(Long id);

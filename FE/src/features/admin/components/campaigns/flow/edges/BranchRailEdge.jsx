@@ -7,7 +7,7 @@ function BranchRailEdge({ id, sourceX, sourceY, targetX, targetY, data }) {
   const path = branchRailPath(sourceX, sourceY, targetX, targetY, data?.railY);
   const labelX = sourceX;
   const labelY = (sourceY + targetY) / 2;
-  const showPlus = data?.insertable && data?.wfEdgeId;
+  const showPlus = data?.insertable && data?.wfEdgeId && data?.dragType;
 
   return (
     <>
@@ -28,13 +28,13 @@ function BranchRailEdge({ id, sourceX, sourceY, targetX, targetY, data }) {
             }}
             onClick={e => {
               e.stopPropagation();
-              data.onInsertClick?.(data.wfEdgeId);
+              data.onInsertClick?.(data.wfEdgeId, data.mergeInsert);
             }}
             onDragOver={e => e.preventDefault()}
             onDrop={e => {
               e.preventDefault();
               const t = e.dataTransfer.getData("text/plain");
-              if (t && data.onInsertDrop) data.onInsertDrop(data.wfEdgeId, t);
+              if (t && data.onInsertDrop) data.onInsertDrop(data.wfEdgeId, t, data.mergeInsert);
             }}
           >
             +

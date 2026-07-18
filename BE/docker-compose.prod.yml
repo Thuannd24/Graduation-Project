@@ -1,0 +1,161 @@
+
+services:
+  mariadb:
+    ports: !reset []
+    mem_limit: 512m
+
+  mongodb:
+    ports: !reset []
+    mem_limit: 256m
+
+  redis:
+    ports: !reset []
+    mem_limit: 128m
+
+  kafka:
+    ports: !reset []
+    mem_limit: 512m
+
+  debezium-connect:
+    ports: !reset []
+    mem_limit: 512m
+
+  elasticsearch:
+    ports: !reset []
+    mem_limit: 1024m
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+
+  minio:
+    ports: !reset []
+    mem_limit: 256m
+    # Served publicly through Caddy at cdn.${DOMAIN} instead of a raw port.
+
+  eureka-server:
+    ports: !reset []
+    mem_limit: 384m
+
+  # ===========================================================================
+  # Keycloak: switch from start-dev (embedded dev DB, wipes users on every
+  # restart via OVERWRITE_EXISTING) to start + real MariaDB-backed storage.
+  # IGNORE_EXISTING imports the realm once and never touches it again.
+  # ===========================================================================
+  keycloak:
+    ports: !reset []
+    mem_limit: 512m
+    command: start
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://mariadb:3306/keycloak_db
+      - KC_DB_USERNAME=${DB_USER}
+      - KC_DB_PASSWORD=${DB_PASSWORD}
+      - KC_HOSTNAME=auth.${DOMAIN}
+      - KC_PROXY=edge
+      - KC_HTTP_ENABLED=true
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=IGNORE_EXISTING -Dkeycloak.migration.replace-placeholders=true -Denv.GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -Denv.GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -Denv.KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -Denv.DOMAIN=${DOMAIN}
+
+  # ===========================================================================
+  # Business services: trim JVM heap to fit the box, point issuer/URLs at the
+  # real domain instead of localhost, drop api-gateway's public port (Caddy
+  # reaches it over the internal docker network instead).
+  # ===========================================================================
+  api-gateway:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  user-service:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  product-service:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - MINIO_PUBLIC_ENDPOINT=https://cdn.${DOMAIN}
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  order-service:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  inventory-service:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  payment-service:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - VNPAY_RETURN_URL=https://${DOMAIN}/api/v1/public/payments/vnpay-callback
+      - FRONTEND_URL=https://${DOMAIN}
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  notification-service:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  promotion-service:
+    ports: !reset []
+    mem_limit: 384m
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+      - CAMUNDA_ADMIN_PASSWORD=${CAMUNDA_ADMIN_PASSWORD}
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  # ===========================================================================
+  # Caddy: single public ingress. Auto HTTPS (Let's Encrypt) for all 3 hosts.
+  # ===========================================================================
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: always
+    mem_limit: 96m
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../FE/dist:/srv/fe-dist:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api-gateway
+      - keycloak
+      - minio
+    networks:
+      - ecommerce-network
+
+volumes:
+  caddy_data:
+  caddy_config:

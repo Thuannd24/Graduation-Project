@@ -39,9 +39,11 @@ public class IssueVoucherFreeshippingDelegate implements JavaDelegate {
         log.info("[IssueVoucherFreeship] userId={} maxShippingDiscount={} expireDays={}",
                 userDbId.get(), maxShip, days);
 
+        String idempotencyKey = execution.getProcessInstanceId() + ":" + execution.getCurrentActivityId();
         try {
             IssueVoucherResult result = voucherIssuanceService.issueFreeship(
-                    userDbId.get(), campaignId, maxShip, days, restrictedCategoryIds, restrictedProductIds);
+                    userDbId.get(), campaignId, maxShip, days, restrictedCategoryIds, restrictedProductIds,
+                    idempotencyKey);
             applyResult(execution, result);
             log.info("[IssueVoucherFreeship] Issued voucher {} for user {}", result.getVoucherCode(), userDbId.get());
         } catch (Exception ex) {
@@ -51,9 +53,13 @@ public class IssueVoucherFreeshippingDelegate implements JavaDelegate {
     }
 
     private void applyResult(DelegateExecution execution, IssueVoucherResult result) {
+        String expiresAt = result.getExpiresAt() != null ? result.getExpiresAt().toString() : null;
         execution.setVariable("voucherCode", result.getVoucherCode());
         execution.setVariable("voucherId", result.getVoucherId());
-        execution.setVariable("voucherExpiresAt", result.getExpiresAt() != null ? result.getExpiresAt().toString() : null);
+        execution.setVariable("voucherExpiresAt", expiresAt);
+        execution.setVariable("freeshipVoucherCode", result.getVoucherCode());
+        execution.setVariable("freeshipVoucherId", result.getVoucherId());
+        execution.setVariable("freeshipVoucherExpiresAt", expiresAt);
         execution.setVariable("voucherIssued", true);
     }
 }

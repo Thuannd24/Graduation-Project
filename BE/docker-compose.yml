@@ -230,7 +230,9 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.migration.replace-placeholders=true -Denv.GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -Denv.GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET}
+      - DOMAIN=${DOMAIN:-localhost}
+      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.migration.replace-placeholders=true -DGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -DGOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -DKEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -DDOMAIN=${DOMAIN:-localhost}
     volumes:
       - ./keycloak-data:/opt/keycloak/data/import
       - ./keycloak-themes:/opt/keycloak/themes
@@ -366,7 +368,6 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
       - SHIPPING_WEBHOOK_SECRET=${SHIPPING_WEBHOOK_SECRET}
-      - WARRANTY_OTP_EXPOSE=${WARRANTY_OTP_EXPOSE}
       - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh
     depends_on:
       eureka-server:
