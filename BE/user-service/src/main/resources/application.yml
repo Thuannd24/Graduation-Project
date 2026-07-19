@@ -55,8 +55,6 @@ keycloak:
     client-id: ${KEYCLOAK_ADMIN_CLIENT_ID:ecommerce-backend}
     client-secret: ${KEYCLOAK_ADMIN_CLIENT_SECRET}
 
-location:
-  api-url: ${LOCATION_API_URL:https://provinces.open-api.vn/api/v2}
 
 app:
   internal:

@@ -100,10 +100,10 @@ async function main() {
     }
   }
   console.log(`  → ${tasks.length} variant cần set tồn kho = ${qty}\n`);
-
   let ok = 0;
   let failed = 0;
-  await mapPool(tasks, 3, async (t) => {
+  await mapPool(tasks, 1, async (t) => {
+    await new Promise((r) => setTimeout(r, 60)); // Sleep 60ms to prevent API Gateway Rate Limiting (429)
     const result = await setInventory(inventoryUrl, headers, t.productId, t.variantId, qty);
     if (result.ok) {
       ok++;

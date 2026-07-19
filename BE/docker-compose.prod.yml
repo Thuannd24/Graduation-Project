@@ -18,7 +18,9 @@ services:
 
   debezium-connect:
     ports: !reset []
-    mem_limit: 512m
+    mem_limit: 1024m
+    environment:
+      - KAFKA_HEAP_OPTS=-Xmx512m -Xms256m
 
   elasticsearch:
     ports: !reset []
@@ -49,8 +51,8 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
-      - KC_DB=mysql
-      - KC_DB_URL=jdbc:mysql://mariadb:3306/keycloak_db
+      - KC_DB=mariadb
+      - KC_DB_URL=jdbc:mariadb://mariadb:3306/keycloak_db
       - KC_DB_USERNAME=${DB_USER}
       - KC_DB_PASSWORD=${DB_PASSWORD}
       - KC_HOSTNAME=auth.${DOMAIN}
@@ -75,36 +77,37 @@ services:
 
   user-service:
     ports: !reset []
-    mem_limit: 384m
+    mem_limit: 512m
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
-      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+      - KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET}
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx384m -Xms128m
 
   product-service:
     ports: !reset []
-    mem_limit: 384m
+    mem_limit: 512m
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - MINIO_PUBLIC_ENDPOINT=https://cdn.${DOMAIN}
-      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx384m -Xms128m
 
   order-service:
     ports: !reset []
-    mem_limit: 384m
+    mem_limit: 512m
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
-      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx384m -Xms128m
 
   inventory-service:
     ports: !reset []
-    mem_limit: 384m
+    mem_limit: 512m
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
-      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx384m -Xms128m
 
   payment-service:
     ports: !reset []

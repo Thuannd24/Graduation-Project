@@ -1,10 +1,13 @@
 {$DOMAIN} {
-	@api path /api/*
-	reverse_proxy @api api-gateway:8080
+	handle /api/* {
+		reverse_proxy api-gateway:8080
+	}
 
-	root * /srv/fe-dist
-	file_server
-	try_files {path} /index.html
+	handle {
+		root * /srv/fe-dist
+		try_files {path} /index.html
+		file_server
+	}
 }
 
 auth.{$DOMAIN} {

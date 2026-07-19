@@ -6,13 +6,14 @@ import com.ecommerce.userservice.exception.ResourceNotFoundException;
 import com.ecommerce.userservice.repository.ProvinceRepository;
 import com.ecommerce.userservice.repository.WardRepository;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -22,37 +23,54 @@ public class LocationService {
 
     private final ProvinceRepository provinceRepository;
     private final WardRepository wardRepository;
-    private final RestTemplate restTemplate;
-
-    @Value("${location.api-url}")
-    private String apiUrl;
+    private final ObjectMapper objectMapper;
 
     @PostConstruct
     void syncIfEmpty() {
         if (provinceRepository.count() > 0)
             return;
+
+        // Load from raw local vietnam_provinces.json (offline import)
         try {
-            JsonNode provinces = restTemplate.getForObject(apiUrl + "?depth=1", JsonNode.class);
-            if (provinces == null)
-                return;
-            for (JsonNode p : provinces) {
-                int code = p.get("code").asInt();
-                provinceRepository.save(Province.builder().code(code).name(p.get("name").asText()).build());
-                JsonNode detail = restTemplate.getForObject(apiUrl + "/p/" + code + "?depth=2", JsonNode.class);
-                if (detail == null || !detail.has("wards"))
-                    continue;
-                wardRepository.deleteByProvinceCode(code);
-                for (JsonNode w : detail.get("wards")) {
-                    wardRepository.save(Ward.builder()
-                            .code(w.get("code").asInt())
-                            .name(w.get("name").asText())
-                            .provinceCode(code)
-                            .build());
+            ClassPathResource resource = new ClassPathResource("vietnam_provinces.json");
+            if (resource.exists()) {
+                log.info("Loading provinces and wards from local vietnam_provinces.json...");
+                try (InputStream stream = resource.getInputStream()) {
+                    JsonNode data = objectMapper.readTree(stream);
+                    int provinceCount = 0;
+                    int wardCount = 0;
+                    for (JsonNode p : data) {
+                        int code = p.get("code").asInt();
+                        provinceRepository.save(Province.builder().code(code).name(p.get("name").asText()).build());
+                        provinceCount++;
+                        
+                        JsonNode items = null;
+                        if (p.has("wards") && p.get("wards").isArray() && p.get("wards").size() > 0) {
+                            items = p.get("wards");
+                        } else if (p.has("districts") && p.get("districts").isArray() && p.get("districts").size() > 0) {
+                            items = p.get("districts");
+                        }
+                        
+                        if (items == null)
+                            continue;
+                        
+                        wardRepository.deleteByProvinceCode(code);
+                        for (JsonNode w : items) {
+                            wardRepository.save(Ward.builder()
+                                    .code(w.get("code").asInt())
+                                    .name(w.get("name").asText())
+                                    .provinceCode(code)
+                                    .build());
+                            wardCount++;
+                        }
+                    }
+                    log.info("Successfully imported {} provinces and {} wards from local vietnam_provinces.json!", provinceCount, wardCount);
                 }
+            } else {
+                log.warn("Local vietnam_provinces.json not found in classpath. Skipping import.");
             }
-            log.info("Synced {} provinces", provinces.size());
         } catch (Exception ex) {
-            log.error("Location sync failed: {}", ex.getMessage());
+            log.error("Failed to load local vietnam_provinces.json: {}", ex.getMessage());
         }
     }
 

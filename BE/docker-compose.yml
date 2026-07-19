@@ -104,6 +104,8 @@ services:
         condition: service_healthy
     networks:
       - ecommerce-network
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD:-root}
     restart: "no"
     entrypoint: ["/bin/sh", "-c"]
     command:
@@ -120,7 +122,7 @@ services:
               "database.hostname": "mariadb",
               "database.port": "3306",
               "database.user": "root",
-              "database.password": "root",
+              "database.password": "${DB_PASSWORD:-root}",
               "database.server.id": "184054",
               "topic.prefix": "order-db",
               "database.include.list": "ecommerce_order_db",
@@ -157,7 +159,7 @@ services:
               "database.hostname": "mariadb",
               "database.port": "3306",
               "database.user": "root",
-              "database.password": "root",
+              "database.password": "${DB_PASSWORD:-root}",
               "database.server.id": "184055",
               "topic.prefix": "payment-db",
               "database.include.list": "ecommerce_payment_db",
