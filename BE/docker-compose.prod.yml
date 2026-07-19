@@ -113,6 +113,8 @@ services:
     ports: !reset []
     mem_limit: 384m
     environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - VNPAY_RETURN_URL=https://${DOMAIN}/api/v1/public/payments/vnpay-callback

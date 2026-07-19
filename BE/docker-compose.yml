@@ -414,6 +414,8 @@ services:
       - EUREKA_HOST=eureka-server
       - DB_HOST=mariadb
       - DB_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
