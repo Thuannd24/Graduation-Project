@@ -21,64 +21,11 @@ export interface ChatMessage {
   isEscalated?: boolean;
 }
 
-// Fallback Mock Data for UI demonstration
-const MOCK_PRODUCTS: AIProduct[] = [
-  { id: 1, name: "iPhone 15 Pro Max 256GB Titanium", price: 29990000, oldPrice: 34990000, image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=300", brand: "Apple", category: "Phone", rating: 4.8, matchScore: 98.5 },
-  { id: 2, name: "MacBook Pro 14\" M3 Space Gray (8GB/512GB)", price: 39990000, oldPrice: 42990000, image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300", brand: "Apple", category: "Laptop", rating: 4.7, matchScore: 92.4 },
-  { id: 3, name: "Sony WH-1000XM5 Wireless Headphones", price: 6490000, oldPrice: 8490000, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300", brand: "Sony", category: "Accessories", rating: 4.9, matchScore: 89.2 },
-  { id: 4, name: "Bàn phím cơ ASUS ROG Strix Scope II", price: 2890000, oldPrice: 3490000, image: "https://images.unsplash.com/photo-1618384887929-16ec33faf9c1?w=300", brand: "ASUS", category: "Accessories", rating: 4.5, matchScore: 85.0 },
-  { id: 5, name: "Samsung Galaxy S24 Ultra 512GB", price: 27490000, oldPrice: 31990000, image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=300", brand: "Samsung", category: "Phone", rating: 4.8, matchScore: 95.0 }
-];
-
 export const aiApi = {
   // 1. Chatbot AI
   sendMessage: async (message: string, image?: string, sessionId?: string): Promise<{ message: string; products?: AIProduct[]; intent?: string }> => {
-    try {
-      const response = await apiClient.post("/chatbot/message", { message, image, session_id: sessionId });
-      return response.data;
-    } catch (err) {
-      console.warn("AI Service API not ready. Using simulation mock responses.", err);
-      // Simulate chatbot responses based on message keywords
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const query = message.toLowerCase();
-          if (query.includes("iphone") || query.includes("apple") || query.includes("điện thoại")) {
-            resolve({
-              message: "Tôi tìm thấy một số sản phẩm iPhone và điện thoại cao cấp phù hợp với yêu cầu của bạn. Bạn có muốn xem thêm chi tiết hoặc so sánh cấu hình không?",
-              products: [MOCK_PRODUCTS[0], MOCK_PRODUCTS[4]],
-              intent: "product_search"
-            });
-          } else if (query.includes("macbook") || query.includes("laptop") || query.includes("máy tính")) {
-            resolve({
-              message: "Đây là mẫu MacBook Pro M3 đang được ưu chuộng nhất tại cửa hàng với hiệu năng cực kỳ ấn tượng.",
-              products: [MOCK_PRODUCTS[1]],
-              intent: "product_search"
-            });
-          } else if (query.includes("tai nghe") || query.includes("phụ kiện") || query.includes("bàn phím")) {
-            resolve({
-              message: "Gợi ý các phụ kiện công nghệ chất lượng cao, đang có chương trình giảm giá sâu tuần này:",
-              products: [MOCK_PRODUCTS[2], MOCK_PRODUCTS[3]],
-              intent: "product_search"
-            });
-          } else if (query.includes("bảo hành") || query.includes("đổi trả")) {
-            resolve({
-              message: "Chính sách bảo hành tại AuraTech:\n- Bảo hành chính hãng 12-24 tháng đối với toàn bộ thiết bị điện tử.\n- Lỗi 1 đổi 1 trong vòng 30 ngày nếu phát hiện lỗi từ nhà sản xuất.\n- Hỗ trợ gửi trả bảo hành tận nơi miễn phí phí vận chuyển 2 chiều.",
-              intent: "qa_policy"
-            });
-          } else if (query.includes("nhân viên") || query.includes("gặp người") || query.includes("hỗ trợ trực tiếp")) {
-            resolve({
-              message: "Yêu cầu của bạn đã được chuyển giao cho nhân viên trực tuyến. Tư vấn viên sẽ phản hồi bạn sau vài giây!",
-              intent: "escalate"
-            });
-          } else {
-            resolve({
-              message: "Chào bạn! Tôi là Aura AI - trợ lý mua sắm thông minh của AuraTech. Tôi có thể giúp bạn tìm kiếm sản phẩm bằng văn bản/hình ảnh, tư vấn cấu hình, hoặc tra cứu chính sách bảo hành. Bạn cần hỗ trợ gì hôm nay?",
-              intent: "greeting"
-            });
-          }
-        }, 1000);
-      });
-    }
+    const response = await apiClient.post("/chatbot/message", { message, image, session_id: sessionId });
+    return response.data;
   },
 
   escalateSession: async (sessionId: string): Promise<boolean> => {
@@ -93,33 +40,15 @@ export const aiApi = {
 
   // 2. Visual Search (Tìm kiếm bằng hình ảnh)
   searchByImage: async (imageFile: File): Promise<{ items: AIProduct[]; cropBox: { x1: number; y1: number; x2: number; y2: number } }> => {
-    try {
-      const formData = new FormData();
-      formData.append("image", imageFile);
-      const response = await apiClient.post("/search/image", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
-      return response.data;
-    } catch (err) {
-      console.warn("Visual Search API not ready. Simulating image retrieval.", err);
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            items: [
-              { ...MOCK_PRODUCTS[0], matchScore: 96.8 },
-              { ...MOCK_PRODUCTS[4], matchScore: 84.2 },
-              { ...MOCK_PRODUCTS[2], matchScore: 61.5 }
-            ],
-            cropBox: { x1: 50, y1: 50, x2: 450, y2: 450 } // Simulated crop rectangle
-          });
-        }, 1200);
-      });
-    }
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    const response = await apiClient.post("/search/image", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+    return response.data;
   },
 
-  // 3. Recommendations (Đề xuất cá nhân hóa & mua kèm)
-  // recs-service chưa triển khai — trả về rỗng để mục "Gợi ý từ AI" tự ẩn (SuggestedSection),
-  // không hiện data giả khi service chưa có thật.
+  // 3. Recommendations
   getPersonalizedRecommendations: async (userId?: string): Promise<AIProduct[]> => {
     if (!hasAuthToken()) {
       return [];
@@ -138,9 +67,8 @@ export const aiApi = {
       const response = await apiClient.get(`/recommendations/cross-sell?item_ids=${itemIds.join(",")}`);
       return response.data;
     } catch (err) {
-      console.warn("Cross-sell API fallback.");
-      // Return accessories for cross sell
-      return [MOCK_PRODUCTS[2], MOCK_PRODUCTS[3]];
+      console.warn("Cross-sell API fallback.", err);
+      return [];
     }
   },
 

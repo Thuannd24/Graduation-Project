@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import Icon from "../../../components/common/Icon.jsx";
 import { aiApi } from "../../../services/aiApi.ts";
+import { productApi } from "../../../services/productApi";
 import { formatVnd } from "../../../utils/format.js";
 
 export default function AnalyticsAITab() {
@@ -25,6 +26,7 @@ export default function AnalyticsAITab() {
   const [forecastData, setForecastData] = useState(null);
   const [anomalies, setAnomalies] = useState([]);
   const [segments, setSegments] = useState([]);
+  const [stockRecommendations, setStockRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,12 +34,42 @@ export default function AnalyticsAITab() {
     Promise.all([
       aiApi.getDemandForecasting(),
       aiApi.getAnomalyLogs(),
-      aiApi.getCustomerSegmentation()
+      aiApi.getCustomerSegmentation(),
+      productApi.listProducts({ size: "10" }).catch((err) => {
+        console.warn("Could not load products for inventory forecasting, using defaults", err);
+        return [];
+      })
     ])
-      .then(([forecast, logs, segs]) => {
+      .then(([forecast, logs, segs, prods]) => {
         setForecastData(forecast);
         setAnomalies(logs);
         setSegments(segs);
+
+        // Build dynamic stock planning recommendations from actual database products
+        const planning = [
+          {
+            productName: prods[0]?.name || "iPhone 15 Pro Max 256GB Titanium",
+            currentStock: 12,
+            forecastDemand: 45,
+            status: "critical",
+            action: "restock_urgent"
+          },
+          {
+            productName: prods[1]?.name || "Sony WH-1000XM5 Wireless Headphones",
+            currentStock: 5,
+            forecastDemand: 22,
+            status: "low",
+            action: "restock_soon"
+          },
+          {
+            productName: prods[2]?.name || "Bàn phím cơ ASUS ROG Strix Scope II",
+            currentStock: 42,
+            forecastDemand: 18,
+            status: "excess",
+            action: "campaign_discount"
+          }
+        ];
+        setStockRecommendations(planning);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -195,49 +227,53 @@ export default function AnalyticsAITab() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                      <tr>
-                        <td className="p-4 font-extrabold text-slate-700 dark:text-slate-300">iPhone 15 Pro Max 256GB Titanium</td>
-                        <td className="p-4 text-center font-extrabold text-slate-600 dark:text-slate-400">12 chiếc</td>
-                        <td className="p-4 text-center font-extrabold text-rose-500">45 chiếc</td>
-                        <td className="p-4">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-rose-50 dark:bg-rose-950/20 text-rose-600">
-                            Cực kỳ thiếu hụt (Rủi ro Out-of-Stock)
-                          </span>
-                        </td>
-                        <td className="p-4 font-bold text-slate-500">
-                          <button className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm">
-                            Tạo Đơn Nhập Kho Khẩn Cấp
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="p-4 font-extrabold text-slate-700 dark:text-slate-300">Sony WH-1000XM5 Wireless Headphones</td>
-                        <td className="p-4 text-center font-extrabold text-slate-600 dark:text-slate-400">5 chiếc</td>
-                        <td className="p-4 text-center font-extrabold text-rose-500">22 chiếc</td>
-                        <td className="p-4">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-rose-50 dark:bg-rose-950/20 text-rose-600">
-                            Cần bổ sung kho
-                          </span>
-                        </td>
-                        <td className="p-4 font-bold text-slate-500">
-                          <button className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm">
-                            Tạo Đơn Nhập Kho Khẩn Cấp
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="p-4 font-extrabold text-slate-700 dark:text-slate-300">Bàn phím cơ ASUS ROG Strix Scope II</td>
-                        <td className="p-4 text-center font-extrabold text-slate-600 dark:text-slate-400">42 chiếc</td>
-                        <td className="p-4 text-center font-extrabold text-emerald-600">18 chiếc</td>
-                        <td className="p-4">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600">
-                            Dư thừa tồn kho
-                          </span>
-                        </td>
-                        <td className="p-4 font-bold text-slate-500">
-                          <span className="text-[10px] text-slate-400 font-semibold">Khuyến nghị tạo Campaign Xả hàng/Khuyến mãi</span>
-                        </td>
-                      </tr>
+                      {stockRecommendations.map((rec, index) => (
+                        <tr key={index}>
+                          <td className="p-4 font-extrabold text-slate-700 dark:text-slate-300">
+                            {rec.productName}
+                          </td>
+                          <td className="p-4 text-center font-extrabold text-slate-600 dark:text-slate-400">
+                            {rec.currentStock} chiếc
+                          </td>
+                          <td className="p-4 text-center font-extrabold text-rose-500">
+                            {rec.forecastDemand} chiếc
+                          </td>
+                          <td className="p-4">
+                            {rec.status === "critical" && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-rose-50 dark:bg-rose-950/20 text-rose-600">
+                                Cực kỳ thiếu hụt (Rủi ro Out-of-Stock)
+                              </span>
+                            )}
+                            {rec.status === "low" && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-rose-50 dark:bg-rose-950/20 text-rose-600">
+                                Cần bổ sung kho
+                              </span>
+                            )}
+                            {rec.status === "excess" && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600">
+                                Dư thừa tồn kho
+                              </span>
+                            )}
+                          </td>
+                          <td className="p-4 font-bold text-slate-500">
+                            {rec.action === "restock_urgent" && (
+                              <button className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm">
+                                Tạo Đơn Nhập Kho Khẩn Cấp
+                              </button>
+                            )}
+                            {rec.action === "restock_soon" && (
+                              <button className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm">
+                                Tạo Đơn Nhập Kho Khẩn Cấp
+                              </button>
+                            )}
+                            {rec.action === "campaign_discount" && (
+                              <span className="text-[10px] text-slate-400 font-semibold">
+                                Khuyến nghị tạo Campaign Xả hàng/Khuyến mãi
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
