@@ -187,6 +187,25 @@ export default function LaptopShowcaseSection({ categories }) {
           transform: scale(1.02);
           filter: brightness(0.95);
         }
+        
+        @media (max-width: 768px) {
+          .laptop-shelf-tabs {
+            overflow-x: auto !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+          }
+          .laptop-shelf-tabs::-webkit-scrollbar {
+            display: none !important;
+          }
+          .laptop-shelf-tab-btn {
+            flex: none !important;
+            flex-shrink: 0 !important;
+            padding: 0 16px !important;
+            font-size: 11px !important;
+            white-space: nowrap !important;
+            border-right: none !important;
+          }
+        }
       `}</style>
 
       {/* ── Left sidebar (Hidden on Mobile) ── */}
@@ -259,13 +278,16 @@ export default function LaptopShowcaseSection({ categories }) {
           minWidth: 0,
         }}
       >
-        {/* Tab bar (Red underline, borderless container) */}
-        <div style={{
-          display: "flex",
-          borderBottom: "2px solid #E5E7EB",
-          marginBottom: 16,
-          backgroundColor: "#fff"
-        }}>
+        {/* Tab bar (Red underline, borderless container, scrollable on mobile) */}
+        <div 
+          className="laptop-shelf-tabs hide-scrollbar"
+          style={{
+            display: "flex",
+            borderBottom: "2px solid #E5E7EB",
+            marginBottom: 16,
+            backgroundColor: "#fff"
+          }}
+        >
           {tabs.map((tab, idx) => {
             const isActive = activeTab === tab.id;
             return (
@@ -273,6 +295,7 @@ export default function LaptopShowcaseSection({ categories }) {
                 key={tab.id}
                 type="button"
                 onClick={() => { setActiveTab(tab.id); setActiveBrand(null); setActiveSub(null); }}
+                className="laptop-shelf-tab-btn"
                 style={{
                   flex: 1,
                   display: "flex",
