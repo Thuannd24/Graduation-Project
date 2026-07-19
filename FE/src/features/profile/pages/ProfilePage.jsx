@@ -228,6 +228,33 @@ function getStatusLabel(status) {
   }
 }
 
+const navSections = [
+  {
+    title: "Hồ sơ cá nhân",
+    items: [
+      { id: "overview", label: "Tổng quan tài khoản", icon: "home" },
+      { id: "account", label: "Thông tin tài khoản", icon: "manage_accounts" },
+      { id: "addresses", label: "Sổ địa chỉ nhận hàng", icon: "location_on" }
+    ]
+  },
+  {
+    title: "Giao dịch & Ưu đãi",
+    items: [
+      { id: "orders", label: "Lịch sử mua hàng", icon: "receipt_long" },
+      { id: "vouchers", label: "Kho voucher cá nhân", icon: "confirmation_number" },
+      { id: "membership", label: "Điểm thưởng & Hạng thẻ", icon: "workspace_premium" },
+      { id: "warranty", label: "Tra cứu bảo hành", icon: "verified_user" }
+    ]
+  },
+  {
+    title: "Hỗ trợ & Chính sách",
+    items: [
+      { id: "reviews", label: "Đánh giá của bạn", icon: "rate_review" },
+      { id: "policy", label: "Chính sách bảo hành", icon: "policy" }
+    ]
+  }
+];
+
 function getLoyaltySourceLabel(sourceType) {
   const s = String(sourceType || "").toUpperCase();
   switch (s) {
@@ -257,6 +284,17 @@ export default function ProfilePage() {
   const [savingProfile, setSavingProfile] = useState(false);
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const currentTabInfo = useMemo(() => {
+    for (const section of navSections) {
+      const item = section.items.find((i) => i.id === activeTab);
+      if (item) return item;
+    }
+    // Fallbacks if not in list
+    if (activeTab === "overview") return { id: "overview", label: "Tổng quan tài khoản", icon: "home" };
+    return { id: activeTab, label: "Tài khoản", icon: "account_circle" };
+  }, [activeTab]);
 
   const getCancelTimeLeft = (createdAt) => {
     if (!createdAt) return 0;
@@ -462,33 +500,6 @@ export default function ProfilePage() {
     });
   };
 
-  const navSections = [
-    {
-      title: "Hồ sơ cá nhân",
-      items: [
-        { id: "overview", label: "Tổng quan tài khoản", icon: "home" },
-        { id: "account", label: "Thông tin tài khoản", icon: "manage_accounts" },
-        { id: "addresses", label: "Sổ địa chỉ nhận hàng", icon: "location_on" }
-      ]
-    },
-    {
-      title: "Giao dịch & Ưu đãi",
-      items: [
-        { id: "orders", label: "Lịch sử mua hàng", icon: "receipt_long" },
-        { id: "vouchers", label: "Kho voucher cá nhân", icon: "confirmation_number" },
-        { id: "membership", label: "Điểm thưởng & Hạng thẻ", icon: "workspace_premium" },
-        { id: "warranty", label: "Tra cứu bảo hành", icon: "verified_user" }
-      ]
-    },
-    {
-      title: "Hỗ trợ & Chính sách",
-      items: [
-        { id: "reviews", label: "Đánh giá của bạn", icon: "rate_review" },
-        { id: "policy", label: "Chính sách bảo hành", icon: "policy" }
-      ]
-    }
-  ];
-
   const handleNavClick = (itemId) => {
     setActiveTab(itemId);
     setSearchParams({ tab: itemId });
@@ -577,8 +588,24 @@ export default function ProfilePage() {
 
   return (
     <div className="bg-surface-container-low text-on-background font-body-lg min-h-screen py-md px-md lg:px-lg">
+      <style>{`
+        @keyframes slideIn {
+          from { transform: translateX(-100%); }
+          to { transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-slide-in {
+          animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.2s ease-out forwards;
+        }
+      `}</style>
       <main className="w-full max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-12 gap-md">
-        <aside className="md:col-span-3">
+        <aside className="hidden md:block md:col-span-3">
           <div className="bg-surface-container-lowest rounded-lg shadow-sm flex flex-col w-full py-md overflow-hidden">
             <nav className="flex flex-col gap-xs">
               {navSections.map((section, idx) => (
@@ -589,27 +616,30 @@ export default function ProfilePage() {
                   </div>
                   
                   {/* Section Navigation Items */}
-                  <div className="flex flex-col gap-[2px]">
+                  <div className="flex flex-col gap-[4px] px-2">
                     {section.items.map((item) => {
                       const isActive = activeTab === item.id;
                       return (
                         <button
                           key={item.id}
                           onClick={() => handleNavClick(item.id)}
-                          className={`flex items-center px-lg py-2.5 font-body-sm text-body-sm transition-all duration-150 border-l-4 ${
+                          className={`flex items-center justify-between px-3.5 py-2.5 font-body-sm text-body-sm transition-all duration-200 rounded-xl text-left ${
                             isActive
-                              ? "text-primary font-bold bg-surface-container-low border-primary"
+                              ? "text-primary font-extrabold bg-primary/10 border-l-4 border-primary shadow-[0_2px_8px_rgba(169,0,16,0.06)]"
                               : "text-on-surface border-transparent hover:bg-surface-container-low/60 hover:text-primary"
                           }`}
                           type="button"
                         >
-                          <Icon 
-                            className={`mr-3 text-[18px] transition-colors ${
-                              isActive ? "text-primary" : "text-secondary"
-                            }`} 
-                            name={item.icon} 
-                          />
-                          <span className="truncate">{item.label}</span>
+                          <div className="flex items-center min-w-0">
+                            <Icon 
+                              className={`mr-3 text-[20px] transition-colors ${
+                                isActive ? "text-primary" : "text-secondary"
+                              }`} 
+                              name={item.icon} 
+                            />
+                            <span className="truncate">{item.label}</span>
+                          </div>
+                          <Icon name="chevron_right" className={`text-xs transition-transform duration-200 ${isActive ? "text-primary translate-x-0.5" : "text-secondary/40"}`} />
                         </button>
                       );
                     })}
@@ -665,16 +695,16 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
-                {/* Right side: 3 Stats (Compact & Sleek) */}
-                <div className="flex flex-col sm:flex-row gap-md lg:gap-lg w-full lg:w-auto items-center justify-end">
+                {/* Right side: 3 Stats (Compact & Sleek Grid on Mobile, Flex Row on larger screens) */}
+                <div className="grid grid-cols-3 gap-xs w-full sm:flex sm:flex-row sm:gap-md lg:gap-lg sm:w-auto items-center sm:justify-end mt-4 sm:mt-0">
                   {/* Stat 1 */}
-                  <div className="flex items-center gap-xs px-2 py-1">
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
-                      <Icon className="text-[18px]" name="shopping_cart" />
+                  <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-xs px-1 sm:px-2 py-2 sm:py-1 bg-black/5 dark:bg-white/5 sm:bg-transparent rounded-xl sm:rounded-none">
+                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
+                      <Icon className="text-[16px] sm:text-[18px]" name="shopping_cart" />
                     </div>
-                    <div>
-                      <p className={`text-base font-bold leading-tight ${theme.statValue}`}>{orders.length}</p>
-                      <p className="text-[11px] text-secondary leading-tight mt-0.5">Đơn hàng đã mua</p>
+                    <div className="min-w-0">
+                      <p className={`text-xs sm:text-base font-extrabold leading-tight ${theme.statValue}`}>{orders.length}</p>
+                      <p className="text-[9px] sm:text-[11px] text-secondary leading-tight mt-0.5 whitespace-nowrap">Đơn hàng</p>
                     </div>
                   </div>
 
@@ -682,13 +712,13 @@ export default function ProfilePage() {
                   <div className={`hidden sm:block h-8 w-[1px] bg-slate-300/40 ${theme.dividerColor}`}></div>
 
                   {/* Stat 2 */}
-                  <div className="flex items-center gap-xs px-2 py-1">
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
-                      <Icon className="text-[18px]" name="receipt" />
+                  <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-xs px-1 sm:px-2 py-2 sm:py-1 bg-black/5 dark:bg-white/5 sm:bg-transparent rounded-xl sm:rounded-none">
+                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
+                      <Icon className="text-[16px] sm:text-[18px]" name="receipt" />
                     </div>
-                    <div>
-                      <p className={`text-base font-bold leading-tight ${theme.statValue}`}>{formatVnd(totalSpent)}</p>
-                      <p className="text-[11px] text-secondary leading-tight mt-0.5">Tích lũy chi tiêu</p>
+                    <div className="min-w-0 w-full">
+                      <p className={`text-xs sm:text-base font-extrabold leading-tight truncate ${theme.statValue}`} title={formatVnd(totalSpent)}>{formatVnd(totalSpent)}</p>
+                      <p className="text-[9px] sm:text-[11px] text-secondary leading-tight mt-0.5 whitespace-nowrap">Tích lũy</p>
                     </div>
                   </div>
 
@@ -696,13 +726,13 @@ export default function ProfilePage() {
                   <div className={`hidden sm:block h-8 w-[1px] bg-slate-300/40 ${theme.dividerColor}`}></div>
 
                   {/* Stat 3 */}
-                  <div className="flex items-center gap-xs px-2 py-1">
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
-                      <Icon className="text-[18px]" name="loyalty" />
+                  <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-xs px-1 sm:px-2 py-2 sm:py-1 bg-black/5 dark:bg-white/5 sm:bg-transparent rounded-xl sm:rounded-none">
+                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center shrink-0 shadow-sm ${theme.iconBg}`}>
+                      <Icon className="text-[16px] sm:text-[18px]" name="loyalty" />
                     </div>
                     <div>
-                      <p className={`text-base font-bold leading-tight ${theme.statValue}`}>{loyaltyPoints.toLocaleString("vi-VN")}</p>
-                      <p className="text-[11px] text-secondary leading-tight mt-0.5">Điểm thưởng tích lũy</p>
+                      <p className={`text-xs sm:text-base font-extrabold leading-tight ${theme.statValue}`}>{loyaltyPoints.toLocaleString("vi-VN")}</p>
+                      <p className="text-[9px] sm:text-[11px] text-secondary leading-tight mt-0.5 whitespace-nowrap">Điểm thưởng</p>
                     </div>
                   </div>
                 </div>
@@ -710,31 +740,30 @@ export default function ProfilePage() {
             );
           })()}
 
-          <div className="bg-surface-container-lowest rounded-lg shadow-sm p-sm flex overflow-x-auto hide-scrollbar gap-sm">
-            {[
-              { id: "overview", label: "Tổng quan", icon: "workspace_premium" },
-              { id: "orders", label: "Lịch sử mua hàng", icon: "receipt_long" },
-              { id: "reviews", label: "Đánh giá sản phẩm", icon: "rate_review" },
-              { id: "vouchers", label: "Kho voucher", icon: "confirmation_number" },
-              { id: "membership", label: "Điểm thưởng", icon: "loyalty" },
-              { id: "addresses", label: "Sổ địa chỉ", icon: "location_on" },
-              { id: "warranty", label: "Tra cứu bảo hành", icon: "verified_user" },
-              { id: "policy", label: "Chính sách bảo hành", icon: "policy" },
-              { id: "account", label: "Thông tin tài khoản", icon: "manage_accounts" }
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`flex items-center gap-2 px-4 py-2 border border-surface-container-highest rounded-full whitespace-nowrap hover:bg-surface-container-low transition-colors text-left ${
-                  activeTab === item.id ? "bg-surface-container-low text-primary font-bold" : "bg-surface-container-lowest text-on-surface"
-                }`}
-                type="button"
-              >
-                <Icon className="text-[18px] text-secondary" name={item.icon} />
-                <span className="font-body-sm text-body-sm">{item.label}</span>
-              </button>
-            ))}
+          {/* Mobile Navigation Trigger Button */}
+          <div className="md:hidden block w-full">
+            <button
+              onClick={() => setIsMobileSidebarOpen(true)}
+              className="w-full flex items-center justify-between bg-surface-container-lowest border border-surface-container-highest rounded-xl p-4 shadow-sm active:bg-surface-container-low transition-colors"
+              type="button"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Icon className="text-[18px]" name={currentTabInfo.icon} />
+                </div>
+                <div className="text-left">
+                  <p className="text-[10px] text-secondary font-bold uppercase tracking-wider">Danh mục đang chọn</p>
+                  <p className="font-extrabold text-sm text-on-surface mt-0.5">{currentTabInfo.label}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1 bg-surface-container-low hover:bg-surface-container-high rounded-full transition-colors text-xs font-bold text-primary">
+                <Icon name="menu" className="text-[16px]" />
+                <span>Xem tất cả</span>
+              </div>
+            </button>
           </div>
+
+          {/* Removed horizontal pills list to keep mobile layout clean and focus on drawer navigation */}
 
           {activeTab === "overview" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
@@ -1180,23 +1209,23 @@ export default function ProfilePage() {
                 );
               })()}
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-md pt-sm">
-                <div className="bg-primary-fixed rounded-lg p-md text-center flex flex-col justify-center min-h-[96px]">
-                  <p className="text-xs text-secondary font-bold uppercase">Số dư hiện tại</p>
-                  <p className="text-2xl font-black text-primary mt-1">{loyaltyPoints.toLocaleString("vi-VN")}</p>
-                  <p className="text-xs text-secondary mt-0.5">điểm</p>
+              <div className="grid grid-cols-3 gap-xs sm:gap-md pt-sm">
+                <div className="bg-primary-fixed rounded-xl p-2 text-center flex flex-col justify-center min-h-[80px]">
+                  <p className="text-[9px] text-secondary font-bold uppercase">Số dư</p>
+                  <p className="text-sm sm:text-lg font-black text-primary mt-0.5">{loyaltyPoints.toLocaleString("vi-VN")}</p>
+                  <p className="text-[8px] text-secondary">điểm</p>
                 </div>
-                <div className="bg-surface-container-low rounded-lg p-md text-center flex flex-col justify-center min-h-[96px]">
-                  <p className="text-xs text-secondary font-bold uppercase">Quy đổi</p>
-                  <p className="text-base font-black text-on-surface mt-1">{formatVnd(loyaltyPoints * 1000)}</p>
-                  <p className="text-xs text-secondary mt-0.5">giá trị tối đa</p>
+                <div className="bg-surface-container-low rounded-xl p-2 text-center flex flex-col justify-center min-h-[80px]">
+                  <p className="text-[9px] text-secondary font-bold uppercase">Quy đổi</p>
+                  <p className="text-sm sm:text-lg font-black text-on-surface mt-0.5">{formatVnd(loyaltyPoints * 1000)}</p>
+                  <p className="text-[8px] text-secondary">giá trị</p>
                 </div>
-                <div className="bg-surface-container-low rounded-lg p-md text-center flex flex-col justify-center items-center min-h-[96px]">
-                  <p className="text-xs text-secondary font-bold uppercase mb-1">Hạng thành viên</p>
-                  <span className={`inline-block font-bold text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full ${getTierBadgeClass(userProfile.tier)}`}>
+                <div className="bg-surface-container-low rounded-xl p-2 text-center flex flex-col justify-center items-center min-h-[80px]">
+                  <p className="text-[9px] text-secondary font-bold uppercase mb-0.5">Hạng</p>
+                  <span className={`inline-block font-bold text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded-full ${getTierBadgeClass(userProfile.tier)}`}>
                     {userProfile.tier}
                   </span>
-                  <p className="text-xs text-secondary mt-1">hệ số tích điểm theo hạng</p>
+                  <p className="text-[8px] text-secondary mt-1">hệ số tích lũy</p>
                 </div>
               </div>
 
@@ -1296,6 +1325,98 @@ export default function ProfilePage() {
           )}
         </section>
       </main>
+
+      {/* Mobile Sidebar Drawer Overlay */}
+      {isMobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsMobileSidebarOpen(false)}
+            className="fixed inset-0 bg-black/60 transition-opacity backdrop-blur-sm animate-fade-in"
+          />
+          
+          {/* Drawer Panel */}
+          <div className="relative flex w-[290px] flex-col bg-surface-container-lowest shadow-2xl h-full z-10 animate-slide-in overflow-y-auto rounded-r-2xl">
+            {/* Drawer Header with user info */}
+            <div className="flex flex-col gap-sm p-md bg-gradient-to-r from-[#c82229] to-[#ec5158] text-white shrink-0">
+              <div className="flex items-center justify-between">
+                <span className="font-orbitron font-black text-base tracking-wider">AuraTech Profile</span>
+                <button
+                  onClick={() => setIsMobileSidebarOpen(false)}
+                  className="text-white bg-transparent border-0 p-1 cursor-pointer flex items-center hover:bg-white/10 rounded-full"
+                >
+                  <Icon name="close" className="text-xl" />
+                </button>
+              </div>
+              <div className="flex items-center gap-sm mt-xs">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-white/20 border border-white/30 shrink-0">
+                  <img alt="Ảnh đại diện" className="w-full h-full object-cover" src={userProfile.avatarUrl} />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-bold text-sm truncate">{userProfile.name}</p>
+                  <p className="text-[10px] text-white/80 uppercase tracking-widest font-black mt-0.5">{userProfile.tier}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Drawer Navigation List */}
+            <nav className="flex-1 py-md flex flex-col gap-xs">
+              {navSections.map((section, idx) => (
+                <div key={idx} className="flex flex-col mb-sm last:mb-0">
+                  {/* Section Title */}
+                  <div className="px-lg py-1.5 text-[9px] font-black uppercase tracking-wider text-secondary opacity-65">
+                    {section.title}
+                  </div>
+                  
+                  {/* Section Navigation Items */}
+                  <div className="flex flex-col gap-[4px] px-2">
+                    {section.items.map((item) => {
+                      const isActive = activeTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            handleNavClick(item.id);
+                            setIsMobileSidebarOpen(false);
+                          }}
+                          className={`flex items-center justify-between px-3.5 py-2.5 font-body-sm text-body-sm transition-all duration-200 rounded-xl text-left ${
+                            isActive
+                              ? "text-primary font-extrabold bg-primary/10 border-l-4 border-primary shadow-[0_2px_8px_rgba(169,0,16,0.06)]"
+                              : "text-on-surface border-transparent hover:bg-surface-container-low/60 hover:text-primary"
+                          }`}
+                          type="button"
+                        >
+                          <div className="flex items-center min-w-0">
+                            <Icon 
+                              className={`mr-3 text-[20px] transition-colors ${
+                                isActive ? "text-primary" : "text-secondary"
+                              }`} 
+                              name={item.icon} 
+                            />
+                            <span className="truncate">{item.label}</span>
+                          </div>
+                          <Icon name="chevron_right" className={`text-xs transition-transform duration-200 ${isActive ? "text-primary translate-x-0.5" : "text-secondary/40"}`} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+              
+              <div className="border-t border-surface-container-highest mt-sm pt-sm">
+                <a
+                  href="/"
+                  onClick={handleLogout}
+                  className="flex items-center px-lg py-2.5 text-on-surface font-body-sm text-body-sm border-l-4 border-transparent hover:bg-surface-container-low/60 hover:text-primary transition-all duration-150"
+                >
+                  <Icon className="mr-3 text-[18px] text-secondary" name="logout" />
+                  <span>Đăng xuất</span>
+                </a>
+              </div>
+            </nav>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

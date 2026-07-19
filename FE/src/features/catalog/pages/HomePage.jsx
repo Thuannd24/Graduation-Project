@@ -128,7 +128,7 @@ export default function HomePage() {
           {/* Main Grid: Slider (3 cols) + Side Banners (1 col) */}
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-3">
             {/* Middle: Clean full-bleed Slider */}
-            <div className="xl:col-span-3 flex flex-col h-[420px] bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800">
+            <div className="xl:col-span-3 flex flex-col h-[180px] sm:h-[280px] md:h-[350px] xl:h-[420px] bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800">
               <div className="flex-1 relative group overflow-hidden bg-slate-50 dark:bg-slate-950">
                 {SLIDES.map((slide, idx) => (
                   <Link
@@ -136,7 +136,7 @@ export default function HomePage() {
                     to={slide.link}
                     className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}`}
                   >
-                    <img alt={`Banner ${idx}`} src={slide.image} className="w-full h-full object-fill" />
+                    <img alt={`Banner ${idx}`} src={slide.image} className="w-full h-full object-cover sm:object-fill" />
                   </Link>
                 ))}
                 <button onClick={prevSlide} type="button"

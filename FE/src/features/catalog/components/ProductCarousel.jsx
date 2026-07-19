@@ -15,7 +15,31 @@ export default function ProductCarousel({
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
 
-  const itemBasis = `calc((100% - ${(visibleCount - 1) * gap}px) / ${visibleCount})`;
+  const [actualVisibleCount, setActualVisibleCount] = useState(visibleCount);
+
+  useEffect(() => {
+    const updateCount = () => {
+      const w = window.innerWidth;
+      if (w < 520) {
+        setActualVisibleCount(2); // Mobile: show 2 cards
+      } else if (w < 768) {
+        setActualVisibleCount(2); // Large mobile / Phablet: show 2 cards
+      } else if (w < 1024) {
+        setActualVisibleCount(3); // Tablet: show 3 cards
+      } else if (w < 1280) {
+        setActualVisibleCount(4); // Small laptop: show 4 cards
+      } else {
+        setActualVisibleCount(visibleCount); // Desktop: show original
+      }
+    };
+    updateCount();
+    window.addEventListener("resize", updateCount);
+    return () => {
+      window.removeEventListener("resize", updateCount);
+    };
+  }, [visibleCount]);
+
+  const itemBasis = `calc((100% - ${(actualVisibleCount - 1) * gap}px) / ${actualVisibleCount})`;
 
   const checkScroll = useCallback(() => {
     const el = scrollRef.current;
@@ -39,9 +63,9 @@ export default function ProductCarousel({
   const scrollBy = (direction) => {
     const el = scrollRef.current;
     if (!el) return;
-    const cardWidth = (el.clientWidth - gap * (visibleCount - 1)) / visibleCount;
+    const cardWidth = (el.clientWidth - gap * (actualVisibleCount - 1)) / actualVisibleCount;
     el.scrollBy({
-      left: direction * (cardWidth + gap) * Math.max(1, visibleCount - 1),
+      left: direction * (cardWidth + gap) * Math.max(1, actualVisibleCount - 1),
       behavior: "smooth",
     });
   };
@@ -68,7 +92,7 @@ export default function ProductCarousel({
     return (
       <div style={{ position: "relative", padding }}>
         <div style={{ display: "flex", gap }}>
-          {Array.from({ length: visibleCount }).map((_, i) => (
+          {Array.from({ length: actualVisibleCount }).map((_, i) => (
             <div
               key={i}
               style={{

@@ -96,7 +96,7 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
         </div>
 
         {/* Pricing & Controls Row */}
-        <div className="flex items-end justify-between mt-3">
+        <div className="flex flex-wrap items-end justify-between gap-2 mt-3">
           {/* Quantity Controls */}
           <div className="flex items-center border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-950 h-8">
             <button

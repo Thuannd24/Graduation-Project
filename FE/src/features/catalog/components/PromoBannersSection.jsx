@@ -24,17 +24,17 @@ export function SubBannersGrid() {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-[124px] min-h-[124px]">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:h-[124px] md:min-h-[124px] h-auto">
       {subBanners.map((banner, i) => (
         <Link
           key={i}
           to={banner.link}
-          className={`block rounded-xl overflow-hidden shadow-md hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 relative group border border-slate-100 dark:border-slate-800/80 h-full bg-slate-50 dark:bg-slate-900 ${banner.glow}`}
+          className={`block rounded-xl overflow-hidden shadow-md hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 relative group border border-slate-100 dark:border-slate-800/80 h-[75px] sm:h-[90px] md:h-full bg-slate-50 dark:bg-slate-900 ${banner.glow}`}
         >
           <img
             src={banner.src}
             alt={`Sub-banner ${i + 1}`}
-            className="w-full h-full object-fill group-hover:scale-[1.015] transition-transform duration-500 ease-out rounded-xl"
+            className="w-full h-full object-cover md:object-fill group-hover:scale-[1.015] transition-transform duration-500 ease-out rounded-xl"
           />
           
           {/* Premium overlay tint */}
