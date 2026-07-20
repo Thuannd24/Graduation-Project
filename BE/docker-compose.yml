@@ -304,6 +304,7 @@ services:
       - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - KEYCLOAK_ADMIN_URL=http://keycloak:8080
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
