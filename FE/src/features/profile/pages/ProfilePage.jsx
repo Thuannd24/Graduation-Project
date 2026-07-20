@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
 import { formatVnd } from "../../../utils/format.js";
@@ -340,11 +340,17 @@ export default function ProfilePage() {
   const [loadingLoyalty, setLoadingLoyalty] = useState(false);
 
   const totalSpent = useMemo(
-    () => orders.reduce((sum, order) => sum + Number(order.finalAmount || order.totalAmount || 0), 0),
+    () => orders
+      .filter((order) => String(order.status || "").toUpperCase() === "DELIVERED")
+      .reduce((sum, order) => sum + Number(order.finalAmount || order.totalAmount || 0), 0),
     [orders]
   );
 
-  useEffect(() => {
+  // Tier and loyalty points can change server-side any time a promotion workflow runs in the
+  // background (e.g. member-rank upgrade, point reward) - refetching only on mount meant the
+  // user had to hard-reload the page to ever see the update. Re-run on window focus too, so
+  // coming back to this tab is enough.
+  const loadProfileAndLoyalty = useCallback(() => {
     authApi.me()
       .then((data) => {
         const profile = normalizeProfile(data);
@@ -358,6 +364,24 @@ export default function ProfilePage() {
         console.error("Failed to load user profile from service", err);
       });
 
+    setLoadingLoyalty(true);
+    authApi.getLoyaltyPoints()
+      .then((balance) => setLoyaltyPoints(Number(balance || 0)))
+      .catch((err) => console.error("Failed to load loyalty points", err));
+
+    authApi.getLoyaltyHistory(0, 10)
+      .then((data) => setLoyaltyHistory(data.content || []))
+      .catch((err) => console.error("Failed to load loyalty history", err))
+      .finally(() => setLoadingLoyalty(false));
+  }, []);
+
+  useEffect(() => {
+    loadProfileAndLoyalty();
+    window.addEventListener("focus", loadProfileAndLoyalty);
+    return () => window.removeEventListener("focus", loadProfileAndLoyalty);
+  }, [loadProfileAndLoyalty]);
+
+  useEffect(() => {
     setLoadingOrders(true);
     orderApi.listOrders()
       .then(async (data) => {
@@ -431,16 +455,6 @@ export default function ProfilePage() {
       .finally(() => {
         setLoadingAddresses(false);
       });
-
-    setLoadingLoyalty(true);
-    authApi.getLoyaltyPoints()
-      .then((balance) => setLoyaltyPoints(Number(balance || 0)))
-      .catch((err) => console.error("Failed to load loyalty points", err));
-
-    authApi.getLoyaltyHistory(0, 10)
-      .then((data) => setLoyaltyHistory(data.content || []))
-      .catch((err) => console.error("Failed to load loyalty history", err))
-      .finally(() => setLoadingLoyalty(false));
   }, []);
 
   useEffect(() => {
@@ -1270,8 +1284,8 @@ export default function ProfilePage() {
             <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-md space-y-md">
               <div className="border-b border-surface-container-highest pb-xs flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-headline-md text-on-surface">Chính sách bảo hành AuraTech</h3>
-                  <p className="text-xs text-secondary mt-1">Thông tin chi tiết về chính sách bảo hành và đổi trả của chúng tôi.</p>
+                  <h3 className="font-bold text-headline-md text-on-surface">Chính sách & Thông tin AuraTech</h3>
+                  <p className="text-xs text-secondary mt-1">Bảo hành, đổi trả, giao nhận hàng và bảo mật thông tin khách hàng.</p>
                 </div>
                 <Icon className="text-primary text-[24px]" name="policy" />
               </div>
@@ -1281,18 +1295,25 @@ export default function ProfilePage() {
                   <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
                     <Icon name="verified" className="text-base" /> 1. Cam kết bảo hành chính hãng
                   </h4>
-                  <p className="text-xs leading-relaxed text-secondary">
-                    Tất cả sản phẩm điện thoại, laptop, phụ kiện công nghệ mua tại AuraTech đều được cam kết bảo hành chính hãng 12 tháng kể từ ngày giao hàng thành công.
-                  </p>
+                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
+                    <li>Điện thoại, laptop, tablet: bảo hành chính hãng <span className="font-bold text-on-surface">12 tháng</span> kể từ ngày giao hàng thành công.</li>
+                    <li>Đồng hồ thông minh: bảo hành <span className="font-bold text-on-surface">12 tháng</span>.</li>
+                    <li>Phụ kiện (tai nghe, sạc, ốp lưng...): theo chính sách riêng của từng hãng, thường từ <span className="font-bold text-on-surface">3–12 tháng</span>.</li>
+                    <li>Miễn phí kiểm tra, tư vấn kỹ thuật tại các trung tâm bảo hành liên kết trên toàn quốc.</li>
+                  </ul>
                 </div>
 
                 <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
                   <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
                     <Icon name="swap_horiz" className="text-base" /> 2. Chính sách đổi trả 30 ngày
                   </h4>
-                  <p className="text-xs leading-relaxed text-secondary">
-                    Đổi mới sản phẩm cùng model hoặc hoàn tiền 100% trong vòng 30 ngày đầu tiên nếu sản phẩm phát sinh lỗi phần cứng do nhà sản xuất.
-                  </p>
+                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
+                    <li>Điện thoại / Tablet / Laptop: đổi trả trong <span className="font-bold text-on-surface">30 ngày</span>, khấu hao 20% (máy mới nguyên seal) hoặc 15% (máy đã kích hoạt) nếu không phải lỗi do nhà sản xuất.</li>
+                    <li>Phụ kiện giá trị dưới 1.000.000đ: đổi trả trong <span className="font-bold text-on-surface">12 tháng</span>, không khấu hao nếu còn nguyên tem, hộp.</li>
+                    <li>Phụ kiện giá trị từ 1.000.000đ trở lên: đổi trả trong <span className="font-bold text-on-surface">15 ngày</span>.</li>
+                    <li><span className="font-bold text-on-surface">Miễn phí 100%</span> (hoàn tiền hoặc đổi máy mới) nếu sản phẩm phát sinh lỗi phần cứng do nhà sản xuất trong 7 ngày đầu tiên.</li>
+                    <li>Điều kiện đủ tiêu chuẩn đổi trả: máy như mới (không trầy xước, không dán decal), hộp và phụ kiện đi kèm đầy đủ, số serial/IMEI trên hộp khớp với máy, đã đăng xuất toàn bộ tài khoản (iCloud, Google, Samsung Account...).</li>
+                  </ul>
                 </div>
 
                 <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
@@ -1302,6 +1323,33 @@ export default function ProfilePage() {
                   <p className="text-xs leading-relaxed text-secondary">
                     Quý khách có thể mang sản phẩm trực tiếp đến bất kỳ trung tâm bảo hành ủy quyền của AuraTech trên toàn quốc, hoặc liên hệ Hotline miễn phí <span className="font-bold text-on-surface">1800.2097</span> để được hướng dẫn gửi chuyển phát miễn phí.
                   </p>
+                </div>
+
+                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
+                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
+                    <Icon name="local_shipping" className="text-base" /> 4. Chính sách giao nhận hàng
+                  </h4>
+                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
+                    <li>Phí vận chuyển đồng giá <span className="font-bold text-on-surface">30.000đ</span> toàn quốc — có thể được miễn phí khi áp dụng voucher Freeship.</li>
+                    <li>Thời gian giao hàng dự kiến: <span className="font-bold text-on-surface">1–2 ngày</span> tại các thành phố lớn, <span className="font-bold text-on-surface">2–5 ngày</span> với khu vực tỉnh/thành khác.</li>
+                    <li>Khách hàng có quyền yêu cầu nhân viên giao hàng mở kiện kiểm tra sản phẩm (đồng kiểm) ngay khi nhận, trước khi xác nhận đã nhận hàng.</li>
+                    <li>Đơn hàng từ <span className="font-bold text-on-surface">10.000.000đ</span> trở lên: yêu cầu xuất trình CCCD trùng khớp thông tin đặt hàng để đối chiếu, nhằm hạn chế gian lận.</li>
+                    <li>Nếu phát hiện sản phẩm lỗi/hư hỏng khi đồng kiểm, AuraTech chịu toàn bộ chi phí thu hồi và đổi mới trong vòng 15 ngày.</li>
+                  </ul>
+                </div>
+
+                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
+                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
+                    <Icon name="lock" className="text-base" /> 5. Chính sách bảo mật thông tin
+                  </h4>
+                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
+                    <li>Thông tin thu thập: họ tên, email, số điện thoại, địa chỉ giao hàng, thông tin đăng nhập tài khoản.</li>
+                    <li>Mục đích sử dụng: xử lý đơn hàng và giao hàng, quản lý tài khoản, gửi thông báo khuyến mãi/bảo hành, chăm sóc khách hàng, phòng chống gian lận.</li>
+                    <li>Biện pháp bảo vệ: mã hóa dữ liệu nhạy cảm, giới hạn quyền truy cập chỉ nhân viên có thẩm quyền, tuân thủ quy định pháp luật về an toàn thông tin mạng.</li>
+                    <li>Chia sẻ dữ liệu: chỉ chia sẻ với đối tác vận chuyển, đơn vị thanh toán để phục vụ đơn hàng — <span className="font-bold text-on-surface">không</span> bán hoặc cho thuê dữ liệu khách hàng cho bên thứ ba vì mục đích thương mại khác.</li>
+                    <li>Quý khách có quyền yêu cầu chỉnh sửa, cập nhật hoặc xóa thông tin cá nhân bất kỳ lúc nào tại trang Hồ sơ, hoặc liên hệ Hotline <span className="font-bold text-on-surface">1800.2097</span>.</li>
+                    <li>Dữ liệu cá nhân được lưu trữ cho đến khi khách hàng yêu cầu xóa tài khoản.</li>
+                  </ul>
                 </div>
               </div>
             </div>

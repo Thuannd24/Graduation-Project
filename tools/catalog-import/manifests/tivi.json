@@ -462,6 +462,16 @@
       "categorySlugs": [
         "tivi"
       ]
+    },
+    {
+      "slug": "coocaa",
+      "name": "Coocaa",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/coocaa-240x50.png",
+      "description": "Coocaa — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "tivi"
+      ]
     }
   ],
   "products": [
@@ -531,7 +541,7 @@
       "slug": "smart-tivi-coocaa-fhd-43-inch-43s3u-plus",
       "name": "Smart Tivi Coocaa FHD 43 inch 43S3U+",
       "categorySlug": "tivi",
-      "brandSlug": "",
+      "brandSlug": "coocaa",
       "description": "Đặc điểm nổi bật Smart tivi Coocaa 43S3U+ FHD 43 inch được trang bị màn hình độ phân giải FHD HDR10+ với tần số quét 60Hz cho chất lượng hình ảnh sắc nét và sống động. Trải nghiệm các nội dung đa phương tiện một cách trọn vẹn với âm thanh vòm tổng công suất 20W ứng dụng công nghệ Dolby Audio tân tiến. Điều khiển tivi từ xa dễ dàng hơn bao giờ hết với sự trợ giúp từ ứng dụng Swaiot Home. Smart tivi Coocaa FHD 43 inch 43S3U+: khung hình mượt mà, âm thanh đa chiều đắm chìm Nếu bạn đang tìm kiếm mẫu",
       "price": 5490000,
       "salePrice": 4890000,

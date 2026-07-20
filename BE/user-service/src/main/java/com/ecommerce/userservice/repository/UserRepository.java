@@ -1,9 +1,11 @@
 package com.ecommerce.userservice.repository;
 
 import com.ecommerce.userservice.entity.User;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -43,4 +45,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long countByCustomerTier(String tier);
 
     long countByIsBlacklistedTrue();
+
+    // BUG FIX: adjustPoints() used a plain findById() (no lock) to read loyaltyPoints before
+    // writing it back in the same transaction - two concurrent point adjustments for the same
+    // user (redeem/refund/campaign-award) could both read the same balance before either
+    // commits, both pass the sufficient-balance check, and both write - a lost update that lets
+    // redemption spend more points than the user actually has. Mirrors CampaignRepository's
+    // findByIdForUpdate fix for the same class of bug on campaign budgets.
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT u FROM User u WHERE u.id = :id")
+    Optional<User> findByIdForUpdate(@Param("id") Long id);
 }

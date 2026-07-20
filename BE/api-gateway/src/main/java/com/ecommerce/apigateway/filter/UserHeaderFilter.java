@@ -1,6 +1,7 @@
 package com.ecommerce.apigateway.filter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
@@ -45,6 +46,9 @@ public class UserHeaderFilter implements WebFilter {
 
     private final WebClient.Builder loadBalancedWebClientBuilder;
     private final ReactiveStringRedisTemplate redisTemplate;
+
+    @Value("${app.internal.api-key:}")
+    private String internalApiKey;
 
     public UserHeaderFilter(WebClient.Builder loadBalancedWebClientBuilder,
                              ReactiveStringRedisTemplate redisTemplate) {
@@ -112,6 +116,7 @@ public class UserHeaderFilter implements WebFilter {
                     }
                     return loadBalancedWebClientBuilder.build().post()
                             .uri("lb://user-service/api/internal/users/provision")
+                            .header("X-Internal-Api-Key", internalApiKey != null ? internalApiKey : "")
                             .header("X-User-Id", userId)
                             .header("X-User-Email", email != null ? email : "")
                             .header("X-User-Username", username != null ? username : "")

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
 import OrderSummary from "../../cart/components/OrderSummary.jsx";
 import VoucherPicker from "../components/VoucherPicker.jsx";
+import LoyaltyPointsPicker from "../components/LoyaltyPointsPicker.jsx";
 import { useCart } from "../../../context/CartContext.jsx";
 import { orderApi } from "../../../services/orderApi";
 import { authApi } from "../../../services/authApi";
@@ -60,6 +61,7 @@ export default function CheckoutPage() {
   const [couponCode, setCouponCode] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
   const [appliedVoucher, setAppliedVoucher] = useState(null);
+  const [appliedPoints, setAppliedPoints] = useState(null);
 
   // Address book & DB locations state
   const [savedAddresses, setSavedAddresses] = useState([]);
@@ -209,18 +211,20 @@ export default function CheckoutPage() {
     if (appliedVoucher?.shippingDiscountAmount > 0) {
       shipping = Math.max(0, shipping - appliedVoucher.shippingDiscountAmount);
     }
-    
+
+    const pointDiscount = appliedPoints?.pointDiscount || 0;
     const vat = Math.round((subtotal - discount) * 0.1);
-    const total = subtotal - discount + shipping + vat;
-    
+    const total = Math.max(0, subtotal - discount + shipping + vat - pointDiscount);
+
     return {
       subtotal,
       discount,
       shipping,
       vat,
+      pointDiscount,
       total
     };
-  }, [summary, discountPercent, appliedVoucher]);
+  }, [summary, discountPercent, appliedVoucher, appliedPoints]);
 
   const validateForm = () => {
     const errors = {};
@@ -285,6 +289,7 @@ export default function CheckoutPage() {
         phoneNumber: phoneNumber.trim(),
         couponCode: couponCode.trim() || null,
         shippingFee: localSummary.shipping,
+        pointsToRedeem: appliedPoints?.pointsToRedeem || null,
         note: note.trim() || null
       }, idempotencyKeyRef.current);
 
@@ -714,6 +719,13 @@ export default function CheckoutPage() {
             appliedVoucher={appliedVoucher}
             onApplied={setAppliedVoucher}
             onClear={() => setAppliedVoucher(null)}
+          />
+
+          <LoyaltyPointsPicker
+            orderAmount={summary.subtotal - localSummary.discount}
+            appliedPoints={appliedPoints}
+            onApplied={setAppliedPoints}
+            onClear={() => setAppliedPoints(null)}
           />
 
           <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">

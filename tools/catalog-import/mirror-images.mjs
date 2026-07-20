@@ -97,6 +97,7 @@ async function fetchAndUpload(client, bucket, publicBase, sourceUrl, key, retrie
 async function mirrorManifest(filePath, client, bucket, publicBase, concurrency) {
   const manifest = JSON.parse(fs.readFileSync(filePath, "utf8"));
   const products = manifest.products || [];
+  const brands = manifest.brands || [];
 
   // Pass 1 — thu thập toàn bộ URL ảnh unique cần mirror, gán key object ổn định theo slug
   const urlToKey = new Map(); // sourceUrl -> objectKey (chưa upload)
@@ -115,8 +116,20 @@ async function mirrorManifest(filePath, client, bucket, publicBase, concurrency)
     (p.variants || []).forEach((v, i) => plan(v.imageUrl, p.slug, `variant-${i}`));
   }
 
+  // Logo thương hiệu cũng phụ thuộc site nguồn y hệt ảnh sản phẩm — mirror luôn để không
+  // vỡ logo nếu cellphones.com.vn đổi/gỡ asset (key ổn định theo slug, không theo file manifest,
+  // vì 1 brand có thể được khai báo lặp lại ở nhiều manifest).
+  function planBrandLogo(url, slug) {
+    if (!url || urlToKey.has(url)) return;
+    const ext = extFromUrl(url);
+    urlToKey.set(url, `brands/${slug}/logo.${ext}`);
+  }
+  for (const b of brands) {
+    planBrandLogo(b.logoUrl, b.slug);
+  }
+
   const tasks = [...urlToKey.entries()]; // [sourceUrl, key][]
-  console.log(`  → ${tasks.length} ảnh unique cần mirror`);
+  console.log(`  → ${tasks.length} ảnh unique cần mirror (gồm cả logo thương hiệu)`);
 
   const urlToPublic = new Map(); // sourceUrl -> publicUrl | null
   await mapPool(tasks, concurrency, async ([sourceUrl, key]) => {
@@ -135,8 +148,11 @@ async function mirrorManifest(filePath, client, bucket, publicBase, concurrency)
     p.images = (p.images || []).map(rewrite);
     (p.variants || []).forEach((v) => { v.imageUrl = rewrite(v.imageUrl); });
   }
+  for (const b of brands) {
+    b.logoUrl = rewrite(b.logoUrl);
+  }
 
-  fs.writeFileSync(filePath, JSON.stringify(manifest, null, 2));
+  fs.writeFileSync(filePath, JSON.stringify(manifest, null, 2) + "\n");
 
   const failed = [...urlToPublic.values()].filter((v) => !v).length;
   console.log(`  ✅ Xong — ${tasks.length - failed}/${tasks.length} thành công${failed ? `, ${failed} lỗi (giữ URL gốc)` : ""}`);

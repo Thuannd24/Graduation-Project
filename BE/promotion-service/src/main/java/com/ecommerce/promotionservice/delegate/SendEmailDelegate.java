@@ -14,9 +14,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Camunda service-task delegate for the "Action_Send_Email" campaign node — the only
- * notification channel the campaign builder currently supports (SMS/Zalo/App-Push were
- * removed: there was never a way to create those nodes from the frontend, so the channel
+ * Camunda service-task delegate for the "Action_Send_Email" campaign node — the
+ * only
+ * notification channel the campaign builder currently supports
+ * (SMS/Zalo/App-Push were
+ * removed: there was never a way to create those nodes from the frontend, so
+ * the channel
  * variants were unreachable dead code).
  */
 @Component("sendEmailDelegate")
@@ -25,8 +28,7 @@ import java.util.Set;
 public class SendEmailDelegate implements JavaDelegate {
 
     private static final Set<String> SKIP_TEMPLATE_VARS = Set.of(
-            "campaignWorkflowJson", "actionType", "templateId", "rawContent"
-    );
+            "campaignWorkflowJson", "actionType", "templateId", "rawContent");
 
     private final NotificationClient notificationClient;
     private final IdempotencyGuardService idempotencyGuard;
@@ -66,7 +68,7 @@ public class SendEmailDelegate implements JavaDelegate {
                 .email(email)
                 .orderId(orderId)
                 .eventType("Action_Send_Email")
-                .subject("Thông báo khuyến mãi từ E-Commerce")
+                .subject("Thông báo khuyến mãi từ Auratech!")
                 .templateVariables(templateVariables);
 
         if (!templateId.isBlank()) {

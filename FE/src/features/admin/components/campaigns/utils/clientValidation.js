@@ -504,7 +504,11 @@ export function mergeValidationResults(clientErrors, serverResult) {
   const seen = new Set();
   const merged = [];
   [...clientErrors, ...serverErrors].forEach(e => {
-    const key = `${e.nodeId || ""}|${e.errorType}|${e.field}|${e.message}`;
+    // BUG FIX: client-side validation mirrors BE WorkflowValidatorService rule-for-rule, but
+    // the two sides phrase `message` slightly differently for the same (nodeId, errorType,
+    // field) - e.g. missing meta.totalBudget shows up once from each side. Dedupe on WHAT
+    // was violated, not the exact wording, or the same issue is listed twice.
+    const key = `${e.nodeId || ""}|${String(e.errorType || "").toLowerCase()}|${e.field || ""}`;
     if (seen.has(key)) return;
     seen.add(key);
     merged.push(e);

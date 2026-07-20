@@ -10968,6 +10968,116 @@
           "salePrice": 4490000
         }
       ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-17t",
+      "name": "Xiaomi 17T 5G 12GB 512GB",
+      "categorySlug": "xiaomi-phone",
+      "brandSlug": "xiaomi",
+      "description": "Đặc điểm nổi bật của Xiaomi 17T 5G 12GB 512GB Xiaomi 17T là mẫu smartphone cận cao cấp mới nhất năm 2026, được ví như \"Flagship Killer\" thực thụ nhờ cấu hình đỉnh cao thách thức phân khúc flagship. Thiết bị sở hữu chip Dimensity 8500-Ultra mạnh mẽ kết hợp cùng giao diện HyperOS 3 (Android 16) mượt mà, tích hợp đảo thông minh Xiaomi HyperIsland độc đáo. Trải nghiệm thực tế cầm trên tay cực kỳ đầm nhờ khung viền nguyên khối. Máy sở hữu màn hình CrystalRes AMOLED 120Hz hỗ trợ Dolby Vision rực rỡ, v",
+      "price": 20990000,
+      "salePrice": 18990000,
+      "costPrice": 14432400,
+      "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-197.jpg",
+      "images": [
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-198.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-1-199.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-2-200.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-3-201.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-4-202.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-5-203.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-6-204.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-7-205.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-8-206.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-9-207.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-10-208.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-11-209.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-12-210.jpg",
+        "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-13-211.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành chính hãng 12 tháng. Đổi mới trong 30 ngày nếu lỗi nhà sản xuất.",
+      "specs": {
+        "os": "Xiaomi HyperOS 3",
+        "cpu": "MediaTek Dimensity 8500-Ultra",
+        "ram": "12 GB",
+        "storage": "512 GB",
+        "gpu": "Mali-G720 MC8",
+        "screen": "6.59 inches",
+        "display_tech": "AMOLED",
+        "camera": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "camera_front": "32 MP, f/2.2",
+        "battery": "6500 mAh",
+        "network": "5G",
+        "nfc": "Có",
+        "dimensions": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "charging": "90W có dây"
+      },
+      "specsRaw": {
+        "Hệ điều hành khi ra mắt": "Xiaomi HyperOS 3",
+        "Chipset": "MediaTek Dimensity 8500-Ultra",
+        "Dung lượng RAM": "12 GB",
+        "Bộ nhớ trong": "512 GB",
+        "Loại CPU": "8 nhân",
+        "GPU": "Mali-G720 MC8",
+        "Kích thước màn hình": "6.59 inches",
+        "Công nghệ màn hình": "AMOLED",
+        "Độ phân giải màn hình": "2756 x 1268 pixels",
+        "Tính năng màn hình": "Độ sáng tối đa 3500 nits460 PPI100% DCI-P312bit, 68 tỉ màuDolby VisionHDR10+",
+        "Camera sau": "Chính 50 MP, f/1.7Tele 0 MP, f/3.0Góc siêu rộng 12 MP, f/2.2",
+        "Camera trước": "32 MP, f/2.2",
+        "Pin": "6500 mAh",
+        "Hỗ trợ mạng": "5G",
+        "Thẻ SIM": "2 Nano SIM hoặc 2 eSIM hoặc 1 Nano SIM + 1 eSIM",
+        "Công nghệ NFC": "Có",
+        "Thời điểm ra mắt": "5/2026",
+        "Tên sản phẩm": "Giá bán",
+        "Xiaomi 17T 5G 12GB 512GB": "18.990.000đ",
+        "Tiêu chí": "Thông số kỹ thuật",
+        "Vi xử lý (Chipset)": "MediaTek Dimensity 8500 Ultra, GPU Mail-G720 MC8 - Cấu trúc tối ưu hiệu năng nặng",
+        "Bộ nhớ": "RAM 12GB LPDDR5X kết hợp ROM 512GB UFS 4.1",
+        "Màn hình": "Kích thước 6.59 inch AMOLED 1.5K, tần số quét 120Hz, độ sáng tối đa 3500 nits, HDR10+, kính cường lực Gorilla Glass 7i",
+        "Pin & sạc": "Dung lượng pin 6500 mAh, công nghệ sạc nhanh siêu tốc 67W",
+        "Hệ điều hành & AI": "Andriod 16, giao diện HyperOS 3. Tích hợp AI. Gemini9",
+        "Kích thước": "Trọng lượng 200g. Màu sắc Tím, Đen, Trắng",
+        "Kết nối khác": "Kháng nước bụi iP68 - Wifi-6E, NFC, mạng 5G",
+        "Vi xử lý": "MediaTek Dimensity 8500-Ultra",
+        "Tốc độ sạc nhanh": "Sạc nhanh có dây UFS/Turbo Charge 67W (đầy pin khoảng 58 phút)",
+        "Cảm biến camera": "Cảm biến chuẩn Leica Light Fusion 800 (quay phim 4K)",
+        "Đặc điểm": "Xiaomi 15",
+        "Phân khúc": "Flagship nhỏ gọn",
+        "Sạc nhanh": "90W có dây",
+        "Camera": "Leica 50MP + 50MP + 50MP"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "CBNSF2-TIM-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/main-197.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        },
+        {
+          "sku": "CBNSF2-DEN-512GB",
+          "price": 20990000,
+          "costPrice": 14432400,
+          "imageUrl": "https://pub-f64bad62c3d044a58fab476ee6ae01c1.r2.dev/products/dien-thoai-xiaomi-17t/gallery-0-198.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "storage": "512GB"
+          },
+          "salePrice": 18990000
+        }
+      ]
     }
   ]
 }

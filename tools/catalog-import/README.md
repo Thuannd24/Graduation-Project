@@ -30,12 +30,13 @@ Dùng khi: dự án mới build lần đầu, DB bị trắng, hoặc muốn res
 
 ```bash
 cd tools/catalog-import
-npm install                    # 1 lần đầu
 cp .env.example .env           # rồi điền ADMIN_TOKEN (xem cách lấy ở dưới)
 
 npm run setup                  # import categories + brands + products + variants + ảnh (đã có URL R2 sẵn)
 npm run seed-inventory         # set tồn kho mặc định = 10 cho mọi variant
 ```
+
+> **Không cần `npm install`** cho 2 lệnh trên — `setup.mjs`/`seed-inventory.mjs` chỉ dùng module có sẵn của Node (`fs`, `path`, `child_process`), không import `cheerio`/`@aws-sdk/client-s3`. `npm install` chỉ cần khi chạy `scrape`/`mirror`/`backup`/`clean-broken-products` (xem mục dưới).
 
 Xong — có đủ category, attribute, brand, product, variant, ảnh (trỏ R2, không phụ thuộc cellphones.com.vn), tồn kho. Elasticsearch tự re-index qua bước import (BE tự gọi `indexProduct` mỗi lần tạo/update product).
 
@@ -79,6 +80,11 @@ SET FOREIGN_KEY_CHECKS=1;
 ## Scrape lại dữ liệu mới từ cellphones.com.vn
 
 Chỉ cần khi muốn lấy thêm sản phẩm mới / cập nhật giá — **không cần cho việc build/khôi phục thông thường** (đã có `manifests/` sẵn).
+
+Các lệnh từ đây trở xuống (`scrape`/`mirror`/`backup`/`clean-broken-products`) mới thật sự cần `npm install` (dùng `cheerio`/`@aws-sdk/client-s3`):
+```bash
+npm install                    # 1 lần đầu, chỉ cần cho các lệnh dưới đây
+```
 
 ```bash
 npm run scrape                 # = node scrape-cellphones.mjs --per-category

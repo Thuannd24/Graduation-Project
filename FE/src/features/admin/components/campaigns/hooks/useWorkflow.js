@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { NODE_TYPES, DEFAULT_NODES, DEFAULT_EDGES } from "../constants.js";
 import { clone, computeLayout, normalizeWorkflow, findMainEdgeToEnd } from "../utils/graph.js";
-import { bridgeAfterDelete, ensureConditionBranches, dedupeEdges } from "../utils/graphNormalize.js";
+import { bridgeAfterDelete, ensureConditionBranches, dedupeEdges, pruneUnreachable } from "../utils/graphNormalize.js";
 import { buildBranchProps, createDefaultBranchProps } from "../utils/expression.js";
 import { nextCounter } from "../nodeCounter.js";
 
@@ -115,10 +115,14 @@ export default function useWorkflow(showToast) {
 
   const deleteNode = useCallback(() => {
     if (!selected || selected === "start" || selected === "end") return;
-    const nextNodes = nodes.filter(n => n.id !== selected);
-    const nextEdges = bridgeAfterDelete(edges, nodes, selected);
-    setNodes(nextNodes);
-    setEdges(nextEdges);
+    const survivingNodes = nodes.filter(n => n.id !== selected);
+    const bridgedEdges = bridgeAfterDelete(edges, nodes, selected);
+    // Deleting a condition only keeps ONE branch as the bridge continuation - the other
+    // branch's own content (and anything nested inside it) has no path back to "start"
+    // anymore and must be cleaned up along with the parent, not left dangling on the canvas.
+    const { nodes: prunedNodes, edges: prunedEdges } = pruneUnreachable(survivingNodes, bridgedEdges);
+    setNodes(prunedNodes);
+    setEdges(prunedEdges);
     setSelected(null);
     showToast("Đã xóa khối", "info");
   }, [edges, nodes, selected, showToast]);
@@ -175,9 +179,14 @@ export default function useWorkflow(showToast) {
       showToast("Condition gateway cần ít nhất 1 nhánh IF (ngoài Else)", "error");
       return;
     }
-    setEdges(prev => prev.filter(x => x.id !== edgeId));
+    const remainingEdges = edges.filter(x => x.id !== edgeId);
+    // Same orphaning risk as deleteNode: whatever sat only inside this IF branch (and nothing
+    // else pointed to) is no longer reachable from "start" and must be cleaned up too.
+    const { nodes: prunedNodes, edges: prunedEdges } = pruneUnreachable(nodes, remainingEdges);
+    setNodes(prunedNodes);
+    setEdges(prunedEdges);
     showToast("Đã xóa nhánh IF", "info");
-  }, [edges, showToast]);
+  }, [edges, nodes, showToast]);
 
   const changeTriggerType = useCallback(newType => {
     setNodes(prev => prev.map(n => n.id === "start"

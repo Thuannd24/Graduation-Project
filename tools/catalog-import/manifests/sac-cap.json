@@ -482,6 +482,36 @@
       "categorySlugs": [
         "sac-cap"
       ]
+    },
+    {
+      "slug": "belkin",
+      "name": "Belkin",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/BELKIN-240x50.png",
+      "description": "Belkin — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
+    },
+    {
+      "slug": "cuktech",
+      "name": "Cuktech",
+      "logoUrl": "",
+      "description": "Cuktech — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
+    },
+    {
+      "slug": "mophie",
+      "name": "Mophie",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/mophie-240x50.png",
+      "description": "Mophie — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "sac-cap"
+      ]
     }
   ],
   "products": [
@@ -489,7 +519,7 @@
       "slug": "cu-sac-belkin-type-c-50w-pd-pps-cubic-wall-charger",
       "name": "Sạc nhanh Belkin 50W 2 cổng USB-C PD/PPS Cubic Wall Charger",
       "categorySlug": "sac-cap",
-      "brandSlug": "",
+      "brandSlug": "belkin",
       "description": "Đặc điểm nổi bật Củ sạc Belkin Type-C 50W PD/PPS Cubic Wall Charger sở hữu công nghệ GaN cho hiệu suất sạc nhanh, tiết kiệm năng lượng và hạn chế tỏa nhiệt khi hoạt động. Sản phẩm củ sạc nhanh có 2 cổng USB-C hỗ trợ PD/PPS, công suất tối đa 50W. Sạc tương thích đa dạng thiết bị, vẻ ngoài nhỏ gọn với chân gập và được hoàn thiện từ vật liệu tái chế. Củ sạc Belkin Type-C 50W PD/PPS Cubic Wall Charger - Sức mạnh nhỏ gọn cho mọi thiết bị hiện đại Củ sạc Belkin Type-C 50W PD/PPS Cubic Wall Charger nổi",
       "price": 890000,
       "salePrice": 590000,
@@ -730,7 +760,7 @@
       "slug": "cu-sac-cuktech-gan-1c-20w-cn-ha716c",
       "name": "Sạc Cuktech GAN 1C 20W (CN) HA716C",
       "categorySlug": "sac-cap",
-      "brandSlug": "",
+      "brandSlug": "cuktech",
       "description": "Đặc điểm nổi bật Củ sạc Cuktech GaN 1C 20W CN HA716C sử dụng công nghệ GaN thế hệ 3, hỗ trợ chuẩn USB-C PD công suất tối đa 20W và có kích thước nhỏ gọn 38x22,3x43mm. Nhờ các mức điện áp 5V-3A, 9V-2.22A và 12V-1.67A, củ sạc đáp ứng tốt các thiết bị dùng USB-C. Sạc Cuktech tích hợp nhiều lớp bảo vệ an toàn, giúp duy trì dòng điện ổn định và bảo vệ tuổi thọ pin. Củ sạc Cuktech GaN 1C 20W CN HA716C – Sạc tiện lợi, hiệu suất mạnh mẽ Củ sạc Cuktech GaN 1C 20W CN HA716C là một phụ kiện tiện lợi, có th",
       "price": 146000,
       "salePrice": 125000,
@@ -837,7 +867,7 @@
       "slug": "cu-sac-mophie-essentials-1c-gan-45w",
       "name": "Sạc Mophie Essentials 1C GaN 45W - 978",
       "categorySlug": "sac-cap",
-      "brandSlug": "",
+      "brandSlug": "mophie",
       "description": "Đặc điểm nổi bật Củ sạc Mophie Essentials 1C GaN 45W được trang bị công nghệ GaN và PPS hỗ trợ sạc nhanh hiệu suất cao, đồng thời tương thích thiết bị sử dụng cổng USB-C. Mẫu sạc nhanh này còn có thiết kế chân gập linh hoạt, kèm theo kích thước nhỏ gọn. Ngoài ra, công nghệ Power Delivery công suất 45W cũng cho phép nạp năng lượng trong thời gian ngắn. Củ sạc Mophie Essentials 1C GaN 45W - Sạc nhanh và an toàn Củ sạc Mophie Essentials 1C GaN 45W là một sự lựa chọn lý tưởng trong quá trình sạc pin",
       "price": 648000,
       "salePrice": 590000,
@@ -1040,7 +1070,7 @@
       "slug": "cu-sac-cuktech-3c1a-no-10-man-hinh-ultra-kem-cap-c-c-120w-ad1204u",
       "name": "Sạc Cuktech 3C1A No.10 màn hình ultra 120W kèm cáp C-C (CN) AD1204U",
       "categorySlug": "sac-cap",
-      "brandSlug": "",
+      "brandSlug": "cuktech",
       "description": "Đặc điểm nổi bật Củ sạc Cuktech 3C1A No.10 màn hình Ultra kèm cáp C to C 120W AD1204U là giải pháp nạp năng lượng hiện đại với công nghệ GaN cùng thiết kế 4 cổng đa năng. Màn hình LED 1.57 inch hỗ trợ theo dõi thông số dòng điện và trạng thái sạc của các thiết bị một cách trực quan. Phụ kiện còn sở hữu công suất sạc 120W mạnh mẽ. Củ sạc Cuktech 3C1A No.10 màn hình Ultra kèm cáp C to C 120W AD1204U - Trạm sạc tiên tiến với màn hình TFT và công nghệ GaN Cuktech AD1204U ứng dụng công nghệ GaN thế h",
       "price": 1260000,
       "salePrice": 1139000,
@@ -1092,7 +1122,7 @@
       "slug": "cu-sac-nhanh-mophie-20w-pd-type-c",
       "name": "Củ sạc Mophie 20W PD Type-C",
       "categorySlug": "sac-cap",
-      "brandSlug": "",
+      "brandSlug": "mophie",
       "description": "Đặc điểm nổi bật Củ sạc Mophie 20w PD Type C – Tiết kiệm thời gian sạc tối đa Mophie là thương hiệu có độ tin cậy cao chuyên sản xuất các phụ kiện dành cho điện thoại di động. Củ sạc nhanh Mophie 20w PD Type-C hoàn toàn tương thích với để sạc nhanh tối đa với những chiếc điện thoại thông minh. Ngoài khả năng sạc nhanh Mophie còn có hệ thống nào tân tiến, hãy xem bài viết dưới nhé. Kích thước nhỏ gọn, tích hợp cổng USB-C Mophie 20w sở hữu thiết kế nhỏ gọn với kích thước cụ thể đạt 36 x 36 x 25 mm",
       "price": 490000,
       "salePrice": 290000,
@@ -1155,7 +1185,7 @@
       "slug": "cu-sac-cuktech-cp6-gan-2c1a-kem-cap-usb-c-67w-ad653w",
       "name": "Sạc Cuktech CP6 GaN 2C1A 67W tích hợp cáp USB-C rút gọn AD653W",
       "categorySlug": "sac-cap",
-      "brandSlug": "",
+      "brandSlug": "cuktech",
       "description": "Đặc điểm nổi bật Củ sạc Cuktech CP6 GaN 2C1A kèm cáp USB-C 67W - AD653W sở hữu công nghệ tản nhiệt GaN tiên tiến cùng sợi dây cáp dài 0.7m có thể rút gọn linh hoạt. Công suất 67W hỗ trợ sạc nhanh cho đa dạng các dòng máy điện tử. Nhờ thiết kế chân cắm gập và bảo vệ nhiều lớp, sản phẩm mang lại sự an tâm cùng không gian sạc gọn gàng. Củ sạc Cuktech CP6 GaN 2C1A kèm cáp USB-C 67W - AD653W - Hiệu suất cao, thiết kế thông minh Thiết bị củ sạc nhanh thu hút sự chú ý nhờ sự hợp nhất giữa công suất tru",
       "price": 809000,
       "salePrice": 750000,

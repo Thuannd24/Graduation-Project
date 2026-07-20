@@ -34,7 +34,10 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
     @Override
     @Transactional
     public LoyaltyPointResponse adjustPoints(Long userId, PointUpdateRequest request) {
-        User user = userRepository.findById(userId)
+        // Locked read: this method both reads and writes loyaltyPoints in one transaction, and
+        // is the single choke point for redeem/refund/campaign-award - see UserRepository's
+        // findByIdForUpdate for why a plain findById() here is unsafe under concurrency.
+        User user = userRepository.findByIdForUpdate(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         String mode = normalizeMode(request.getCalculationMode());

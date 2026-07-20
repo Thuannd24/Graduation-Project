@@ -280,6 +280,7 @@ services:
       - KEYCLOAK_SERVER_URL=http://keycloak:8080
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY:-dev-internal-api-key}
 
     depends_on:
       eureka-server:

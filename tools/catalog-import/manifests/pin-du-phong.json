@@ -482,6 +482,46 @@
       "categorySlugs": [
         "pin-du-phong"
       ]
+    },
+    {
+      "slug": "stargo",
+      "name": "StarGO",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/STARGO-240x50.png",
+      "description": "StarGO — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    },
+    {
+      "slug": "aukey",
+      "name": "Aukey",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/aukey-240x50.png",
+      "description": "Aukey — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    },
+    {
+      "slug": "cuktech",
+      "name": "Cuktech",
+      "logoUrl": "",
+      "description": "Cuktech — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
+    },
+    {
+      "slug": "innostyle",
+      "name": "Innostyle",
+      "logoUrl": "https://cdn2.cellphones.com.vn/insecure/rs:fill:0:50/q:100/plain/https://cellphones.com.vn/media/wysiwyg/Web/Brand/innostyle-240x50.png",
+      "description": "Innostyle — phân phối chính hãng tại CellphoneS.",
+      "active": true,
+      "categorySlugs": [
+        "pin-du-phong"
+      ]
     }
   ],
   "products": [
@@ -640,7 +680,7 @@
       "slug": "pin-sac-du-phong-stargo-star-x2-lite-20000mah-22-5w",
       "name": "Pin dự phòng StarGO Star X2 Lite 20000mAh 22.5W",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "stargo",
       "description": "Đặc điểm nổi bật Pin sạc dự phòng StarGO Star X2 Lite 20000mAh 22.5W sở hữu dung lượng pin lớn, hỗ trợ sạc nhanh 22.5W và tích hợp 3 cổng đầu ra cho nhiều thiết bị. Sản phẩm sở hữu vỏ ngoài bền bỉ, chống va đập tốt và trang bị màn hình LED hiển thị dung lượng. Ngoài ra, StarGO Star X2 Lite còn sở hữu các tính năng bảo vệ an toàn với kiểu dáng nhỏ gọn. Pin sạc dự phòng StarGO Star X2 Lite 20000mAh 22.5W - Sạc nhanh 22,5W, 3 cổng đầu ra Pin sạc dự phòng StarGO Star X2 Lite 20000mAh 22.5W là giải p",
       "price": 430000,
       "salePrice": 390000,
@@ -802,7 +842,7 @@
       "slug": "pin-sac-du-phong-aukey-10000mah-pd-20w-pb-n83s",
       "name": "Pin sạc dự phòng Aukey 10000MAH PD 20W & QC 3.0 (PB-N83S)",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "aukey",
       "description": "Đặc điểm nổi bật Pin sạc dự phòng Aukey 10000mAh PD 20W PB-N83S có trọng lượng nhẹ chỉ 174g, công suất sạc 22.5W với công nghệ Qualcomm Quick Charge 3.0 và Power Delivery. Lõi pin bền bỉ, kết hợp nhiều cổng sạc, hỗ trợ điện thoại, tai nghe và đồng hồ. Phụ kiện sạc dự phòng Aukey này có hệ thống bảo vệ, chống đoản mạch, quá dòng đảm bảo an toàn tối đa. Pin sạc dự phòng Aukey 10000mAh PD 20W PB-N83S - Kích thước nhỏ gọn, sạc pin an toàn Pin sạc dự phòng Aukey 10000mAh PD 20W PB-N83S là trợ thủ cần",
       "price": 590000,
       "salePrice": 390000,
@@ -918,7 +958,7 @@
       "slug": "pin-sac-du-phong-cuktech-p-series-no-10-plus-2c1a-15000mah-100w-pb150p",
       "name": "Pin dự phòng Cuktech P+Series 2C1A 15000mAh 100W có màn hình No.10 Plus PB150P",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "cuktech",
       "description": "Đặc điểm nổi bật Pin sạc dự phòng Cuktech P Series No-10 Plus 2C1A 15000mAh 100W PB150P sở hữu dung lượng lớn lên đến 15.000mAh và sử dụng viên pin Lithium-ion bền bỉ. Thiết bị mang đến hiệu suất sạc mạnh mẽ thông qua 2 cổng USB-C và 1 cổng USB-A. Sản phẩm sạc dự phòng Cuktech này có trọng lượng chỉ 345g, giúp người dùng có thể dễ dàng mang theo ra ngoài. Pin sạc dự phòng Cuktech P Series No-10 Plus 2C1A 15000mAh 100W PB150P - Sạc nhanh, công suất mạnh mẽ Pin sạc dự phòng Cuktech P Series No-10 ",
       "price": 1400000,
       "salePrice": 1329000,
@@ -1056,7 +1096,7 @@
       "slug": "pin-sac-du-phong-stargo-star-x1-lite-10000mah-10w",
       "name": "Pin dự phòng StarGO Star X1 Lite 10000mAh 10.5W",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "stargo",
       "description": "Đặc điểm nổi bật Pin sạc dự phòng Stargo Star X1 Lite 10W nổi bật với dung lượng 10.000mAh, đi kèm hệ thống cổng USB kép 5V/2.1A và cổng Type-C 5V/2A. Sản phẩm có kích thước 146 x 68 x 16 mm, vỏ ngoài làm từ vật liệu ABS+PC. Pin sạc dùng pin Li-Polymer chất lượng cao, màu đen sang trọng, thuận tiện trong việc di chuyển. Pin sạc dự phòng Stargo Star X1 Lite 10000mAh 10W - Nguồn năng lượng di động tiện lợi, an toàn Pin sạc dự phòng Stargo Star X1 Lite 10000mAh 10W là lựa chọn hấp dẫn cho người dùn",
       "price": 290000,
       "salePrice": 190000,
@@ -1116,7 +1156,7 @@
       "slug": "pin-sac-du-phong-stargo-hypercharge-25000mah-100w",
       "name": "Pin dự phòng StarGO Hypercharge 25000mAh 100W tích hợp màn hình + cáp Type-C",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "stargo",
       "description": "Đặc điểm nổi bật Pin sạc dự phòng Stargo Hypercharge 25000mAh 100W sử dụng pin Li-Polymer 5 cell, hỗ trợ sạc ra tối đa 100W và sạc vào 65W thông qua cổng USB-C và cáp Type-C. Mẫu pin dự phòng Stargo này hỗ trợ sạc nhanh đa giao thức PD 3.0, QC 3.0, PPS. Cùng với đó sản phẩm còn được trang bị màn hình TFT hiển thị phần trăm pin, điện áp, dòng điện, công suất sạc. Pin sạc dự phòng Stargo Hypercharge 25000mAh 100W – Công suất sạc nhanh 100W Sản phẩm phù hợp với người dùng thường xuyên di chuyển và ",
       "price": 1290000,
       "salePrice": 990000,
@@ -1523,7 +1563,7 @@
       "slug": "pin-sac-du-phong-innostyle-powermax-ip20pd-20w-10000mah",
       "name": "Pin sạc dự phòng Innostyle PowerMax 10.000mAh 20W IP20PD",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "innostyle",
       "description": "Đặc điểm nổi bật Sạc dự phòng Innostyle PowerMax 20W 10.000mAh IP20PD - Dung lượng lớn lưu trữ tốt hơn Sạc dự phòng Innostyle PowerMax 20W 10.000mAh IP20PD là phụ kiện quan trọng nên trang bị để luôn kịp thời nạp đầy năng lượng cho smartphone. Chiếc pin dự phòng này trở nên cần thiết hơn nếu bạn muốn đi du lịch, đi công tác. Hãy xem đoạn mô tả dưới đây để hiểu rõ hơn về chiếc pin dự phòng Innostyle này! Dung lượng siêu lớn, thiết kế gọn nhẹ đạt chuẩn an toàn Pin dự phòng Innostyle Powermax có du",
       "price": 650000,
       "salePrice": 380000,
@@ -1789,7 +1829,7 @@
       "slug": "pin-sac-du-phong-cuktech-cp133l-10000mah-33w-lpb100",
       "name": "Pin dự phòng Cuktech CP133L 10000mAh 33W tích hợp cáp Type-C LPB100",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "cuktech",
       "description": "Đặc điểm nổi bật Pin sạc dự phòng Cuktech CP133L 10000mAh 33W LPB100 sở hữu công suất định mức 35,28Wh/36Wh, mang lại khả năng sạc nhanh và tiện lợi cho nhiều thiết bị. Trọng lượng của sạc dự phòng Cuktech này chỉ khoảng 215g, nhỏ gọn như một chiếc thẻ ngân hàng nhưng đủ mạnh mẽ để sạc cùng lúc nhiều thiết bị. Pin còn hỗ trợ công nghệ sạc nhanh PD3, PPS và QC3.0. Pin sạc dự phòng Cuktech CP133L 10000mAh 33W LPB100 – Nhỏ gọn, mạnh mẽ, tiện lợi Sản phẩm gây ấn tượng không chỉ bởi thiết kế nhỏ gọn,",
       "price": 667000,
       "salePrice": 590000,
@@ -2055,7 +2095,7 @@
       "slug": "pin-sac-du-phong-cuktech-1c1a-10000mah-30w-cp13-pb100",
       "name": "Pin dự phòng Cuktech 1C1A 10000mAh 30W (CP13) PB100",
       "categorySlug": "pin-du-phong",
-      "brandSlug": "",
+      "brandSlug": "cuktech",
       "description": "Đặc điểm nổi bật Pin sạc dự phòng Cuktech 1C1A 10000mAh 30W CP13 PB100 có dung lượng 10.000mAh, hỗ trợ sạc nhanh công suất 30W, đi kèm đèn LED hiển thị pin trực quan. Sản phẩm mang đến khả năng sạc nhanh ổn định cho nhiều thiết bị, giúp người dùng yên tâm khi di chuyển bên ngoài. Phụ kiện sạc dự phòng Cuktech này còn có trọng lượng nhẹ khoảng 195g, dễ bỏ túi hay balo, thuận tiện mang theo khắp nơi. Pin sạc dự phòng Cuktech 1C1A 10000mAh 30W CP13 PB100 - Thiết kế gọn nhẹ, sạc nhanh Pin sạc dự phò",
       "price": 645000,
       "salePrice": 509000,

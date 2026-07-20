@@ -1,226 +1,37 @@
 import { NODE_TYPES } from "../constants.js";
 import { isEmptyWorkflow } from "../utils/edgeRouting.js";
-
-console.log("%c[flowLayout] build marker: STRAIGHTEN-FIX-v1", "color:#fff;background:#7c3aed;padding:2px 6px;border-radius:4px;font-weight:bold");
+import { resolveBranchStructure } from "../utils/branchStructure.js";
 
 /**
  * nodeOrigin=[0.5,0] → position.x là tâm ngang của node.
  * NODE_W phải khớp với width thật của .cb-rf-node trong campaign-builder.css,
  * nếu không các cột nhánh sẽ chồng lên nhau (offset < nửa bề rộng node).
+ *
+ * Layout đệ quy theo subtree (thay cho gán cột BFS tham lam + vá hậu kỳ cũ):
+ * mỗi condition tự tính bề rộng cần thiết từ NỘI DUNG nhánh của chính nó (không dùng
+ * mảng "lane" toàn cục), điểm hội tụ thật (joinNode) được `branchStructure.js` xác định
+ * trước một cách cấu trúc (không suy đoán hậu kỳ) nên toạ độ X luôn thẳng hàng đúng ngay
+ * từ đầu — không cần bước "straighten" hay "mergeNodeX" dò lại sau này.
  */
 export const FLOW = {
   SPINE_X: 400,
   BRANCH_OFFSET: 200,
-  BRANCH_OFFSET_LOCAL: 180,
+  MIN_LANE_WIDTH: 400, // = 2 * BRANCH_OFFSET: mỗi nhánh (kể cả nhánh trơn/trivial) chiếm tối thiểu 1 lane rộng chừng này
   Y_STEP: 160,
   NODE_H: 72,
   NODE_W: 280,
   TAG_W: 80,
-  MERGE_SIZE: 8,
+  TAG_H: 36,
   FORK_GAP: 8,
-  TAG_DROP: 28,
-  LANE_STEP: 100
+  TAG_DROP: 48, // fork bar → tag (chiều cao "ngoặc trên") - cân đối với MERGE_GAP để 2 ngoặc trông đối xứng
+  BRANCH_START_GAP: 64, // tag → node đầu nhánh
+  MERGE_GAP: 64, // node cuối nhánh (hoặc tag, nếu nhánh trơn) → merge bar - tăng nhẹ cho đỡ "vuông"
+  GAP_AFTER_MERGE: 80
 };
 
 function isCondition(nodes, id) {
   const n = nodes.find(x => x.id === id);
   return n && NODE_TYPES[n.type]?.cat === "condition";
-}
-
-function getCondEdges(edges, condId) {
-  return {
-    ifEdge: edges.find(e => e.source === condId && !e.isDefault),
-    elseEdge: edges.find(e => e.source === condId && e.isDefault)
-  };
-}
-
-function colOf(id, columns) {
-  if (id === "end") return 0;
-  return columns[id] ?? 0;
-}
-
-function spineX(id, columns) {
-  return FLOW.SPINE_X + colOf(id, columns) * FLOW.BRANCH_OFFSET;
-}
-
-// A node with 2+ incoming edges is a reconvergence point, not simply nested one level down -
-// e.g. a condition chained in right after another condition's merge (both branches lead to
-// it) has no parent, even though a direct edge from that condition reaches it.
-function findParentConditionId(nodeId, nodes, edges) {
-  let curr = nodeId;
-  const seen = new Set();
-  while (curr && !seen.has(curr)) {
-    seen.add(curr);
-    const incs = edges.filter(e => e.target === curr);
-    if (incs.length !== 1) return null;
-    const inc = incs[0];
-    if (isCondition(nodes, inc.source)) return inc.source;
-    curr = inc.source;
-  }
-  return null;
-}
-
-function findParentConditionMergeId(nodeId, nodes, edges) {
-  const p = findParentConditionId(nodeId, nodes, edges);
-  return p ? `${p}__merge` : null;
-}
-
-function conditionDepth(cid, nodes, edges) {
-  let d = 0;
-  let p = findParentConditionId(cid, nodes, edges);
-  while (p) {
-    d++;
-    p = findParentConditionId(p, nodes, edges);
-  }
-  return d;
-}
-
-// Walks one branch through plain action nodes until "end"/a condition/a dead-end.
-function branchPath(edge, nodes, edges, maxSteps = 50) {
-  const path = [];
-  if (!edge) return path;
-  let cur = edge.target;
-  const seen = new Set();
-  let steps = 0;
-  while (cur && !seen.has(cur) && steps < maxSteps) {
-    path.push(cur);
-    seen.add(cur);
-    steps++;
-    if (cur === "end" || isCondition(nodes, cur)) break;
-    const next = edges.find(e => e.source === cur);
-    if (!next) break;
-    cur = next.target;
-  }
-  return path;
-}
-
-function mergeSpineTarget(condId, nodes, edges, columns) {
-  const parentMerge = findParentConditionMergeId(condId, nodes, edges);
-  if (parentMerge) return parentMerge;
-
-  const { ifEdge, elseEdge } = getCondEdges(edges, condId);
-  const outs = [ifEdge, elseEdge].filter(Boolean);
-
-  // Shallowest node both branches reconverge on, however they get there - checked before the
-  // column-based fallback below, which can't see reconvergence through intermediate nodes.
-  if (outs.length === 2) {
-    const pathA = branchPath(outs[0], nodes, edges);
-    const setB = new Set(branchPath(outs[1], nodes, edges));
-    const common = pathA.find(t => setB.has(t));
-    if (common) return common;
-  }
-
-  const spine = outs
-    .map(e => e.target)
-    .filter(t => t === "end" || colOf(t, columns) === 0);
-  const nonEnd = spine.filter(t => t !== "end");
-  if (nonEnd.length) {
-    const prefer = nonEnd.find(t => outs.find(e => e.target === t && !e.isDefault));
-    return prefer || nonEnd[0];
-  }
-  return "end";
-}
-
-// Real wfEdges to relink when inserting right after a condition's merge - every branch's true
-// terminal edge(s) reaching outTarget, however deep (through actions/nested conditions).
-function collectRealExitEdges(condId, outTarget, nodes, edges, memo) {
-  const key = condId + "|" + outTarget;
-  if (memo.has(key)) return memo.get(key);
-memo.set(key, []); // guard against pathological cycles while resolving
-  const { ifEdge, elseEdge } = getCondEdges(edges, condId);
-  const result = [];
-
-  const walkFrom = edge => {
-    if (!edge) return;
-    if (edge.target === outTarget) {
-      result.push(edge.id);
-      return;
-    }
-    if (edge.target === "end" || isCondition(nodes, edge.target)) {
-      if (isCondition(nodes, edge.target)) {
-        result.push(...collectRealExitEdges(edge.target, outTarget, nodes, edges, memo));
-      }
-      return;
-    }
-    let cur = edge.target;
-    const seen = new Set();
-    while (cur && !seen.has(cur)) {
-      seen.add(cur);
-      const outs = edges.filter(e => e.source === cur);
-      let advanced = false;
-      outs.forEach(e => {
-        if (e.target === outTarget) result.push(e.id);
-        else if (isCondition(nodes, e.target)) result.push(...collectRealExitEdges(e.target, outTarget, nodes, edges, memo));
-        else if (e.target !== "end") { cur = e.target; advanced = true; }
-      });
-      if (!advanced) break;
-    }
-  };
-
-  walkFrom(ifEdge);
-  walkFrom(elseEdge);
-  memo.set(key, result);
-  return result;
-}
-
-function subtreeMaxBottom(rootId, nodes, edges, columns, positions, memo = new Map()) {
-  if (!rootId || rootId === "end") return 0;
-  if (memo.has(rootId)) return memo.get(rootId);
-
-  const pos = positions[rootId];
-  let bottom = (pos?.y ?? 0) + FLOW.NODE_H;
-
-  if (isCondition(nodes, rootId)) {
-    const { ifEdge, elseEdge } = getCondEdges(edges, rootId);
-    [ifEdge, elseEdge].forEach(e => {
-      if (e?.target && e.target !== "end") {
-        bottom = Math.max(bottom, subtreeMaxBottom(e.target, nodes, edges, columns, positions, memo) + 140);
-      }
-    });
-    // Fallback height must match computeMergeY's minimum (own fork/tag/merge visuals), not a
-    // fixed guess - otherwise a parent condition's merge row can sit above this one's.
-    bottom = Math.max(
-      bottom,
-      (pos?.y ?? 0) + FLOW.NODE_H + FLOW.FORK_GAP + FLOW.TAG_DROP + 56
-    );
-  } else {
-    edges.filter(e => e.source === rootId).forEach(e => {
-      if (e.target !== "end") {
-        bottom = Math.max(bottom, subtreeMaxBottom(e.target, nodes, edges, columns, positions, memo));
-      }
-    });
-  }
-
-  memo.set(rootId, bottom);
-  return bottom;
-}
-
-function subtreeColBounds(rootId, nodes, edges, columns, memo = new Map()) {
-  if (!rootId || rootId === "end") return null;
-  if (memo.has(rootId)) return memo.get(rootId);
-  let minC = colOf(rootId, columns);
-  let maxC = minC;
-  const walk = id => {
-    if (!id || id === "end") return;
-    const c = colOf(id, columns);
-    minC = Math.min(minC, c);
-    maxC = Math.max(maxC, c);
-    if (isCondition(nodes, id)) {
-      const { ifEdge, elseEdge } = getCondEdges(edges, id);
-      [ifEdge, elseEdge].forEach(e => e?.target && walk(e.target));
-    } else {
-      edges.filter(e => e.source === id).forEach(e => walk(e.target));
-    }
-  };
-  walk(rootId);
-  const bounds = { minC, maxC };
-  memo.set(rootId, bounds);
-  return bounds;
-}
-
-function defaultSideOffset(depth, cc) {
-  const base = cc === 0 ? FLOW.BRANCH_OFFSET : FLOW.BRANCH_OFFSET_LOCAL;
-  return base + depth * FLOW.LANE_STEP;
 }
 
 /** Orthogonal path — railY cố định cho mọi nhánh gom về merge */
@@ -231,178 +42,64 @@ export function branchRailPath(sourceX, sourceY, targetX, targetY, railY) {
   const lo = Math.min(sourceY, targetY);
   const hi = Math.max(sourceY, targetY);
   const fallback = sourceY + Math.min(Math.max(36, (targetY - sourceY) * 0.4), targetY - sourceY - 12);
-  // Clamp: a bad railY must never bend past the target and double back.
   const y = railY != null ? Math.min(Math.max(railY, lo), hi) : fallback;
   return `M ${sourceX} ${sourceY} L ${sourceX} ${y} L ${targetX} ${y} L ${targetX} ${targetY}`;
 }
 
-function mergeNodeX(targetId, columns) {
-  if (targetId === "end") return FLOW.SPINE_X;
-  if (String(targetId).includes("__merge")) {
-    const cid = String(targetId).replace("__merge", "");
-    return spineX(cid, columns);
-  }
-  return
-spineX(targetId, columns);
-}
+// Real wfEdges to relink when inserting right after a condition's merge - every branch's true
+// terminal edge(s) reaching joinNode, however deep (through actions/nested conditions).
+function collectTerminalEdgeIds(condId, joinNode, nodes, edges, structure, memo) {
+  const key = condId + "|" + joinNode;
+  if (memo.has(key)) return memo.get(key);
+  memo.set(key, []); // guard against pathological cycles while resolving
+  const info = structure.get(condId);
+  const result = [];
 
-function computeMergeY(condId, nodes, edges, columns, positions) {
-  const pos = positions[condId];
-  const condBottom = pos.y + FLOW.NODE_H;
-  const tagY = condBottom + FLOW.FORK_GAP + FLOW.TAG_DROP;
-  const base = tagY + 56;
-  const { ifEdge, elseEdge } = getCondEdges(edges, condId);
-  let maxY = base;
-  [ifEdge, elseEdge].forEach(e => {
-    if (e?.target && e.target !== "end") {
-      // Must match subtreeMaxBottom's own clearance below, else merge rails overlap.
-      maxY = Math.max(maxY, subtreeMaxBottom(e.target, nodes, edges, columns, positions) + 140);
+  const walk = edge => {
+    if (!edge) return;
+    if (edge.target === joinNode) {
+      result.push(edge.id);
+      return;
     }
-  });
-  return maxY;
-}
-
-function resolveLaneX(preferredX, usedLanes, side) {
-  let x = preferredX;
-  const step = FLOW.LANE_STEP;
-  const dir = side === "left" ? -1 : 1;
-  while (usedLanes.some(u => Math.abs(u - x) < step * 0.85)) {
-    x += dir * step;
-  }
-  usedLanes.push(x);
-  return x;
-}
-
-// When both branches of a condition converge directly on the same real node, that node drifts
-// to whichever column computeLayout assigned its first-processed incoming edge - center it on
-// the condition's own X instead, since both paths lead there symmetrically. A single-branch
-// case (other side empty) is left at its own offset column - that asymmetry is the point, it
-// keeps the nested content visually clear of the other branch's bypass rail.
-function straightenSingleActiveBranches(wfNodes, wfEdges, positions) {
-  const conditionIds = wfNodes
-    .filter(n => NODE_TYPES[n.type]?.cat === "condition")
-    .map(n => n.id)
-    .sort((a, b) => positions[a].y - positions[b].y);
-
-  conditionIds.forEach(cid => {
-    const { ifEdge, elseEdge } = getCondEdges(wfEdges, cid);
-    const ifTrivial = !ifEdge || ifEdge.target === "end";
-    const elseTrivial = !elseEdge || elseEdge.target === "end";
-    if (ifTrivial || elseTrivial || !ifEdge || !elseEdge) return;
-
-    const pathA = branchPath(ifEdge, wfNodes, wfEdges);
-    const setB = new Set(branchPath(elseEdge, wfNodes, wfEdges));
-    const chainStart = pathA.find(t => t !== "end" && setB.has(t));
-    if (!chainStart) return;
-
-    let cur = chainStart;
+    if (isCondition(nodes, edge.target)) {
+      result.push(...collectTerminalEdgeIds(edge.target, joinNode, nodes, edges, structure, memo));
+      return;
+    }
+    let cur = edge.target;
     const seen = new Set();
-    while (cur && cur !== "end" && positions[cur] && !seen.has(cur)) {
+    while (cur && !seen.has(cur)) {
       seen.add(cur);
-      positions[cur].x = positions[cid].x;
-      if (isCondition(wfNodes, cur)) break;
-      const next = wfEdges.find(e => e.source === cur);
-      cur = next?.target;
+      const outs = edges.filter(e => e.source === cur);
+      let advanced = false;
+      outs.forEach(e => {
+        if (e.target === joinNode) result.push(e.id);
+        else if (isCondition(nodes, e.target)) result.push(...collectTerminalEdgeIds(e.target, joinNode, nodes, edges, structure, memo));
+        else if (e.target !== joinNode) { cur = e.target; advanced = true; }
+      });
+      if (!advanced) break;
     }
-  });
-}
+  };
 
-function buildConditionMeta(wfNodes, wfEdges, columns, levels, positions) {
-  const conditionIds = wfNodes
-    .filter(n => NODE_TYPES[n.type]?.cat === "condition")
-    .map(n => n.id);
-
-  const meta = {};
-  const usedLeft = [];
-  const usedRight = [];
-
-  conditionIds
-    .slice()
-    .sort((a, b) => (levels[a] ?? 0) - (levels[b] ?? 0))
-    .forEach(cid => {
-      const cc = colOf(cid, columns);
-      const cx = positions[cid].x; // reflects straightenSingleActiveBranches, not raw spineX
-      const depth = conditionDepth(cid, wfNodes, wfEdges);
-      const { ifEdge, elseEdge } = getCondEdges(wfEdges, cid);
-      const off = defaultSideOffset(depth, cc);
-
-      let prefLeft = cx - off;
-      let prefRight = cx + off;
-
-      if (ifEdge?.target && ifEdge.target !== "end") {
-        prefLeft = spineX(ifEdge.target, columns);
-      }
-      if (elseEdge?.target && elseEdge.target !== "end") {
-        prefRight = spineX(elseEdge.target, columns);
-      }
-
-      if (ifEdge?.target && ifEdge.target !== "end") {
-        const b = subtreeColBounds(ifEdge.target, wfNodes, wfEdges, columns);
-        if (b) {
-          const minRightClear = cx + Math.max(off, (b.maxC - cc + 1) * FLOW.BRANCH_OFFSET);
-          prefRight = Math.max(prefRight, minRightClear);
-        }
-      }
-      if (elseEdge?.target && elseEdge.target !== "end") {
-        const b = subtreeColBounds(elseEdge.target, wfNodes, wfEdges, columns);
-        if (b) {
-          const minLeftClear = cx - Math.max(off, (cc - b.minC + 1) * FLOW.BRANCH_OFFSET);
-          prefLeft = Math.min(prefLeft, minLeftClear);
-        }
-      }
-
-      const tagLeftX = resolveLaneX(prefLeft, usedLeft, "left");
-const tagRightX = resolveLaneX(prefRight, usedRight, "right");
-
-      const pos = positions[cid];
-      const condBottom = pos.y + FLOW.NODE_H;
-      const forkY = condBottom + FLOW.FORK_GAP;
-      const tagY = forkY + FLOW.TAG_DROP;
-      const mergeY = Math.max(
-        computeMergeY(cid, wfNodes, wfEdges, columns, positions),
-        tagY + 56
-      );
-      const parentMergeId = findParentConditionMergeId(cid, wfNodes, wfEdges);
-      // A nested condition's merge exits straight into its parent's merge - align its X with
-      // wherever the parent's own merge renders (cascading through multiple nesting levels)
-      // so that exit is a straight drop, not a long sideways jog.
-      const parentCid = parentMergeId ? parentMergeId.replace("__merge", "") : null;
-      const mergeCx = parentCid ? (meta[parentCid]?.mergeCx ?? spineX(parentCid, columns)) : cx;
-
-      meta[cid] = {
-        cx,
-        mergeCx,
-        forkY,
-        tagY,
-        mergeY,
-        tagLeftX,
-        tagRightX,
-        ifEdge,
-        elseEdge,
-        mergeId: `${cid}__merge`,
-        forkId: `${cid}__fork`,
-        trueId: `${cid}__true`,
-        falseId: `${cid}__false`,
-        parentMergeId
-      };
-    });
-
-  return { conditionIds, meta };
+  (info?.branchEdges || []).forEach(walk);
+  memo.set(key, result);
+  return result;
 }
 
 export function buildFlowElements(wfNodes, wfEdges, layout, { selected, insertEdgeId, dragType }) {
-  const { levels, columns } = layout;
+  const empty = isEmptyWorkflow(wfNodes, wfEdges);
   const positions = {};
   const rfNodes = [];
   const rfEdges = [];
   const edgeKeys = new Set();
-  const spineVertKeys = new Set();
-  const mergeMeta = {};
+  const placed = new Set();
+  const halfWidthCache = new Map();
   const exitEdgesMemo = new Map();
+
+  const isCond = id => isCondition(wfNodes, id);
 
   const addEdge = (id, source, target, data = {}) => {
     if (!source || !target) return;
-    const key = `${source}|${target}|${data.wfEdgeId || ""}|${data.kind || ""}|${data.sourceHandle || ""}|${data.railY || ""}`;
+    const key = `${source}|${target}|${data.wfEdgeId || ""}|${data.kind || ""}`;
     if (edgeKeys.has(key)) return;
     edgeKeys.add(key);
     const edgeType =
@@ -420,280 +117,242 @@ export function buildFlowElements(wfNodes, wfEdges, layout, { selected, insertEd
     });
   };
 
-  /** Chỉ 1 đoạn dọc trên spine trùng Y — tránh double-line */
-  const addSpineEdge = (id, source, target, data = {}) => {
-    const sx = positions[source]?.x ?? FLOW.SPINE_X;
-    const tx = positions[target]?.x ?? mergeNodeX(target, columns);
-    if (Math.abs(sx - FLOW.SPINE_X) < 8 && Math.abs(tx - FLOW.SPINE_X) < 8) {
-      const sy = positions[source]?.y ?? 0;
-      const ty = positions[target]?.y ?? positions.end?.y ?? 0;
-      const vKey = `${FLOW.SPINE_X}|${Math.round(Math.min(sy, ty))}|${Math.round(Math.max(sy, ty))}`;
-      if (spineVertKeys.has(vKey)) return;
-      spineVertKeys.add(vKey);
-    }
-    addEdge(id, source, target, { ...data, kind: "spine" });
-  };
-
-  wfNodes.forEach(n => {
-    positions[n.id] = {
-      x: spineX(n.id, columns),
-      y: (levels[n.id] ?? 0) * FLOW.Y_STEP + 40
-    };
-  });
-  straightenSingleActiveBranches(wfNodes, wfEdges, positions);
-
-  const empty = isEmptyWorkflow(wfNodes, wfEdges);
-
-  wfNodes.forEach(n => {
-    const cat =
-      n.id === "start" ? "trigger"
-        : n.id === "end" ? "end"
-          : NODE_TYPES[n.type]?.cat || "action";
-    rfNodes.push({
-      id: n.id,
-      type: "workflow",
-      position: positions[n.id],
-      draggable: false,
-      selectable: true,
-      data: { wfNode: n, cat, selected: selected === n.id }
-    });
-  });
-
   if (empty) {
     const startEdge = wfEdges.find(e => e.source === "start" && e.target === "end");
+    wfNodes.forEach(n => {
+      positions[n.id] = { x: FLOW.SPINE_X, y: n.id === "end" ? 200 : 40 };
+    });
+    wfNodes.forEach(n => {
+      const cat = n.id === "start" ? "trigger" : n.id === "end" ? "end" : NODE_TYPES[n.type]?.cat || "action";
+      rfNodes.push({
+        id: n.id, type: "workflow", position: positions[n.id], draggable: false, selectable: true,
+        data: { wfNode: n, cat, selected: selected === n.id }
+      });
+    });
     const midY = (positions.start.y + positions.end.y) / 2;
     rfNodes.push({
-      id: "slot_empty",
-      type: "insertSlot",
-      position: { x: FLOW.SPINE_X, y: midY },
-      draggable: false,
-      selectable: false,
-      data: {
-        wfEdgeId: startEdge?.id,
-        insertEdgeId,
-        dragType,
-        label: "Kéo item đầu tiên vào đây",
-        overlayOnly: true
-      }
+      id: "slot_empty", type: "insertSlot", position: { x: FLOW.SPINE_X, y: midY },
+      draggable: false, selectable: false,
+      data: { wfEdgeId: startEdge?.id, insertEdgeId, dragType, label: "Kéo item đầu tiên vào đây", overlayOnly: true }
     });
-    addSpineEdge("e_start_end", "start", "end", {
-      wfEdgeId:
-startEdge?.id,
-      insertable: true,
-      straight: true
-    });
+    addEdge("e_start_end", "start", "end", { wfEdgeId: startEdge?.id, insertable: true, kind: "spine" });
     return { nodes: rfNodes, edges: rfEdges };
   }
 
-  const { conditionIds, meta } = buildConditionMeta(wfNodes, wfEdges, columns, levels, positions);
+  const structure = resolveBranchStructure(wfNodes, wfEdges);
 
-  let maxEndY = positions.end?.y ?? 0;
-  conditionIds.forEach(cid => {
-    maxEndY = Math.max(maxEndY, meta[cid].mergeY + 80);
-  });
-  positions.end.y = maxEndY;
-  const endRf = rfNodes.find(n => n.id === "end");
-  if (endRf) endRf.position.y = maxEndY;
+  function computeBranchHalfWidth(target, joinNode) {
+    if (!target || target === joinNode) return 0;
+    if (isCond(target)) return computeConditionHalfWidth(target);
+    return 0;
+  }
 
-  function connectBranchExit(fromId, parentMergeId, railY, visited = new Set()) {
-    if (!fromId || visited.has(fromId)) return;
-    visited.add(fromId);
-    if (isCondition(wfNodes, fromId)) return;
+  function computeConditionHalfWidth(condId) {
+    if (halfWidthCache.has(condId)) return halfWidthCache.get(condId);
+    halfWidthCache.set(condId, FLOW.MIN_LANE_WIDTH / 2); // provisional guard, only matters for malformed cyclic input
+    const info = structure.get(condId);
+    const slots = (info?.branchEdges || []).map(e =>
+      Math.max(FLOW.MIN_LANE_WIDTH, computeBranchHalfWidth(e.target, info.joinNode) * 2)
+    );
+    const total = slots.reduce((a, b) => a + b, 0) || FLOW.MIN_LANE_WIDTH;
+    const half = total / 2;
+    halfWidthCache.set(condId, half);
+    return half;
+  }
 
-    const outs = wfEdges.filter(e => e.source === fromId);
+  const cat = n => n.id === "start" ? "trigger" : n.id === "end" ? "end" : NODE_TYPES[n.type]?.cat || "action";
 
-    if (!outs.length) {
-      addEdge(`${fromId}_exit_${parentMergeId}`, fromId, parentMergeId, {
-        kind: "branch",
-        railY
-      });
-      return;
-    }
-
-    outs.forEach(e => {
-      if (e.target === "end") {
-        addEdge(`${fromId}_exit_${parentMergeId}`, fromId, parentMergeId, {
-          wfEdgeId: e.id,
-          insertable: true,
-          kind: "branch",
-          railY
-        });
-      } else if (isCondition(wfNodes, e.target)) {
-        // No railY: hop into a nested condition's own top, no shared row to align with.
-        addEdge(`${fromId}_to_${e.target}`, fromId, e.target, {
-          wfEdgeId: e.id,
-          kind: "branch"
-        });
-      } else if (colOf(fromId, columns) === colOf(e.target, columns)) {
-        addSpineEdge(e.id, fromId, e.target, {
-          wfEdgeId: e.id,
-          insertable: true,
-          straight: true
-        });
-        connectBranchExit(e.target, parentMergeId, railY, visited);
-      } else {
-        addEdge(e.id, fromId, e.target, {
-          wfEdgeId: e.id,
-          insertable: true,
-          kind: "branch",
-          railY
-        });
-        connectBranchExit(e.target, parentMergeId, railY, visited);
-      }
+  function placeNode(id, x, y) {
+    if (placed.has(id)) return;
+    placed.add(id);
+    positions[id] = { x, y };
+    const n = wfNodes.find(x2 => x2.id === id);
+    rfNodes.push({
+      id, type: "workflow", position: { x, y }, draggable: false, selectable: true,
+      data: { wfNode: n, cat: cat(n), selected: selected === id }
     });
   }
 
-  conditionIds
-    .slice()
-    .sort((a, b) => (levels[a] ?? 0) - (levels[b] ?? 0))
-    .forEach(cid => {
-      const m = meta[cid];
-      mergeMeta[m.mergeId] = { cx: m.mergeCx, mergeY: m.mergeY };
+  function placeJunction(condId, x, y) {
+    const id = `${condId}__fork`;
+    positions[id] = { x, y };
+    rfNodes.push({ id, type: "junction", position: { x, y }, draggable: false, selectable: false, data: {} });
+    return id;
+  }
 
-      rfNodes.push(
-        {
-          id: m.forkId,
-          type: "junction",
-          position: { x: m.cx, y: m.forkY },
-          draggable: false,
-          selectable: false,
-          data: {}
-        },
-        {
-          id: m.trueId,
-          type: "branchTag",
-          position: { x: m.tagLeftX, y: m.tagY },
-          draggable: false,
-          selectable: false,
-          data: { label: "Đúng", side: "left", conditionId: cid }
-        },
-        {
-          id: m.falseId,
-          type: "branchTag",
-          position: { x: m.tagRightX, y: m.tagY },
-          draggable: false,
-          selectable: false,
-          data: { label: "Sai", side: "right", conditionId: cid }
-        },
-        {
-          id: m.mergeId,
-          type: "merge",
-          position: { x: m.mergeCx, y: m.mergeY },
-          draggable: false,
-          selectable: false,
-          data: { conditionId: cid }
-        }
-      );
+  function placeTag(condId, edge, index, x, y) {
+    const id = `${condId}__tag${index}`;
+    positions[id] = { x, y };
+    const isIf = !edge.isDefault;
+    rfNodes.push({
+      id, type: "branchTag", position: { x, y }, draggable: false, selectable: false,
+      data: {
+        label: isIf ? (edge.label || "Đúng") : "Sai",
+        side: isIf ? "left" : "right",
+        conditionId: condId
+      }
+    });
+    return id;
+  }
 
-      addSpineEdge(`${cid}_down`, cid, m.forkId, { straight: true });
-      addEdge(`${cid}_t`, m.forkId, m.trueId, { kind: "forkArm", sourceHandle: "left" });
-      addEdge(`${cid}_f`, m.forkId, m.falseId, { kind: "forkArm", sourceHandle: "right" });
+  function placeMerge(condId, x, y) {
+    const id = `${condId}__merge`;
+    positions[id] = { x, y };
+    rfNodes.push({ id, type: "merge", position: { x, y }, draggable: false, selectable: false, data: { conditionId: condId } });
+    return id;
+  }
 
-      const wireSide = (tagId, edge, side) => {
-        if (!edge || edge.target === "end") {
-          addEdge(`${cid}_${side}_m`, tagId, m.mergeId, {
-            wfEdgeId: edge?.id,
-            insertable: true,
-            side,
-            kind: "branch",
-            railY: m.mergeY
-          });
-          return;
-        }
-        if (isCondition(wfNodes, edge.target)) {
-          addEdge(`${cid}_${side}_cond`, tagId, edge.target, {
-            wfEdgeId: edge.id,
-            insertable: true,
-            kind: "branch"
-          });
-          return;
-        }
-        addEdge(`${cid}_${side}_to_${edge.target}`, tagId, edge.target, {
-          wfEdgeId: edge.id,
-          insertable: true,
-          kind: "branch",
-          railY: m.mergeY
-});
-        connectBranchExit(edge.target, m.mergeId, m.mergeY);
-      };
+  // Lays out one condition fully: itself, fork junction, N branch tags (+ their subtrees),
+  // and its own merge. Does NOT draw the merge's outgoing edge - the caller (layoutChain)
+  // decides that, since it depends on whether this condition's join is being absorbed into
+  // an enclosing merge or continues the current chain.
+  function layoutCondition(condId, x, y) {
+    placeNode(condId, x, y);
+    const info = structure.get(condId);
+    const branchEdges = info?.branchEdges || [];
 
-      wireSide(m.trueId, m.ifEdge, "true");
-      wireSide(m.falseId, m.elseEdge, "false");
+    const tagY = y + FLOW.NODE_H + FLOW.FORK_GAP + FLOW.TAG_DROP;
+    // The common binary Đúng/Sai case connects straight from the condition box's own left/right
+    // sides (matches the reference diagram - no separate fork dot below the box). N-ary (3+
+    // branches, no side-only geometry to fall back on) keeps the junction-below approach.
+    const useSides = branchEdges.length === 2;
+    let forkId = null;
+    if (!useSides) {
+      forkId = placeJunction(condId, x, y + FLOW.NODE_H + FLOW.FORK_GAP);
+      addEdge(`${condId}_to_fork`, condId, forkId, { kind: "spine", straight: true });
+    }
 
-      const outTarget = mergeSpineTarget(cid, wfNodes, wfEdges, columns);
-      // Nested condition: merge routes into the PARENT's merge, no insert point here.
-      const outIsParentMerge = outTarget.includes("__merge");
-      // mergeCx was derived from the parent's own merge X, so this is always aligned already.
-      const outX = outIsParentMerge ? m.mergeCx : mergeNodeX(outTarget, columns);
-      const sameX = Math.abs(m.mergeCx - outX) < 8;
-      const mergeEdgeIds = outIsParentMerge
-        ? []
-        : collectRealExitEdges(cid, outTarget, wfNodes, wfEdges, exitEdgesMemo);
+    const slots = branchEdges.map(e => Math.max(FLOW.MIN_LANE_WIDTH, computeBranchHalfWidth(e.target, info.joinNode) * 2));
+    const total = slots.reduce((a, b) => a + b, 0);
+    let cursor = x - total / 2;
+    let maxBottom = tagY + FLOW.TAG_H;
+    const ifSeen = { count: 0 };
+    // Local to this call (not shared across recursive layoutCondition calls) - a nested
+    // condition processed while resolving one branch must never clobber a sibling branch's
+    // already-pushed terminal here.
+    const branchTerminals = [];
 
-      addEdge(`${cid}_out`, m.mergeId, outTarget, {
-        insertable: !outIsParentMerge && mergeEdgeIds.length > 0,
-        wfEdgeId: mergeEdgeIds[0],
-        mergeInsert: (!outIsParentMerge && mergeEdgeIds.length > 0)
-          ? { conditionId: cid, downstreamId: outTarget, edgeIds: mergeEdgeIds }
-          : undefined,
-        kind: sameX ? "spine" : "branch",
-        straight: sameX,
-        railY: outIsParentMerge
-          ? mergeMeta[outTarget]?.mergeY ?? m.mergeY
-          : m.mergeY
+    branchEdges.forEach((e, i) => {
+      const w = slots[i];
+      const tagX = cursor + w / 2;
+      cursor += w;
+      if (!e.isDefault) {
+        ifSeen.count++;
+        e = { ...e, label: branchEdges.filter(b => !b.isDefault).length > 1 ? `Đúng ${ifSeen.count}` : "Đúng" };
+      }
+      const tagId = placeTag(condId, e, i, tagX, tagY);
+      if (useSides) {
+        addEdge(`${condId}_arm_${i}`, condId, tagId, {
+          kind: "forkArm", sourceHandle: i === 0 ? "branchLeft" : "branchRight"
+        });
+      } else {
+        addEdge(`${condId}_arm_${i}`, forkId, tagId, { kind: "forkArm" });
+      }
+
+      if (!e.target || e.target === info.joinNode) {
+        // trivial branch: tag connects straight to this condition's own merge (drawn after
+        // mergeY known) - the edge IS `e` itself, so it stays insertable.
+        maxBottom = Math.max(maxBottom, tagY + FLOW.TAG_H);
+        branchTerminals.push({ lastId: tagId, edgeId: e.id });
+        return;
+      }
+
+      const entryY = tagY + FLOW.BRANCH_START_GAP;
+      addEdge(`${condId}_b${i}_to_${e.target}`, tagId, e.target, { wfEdgeId: e.id, insertable: true, kind: "branch" });
+      const { y: bottomY, lastId } = layoutChain(e.target, info.joinNode, tagX, entryY);
+      maxBottom = Math.max(maxBottom, bottomY);
+      // lastId is either a real node id (look up its real outgoing edge into joinNode - still
+      // insertable) or a nested condition's own "<id>__merge" (no single real edge, not
+      // insertable - matches how a nested merge-to-merge hop always behaved).
+      const realEdge = wfEdges.find(x2 => x2.source === lastId && x2.target === info.joinNode);
+      branchTerminals.push({ lastId, edgeId: realEdge?.id });
+    });
+
+    const mergeY = maxBottom + FLOW.MERGE_GAP;
+    const mergeId = placeMerge(condId, x, mergeY);
+
+    branchTerminals.forEach(({ lastId, edgeId }) => {
+      if (!lastId) return;
+      addEdge(`${lastId}_to_${mergeId}`, lastId, mergeId, {
+        kind: "branch", railY: mergeY, wfEdgeId: edgeId, insertable: !!edgeId
       });
     });
 
-  const coveredSpinePairs = new Set();
-  conditionIds.forEach(cid => {
-    const out = mergeSpineTarget(cid, wfNodes, wfEdges, columns);
-    if (!findParentConditionMergeId(cid, wfNodes, wfEdges)) {
-      coveredSpinePairs.add(`merge|${out}`);
+    return mergeId;
+  }
+
+  // Walks a straight chain of real nodes starting at `nodeId`, stopping at `joinNode`, a dead
+  // end, or an already-placed node (defensive reconvergence guard for malformed input). When
+  // it passes through a nested condition, decides whether this chain continues past it
+  // (draws the merge->next edge itself) or whether the condition's join equals the outer
+  // `joinNode` (defers the final wiring to the caller, returning the merge id as `lastId`).
+  function layoutChain(nodeId, joinNode, x, startY) {
+    let cur = nodeId;
+    let y = startY;
+    let lastId = null;
+
+    while (cur && cur !== joinNode) {
+      if (placed.has(cur)) { lastId = cur; break; }
+
+      if (isCond(cur)) {
+        const mergeId = layoutCondition(cur, x, y);
+        const mergeY = positions[mergeId].y;
+        const next = structure.get(cur)?.joinNode ?? null;
+        if (next === joinNode || next == null) {
+          lastId = mergeId;
+          y = mergeY; // caller's maxBottom must see this subtree's real extent, not the pre-recursion y
+          break;
+        }
+        drawMergeExit(cur, mergeId, next, x, mergeY, { kind: "spine", straight: true });
+        y = mergeY + FLOW.GAP_AFTER_MERGE;
+        cur = next;
+        continue;
+      }
+
+      placeNode(cur, x, y);
+      lastId = cur;
+      y += FLOW.Y_STEP;
+      const next = wfEdges.find(e => e.source === cur);
+      if (!next) { cur = null; break; }
+      if (next.target !== joinNode) {
+        addEdge(next.id, cur, next.target, { wfEdgeId: next.id, insertable: true, kind: "spine", straight: true });
+      }
+      cur = next.target;
     }
-    const m = meta[cid];
-    if (m.parentMergeId) coveredSpinePairs.add(`${m.parentMergeId}|${m.mergeId}`);
-  });
 
-  wfEdges.forEach(e => {
-    const src = wfNodes.find(n => n.id === e.source);
-    const tgt = wfNodes.find(n => n.id === e.target);
-    if (!src || !tgt) return;
+    return { y, lastId };
+  }
 
-    const srcCat = NODE_TYPES[src.type]?.cat;
-    if (srcCat === "condition") return;
-    if (colOf(e.source, columns) !== 0 && e.target === "end") return;
-
-    const srcSpine = colOf(e.source, columns) === 0 || e.source === "start";
-    const tgtSpine = colOf(e.target, columns) === 0 || e.target === "end";
-    if (!srcSpine || !tgtSpine) return;
-
-    if (e.target === "end") {
-      const mergeReachesEnd = conditionIds.some(c => {
-        if (findParentConditionMergeId(c, wfNodes, wfEdges)) return false;
-        return mergeSpineTarget(c, wfNodes, wfEdges, columns) === "end";
-      });
-      if (mergeReachesEnd && e.source !== "start") return;
-    }
-
-    if (isCondition(wfNodes, e.target)) {
-      const pairKey = `${e.source}|${e.target}`;
-      if (coveredSpinePairs.has(pairKey)) return;
-      addSpineEdge(e.id, e.source, e.target, { wfEdgeId: e.id, insertable: true });
-      return;
-    }
-
-    if (e.target === "end") {
-      addSpineEdge(e.id, e.source, e.target, { wfEdgeId: e.id, straight: true });
-      return;
-    }
-
-    const coveredByMerge = conditionIds.some(c => {
-      const t = mergeSpineTarget(c, wfNodes, wfEdges, columns);
-      return t === e.target && !findParentConditionMergeId(c, wfNodes, wfEdges);
+  function drawMergeExit(condId, mergeId, joinNode, x, mergeY, extra) {
+    const terminalIds = collectTerminalEdgeIds(condId, joinNode, wfNodes, wfEdges, structure, exitEdgesMemo);
+    addEdge(`${mergeId}_out`, mergeId, joinNode, {
+      insertable: terminalIds.length > 0,
+      wfEdgeId: terminalIds[0],
+      mergeInsert: terminalIds.length > 0 ? { conditionId: condId, downstreamId: joinNode, edgeIds: terminalIds } : undefined,
+      railY: mergeY,
+      ...extra
     });
-    if (!coveredByMerge) {
-      addSpineEdge(e.id, e.source, e.target, { wfEdgeId: e.id, insertable: true });
-    }
+  }
+
+  const { y: topY, lastId: topLastId } = layoutChain("start", null, FLOW.SPINE_X, 40);
+
+  // The top-level chain has no enclosing condition, so if it ended on an absorbed merge
+  // (topLastId is a synthetic "<id>__merge"), wire that merge's real outgoing edge to "end"
+  // here - mirrors what layoutChain does for nested continuations, but for the outermost level.
+  if (typeof topLastId === "string" && topLastId.endsWith("__merge") && !placed.has("end")) {
+    const condId = topLastId.slice(0, -"__merge".length);
+    const mergeY = positions[topLastId].y;
+    placeNode("end", FLOW.SPINE_X, mergeY + FLOW.GAP_AFTER_MERGE);
+    drawMergeExit(condId, topLastId, "end", FLOW.SPINE_X, mergeY, { straight: true });
+  }
+
+  // Any wfNode the walk never reached (malformed/orphaned input) still needs a position so it
+  // isn't silently dropped from the canvas - stack these below everything else as a fallback.
+  let fallbackY = Math.max(topY, positions.end ? positions.end.y + FLOW.GAP_AFTER_MERGE : topY);
+  wfNodes.forEach(n => {
+    if (placed.has(n.id)) return;
+    placeNode(n.id, FLOW.SPINE_X, fallbackY);
+    fallbackY += FLOW.Y_STEP;
   });
 
   return { nodes: rfNodes, edges: rfEdges };

@@ -873,7 +873,10 @@ public class OrderServiceImpl implements OrderService {
                         .timestamp(LocalDateTime.now().toString())
                         .orderId(orderId)
                         .userId(order.getUserId())
-                        .email("") // fallback handled by notification-service
+                        // BUG FIX: was hardcoded to "" ("fallback handled by notification-service") - that
+                        // fallback fabricates a fake <userId>@ecommerce.com address instead of a real
+                        // lookup. The order itself already has the customer's real email from checkout.
+                        .email(order.getEmail())
                         .items(itemInfos)
                         .build();
 
@@ -893,7 +896,9 @@ public class OrderServiceImpl implements OrderService {
                         .timestamp(LocalDateTime.now().toString())
                         .orderId(orderId)
                         .userId(order.getUserId())
-                        .email("") // fallback handled by notification-service
+                        // BUG FIX: same as OrderCancelledEvent below - use the order's real email
+                        // instead of the fake-address fallback in notification-service.
+                        .email(order.getEmail())
                         .build();
 
                 saveOutboxEvent(String.valueOf(orderId), "OrderConfirmedEvent",

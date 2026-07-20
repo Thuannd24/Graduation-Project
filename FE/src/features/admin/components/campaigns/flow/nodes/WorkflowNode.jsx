@@ -45,6 +45,12 @@ function WorkflowNode({ data }) {
       {n.id !== "end" && (
         <Handle type="source" position={Position.Bottom} className="cb-rf-handle" />
       )}
+      {cat === "condition" && (
+        <>
+          <Handle type="source" position={Position.Left} id="branchLeft" className="cb-rf-handle" />
+          <Handle type="source" position={Position.Right} id="branchRight" className="cb-rf-handle" />
+        </>
+      )}
     </div>
   );
 }

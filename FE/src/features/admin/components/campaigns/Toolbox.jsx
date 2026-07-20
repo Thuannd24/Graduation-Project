@@ -6,10 +6,9 @@ import { NODE_TYPES, CAT_KEYS, CAT_NAMES, CAT_DOTS } from "./constants.js";
 export default function Toolbox({ onQuickAdd, onDragStart, onDragEnd }) {
   return (
     <aside className="cb-sidebar">
-      <h2>Thư Viện Khối Hỗ Trợ</h2>
+      <h2>Thư Viện Khối</h2>
       <p className="cb-sidebar-desc">
-        Kéo khối thả vào nút <strong style={{ color: "#6366f1" }}>+</strong> trên đường nối
-        hoặc nhánh Đúng/Sai. Click khối để thêm nhanh vào cuối luồng chính.
+        Kéo vào nút <strong style={{ color: "#6366f1" }}>+</strong>, hoặc click để thêm nhanh.
       </p>
 
       {CAT_KEYS.map(cat => (

@@ -1,11 +1,13 @@
-// Seeded EMAIL templates in notification-service (NotificationTemplateSeeder).
+// Seeded EMAIL templates in notification-service (NotificationTemplateSeeder) that are
+// actually campaign-only. order_confirmed_template/order_cancelled_template/
+// payment_success_template/payment_failed_template are deliberately excluded here - those 4
+// are already sent automatically and unconditionally by order-service/payment-service's own
+// outbox -> Kafka ("order-events"/"payment-events") -> notification-service path, independent
+// of any campaign. Offering them here let an admin build a campaign that double-sends the
+// exact same transactional email a customer already gets automatically.
 export const EMAIL_TEMPLATE_CODES = new Set([
   "promotion_voucher_template",
   "welcome_template",
-  "order_confirmed_template",
-  "order_cancelled_template",
-  "payment_success_template",
-  "payment_failed_template",
   "vip_membership_promo_template"
 ]);
 
@@ -24,25 +26,5 @@ export const EMAIL_TEMPLATES = [
     code: "welcome_template",
     label: "Chào mừng thành viên mới",
     hint: "Biến: email, userId"
-  },
-  {
-    code: "order_confirmed_template",
-    label: "Xác nhận đơn hàng",
-    hint: "Biến: orderId"
-  },
-  {
-    code: "order_cancelled_template",
-    label: "Đơn hàng bị hủy",
-    hint: "Biến: orderId"
-  },
-  {
-    code: "payment_success_template",
-    label: "Thanh toán thành công",
-    hint: "Biến: orderId"
-  },
-  {
-    code: "payment_failed_template",
-    label: "Thanh toán thất bại",
-    hint: "Biến: orderId"
   }
 ];

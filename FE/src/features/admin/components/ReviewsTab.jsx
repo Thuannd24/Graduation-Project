@@ -33,6 +33,24 @@ function StarDisplay({ rating }) {
   );
 }
 
+function ReviewImages({ imageUrls, onSelect }) {
+  if (!Array.isArray(imageUrls) || imageUrls.length === 0) return null;
+  return (
+    <div className="flex flex-wrap gap-1.5 mt-2">
+      {imageUrls.map((url, idx) => (
+        <button
+          key={url || idx}
+          type="button"
+          onClick={() => onSelect(url)}
+          className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 hover:ring-2 hover:ring-emerald-500/40 transition-all shrink-0 p-0"
+        >
+          <img src={url} alt="Ảnh đánh giá" className="w-full h-full object-cover" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function ReviewsTab() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,6 +71,8 @@ export default function ReviewsTab() {
   const [viewingProduct, setViewingProduct] = useState(null);
   const [productReviews, setProductReviews] = useState([]);
   const [loadingProductView, setLoadingProductView] = useState(false);
+
+  const [lightboxImage, setLightboxImage] = useState(null);
 
   const fetchReviews = async (page = 0) => {
     try {
@@ -157,16 +177,15 @@ export default function ReviewsTab() {
 
       <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left text-xs border-collapse table-fixed">
             <thead>
               <tr className="bg-slate-50/70 text-slate-400 border-b border-slate-100">
-                <th className="p-4 font-bold text-[10px] uppercase w-56">Sản phẩm</th>
-                <th className="p-4 font-bold text-[10px] uppercase w-44">Khách hàng</th>
-                <th className="p-4 font-bold text-[10px] uppercase w-28">Đánh giá</th>
-                <th className="p-4 font-bold text-[10px] uppercase">Nội dung</th>
-                <th className="p-4 font-bold text-[10px] uppercase w-40">Thời gian</th>
-                <th className="p-4 font-bold text-[10px] uppercase w-32 text-center">Trạng thái</th>
-                <th className="p-4 font-bold text-[10px] uppercase w-28 text-center">Thao tác</th>
+                <th className="p-4 font-bold text-[10px] uppercase w-[18%]">Sản phẩm</th>
+                <th className="p-4 font-bold text-[10px] uppercase w-[14%]">Khách hàng</th>
+                <th className="p-4 font-bold text-[10px] uppercase w-[9%]">Đánh giá</th>
+                <th className="p-4 font-bold text-[10px] uppercase w-[38%]">Nội dung</th>
+                <th className="p-4 font-bold text-[10px] uppercase w-[13%]">Thời gian</th>
+                <th className="p-4 font-bold text-[10px] uppercase w-[8%] text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -215,8 +234,9 @@ export default function ReviewsTab() {
                     </div>
                   </td>
                   <td className="p-4"><StarDisplay rating={review.rating || 0} /></td>
-                  <td className="p-4 text-slate-600 max-w-md">
+                  <td className="p-4 text-slate-600">
                     <p className="line-clamp-2">{review.comment}</p>
+                    <ReviewImages imageUrls={review.imageUrls} onSelect={setLightboxImage} />
                     {review.staffReplyContent && (
                       <div className="mt-2 p-2 rounded-lg bg-emerald-50 border border-emerald-100">
                         <span className="text-[10px] font-bold text-emerald-700 block mb-0.5">Đã phản hồi:</span>
@@ -225,17 +245,6 @@ export default function ReviewsTab() {
                     )}
                   </td>
                   <td className="p-4 text-slate-500 font-semibold">{formatDate(review.createdAt)}</td>
-                  <td className="p-4 text-center">
-                    {review.staffReplyContent ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
-                        Đã phản hồi
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">
-                        Chưa phản hồi
-                      </span>
-                    )}
-                  </td>
                   <td className="p-4 text-center">
                     <button
                       onClick={() => openReplyModal(review)}
@@ -250,7 +259,7 @@ export default function ReviewsTab() {
               })}
               {reviews.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-slate-400 font-semibold">
+                  <td colSpan={6} className="p-8 text-center text-slate-400 font-semibold">
                     Chưa có đánh giá nào.
                   </td>
                 </tr>
@@ -305,6 +314,7 @@ export default function ReviewsTab() {
                 </div>
                 <StarDisplay rating={replyingReview.rating || 0} />
                 <p className="text-xs text-slate-600 mt-2 leading-relaxed">{replyingReview.comment}</p>
+                <ReviewImages imageUrls={replyingReview.imageUrls} onSelect={setLightboxImage} />
               </div>
 
               <div>
@@ -387,6 +397,7 @@ export default function ReviewsTab() {
                       </div>
                       <StarDisplay rating={review.rating || 0} />
                       <p className="text-xs text-slate-600 leading-relaxed">{review.comment}</p>
+                      <ReviewImages imageUrls={review.imageUrls} onSelect={setLightboxImage} />
                       {review.staffReplyContent ? (
                         <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100">
                           <span className="text-[10px] font-bold text-emerald-700 block mb-0.5">Đã phản hồi:</span>
@@ -406,6 +417,27 @@ export default function ReviewsTab() {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 bg-slate-900/80 z-[70] flex items-center justify-center p-4"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setLightboxImage(null)}
+            className="absolute top-4 right-4 p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white"
+          >
+            <Icon name="close" className="text-2xl" />
+          </button>
+          <img
+            src={lightboxImage}
+            alt="Ảnh đánh giá"
+            className="max-w-full max-h-full rounded-xl object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
     </div>

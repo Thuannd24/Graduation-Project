@@ -3,28 +3,36 @@ services:
   mariadb:
     ports: !reset []
     mem_limit: 512m
+    restart: always
 
   mongodb:
     ports: !reset []
     mem_limit: 256m
+    restart: always
 
   redis:
     ports: !reset []
     mem_limit: 128m
+    restart: always
 
   kafka:
     ports: !reset []
     mem_limit: 512m
+    restart: always
+    environment:
+      - KAFKA_HEAP_OPTS=-Xmx320m -Xms256m
 
   debezium-connect:
     ports: !reset []
     mem_limit: 1024m
+    restart: always
     environment:
       - KAFKA_HEAP_OPTS=-Xmx512m -Xms256m
 
   elasticsearch:
     ports: !reset []
     mem_limit: 1024m
+    restart: always
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -33,11 +41,13 @@ services:
   minio:
     ports: !reset []
     mem_limit: 256m
+    restart: always
     # Served publicly through Caddy at cdn.${DOMAIN} instead of a raw port.
 
   eureka-server:
     ports: !reset []
     mem_limit: 384m
+    restart: always
 
   # ===========================================================================
   # Keycloak: switch from start-dev (embedded dev DB, wipes users on every
@@ -47,6 +57,7 @@ services:
   keycloak:
     ports: !reset []
     mem_limit: 512m
+    restart: always
     command: start
     environment:
       - KEYCLOAK_ADMIN=admin
@@ -70,6 +81,7 @@ services:
   api-gateway:
     ports: !reset []
     mem_limit: 384m
+    restart: always
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
@@ -78,6 +90,7 @@ services:
   user-service:
     ports: !reset []
     mem_limit: 512m
+    restart: always
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
@@ -87,6 +100,7 @@ services:
   product-service:
     ports: !reset []
     mem_limit: 512m
+    restart: always
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
@@ -96,6 +110,7 @@ services:
   order-service:
     ports: !reset []
     mem_limit: 512m
+    restart: always
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
@@ -104,6 +119,7 @@ services:
   inventory-service:
     ports: !reset []
     mem_limit: 512m
+    restart: always
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
@@ -112,6 +128,7 @@ services:
   payment-service:
     ports: !reset []
     mem_limit: 384m
+    restart: always
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -124,12 +141,14 @@ services:
   notification-service:
     ports: !reset []
     mem_limit: 384m
+    restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
 
   promotion-service:
     ports: !reset []
     mem_limit: 384m
+    restart: always
     environment:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs

@@ -55,11 +55,16 @@ export function clone(o) {
 
 // Longest path from "start", relaxed to a fixpoint (a single BFS pass can undercount a node
 // reached by both a short and a long path, since the short path may finalize it before the
-// long path's update arrives).
+// long path's update arrives). Capped defensively: a cycle (malformed/hand-edited import -
+// the UI itself never creates one, but clientValidation.js validates against it as a
+// possible error state) would otherwise relax forever.
 export function getLevels(nodes, edges) {
   const lv = { start: 0 };
   let changed = true;
-  while (changed) {
+  const maxRounds = nodes.length + edges.length + 5;
+  let round = 0;
+  while (changed && round < maxRounds) {
+    round++;
     changed = false;
     edges.forEach(e => {
       if (lv[e.source] === undefined) return;

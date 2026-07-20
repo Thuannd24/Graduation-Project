@@ -208,3 +208,7 @@ management:
   endpoint:
     health:
       show-details: always
+
+app:
+  internal:
+    api-key: ${INTERNAL_API_KEY:dev-internal-api-key}

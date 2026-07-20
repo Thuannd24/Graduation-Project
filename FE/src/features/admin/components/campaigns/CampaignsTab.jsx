@@ -15,9 +15,10 @@ import Toast from "./Toast.jsx";
 import Toolbox from "./Toolbox.jsx";
 import CanvasFlow from "./CanvasFlow.jsx";
 import PropertyPanel from "./PropertyPanel.jsx";
-import BottomPanel from "./BottomPanel.jsx";
 import CampaignsList from "./CampaignsList.jsx";
 import DeployModal from "./DeployModal.jsx";
+import ValidationModal from "./ValidationModal.jsx";
+import BpmnModal from "./BpmnModal.jsx";
 import CampaignBudgetBar from "./CampaignBudgetBar.jsx";
 
 const EMPTY_DEPLOY_FORM = { name: "", startDate: "", endDate: "" };
@@ -30,7 +31,6 @@ export default function CampaignsTab() {
   // ── High-level view state ──────────────────────────────────────────────────
   const [view, setView] = useState("list");           // "list" | "editor"
   const [editingId, setEditingId] = useState(null);
-  const [bottomTab, setBottomTab] = useState("validation");
   const [dragType, setDragType] = useState(null);
   const [layoutTick, setLayoutTick] = useState(0);
 
@@ -41,6 +41,8 @@ export default function CampaignsTab() {
   // ── Modal state ────────────────────────────────────────────────────────────
   const [showDeploy, setShowDeploy] = useState(false);
   const [deployForm, setDeployForm] = useState(EMPTY_DEPLOY_FORM);
+  const [showValidationModal, setShowValidationModal] = useState(false);
+  const [showBpmnModal, setShowBpmnModal] = useState(false);
 
   // ── Hooks ──────────────────────────────────────────────────────────────────
   const canvasRef = useRef(null);
@@ -63,10 +65,6 @@ export default function CampaignsTab() {
   }, [wf]);
 
   // ── Memoised previews ──────────────────────────────────────────────────────
-  const jsonPreview = useMemo(
-    () => JSON.stringify(buildGraphPayload(wf.nodes, wf.edges, wf.meta), null, 2),
-    [wf.nodes, wf.edges, wf.meta]
-  );
   const bpmnPreview = useMemo(
     () => formatXML(generateBPMNXML(wf.nodes, wf.edges)),
     [wf.nodes, wf.edges]
@@ -108,7 +106,6 @@ export default function CampaignsTab() {
     wf.resetWorkflow();
     setEditingId(null);
     setValidationResult(null);
-    setBottomTab("validation");
     showToast("Đã đặt lại sơ đồ", "info");
   };
 
@@ -116,7 +113,7 @@ export default function CampaignsTab() {
   const validateWorkflow = useCallback(async () => {
     try {
       setValidating(true);
-      setBottomTab("validation");
+      setShowValidationModal(true);
       const clientErrors = findClientValidationErrors(wf.nodes, wf.edges, wf.meta);
       let serverResult = { valid: true, errors: [], summary: "" };
       try {
@@ -162,9 +159,10 @@ export default function CampaignsTab() {
     e.preventDefault();
     const clientErrors = findClientValidationErrors(wf.nodes, wf.edges, wf.meta);
     if (clientErrors.length) {
-      showToast(`${clientErrors.length} lỗi — xem tab Validation`, "error");
-      setBottomTab("validation");
+      showToast(`${clientErrors.length} lỗi cần sửa`, "error");
       setValidationResult(mergeValidationResults(clientErrors, { valid: false, errors: [] }));
+      setShowDeploy(false);
+      setShowValidationModal(true);
       return;
     }
     try {
@@ -316,6 +314,9 @@ export default function CampaignsTab() {
           <button className="cb-btn cb-btn-secondary cb-btn-sm" onClick={validateWorkflow}>
             Kiểm tra sơ đồ
           </button>
+          <button className="cb-btn cb-btn-secondary cb-btn-sm" onClick={() => setShowBpmnModal(true)}>
+            Xem BPMN
+          </button>
           <button className="cb-btn cb-btn-primary cb-btn-sm" onClick={openDeployModal}>
             {editingId ? "Cập nhật" : "Triển khai"}
           </button>
@@ -385,26 +386,22 @@ export default function CampaignsTab() {
         />
       </div>
 
-      <BottomPanel
-        activeTab={bottomTab}
-        onChangeTab={tab => {
-          setBottomTab(tab);
-          if (tab === "campaigns") fetchCampaigns();
-        }}
+      <ValidationModal
+        open={showValidationModal}
         validating={validating}
-        validationResult={validationResult}
-        onSelectErrorNode={id => { wf.setSelected(id); wf.setInsertEdgeId(null); }}
+        result={validationResult}
         editingId={editingId}
-        jsonPreview={jsonPreview}
-        bpmnPreview={bpmnPreview}
-        campaigns={campaigns}
-        loading={loading}
+        onClose={() => setShowValidationModal(false)}
         onOpenDeploy={openDeployModal}
+        onSelectErrorNode={id => { wf.setSelected(id); wf.setInsertEdgeId(null); }}
+      />
+
+      <BpmnModal
+        open={showBpmnModal}
+        bpmnPreview={bpmnPreview}
+        onClose={() => setShowBpmnModal(false)}
         onCopy={copyText}
         onDownloadBpmn={downloadBpmn}
-        onEdit={loadForEdit}
-        onToggleActive={toggleActive}
-        onDelete={removeCampaign}
       />
 
       <DeployModal
