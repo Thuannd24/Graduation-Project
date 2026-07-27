@@ -1,0 +1,16 @@
+{
+  "name": "data-seed",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sinh dữ liệu user/order/behavior tổng hợp (synthetic) để mở khóa phần ML của churn-risk detection. Xem docs/canvas/churn-risk-implementation-plan.md Phase 3.",
+  "scripts": {
+    "seed": "node seed.mjs",
+    "seed:dry-run": "node seed.mjs --dry-run",
+    "seed:force": "node seed.mjs --force",
+    "cleanup": "node cleanup.mjs"
+  },
+  "dependencies": {
+    "mysql2": "^3.9.0"
+  }
+}
