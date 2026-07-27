@@ -3,6 +3,7 @@ from app.models.recommend import RecommendRequest, RecommendResponse, Recommende
 from app.services.sasrec import sasrec_service
 from app.services.popularity import popularity_rec_service
 from shared_common.database import get_redis_client
+from shared_common.contracts import history_key_for, user_history_key, HISTORY_MAX_LEN
 from shared_common.logger import get_logger
 import json
 
@@ -17,11 +18,12 @@ def get_recommendations(request: RecommendRequest):
         top_k = request.top_k
         
         # 1. Fetch user item interaction history from Redis or database
-        # Redis key format: user:{userId}:history or session:{sessionId}:history
-        history_key = f"user:{user_id}:history" if user_id else f"session:{session_id}:history"
-        
+        # Key naming là hợp đồng dùng chung với BE Java (xem shared_common.contracts) - written
+        # by forecast-service/behavior_consumer.py mỗi khi có sự kiện view/cart.
+        history_key = history_key_for(user_id=user_id, session_id=session_id)
+
         redis_client = get_redis_client()
-        history_raw = redis_client.lrange(history_key, 0, 49)
+        history_raw = redis_client.lrange(history_key, 0, HISTORY_MAX_LEN - 1) if history_key else []
         
         # Convert raw strings to list of integers
         item_history = []
@@ -64,8 +66,8 @@ def get_personal_recommendations(user_id: Optional[str] = Query(None, alias="use
         redis_client = get_redis_client()
         item_history = []
         if user_id:
-            history_key = f"user:{user_id}:history"
-            history_raw = redis_client.lrange(history_key, 0, 49)
+            history_key = user_history_key(user_id)
+            history_raw = redis_client.lrange(history_key, 0, HISTORY_MAX_LEN - 1)
             for x in history_raw:
                 try:
                     item_history.append(int(x))

@@ -84,6 +84,20 @@ keycloak-data/*
 !keycloak-data/ecommerce-realm-export.json
 !keycloak-data/import/
 
+# --- MODEL ARTIFACT (AI) ---
+# Model đã train (KMeans/LogReg/scaler...) là output có thể sinh lại, không commit vào git
+AI/models/
+
+# --- PYTHON (AI SERVICES) ---
+__pycache__/
+**/__pycache__/
+*.pyc
+*.egg-info/
+**/*.egg-info/
+
+# --- CLAUDE CODE (RUNTIME STATE, KHÔNG PHẢI CẤU HÌNH) ---
+.claude/scheduled_tasks.lock
+
 # --- CÁC FILE TẠM THỜI (TEMP/SCRATCH) ---
 *.tmp
 *.bak

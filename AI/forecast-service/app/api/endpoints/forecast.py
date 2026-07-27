@@ -3,6 +3,8 @@ from app.models.forecast import ForecastRequest, ForecastResponse, AnomalyReques
 from app.services.demand import demand_forecasting_service
 from app.services.anomaly import anomaly_detection_service
 from app.services.rfm import rfm_segmentation_service
+from app.training.train import train_and_evaluate
+from app.state import risk_scheduler
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
@@ -53,6 +55,32 @@ def trigger_rfm_clustering():
         return res
     except Exception as e:
         logger.error(f"Error triggering RFM: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/models/train")
+def train_churn_models():
+    """Train (fit) lại KMeans segmentation + Logistic Regression churn classifier, lưu artifact
+    qua shared_common.registry. Đây là nơi DUY NHẤT model được fit — mọi endpoint/scan định kỳ
+    khác chỉ predict bằng model đã lưu (xem docs/canvas/churn-risk-implementation-plan.md Phase 5).
+    Chạy tay khi demo/cần cập nhật model; có thể lên lịch chạy định kỳ (vd hàng ngày) sau này."""
+    try:
+        metrics = train_and_evaluate()
+        return {"status": "SUCCESS", "metrics": metrics}
+    except Exception as e:
+        logger.error(f"Error training churn models: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/risk/trigger-scan")
+async def trigger_risk_scan():
+    """Chạy risk-scan ngay (không đợi lịch APScheduler) — phục vụ test/demo. Cần đã train model
+    qua POST /models/train trước, nếu không sẽ trả status=SKIPPED kèm lý do rõ ràng."""
+    try:
+        result = await risk_scheduler.run_risk_scan()
+        return result
+    except Exception as e:
+        logger.error(f"Error triggering risk scan: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 import numpy as np

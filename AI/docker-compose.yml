@@ -68,11 +68,23 @@ services:
       - REDIS_PORT=6379
       - DB_HOST=infra-mariadb
       - DB_PORT=3306
+      # V-1 FIX: RFM/churn phải đọc bảng `orders` thật (nằm ở ecommerce_order_db), không phải
+      # default ecommerce_product_db của shared_common/config.py — trước đây thiếu biến này nên
+      # RFM âm thầm query nhầm DB (bảng orders không tồn tại ở đó).
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=ecommerce_order_db
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - USER_SERVICE_URL=http://be-user-service:8085
+    volumes:
+      - ./models:/workspace/forecast-service/data/models
     networks:
       - ecommerce-network
 
 networks:
   ecommerce-network:
-    name: be_ecommerce-network
+    # V-2 FIX: tên thật của network do BE/docker-compose.yml VÀ BE/docker-compose-infra.yml tạo
+    # là "ecommerce-network" (không có tiền tố "be_") — trước đây khai sai tên nên AI service
+    # không bao giờ join đúng network, không thể kết nối Kafka/MariaDB của BE dù code đúng.
+    name: ecommerce-network
     external: true

@@ -137,7 +137,10 @@ spring:
         - id: ai-forecast
           uri: ${AI_FORECAST_URL:http://host.docker.internal:8004}
           predicates:
-            - Path=/api/v1/admin/analytics/**,/api/v1/public/admin/analytics/**,/api/v1/pricing/**,/api/v1/public/pricing/**
+            # V-3 FIX: /rfm, /risk, /models trước đây không nằm trong predicate nào — endpoint
+            # RFM/anomaly/churn thật của forecast-service không gọi được qua gateway, chỉ gọi
+            # trực tiếp tới port 8004.
+            - Path=/api/v1/admin/analytics/**,/api/v1/public/admin/analytics/**,/api/v1/pricing/**,/api/v1/public/pricing/**,/api/v1/rfm/**,/api/v1/risk/**,/api/v1/models/**
           filters:
             - name: CircuitBreaker
               args:
