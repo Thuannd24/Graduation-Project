@@ -28,6 +28,7 @@ public class WorkflowValidatorService {
             "Trigger_Event_NewUser",
             "Trigger_Event_OrderSuccess",
             "Trigger_Event_ReviewProduct",
+            "Trigger_Event_ChurnRisk",
             "Trigger_Timer_Schedule"
     );
 

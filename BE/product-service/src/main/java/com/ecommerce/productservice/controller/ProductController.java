@@ -4,6 +4,7 @@ import com.ecommerce.productservice.dto.ApiResponse;
 import com.ecommerce.productservice.dto.ProductDto;
 import com.ecommerce.productservice.dto.ProductReviewDto;
 import com.ecommerce.productservice.entity.ProductDocument;
+import com.ecommerce.productservice.event.producer.ProductViewEventProducer;
 import com.ecommerce.productservice.service.ProductService;
 import com.ecommerce.productservice.service.ReviewService;
 import com.ecommerce.productservice.service.SearchService;
@@ -24,6 +25,7 @@ public class ProductController {
     private final SearchService searchService;
     private final ReviewService reviewService;
     private final com.ecommerce.productservice.service.StorageService storageService;
+    private final ProductViewEventProducer productViewEventProducer;
 
     @GetMapping("/api/v1/public/products")
     public ApiResponse<Slice<ProductDto>> getAllProducts(
@@ -44,20 +46,26 @@ public class ProductController {
     }
 
     @GetMapping("/api/v1/public/products/{id}")
-    public ApiResponse<ProductDto> getProductById(@PathVariable Long id) {
+    public ApiResponse<ProductDto> getProductById(
+            @PathVariable Long id,
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
         ProductDto product = productService.getProductById(id);
         if (product == null) {
             throw new RuntimeException("Product not found with id: " + id);
         }
+        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId);
         return ApiResponse.success(product);
     }
 
     @GetMapping("/api/v1/public/products/slug/{slug}")
-    public ApiResponse<ProductDto> getProductBySlug(@PathVariable String slug) {
+    public ApiResponse<ProductDto> getProductBySlug(
+            @PathVariable String slug,
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
         ProductDto product = productService.getProductBySlug(slug);
         if (product == null) {
             throw new RuntimeException("Product not found with slug: " + slug);
         }
+        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId);
         return ApiResponse.success(product);
     }
 

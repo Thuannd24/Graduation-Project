@@ -144,6 +144,45 @@ public class PromotionKafkaConsumer {
         }
     }
 
+    /**
+     * Sự kiện AI phát hiện nguy cơ rời bỏ (forecast-service/app/kafka/risk_producer.py, xem
+     * docs/canvas/churn-risk-implementation-plan.md Phase 6-7). `eventUniqueId` do phía AI tự
+     * sinh dạng "{userId}:{yyyyMMdd}" để chống trigger trùng trong ngày — bắt buộc phải truyền
+     * xuống variables để CampaignTriggerService.resolveEventUniqueId() đọc lại được.
+     */
+    @KafkaListener(topics = "user-risk-events", groupId = "promotion-service-group")
+    public void consumeUserRiskEvent(String message, Acknowledgment ack) {
+        log.info("[Promotion] user-risk-events: {}", message);
+        try {
+            JsonNode payload = objectMapper.readTree(message);
+            String eventType = textOr(payload, "eventType", "");
+            if (!"ChurnRiskDetectedEvent".equalsIgnoreCase(eventType)) {
+                ack.acknowledge();
+                return;
+            }
+
+            Map<String, Object> variables = new HashMap<>();
+            putIfPresent(payload, variables, "userId");
+            putIfPresent(payload, variables, "segment");
+            putIfPresent(payload, variables, "eventUniqueId");
+            if (payload.has("churnProbability")) {
+                variables.put("churnProbability", payload.get("churnProbability").asDouble());
+            }
+            if (payload.has("daysSinceLastActivity")) {
+                variables.put("daysSinceLastActivity", payload.get("daysSinceLastActivity").asDouble());
+            }
+            if (payload.has("cartAbandonCount")) {
+                variables.put("cartAbandonCount", payload.get("cartAbandonCount").asDouble());
+            }
+
+            campaignTriggerService.triggerByEventType("Trigger_Event_ChurnRisk", variables);
+            ack.acknowledge();
+        } catch (Exception e) {
+            log.error("Failed to process user-risk-events: {}", e.getMessage(), e);
+            ack.acknowledge();
+        }
+    }
+
     private void putIfPresent(JsonNode payload, Map<String, Object> variables, String field) {
         if (payload.has(field) && !payload.get(field).isNull()) {
             variables.put(field, payload.get(field).asText());
