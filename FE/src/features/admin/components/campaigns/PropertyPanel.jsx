@@ -88,6 +88,7 @@ export default function PropertyPanel({
                 <option value="Trigger_Event_OrderSuccess">Mua hàng thành công</option>
                 <option value="Trigger_Event_ReviewProduct">Đánh giá sản phẩm</option>
                 <option value="Trigger_Timer_Schedule">Hẹn giờ định kỳ</option>
+                <option value="Trigger_Event_ChurnRisk">Nguy cơ rời bỏ (AI)</option>
               </select>
             </div>
           )}

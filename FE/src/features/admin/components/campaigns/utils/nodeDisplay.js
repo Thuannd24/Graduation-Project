@@ -5,7 +5,8 @@ export function getTriggerLabel(type) {
     Trigger_Event_NewUser: "Đăng ký mới",
     Trigger_Event_OrderSuccess: "Đơn hàng thành công",
     Trigger_Event_ReviewProduct: "Đánh giá sản phẩm",
-    Trigger_Timer_Schedule: "Hẹn giờ định kỳ"
+    Trigger_Timer_Schedule: "Hẹn giờ định kỳ",
+    Trigger_Event_ChurnRisk: "Nguy cơ rời bỏ (AI)"
   };
   return map[type] || "Trigger";
 }

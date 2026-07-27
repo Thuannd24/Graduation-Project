@@ -8,6 +8,7 @@ export const NODE_TYPES = {
   Trigger_Event_OrderSuccess:   { cat: "trigger",   name: "Đơn hàng thành công", def: { minOrderValue: 100000 } },
   Trigger_Event_ReviewProduct:  { cat: "trigger",   name: "Đánh giá sản phẩm",   def: { minRating: 5 } },
   Trigger_Timer_Schedule:       { cat: "trigger",   name: "Hẹn giờ định kỳ",     def: { cronExpression: "0 0 12 * * ?", scheduleFrequency: "daily", scheduleHour: 12 } },
+  Trigger_Event_ChurnRisk:      { cat: "trigger",   name: "Nguy cơ rời bỏ (AI)", def: {} },
   Condition_MemberRank:         { cat: "condition", name: "Hạng thành viên",   def: {} },
   Condition_TotalSpending:      { cat: "condition", name: "Tổng chi tiêu", def: { daysLookback: 30 } },
   Condition_Location:           { cat: "condition", name: "Lọc tỉnh/thành",    def: {} },
