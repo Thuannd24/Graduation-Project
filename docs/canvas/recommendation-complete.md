@@ -185,8 +185,14 @@ CREATE INDEX idx_cross_sell_lookup ON cross_sell_rules (antecedent_item_id, lift
 ```
 
 #### Thiết kế cấu trúc lưu trữ cache trong Redis:
-* `sess:{sid}:seq` (Type: `List`): Danh sách lưu chuỗi tối đa 50 ID sản phẩm người dùng đã xem trong session đó phục vụ đầu vào thời gian thực cho SASRec.
-* `user:{uid}:purchased` (Type: `Set`): Danh sách ID sản phẩm khách đã mua trong vòng 30 ngày để bộ lọc loại bỏ khỏi phần gợi ý.
+> Cập nhật: tên key thực tế trong code là `user:{uid}:history` / `session:{sid}:history` (không
+> phải `sess:{sid}:seq` như bản nháp ban đầu) — chốt tại `AI/shared-common/shared_common/contracts.py`
+> vì đây là key mà `recs-service` đã đọc sẵn từ trước; giữ nguyên để không phải sửa recs-service
+> khi thêm write-path hành vi. Xem `docs/canvas/churn-risk-implementation-plan.md`.
+* `user:{uid}:history` / `session:{sid}:history` (Type: `List`): Danh sách lưu chuỗi tối đa 50 ID
+  sản phẩm người dùng đã xem/thêm giỏ gần đây, phục vụ đầu vào thời gian thực cho SASRec.
+* `user:{uid}:purchased` (Type: `Set`, **chưa triển khai**): Danh sách ID sản phẩm khách đã mua
+  trong vòng 30 ngày để bộ lọc loại bỏ khỏi phần gợi ý.
 
 ---
 
