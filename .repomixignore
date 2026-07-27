@@ -1,0 +1,51 @@
+# .repomixignore — loại bớt nhiễu khi pack context, giảm token
+
+# Dependencies / build output
+node_modules/
+dist/
+build/
+out/
+target/
+.gradle/
+bin/
+obj/
+
+# Logs / temp
+*.log
+*.tmp
+tmp/
+.cache/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Lockfiles (thường ít giá trị phân tích, tốn token)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Assets nặng
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.pdf
+*.zip
+*.jar
+*.class
+
+# Secrets — không bao giờ pack
+.env
+.env.*
+*.pem
+*.key
+
+# Data thuần (không phải code, chỉ tốn token khi pack map)
+tools/catalog-import/manifests/
+BE/*/src/main/resources/vietnam_provinces.json
+BE/keycloak-data/
+BE/keycloak-themes/

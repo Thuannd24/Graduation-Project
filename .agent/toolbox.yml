@@ -1,0 +1,10 @@
+toolbox_source: 'D:\Agent_Optimizer\Token_Optimizer\agent-toolbox'
+installed_at: "2026-07-27T09:12:35.0149183+07:00"
+preset: "generic"
+runtime_tools:
+  tools: ".agent/tools.yml"
+  policy: ".agent/policy.yml"
+  preset: ".agent/preset.yml"
+  pack_context: ".agent/scripts/pack-context.ps1"
+  agent_check: ".agent/scripts/agent-check.ps1"
+  review_diff: ".agent/scripts/review-diff.ps1"
