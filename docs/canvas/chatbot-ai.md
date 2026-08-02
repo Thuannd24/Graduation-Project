@@ -8,11 +8,14 @@
 
 | Chỉ số | Thông số cấu hình |
 | :--- | :--- |
-| **Kiến trúc chính** | Retrieval-Augmented Generation (RAG) |
+| **Kiến trúc chính** | Retrieval-Augmented Generation (RAG) + Tool-Calling Agent |
 | **Số lượng nhãn Intent** | 6 nhóm (phân loại bằng PhoBERT Classifier hoặc LLM) |
 | **Mô hình Sentiment** | PhoBERT-sentiment (ONNX Optimized) |
 | **LLM Provider** | Google Gemini (Gemini 1.5 Flash) |
 | **Giao thức truyền tải** | Server-Sent Events (SSE) Streaming |
+| **Tool-Calling** | 5 công cụ tích hợp trực tiếp với backend API |
+| **Evaluation** | RAGAS (Faithfulness, Answer Relevancy, Context Recall) |
+| **Guardrails** | Off-topic rejection + Confidence threshold + Hallucination prevention |
 
 ---
 
@@ -162,3 +165,142 @@ Sử dụng giao thức **Server-Sent Events (SSE)** thông qua FastAPI `Streami
 
 > [!TIP]
 > **Tính năng chủ động gợi ý (Proactive Recommendation):** Nếu khách hàng di chuyển giữa các trang sản phẩm hoặc ở lại một trang quá 3 phút mà không thực hiện hành động thêm vào giỏ hàng, frontend sẽ tự động kích hoạt chatbot mở lời chào hỏi: *"Tôi thấy bạn đang quan tâm sản phẩm này, tôi có thể hỗ trợ chọn size hoặc màu sắc cho bạn không?"*. Việc này giúp tăng tỷ lệ chuyển đổi (Conversion Rate) thực tế của cửa hàng.
+
+---
+
+## 6. Tool-Calling & Tích Hợp API Backend
+
+Đây là điểm khác biệt cốt lõi giữa một chatbot tĩnh (chỉ trả lời từ tài liệu) và một **AI Agent thực sự**: chatbot có thể chủ động gọi các API của hệ thống backend để tra cứu và thực hiện hành động thật trong thời gian thực.
+
+### Nguyên lý hoạt động
+
+```
+User: "Đơn hàng #123 của tôi đang ở đâu?"
+         ↓
+[Intent Classifier] → order_tracking
+         ↓
+[LLM nhận diện cần gọi tool: get_order_status(order_id=123)]
+         ↓
+[Tool thực thi: GET /api/orders/123]
+         ↓
+[Kết quả thật từ DB: status=SHIPPED, tracking=VN123456]
+         ↓
+[LLM tổng hợp câu trả lời tự nhiên]
+```
+
+### Danh sách 5 Tool tích hợp với hệ thống AuraTech
+
+| Tool | API gọi | Câu hỏi kích hoạt | Xác thực |
+| :--- | :--- | :--- | :--- |
+| **get_order_status** | `GET /api/orders/{id}` | *"Đơn #123 đang ở đâu?"*, *"Khi nào giao hàng?"* | Chỉ xem đơn của chính user đang chat |
+| **cancel_order** | `DELETE /api/orders/{id}/cancel` | *"Huỷ đơn #123 giúp tôi"* | Xác nhận lại với user trước khi thực hiện |
+| **get_loyalty_points** | `GET /api/users/me/points` | *"Tôi có bao nhiêu điểm thưởng?"* | Phải đăng nhập |
+| **get_user_vouchers** | `GET /api/users/me/vouchers` | *"Voucher của tôi còn hiệu lực không?"* | Phải đăng nhập |
+| **get_warranty_info** | `GET /api/orders/{id}/warranty` | *"Bảo hành đơn #123 còn không?"* | Chỉ xem đơn của chính user |
+
+### Cơ chế xác nhận trước khi hành động (Action Confirmation)
+
+Với các tool có tính **phá huỷ** (destructive) như `cancel_order`, hệ thống bắt buộc phải hỏi xác nhận trước:
+
+```
+User: "Huỷ đơn #123 giúp tôi"
+Bot:  "Bạn có chắc muốn huỷ đơn hàng #123
+       (iPhone 15 Pro Max - 28.990.000đ) không?
+       Thao tác này không thể hoàn tác."
+User: "Có, huỷ đi"
+Bot:  [Gọi cancel_order API → Thực hiện huỷ → Thông báo kết quả]
+```
+
+### Xử lý khi user chưa đăng nhập
+
+Nếu user hỏi các thông tin cá nhân (đơn hàng, điểm, voucher) mà chưa xác thực:
+```
+Bot: "Để tra cứu thông tin đơn hàng, bạn vui lòng đăng nhập
+      vào tài khoản AuraTech trước nhé.
+      👉 [Đăng nhập ngay]"
+```
+
+---
+
+## 7. Đánh Giá Chất Lượng Chatbot với RAGAS
+
+RAGAS (Retrieval-Augmented Generation Assessment) là framework đánh giá chatbot RAG hiện đại nhất, cho phép đo lường khách quan chất lượng hệ thống mà không cần con người đọc từng câu trả lời.
+
+### 3 Chỉ số đánh giá chính
+
+| Metric | Ý nghĩa | Cách tính | Ngưỡng tốt |
+| :--- | :--- | :--- | :--- |
+| **Faithfulness** | Bot có bịa ra thông tin không có trong tài liệu không? | So sánh câu trả lời với context được retrieve | ≥ 0.85 |
+| **Answer Relevancy** | Câu trả lời có đúng trọng tâm câu hỏi không? | Embedding similarity giữa câu hỏi và câu trả lời | ≥ 0.80 |
+| **Context Recall** | RAG có lấy đúng đoạn tài liệu cần thiết không? | So sánh context retrieve được với ground truth | ≥ 0.75 |
+
+### Cách triển khai đánh giá
+
+```python
+from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy, context_recall
+from datasets import Dataset
+
+# Tập test: 50-100 cặp Q&A mẫu có ground truth
+test_dataset = Dataset.from_dict({
+    "question": ["Chính sách đổi trả trong 30 ngày thế nào?", ...],
+    "answer": [chatbot_answers],           # câu trả lời của bot
+    "contexts": [retrieved_chunks],         # đoạn tài liệu RAG lấy được
+    "ground_truth": [expected_answers]      # câu trả lời đúng
+})
+
+results = evaluate(
+    test_dataset,
+    metrics=[faithfulness, answer_relevancy, context_recall]
+)
+print(results)  # → {faithfulness: 0.91, answer_relevancy: 0.87, context_recall: 0.83}
+```
+
+### Quy trình tạo tập test
+
+1. Chọn **50–100 câu hỏi** bao phủ đều 6 intent
+2. Với mỗi câu: viết sẵn `ground_truth` (câu trả lời mẫu đúng)
+3. Chạy chatbot qua tất cả → thu `answer` và `contexts`
+4. Chạy RAGAS evaluate → có điểm số khách quan
+5. Đưa kết quả vào báo cáo đồ án *(hội đồng rất ấn tượng với phần này)*
+
+---
+
+## 8. Guardrails — Kiểm soát Chất Lượng Đầu Ra
+
+### Off-topic Rejection (Từ chối câu hỏi ngoài phạm vi)
+
+Chatbot chỉ hỗ trợ trong phạm vi: **sản phẩm, đơn hàng, bảo hành, chính sách, tài khoản AuraTech**. Các câu hỏi ngoài phạm vi cần được từ chối lịch sự:
+
+```
+User: "Giải bài toán tích phân này giúp tôi"
+Bot:  "Xin lỗi bạn, tôi chỉ có thể hỗ trợ các vấn đề liên quan
+       đến mua sắm và dịch vụ của AuraTech thôi nhé.
+       Tôi có thể giúp bạn tìm sản phẩm, tra đơn hàng
+       hoặc giải đáp chính sách bảo hành không? 😊"
+```
+
+**Cách phát hiện off-topic:** Kết hợp intent classifier (`general_chat` với confidence thấp) + embedding similarity giữa câu hỏi với tập từ khoá domain.
+
+### Confidence Threshold (Ngưỡng tin cậy RAG)
+
+Khi RAG retrieve được context có **similarity score thấp** (tài liệu không liên quan), chatbot không được bịa câu trả lời:
+
+```python
+if max_similarity_score < 0.65:
+    return "Tôi chưa có thông tin chính xác về vấn đề này.
+            Bạn vui lòng liên hệ tổng đài 1800.2097 để được
+            nhân viên hỗ trợ chi tiết hơn nhé."
+```
+
+| Similarity Score | Hành động |
+| :--- | :--- |
+| ≥ 0.75 | Trả lời bình thường dựa trên context |
+| 0.65 – 0.74 | Trả lời kèm disclaimer: *"Thông tin có thể chưa đầy đủ..."* |
+| < 0.65 | Từ chối trả lời + đề nghị liên hệ tổng đài |
+
+### Hallucination Prevention (Ngăn bịa thông tin)
+
+- **System Prompt bắt buộc:** Luôn thêm chỉ thị `"Chỉ trả lời dựa trên thông tin được cung cấp trong context. Nếu không có thông tin, hãy nói 'Tôi không biết' thay vì đoán."` vào System Prompt.
+- **Source Citation:** Yêu cầu LLM trích dẫn nguồn tài liệu khi trả lời chính sách *("Theo chính sách đổi trả của AuraTech...")*.
+- **Number Validation:** Với các con số quan trọng (giá tiền, thời gian bảo hành, % VAT), cross-check lại với dữ liệu gốc trước khi trả về.

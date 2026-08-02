@@ -73,6 +73,7 @@ yarn-error.log*
 # Bỏ qua dữ liệu phân tích / db map trực tiếp ra thư mục máy host (nếu có)
 data/
 **/data/
+!AI/chatbot-service/data/
 db_data/
 mysql_data/
 postgres_data/
