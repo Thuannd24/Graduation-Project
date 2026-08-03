@@ -104,6 +104,22 @@ spring:
                 name: promotion-service-cb
                 fallbackUri: forward:/fallback/promotion-service
 
+        - id: chat-service
+          uri: lb://chat-service
+          predicates:
+            - Path=/api/v1/chat/**,/api/v1/admin/chat/**,/api/v1/public/chat/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: chat-service-cb
+                fallbackUri: forward:/fallback/chat-service
+
+        - id: chat-websocket
+          uri: lb:ws://chat-service
+          predicates:
+            - Path=/api/v1/public/chat/ws/**
+
+
         - id: ai-search
           uri: ${AI_SEARCH_URL:http://host.docker.internal:8001}
           predicates:
@@ -175,6 +191,8 @@ resilience4j:
         baseConfig: default
       promotion-service-cb:
         baseConfig: default
+      chat-service-cb:
+        baseConfig: default
       ai-engine-cb:
         waitDurationInOpenState: 30s
         baseConfig: default
@@ -196,6 +214,8 @@ resilience4j:
       notification-service-cb:
         baseConfig: default
       promotion-service-cb:
+        baseConfig: default
+      chat-service-cb:
         baseConfig: default
       ai-engine-cb:
         baseConfig: default

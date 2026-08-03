@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Icon from "../../../components/common/Icon.jsx";
+import { chatApi } from "../../../services/chatApi.ts";
+import { createWebSocketClient } from "../../../services/websocketService.ts";
+import keycloak from "../../../services/keycloak.js";
 
 export default function SupportChatTab() {
   const [sessions, setSessions] = useState([]);
@@ -8,105 +11,130 @@ export default function SupportChatTab() {
   const [replyText, setReplyText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
+  const stompClientRef = useRef(null);
 
-  // Initialize and poll localStorage for chat sync
-  useEffect(() => {
-    // 1. Initialize mock escalated sessions if localStorage is empty
-    const initMockData = () => {
-      const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-      if (activeSessions.length === 0) {
-        const mockSessions = ["session_iphone_user", "session_warranty_help", "session_guest_9918"];
-        localStorage.setItem("aura_escalated_sessions", JSON.stringify(mockSessions));
+  const staffId = keycloak.subject || "staff_dev";
+  const staffName = keycloak.tokenParsed?.name || "Nhân viên hỗ trợ";
 
-        // Mock chat 1
-        localStorage.setItem(
-          "aura_chat_session_session_iphone_user",
-          JSON.stringify({
-            isEscalated: true,
-            messages: [
-              { id: "welcome", sender: "assistant", text: "Xin chào! Tôi có thể hỗ trợ gì cho bạn?", timestamp: new Date(Date.now() - 600000).toISOString() },
-              { id: "msg_1", sender: "user", text: "Tôi muốn mua trả góp iPhone 16 Pro Max, thủ tục cần những gì và lãi suất thế nào?", timestamp: new Date(Date.now() - 500000).toISOString() },
-              { id: "msg_2", sender: "assistant", text: "Dạ, để mua trả góp iPhone 16 Pro Max bạn có thể chọn qua công ty tài chính hoặc thẻ tín dụng...", timestamp: new Date(Date.now() - 400000).toISOString() },
-              { id: "msg_3", sender: "user", text: "Tôi muốn gặp nhân viên để tư vấn trực tiếp hồ sơ công ty tài chính", timestamp: new Date(Date.now() - 300000).toISOString() }
-            ],
-            lastUpdated: Date.now() - 300000
-          })
-        );
-
-        // Mock chat 2
-        localStorage.setItem(
-          "aura_chat_session_session_warranty_help",
-          JSON.stringify({
-            isEscalated: true,
-            messages: [
-              { id: "welcome", sender: "assistant", text: "Chào bạn, bạn cần hỗ trợ gì?", timestamp: new Date(Date.now() - 1200000).toISOString() },
-              { id: "msg_1", sender: "user", text: "Máy Macbook mua được 3 tháng bị sọc màn hình thì bảo hành thế nào?", timestamp: new Date(Date.now() - 1000000).toISOString() },
-              { id: "msg_2", sender: "user", text: "Yêu cầu gặp nhân viên tư vấn bảo hành trực tiếp", timestamp: new Date(Date.now() - 900000).toISOString() }
-            ],
-            lastUpdated: Date.now() - 900000
-          })
-        );
-
-        // Mock chat 3
-        localStorage.setItem(
-          "aura_chat_session_session_guest_9918",
-          JSON.stringify({
-            isEscalated: true,
-            messages: [
-              { id: "welcome", sender: "assistant", text: "AuraTech xin chào! Tôi giúp gì được cho bạn?", timestamp: new Date(Date.now() - 2000000).toISOString() },
-              { id: "msg_1", sender: "user", text: "Shop có sẵn laptop Asus ROG Zephyrus G14 ở chi nhánh HN không?", timestamp: new Date(Date.now() - 1800000).toISOString() }
-            ],
-            lastUpdated: Date.now() - 1800000
-          })
-        );
-      }
-    };
-
-    initMockData();
-
-    // 2. Poll function to read active chat sessions
-    const fetchActiveChats = () => {
-      const activeSessionIds = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-      const loadedSessions = [];
-
-      activeSessionIds.forEach((id) => {
-        const chatData = JSON.parse(localStorage.getItem("aura_chat_session_" + id) || "null");
-        if (chatData && chatData.isEscalated) {
-          const lastMsg = chatData.messages[chatData.messages.length - 1];
-          loadedSessions.push({
-            id,
-            lastMessage: lastMsg ? lastMsg.text : "Không có tin nhắn nào",
-            timestamp: chatData.lastUpdated || Date.now(),
-            messages: chatData.messages || [],
-            isEscalated: chatData.isEscalated
-          });
-        }
+  // Function to load all escalated chat rooms from backend database
+  const loadRooms = async () => {
+    try {
+      const waitingPage = await chatApi.getRoomsByStatus("WAITING", 0, 50);
+      const activePage = await chatApi.getRoomsByStatus("ACTIVE", 0, 50);
+      const allRooms = [...(waitingPage.content || []), ...(activePage.content || [])];
+      
+      // Sort by last message time or creation time (newest first)
+      allRooms.sort((a, b) => {
+        const timeA = new Date(a.lastMessageAt || a.createdAt).getTime();
+        const timeB = new Date(b.lastMessageAt || b.createdAt).getTime();
+        return timeB - timeA;
       });
 
-      // Sort by last updated time (newest first)
-      loadedSessions.sort((a, b) => b.timestamp - a.timestamp);
-      setSessions(loadedSessions);
+      setSessions(allRooms);
+    } catch (err) {
+      console.error("Failed to load admin support chat rooms", err);
+    }
+  };
+
+  // 1. Fetch initial rooms list and configure STOMP WebSocket connection
+  useEffect(() => {
+    loadRooms();
+
+    // Establish WebSocket STOMP connection for real-time room list notifications
+    const client = createWebSocketClient({
+      onConnect: () => {
+        console.log("WebSocket connected for support staff dashboard");
+        // Subscribe to general rooms updates to reload rooms list dynamically
+        client.subscribe("/topic/rooms.updates", (message) => {
+          console.log("Rooms update received on admin panel, reloading list...");
+          loadRooms();
+        });
+      }
+    });
+
+    client.activate();
+    stompClientRef.current = client;
+
+    // Polling backup to ensure new rooms show up even if WebSocket disconnects
+    const pollInterval = setInterval(loadRooms, 5000);
+
+    return () => {
+      client.deactivate();
+      stompClientRef.current = null;
+      clearInterval(pollInterval);
     };
-
-    fetchActiveChats();
-    const interval = setInterval(fetchActiveChats, 1500);
-
-    return () => clearInterval(interval);
   }, []);
 
-  // Update selected session details when sessions list or selected ID changes
+  // 2. Load selected session message history and subscribe to the specific room WebSocket
   useEffect(() => {
-    if (selectedSessionId) {
-      const matched = sessions.find((s) => s.id === selectedSessionId);
-      if (matched) {
-        setSelectedSession(matched);
-      }
-    } else {
+    if (!selectedSessionId) {
       setSelectedSession(null);
+      return;
     }
+
+    const matchedRoom = sessions.find((s) => s.id === selectedSessionId);
+    if (!matchedRoom) return;
+
+    // Local subscription to the active chat room channel
+    let stompSubscription = null;
+    
+    const loadMessages = async () => {
+      try {
+        const historyPage = await chatApi.getRoomMessages(selectedSessionId, 0, 100);
+        const historyMsgs = (historyPage.content || [])
+          .map((msg) => ({
+            id: msg.id,
+            sender: msg.senderId === matchedRoom.customerId ? "user" : "assistant",
+            text: msg.content,
+            timestamp: msg.createdAt
+          }))
+          .reverse();
+
+        setSelectedSession({
+          ...matchedRoom,
+          messages: historyMsgs
+        });
+
+        // Setup STOMP subscription for live updates inside this room
+        if (stompClientRef.current && stompClientRef.current.connected) {
+          stompSubscription = stompClientRef.current.subscribe(
+            `/topic/room/${selectedSessionId}`,
+            (message) => {
+              const payload = JSON.parse(message.body);
+              const stompMsg = {
+                id: payload.id,
+                sender: payload.senderId === matchedRoom.customerId ? "user" : "assistant",
+                text: payload.content,
+                timestamp: payload.createdAt
+              };
+
+              setSelectedSession((prev) => {
+                if (!prev || prev.id !== selectedSessionId) return prev;
+                // Avoid duplicates
+                if (prev.messages.some((m) => m.id === stompMsg.id)) return prev;
+                return {
+                  ...prev,
+                  messages: [...prev.messages, stompMsg]
+                };
+              });
+            }
+          );
+        }
+      } catch (err) {
+        console.error("Failed to load room messages history", err);
+      }
+    };
+
+    loadMessages();
+
+    return () => {
+      if (stompSubscription) {
+        stompSubscription.unsubscribe();
+      }
+    };
   }, [selectedSessionId, sessions]);
 
-  // Scroll to bottom when message history opens or updates
+  // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [selectedSession?.messages]);
@@ -114,68 +142,41 @@ export default function SupportChatTab() {
   const handleSendReply = () => {
     if (!replyText.trim() || !selectedSessionId) return;
 
-    const chatData = JSON.parse(localStorage.getItem("aura_chat_session_" + selectedSessionId) || "null");
-    if (!chatData) return;
-
-    const newMsg = {
-      id: "staff_" + Date.now(),
-      sender: "assistant", // Displays as assistant/staff in the customer UI
-      text: replyText.trim(),
-      timestamp: new Date().toISOString()
-    };
-
-    const updatedMessages = [...(chatData.messages || []), newMsg];
-    const updatedData = {
-      ...chatData,
-      messages: updatedMessages,
-      lastUpdated: Date.now()
-    };
-
-    localStorage.setItem("aura_chat_session_" + selectedSessionId, JSON.stringify(updatedData));
-    setReplyText("");
-
-    // Instant local UI state refresh
-    setSessions((prev) =>
-      prev.map((s) =>
-        s.id === selectedSessionId
-          ? { ...s, messages: updatedMessages, timestamp: updatedData.lastUpdated }
-          : s
-      )
-    );
+    if (stompClientRef.current && stompClientRef.current.connected) {
+      stompClientRef.current.publish({
+        destination: "/app/chat.sendMessage",
+        body: JSON.stringify({
+          roomId: selectedSessionId,
+          content: replyText.trim(),
+          type: "TEXT"
+        })
+      });
+      setReplyText("");
+    } else {
+      console.warn("WebSocket not connected. Reply message not sent.");
+    }
   };
 
-  const handleResolveChat = (sessionIdToResolve) => {
+  const handleAcceptChat = async (roomId) => {
+    try {
+      const updated = await chatApi.assignRoom(roomId);
+      await loadRooms();
+      setSelectedSessionId(updated.id);
+    } catch (err) {
+      console.error("Failed to accept chat", err);
+    }
+  };
+
+  const handleResolveChat = async (roomId) => {
     if (!window.confirm("Xác nhận đã giải quyết xong và đóng phiên chat trực tuyến này?")) return;
 
-    // 1. Update session status to false in chat details
-    const chatData = JSON.parse(localStorage.getItem("aura_chat_session_" + sessionIdToResolve) || "null");
-    if (chatData) {
-      const resolvedMsg = {
-        id: "sys_" + Date.now(),
-        sender: "system",
-        text: "Hội thoại đã kết thúc và chuyển lại cho trợ lý AI quản lý.",
-        timestamp: new Date().toISOString()
-      };
-      localStorage.setItem(
-        "aura_chat_session_" + sessionIdToResolve,
-        JSON.stringify({
-          ...chatData,
-          isEscalated: false,
-          messages: [...(chatData.messages || []), resolvedMsg],
-          lastUpdated: Date.now()
-        })
-      );
-    }
-
-    // 2. Remove from active list
-    const activeSessionIds = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-    const updatedSessionIds = activeSessionIds.filter((id) => id !== sessionIdToResolve);
-    localStorage.setItem("aura_escalated_sessions", JSON.stringify(updatedSessionIds));
-
-    // Clear selection if resolving the active chat
-    if (selectedSessionId === sessionIdToResolve) {
+    try {
+      await chatApi.closeRoom(roomId);
+      await loadRooms();
       setSelectedSessionId("");
       setSelectedSession(null);
+    } catch (err) {
+      console.error("Failed to resolve chat", err);
     }
   };
 
@@ -186,8 +187,8 @@ export default function SupportChatTab() {
 
   const filteredSessions = sessions.filter(
     (s) =>
-      s.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
+      s.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (s.lastMessage && s.lastMessage.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -267,11 +268,16 @@ export default function SupportChatTab() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center mb-0.5">
-                      <span className="text-xs font-black truncate text-slate-800 dark:text-slate-200">
-                        {session.id.replace("session_", "Khách hàng ")}
+                      <span className="text-xs font-black truncate text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                        {session.customerName}
+                        {session.status === "WAITING" ? (
+                          <span className="text-[8px] bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 px-1.5 py-0.5 rounded font-black shrink-0">Chờ</span>
+                        ) : (
+                          <span className="text-[8px] bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 px-1.5 py-0.5 rounded font-black shrink-0">Trực</span>
+                        )}
                       </span>
                       <span className="text-[9px] text-slate-400 font-medium shrink-0">
-                        {formatTime(session.timestamp)}
+                        {formatTime(session.lastMessageAt || session.createdAt)}
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate leading-relaxed">
@@ -296,7 +302,7 @@ export default function SupportChatTab() {
                   </div>
                   <div>
                     <h4 className="text-xs font-black text-slate-800 dark:text-slate-100">
-                      {selectedSessionId.replace("session_", "Khách hàng ")}
+                      {selectedSession.customerName}
                     </h4>
                     <p className="text-[9px] text-emerald-600 font-bold uppercase tracking-wider">
                       Đang kết nối nhân viên • Yêu cầu hỗ trợ
@@ -304,14 +310,25 @@ export default function SupportChatTab() {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleResolveChat(selectedSessionId)}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white border-none rounded-xl px-4 py-2 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95 transition-all"
-                  title="Đánh dấu đã tư vấn xong"
-                >
-                  <Icon name="check_circle" className="text-sm" />
-                  Giải Quyết Xong
-                </button>
+                {selectedSession.status === "WAITING" ? (
+                  <button
+                    onClick={() => handleAcceptChat(selectedSession.id)}
+                    className="bg-[#c82229] hover:bg-[#a81a1f] text-white border-none rounded-xl px-4 py-2 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95 transition-all"
+                    title="Tiếp nhận hỗ trợ cuộc chat này"
+                  >
+                    <Icon name="support_agent" className="text-sm" />
+                    Tiếp Nhận Chat
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleResolveChat(selectedSession.id)}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white border-none rounded-xl px-4 py-2 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95 transition-all"
+                    title="Đánh dấu đã tư vấn xong"
+                  >
+                    <Icon name="check_circle" className="text-sm" />
+                    Giải Quyết Xong
+                  </button>
+                )}
               </div>
 
               {/* Chat Messages Stream */}

@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Icon from "../../../components/common/Icon.jsx";
 import { aiApi } from "../../../services/aiApi.ts";
 import { formatVnd } from "../../../utils/format.js";
+import { chatApi } from "../../../services/chatApi.ts";
+import { createWebSocketClient } from "../../../services/websocketService.ts";
+import keycloak from "../../../services/keycloak.js";
 
 // Import transparent robot poses
 import robot1 from "../../../assets/images/robot1.png";
@@ -83,7 +86,22 @@ export default function AIChatbotWidget() {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [isEscalated, setIsEscalated] = useState(false);
-  const [sessionId] = useState(() => "session_" + Math.random().toString(36).substr(2, 9));
+  
+  // Persistent guest identifier
+  const [guestId] = useState(() => {
+    let id = localStorage.getItem("aura_guest_chat_id");
+    if (!id) {
+      id = "guest_" + Math.random().toString(36).substr(2, 9) + "_" + Date.now();
+      localStorage.setItem("aura_guest_chat_id", id);
+    }
+    return id;
+  });
+
+  const clientId = keycloak.authenticated ? keycloak.subject : guestId;
+  const clientName = keycloak.authenticated ? (keycloak.tokenParsed?.name || "Khách hàng") : "Khách vãng lai";
+
+  const [dbRoom, setDbRoom] = useState(null);
+  const stompClientRef = useRef(null);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -114,13 +132,10 @@ export default function AIChatbotWidget() {
       
       const timer = setTimeout(() => {
         setShowPopup(false);
-      }, 3500); // Dismiss quickly in 3.5 seconds
-      
+      }, 3500);
       return () => clearTimeout(timer);
     } else {
       setPopupText("AuraTech xin chào! 👋");
-      
-      // Auto-dismiss after 12s on other pages
       const timer = setTimeout(() => {
         setShowPopup(false);
       }, 12000);
@@ -128,39 +143,135 @@ export default function AIChatbotWidget() {
     }
   }, [location.pathname]);
 
-  // Syncer for escalated customer session
+  // Load chat session room and history from database when widget is opened
   useEffect(() => {
-    if (!isEscalated) return;
-
-    // Check if session needs to be registered
-    const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-    if (!activeSessions.includes(sessionId)) {
-      activeSessions.push(sessionId);
-      localStorage.setItem("aura_escalated_sessions", JSON.stringify(activeSessions));
+    if (!isOpen) {
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate();
+        stompClientRef.current = null;
+      }
+      return;
     }
 
-    const syncInterval = setInterval(() => {
-      const chatData = JSON.parse(localStorage.getItem("aura_chat_session_" + sessionId) || "null");
-      if (chatData) {
-        // If staff closed the chat session
-        if (!chatData.isEscalated) {
-          setIsEscalated(false);
-          setMessages(chatData.messages);
-          return;
-        }
+    const initChatRoom = async () => {
+      try {
+        setLoading(true);
+        const room = await chatApi.getOrCreateRoom(guestId, clientName);
+        setDbRoom(room);
 
-        // Sync messages from staff/system
-        if (chatData.messages.length !== messages.length) {
-          setMessages(chatData.messages);
+        const status = room.status;
+        const escalated = status === "ACTIVE" || status === "WAITING";
+        setIsEscalated(escalated);
+
+        const historyPage = await chatApi.getMyMessages(room.id, guestId, 0, 50);
+        if (historyPage && historyPage.content) {
+          const historyMsgs = historyPage.content
+            .map((msg) => ({
+              id: msg.id,
+              sender: msg.senderId === clientId ? "user" : "assistant",
+              text: msg.content,
+              timestamp: new Date(msg.createdAt)
+            }))
+            .reverse();
+          
+          if (historyMsgs.length > 0) {
+            setMessages(historyMsgs);
+          }
         }
+      } catch (err) {
+        console.error("Failed to load chat room history", err);
+      } finally {
+        setLoading(false);
       }
-    }, 1200);
+    };
 
-    return () => clearInterval(syncInterval);
-  }, [isEscalated, sessionId, messages.length]);
+    initChatRoom();
+  }, [isOpen, guestId, clientName, clientId]);
+
+  // Establish WebSocket connection when room is ready
+  useEffect(() => {
+    if (!dbRoom) return;
+
+    const client = createWebSocketClient({
+      guestId,
+      roomId: dbRoom.id,
+      onConnect: () => {
+        console.log("WebSocket connected to room: " + dbRoom.id);
+      },
+      onMessageReceived: (payload) => {
+        if (payload.senderRole === "STAFF") {
+          setIsEscalated(true);
+        }
+
+        const stompMsg = {
+          id: payload.id,
+          sender: payload.senderId === clientId ? "user" : "assistant",
+          text: payload.content,
+          timestamp: new Date(payload.createdAt)
+        };
+
+        setMessages((prev) => {
+          if (prev.some((m) => m.id === stompMsg.id)) return prev;
+          return [...prev, stompMsg];
+        });
+      }
+    });
+
+    client.activate();
+    stompClientRef.current = client;
+
+    return () => {
+      client.deactivate();
+      stompClientRef.current = null;
+    };
+  }, [dbRoom, guestId, clientId]);
 
   const handleSend = async (textToSend, imageBase64) => {
     if (!textToSend.trim() && !imageBase64) return;
+
+    setInputValue("");
+
+    if (isEscalated) {
+      if (stompClientRef.current && stompClientRef.current.connected && dbRoom) {
+        stompClientRef.current.publish({
+          destination: "/app/chat.sendMessage",
+          body: JSON.stringify({
+            roomId: dbRoom.id,
+            content: textToSend.trim(),
+            type: "TEXT"
+          })
+        });
+      } else {
+        console.warn("WebSocket is not connected. Message not sent.");
+      }
+      return;
+    }
+
+    if (textToSend.trim() === "Yêu cầu gặp nhân viên trực tuyến") {
+      if (dbRoom) {
+        try {
+          setLoading(true);
+          const updatedRoom = await chatApi.handoverToStaff(dbRoom.id);
+          setDbRoom(updatedRoom);
+          setIsEscalated(true);
+
+          const systemMsg = {
+            id: "sys_" + Date.now(),
+            sender: "system",
+            text: updatedRoom.status === "ACTIVE" 
+              ? `Đã kết nối với nhân viên hỗ trợ: ${updatedRoom.staffName || "Nhân viên"}` 
+              : "Không có nhân viên online trực tuyến. Tin nhắn của bạn đã được chuyển tiếp đến email hỗ trợ. Chúng tôi sẽ phản hồi sớm nhất!",
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, systemMsg]);
+        } catch (err) {
+          console.error("Failed to handover session to staff", err);
+        } finally {
+          setLoading(false);
+        }
+      }
+      return;
+    }
 
     const userMsg = {
       id: "msg_" + Date.now(),
@@ -168,62 +279,11 @@ export default function AIChatbotWidget() {
       text: textToSend || "Đã gửi một hình ảnh",
       timestamp: new Date()
     };
-
-    setInputValue("");
-
-    // 1. If chat is escalated, bypass AI and send directly to staff
-    if (isEscalated) {
-      const updatedMessages = [...messages, userMsg];
-      setMessages(updatedMessages);
-
-      const chatData = JSON.parse(localStorage.getItem("aura_chat_session_" + sessionId) || "null");
-      if (chatData) {
-        localStorage.setItem(
-          "aura_chat_session_" + sessionId,
-          JSON.stringify({
-            ...chatData,
-            messages: updatedMessages,
-            lastUpdated: Date.now()
-          })
-        );
-      }
-      return;
-    }
-
-    // 2. Direct manual trigger to call staff
-    if (textToSend.trim() === "Yêu cầu gặp nhân viên trực tuyến") {
-      setIsEscalated(true);
-      const systemMsg = {
-        id: "sys_" + Date.now(),
-        sender: "system",
-        text: "Đang kết nối với nhân viên hỗ trợ...",
-        timestamp: new Date()
-      };
-      const updatedMessages = [...messages, userMsg, systemMsg];
-      setMessages(updatedMessages);
-
-      const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-      if (!activeSessions.includes(sessionId)) {
-        activeSessions.push(sessionId);
-        localStorage.setItem("aura_escalated_sessions", JSON.stringify(activeSessions));
-      }
-      localStorage.setItem(
-        "aura_chat_session_" + sessionId,
-        JSON.stringify({
-          isEscalated: true,
-          messages: updatedMessages,
-          lastUpdated: Date.now()
-        })
-      );
-      return;
-    }
-
-    // 3. Normal AI Chat workflow
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
     try {
-      const response = await aiApi.sendMessage(textToSend, imageBase64, sessionId);
+      const response = await aiApi.sendMessage(textToSend, imageBase64, dbRoom?.id || guestId);
 
       const assistantMsg = {
         id: "msg_" + (Date.now() + 1),
@@ -234,23 +294,23 @@ export default function AIChatbotWidget() {
       };
 
       if (response.intent === "escalate") {
-        setIsEscalated(true);
-        assistantMsg.isEscalated = true;
+        if (dbRoom) {
+          const updatedRoom = await chatApi.handoverToStaff(dbRoom.id);
+          setDbRoom(updatedRoom);
+          setIsEscalated(true);
 
-        // Auto-register in localStorage
-        const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-        if (!activeSessions.includes(sessionId)) {
-          activeSessions.push(sessionId);
-          localStorage.setItem("aura_escalated_sessions", JSON.stringify(activeSessions));
+          const systemMsg = {
+            id: "sys_" + Date.now(),
+            sender: "system",
+            text: updatedRoom.status === "ACTIVE" 
+              ? `Đã kết nối với nhân viên hỗ trợ: ${updatedRoom.staffName || "Nhân viên"}` 
+              : "Hệ thống đã nhận dạng cảm xúc tiêu cực. Vì không có nhân viên trực tuyến trực tiếp lúc này, tin nhắn của bạn đã được chuyển tiếp đến email hỗ trợ để giải quyết gấp!",
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, assistantMsg, systemMsg]);
+          setLoading(false);
+          return;
         }
-        localStorage.setItem(
-          "aura_chat_session_" + sessionId,
-          JSON.stringify({
-            isEscalated: true,
-            messages: [...messages, userMsg, assistantMsg],
-            lastUpdated: Date.now()
-          })
-        );
       }
 
       setMessages((prev) => [...prev, assistantMsg]);
@@ -275,7 +335,6 @@ export default function AIChatbotWidget() {
 
     const reader = new FileReader();
     reader.onload = () => {
-      // Simulate visual search triggering within chat
       handleSend("Tìm kiếm sản phẩm tương tự từ hình ảnh tải lên này", reader.result);
     };
     reader.readAsDataURL(file);
@@ -285,7 +344,16 @@ export default function AIChatbotWidget() {
     fileInputRef.current?.click();
   };
 
-  const resetChat = () => {
+  const resetChat = async () => {
+    if (dbRoom) {
+      try {
+        await chatApi.closeMyRoom(dbRoom.id, guestId);
+        const newRoom = await chatApi.getOrCreateRoom(guestId, clientName);
+        setDbRoom(newRoom);
+      } catch (err) {
+        console.error("Failed to reset chat room", err);
+      }
+    }
     setIsEscalated(false);
     setMessages([
       {
