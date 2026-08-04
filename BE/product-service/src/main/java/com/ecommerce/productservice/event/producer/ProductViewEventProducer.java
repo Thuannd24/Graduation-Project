@@ -25,13 +25,14 @@ public class ProductViewEventProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    public void publishProductViewed(Long productId, Long categoryId, String userId) {
+    public void publishProductViewed(Long productId, Long categoryId, String userId, String sessionId) {
         try {
             ProductViewedEvent event = ProductViewedEvent.builder()
                     .eventId(UUID.randomUUID().toString())
                     .eventType("ProductViewedEvent")
                     .timestamp(LocalDateTime.now().toString())
                     .userId(userId)
+                    .sessionId(sessionId)
                     .productId(productId)
                     .categoryId(categoryId)
                     .build();

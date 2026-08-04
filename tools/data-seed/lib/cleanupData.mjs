@@ -6,16 +6,17 @@ import { SYNTHETIC_EMAIL_DOMAIN } from "./users.mjs";
  * đúng 2 email pattern seed dùng (`seed_user_*@seed.internal`, `demo_user_*@demo.local`). */
 export async function cleanupSeedData() {
   const seedUsers = await query(
-    `SELECT keycloak_user_id AS userId, email FROM ${DB.USER}.users
+    `SELECT id AS internalId, keycloak_user_id AS userId, email FROM ${DB.USER}.users
      WHERE email LIKE ? OR email LIKE 'demo_user_%@demo.local'`,
     [`%@${SYNTHETIC_EMAIL_DOMAIN}`]
   );
 
   if (seedUsers.length === 0) {
-    return { usersDeleted: 0, ordersDeleted: 0, eventsDeleted: 0 };
+    return { usersDeleted: 0, ordersDeleted: 0, eventsDeleted: 0, reviewsDeleted: 0, vouchersDeleted: 0 };
   }
 
   const userIds = seedUsers.map((u) => u.userId);
+  const internalUserIds = seedUsers.map((u) => u.internalId);
   const pool = getPool();
   const placeholders = userIds.map(() => "?").join(",");
 
@@ -38,6 +39,17 @@ export async function cleanupSeedData() {
     userIds
   );
 
+  const [reviewsResult] = await pool.query(
+    `DELETE FROM ${DB.PRODUCT}.product_reviews WHERE user_id IN (${placeholders})`,
+    userIds
+  );
+
+  const internalPlaceholders = internalUserIds.map(() => "?").join(",");
+  const [vouchersResult] = await pool.query(
+    `DELETE FROM ${DB.PROMOTION}.issued_vouchers WHERE user_id IN (${internalPlaceholders})`,
+    internalUserIds
+  );
+
   // Chỉ xoá user KHÔNG phải demo (demo_user_* giữ lại để không phải tạo lại account Keycloak
   // mỗi lần --force; email seed_user_*@seed.internal thì xoá sạch để tái sinh profile mới).
   const [usersResult] = await pool.query(
@@ -49,5 +61,7 @@ export async function cleanupSeedData() {
     usersDeleted: usersResult.affectedRows,
     ordersDeleted,
     eventsDeleted: eventsResult.affectedRows,
+    reviewsDeleted: reviewsResult.affectedRows,
+    vouchersDeleted: vouchersResult.affectedRows,
   };
 }

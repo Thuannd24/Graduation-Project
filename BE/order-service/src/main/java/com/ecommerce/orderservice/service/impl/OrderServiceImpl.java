@@ -351,8 +351,8 @@ public class OrderServiceImpl implements OrderService {
                 throw ex;
             }
 
-            // Clear Cart
-            cartService.clearCart(cartKey);
+            // Clear Cart (không có session HTTP request ở bước checkout này, không cần cho hành vi)
+            cartService.clearCart(cartKey, null);
 
             OrderResponse response = convertToResponse(savedOrder, finalOrderItems);
 

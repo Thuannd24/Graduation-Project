@@ -9,6 +9,21 @@ export interface ApiResponse<T> {
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
 const AUTH_TOKEN_KEY = "techstore_auth_token";
 const AUTH_EXPIRED_MESSAGE = "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.";
+const SESSION_ID_KEY = "techstore_session_id";
+
+// Session id ổn định trong 1 tab/1 phiên trình duyệt (sessionStorage: mất khi đóng tab, không
+// chia sẻ giữa các tab) — dùng để nhóm hành vi xem/giỏ hàng theo phiên cho churn-risk feature
+// (xem docs/canvas/churn-risk-roadmap.md Tầng 1.1). Không phải session id bảo mật, chỉ là nhãn
+// nhóm hành vi nên không cần luân chuyển/ký.
+function getSessionId(): string {
+  if (typeof window === "undefined") return "";
+  let sessionId = window.sessionStorage.getItem(SESSION_ID_KEY);
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    window.sessionStorage.setItem(SESSION_ID_KEY, sessionId);
+  }
+  return sessionId;
+}
 
 export function getAuthToken(): string | null {
   if (keycloak.authenticated && keycloak.token) {
@@ -120,6 +135,7 @@ async function request<T>(path: string, options: RequestInit & { requireAuth?: b
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
+      "X-Session-Id": getSessionId(),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(customHeaders as Record<string, string> || {})
     },
@@ -217,6 +233,7 @@ export const apiClient = {
     const response = await fetch(url, {
       method: "POST",
       headers: {
+        "X-Session-Id": getSessionId(),
         ...(token ? { Authorization: `Bearer ${token}` } : {})
       },
       body: formData

@@ -14,6 +14,7 @@ public class ProductViewedEvent {
     private String eventType;
     private String timestamp;
     private String userId;
+    private String sessionId;
     private Long productId;
     private Long categoryId;
 }

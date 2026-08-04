@@ -48,24 +48,26 @@ public class ProductController {
     @GetMapping("/api/v1/public/products/{id}")
     public ApiResponse<ProductDto> getProductById(
             @PathVariable Long id,
-            @RequestHeader(value = "X-User-Id", required = false) String userId) {
+            @RequestHeader(value = "X-User-Id", required = false) String userId,
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId) {
         ProductDto product = productService.getProductById(id);
         if (product == null) {
             throw new RuntimeException("Product not found with id: " + id);
         }
-        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId);
+        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
         return ApiResponse.success(product);
     }
 
     @GetMapping("/api/v1/public/products/slug/{slug}")
     public ApiResponse<ProductDto> getProductBySlug(
             @PathVariable String slug,
-            @RequestHeader(value = "X-User-Id", required = false) String userId) {
+            @RequestHeader(value = "X-User-Id", required = false) String userId,
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId) {
         ProductDto product = productService.getProductBySlug(slug);
         if (product == null) {
             throw new RuntimeException("Product not found with slug: " + slug);
         }
-        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId);
+        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
         return ApiResponse.success(product);
     }
 

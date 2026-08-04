@@ -42,7 +42,7 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
         if topic == TOPIC_PRODUCT_VIEWED:
             return {
                 "user_id": payload.get("userId") or None,
-                "session_id": None,  # ProductViewedEvent chưa track session cho guest
+                "session_id": payload.get("sessionId") or None,
                 "item_id": payload["productId"],
                 "category_id": payload.get("categoryId"),
                 "action_type": ACTION_VIEW_PRODUCT,

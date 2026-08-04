@@ -25,9 +25,32 @@ import { loadCatalog } from "./lib/catalog.mjs";
 import { generateUserProfiles } from "./lib/profiles.mjs";
 import { simulateAllUsers } from "./lib/simulate.mjs";
 import { ensureSeedUsers, countExistingSeedUsers } from "./lib/users.mjs";
-import { writeOrders, writeEvents } from "./lib/writeData.mjs";
+import { generateReviews } from "./lib/reviews.mjs";
+import { generateIssuedVouchers } from "./lib/vouchers.mjs";
+import {
+  writeOrders,
+  writeEvents,
+  writeReviews,
+  writeVouchers,
+  fetchInternalUserIdMap,
+} from "./lib/writeData.mjs";
 import { cleanupSeedData } from "./lib/cleanupData.mjs";
 import { closePool } from "./lib/db.mjs";
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Map<userId, Array<order>> chỉ đơn DELIVERED, sắp theo `createdAt` tăng dần — dùng để tìm đơn
+ * "dùng voucher này" (voucher chỉ redeem được vào 1 đơn đã giao thành công, không phải đơn huỷ). */
+function groupDeliveredOrdersByUser(orders) {
+  const map = new Map();
+  for (const o of orders) {
+    if (o.status !== "DELIVERED") continue;
+    if (!map.has(o.userId)) map.set(o.userId, []);
+    map.get(o.userId).push(o);
+  }
+  for (const list of map.values()) list.sort((a, b) => a.createdAt - b.createdAt);
+  return map;
+}
 
 function parseArgs(argv) {
   const args = {
@@ -66,7 +89,7 @@ Env (.env, xem .env.example):
 `);
 }
 
-function summarize(profiles, orders, events, users, now) {
+function summarize(profiles, orders, events, users, now, reviews, vouchers) {
   const churners = profiles.filter((p) => p.willChurn).length;
   const amounts = orders.map((o) => o.totalAmount).sort((a, b) => a - b);
   const median = amounts.length ? amounts[Math.floor(amounts.length / 2)] : 0;
@@ -82,6 +105,29 @@ function summarize(profiles, orders, events, users, now) {
 
   const usersWithOrders = new Set(orders.map((o) => o.userId)).size;
   console.log(`Users có ít nhất 1 đơn: ${usersWithOrders} / ${users.length}`);
+
+  // Tiêu chí thành công Tầng 1.1/1.2 (docs/canvas/churn-risk-roadmap.md): tỉ lệ session_id NULL
+  // < 5%, events_per_session > 1 — in ra ngay lúc seed để phát hiện sớm nếu cụm phiên bị lỗi.
+  const withSession = events.filter((e) => e.sessionId).length;
+  const sessionIds = new Set(events.map((e) => e.sessionId).filter(Boolean));
+  const nullSessionRatio = events.length ? (100 * (events.length - withSession)) / events.length : 0;
+  console.log(`Session: ${sessionIds.size} phiên, ${(events.length / Math.max(sessionIds.size, 1)).toFixed(2)} event/phiên trung bình, ${nullSessionRatio.toFixed(1)}% event không có session_id`);
+
+  // Tiêu chí thành công Tầng 1.2 (review/voucher): phân bố lệch thật (không hằng số) — in rating
+  // trung bình + độ lệch chuẩn (không phải mọi user rating giống nhau) và tỉ lệ dùng voucher.
+  const deliveredCount = orders.length - orders.filter((o) => o.status === "CANCELLED").length;
+  const ratings = reviews.map((r) => r.rating);
+  const avgRating = ratings.length ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0;
+  const ratingVariance = ratings.length
+    ? ratings.reduce((a, r) => a + (r - avgRating) ** 2, 0) / ratings.length
+    : 0;
+  console.log(
+    `Reviews: ${reviews.length} (${((100 * reviews.length) / Math.max(deliveredCount, 1)).toFixed(1)}% đơn DELIVERED có review), rating trung bình ${avgRating.toFixed(2)} ± ${Math.sqrt(ratingVariance).toFixed(2)}`
+  );
+  const usedVouchers = vouchers.filter((v) => v.status === "USED").length;
+  console.log(
+    `Vouchers: ${vouchers.length} phát ra, ${usedVouchers} đã dùng (${((100 * usedVouchers) / Math.max(vouchers.length, 1)).toFixed(1)}%)`
+  );
   console.log("================================\n");
 }
 
@@ -123,9 +169,22 @@ async function main() {
     now,
   });
 
-  summarize(profiles, orders, events, users, now);
+  const profileByUserId = new Map(userIds.map((uid, i) => [uid, profiles[i]]));
+  const windowStart = new Date(now.getTime() - args.months * 30 * DAY_MS);
 
   if (args.dryRun) {
+    // Dry-run không ghi DB nên không có order_id thật — gán id giả TUẦN TỰ chỉ để review/voucher
+    // có chỗ tham chiếu lúc tính thống kê xem trước (KHÔNG dùng để ghi bất cứ đâu).
+    orders.forEach((o, i) => { o.dbId = i + 1; });
+    const fakeInternalUserIdMap = new Map(userIds.map((uid, i) => [uid, i + 1]));
+    const deliveredOrdersByUser = groupDeliveredOrdersByUser(orders);
+    const reviews = generateReviews(rng, profileByUserId, orders);
+    const vouchers = generateIssuedVouchers(rng, profileByUserId, fakeInternalUserIdMap, deliveredOrdersByUser, {
+      windowStart,
+      windowEnd: now,
+      now,
+    });
+    summarize(profiles, orders, events, users, now, reviews, vouchers);
     console.log("(--dry-run) Không ghi gì vào DB.");
     return;
   }
@@ -137,6 +196,26 @@ async function main() {
   console.log("Ghi user_events...");
   const eventResult = await writeEvents(events);
   console.log(`Đã ghi ${eventResult.eventsWritten} events.`);
+
+  // Review/voucher sinh SAU writeOrders() vì cần order_id THẬT (order.dbId đã được writeOrders
+  // gán lại đúng giá trị auto-increment thật, không phải id giả).
+  console.log("Ghi reviews...");
+  const internalUserIdMap = await fetchInternalUserIdMap(userIds);
+  const deliveredOrdersByUser = groupDeliveredOrdersByUser(orders);
+  const reviews = generateReviews(rng, profileByUserId, orders);
+  const reviewResult = await writeReviews(reviews);
+  console.log(`Đã ghi ${reviewResult.reviewsWritten} reviews.`);
+
+  console.log("Ghi vouchers...");
+  const vouchers = generateIssuedVouchers(rng, profileByUserId, internalUserIdMap, deliveredOrdersByUser, {
+    windowStart,
+    windowEnd: now,
+    now,
+  });
+  const voucherResult = await writeVouchers(vouchers);
+  console.log(`Đã ghi ${voucherResult.vouchersWritten} vouchers.`);
+
+  summarize(profiles, orders, events, users, now, reviews, vouchers);
 
   const demoUsers = users.filter((u) => u.isDemo);
   if (demoUsers.length > 0) {

@@ -28,6 +28,29 @@ export function generateUserProfiles(rng, count, categoryIds) {
     // baseline browsing intensity tỉ lệ thuận với lambda (user mua nhiều cũng xem nhiều)
     const baselineViewsPerMonth = 3 + lambdaBase * 8;
 
+    // --- Nhịp giờ/ngày (Tầng 1.2) — tham số ẩn SINH ĐỘC LẬP với willChurn/churnMonth, chỉ chi
+    // phối THỜI ĐIỂM trong ngày/tuần, không chi phối TẦN SUẤT hành vi -> không mang tín hiệu
+    // churn, tránh lặp lại lỗi "Herfindahl tập trung category" đã bị loại ở candidates.py.
+    const preferredHourCenter = rng.float(0, 24); // giờ hoạt động ưa thích (vòng 0-24h)
+    const hourConcentration = rng.float(1.5, 4.5); // độ lệch quanh giờ ưa thích (giờ, càng nhỏ càng đều đặn)
+    const weekendBias = rng.float(0.6, 1.8); // >1: hoạt động nhiều hơn cuối tuần, <1: ít hơn
+
+    // --- Cụm phiên (session) — độ dài/tần suất phiên độc lập với churn, chỉ nhóm lại các event
+    // đã có sẵn thành "1 lượt ghé thăm" thay vì rải đều toàn tháng.
+    const sessionBrowseSpreadMinutes = rng.int(3, 40); // độ trải các event trong CÙNG 1 phiên
+    const sessionPureViewBatch = rng.int(1, 4); // số sản phẩm xem thuần tuý/phiên (trung bình)
+
+    // --- Review sau khi mua (Tầng 1.2) — xu hướng review ĐỘC LẬP với willChurn/churnMonth, chỉ
+    // là tính cách "có hay để lại đánh giá không" và "khó tính hay dễ tính", không liên quan rời bỏ.
+    const reviewProbability = rng.float(0.05, 0.6); // xác suất để lại review sau 1 đơn DELIVERED
+    const reviewRatingBias = rng.float(-1.2, 0.8); // lệch quanh mốc trung tính ~4 sao (khó tính/dễ tính)
+
+    // --- Lịch sử voucher (Tầng 1.2) — tần suất được phát/dùng voucher gắn với `priceSensitivity`
+    // ĐÃ CÓ (không phải churn) — user nhạy giá thật thì hay xin/dùng voucher hơn, đây là quan hệ
+    // hợp lý cần có (khác với gán thẳng theo willChurn, vốn sẽ là suy luận vòng tròn).
+    const voucherIssueRateBase = 0.4 + priceSensitivity * 1.6; // số voucher được phát/12 tháng (kỳ vọng Poisson)
+    const voucherRedeemProbability = 0.25 + priceSensitivity * 0.5; // xác suất 1 voucher được dùng trước khi hết hạn
+
     profiles.push({
       index: i,
       lambdaBase,
@@ -37,6 +60,15 @@ export function generateUserProfiles(rng, count, categoryIds) {
       cancelProb,
       preferredCategories,
       baselineViewsPerMonth,
+      preferredHourCenter,
+      hourConcentration,
+      weekendBias,
+      sessionBrowseSpreadMinutes,
+      sessionPureViewBatch,
+      reviewProbability,
+      reviewRatingBias,
+      voucherIssueRateBase,
+      voucherRedeemProbability,
     });
   }
 

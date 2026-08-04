@@ -8,6 +8,7 @@ export const DB = {
   USER: process.env.DB_USER_NAME || "ecommerce_user_db",
   PRODUCT: process.env.DB_PRODUCT_NAME || "ecommerce_product_db",
   ORDER: process.env.DB_ORDER_NAME || "ecommerce_order_db",
+  PROMOTION: process.env.DB_PROMOTION_NAME || "ecommerce_promotion_db",
 };
 
 let pool;

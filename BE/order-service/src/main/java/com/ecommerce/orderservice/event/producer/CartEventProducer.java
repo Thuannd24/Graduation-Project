@@ -30,7 +30,7 @@ public class CartEventProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    public void publishCartUpdated(String userId, Long productId, Long variantId, Integer quantity, String action) {
+    public void publishCartUpdated(String userId, String sessionId, Long productId, Long variantId, Integer quantity, String action) {
         if (userId == null || userId.isBlank() || ANONYMOUS_USER_ID.equals(userId)) {
             log.debug("Skip publishing CartUpdatedEvent: no real user identity (action={}, productId={})",
                     action, productId);
@@ -43,7 +43,7 @@ public class CartEventProducer {
                     .eventType("CartUpdatedEvent")
                     .timestamp(LocalDateTime.now().toString())
                     .userId(userId)
-                    .sessionId(null)
+                    .sessionId(sessionId)
                     .productId(productId)
                     .variantId(variantId)
                     .quantity(quantity)

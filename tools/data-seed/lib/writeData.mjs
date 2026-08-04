@@ -63,6 +63,7 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
     const itemRows = [];
     batch.forEach((order, idx) => {
       const orderId = firstOrderId + idx;
+      order.dbId = orderId; // ghi lại id thật -> reviews.mjs cần tham chiếu order_id có thật
       for (const item of order.items) {
         itemRows.push([
           orderId,
@@ -91,6 +92,7 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
 export async function writeEvents(events, { batchSize = 1000 } = {}) {
   const rows = events.map((e) => [
     e.userId,
+    e.sessionId || null,
     e.itemId,
     e.categoryId,
     e.actionType,
@@ -98,9 +100,73 @@ export async function writeEvents(events, { batchSize = 1000 } = {}) {
   ]);
   await bulkInsert(
     `${DB.ORDER}.user_events`,
-    ["user_id", "item_id", "category_id", "action_type", "created_at"],
+    ["user_id", "session_id", "item_id", "category_id", "action_type", "created_at"],
     rows,
     batchSize
   );
   return { eventsWritten: rows.length };
+}
+
+/** `issued_vouchers.user_id` là internal numeric id (Long), KHÁC `keycloak_user_id` (UUID) dùng ở
+ * mọi bảng khác — phải tra ngược qua bảng `users` sau khi đã insert xong. Trả Map<keycloakUserId, id>. */
+export async function fetchInternalUserIdMap(keycloakUserIds) {
+  if (keycloakUserIds.length === 0) return new Map();
+  const pool = getPool();
+  const placeholders = keycloakUserIds.map(() => "?").join(",");
+  const [rows] = await pool.query(
+    `SELECT id, keycloak_user_id AS keycloakUserId FROM ${DB.USER}.users WHERE keycloak_user_id IN (${placeholders})`,
+    keycloakUserIds
+  );
+  return new Map(rows.map((r) => [r.keycloakUserId, r.id]));
+}
+
+export async function writeReviews(reviews, { batchSize = 500 } = {}) {
+  const rows = reviews.map((r) => [
+    r.productId,
+    r.userId,
+    r.orderId,
+    r.rating,
+    r.comment,
+    toSqlDatetime(r.createdAt),
+  ]);
+  await bulkInsert(
+    `${DB.PRODUCT}.product_reviews`,
+    ["product_id", "user_id", "order_id", "rating", "comment", "created_at"],
+    rows,
+    batchSize
+  );
+  return { reviewsWritten: rows.length };
+}
+
+export async function writeVouchers(vouchers, { batchSize = 500 } = {}) {
+  const rows = vouchers.map((v) => [
+    v.code,
+    v.userId,
+    v.voucherType,
+    v.status,
+    v.discountPercent,
+    v.discountAmount,
+    v.expiresAt ? toSqlDatetime(v.expiresAt) : null,
+    v.usedAt ? toSqlDatetime(v.usedAt) : null,
+    v.usedOrderId || null,
+    toSqlDatetime(v.createdAt),
+  ]);
+  await bulkInsert(
+    `${DB.PROMOTION}.issued_vouchers`,
+    [
+      "code",
+      "user_id",
+      "voucher_type",
+      "status",
+      "discount_percent",
+      "discount_amount",
+      "expires_at",
+      "used_at",
+      "used_order_id",
+      "created_at",
+    ],
+    rows,
+    batchSize
+  );
+  return { vouchersWritten: rows.length };
 }
