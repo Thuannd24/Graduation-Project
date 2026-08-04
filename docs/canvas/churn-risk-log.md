@@ -1630,6 +1630,86 @@ phối bất thường, đối chứng âm sạch. **Không có dấu hiệu rò
 
 ---
 
+## 2026-08-04 (tiếp) — Tracker vi hành vi: mở rộng bảng chữ cái hành vi từ 5 lên 18
+
+Thí nghiệm trước kết luận: **thứ tự không mang thông tin** vì RetailRocket chỉ có 3 loại event nên
+bigram trùng với số đếm. Muốn kiểm chứng lại giả thuyết cho đúng thì phải có bảng chữ cái phong phú
+hơn — dataset công khai không có, nên phải tự bắn từ FE.
+
+### Thiết kế
+
+**13 action type mới** (`contracts.py::FE_BEHAVIOR_ACTIONS`), chọn theo 2 tiêu chí:
+- **Mang ý nghĩa ma sát/ý định thật**: `VIEW_CART`, `BEGIN_CHECKOUT`, `VIEW_SHIPPING_FEE`,
+  `COUPON_FAILED`/`COUPON_APPLIED` (đúng 2 ví dụ tài liệu tham khảo nêu: "xem phí ship", "vừa nhập
+  sai mã"), `TAB_HIDDEN`/`TAB_VISIBLE`, `SCROLL_DEPTH`, `PAGE_DWELL`, `PRODUCT_ZOOM`, `SEARCH`,
+  `FILTER_APPLIED`, `SORT_APPLIED`.
+- **Chạy được trên MOBILE**: cố ý KHÔNG dùng gia tốc chuột/hover thuần desktop như tài liệu gợi ý
+  (`exit_intent_velocity`) — TMĐT Việt Nam đa số mobile, feature đó sẽ NULL với phần lớn traffic.
+  Thay bằng `visibilitychange` / scroll / thời gian dừng: có trên cả 2 nền tảng.
+
+Alphabet **5 → 18 ký hiệu ⇒ 324 bigram** (trước chỉ 9). Giờ thứ tự mới *có gì để mang*.
+
+**Đường đi dữ liệu:** FE → `POST /api/v1/public/behavior/events` (forecast-service) → Kafka
+(`user-behavior-events`) → chính `BehaviorEventConsumer` → `user_events`.
+
+Quyết định: **cố ý đi vòng qua Kafka** thay vì endpoint ghi thẳng DB, để giữ **đúng MỘT đường ghi**
+vào `user_events` (consumer) — mọi guard/chuẩn hoá chỉ tồn tại một chỗ, không lệch nhau khi sửa; và
+có backpressure sẵn vì vi hành vi tần suất cao hơn hẳn event nghiệp vụ.
+
+**Không cần migration DB:** dùng cột `weight` (Double) đã có sẵn trong `UserEvent` làm payload số
+(% scroll, giây dwell). `action_type` là VARCHAR(30) nên mọi tên action đều ≤30 ký tự.
+
+### 3 quyết định kỹ thuật quan trọng
+
+1. **Gửi timestamp XẢY RA THẬT, không dùng giờ server nhận.** Lô được gom rồi mới gửi (flush 10s),
+   nên nếu lấy giờ server thì **cả lô dồn vào một mốc và PHÁ VỠ THỨ TỰ** — mà thứ tự chính là thứ
+   cần đo. Đã verify: 7 event test giữ đúng 6 mốc thời gian khác nhau.
+2. **Key Kafka = `sessionId`** (fallback `userId`): mọi event cùng phiên vào cùng partition ⇒ Kafka
+   giữ nguyên thứ tự trong phiên. Điều kiện bắt buộc cho feature chuỗi.
+3. **Guard: KHÔNG đẩy vi hành vi vào Redis history.** Chuỗi Redis được recs-service dùng để gợi ý
+   sản phẩm; đẩy vi hành vi vào đó sẽ làm nhiễu gợi ý (vd rời tab 5 lần ở 1 SP biến nó thành "quan
+   tâm nhất"). Đã verify Redis history rỗng sau khi bắn 7 vi hành vi.
+
+### FE tracker — 3 nguyên tắc không được vi phạm
+
+`FE/src/services/behaviorTracker.ts`:
+1. **Không bao giờ làm hỏng UX**: listener `passive: true` (thiếu cờ này sẽ làm chậm cuộn trang trên
+   mobile), mọi thứ bọc try/catch, lỗi mạng nuốt im lặng, `sendBeacon` khi đóng tab (fetch thường bị
+   hủy giữa đường).
+2. **Gom lô**: flush mỗi 10s / khi rời tab / khi đầy 200 event (khớp `MAX_BATCH_SIZE` phía BE).
+3. **Chỉ mốc, không spam**: scroll chỉ bắn ở 4 mốc 25/50/75/100, mỗi mốc 1 lần/trang.
+
+Endpoint **public có chủ đích** (khách chưa đăng nhập vẫn duyệt hàng và vẫn cần ghi nhận — chặn họ
+là mất đúng nhóm dữ liệu quan trọng nhất cho bài toán bỏ giỏ). Danh tính lấy từ `X-User-Id` do
+**gateway inject từ JWT**, KHÔNG tin header client gửi (gateway đã strip mọi `X-User-*` của client —
+xem `UserHeaderFilter.java`). Không gửi nội dung truy vấn tìm kiếm (không cần cho bài toán).
+
+### Kiểm chứng end-to-end (không chỉ compile)
+
+| Phép thử | Kết quả |
+|---|---|
+| `npm run build` (FE) | sạch |
+| POST lô 7 vi hành vi thật | `{"received":7,"accepted":7}` |
+| Ghi vào `user_events` | **7/7 dòng đúng** action_type |
+| `weight` bảo toàn | 3 / 50 / 3 / null / null / null / 24 ✓ |
+| `user_id` từ header gateway | `test-user-behavior-1` ✓ |
+| **Thứ tự bảo toàn** | 6 mốc thời gian riêng biệt, đúng trình tự ✓ |
+| `actionType` lạ (`HACKED_ACTION`) | **HTTP 422 — bị chặn** ✓ |
+| Redis history sau khi bắn | **rỗng** ⇒ guard đúng ✓ |
+| Topic `user-behavior-events` | đã tạo ✓ |
+
+### Việc CHƯA làm (nói rõ, không phải quên)
+
+- **Chưa có dữ liệu thật để re-test giả thuyết thứ tự.** Pipeline đã chạy nhưng cần **traffic người
+  dùng thật** tích lũy trước khi chạy lại thí nghiệm `experiments/cart_abandon_rule_vs_ml.py` trên
+  bảng chữ cái 18 ký hiệu. Chưa có kết luận mới nào về thứ tự — chỉ có hạ tầng để thu.
+- Chưa nối `PRODUCT_ZOOM`, `FILTER_APPLIED`, `SORT_APPLIED` vào UI (đã khai báo trong contracts và
+  tracker hỗ trợ, nhưng chưa gọi ở component tương ứng).
+- Chưa mở rộng bộ sinh dữ liệu tổng hợp để phát 13 action mới — nếu muốn có thí nghiệm có kiểm soát
+  (DGP thiết kế trước, xem đề xuất ở mục trên) thì cần làm thêm bước này.
+
+---
+
 ## Giới hạn phải nói rõ khi báo cáo
 
 - **Dữ liệu synthetic** → metric đo "model có phục hồi được cấu trúc sinh dữ liệu hay không",

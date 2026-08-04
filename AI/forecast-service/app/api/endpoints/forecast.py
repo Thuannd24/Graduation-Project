@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Header, HTTPException, Query
+from app.models.behavior import BehaviorBatchRequest
 from app.models.forecast import ForecastRequest, ForecastResponse, AnomalyRequest, AnomalyResponse, ForecastPoint
 from app.services.demand import demand_forecasting_service
 from app.services.anomaly import anomaly_detection_service
@@ -11,7 +12,7 @@ from app.training.calibration import run_calibration_study
 from app.training.label_diagnostics import run_label_diagnostics
 from app.training.rule_benchmark import run_rule_benchmark
 from app.training.model_card import build_model_card
-from app.state import risk_scheduler
+from app.state import behavior_producer, risk_scheduler
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
@@ -273,3 +274,38 @@ def get_admin_segmentation():
     rows.sort(key=lambda r: -r["count"])
 
     return {"data": rows, "is_demo_data": False, "note": None}
+
+
+@router.post("/public/behavior/events")
+async def ingest_behavior_events(request: BehaviorBatchRequest, x_user_id: str | None = Header(None)):
+    """Nhận lô vi hành vi từ FE rồi publish lên Kafka (`BehaviorEventConsumer` ghi vào `user_events`).
+
+    **Public có chủ đích**: khách chưa đăng nhập vẫn duyệt hàng và vẫn cần ghi nhận hành vi — chặn
+    họ lại sẽ mất đúng nhóm dữ liệu quan trọng nhất cho bài toán bỏ giỏ hàng. Danh tính lấy theo thứ
+    tự: `X-User-Id` (do api-gateway inject từ JWT, KHÔNG tin header client tự gửi — gateway đã strip
+    mọi `X-User-*` từ client, xem UserHeaderFilter.java) -> nếu không có thì chỉ có `sessionId`.
+
+    Luôn trả 200 kể cả khi publish lỗi: đây là đường ghi nhận phụ trợ, không được để nó làm FE báo
+    lỗi cho người dùng. Số thực sự gửi được trả về trong `accepted` để debug.
+    """
+    events = []
+    for e in request.events:
+        events.append(
+            {
+                "userId": x_user_id or None,
+                "sessionId": e.sessionId,
+                "itemId": e.itemId,
+                "categoryId": e.categoryId,
+                "actionType": e.actionType,
+                "weight": e.weight,
+                "timestamp": e.timestamp,
+            }
+        )
+
+    try:
+        accepted = await behavior_producer.publish_batch(events)
+    except Exception as exc:
+        logger.error(f"Không publish được lô vi hành vi ({len(events)} event): {exc}")
+        return {"received": len(events), "accepted": 0}
+
+    return {"received": len(events), "accepted": accepted}

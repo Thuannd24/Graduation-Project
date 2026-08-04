@@ -10,6 +10,7 @@ import { formatVnd } from "../../../utils/format.js";
 import { aiApi } from "../../../services/aiApi.ts";
 import { orderApi } from "../../../services/orderApi";
 import { hasAuthToken } from "../../../services/apiClient";
+import { trackBehavior } from "../../../services/behaviorTracker.ts";
 
 /* ===================== Cart Item Component ===================== */
 
@@ -213,6 +214,11 @@ export default function CartPage() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [backendSummary, setBackendSummary] = useState(null);
   const [previewLoading, setPreviewLoading] = useState(false);
+
+  // Mở trang giỏ hàng = tín hiệu ý định mua mạnh, và là mốc bắt đầu của "phễu bỏ giỏ".
+  useEffect(() => {
+    trackBehavior("VIEW_CART", { weight: items.length });
+  }, []); // chỉ 1 lần mỗi lần vào trang, không bắn lại khi giỏ đổi số lượng
 
   useEffect(() => {
     let cancelled = false;

@@ -15,8 +15,10 @@ from shared_common.config import shared_settings
 from shared_common.contracts import (
     TOPIC_PRODUCT_VIEWED,
     TOPIC_CART_UPDATED,
+    TOPIC_USER_BEHAVIOR,
     ACTION_VIEW_PRODUCT,
     CART_ACTION_MAP,
+    FE_BEHAVIOR_ACTIONS,
     history_key_for,
     HISTORY_MAX_LEN,
     HISTORY_TTL_SECONDS,
@@ -28,8 +30,8 @@ logger = get_logger(__name__)
 
 INSERT_USER_EVENT_SQL = text(
     """
-    INSERT INTO user_events (user_id, session_id, item_id, category_id, action_type, created_at)
-    VALUES (:user_id, :session_id, :item_id, :category_id, :action_type, :created_at)
+    INSERT INTO user_events (user_id, session_id, item_id, category_id, action_type, weight, created_at)
+    VALUES (:user_id, :session_id, :item_id, :category_id, :action_type, :weight, :created_at)
     """
 )
 
@@ -46,6 +48,7 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "item_id": payload["productId"],
                 "category_id": payload.get("categoryId"),
                 "action_type": ACTION_VIEW_PRODUCT,
+                "weight": None,
                 "created_at": payload["timestamp"],
             }
         if topic == TOPIC_CART_UPDATED:
@@ -59,6 +62,24 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "item_id": payload.get("productId"),  # None cho CLEAR_CART
                 "category_id": None,  # CartUpdatedEvent không mang category
                 "action_type": action_type,
+                "weight": None,
+                "created_at": payload["timestamp"],
+            }
+        if topic == TOPIC_USER_BEHAVIOR:
+            # Vi hành vi từ FE. `actionType` đã được endpoint ingest kiểm tra nằm trong
+            # FE_BEHAVIOR_ACTIONS, nhưng kiểm lại ở đây: consumer là đường ghi DUY NHẤT vào
+            # `user_events`, nên nó phải tự bảo vệ được kể cả khi có producer khác publish sai.
+            action_type = payload.get("actionType")
+            if action_type not in FE_BEHAVIOR_ACTIONS:
+                logger.warning(f"Vi hành vi có actionType lạ '{action_type}', bỏ message")
+                return None
+            return {
+                "user_id": payload.get("userId") or None,
+                "session_id": payload.get("sessionId") or None,
+                "item_id": payload.get("itemId"),
+                "category_id": payload.get("categoryId"),
+                "action_type": action_type,
+                "weight": payload.get("weight"),  # % scroll / giây dwell, None với action không có số
                 "created_at": payload["timestamp"],
             }
     except KeyError as e:
@@ -83,6 +104,7 @@ class BehaviorEventConsumer:
         self._consumer = AIOKafkaConsumer(
             TOPIC_PRODUCT_VIEWED,
             TOPIC_CART_UPDATED,
+            TOPIC_USER_BEHAVIOR,
             bootstrap_servers=shared_settings.KAFKA_BOOTSTRAP_SERVERS,
             group_id="forecast-service-behavior-group",
             enable_auto_commit=False,
@@ -92,7 +114,7 @@ class BehaviorEventConsumer:
         self._task = asyncio.create_task(self._consume_loop())
         logger.info(
             f"BehaviorEventConsumer started, subscribed to "
-            f"[{TOPIC_PRODUCT_VIEWED}, {TOPIC_CART_UPDATED}]"
+            f"[{TOPIC_PRODUCT_VIEWED}, {TOPIC_CART_UPDATED}, {TOPIC_USER_BEHAVIOR}]"
         )
 
     async def stop(self):
@@ -138,6 +160,13 @@ class BehaviorEventConsumer:
         if event["item_id"] is None:
             return  # CLEAR_CART không có item cụ thể để đưa vào chuỗi lịch sử
 
+        # Chuỗi lịch sử trong Redis được recs-service dùng để GỢI Ý SẢN PHẨM, nên chỉ nhận
+        # tương tác thật với sản phẩm (xem/thêm giỏ). Vi hành vi từ FE (mở giỏ, cuộn trang, rời
+        # tab...) tuy có thể mang `itemId` bối cảnh nhưng KHÔNG phải hành vi chọn sản phẩm — đẩy
+        # vào đây sẽ làm nhiễu gợi ý (vd rời tab 5 lần ở 1 sản phẩm biến nó thành "quan tâm nhất").
+        if event["action_type"] in FE_BEHAVIOR_ACTIONS:
+            return
+
         key = history_key_for(user_id=event["user_id"], session_id=event["session_id"])
         if key is None:
             return
@@ -158,6 +187,7 @@ class BehaviorEventConsumer:
                     "item_id": event["item_id"],
                     "category_id": event["category_id"],
                     "action_type": event["action_type"],
+                    "weight": event.get("weight"),
                     "created_at": created_at,
                 },
             )

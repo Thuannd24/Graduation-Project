@@ -49,6 +49,12 @@ TOPIC_INVENTORY_EVENTS = "inventory-events"
 TOPIC_PRODUCT_VIEWED = "product-viewed-events"      # producer: product-service
 TOPIC_CART_UPDATED = "cart-updated-events"          # producer: order-service (CartUpdatedEvent)
 TOPIC_USER_RISK_EVENTS = "user-risk-events"         # producer: forecast-service, consumer: promotion-service
+# Vi hành vi bắn TRỰC TIẾP từ FE (không qua service Java nào, vì không có thao tác nghiệp vụ nào để
+# gắn vào). FE gọi POST /api/v1/public/behavior/events -> forecast-service publish lên topic này ->
+# chính `BehaviorEventConsumer` đọc lại và ghi `user_events`. Cố ý đi vòng qua Kafka thay vì ghi
+# thẳng DB từ endpoint: giữ ĐÚNG MỘT đường ghi vào `user_events` (consumer), nên mọi chuẩn hoá/
+# guard chỉ tồn tại một chỗ, và có backpressure sẵn khi traffic vi hành vi dày.
+TOPIC_USER_BEHAVIOR = "user-behavior-events"        # producer: FE qua forecast-service
 
 # Action type chuẩn hoá ghi vào bảng `user_events` (map từ field `action` của CartUpdatedEvent
 # và `eventType` của ProductViewedEvent sang cùng 1 tập giá trị).
@@ -67,3 +73,48 @@ CART_ACTION_MAP = {
 
 # Action nào tính là "đã thêm vào giỏ" khi tính feature has_abandoned_cart / conversion rate.
 CART_ADD_ACTIONS = {ACTION_ADD_TO_CART, ACTION_UPDATE_CART_QTY}
+
+# --- Vi hành vi (micro-behavior) do FE bắn trực tiếp ---
+# Vì sao cần: thí nghiệm trên clickstream thật (RetailRocket, xem
+# docs/canvas/churn-risk-log.md mục 2026-08-04) đo được rằng với chỉ 3 loại event
+# (view/addtocart/transaction) thì THỨ TỰ hành vi KHÔNG mang thêm thông tin nào (ΔAUC −0,0009) —
+# bigram gần như trùng với số đếm. Muốn kiểm chứng được giả thuyết "thứ tự là thứ rule bất lực"
+# thì bảng chữ cái hành vi phải đủ phong phú. 5 action cũ + 13 action dưới đây = 18 ký hiệu,
+# tức 324 bigram, khi đó thứ tự mới có gì để mang.
+#
+# Mọi action dưới đây CHỌN CÓ CHỦ ĐÍCH để chạy được trên MOBILE (thị trường TMĐT Việt Nam đa số
+# mobile): không dùng gia tốc chuột/hover thuần desktop như tài liệu tham khảo gợi ý, mà dùng
+# `visibilitychange`, scroll, thời gian dừng — có trên cả 2 nền tảng.
+#
+# Giới hạn 30 ký tự: `user_events.action_type` là VARCHAR(30) (xem UserEvent.java).
+ACTION_VIEW_CART = "VIEW_CART"                      # mở trang giỏ hàng — tín hiệu ý định mạnh
+ACTION_BEGIN_CHECKOUT = "BEGIN_CHECKOUT"            # vào luồng thanh toán
+ACTION_VIEW_SHIPPING_FEE = "VIEW_SHIPPING_FEE"      # nhìn thấy khu vực phí vận chuyển
+ACTION_COUPON_FAILED = "COUPON_FAILED"              # nhập mã giảm giá KHÔNG hợp lệ
+ACTION_COUPON_APPLIED = "COUPON_APPLIED"            # áp mã thành công
+ACTION_TAB_HIDDEN = "TAB_HIDDEN"                    # rời tab/thu nhỏ app (so giá ở nơi khác?)
+ACTION_TAB_VISIBLE = "TAB_VISIBLE"                  # quay lại
+ACTION_SCROLL_DEPTH = "SCROLL_DEPTH"                # weight = % đã cuộn (mốc 25/50/75/100)
+ACTION_PAGE_DWELL = "PAGE_DWELL"                    # weight = số giây dừng ở trang
+ACTION_PRODUCT_ZOOM = "PRODUCT_ZOOM"                # xem kỹ ảnh sản phẩm
+ACTION_SEARCH = "SEARCH"                            # tìm kiếm
+ACTION_FILTER_APPLIED = "FILTER_APPLIED"            # lọc — hành vi so sánh
+ACTION_SORT_APPLIED = "SORT_APPLIED"                # sắp xếp (thường là sắp theo giá)
+
+# Tập action FE được phép bắn. Endpoint ingest CHỈ nhận các giá trị này — chặn client bịa
+# action_type lạ làm bẩn bảng `user_events` (và làm vỡ mọi feature đếm theo action).
+FE_BEHAVIOR_ACTIONS = {
+    ACTION_VIEW_CART,
+    ACTION_BEGIN_CHECKOUT,
+    ACTION_VIEW_SHIPPING_FEE,
+    ACTION_COUPON_FAILED,
+    ACTION_COUPON_APPLIED,
+    ACTION_TAB_HIDDEN,
+    ACTION_TAB_VISIBLE,
+    ACTION_SCROLL_DEPTH,
+    ACTION_PAGE_DWELL,
+    ACTION_PRODUCT_ZOOM,
+    ACTION_SEARCH,
+    ACTION_FILTER_APPLIED,
+    ACTION_SORT_APPLIED,
+}

@@ -9,6 +9,7 @@ import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi";
 import { PRICE_PRESETS } from "../utils/categoryUtils.js";
 import { useDebounce } from "../hooks/useDebounce.js";
+import { trackBehavior } from "../../../services/behaviorTracker.ts";
 
 const DEFAULT_MAX_PRICE = 50000000;
 
@@ -16,6 +17,12 @@ export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
   const isImageSearch = searchParams.get("imageSearch") === "true";
+
+  // Tìm kiếm = hành vi chủ động tìm thứ cụ thể, khác hẳn duyệt lướt. KHÔNG gửi nội dung truy vấn
+  // (không cần cho bài toán, và tránh thu thập dữ liệu không cần thiết) — chỉ ghi nhận "đã tìm".
+  useEffect(() => {
+    if (query.trim()) trackBehavior("SEARCH");
+  }, [query]);
 
   const selectedBrands = useMemo(
     () => searchParams.get("brand")?.split(",").filter(Boolean) ?? [],

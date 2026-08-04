@@ -4,9 +4,11 @@ tránh circular import (main.py import router từ endpoints, nếu endpoints l�
 main.py sẽ vòng lặp).
 """
 from app.kafka.behavior_consumer import BehaviorEventConsumer
+from app.kafka.behavior_producer import BehaviorEventProducer
 from app.kafka.risk_producer import RiskEventProducer
 from app.services.risk_scheduler import RiskScheduler
 
 behavior_consumer = BehaviorEventConsumer()
+behavior_producer = BehaviorEventProducer()
 risk_producer = RiskEventProducer()
 risk_scheduler = RiskScheduler(risk_producer)

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import forecast_settings
 from app.api.endpoints import forecast, pricing
-from app.state import behavior_consumer, risk_producer, risk_scheduler
+from app.state import behavior_consumer, behavior_producer, risk_producer, risk_scheduler
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
@@ -15,11 +15,13 @@ async def lifespan(_app: FastAPI):
     # Cả 2 chạy nền song song với FastAPI, không chặn request HTTP nào (xem
     # docs/canvas/churn-risk-implementation-plan.md Phase 4 & 6).
     await behavior_consumer.start()
+    await behavior_producer.start()
     await risk_producer.start()
     risk_scheduler.start()
     yield
     risk_scheduler.shutdown()
     await risk_producer.stop()
+    await behavior_producer.stop()
     await behavior_consumer.stop()
 
 

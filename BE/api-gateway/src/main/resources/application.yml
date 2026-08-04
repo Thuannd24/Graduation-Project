@@ -140,7 +140,10 @@ spring:
             # V-3 FIX: /rfm, /risk, /models trước đây không nằm trong predicate nào — endpoint
             # RFM/anomaly/churn thật của forecast-service không gọi được qua gateway, chỉ gọi
             # trực tiếp tới port 8004.
-            - Path=/api/v1/admin/analytics/**,/api/v1/public/admin/analytics/**,/api/v1/pricing/**,/api/v1/public/pricing/**,/api/v1/rfm/**,/api/v1/risk/**,/api/v1/models/**
+            # /public/behavior/** = vi hành vi FE bắn lên (public có chủ đích: khách chưa đăng nhập
+            # vẫn cần ghi nhận hành vi cho bài toán bỏ giỏ hàng). Gateway vẫn strip X-User-* của
+            # client và tự inject từ JWT nếu có, nên endpoint không tin được header client tự gửi.
+            - Path=/api/v1/admin/analytics/**,/api/v1/public/admin/analytics/**,/api/v1/pricing/**,/api/v1/public/pricing/**,/api/v1/rfm/**,/api/v1/risk/**,/api/v1/models/**,/api/v1/public/behavior/**
           filters:
             - name: CircuitBreaker
               args:
