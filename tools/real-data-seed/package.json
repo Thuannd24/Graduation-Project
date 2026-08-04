@@ -1,0 +1,19 @@
+{
+  "name": "real-data-seed",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Nạp dữ liệu ĐƠN HÀNG + REVIEW THẬT (Olist Brazilian E-Commerce, Kaggle) vào DB, thay cho phần orders/reviews tổng hợp của tools/data-seed. Hành vi xem/bỏ giỏ vẫn phải sinh tổng hợp (neo theo mốc thời gian đơn hàng thật) vì Olist không có dữ liệu clickstream. Xem README.md.",
+  "scripts": {
+    "download": "node download.mjs",
+    "import": "node import.mjs",
+    "import:dry-run": "node import.mjs --dry-run",
+    "import:force": "node import.mjs --force",
+    "cleanup": "node cleanup.mjs"
+  },
+  "dependencies": {
+    "mysql2": "^3.9.0",
+    "csv-parse": "^5.5.6",
+    "adm-zip": "^0.6.0"
+  }
+}
