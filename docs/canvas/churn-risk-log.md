@@ -1378,7 +1378,74 @@ orphan order_items, 0 orphan review (cả 2 khoá), 0 lệch `subtotal`, đếm 
 595 order_items — xác nhận suy `order_id` theo batch không bị lệch/collision.
 
 **Ước tính full ~96.478 đơn sau tối ưu: ~15-25 phút** (so với ~8-9 tiếng trước tối ưu) — đã báo lại
-cho user, đang chờ quyết định có chạy full + train lại trên dữ liệu thật hay không.
+cho user, user xác nhận chạy full + train để so sánh.
+
+### Import full ~93.897 user thật + train thật để so sánh — kết quả quan trọng
+
+**Import full:** đúng ước tính, chạy nền. Kết quả: **93.897 user, 97.103 đơn (96.478 DELIVERED /
+625 CANCELLED), 96.808 review thật, 221.478 event hành vi tổng hợp**. Verify SQL lại từ đầu ở quy
+mô đầy đủ: **0 orphan** ở mọi bảng (order_items, review theo order_id, review theo product_id,
+event theo user_id). Docker Desktop crash thêm 1 lần giữa chừng (quen thuộc) — khởi động lại,
+`ai-forecast-service` cần thêm ~15-20s sau khi daemon sẵn sàng để networking WSL2 ổn định (curl
+"connection refused" dù `docker ps` báo "Up" — không phải lỗi ứng dụng, đã gặp lại đúng hiện tượng
+network chưa ổn định sau crash).
+
+**Phát hiện phụ, đáng chú ý:** trong 93.897 user thật, chỉ **2.801 user (~3%)** có ≥2 đơn DELIVERED
+— ngưỡng dân số huấn luyện churn hiện dùng. Olist là dữ liệu marketplace thật với tỉ lệ khách quay
+lại mua RẤT THẤP — đặc điểm đã biết công khai của dataset này, không phải lỗi import.
+
+**Để so sánh sạch (không trộn lẫn synthetic + thật)**: tạm dọn dữ liệu synthetic
+(`tools/data-seed/cleanup.mjs`, có chủ đích, sẽ sinh lại sau) rồi gọi `POST /models/train` trên
+CHỈ dữ liệu Olist thật.
+
+**Phát hiện quan trọng #1 — training thất bại lần đầu, đúng nguyên nhân, không phải bug import:**
+`/models/train` báo lỗi "tập train chỉ có 1 lớp nhãn duy nhất". Lý do: `_build_training_panel()`
+tính mốc cắt bằng `datetime.now()` (đồng hồ hệ thống, hiện là 2026), nhưng dữ liệu Olist thật đứng
+yên ở 2016-2018 — mọi mốc cắt rơi vào ~2025-2026, cách xa dữ liệu thật hàng năm trời, nên "user có
+đơn trong 120 ngày tới mốc cắt" luôn là KHÔNG (tương lai đó không hề tồn tại trong dữ liệu) → 100%
+user churn=1, mất khả năng train. Đây là giới hạn thật của kiến trúc (mốc cắt neo theo đồng hồ hệ
+thống — hợp lý cho dữ liệu synthetic luôn sinh quanh "hiện tại", nhưng sai với dữ liệu lịch sử đã
+đóng băng), không phải lỗi của `tools/real-data-seed`.
+
+**Sửa tối thiểu, an toàn:** thêm tham số `reference_now: pd.Timestamp | None = None` vào
+`_build_training_panel()` — mặc định `None` giữ NGUYÊN hành vi production (dùng đồng hồ hệ thống),
+chỉ dùng tường minh cho phân tích dữ liệu lịch sử. Xác nhận model production KHÔNG bị đụng vào:
+version/AUC trước và sau detour này giống hệt nhau (`GET /models/card` kiểm tra lại sau cùng).
+
+Chạy trực tiếp `_build_training_panel(reference_now=2018-10-20)` + `_evaluate_grouped_cv()` (không
+qua `/models/train`, không lưu model — đây là phân tích một lần, không phải thay đổi production)
+với mốc neo = ngày cuối cùng có đơn thật (2018-10-17) + vài ngày đệm.
+
+**Phát hiện quan trọng #2 — kết quả trên dữ liệu thật:**
+
+| Chỉ số | Dữ liệu tổng hợp (production, train #7) | Dữ liệu Olist thật |
+|---|---|---|
+| Panel | 342 user / 1.443 dòng | 2.189 user / 8.815 dòng |
+| Churn rate | 0.2633 | **0,9729** |
+| AUC (grouped CV) | 0,8415 ± 0,032 | **0,7564 ± 0,0413** |
+| F1 | 0,6621 | 0,8599 ± 0,0252 |
+| Precision | 0,555 | 0,9903 ± 0,0021 |
+| Recall | 0,8316 | 0,7608 ± 0,0394 |
+
+**Diễn giải trung thực (không phải "thật tốt hơn synthetic" hay ngược lại):**
+- **AUC — CÓ so sánh được** (không phụ thuộc base rate): 0,7564 (thật) so với 0,7461-0,8415 (các
+  lần đo synthetic khác nhau trong phiên) — **cùng bậc độ lớn**. Đây là tín hiệu tốt: sức phân biệt
+  của 11 feature + Logistic Regression **có chuyển giao được sang hành vi người thật**, không chỉ
+  "học vẹt" cấu trúc sinh dữ liệu tổng hợp.
+- **F1/Precision/Recall — KHÔNG so sánh trực tiếp được**, vì base rate khác nhau quá xa (97,3% so
+  với 26,3%). Ở base rate 97,3%, "đoán bừa toàn churn" đã cho precision ~97% miễn phí — F1 0,86 và
+  precision 0,99 ở đây **bị base rate cực lệch thổi phồng**, không phản ánh model giỏi hơn.
+- **Phát hiện thật, có giá trị báo cáo:** cửa sổ nhãn 120 ngày (hiệu chỉnh cho tốc độ mua của
+  generator tổng hợp) tạo ra churn rate cực đoan (97,3%) trên hành vi mua hàng thật — gợi ý dataset
+  marketplace thật như Olist cần cửa sổ nhãn DÀI HƠN nhiều (vd 180-365 ngày) để có churn rate cân
+  bằng/dùng được, vì khách quay lại mua thật thường cách nhau lâu hơn giả định của generator tổng hợp.
+
+**Phát hiện phụ khác:** `behavior.py:125` (`cart_abandon_count.fillna(0)`) vẫn còn 1 chỗ
+`FutureWarning` pandas y hệt lỗi đã sửa ở Tầng 5 (dòng khác trong cùng file) — chưa sửa vì không
+chặn kết quả, để lại cho lần dọn dẹp tiếp theo.
+
+**Đã khôi phục dữ liệu synthetic** (`node seed.mjs --force --demo-users 0`) về đúng quy mô cũ (500
+user) sau khi đo xong — không mất gì, seeder sinh lại được bất cứ lúc nào.
 
 ---
 

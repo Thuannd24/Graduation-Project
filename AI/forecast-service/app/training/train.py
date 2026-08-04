@@ -192,6 +192,7 @@ def _build_training_panel(
     label_window_days: int | None = None,
     label_source: str = LABEL_SOURCE,
     min_delivered_orders: int = MIN_DELIVERED_ORDERS_FOR_CHURN,
+    reference_now: pd.Timestamp | None = None,
 ) -> pd.DataFrame:
     """`include_candidates=True` ghép thêm các cột ứng viên (`features/candidates.py`) để
     `app/training/ablation.py` thí nghiệm. Production train luôn để False — model đang chạy chỉ
@@ -200,11 +201,17 @@ def _build_training_panel(
     `cutoffs_days_ago` / `label_window_days` / `label_source` / `min_delivered_orders` để
     `label_diagnostics.py` quét lưới định nghĩa nhãn (Tầng 0.2) — module đó tự lọc dân số nên truyền
     `min_delivered_orders=0` để không lọc hai lần. Mặc định giữ đúng cấu hình production.
+
+    `reference_now`: mặc định `None` -> dùng đồng hồ hệ thống (đúng hành vi production, dữ liệu
+    seed synthetic luôn neo quanh "hiện tại"). CHỈ truyền tường minh khi train trên dữ liệu lịch sử
+    đã đóng băng (vd Olist 2016-2018, xem `tools/real-data-seed`) — nếu không, mốc cắt sẽ tính lùi
+    từ NGÀY HỆ THỐNG thay vì từ mốc cuối cùng có dữ liệu thật, khiến MỌI user rơi vào đúng 1 nhãn
+    (toàn bộ "không có đơn trong tương lai" vì tương lai đó không hề tồn tại trong dữ liệu).
     """
     cutoff_days = cutoffs_days_ago or CUTOFF_DAYS_AGO
     window_days = label_window_days or LABEL_WINDOW_DAYS
 
-    now = pd.Timestamp(datetime.now())
+    now = reference_now if reference_now is not None else pd.Timestamp(datetime.now())
     cutoffs = [now - timedelta(days=d) for d in cutoff_days]
 
     frames = []
