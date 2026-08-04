@@ -1515,6 +1515,121 @@ AUC 0,99 là giả, và lệnh cụ thể để cô lập từng nguồn trướ
 
 ---
 
+## 2026-08-04 — Thí nghiệm: bỏ giỏ hàng trên clickstream THẬT (RetailRocket)
+
+User chất vấn liên tiếp 3 câu buộc phải nghĩ lại toàn bộ: (1) *"rule gần bằng AI thì AI còn ý nghĩa
+gì"*, (2) *"rule cũng phân mức được mà"*, (3) *"tăng feature lên thì rule sẽ dần không bắt kịp"*.
+Cả 3 đều đúng ở mức độ nào đó và đã buộc tôi **sửa 2 lập luận sai của chính mình** (xem dưới).
+
+### Sửa 2 lập luận sai của tôi
+
+1. **"Rule trả nhãn nhị phân nên không phân mức được"** — **SAI**. Rule xếp tầng được
+   (`if x>60 → A elif x>30 → B`). Đã đo lại: rule phân mức (cây depth-2) cho **4 bậc điểm**, model
+   cho **207 bậc**; tại ngân sách K=50 rule có **48 người đồng hạng** (phải chọn bừa) còn model có
+   **2**; đổi được thành **+5,8% revenue_recall** (0,5296 → 0,5603). Khác biệt là **độ mịn của thứ
+   tự**, KHÔNG phải "làm được / không làm được".
+2. **"Tăng feature lên thì rule không bắt kịp"** — **SAI theo hướng user nghĩ**. Đo thật: 11 → 26
+   feature làm AUC **GIẢM** (0,7461 → 0,7373). L1 path cho đỉnh ở **6 feature**; 6/11 feature hiện
+   tại có permutation importance ≈ 0 (`monetary` 0,0001 vì tương quan 0,877 với `frequency`). Lý do
+   logic: rule quét lưới trên 26 feature **có nhiều lựa chọn hơn**, nên **mạnh lên chứ không yếu đi**.
+   Cái quyết định là **độ sâu tương tác** cần thiết, không phải số cột. Và **trần thông tin do dữ liệu
+   thô quyết định** — thêm `GROUP BY` trên cùng bảng không tạo ra thông tin mới.
+
+### Dữ liệu mới: clickstream hành vi THẬT
+
+Olist không có clickstream (đã đo: chỉ 3,3% đơn có ≥2 SP, 3,1% khách mua lặp ⇒ loại luôn hướng
+gợi ý bằng CF). Chuyển sang **RetailRocket** (Kaggle, `retailrocket/ecommerce-dataset`) — tải được
+qua `kagglehub` **không cần xác thực**, giống Olist.
+
+**2.756.101 event thật** (view/addtocart/transaction), 1.407.580 visitor, 5/2015-9/2015.
+Dựng bài toán bỏ giỏ hàng với **nhãn thật** (addtocart → có transaction cùng item trong 24h?):
+
+| | Con số |
+|---|---|
+| Mẫu | **69.332** |
+| Bỏ giỏ / Mua | **70,0% / 30,0%** ← cân bằng lành mạnh |
+| Visitor | 37.722 |
+
+So với churn synthetic (340 user) và Olist (churn 97,3% thoái hoá): **bậc khác hoàn toàn**, và giải
+quyết luôn phản biện "340 user thì overfit".
+
+### Thiết kế thí nghiệm — sửa lỗi phương pháp của benchmark rule cũ
+
+Benchmark rule-vs-AI trước đây có **lỗi thiết kế**: tôi cho cả 2 bên **CÙNG bộ feature tổng hợp**,
+nên chúng bằng nhau là hiển nhiên. Lần này chia theo *cái rule truy cập được*:
+- **Nhóm A (12 feature) — rule dùng được**: mọi vô hướng có thể đặt ngưỡng (đếm luỹ tiến, vị trí,
+  khoảng thời gian, giờ/thứ). **Cố ý hào phóng với rule.**
+- **Nhóm B (11 feature) — chỉ model dùng được**: phụ thuộc THỨ TỰ (hành động liền trước, đếm bigram
+  chuyển trạng thái).
+
+Chống rò rỉ: mọi feature dùng `cumsum` theo visitor rồi **trừ chính event hiện tại** ⇒ chỉ dùng dữ
+liệu TRƯỚC thời điểm thêm giỏ. Grouped CV theo visitor (user-disjoint), 5 fold.
+
+### Kết quả — 1 phát hiện DƯƠNG, 1 phát hiện ÂM (giả thuyết của tôi sai)
+
+**ÂM — thứ tự KHÔNG mang thêm thông tin gì:**
+
+| | AUC |
+|---|---|
+| LightGBM nhóm A (không có thứ tự) | 0,7447 ± 0,0137 |
+| LightGBM A+B (có thứ tự) | 0,7438 ± 0,0165 → **ΔAUC = −0,0009** |
+| A+B đã **xáo trộn** (đối chứng âm) | 0,7445 → đối chứng **sạch**, harness đáng tin |
+
+**Giả thuyết "thứ tự là thứ rule bất lực" của tôi THẤT BẠI trên dữ liệu này.** Nguyên nhân đo được:
+RetailRocket chỉ có **3 loại event**, nên bigram gần như trùng với số đếm (`cum_bg_1_1` ≈ `cum_view`).
+Các tín hiệu chuỗi giàu mà tài liệu tham khảo nêu (`cart→remove→cart`, hover phí ship) **KHÔNG TỒN
+TẠI** trong dataset này. Đây lại đúng luận điểm "trần thông tin do dữ liệu thô quyết định".
+
+**F1 là metric RÁC ở base rate 70% — phải phát hiện ra điều này trước khi kết luận:**
+
+| | F1 |
+|---|---|
+| "Đoán tất cả đều bỏ giỏ" (không AI, không rule) | **0,8238** |
+| Rule tốt nhất | 0,8432 |
+| Model | 0,8440 |
+
+Cả hai chỉ hơn "không làm gì" ~0,02 ⇒ **so sánh bằng F1 ở đây vô nghĩa**. Phải dùng metric xếp hạng.
+
+**DƯƠNG — trên XẾP HẠNG, model hơn rule VƯỢT XA sàn nhiễu:**
+
+| Phương pháp (chỉ nhóm A) | AUC | Số lá | So với LightGBM |
+|---|---|---|---|
+| Xếp hạng bằng **1 feature** tốt nhất (`cum_view`) | 0,6592 | — | **+0,0855 = 5,2× sàn nhiễu** |
+| Cây depth-1 (1 câu if) | 0,6345 | 2 | +0,110 = 8× |
+| **Cây depth-2 (mức người viết tay được)** | **0,6987** | 4 | **+0,046 = 3,4× sàn nhiễu** |
+| Cây depth-3 | 0,7202 | 8 | +0,025 |
+| Cây depth-6 (60 lá — không ai viết tay) | 0,7339 | 60 | +0,011 |
+| Cây depth-10 | 0,7167 ↓ **overfit** | 467 | — |
+| **LightGBM** | **0,7447 ± 0,0137** | ~nghìn | — |
+
+**Đây là khác biệt căn bản so với churn**, đo được rõ ràng:
+
+| | Churn 120 ngày | Bỏ giỏ hàng |
+|---|---|---|
+| AUC xếp hạng bằng 1 feature tốt nhất | **0,7494** (`days_since_last_activity`) | **0,6592** (`cum_view`) |
+| AUC model đầy đủ | 0,7738 | 0,7447 |
+| Chênh / sàn nhiễu | 0,024 / ±0,0596 = **0,4× → KHÔNG đáng kể** | 0,0855 / ±0,0137 = **5,2× → ĐÁNG KỂ** |
+
+Ở churn, **một con số** (`days_since_last_activity`) mang gần hết tín hiệu ⇒ rule là đủ. Ở bỏ giỏ
+hàng, **không feature nào một mình mang được tín hiệu** ⇒ buộc phải kết hợp nhiều chiều ⇒ **rule
+người viết tay có trần ~0,70 AUC, không thể chạm 0,745**.
+
+**Audit rò rỉ (bắt buộc, sau vụ AUC 0,9908 giả trong phiên này):** top feature là các đại lượng thời
+gian hợp lệ (`secs_since_first`, `secs_in_session`, `dt_prev`), AUC ổn định qua phân tầng độ hoạt
+động (0,6766 / 0,6989 / 0,7988 — user nhiều lịch sử dự đoán tốt hơn, hợp lý), không feature nào chi
+phối bất thường, đối chứng âm sạch. **Không có dấu hiệu rò rỉ.**
+
+### Kết luận rút ra
+
+- **Nguồn giá trị của AI ở đây là KẾT HỢP NHIỀU CHIỀU, không phải THỨ TỰ** — ngược với giả thuyết
+  ban đầu của tôi. Phải báo cáo đúng như vậy.
+- Muốn kiểm chứng giả thuyết thứ tự thì **cần bộ event phong phú hơn** (remove-from-cart, hover phí
+  ship, chuyển tab...) ⇒ phải thêm tracker ở FE, dataset công khai không có sẵn.
+- **F1 ở base rate lệch là metric bẫy** — phải luôn so với baseline tầm thường ("đoán tất cả") trước
+  khi kết luận bất cứ điều gì.
+
+---
+
 ## Giới hạn phải nói rõ khi báo cáo
 
 - **Dữ liệu synthetic** → metric đo "model có phục hồi được cấu trúc sinh dữ liệu hay không",
