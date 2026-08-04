@@ -39,11 +39,17 @@ def save_model(
     metrics: dict[str, Any],
     version: str | None = None,
     extra: dict[str, Any] | None = None,
+    update_latest: bool = True,
 ) -> str:
     """Lưu `artifact` (joblib-serializable: sklearn model/scaler/dict chứa nhiều model...) xuống
-    `{MODELS_DIR}/{name}/{version}/model.joblib`, ghi kèm metadata.json, cập nhật con trỏ
-    `latest.json`, và append 1 dòng vào `run_log.jsonl` để tra cứu lịch sử train. Trả về version
-    vừa lưu.
+    `{MODELS_DIR}/{name}/{version}/model.joblib`, ghi kèm metadata.json, và append 1 dòng vào
+    `run_log.jsonl` để tra cứu lịch sử train (LUÔN ghi, bất kể `update_latest`, để giữ dấu vết mọi
+    lần train kể cả lần bị retrain-gate từ chối). Trả về version vừa lưu.
+
+    `update_latest=False` (dùng bởi retrain gate ở `app/training/train.py`): lưu artifact + metadata
+    đầy đủ nhưng KHÔNG cập nhật con trỏ `latest.json` — production tiếp tục dùng model cũ. Đây là
+    cách duy nhất để "train thử, chỉ thay nếu tốt hơn" mà không mất version vừa train (vẫn load lại
+    được bằng version cụ thể nếu cần soát lại).
     """
     # %f (microsecond) bắt buộc phải có: 2 lần train liên tiếp trong cùng 1 giây (vd retry nhanh,
     # hoặc test) sẽ trùng version nếu chỉ có độ phân giải tới giây -> ghi đè mất bản cũ âm thầm.
@@ -65,15 +71,19 @@ def save_model(
     with open(model_dir / "metadata.json", "w", encoding="utf-8") as f:
         json.dump(metadata, f, ensure_ascii=False, indent=2)
 
-    latest_path = _models_root() / name / "latest.json"
-    with open(latest_path, "w", encoding="utf-8") as f:
-        json.dump({"version": version}, f)
+    if update_latest:
+        latest_path = _models_root() / name / "latest.json"
+        with open(latest_path, "w", encoding="utf-8") as f:
+            json.dump({"version": version}, f)
 
     run_log_path = _models_root() / "run_log.jsonl"
     with open(run_log_path, "a", encoding="utf-8") as f:
         f.write(json.dumps(metadata, ensure_ascii=False) + "\n")
 
-    logger.info(f"Saved model name={name} version={version} feature_version={feature_version} metrics={metrics}")
+    logger.info(
+        f"Saved model name={name} version={version} feature_version={feature_version} "
+        f"update_latest={update_latest} metrics={metrics}"
+    )
     return version
 
 

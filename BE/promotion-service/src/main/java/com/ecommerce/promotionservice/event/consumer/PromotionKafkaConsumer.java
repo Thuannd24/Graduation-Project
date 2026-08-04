@@ -174,6 +174,18 @@ public class PromotionKafkaConsumer {
             if (payload.has("cartAbandonCount")) {
                 variables.put("cartAbandonCount", payload.get("cartAbandonCount").asDouble());
             }
+            // Xếp hạng theo tổn thất kỳ vọng (churnProbability x monetary) do phía AI tính, đưa
+            // xuống để admin dựng nhánh điều kiện trong BPMN theo GIÁ TRỊ khách hàng chứ không chỉ
+            // theo xác suất churn — vd expectedLoss cao thì voucher lớn, thấp thì chỉ email nhắc.
+            if (payload.has("monetary")) {
+                variables.put("monetary", payload.get("monetary").asDouble());
+            }
+            if (payload.has("expectedLoss")) {
+                variables.put("expectedLoss", payload.get("expectedLoss").asDouble());
+            }
+            if (payload.has("riskRank")) {
+                variables.put("riskRank", payload.get("riskRank").asInt());
+            }
 
             campaignTriggerService.triggerByEventType("Trigger_Event_ChurnRisk", variables);
             ack.acknowledge();

@@ -5,6 +5,7 @@ tự query trực tiếp, giờ hàm đó gọi lại module này thay vì tự 
 """
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 from sqlalchemy.engine import Engine
 
@@ -59,12 +60,15 @@ def fetch_order_features(engine: Engine, *, as_of: pd.Timestamp | None = None) -
     df["cancelled_count"] = df["cancelled_count"].fillna(0)
     df["coupon_used_count"] = df["coupon_used_count"].fillna(0)
 
-    df["avg_order_value"] = (df["monetary"] / df["frequency"].replace(0, pd.NA)).fillna(0.0)
+    # np.nan (KHÔNG phải pd.NA) làm mẫu số rỗng: pd.NA sinh dtype object sau phép chia, khiến
+    # .fillna() phải "downcast" ngầm về float -> FutureWarning, và sẽ đổi hành vi ở pandas tương lai.
+    # np.nan vốn đã là float nên chia xong dtype không đổi, .fillna() không cần downcast gì.
+    df["avg_order_value"] = (df["monetary"] / df["frequency"].replace(0, np.nan)).fillna(0.0)
     df["cancel_rate"] = (
-        df["cancelled_count"] / df["total_order_count"].replace(0, pd.NA)
+        df["cancelled_count"] / df["total_order_count"].replace(0, np.nan)
     ).fillna(0.0)
     df["discount_dependency"] = (
-        df["coupon_used_count"] / df["total_order_count"].replace(0, pd.NA)
+        df["coupon_used_count"] / df["total_order_count"].replace(0, np.nan)
     ).fillna(0.0)
 
     return df[[

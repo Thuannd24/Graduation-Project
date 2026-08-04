@@ -24,8 +24,11 @@ export default function AnalyticsAITab() {
   
   // States for data
   const [forecastData, setForecastData] = useState(null);
+  const [forecastMeta, setForecastMeta] = useState({ is_demo_data: true, note: null });
   const [anomalies, setAnomalies] = useState([]);
+  const [anomaliesMeta, setAnomaliesMeta] = useState({ is_demo_data: true, note: null });
   const [segments, setSegments] = useState([]);
+  const [segmentsMeta, setSegmentsMeta] = useState({ is_demo_data: false, note: null });
   const [stockRecommendations, setStockRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,9 +44,12 @@ export default function AnalyticsAITab() {
       })
     ])
       .then(([forecast, logs, segs, prods]) => {
-        setForecastData(forecast);
-        setAnomalies(logs);
-        setSegments(segs);
+        setForecastData(forecast.data);
+        setForecastMeta({ is_demo_data: forecast.is_demo_data, note: forecast.note });
+        setAnomalies(logs.data);
+        setAnomaliesMeta({ is_demo_data: logs.is_demo_data, note: logs.note });
+        setSegments(segs.data);
+        setSegmentsMeta({ is_demo_data: segs.is_demo_data, note: segs.note });
 
         // Build dynamic stock planning recommendations from actual database products
         const planning = [
@@ -94,6 +100,17 @@ export default function AnalyticsAITab() {
   const handleFreezeUser = (username) => {
     alert(`Đã tạm khóa tài khoản của khách hàng: ${username}. Yêu cầu xác thực bảo mật đã được gửi.`);
   };
+
+  // Banner minh bạch: 2/3 tab (demand-forecasting, anomalies) chưa có model thật đứng sau — dựng
+  // bản thật là hướng phát triển riêng ngoài phạm vi tính năng churn-risk. Không ẩn đi để tránh
+  // trình bày số minh họa như kết quả AI thật khi demo.
+  const DemoDataBanner = ({ note }) =>
+    note ? (
+      <div className="flex items-start gap-2 px-4 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-amber-700 dark:text-amber-400 text-[11px] font-semibold">
+        <Icon name="info" className="text-sm shrink-0 mt-0.5" />
+        <span>{note}</span>
+      </div>
+    ) : null;
 
   return (
     <div className="space-y-6 animate-fadeIn p-6 text-slate-800 dark:text-slate-200">
@@ -160,6 +177,7 @@ export default function AnalyticsAITab() {
           {/* ===================== VIEW 1: FORECASTING ===================== */}
           {activeSubTab === "forecasting" && (
             <div className="space-y-6">
+              <DemoDataBanner note={forecastMeta.note} />
               {/* Forecasting chart */}
               <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
                 <div className="flex justify-between items-center mb-6">
@@ -167,13 +185,7 @@ export default function AnalyticsAITab() {
                     <h3 className="text-base font-extrabold text-slate-800 dark:text-white">
                       Biểu đồ Dự Báo Doanh Số & Nhu Cầu Tồn Kho (30 ngày)
                     </h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">
-                      Model: LightGBM & Facebook Prophet • Độ chính xác: MAPE ~ 4.2%
-                    </p>
                   </div>
-                  <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 px-3 py-1 rounded-full font-bold">
-                    Dự báo tự động cập nhật lúc 00:00 hàng ngày
-                  </span>
                 </div>
 
                 <div className="w-full h-80">
@@ -284,11 +296,12 @@ export default function AnalyticsAITab() {
           {/* ===================== VIEW 2: ANOMALY DETECTION ===================== */}
           {activeSubTab === "anomalies" && (
             <div className="space-y-6">
+              <DemoDataBanner note={anomaliesMeta.note} />
               <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
                 <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                   <div>
                     <h3 className="text-sm font-extrabold text-slate-800 dark:text-white">
-                      Danh Sách Cảnh Báo Giao Dịch Bất Thường (LSTM Autoencoder)
+                      Danh Sách Cảnh Báo Giao Dịch Bất Thường
                     </h3>
                     <p className="text-[10.5px] text-slate-400 font-medium">
                       Các giao dịch mua sắm có dấu hiệu bất thường về mặt hành vi, số lượng hoặc thanh toán được AI gắn cờ đỏ rủi ro.
@@ -358,6 +371,7 @@ export default function AnalyticsAITab() {
           {/* ===================== VIEW 3: CUSTOMER SEGMENTATION ===================== */}
           {activeSubTab === "segmentation" && (
             <div className="space-y-6">
+              <DemoDataBanner note={segmentsMeta.note} />
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 
                 {/* Segmentation breakdown chart */}

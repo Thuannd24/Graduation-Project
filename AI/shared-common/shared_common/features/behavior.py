@@ -6,6 +6,7 @@ join được bằng pandas mà không cần cross-service SQL JOIN).
 """
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 from sqlalchemy.engine import Engine
 
@@ -128,8 +129,10 @@ def fetch_behavior_features(
     # user chưa từng có hành vi nào (join outer sinh NaN) -> coi như "im lặng rất lâu"
     df["days_since_last_activity"] = df["days_since_last_activity"].fillna(abandon_window_days * 12)
 
+    # np.nan (KHÔNG phải pd.NA) làm mẫu số rỗng: pd.NA sinh dtype object sau phép chia, khiến
+    # .fillna() phải "downcast" ngầm về float -> FutureWarning (xem cùng lý do ở rfm.py).
     df["view_to_cart_conversion_rate"] = (
-        df["cart_add_count"] / df["view_count"].replace(0, pd.NA)
+        df["cart_add_count"] / df["view_count"].replace(0, np.nan)
     ).fillna(0.0)
 
     return df[[
