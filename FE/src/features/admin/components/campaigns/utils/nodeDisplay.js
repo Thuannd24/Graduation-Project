@@ -43,6 +43,8 @@ export function getNodeSummary(node) {
       return "Phân nhánh theo danh mục SP";
     case "Condition_ContainsProduct":
       return "Phân nhánh theo sản phẩm";
+    case "Condition_ChurnRiskTier":
+      return "Phân nhánh theo mức xác suất rời bỏ (AI)";
     case "Action_IssueVoucher_Percent":
       return p.discountPercent ? `Giảm ${p.discountPercent}%` : "";
     case "Action_IssueVoucher_Fixed":

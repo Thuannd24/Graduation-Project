@@ -13,6 +13,10 @@ export function formatBranchCondition(nodeType, edge) {
       return parsed.amount != null
         ? `Chi tiêu ${parsed.operator || ">="} ${Number(parsed.amount).toLocaleString("vi-VN")}đ`
         : null;
+    case "Condition_ChurnRiskTier":
+      return parsed.threshold != null
+        ? `Rủi ro rời bỏ ${parsed.operator || ">="} ${Math.round(Number(parsed.threshold) * 100)}%`
+        : null;
     case "Condition_Location":
       return parsed.value ? `Tỉnh = ${parsed.value}` : null;
     case "Condition_ContainsCategory":

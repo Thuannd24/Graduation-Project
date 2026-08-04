@@ -15,7 +15,8 @@ const CONDITION_TYPES = new Set([
   "Condition_TotalSpending",
   "Condition_Location",
   "Condition_ContainsCategory",
-  "Condition_ContainsProduct"
+  "Condition_ContainsProduct",
+  "Condition_ChurnRiskTier"
 ]);
 
 const ACTION_TYPES = new Set([
@@ -204,6 +205,18 @@ function validateCondition(node, inDeg, outs, props, errors) {
         break;
       }
       case "Condition_TotalSpending": {
+        const op = String(ep.operator || "").toUpperCase();
+        if (!["GREATER_THAN", "LESS_THAN", "EQUAL"].includes(op)) {
+          errors.push(err(node.id, "invalid_data", `edge.${edge.id}.operator`,
+            `Nhánh IF của "${node.name}": operator không hợp lệ.`));
+        }
+        if (!isNumber(ep.value)) {
+          errors.push(err(node.id, "missing_parameter", `edge.${edge.id}.value`,
+            `Nhánh IF của "${node.name}": value phải là số.`));
+        }
+        break;
+      }
+      case "Condition_ChurnRiskTier": {
         const op = String(ep.operator || "").toUpperCase();
         if (!["GREATER_THAN", "LESS_THAN", "EQUAL"].includes(op)) {
           errors.push(err(node.id, "invalid_data", `edge.${edge.id}.operator`,

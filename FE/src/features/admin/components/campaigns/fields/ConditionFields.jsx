@@ -46,6 +46,17 @@ export default function ConditionFields({ node, updateProp, lookup }) {
         </>
       );
 
+    // Threshold is configured per-branch below — không có tham số cấp node (churnProbability là
+    // điểm số tại thời điểm risk-scan chấm, không cộng dồn theo khoảng thời gian như totalSpending).
+    case "Condition_ChurnRiskTier":
+      return (
+        <div className="cb-fg" style={INFO_BOX_STYLE}>
+          <small style={INFO_TEXT_STYLE}>
+            Cấu hình từng ngưỡng IF ở mục &quot;Điều kiện rẽ nhánh&quot;. Else khi không đạt.
+          </small>
+        </div>
+      );
+
     // Province is configured per-branch, not here.
     case "Condition_Location":
       return null;

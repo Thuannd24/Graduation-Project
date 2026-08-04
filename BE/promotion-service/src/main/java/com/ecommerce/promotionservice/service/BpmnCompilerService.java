@@ -51,7 +51,8 @@ public class BpmnCompilerService {
             "Condition_TotalSpending",
             "Condition_Location",
             "Condition_ContainsCategory",
-            "Condition_ContainsProduct"
+            "Condition_ContainsProduct",
+            "Condition_ChurnRiskTier"
     );
 
     public String compile(WorkflowGraphDto graph, String processKey, String processName) {

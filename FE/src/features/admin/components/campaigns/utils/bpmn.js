@@ -32,7 +32,8 @@ const CONDITION_TYPES = new Set([
   "Condition_TotalSpending",
   "Condition_Location",
   "Condition_ContainsCategory",
-  "Condition_ContainsProduct"
+  "Condition_ContainsProduct",
+  "Condition_ChurnRiskTier"
 ]);
 
 function isSmallNode(node) {

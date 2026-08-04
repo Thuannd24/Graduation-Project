@@ -14,6 +14,7 @@ export const NODE_TYPES = {
   Condition_Location:           { cat: "condition", name: "Lọc tỉnh/thành",    def: {} },
   Condition_ContainsCategory:   { cat: "condition", name: "Có danh mục SP", def: { targetIds: [] } },
   Condition_ContainsProduct:    { cat: "condition", name: "Có sản phẩm",       def: { targetIds: [] } },
+  Condition_ChurnRiskTier:      { cat: "condition", name: "Mức độ rủi ro rời bỏ (AI)", def: {} },
   Action_IssueVoucher_Percent:  { cat: "action",    name: "Tặng voucher %",    def: { discountPercent: 10, maxDiscountAmount: 50000, expireDays: 7 } },
   Action_IssueVoucher_Fixed:    { cat: "action",    name: "Voucher giảm tiền", def: { discountAmount: 20000, minOrderValue: 150000, expireDays: 7 } },
   Action_IssueVoucher_Freeship: { cat: "action",    name: "Voucher Freeship",  def: { maxShippingDiscount: 30000, expireDays: 7 } },
