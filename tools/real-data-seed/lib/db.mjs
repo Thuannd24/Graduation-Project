@@ -39,6 +39,19 @@ export async function bulkInsert(table, columns, rows, batchSize = 500) {
   }
 }
 
+/** Bulk INSERT ... ON DUPLICATE KEY UPDATE theo batch — dùng cho categories/products/users (idempotent
+ * qua khoá unique slug/email), khác `bulkInsert()` (orders) không cần upsert vì luôn là dòng mới. */
+export async function bulkUpsert(table, columns, rows, { updateColumn, batchSize = 500 } = {}) {
+  if (rows.length === 0) return;
+  const placeholder = `(${columns.map(() => "?").join(",")})`;
+  const updateClause = `${updateColumn} = ${updateColumn}`; // no-op update, chỉ để kích hoạt nhánh "đã tồn tại thì bỏ qua"
+  for (let i = 0; i < rows.length; i += batchSize) {
+    const batch = rows.slice(i, i + batchSize);
+    const sql = `INSERT INTO ${table} (${columns.join(",")}) VALUES ${batch.map(() => placeholder).join(",")} ON DUPLICATE KEY UPDATE ${updateClause}`;
+    await getPool().execute(sql, batch.flat());
+  }
+}
+
 export async function closePool() {
   if (pool) await pool.end();
 }

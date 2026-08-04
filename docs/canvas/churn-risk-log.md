@@ -1358,9 +1358,27 @@ trước) — khởi động lại, infra tự phục hồi.
   (phiên chốt đơn), mọi event đều có timestamp TRƯỚC mốc đơn hàng thật.
 
 **Kết luận: `tools/real-data-seed` hoạt động đúng trên dữ liệu thật, không chỉ trên fixture giả
-lập.** Còn lại (chưa làm, để ngỏ): import full ~96k khách hàng (hiện mới mẫu 500), train lại model
-trên dữ liệu thật để so sánh với model train trên dữ liệu tổng hợp — đây mới là câu trả lời đầy đủ
-cho yêu cầu ban đầu "test chuẩn nhất".
+lập.**
+
+### Tối ưu tốc độ trước khi import full ~96k khách hàng
+
+User hỏi "import full mất bao lâu" — đo thời gian thật của lần chạy mẫu 500 khách hàng (~175s) rồi
+suy ra: `writeOrders()` đang ghi **từng đơn một** (khác hẳn `tools/data-seed` đã tối ưu bulk-insert
+từ đầu), ước tính scale lên ~96.478 đơn thật sẽ mất **~8-9 tiếng** — không thực tế. Hỏi lại user
+trước khi làm thêm (không tự ý vừa import full vừa chấp nhận chờ hàng giờ): user chọn tối ưu trước.
+
+Sửa `ensureCategories`/`ensureProducts`/`ensureUsers` (thêm `bulkUpsert()` — batch INSERT ...
+ON DUPLICATE KEY UPDATE) và `writeOrders` (batch INSERT nhiều dòng, suy `order_id` qua
+`result.insertId + idx` — **giống hệt** pattern đã dùng ở `tools/data-seed/lib/writeData.mjs`,
+đúng nguyên tắc InnoDB single-connection không ghi đồng thời).
+
+**Đo lại sau tối ưu:** cùng mẫu ~500 khách hàng, `--force` chạy lại — **10,4 giây** (từ ~175s ban
+đầu, nhanh hơn ~17×). Verify SQL lại từ đầu sau khi đổi cách ghi (không chỉ tin vì nhanh hơn): 0
+orphan order_items, 0 orphan review (cả 2 khoá), 0 lệch `subtotal`, đếm chéo 521 order khớp đúng
+595 order_items — xác nhận suy `order_id` theo batch không bị lệch/collision.
+
+**Ước tính full ~96.478 đơn sau tối ưu: ~15-25 phút** (so với ~8-9 tiếng trước tối ưu) — đã báo lại
+cho user, đang chờ quyết định có chạy full + train lại trên dữ liệu thật hay không.
 
 ---
 
