@@ -1710,6 +1710,83 @@ xem `UserHeaderFilter.java`). Không gửi nội dung truy vấn tìm kiếm (kh
 
 ---
 
+## 2026-08-04 (tiếp) — Thí nghiệm CÓ KIỂM SOÁT: xác định ĐIỀU KIỆN rule thất bại
+
+Tracker vi hành vi đã có nhưng chưa có traffic thật để đo lại giả thuyết thứ tự. Thay vì chờ vô định,
+dựng thí nghiệm có kiểm soát (`experiments/synthetic_sequence_dgp.py`) trả lời câu hỏi tổng quát hơn:
+**khi nào rule thất bại về cấu trúc, khi nào rule là đủ?**
+
+### Điểm cốt tử về tính trung thực: PHẢI có 2 DGP, không phải 1
+
+Nếu chỉ thiết kế 1 bộ sinh dữ liệu có tương tác phức tạp rồi cho thấy ML thắng rule, thì chỉ chứng
+minh được *"tôi tự thiết kế được dữ liệu đánh bại rule"* — đúng một cách tầm thường, **vô giá trị**.
+Nên thiết kế **2 sự thật khác nhau trên CÙNG một tập 20.000 phiên** (chuỗi sinh TRƯỚC và độc lập với
+nhãn, nhãn gán sau bằng 2 cách ⇒ mọi khác biệt thuần do **hình dạng của sự thật**, không lẫn nhiễu
+lấy mẫu):
+
+- **DGP-A (dạng-rule):** `P(bỏ giỏ)` cao khi `COUPON_FAILED >= 1`. Một đại lượng đếm, một ngưỡng.
+- **DGP-B (tương tác 3 chiều + thứ tự):** cao **chỉ khi ĐỒNG THỜI** có COUPON_FAILED **và**
+  VIEW_SHIPPING_FEE **và** TAB_HIDDEN — **và** VIEW_SHIPPING_FEE xảy ra **ngay sau** COUPON_FAILED
+  (thử tiết kiệm → thất bại → nhìn thấy phí ship → bỏ). Nhóm đối chứng có **y hệt 3 hành động đó,
+  cùng số lượng**, chỉ khác THỨ TỰ ⇒ **mọi feature đếm bằng nhau tuyệt đối**.
+
+Nhóm feature: **A** = số đếm từng action + độ dài (cho rule tất cả); **B** = 324 bigram chuyển trạng
+thái — biểu diễn thứ tự **TỔNG QUÁT**, cố ý KHÔNG đẽo feature kiểu `vị_trí(shipping)−vị_trí(coupon)`
+vì đó là biết trước đáp án rồi mới tạo feature (chỉ chứng minh "nếu biết đáp án thì rule cũng làm
+được", không phải câu hỏi cần trả lời).
+
+### Kết quả — thí nghiệm CÓ tính phân biệt
+
+| | DGP-A (dạng-rule) | DGP-B (tương tác + thứ tự) |
+|---|---|---|
+| Base rate | 0,5444 | 0,3193 |
+| Sàn nhiễu (±std) | 0,0099 | 0,0102 |
+| Xếp hạng bằng 1 đại lượng đếm tốt nhất | **0,7445** | 0,6223 |
+| Cây depth-2 (mức người viết tay) | 0,7439 | 0,6630 |
+| Cây depth-3 | 0,7429 | 0,6776 |
+| LightGBM chỉ số đếm (nhóm A) | 0,7432 | 0,6780 |
+| **LightGBM + thứ tự (A+B)** | 0,7453 | **0,7220** |
+| **Phần hơn do THỨ TỰ** | +0,0021 (trong nhiễu) | **+0,0440 = 4,3× sàn nhiễu** |
+| **Model vs rule tốt nhất** | **+0,0008 ⇒ rule ĐỦ** | **+0,0997 = 10× sàn nhiễu** |
+
+Cả 3 kỳ vọng đều đúng: `A_rule_is_sufficient=true`, `B_rule_structurally_fails=true`,
+`B_gain_comes_from_order=true` ⇒ **`experiment_is_discriminating=true`**.
+
+Nếu rule thắng ở cả 2 (hoặc ML thắng ở cả 2) thì kết luận sẽ là **harness sai** và không được dùng
+kết quả — điều kiện này được kiểm tra tự động trong script, không phải tự đánh giá bằng mắt.
+
+### Một lần sửa thiết kế giữa đường (ghi lại để minh bạch)
+
+Lần chạy đầu, nhóm thoả tương tác 3 chiều chỉ chiếm ~6% dân số ⇒ AUC tuyệt đối chỉ 0,54-0,56 và phần
+hơn của thứ tự (+0,0131) **suýt không vượt** sàn nhiễu (0,0132) — không đủ kết luận. Đã tăng **độ phổ
+biến** của nhóm đó lên ~18% (`reached_checkout` 0,7→0,85; `has_coupon_fail` 0,45→0,70;
+`has_shipping_view` 0,75→0,85; `TAB_HIDDEN` 0,5→0,70) và tăng độ tương phản (0,80/0,30 → 0,85/0,20).
+
+Đây là điều chỉnh **ĐỘ MẠNH THỐNG KÊ**, không phải tune chiều hiệu ứng: câu hỏi khoa học là "rule có
+diễn đạt được tương tác + thứ tự hay không" — độ phổ biến của nhóm bị ảnh hưởng không làm thay đổi câu
+hỏi đó, chỉ làm hiệu ứng đo được. Ghi rõ ở đây và trong code để người sau không hiểu là tôi tune cho
+ra kết quả mong muốn.
+
+### Kết luận rút ra — và giới hạn của nó
+
+**Điều đã chứng minh:** tồn tại một lớp bài toán hành vi mà **rule thất bại về cấu trúc**, và cụ thể
+là khi sự thật có dạng **tương tác nhiều chiều + phụ thuộc thứ tự**. Ở lớp đó, rule người viết tay
+(cây depth-2) đạt 0,663 còn model đọc chuỗi đạt 0,722 — **chênh 10× sàn nhiễu**. Ngược lại, khi sự
+thật dạng-rule thì rule **là đủ** (model hơn +0,0008, tức không hơn gì) — nên **không phải "AI luôn
+tốt hơn"**, mà là **có điều kiện rõ ràng**.
+
+**Điều CHƯA chứng minh (quan trọng, phải nói khi báo cáo):** đây là dữ liệu tổng hợp với DGP **do tôi
+thiết kế**. Nó chứng minh **"NẾU hành vi thật có dạng này THÌ rule không bắt được"** — chứ **KHÔNG**
+chứng minh hành vi bỏ giỏ hàng thật *có* dạng này. Muốn biết điều đó cần traffic thật từ tracker vi
+hành vi (18 ký hiệu) rồi chạy lại `cart_abandon_rule_vs_ml.py`.
+
+**Giá trị thực tế của thí nghiệm này:** (1) xác nhận bộ đo **đủ nhạy** để phát hiện hiệu ứng thứ tự
+nếu nó tồn tại — điều mà thí nghiệm RetailRocket không kiểm tra được vì alphabet 3 ký hiệu; (2) định
+lượng **mức được/mất** nếu hành vi thật có dạng đó (~+0,10 AUC); (3) cho một **dự đoán có thể bác bỏ**
+để kiểm tra khi có dữ liệu thật.
+
+---
+
 ## Giới hạn phải nói rõ khi báo cáo
 
 - **Dữ liệu synthetic** → metric đo "model có phục hồi được cấu trúc sinh dữ liệu hay không",

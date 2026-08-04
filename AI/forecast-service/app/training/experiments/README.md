@@ -42,3 +42,30 @@ của nhóm B là ảo.
 
 Chống rò rỉ: mọi feature dùng `cumsum` theo visitor rồi **trừ chính event hiện tại** ⇒ chỉ dùng dữ
 liệu trước thời điểm thêm giỏ. Grouped CV theo visitor.
+
+## `synthetic_sequence_dgp.py`
+
+Trả lời câu hỏi tổng quát hơn: **khi nào rule thất bại về cấu trúc, khi nào rule là đủ?**
+
+```bash
+docker cp .../synthetic_sequence_dgp.py ai-forecast-service:/tmp/
+docker exec ai-forecast-service python /tmp/synthetic_sequence_dgp.py
+```
+
+Sinh 20.000 phiên với bảng chữ cái 18 ký hiệu, rồi gán **2 nhãn khác nhau trên CÙNG các phiên đó**:
+
+| DGP | Sự thật được thiết kế | Kỳ vọng |
+|---|---|---|
+| **A** | 1 ngưỡng trên 1 đại lượng đếm (`COUPON_FAILED >= 1`) | rule **đủ** |
+| **B** | Tương tác 3 chiều **+ thứ tự liền kề**; nhóm đối chứng có cùng số đếm, chỉ khác thứ tự | rule **thất bại** |
+
+**Vì sao phải có 2 DGP:** chỉ 1 DGP dạng-tương-tác rồi cho thấy ML thắng thì chỉ chứng minh "tự thiết
+kế được dữ liệu đánh bại rule" — vô giá trị. Script tự kiểm tra `experiment_is_discriminating`: nếu
+rule thắng cả 2 hoặc ML thắng cả 2 thì **harness sai, không được dùng kết quả**.
+
+**Kết quả đã đo:** DGP-A model hơn rule **+0,0008** (rule đủ) · DGP-B model hơn rule **+0,0997 =
+10× sàn nhiễu**, trong đó riêng phần **thứ tự** góp **+0,0440 = 4,3× sàn nhiễu**.
+
+**Giới hạn:** DGP do người viết thiết kế ⇒ chứng minh *"NẾU hành vi thật có dạng này THÌ rule không
+bắt được"*, **KHÔNG** chứng minh hành vi thật *có* dạng đó. Cần traffic thật từ tracker vi hành vi rồi
+chạy lại `cart_abandon_rule_vs_ml.py` để biết.
