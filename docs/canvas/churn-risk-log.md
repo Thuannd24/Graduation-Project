@@ -1320,10 +1320,47 @@ khác domain email `@olist.import` vs `@seed.internal`, khác slug `olist-*`):
 thật + verify bằng SQL (đếm orphan, phân bố trạng thái/rating...) — cùng chuẩn kiểm chứng đã áp
 dụng cho mọi phần khác trong log này, chưa coi là "xong" cho tới khi có số đo thật.
 
-**Chưa hỏi ý kiến trước khi commit/push lên GitHub** — theo đúng lằn ranh đỏ CLAUDE.md (hỏi trước
-khi commit), sẽ hỏi riêng sau khi đã chạy thật + verify xong, KHÔNG commit file dữ liệu (chỉ commit
-script — xem README.md mục "Vì sao không commit data", giấy phép Olist CC BY-NC-SA 4.0 không cho
-phát tán lại dữ liệu tự do).
+**Đã commit + push code (KHÔNG commit dữ liệu)** — 5 commit theo từng mảng việc (calibration/rule-
+benchmark/model-card, session_id + seeder enrichment, NBA `Condition_ChurnRiskTier`, tool
+`real-data-seed`, docs) lên `origin/ai/behavoir`. Đã kiểm tra kỹ trước khi push: không `.env`,
+không `node_modules`, không dữ liệu Olist nào lọt vào (root `.gitignore` đã có sẵn `**/data/`,
+`**/node_modules/`, `**/.env`).
+
+### Tải + import dữ liệu THẬT — dùng `kagglehub` (Python) thay vì tự đăng nhập Kaggle
+
+User đưa đoạn code Python dùng thư viện `kagglehub` để tải — thử trực tiếp: **tải được dataset
+HOÀN TOÀN KHÔNG CẦN xác thực** (`kagglehub.dataset_download("olistbr/brazilian-ecommerce")` chạy
+thẳng, không cần `kaggle.json`). Bất ngờ nhưng hợp lý: dataset công khai, Kaggle cho phép tải ẩn
+danh qua kênh này. Thử lại bằng `fetch` thuần trong Node (cách `download.mjs` đang dùng) thì bị
+`ConnectTimeoutError` tới `kaggle.com` từ môi trường này — không rõ do khác route mạng hay khác
+endpoint nội bộ mà `kagglehub` dùng. Không đào sâu thêm (không phải trọng tâm) — dùng luôn dữ liệu
+đã tải qua `kagglehub`, copy 9 file CSV vào `tools/real-data-seed/data/` (đã gitignore).
+
+**Phát hiện 1 bug thật khi soát header file thật (không phải đoán):**
+`product_category_name_translation.csv` có **BOM UTF-8** ở đầu file — tên cột đầu tiên đọc thô ra
+là `"﻿product_category_name"` thay vì `"product_category_name"`, làm mọi lookup dịch category
+thất bại ÂM THẦM (rơi về tên gốc tiếng Bồ Đào Nha, không sai crash nhưng sai ý nghĩa). Chính cơ chế
+validate cột bắt buộc đã viết trước (`readCsv()`) sẽ bắt được lỗi này khi chạy thật — nhưng sửa
+luôn cho gọn: thêm `bom: true` vào `csv-parse`.
+
+**Dry-run mẫu 500 khách hàng thật** khớp gần đúng thống kê công khai của Olist (99.441 orders/
+customers, 99.224 reviews tổng — đúng số liệu dataset gốc, xác nhận đọc đúng file thật, không phải
+may mắn nhớ đúng cấu trúc). Docker Desktop crash lần nữa giữa chừng (đã quen thuộc, xem các lần
+trước) — khởi động lại, infra tự phục hồi.
+
+**Import thật (500 khách hàng mẫu) + verify SQL đầy đủ:**
+- 517 orders (515 DELIVERED / 2 CANCELLED), 514 reviews thật, 1.180 event hành vi tổng hợp.
+- **0 orphan** order_items (trỏ order không tồn tại), **0 orphan** review theo order_id, **0
+  orphan** review theo product_id — toàn vẹn tham chiếu qua cả 3 database.
+- Phân bố rating: lệch mạnh về 5 sao (318/514 ≈ 61,9%) — khớp đặc điểm review TMĐT Brazil đã biết
+  công khai (thiên lệch tích cực), không phẳng/không giả.
+- Mẫu event: xác nhận đúng thiết kế — nhiều `ADD_TO_CART` cùng 1 đơn chia sẻ đúng 1 `session_id`
+  (phiên chốt đơn), mọi event đều có timestamp TRƯỚC mốc đơn hàng thật.
+
+**Kết luận: `tools/real-data-seed` hoạt động đúng trên dữ liệu thật, không chỉ trên fixture giả
+lập.** Còn lại (chưa làm, để ngỏ): import full ~96k khách hàng (hiện mới mẫu 500), train lại model
+trên dữ liệu thật để so sánh với model train trên dữ liệu tổng hợp — đây mới là câu trả lời đầy đủ
+cho yêu cầu ban đầu "test chuẩn nhất".
 
 ---
 

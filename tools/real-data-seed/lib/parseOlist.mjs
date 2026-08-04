@@ -25,7 +25,10 @@ export function assertDatasetPresent(dataDir) {
 
 function readCsv(dataDir, filename, requiredColumns) {
   const raw = fs.readFileSync(path.join(dataDir, filename), "utf8");
-  const rows = parse(raw, { columns: true, skip_empty_lines: true, relax_column_count: true });
+  // `bom: true`: product_category_name_translation.csv (Kaggle) có BOM UTF-8 ở đầu file — thiếu cờ
+  // này thì tên cột đầu tiên sẽ là "﻿product_category_name" thay vì "product_category_name",
+  // làm mọi lookup theo tên cột đó thất bại âm thầm. Phát hiện khi soát thật header file tải về.
+  const rows = parse(raw, { columns: true, skip_empty_lines: true, relax_column_count: true, bom: true });
   if (rows.length > 0 && requiredColumns) {
     const actualColumns = new Set(Object.keys(rows[0]));
     const missing = requiredColumns.filter((c) => !actualColumns.has(c));
