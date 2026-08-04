@@ -1447,6 +1447,72 @@ chặn kết quả, để lại cho lần dọn dẹp tiếp theo.
 **Đã khôi phục dữ liệu synthetic** (`node seed.mjs --force --demo-users 0`) về đúng quy mô cũ (500
 user) sau khi đo xong — không mất gì, seeder sinh lại được bất cứ lúc nào.
 
+### User hỏi "test chưa" — và câu hỏi đó phát hiện ra 1 LỖI NGHIÊM TRỌNG tôi đã suýt bỏ qua
+
+Rà lại thì đúng là **kiểm chứng của tôi có lỗ hổng thật**: khi thêm tham số `reference_now`, tôi chỉ
+test **nhánh mới** (truyền giá trị → ra AUC 0,7564) mà **KHÔNG test nhánh mặc định** (`None` — chính
+là đường production dùng). Việc gọi `GET /models/card` chỉ chứng minh metadata model CŨ không đổi
+(hiển nhiên, vì chưa gọi train), **không** chứng minh code sửa không làm hỏng đường train bình thường.
+Tệ hơn: đưa file vào container bằng `docker cp` (tạm, mất khi container tạo lại) và **chưa rebuild
+image** — đúng dạng lỗi đã tự rút bài học ở Tầng 1.1/Tầng 3 ("build không thật sự verify code"), lặp
+lại lần thứ 3 dưới hình thức khác. Đã commit + push trước khi verify đủ.
+
+**Sửa cách làm:** rebuild image thật từ code đã commit (bỏ bản `docker cp`), xác nhận code có trong
+image, rồi gọi `POST /models/train` (nhánh mặc định) để regression test.
+
+**Kết quả regression test — phát hiện lỗi NGHIÊM TRỌNG (nghiêm trọng hơn hẳn lỗi ban đầu):**
+
+Lúc đó DB đang có CẢ **93.897 user Olist (đơn 2016-2018)** LẪN **500 user synthetic (đơn 2025-2026)**.
+Train nhánh mặc định (mốc cắt theo đồng hồ hệ thống = 2026) cho ra:
+
+| | Chỉ synthetic (model tốt) | Trộn synthetic + Olist |
+|---|---|---|
+| Panel | 342 user / churn 0,2633 | 3.141 user / churn **0,9285** |
+| AUC | 0,8415 ± 0,032 | **0,9908 ± 0,0027** |
+| Precision | 0,555 | **1,0** |
+| F1 | 0,6621 | 0,9828 |
+
+**AUC 0,9908 này HOÀN TOÀN VÔ NGHĨA.** Mọi user Olist có đơn cuối cách mốc cắt nhiều năm → luôn
+churn=1, và `recency`/`days_since_last_activity` lớn bất thường. Model chỉ cần học **"user thuộc
+nguồn dữ liệu nào"** là phân loại gần hoàn hảo — không học gì về hành vi rời bỏ thật.
+
+**Điểm chết người: `_retrain_gate()` KHÔNG cứu được.** Gate được thiết kế chặn khi AUC TỤT
+(`AUC_mới >= AUC_cũ − std_cũ`), nhưng ở đây AUC bị THỔI PHỒNG nên gate **cho qua** (`passed: true`,
+"ĐẠT: 0.9908 >= 0.8095") và **model rác đã thay luôn model production** (`latest` trỏ sang
+`20260804T034459207489`, threshold nhảy 0,35 → 0,58). Đây là giới hạn thật của retrain gate cần ghi
+rõ khi bảo vệ: **gate chống suy giảm chất lượng, KHÔNG chống nhiễm dữ liệu làm metric đẹp giả.**
+
+**Khắc phục ngay:** khôi phục con trỏ `latest.json` của CẢ 2 model (classifier + kmeans, phải khớp
+version vì được gate đồng thời) về `20260803T030831471695` — xác nhận qua `/models/card`: AUC về
+0,8415, threshold về 0,35, 2 model khớp version. Không mất artifact nào (registry giữ đủ mọi version,
+kể cả bản rác — đúng thiết kế audit trail).
+
+**Sửa nguyên nhân gốc — guard chặn cứng ngay từ lúc dựng panel** (`_assert_panel_not_contaminated`,
+gọi trong `_build_training_panel`), KHÔNG để tới bước gate. Chặn khi thoả **ĐỒNG THỜI** 2 dấu hiệu:
+tỉ lệ churn > 0,90 **và** > 50% user có đơn cuối cùng cũ hơn cả mốc cắt sớm nhất. Chọn ngưỡng 0,90
+có chủ đích rất cao để **không chặn oan** cấu hình nhãn hợp lệ (synthetic hiện tại ~0,26; biến thể
+nhãn 60 ngày từng đo ~0,38 — còn rất xa 0,90). Nếu chỉ 1/2 dấu hiệu → chỉ log cảnh báo, không chặn
+(có thể là chủ đích train dữ liệu lịch sử với `reference_now` đúng).
+
+**Kiểm chứng guard cả 2 nhánh** (đúng chuẩn đã áp dụng cho retrain gate):
+1. **Nhánh CHẶN** — giữ nguyên DB đang nhiễm, gọi `/models/train` → **HTTP 500** kèm chẩn đoán cụ thể
+   ("tỉ lệ churn 0.9285 (> 0.9) và 90,6% user có đơn cuối cùng còn cũ hơn cả mốc cắt sớm nhất
+   (2025-11-07)") + hướng dẫn cách xử lý. Quan trọng: model production **không bị đụng** vì bị chặn
+   TRƯỚC khi lưu.
+2. **Nhánh CHO QUA** — dọn dữ liệu Olist (`real-data-seed/cleanup.mjs`: xoá 93.897 user / 97.103 đơn
+   / 221.478 event / 96.808 review), train lại → **HTTP 200**, panel 340 user / churn 0,2364, AUC
+   0,7438 ± 0,0585. Guard không chặn oan dữ liệu sạch.
+   - Đáng chú ý: retrain gate **từ chối** model mới này (0,7438 < ngưỡng 0,8095) — đúng thiết kế,
+     production giữ model 0,8415. Lại là hiện tượng "lượt lấy mẫu synthetic khác nhau cho AUC dao
+     động 0,74-0,84" đã ghi nhận nhiều lần trong phiên.
+
+**Trạng thái cuối:** DB chỉ còn 1 nguồn (synthetic 500 user), production dùng model
+`20260803T030831471695` (AUC 0,8415, threshold 0,35), cả classifier + kmeans khớp version.
+
+**Đã sửa README của `real-data-seed`**: đoạn cũ viết "2 tool độc lập, không xung đột" — **đúng về
+ghi dữ liệu nhưng SAI về train model**. Thay bằng cảnh báo ⚠️ có bảng số đo thật, giải thích vì sao
+AUC 0,99 là giả, và lệnh cụ thể để cô lập từng nguồn trước khi train.
+
 ---
 
 ## Giới hạn phải nói rõ khi báo cáo

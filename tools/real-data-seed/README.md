@@ -82,10 +82,40 @@ Toàn bộ dữ liệu import được đánh dấu qua email `@olist.import` (u
    thường (không dùng Git LFS ở đây).
 3. Script `download.mjs` tự tải lại được bất cứ lúc nào — không mất gì khi không commit data.
 
-## Kết hợp với `tools/data-seed`
+## ⚠️ KHÔNG train model khi trộn tool này với `tools/data-seed`
 
-2 tool này **độc lập, không xung đột** (khác domain email, khác slug): có thể chạy cả hai trên
-cùng 1 DB để có **cả** user hoàn toàn tổng hợp (đo được circularity/hidden-parameter độc lập, dùng
-cho ablation) **lẫn** đơn hàng/review thật (đo tổng quát hoá thật). Muốn so sánh model train trên
-dữ liệu nào tốt hơn — train riêng từng nguồn (xoá nguồn kia bằng cleanup tương ứng trước khi train)
-thay vì trộn lẫn, để không lẫn lộn 2 loại nhiễu khác nhau khi diễn giải kết quả.
+2 tool ghi dữ liệu **không đè nhau** (khác domain email, khác slug) — nhưng **TRỘN CẢ HAI TRONG DB
+RỒI TRAIN LÀ SAI**, và sai một cách nguy hiểm vì kết quả nhìn rất đẹp.
+
+**Đã xảy ra thật (2026-08-04)**, số đo cụ thể:
+
+| | Chỉ dữ liệu synthetic | Trộn synthetic + Olist |
+|---|---|---|
+| AUC | 0,8415 | **0,9908** |
+| Precision | 0,555 | **1,0** |
+| Churn rate | 0,2633 | 0,9285 |
+
+AUC 0,9908 đó **hoàn toàn vô nghĩa**: đơn hàng Olist nằm ở 2016-2018 còn `tools/data-seed` sinh
+quanh ngày hiện tại, nên mọi user Olist có `recency`/`days_since_last_activity` lớn bất thường và
+luôn bị dán nhãn churn=1. Model chỉ cần học **"user này thuộc nguồn dữ liệu nào"** là phân loại gần
+như hoàn hảo — không học gì về hành vi rời bỏ. Tệ hơn: `_retrain_gate()` (chỉ chặn khi metric TỤT)
+đã cho model rác này qua và **thay luôn model production**.
+
+**Nay đã có guard chặn cứng** (`train.py::_assert_panel_not_contaminated`): train sẽ **bị từ chối**
+kèm chẩn đoán rõ khi phát hiện panel có tỉ lệ churn cực đoan + phần lớn user có đơn cuối cùng cũ hơn
+cả mốc cắt sớm nhất. Nhưng vẫn nên chủ động **chỉ giữ 1 nguồn trong DB khi train**:
+
+```bash
+# Train trên dữ liệu THẬT (Olist):
+cd tools/data-seed && node cleanup.mjs          # dọn synthetic
+cd ../real-data-seed && node import.mjs --force
+
+# Train trên dữ liệu tổng hợp:
+cd tools/real-data-seed && node cleanup.mjs     # dọn Olist
+cd ../data-seed && node seed.mjs --force
+```
+
+**Lưu ý thêm khi train trên dữ liệu Olist thật:** mốc cắt nhãn churn mặc định tính lùi từ **đồng hồ
+hệ thống**, nên với dữ liệu lịch sử đã đóng băng (2016-2018) sẽ ra 100% churn=1 → không train được.
+Phải truyền `reference_now` khớp mốc cuối của dữ liệu (vd `pd.Timestamp("2018-10-20")`) — hiện chỉ
+gọi được từ code (`_build_training_panel`), `POST /models/train` chưa nhận tham số này.

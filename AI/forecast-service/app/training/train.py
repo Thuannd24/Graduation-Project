@@ -251,7 +251,64 @@ def _build_training_panel(
                 f"kiểm tra dữ liệu seed."
             )
 
+    _assert_panel_not_contaminated(panel, cutoffs)
+
     return panel
+
+
+# Tỉ lệ churn vượt ngưỡng này coi như nhãn đã SỤP (gần như mọi user cùng 1 lớp) — không phải bài
+# toán học được nữa. 0.90 chọn cao có chủ đích: churn rate thật của dữ liệu synthetic hiện tại là
+# ~0.26, của biến thể nhãn 60 ngày từng đo là ~0.38 — còn rất xa 0.90, nên guard này KHÔNG chặn oan
+# các cấu hình nhãn hợp lệ, chỉ bắt trường hợp bệnh lý.
+CONTAMINATION_CHURN_RATE_MAX = 0.90
+# Tỉ lệ user "chết hẳn" (đơn cuối cùng còn cũ hơn CẢ mốc cắt sớm nhất) vượt ngưỡng này -> gần như
+# chắc chắn đang trộn 2 nguồn dữ liệu lệch mốc thời gian.
+CONTAMINATION_STALE_RATIO_MAX = 0.50
+
+
+def _assert_panel_not_contaminated(panel: pd.DataFrame, cutoffs: list) -> None:
+    """Chặn train khi panel bị NHIỄM bởi dữ liệu lệch hẳn mốc thời gian (vd trộn dữ liệu lịch sử
+    2016-2018 của `tools/real-data-seed` với dữ liệu synthetic 2025-2026 của `tools/data-seed` trong
+    CÙNG 1 database).
+
+    Vì sao cần guard này (đã xảy ra thật, 2026-08-04 — xem docs/canvas/churn-risk-log.md): khi trộn
+    2 nguồn, mọi user của nguồn cũ có đơn cuối cùng cách mốc cắt nhiều NĂM nên luôn bị dán churn=1,
+    và `recency`/`days_since_last_activity` của họ lớn bất thường -> model chỉ cần học "user thuộc
+    nguồn dữ liệu nào" là đã phân loại gần như hoàn hảo. Kết quả đo được lúc đó: **AUC 0.9908** (so
+    với 0.8415 trên dữ liệu sạch) — nhìn như đột phá nhưng hoàn toàn vô nghĩa.
+
+    Đặc biệt nguy hiểm vì `_retrain_gate()` KHÔNG cứu được: gate chỉ chặn khi metric TỤT, còn đây
+    metric bị THỔI PHỒNG nên gate cho qua và model rác thay luôn model production. Vậy nên phải chặn
+    ngay từ lúc dựng panel, không để tới bước gate.
+    """
+    churn_rate = float(panel["churn_label"].mean())
+    earliest_cutoff = min(cutoffs)
+
+    # `recency` = số ngày từ đơn DELIVERED cuối cùng tới mốc cắt của chính dòng đó. User có recency
+    # lớn hơn khoảng cách (mốc cắt sớm nhất -> mốc cắt muộn nhất) + toàn bộ cửa sổ nhãn thì đơn cuối
+    # của họ nằm trước CẢ mốc sớm nhất -> không thể mang tín hiệu churn nào ngoài "đã chết từ lâu".
+    span_days = (max(cutoffs) - earliest_cutoff).days + LABEL_WINDOW_DAYS
+    stale_ratio = float((panel["recency"] > span_days).mean())
+
+    if churn_rate > CONTAMINATION_CHURN_RATE_MAX and stale_ratio > CONTAMINATION_STALE_RATIO_MAX:
+        raise RuntimeError(
+            f"Panel huấn luyện có dấu hiệu NHIỄM dữ liệu lệch mốc thời gian: tỉ lệ churn "
+            f"{churn_rate:.4f} (> {CONTAMINATION_CHURN_RATE_MAX}) và {stale_ratio:.1%} user có đơn "
+            f"cuối cùng còn cũ hơn cả mốc cắt sớm nhất ({earliest_cutoff.date()}). Thường do trộn "
+            f"2 nguồn dữ liệu lệch nhau nhiều năm trong cùng 1 DB — vd dữ liệu lịch sử của "
+            f"tools/real-data-seed (Olist 2016-2018) lẫn với tools/data-seed (synthetic, quanh hiện "
+            f"tại). Train tiếp sẽ ra AUC cao GIẢ (model chỉ học 'user thuộc nguồn nào'). Cách xử lý: "
+            f"chỉ giữ 1 nguồn trong DB khi train (dùng cleanup.mjs của tool tương ứng), hoặc truyền "
+            f"`reference_now` khớp mốc thời gian của dữ liệu lịch sử nếu CHỦ ĐÍCH train trên nguồn đó."
+        )
+
+    if churn_rate > CONTAMINATION_CHURN_RATE_MAX or stale_ratio > CONTAMINATION_STALE_RATIO_MAX:
+        # Chỉ 1 trong 2 dấu hiệu -> có thể hợp lệ (vd chủ đích train trên dữ liệu lịch sử với
+        # `reference_now` đúng, churn rate cao thật). Không chặn, nhưng phải log để không âm thầm.
+        logger.warning(
+            f"Panel có 1 dấu hiệu bất thường (churn_rate={churn_rate:.4f}, "
+            f"stale_ratio={stale_ratio:.1%}) — kiểm tra lại nguồn dữ liệu trước khi tin metric."
+        )
 
 
 def _fit_classifier(
