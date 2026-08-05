@@ -198,21 +198,65 @@ tại mốc gần nhất; tập train là các user **khác** ở các mốc **c
 nhận diện user đã thấy) vừa giữ nhân quả thời gian (không train trên tương lai). Báo **mean ± std** qua
 5 fold, vì chỉ 1 holdout thì không phân biệt được cải thiện thật với nhiễu.
 
-**Kết quả đo được trên dữ liệu seed** (xem mục 5):
+**Kết quả đo được trên dữ liệu seed:**
 
 | Chỉ số | Giá trị |
 |---|---|
-| AUC | **0.8405 ± 0.0268** |
-| F1 | 0.6889 ± 0.0240 |
-| Precision / Recall (tại ngưỡng tune 0.26) | 0.6147 / 0.7885 |
-| Silhouette (KMeans) | 0.2022 |
+| **AUC (con số nên báo cáo)** | **~0.75 ± 0.05** |
+| Silhouette (KMeans) | 0.20–0.24 |
 
-> Vì sao AUC **thấp hơn** con số 0.93 từng báo: bản đầu chia test theo thời gian nhưng **không tách
-> theo user** (~500 user × 6 mốc, hầu hết user có mặt ở cả train và test). Kiểm chứng lại: leakage đó
-> chỉ thổi AUC lên **+0.0021** — tức con số 0.93 *không* sai vì leakage. Mức tụt xuống 0.84 là do **đổi
-> định nghĩa nhãn** sang bài toán khó và có nghĩa hơn, **không phải hồi quy chất lượng**.
-> Giá trị thật của grouped CV là cho ra **±std**: sàn nhiễu ~±0.027, nhờ đó mới kết luận được điều gì là
-> cải thiện thật và điều gì là nhiễu.
+> **⚠️ Đã tự sửa một con số lạc quan — cần nêu khi bảo vệ, vì đây là bài học phương pháp.**
+>
+> Các bản trước của tài liệu này ghi **AUC 0.8405 ± 0.0268**. Con số đó **lạc quan**, và nguyên nhân
+> đã được truy ra bằng **learning curve** (lấy mẫu 25/50/75/100% số user, xem
+> `experiments/diagnose_model_ceiling.py`):
+>
+> | Số user | AUC | std |
+> |---|---|---|
+> | 85 | 0.7928 | **±0.1602** |
+> | 170 | 0.7651 | ±0.0727 |
+> | 255 | 0.7530 | ±0.0515 |
+> | **340** | **0.7521** | ±0.0540 |
+>
+> AUC **giảm** khi thêm dữ liệu trong khi std **co lại 3×**. Đây là dấu hiệu kinh điển của **lạc quan
+> do mẫu nhỏ**: ở 85 user, std ±0.16 nghĩa là con số "0.79" chỉ là nhiễu. Khi mẫu lớn dần, ước lượng
+> hội tụ về **~0.75**. Con số 0.8405 từng báo là **một lượt lấy mẫu may mắn** — khớp với dải dao động
+> 0.7438–0.8415 đã quan sát được giữa các lần reseed.
+>
+> **Vì sao vẫn thấp hơn 0.93 của bản đầu:** không phải do leakage (đã đo: leakage chỉ thổi +0.0021),
+> mà do **đổi định nghĩa nhãn** sang bài toán khó và có nghĩa hơn (xem khung dưới) — không phải hồi
+> quy chất lượng.
+
+**Đã chẩn đoán nguyên nhân model không mạnh hơn được (`diagnose_model_ceiling.py`):**
+
+| Nghi phạm | Kết quả đo | Kết luận |
+|---|---|---|
+| Thiếu dữ liệu | AUC **không** tăng theo số user (−0.0407) | ❌ Thêm user chỉ làm std nhỏ hơn, không làm AUC cao hơn |
+| Model tuyến tính không đủ | LightGBM 0.7340 vs LogReg 0.7521 | ❌ Model phi tuyến **kém hơn** ⇒ ranh giới vốn đơn giản |
+| Các dòng panel là bản sao | N hiệu dụng **786/1451** (tỉ lệ 0.401) | ⚠️ Giảm ~½ nhưng không thoái hoá |
+| **Chạm trần thông tin của bộ feature** | `at_information_ceiling = true` | ✅ **Đây là nguyên nhân gốc** |
+
+**Bằng chứng bổ trợ:** 6/11 feature gần như là **hằng số theo user** (phương sai trong-user rất thấp:
+`avg_order_value` 0.037 · `monetary` 0.060 · `discount_dependency` 0.069 · `cancel_rate` 0.151 ·
+`frequency` 0.195). Chúng chỉ mô tả *"user này là ai"*, không mô tả *"user này đang thay đổi thế nào"*.
+Chỉ 5 feature hành vi thật sự biến động theo thời gian.
+
+⇒ Muốn vượt ~0.75 thì **không phải thêm dữ liệu hay đổi thuật toán**, mà phải thêm **nguồn thông tin
+mới** (event mới, xem mục 3.2 về tracker vi hành vi).
+
+**Lệch base rate giữa train và test — do chính thiết kế mốc cắt:**
+
+| Mốc cắt | Tỉ lệ churn |
+|---|---|
+| 2025-11-08 | 16.1% |
+| 2025-12-08 | 19.5% |
+| 2026-01-07 | 23.8% |
+| 2026-02-06 | 26.5% |
+| **2026-03-08 (tập TEST)** | **28.8%** |
+
+Tỉ lệ churn tăng đơn điệu theo mốc cắt, mà thiết kế là train trên mốc cũ / test trên mốc mới nhất ⇒
+model **luôn** được train ở base rate 16–26% rồi test ở 28.8%. Đây là lý do bước **hiệu chỉnh xác
+suất** (mục 3.4) có tác dụng lớn — nó bù đúng phần lệch tiên nghiệm này.
 
 ### 3.4. Hiệu chỉnh xác suất — điều kiện cần để dùng xác suất vào quyết định
 

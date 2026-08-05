@@ -1787,6 +1787,87 @@ lượng **mức được/mất** nếu hành vi thật có dạng đó (~+0,10 
 
 ---
 
+## 2026-08-05 — Chẩn đoán nguyên nhân gốc: TẠI SAO model chưa ổn
+
+User yêu cầu tìm nguyên nhân gốc. Có 4 nghi phạm, và chúng dẫn tới **hướng khắc phục ngược nhau**,
+nên phải phân biệt bằng số (`experiments/diagnose_model_ceiling.py`), không đoán.
+
+### Triệu chứng đáng ngờ nhất (đã quan sát nhiều lần trong phiên nhưng chưa truy ra nguyên nhân)
+
+AUC dao động **0,7438 – 0,8415** giữa các lần reseed (biên độ ~0,10) trong khi std NỘI BỘ một lần chạy
+chỉ ±0,03–0,06. **Phương sai giữa các lần seed LỚN HƠN phương sai giữa các fold** — dấu hiệu của mẫu
+quá nhỏ, không phải model sai.
+
+### Learning curve — bằng chứng quyết định
+
+Lấy mẫu theo USER (giữ nguyên cấu trúc panel), đo trên cùng giao thức grouped CV:
+
+| Số user | Số dòng | AUC | std |
+|---|---|---|---|
+| 85 | 372 | **0,7928** | **±0,1602** |
+| 170 | 736 | 0,7651 | ±0,0727 |
+| 255 | 1.077 | 0,7530 | ±0,0515 |
+| **340** | 1.451 | **0,7521** | ±0,0540 |
+
+**AUC GIẢM khi thêm dữ liệu (−0,0407), std CO LẠI 3 lần (0,16 → 0,054).** Đây là dấu hiệu kinh điển
+của **lạc quan do mẫu nhỏ**: ở 85 user std ±0,16 nên "0,79" chỉ là nhiễu; mẫu lớn dần thì ước lượng
+**hội tụ về ~0,75**.
+
+**⇒ AUC THẬT của model là ~0,75, KHÔNG phải 0,8415.** Con số 0,8415 (và 0,8405 trong tài liệu bảo vệ)
+là **một lượt lấy mẫu may mắn** — giải thích trọn vẹn dải dao động 0,7438–0,8415 đã thấy trước đó.
+**Đã sửa lại tài liệu bảo vệ** (mục 3.3) thành ~0,75 ± 0,05 kèm bảng learning curve làm bằng chứng.
+
+### Loại trừ 3 nghi phạm khác
+
+| Nghi phạm | Kết quả đo | Kết luận |
+|---|---|---|
+| Thiếu dữ liệu | AUC không tăng theo số user (−0,0407) | ❌ Thêm user chỉ giảm std |
+| Model tuyến tính không đủ | LightGBM **0,7340** vs LogReg **0,7521** (−0,0181) | ❌ Phi tuyến **kém hơn** ⇒ ranh giới vốn đơn giản. Khớp với việc rule bắt kịp model |
+| Dòng panel là bản sao | Tỉ lệ phương sai trong-user 0,401; N hiệu dụng **786/1.451** | ⚠️ Giảm ~½ nhưng không thoái hoá |
+
+### Nguyên nhân gốc: `at_information_ceiling = true`
+
+Model đã **chạm trần thông tin** của bộ 11 feature. Bằng chứng bổ trợ — **6/11 feature gần như là
+hằng số theo user** (phương sai trong-user / tổng phương sai):
+
+| Feature | Tỉ lệ | |
+|---|---|---|
+| `avg_order_value` | 0,037 | ← gần như hằng số |
+| `monetary` | 0,060 | |
+| `discount_dependency` | 0,069 | |
+| `cancel_rate` | 0,151 | |
+| `frequency` | 0,195 | |
+| `category_diversity_viewed` | 0,479 | ← có biến động |
+| `days_since_last_activity` | 0,544 | |
+| `recency` | 0,579 | |
+| `recent_view_count` | 0,606 | |
+| `cart_abandon_count` | 0,687 | |
+| `view_to_cart_conversion_rate` | 1,006 | |
+
+Nghĩa là **hơn nửa bộ feature chỉ mô tả "user này LÀ AI", không mô tả "user này ĐANG THAY ĐỔI thế
+nào"** — mà churn về bản chất là câu hỏi về sự thay đổi. Đây là lý do sâu xa khiến: (a) thêm 6 khối
+feature cho ΔAUC = 0, (b) L1 path đạt đỉnh ở 6 feature, (c) rule 1 ngưỡng bắt kịp model.
+
+**⇒ Muốn vượt ~0,75 thì KHÔNG phải thêm dữ liệu hay đổi thuật toán, mà phải thêm NGUỒN thông tin
+mới** — đúng hướng tracker vi hành vi đã xây (event mới, không phải `GROUP BY` mới trên event cũ).
+
+### Phát hiện phụ: lệch base rate train/test do chính thiết kế mốc cắt
+
+| Mốc cắt | Số dòng | Tỉ lệ churn |
+|---|---|---|
+| 2025-11-08 | 223 | 16,1% |
+| 2025-12-08 | 262 | 19,5% |
+| 2026-01-07 | 302 | 23,8% |
+| 2026-02-06 | 324 | 26,5% |
+| **2026-03-08 (TEST)** | 340 | **28,8%** |
+
+Churn rate tăng đơn điệu theo mốc cắt (do λ decay của bộ sinh + số user đạt ngưỡng ≥2 đơn tăng dần).
+Thiết kế train-trên-mốc-cũ / test-trên-mốc-mới-nhất ⇒ **model luôn train ở base rate 16–26% rồi test ở
+28,8%** — lệch tiên nghiệm **do chính thiết kế**, không phải do dữ liệu bẩn. Đây là lý do bước hiệu
+chỉnh xác suất có tác dụng lớn: nó bù đúng phần lệch này.
+
+---
+
 ## Giới hạn phải nói rõ khi báo cáo
 
 - **Dữ liệu synthetic** → metric đo "model có phục hồi được cấu trúc sinh dữ liệu hay không",
