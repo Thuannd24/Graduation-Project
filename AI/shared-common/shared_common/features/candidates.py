@@ -97,6 +97,21 @@ BLOCK_REVIEW = ["review_count", "avg_rating_given"]
 # không tạo quan hệ trực tiếp nào giữa vouchers và willChurn/churnMonth).
 BLOCK_VOUCHER = ["voucher_issued_count", "voucher_usage_rate"]
 
+# --- Block 7: nhịp giờ/ngày hoạt động — mở lại sau khảo sát catalog công nghiệp (2026-09) ---
+# Nguồn: "Trend/temporal context" là 1 trong 6 nhóm feature chính của các paper churn thật (vd
+# rolling-window churn framework: avg_booking_hour, weekend_success_rate, first/last_booking_day —
+# arXiv:2606.06776). Bản dự án này ĐÃ TỪNG bị loại ở vòng đầu ("Entropy giờ/ngày ... Mọi timestamp
+# sinh bằng randomTimestamp() — phân bố ĐỀU, không có nhịp nào tồn tại") — nhưng tiền đề đó KHÔNG
+# CÒN ĐÚNG: Tầng 1.2 đã thay `randomTimestamp()` bằng `rhythmicTimestamp()` với tham số ẩn thật
+# (`preferredHourCenter`, `weekendBias`, xem `tools/data-seed/lib/simulate.mjs`). Mở lại có căn cứ,
+# không phải đoán.
+#
+# Circularity: CAO — đúng nguyên tắc đã lập ở Tầng 1.2 cho session/review/voucher: cả 2 tham số ẩn
+# sinh ĐỘC LẬP với `willChurn`/`churnMonth`. Dự đoán ĐĂNG KÝ TRƯỚC: NULL, cùng lý do và cùng dạng
+# với 3 block đã null trước đó — không phải vì nhịp giờ/ngày vô giá trị (catalog công nghiệp trên dữ
+# liệu THẬT chứng minh ngược lại), mà vì generator của DỰ ÁN NÀY cố tình không gắn nó với churn.
+BLOCK_TEMPORAL_RHYTHM = ["weekend_activity_ratio", "peak_hour_block_share"]
+
 CANDIDATE_BLOCKS: dict[str, list[str]] = {
     "abandon_shape": BLOCK_ABANDON_SHAPE,
     "gap_dispersion": BLOCK_GAP_DISPERSION,
@@ -104,6 +119,7 @@ CANDIDATE_BLOCKS: dict[str, list[str]] = {
     "session": BLOCK_SESSION,
     "review": BLOCK_REVIEW,
     "voucher": BLOCK_VOUCHER,
+    "temporal_rhythm": BLOCK_TEMPORAL_RHYTHM,
 }
 
 CANDIDATE_COLUMNS = [col for cols in CANDIDATE_BLOCKS.values() for col in cols]
@@ -124,6 +140,11 @@ CANDIDATE_DEFAULTS = {
     "avg_rating_given": 0.0,
     "voucher_issued_count": 0.0,
     "voucher_usage_rate": 0.0,
+    # Tiên nghiệm ĐỀU (không phải 0.0) — 0.0 sẽ ngầm khai "không hoạt động cuối tuần/giờ nào cả",
+    # sai lệch có hệ thống cho user chưa đủ dữ liệu. 2/7 = tỉ lệ ngày cuối tuần; 1/4 = đều giữa
+    # 4 khối giờ 6h.
+    "weekend_activity_ratio": 2.0 / 7.0,
+    "peak_hour_block_share": 0.25,
 }
 
 # Tên đầy đủ database.table cho 2 bảng KHÔNG thuộc `ecommerce_order_db` (DB mặc định của engine
@@ -315,6 +336,37 @@ def _voucher(engine: Engine, as_of_clause: str, params: dict) -> pd.DataFrame:
     return df[BLOCK_VOUCHER]
 
 
+def _temporal_rhythm(engine: Engine, as_of_clause: str, params: dict) -> pd.DataFrame:
+    """`weekend_activity_ratio` = % event rơi vào Thứ 7/CN. `peak_hour_block_share` = % event rơi
+    vào khối 6h hoạt động nhiều nhất (đêm/sáng/chiều/tối) — đo độ TẬP TRUNG nhịp giờ, không phải
+    giờ cụ thể (tránh 24 cột thưa). Toàn bộ lịch sử tới `as_of` (nhịp là đặc điểm ổn định của user,
+    không phải tín hiệu theo cửa sổ ngắn). Xem đánh giá circularity ở `BLOCK_TEMPORAL_RHYTHM`."""
+    sql = f"""
+        SELECT user_id,
+               SUM(CASE WHEN DAYOFWEEK(created_at) IN (1, 7) THEN 1 ELSE 0 END) AS weekend_events,
+               SUM(CASE WHEN HOUR(created_at) BETWEEN 0 AND 5 THEN 1 ELSE 0 END) AS blk_night,
+               SUM(CASE WHEN HOUR(created_at) BETWEEN 6 AND 11 THEN 1 ELSE 0 END) AS blk_morning,
+               SUM(CASE WHEN HOUR(created_at) BETWEEN 12 AND 17 THEN 1 ELSE 0 END) AS blk_afternoon,
+               SUM(CASE WHEN HOUR(created_at) BETWEEN 18 AND 23 THEN 1 ELSE 0 END) AS blk_evening,
+               COUNT(*) AS n_events
+        FROM user_events
+        WHERE user_id IS NOT NULL
+          AND created_at <= {as_of_clause}
+        GROUP BY user_id
+    """
+    with engine.connect() as conn:
+        df = pd.read_sql(sql, conn, params=params)
+
+    if df.empty:
+        return pd.DataFrame(columns=["user_id", *BLOCK_TEMPORAL_RHYTHM]).set_index("user_id")
+
+    df = df.set_index("user_id").astype(float)
+    blocks = df[["blk_night", "blk_morning", "blk_afternoon", "blk_evening"]]
+    df["weekend_activity_ratio"] = df["weekend_events"] / df["n_events"].replace(0, np.nan)
+    df["peak_hour_block_share"] = blocks.max(axis=1) / df["n_events"].replace(0, np.nan)
+    return df[BLOCK_TEMPORAL_RHYTHM]
+
+
 def fetch_candidate_features(engine: Engine, *, as_of: pd.Timestamp | None = None) -> pd.DataFrame:
     """Trả DataFrame index user_id, đúng `CANDIDATE_COLUMNS`, không NaN.
 
@@ -331,6 +383,7 @@ def fetch_candidate_features(engine: Engine, *, as_of: pd.Timestamp | None = Non
         _session(engine, as_of_clause, params),
         _review(engine, as_of_clause, params),
         _voucher(engine, as_of_clause, params),
+        _temporal_rhythm(engine, as_of_clause, params),
     ]
 
     combined = frames[0]
