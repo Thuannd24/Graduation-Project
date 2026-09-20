@@ -42,7 +42,8 @@ public class ChatWebSocketController {
         List<String> roles = (List<String>) sessionAttributes.get("roles");
         
         String senderRole = "CUSTOMER";
-        if (roles != null && (roles.contains("STAFF") || roles.contains("ADMIN"))) {
+        if (roles != null && roles.stream().anyMatch(r -> r.equalsIgnoreCase("STAFF") || r.equalsIgnoreCase("ROLE_STAFF")
+                || r.equalsIgnoreCase("ADMIN") || r.equalsIgnoreCase("ROLE_ADMIN"))) {
             senderRole = "STAFF";
         }
 

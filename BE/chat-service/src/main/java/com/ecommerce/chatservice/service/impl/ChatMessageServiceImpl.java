@@ -8,6 +8,7 @@ import com.ecommerce.chatservice.repository.ChatMessageRepository;
 import com.ecommerce.chatservice.repository.ChatRoomRepository;
 import com.ecommerce.chatservice.service.ChatMessageService;
 import com.ecommerce.chatservice.service.ChatRoomService;
+import com.ecommerce.chatservice.service.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -33,6 +35,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     private final ChatRoomService chatRoomService;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
+    private final StorageService storageService;
 
     @Override
     @Transactional
@@ -99,6 +102,22 @@ public class ChatMessageServiceImpl implements ChatMessageService {
             log.info("Sent SupportChatOfflineEvent to Kafka for room {} (No staff online)", room.getId());
         } catch (Exception e) {
             log.error("Failed to send offline support chat event to Kafka", e);
+        }
+    }
+
+    @Override
+    public String uploadImage(String roomId, MultipartFile file) {
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy phòng chat"));
+
+        if ("CLOSED".equals(room.getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Phòng chat đã đóng. Không thể gửi ảnh.");
+        }
+
+        try {
+            return storageService.uploadFile(file, "chat/" + roomId);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

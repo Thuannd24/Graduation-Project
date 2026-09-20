@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -43,6 +45,9 @@ public class ChatMessageServiceTest {
 
     @Mock
     private ObjectMapper objectMapper;
+
+    @Mock
+    private StorageService storageService;
 
     @InjectMocks
     private ChatMessageServiceImpl chatMessageService;
@@ -188,5 +193,38 @@ public class ChatMessageServiceTest {
 
         assertNotNull(response);
         assertEquals(1, response.getContent().size());
+    }
+
+    @Test
+    public void testUploadImage_whenRoomIsActive() {
+        ChatRoom room = ChatRoom.builder()
+                .id("room123")
+                .status("ACTIVE")
+                .build();
+
+        MultipartFile file = new MockMultipartFile("file", "photo.png", "image/png", "fake-bytes".getBytes());
+
+        when(chatRoomRepository.findById("room123")).thenReturn(Optional.of(room));
+        when(storageService.uploadFile(eq(file), eq("chat/room123"))).thenReturn("http://minio/chat-images/chat/room123/abc.png");
+
+        String url = chatMessageService.uploadImage("room123", file);
+
+        assertEquals("http://minio/chat-images/chat/room123/abc.png", url);
+    }
+
+    @Test
+    public void testUploadImage_whenRoomIsClosed() {
+        ChatRoom room = ChatRoom.builder()
+                .id("room123")
+                .status("CLOSED")
+                .build();
+
+        MultipartFile file = new MockMultipartFile("file", "photo.png", "image/png", "fake-bytes".getBytes());
+
+        when(chatRoomRepository.findById("room123")).thenReturn(Optional.of(room));
+
+        assertThrows(ResponseStatusException.class, () -> {
+            chatMessageService.uploadImage("room123", file);
+        });
     }
 }

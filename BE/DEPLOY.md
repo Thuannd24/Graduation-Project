@@ -213,6 +213,7 @@ cd ~/auratech/BE
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build \
   eureka-server api-gateway user-service product-service order-service \
   inventory-service payment-service notification-service promotion-service \
+  chat-service \
   mariadb mongodb redis kafka debezium-connect debezium-init elasticsearch \
   minio keycloak caddy
 ```
@@ -236,10 +237,10 @@ Cố ý **không** chạy `kafka-ui`, `redis-insight`, `kibana` (tool dev-only, 
 - [ ] Truy cập `https://auratechvn.online` trên trình duyệt — FE load được, ổ khóa HTTPS hợp lệ (không cảnh báo "Not secure").
 - [ ] Truy cập `https://auth.auratechvn.online/admin` — vào được trang đăng nhập Keycloak Admin Console, login bằng `admin` + mật khẩu đã lưu (`KEYCLOAK_ADMIN_PASSWORD` trong `.env`).
 - [ ] Đăng ký 1 user test qua UI thật, xong chạy `docker compose -f docker-compose.yml -f docker-compose.prod.yml restart keycloak`, kiểm tra user đó **không bị mất** (xác nhận fix `IGNORE_EXISTING` hoạt động). ⚠️ Sau khi restart bất kỳ service backend nào thủ công, nhớ restart luôn `caddy` (`docker compose ... restart caddy`) — nếu không Caddy có thể giữ kết nối tới IP nội bộ cũ và trả về lỗi 502.
-- [ ] Kiểm tra các port cũ (3308, 27017, 6379, 9200, 8090, 5540, 5601, 9001, 8761, 8085, 8089, 8082, 8093, 8084, 8086, 8087) **không** truy cập được từ bên ngoài.
+- [ ] Kiểm tra các port cũ (3308, 27017, 6379, 9200, 8090, 5540, 5601, 9001, 8761, 8085, 8089, 8082, 8093, 8084, 8086, 8087, 8088) **không** truy cập được từ bên ngoài.
 
   **Cách test** (bắt buộc làm từ **máy khác**, KHÔNG phải từ chính server — vì trong docker network port vẫn "mở" nội bộ, đó là bình thường):
-  - Cách 1 — dùng trang **canyouseeme.org**: đổi IP về `13.217.142.118` (hoặc IP hiện tại), nhập lần lượt từng port (`3306`, `27017`, `6379`, `8085`, `8089`, `8082`, `8093`, `8084`, `8086`, `8087`, `8761`, `9200`, `8090`, `5540`, `5601`, `9001`) → kỳ vọng **"Error: I could not see your service"** (nghĩa là đóng, an toàn) cho TẤT CẢ các port này.
+  - Cách 1 — dùng trang **canyouseeme.org**: đổi IP về `13.217.142.118` (hoặc IP hiện tại), nhập lần lượt từng port (`3306`, `27017`, `6379`, `8085`, `8089`, `8082`, `8093`, `8084`, `8086`, `8087`, `8088`, `8761`, `9200`, `8090`, `5540`, `5601`, `9001`) → kỳ vọng **"Error: I could not see your service"** (nghĩa là đóng, an toàn) cho TẤT CẢ các port này.
   - Cách 2 — có terminal (máy nhà/điện thoại có Termux...): `curl -m 5 http://13.217.142.118:3306` → kỳ vọng lệnh treo rồi báo timeout (`curl: (28) Connection timed out`), KHÔNG được trả lời gì (nếu trả lời tức là đang lộ).
   - Chỉ port **80** và **443** được phép "mở"/trả lời — đây là port Caddy phục vụ công khai, đúng thiết kế.
 

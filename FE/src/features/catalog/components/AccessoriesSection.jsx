@@ -33,7 +33,14 @@ export default function AccessoriesSection({ categories }) {
     return padded;
   };
 
+  if (!cats || cats.length === 0) return null;
+
   const paddedCats = getPaddedCats(cats);
+  const N = cats.length;
+  const limitDesktop = Math.ceil(N / 6) * 6;
+  const limitTablet = Math.ceil(N / 4) * 4;
+  const limitMobile = Math.ceil(N / 3) * 3;
+  const limitSmallMobile = Math.ceil(N / 2) * 2;
 
   return (
     <section style={{ marginTop: 24 }}>
@@ -98,10 +105,17 @@ export default function AccessoriesSection({ categories }) {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
+
+        .accessories-item:nth-child(n+${limitDesktop + 1}) {
+          display: none;
+        }
         
         @media (max-width: 1024px) {
           .accessories-grid {
             grid-template-columns: repeat(4, 1fr);
+          }
+          .accessories-item:nth-child(n+${limitTablet + 1}) {
+            display: none;
           }
         }
         @media (max-width: 768px) {
@@ -123,6 +137,9 @@ export default function AccessoriesSection({ categories }) {
           .accessories-title-row h2 {
             font-size: 14px !important;
           }
+          .accessories-item:nth-child(n+${limitMobile + 1}) {
+            display: none;
+          }
         }
         @media (max-width: 480px) {
           .accessories-grid {
@@ -139,6 +156,9 @@ export default function AccessoriesSection({ categories }) {
           }
           .accessories-item-title {
             font-size: 11.5px;
+          }
+          .accessories-item:nth-child(n+${limitSmallMobile + 1}) {
+            display: none;
           }
         }
       `}</style>

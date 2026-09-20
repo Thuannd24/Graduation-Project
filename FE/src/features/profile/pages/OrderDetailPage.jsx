@@ -558,7 +558,7 @@ export default function OrderDetailPage() {
             </p>
             <div className="flex items-center gap-1.5 font-bold text-primary pt-1 border-t border-slate-150 dark:border-slate-800/60">
               <Icon name="phone_in_talk" className="text-sm animate-pulse" />
-              <span>Hotline miễn phí: 1800.2097</span>
+              <span>Hotline hỗ trợ: 0389.468.847</span>
             </div>
           </div>
         </div>

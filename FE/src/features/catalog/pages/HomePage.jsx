@@ -118,6 +118,13 @@ export default function HomePage() {
 
   const dualCategories = categories.slice(0, 2);
 
+  // TODO(AI recommendation): personalizedProducts sẽ do AI recs-service trả về.
+  // Tạm thời khi chưa có gợi ý AI (chưa đăng nhập / service chưa sẵn sàng), hiển thị
+  // tạm sản phẩm khác lấy từ DB để khu vực này không bị trống.
+  const suggestedProducts = personalizedProducts.length > 0
+    ? personalizedProducts
+    : [...products].reverse();
+
   return (
     <div className="space-y-5">
       {/* Hero */}
@@ -255,7 +262,7 @@ export default function HomePage() {
       <FlashDealSection products={products} loading={loading} />
 
       {/* Ảnh 2: Gợi ý cho bạn */}
-      <SuggestedSection products={personalizedProducts} loading={loading} />
+      <SuggestedSection products={suggestedProducts} loading={loading} />
 
       {/* Ảnh 3: Điện thoại / Máy tính bảng */}
       <CategoryDualSection categories={categories} />

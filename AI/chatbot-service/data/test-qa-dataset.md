@@ -21,7 +21,7 @@
 | 9 | Chi tiêu bao nhiêu để lên hạng SILVER? | Tổng chi tiêu tích lũy đạt 15.000.000 đ. |
 | 10 | Hạng VIP cần chi tiêu bao nhiêu? | Từ 100.000.000 đ tổng chi tiêu tích lũy. |
 | 11 | Điều kiện đổi trả hàng là gì? | Còn trong thời hạn đổi trả, còn nguyên hộp/phụ kiện, có hoá đơn AuraTech, lỗi từ nhà sản xuất. |
-| 12 | Hàng bị lỗi giao sai thì phải làm gì? | Liên hệ tổng đài 1800.2097 trong vòng 48 giờ kèm ảnh chụp để được đổi hàng miễn phí. |
+| 12 | Hàng bị lỗi giao sai thì phải làm gì? | Liên hệ tổng đài 0389.468.847 trong vòng 48 giờ kèm ảnh chụp để được đổi hàng miễn phí. |
 | 13 | Bảo hành iPhone bao lâu? | 12 tháng bảo hành chính hãng từ ngày mua. |
 | 14 | Laptop ASUS bảo hành bao lâu? | 24 tháng bảo hành chính hãng. |
 | 15 | Điều kiện nào không được bảo hành? | Vỡ màn hình do va đập, ngấm nước, sửa ngoài, tem bị bóc, hết hạn bảo hành. |
@@ -29,7 +29,7 @@
 | 17 | Hạng GOLD có hệ số nhân điểm bao nhiêu? | ×1.5 (mỗi 10.000 đ chi tiêu = 1,5 điểm). |
 | 18 | Giao hàng nội thành mất bao lâu? | 1–2 ngày làm việc. |
 | 19 | Tỉnh xa giao hàng mất bao nhiêu ngày? | 2–5 ngày làm việc. Vùng xa / hải đảo có thể 5–7 ngày. |
-| 20 | Hotline AuraTech là số mấy? | 1800.2097 (miễn phí), hoạt động 8:00–22:00 hàng ngày. |
+| 20 | Hotline AuraTech là số mấy? | 0389.468.847 (miễn phí), hoạt động 8:00–22:00 hàng ngày. |
 
 ---
 
@@ -40,13 +40,13 @@
 | 21 | Đơn hàng của tôi đang ở trạng thái nào? | [Tool: get_order_status] → Trả về trạng thái thực tế từ hệ thống. |
 | 22 | Đơn #123 khi nào giao tới? | [Tool: get_order_status] → Trả về thông tin giao hàng và tracking code. |
 | 23 | Tracking code đơn của tôi là gì? | [Tool: get_order_status] → Trả về mã vận đơn khi đơn ở SHIPPED. |
-| 24 | Tại sao đơn tôi chưa thấy xác nhận? | Kiểm tra lịch sử đơn hàng trong tài khoản. Nếu sau 15 phút vẫn chưa thấy, liên hệ 1800.2097 kèm mã giao dịch. |
+| 24 | Tại sao đơn tôi chưa thấy xác nhận? | Kiểm tra lịch sử đơn hàng trong tài khoản. Nếu sau 15 phút vẫn chưa thấy, liên hệ 0389.468.847 kèm mã giao dịch. |
 | 25 | Đơn hàng CONFIRMED nghĩa là gì? | Đơn đã được xác nhận và đang được chuẩn bị hàng, sắp chuyển cho đơn vị vận chuyển. |
 | 26 | Đơn SHIPPED nghĩa là gì? | Đơn đã được giao cho đơn vị vận chuyển, đang trên đường đến địa chỉ của bạn. |
 | 27 | Tôi có thể xem lịch sử tất cả đơn hàng ở đâu? | Đăng nhập vào tài khoản → vào mục Lịch sử đơn hàng / Quản lý đơn hàng. |
 | 28 | Đơn hàng bị CANCELLED do đâu? | Có thể do: khách huỷ, hệ thống tự huỷ sau 30 phút không thanh toán, hoặc hết hàng. |
 | 29 | Tôi đặt hàng xong quên thanh toán thì sao? | Đơn tự động huỷ sau 30 phút. Bạn cần đặt lại đơn mới. |
-| 30 | Có thể thay đổi địa chỉ giao hàng sau khi đặt không? | Được nếu đơn còn PENDING hoặc CONFIRMED. Liên hệ 1800.2097. |
+| 30 | Có thể thay đổi địa chỉ giao hàng sau khi đặt không? | Được nếu đơn còn PENDING hoặc CONFIRMED. Liên hệ 0389.468.847. |
 
 ---
 
@@ -57,7 +57,7 @@
 | 31 | Tôi muốn huỷ đơn hàng | [Hỏi xác nhận] → [Tool: cancel_order nếu còn trong trạng thái được huỷ]. |
 | 32 | Huỷ đơn thì tiền hoàn lại bao lâu? | VNPAY: 3–8 ngày làm việc. Thẻ tín dụng: 7–15 ngày. COD: không mất tiền. |
 | 33 | Huỷ đơn rồi voucher có được hoàn không? | Có, voucher được hoàn tự động vào tài khoản để dùng lần sau. |
-| 34 | Đơn đang SHIPPED có huỷ được không? | Không thể huỷ khi đơn đã SHIPPED. Liên hệ 1800.2097 để được hỗ trợ. |
+| 34 | Đơn đang SHIPPED có huỷ được không? | Không thể huỷ khi đơn đã SHIPPED. Liên hệ 0389.468.847 để được hỗ trợ. |
 | 35 | Tôi có bao nhiêu điểm thưởng? | [Tool: get_loyalty_points] → Trả về số điểm thực tế (yêu cầu đăng nhập). |
 | 36 | Voucher của tôi còn hiệu lực không? | [Tool: get_user_vouchers] → Trả về danh sách voucher còn hạn (yêu cầu đăng nhập). |
 | 37 | Sản phẩm bảo hành mở rộng của tôi còn hiệu lực không? | [Tool: get_warranty_info] → Trả về thông tin bảo hành của đơn hàng. |
@@ -88,11 +88,11 @@
 
 | # | Câu hỏi | Câu trả lời đúng mẫu |
 |---|---|---|
-| 51 | Hàng giao bị vỡ màn hình, tôi yêu cầu đổi ngay | Xin lỗi bạn vì sự cố này. Vui lòng liên hệ ngay 1800.2097 kèm ảnh chụp sản phẩm. AuraTech sẽ xử lý đổi hàng trong vòng 24–48 giờ. |
+| 51 | Hàng giao bị vỡ màn hình, tôi yêu cầu đổi ngay | Xin lỗi bạn vì sự cố này. Vui lòng liên hệ ngay 0389.468.847 kèm ảnh chụp sản phẩm. AuraTech sẽ xử lý đổi hàng trong vòng 24–48 giờ. |
 | 52 | Giao hàng chậm quá, tôi đặt 5 ngày rồi chưa thấy | Xin lỗi bạn. Cho Aura xem mã đơn hàng để tra cứu tình trạng ngay nhé. |
-| 53 | Sản phẩm không giống mô tả trên web | Aura xin lỗi vì trải nghiệm không tốt. Bạn vui lòng liên hệ 1800.2097 kèm ảnh để được hỗ trợ đổi trả. |
+| 53 | Sản phẩm không giống mô tả trên web | Aura xin lỗi vì trải nghiệm không tốt. Bạn vui lòng liên hệ 0389.468.847 kèm ảnh để được hỗ trợ đổi trả. |
 | 54 | Tôi rất thất vọng với dịch vụ của AuraTech | Aura rất tiếc về điều này. Cho Aura biết cụ thể vấn đề để Aura hỗ trợ ngay hoặc kết nối bạn với nhân viên chuyên trách nhé. |
-| 55 | Bị tính tiền sai, tôi bị trừ nhiều hơn | Aura xin lỗi. Vui lòng cung cấp mã đơn hàng và số tiền thực tế, Aura sẽ kiểm tra và xử lý ngay. Hotline: 1800.2097. |
+| 55 | Bị tính tiền sai, tôi bị trừ nhiều hơn | Aura xin lỗi. Vui lòng cung cấp mã đơn hàng và số tiền thực tế, Aura sẽ kiểm tra và xử lý ngay. Hotline: 0389.468.847. |
 
 ---
 
@@ -116,7 +116,7 @@
 | 62 | doi tra do loi trong bao lau | Thời hạn đổi trả thông thường từ 7 đến 30 ngày tùy theo loại sản phẩm và điều kiện cụ thể. |
 | 63 | toi mua laptop asus 18 thang truoc bi loi man hinh, co duoc bao hanh free khong | Có, laptop ASUS được bảo hành chính hãng 24 tháng, vì vậy máy mua 18 tháng trước vẫn nằm trong thời hạn bảo hành miễn phí nếu đủ điều kiện phần cứng. |
 | 64 | don cua toi sao chua thay giao | Aura xin lỗi vì sự bất tiện này. Bạn vui lòng cung cấp mã đơn hàng để Aura tra cứu trạng thái giao hàng chính xác giúp bạn nhé. |
-| 65 | t muon huy don da shipped | Rất tiếc, đơn hàng đã giao cho đơn vị vận chuyển (SHIPPED) thì không thể hủy qua website. Bạn vui lòng liên hệ tổng đài 1800.2097 để được hỗ trợ xử lý. |
+| 65 | t muon huy don da shipped | Rất tiếc, đơn hàng đã giao cho đơn vị vận chuyển (SHIPPED) thì không thể hủy qua website. Bạn vui lòng liên hệ tổng đài 0389.468.847 để được hỗ trợ xử lý. |
 | 66 | point cua toi dung het de thanh toan luon duoc ko | Có thể sử dụng điểm thưởng để giảm giá trực tiếp cho đơn hàng, tối đa không vượt quá giá trị đơn hàng sau khi trừ các khoản giảm giá khác. |
 | 67 | ip 16 voi samsung s25 cai nao ngon hon | Cả hai đều là dòng flagship xuất sắc. iPhone 16 nổi bật với hệ điều hành iOS mượt mà, camera sắc nét và giữ giá tốt. Samsung S25 có màn hình AMOLED tuyệt đẹp, nhiều tính năng AI thông minh và thiết kế thời thượng. Bạn có thể chọn tùy theo nhu cầu hệ điều hành ưa thích. |
 | 68 | tim lap duoi 15tr de choi game muot | Với ngân sách dưới 15 triệu, bạn có thể tham khảo các dòng laptop ASUS Vivobook hoặc Acer Aspire Lite cấu hình tốt, hoặc dòng máy cũ như ASUS TUF Gaming, Acer Nitro V cũ tại AuraTech để có hiệu năng chơi game mượt mà nhất. |
@@ -131,7 +131,7 @@
 | 77 | co ban tai nghe airpods rep 1 1 ko | AuraTech cam kết chỉ bán sản phẩm chính hãng 100%, không kinh doanh các loại hàng giả, hàng nhái hoặc hàng rep 1:1. |
 | 78 | lam sao de thiet lap lai mat khau | Bạn vào trang đăng nhập, nhấn "Quên mật khẩu", nhập email/sđt đăng ký tài khoản và làm theo hướng dẫn gửi về để tạo mật khẩu mới. |
 | 79 | may anh cu cua canon co con hang ko | Tình trạng tồn kho của máy ảnh Canon cũ sẽ được hệ thống tra cứu theo thời gian thực. Bạn vui lòng xem trên website hoặc nhắn dòng máy cụ thể để Aura check kho nhé. |
-| 80 | neu nhan vien tu van bao sai gia thi sao | AuraTech cam kết bán đúng giá niêm yết trên website. Nếu có sai sót từ nhân viên tư vấn, bạn vui lòng liên hệ hotline khiếu nại 1800.2097 để được giải quyết quyền lợi. |
+| 80 | neu nhan vien tu van bao sai gia thi sao | AuraTech cam kết bán đúng giá niêm yết trên website. Nếu có sai sót từ nhân viên tư vấn, bạn vui lòng liên hệ hotline khiếu nại 0389.468.847 để được giải quyết quyền lợi. |
 | 81 | iphone lock co ban tai day ko | AuraTech chỉ kinh doanh iPhone phiên bản quốc tế (chính hãng VN/A), không bán iPhone Lock (khóa mạng). |
 | 82 | sao luu du lieu dien thoai co mat phi ko | Dịch vụ hỗ trợ sao lưu, chuyển dữ liệu tại cửa hàng là hoàn toàn miễn phí khi khách hàng mua máy mới tại AuraTech. |
 | 83 | nhan vien tu sao luu mat du lieu co den ko | Theo quy định sao lưu dữ liệu, khách hàng phải ký Cam kết miễn trừ trách nhiệm trước khi nhân viên thực hiện. AuraTech khuyến khích khách hàng tự sao lưu để đảm bảo an toàn tuyệt đối. |

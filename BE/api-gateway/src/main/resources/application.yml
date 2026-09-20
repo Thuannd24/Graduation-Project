@@ -23,8 +23,8 @@ spring:
       default-filters:
         - name: RequestRateLimiter
           args:
-            redis-rate-limiter.replenishRate: 20
-            redis-rate-limiter.burstCapacity: 50
+            redis-rate-limiter.replenishRate: ${RATE_LIMIT_REPLENISH:20}
+            redis-rate-limiter.burstCapacity: ${RATE_LIMIT_BURST:50}
             redis-rate-limiter.requestedTokens: 1
             key-resolver: "#{@userKeyResolver}"
 
@@ -137,7 +137,12 @@ spring:
           filters:
             - name: CircuitBreaker
               args:
-                name: ai-engine-cb
+                # Own breaker, not the shared ai-engine-cb: a chat request can legitimately
+                # take longer than a plain search/recs/forecast call (up to 2 sequential
+                # LLM calls plus product/policy retrieval in the same request), so it needs
+                # a longer timelimiter budget without loosening the timeout for those other,
+                # normally-fast AI routes too.
+                name: ai-chatbot-cb
                 fallbackUri: forward:/fallback/ai-engine
 
         - id: ai-recs
@@ -196,6 +201,9 @@ resilience4j:
       ai-engine-cb:
         waitDurationInOpenState: 30s
         baseConfig: default
+      ai-chatbot-cb:
+        waitDurationInOpenState: 30s
+        baseConfig: default
   timelimiter:
     configs:
       default:
@@ -215,6 +223,11 @@ resilience4j:
         baseConfig: default
       promotion-service-cb:
         baseConfig: default
+      ai-chatbot-cb:
+        # 60s: a chat request can run 2 sequential DeepSeek calls (NLU + answer) plus
+        # product/policy retrieval — 30s tripped mid-request even when chatbot-service
+        # would have answered a few seconds later.
+        timeoutDuration: 60s
       chat-service-cb:
         baseConfig: default
       ai-engine-cb:

@@ -6,13 +6,13 @@
 
 ---
 
-Aura Tech luôn nỗ lực tối đa để hỗ trợ khách hàng bảo vệ quyền lợi mua sắm. Dưới đây là chính sách đổi trả, hoàn tiền và nhập lại sản phẩm áp dụng trên toàn hệ thống cửa hàng và kênh online của Aura Tech.
+AuraTech luôn nỗ lực tối đa để hỗ trợ khách hàng bảo vệ quyền lợi mua sắm. Dưới đây là chính sách đổi trả, hoàn tiền và nhập lại sản phẩm áp dụng trên toàn hệ thống cửa hàng và kênh online của AuraTech.
 
 ---
 
 ## 1. Chính sách đổi mới sản phẩm lỗi (do nhà sản xuất)
 
-Áp dụng cho khách hàng mua sản phẩm mới chính hãng tại Aura Tech phát hiện lỗi kỹ thuật từ phía nhà sản xuất (NSX):
+Áp dụng cho khách hàng mua sản phẩm mới chính hãng tại AuraTech phát hiện lỗi kỹ thuật từ phía nhà sản xuất (NSX):
 
 ### Điện thoại, Máy tính bảng, Laptop, Tivi, Đồng hồ thông minh
 
@@ -31,7 +31,7 @@ Aura Tech luôn nỗ lực tối đa để hỗ trợ khách hàng bảo vệ qu
 
 ## 2. Chính sách trả hàng / thu mua nhập lại (sản phẩm không lỗi)
 
-Trường hợp khách hàng đã mua sản phẩm nhưng thay đổi nhu cầu sử dụng *(không phải do lỗi sản phẩm)*, Aura Tech hỗ trợ chính sách thu mua nhập lại như sau:
+Trường hợp khách hàng đã mua sản phẩm nhưng thay đổi nhu cầu sử dụng *(không phải do lỗi sản phẩm)*, AuraTech hỗ trợ chính sách thu mua nhập lại như sau:
 
 | Thời gian áp dụng | Phí nhập lại (% trên giá trị hóa đơn/giá hiện tại) |
 |---|---|
@@ -50,7 +50,7 @@ Trường hợp khách hàng đã mua sản phẩm nhưng thay đổi nhu cầu 
 
 ## 3. Thủ tục và thời gian hoàn tiền
 
-Khi đơn hàng hủy hoặc giao dịch nhập lại sản phẩm được phê duyệt thành công, Aura Tech sẽ hoàn trả tiền theo phương thức thanh toán ban đầu:
+Khi đơn hàng hủy hoặc giao dịch nhập lại sản phẩm được phê duyệt thành công, AuraTech sẽ hoàn trả tiền theo phương thức thanh toán ban đầu:
 
 | Hình thức hoàn tiền | Thời gian |
 |---|---|

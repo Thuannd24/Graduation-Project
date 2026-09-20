@@ -21,22 +21,6 @@ Sao chép tệp cấu hình mẫu và sửa đổi giá trị nếu cần thiế
 cp .env.example .env
 ```
 
-Nội dung mặc định của tệp tin `FE/.env`:
-```env
-VITE_API_URL=http://localhost:8080/api/v1
-VITE_KEYCLOAK_URL=http://localhost:8083
-VITE_KEYCLOAK_REALM=ecommerce-realm
-VITE_KEYCLOAK_CLIENT_ID=ecommerce-frontend
-```
-
-**Giải thích các biến môi trường:**
-*   `VITE_API_URL`: Điểm cuối (Entry Point) của API Gateway để gửi các API request.
-*   `VITE_KEYCLOAK_URL`: Địa chỉ của máy chủ Keycloak phục vụ đăng nhập OIDC.
-*   `VITE_KEYCLOAK_REALM`: Realm được tạo trên Keycloak dành cho hệ thống E-commerce (Mặc định: `ecommerce-realm`).
-*   `VITE_KEYCLOAK_CLIENT_ID`: ID Client dành cho ứng dụng Frontend được cấu hình trên Keycloak (Mặc định: `ecommerce-frontend`).
-
----
-
 ## III. HƯỚNG DẪN CHẠY LOCAL DEVELOPMENT
 
 Thực hiện các lệnh sau tại thư mục `FE/` bằng Command Prompt, Terminal hoặc Powershell:
@@ -51,13 +35,3 @@ npm install
 npm run dev
 ```
 Sau khi chạy thành công, terminal sẽ hiển thị địa chỉ cục bộ (Mặc định: `http://localhost:5173`). Bạn hãy mở trình duyệt và truy cập vào địa chỉ trên để trải nghiệm ứng dụng.
-
----
-
-## IV. ĐÓNG GÓI SẢN PHẨM (BUILD FOR PRODUCTION)
-
-Để biên dịch và đóng gói ứng dụng tối ưu hóa dung lượng trước khi deploy lên Hosting hoặc Server Nginx:
-```bash
-npm run build
-```
-Sản phẩm đóng gói tĩnh nằm ở thư mục `dist/` sẵn sàng để đưa lên môi trường Production.

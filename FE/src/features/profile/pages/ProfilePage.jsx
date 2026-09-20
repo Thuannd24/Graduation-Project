@@ -9,6 +9,7 @@ import { productApi } from "../../../services/productApi";
 import ProductReviewsTab from "../components/ProductReviewsTab.jsx";
 import VouchersTab from "../components/VouchersTab.jsx";
 import WarrantyTab from "../components/WarrantyTab.jsx";
+import policiesData from "../../../assets/policies.json";
 
 const defaultAvatar =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuD79xXNOGSw680ZnmFoOr1Dy_SKGF_l02zJLxZZKU1yIZZ0XXuoAI8EJ35l9EI_NLBz_9QJrDdAsEhoX8cJO5u-MnRglpZLEKi4dIRY6CLav92GAkIR4MIgBQu7FklRpruD-BLGpy9KSshBB2tca62rHg-dDiHBevjyQESC8KrI4sgR3re5rjnFSulz_w0Z8_Hy8wyX4Y4R6REXHZ6okF12RRsarQbbK7gDat-8ipJnuQrdhISQFBGRRkDRATBXhRshAIzycAvxymM";
@@ -273,6 +274,228 @@ function getLoyaltySourceLabel(sourceType) {
   }
 }
 
+const MarkdownRenderer = ({ content }) => {
+  if (!content) return null;
+
+  const lines = content.split("\n");
+  const renderedElements = [];
+  let listItems = [];
+  let tableRows = [];
+  let calloutLines = [];
+  let insideTable = false;
+
+  const flushList = (key) => {
+    if (listItems.length > 0) {
+      renderedElements.push(
+        <ul key={`list-${key}`} className="list-disc pl-5 space-y-1 my-2 text-xs leading-relaxed text-secondary">
+          {listItems}
+        </ul>
+      );
+      listItems = [];
+    }
+  };
+
+  const flushTable = (key) => {
+    if (tableRows.length > 0) {
+      const [headerRow, ...bodyRows] = tableRows;
+      renderedElements.push(
+        <div key={`table-wrapper-${key}`} className="overflow-x-auto my-3 border border-surface-container-highest rounded-lg">
+          <table className="w-full text-xs text-left border-collapse">
+            <thead className="bg-surface-container-low text-primary font-bold border-b border-surface-container-highest">
+              <tr>
+                {headerRow.map((cell, i) => (
+                  <th key={`th-${i}`} className="p-3 font-bold">{parseInlineStyles(cell)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-surface-container-highest bg-surface-container-lowest text-secondary">
+              {bodyRows.map((row, i) => (
+                <tr key={`tr-${i}`} className="hover:bg-surface-container-low/30">
+                  {row.map((cell, j) => (
+                    <td key={`td-${j}`} className="p-3">{parseInlineStyles(cell)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+      tableRows = [];
+      insideTable = false;
+    }
+  };
+
+  const flushCallout = (key) => {
+    if (calloutLines.length > 0) {
+      let calloutClass = "bg-primary-fixed/20 border-l-4 border-primary text-secondary p-3 rounded-r-lg my-3 text-xs";
+      let title = "LƯU Ý";
+
+      const fullText = calloutLines.join("\n");
+      if (fullText.includes("[! IMPORTANT]") || fullText.includes("[!IMPORTANT]")) {
+        calloutClass = "bg-primary-fixed/20 border-l-4 border-primary text-secondary p-3 rounded-r-lg my-3 text-xs";
+        title = "QUAN TRỌNG";
+      } else if (fullText.includes("[! TIP]") || fullText.includes("[!TIP]")) {
+        calloutClass = "bg-emerald-50 border-l-4 border-emerald-500 text-secondary p-3 rounded-r-lg my-3 text-xs";
+        title = "GỢI Ý";
+      }
+
+      const cleanLines = calloutLines
+        .map(line => line.replace(/\[!(IMPORTANT|TIP|NOTE|WARNING|CAUTION)\]/gi, "").trim())
+        .filter(line => line.length > 0);
+
+      if (cleanLines.length > 0) {
+        renderedElements.push(
+          <div key={`callout-${key}`} className={calloutClass}>
+            <div className="font-bold text-on-surface mb-1">{title}</div>
+            <div className="space-y-1">
+              {cleanLines.map((line, pIdx) => (
+                <p key={pIdx} className="leading-relaxed">{parseInlineStyles(line)}</p>
+              ))}
+            </div>
+          </div>
+        );
+      }
+      calloutLines = [];
+    }
+  };
+
+  const parseInlineStyles = (text) => {
+    if (!text) return "";
+    
+    // First, split by bold markdown **
+    const boldParts = text.split(/\*\*([^*]+)\*\*/g);
+    
+    return boldParts.map((boldPart, bIdx) => {
+      const isBold = bIdx % 2 === 1;
+      
+      // For each part, split by italic markdown *
+      const italicParts = boldPart.split(/\*([^*]+)\*/g);
+      const renderedItalic = italicParts.map((italicPart, iIdx) => {
+        const isItalic = iIdx % 2 === 1;
+        if (isItalic) {
+          return <em key={`em-${iIdx}`} className="italic">{italicPart}</em>;
+        }
+        return italicPart;
+      });
+
+      if (isBold) {
+        return <strong key={`strong-${bIdx}`} className="font-bold text-on-surface">{renderedItalic}</strong>;
+      }
+      return <React.Fragment key={`frag-${bIdx}`}>{renderedItalic}</React.Fragment>;
+    });
+  };
+
+  for (let idx = 0; idx < lines.length; idx++) {
+    const rawLine = lines[idx];
+    const trimLine = rawLine.trim();
+
+    // Skip the metadata block at the top of the file
+    if (/^>\s*\*\*(Danh mục|Đơn vị vận hành|Ngày cập nhật):\*\*/i.test(trimLine)) {
+      continue;
+    }
+
+    if (trimLine.startsWith(">")) {
+      flushList(idx);
+      if (insideTable) {
+        flushTable(idx);
+      }
+      const calloutText = trimLine.substring(1).trim();
+      calloutLines.push(calloutText);
+      continue;
+    } else {
+      flushCallout(idx);
+    }
+
+    if (trimLine.startsWith("|")) {
+      insideTable = true;
+      if (trimLine.replace(/[\s|:-]/g, "").length === 0) {
+        continue;
+      }
+      const cells = trimLine
+        .split("|")
+        .map(c => c.trim())
+        .filter((_, i, arr) => i > 0 && i < arr.length - 1);
+      
+      tableRows.push(cells);
+      continue;
+    } else if (insideTable) {
+      flushTable(idx);
+    }
+
+    if (/^[-*_]{2,30}$/.test(trimLine)) {
+      flushList(idx);
+      renderedElements.push(
+        <hr key={`hr-${idx}`} className="my-4 border-surface-container-highest" />
+      );
+      continue;
+    }
+
+    const isBulletList = trimLine.startsWith("•") || 
+                         trimLine.startsWith("- ") || trimLine === "-" || 
+                         trimLine.startsWith("* ") || trimLine === "*" || 
+                         /^\d+\.\s+/.test(trimLine);
+
+    if (isBulletList) {
+      let contentText = trimLine;
+      if (trimLine.startsWith("•")) {
+        contentText = trimLine.substring(1).trim();
+      } else if (trimLine.startsWith("- ") || trimLine.startsWith("* ")) {
+        contentText = trimLine.substring(2).trim();
+      } else if (trimLine === "-" || trimLine === "*") {
+        contentText = "";
+      } else {
+        const match = trimLine.match(/^(\d+\.)(.*)/);
+        if (match) {
+          contentText = match[2].trim();
+        }
+      }
+      listItems.push(
+        <li key={`li-${idx}`} className="text-secondary leading-relaxed">
+          {parseInlineStyles(contentText)}
+        </li>
+      );
+      continue;
+    } else {
+      flushList(idx);
+    }
+
+    if (trimLine.startsWith("#")) {
+      const match = trimLine.match(/^(#+)(.*)/);
+      if (match) {
+        const level = match[1].length;
+        const text = match[2].trim();
+        if (text) {
+          if (level === 1) {
+            // Skip the main document title as it is already rendered in the tab header
+            continue;
+          } else {
+            renderedElements.push(
+              <h3 key={`h2-${idx}`} className="text-sm font-bold text-on-surface mt-3 mb-1.5 flex items-center gap-1.5">
+                {parseInlineStyles(text)}
+              </h3>
+            );
+          }
+        }
+      }
+      continue;
+    }
+
+    if (trimLine) {
+      renderedElements.push(
+        <p key={`p-${idx}`} className="text-xs text-secondary leading-relaxed mb-2.5">
+          {parseInlineStyles(rawLine)}
+        </p>
+      );
+    }
+  }
+
+  flushList(lines.length);
+  flushTable(lines.length);
+  flushCallout(lines.length);
+
+  return <div className="space-y-1">{renderedElements}</div>;
+};
+
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -285,6 +508,12 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [selectedPolicySlug, setSelectedPolicySlug] = useState(() => {
+    return searchParams.get("policy") || "bieu-phi-bao-hanh-mo-rong";
+  });
+  const [isPolicyExpanded, setIsPolicyExpanded] = useState(() => {
+    return searchParams.get("tab") === "policy";
+  });
 
   const currentTabInfo = useMemo(() => {
     for (const section of navSections) {
@@ -516,12 +745,24 @@ export default function ProfilePage() {
 
   const handleNavClick = (itemId) => {
     setActiveTab(itemId);
-    setSearchParams({ tab: itemId });
+    if (itemId === "policy") {
+      setIsPolicyExpanded(!isPolicyExpanded);
+      setSearchParams({ tab: "policy", policy: selectedPolicySlug });
+    } else {
+      setSearchParams({ tab: itemId });
+    }
   };
 
   useEffect(() => {
     const tab = searchParams.get("tab");
-    if (tab) setActiveTab(tab);
+    const policy = searchParams.get("policy");
+    if (tab) {
+      setActiveTab(tab);
+      if (tab === "policy") {
+        setIsPolicyExpanded(true);
+      }
+    }
+    if (policy) setSelectedPolicySlug(policy);
   }, [searchParams]);
 
   const handleProfileSubmit = async (e) => {
@@ -633,6 +874,62 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-[4px] px-2">
                     {section.items.map((item) => {
                       const isActive = activeTab === item.id;
+                      if (item.id === "policy") {
+                        const policies = policiesData?.policies || [];
+                        return (
+                          <div key={item.id} className="flex flex-col">
+                            <button
+                              onClick={() => handleNavClick("policy")}
+                              className={`flex items-center justify-between px-3.5 py-2.5 font-body-sm text-body-sm transition-all duration-200 rounded-xl text-left ${
+                                isActive
+                                  ? "text-primary font-extrabold bg-primary/10 border-l-4 border-primary shadow-[0_2px_8px_rgba(169,0,16,0.06)]"
+                                  : "text-on-surface border-transparent hover:bg-surface-container-low/60 hover:text-primary"
+                              }`}
+                              type="button"
+                            >
+                              <div className="flex items-center min-w-0">
+                                <Icon 
+                                  className={`mr-3 text-[20px] transition-colors ${
+                                    isActive ? "text-primary" : "text-secondary"
+                                  }`} 
+                                  name={item.icon} 
+                                />
+                                <span className="truncate">{item.label}</span>
+                              </div>
+                              <Icon 
+                                name={isPolicyExpanded ? "expand_more" : "chevron_right"} 
+                                className={`text-xs transition-transform duration-200 ${isActive ? "text-primary" : "text-secondary/40"}`} 
+                              />
+                            </button>
+                            
+                            {isPolicyExpanded && (
+                              <div className="pl-6 mt-1 flex flex-col gap-1 border-l border-surface-container-highest ml-5 mb-1 animate-fade-in">
+                                {policies.map((p) => {
+                                  const isSubActive = activeTab === "policy" && selectedPolicySlug === p.slug;
+                                  return (
+                                    <button
+                                      key={p.slug}
+                                      onClick={() => {
+                                        setActiveTab("policy");
+                                        setSelectedPolicySlug(p.slug);
+                                        setSearchParams({ tab: "policy", policy: p.slug });
+                                      }}
+                                      className={`text-left text-[11px] font-semibold py-1.5 px-3 rounded-lg transition-all truncate ${
+                                        isSubActive
+                                          ? "text-primary bg-primary/5 font-extrabold border-l-2 border-primary"
+                                          : "text-secondary hover:text-primary hover:bg-surface-container-low/40"
+                                      }`}
+                                      type="button"
+                                    >
+                                      {p.title}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
                       return (
                         <button
                           key={item.id}
@@ -1280,80 +1577,40 @@ export default function ProfilePage() {
 
           {activeTab === "warranty" && <WarrantyTab />}
 
-          {activeTab === "policy" && (
-            <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-md space-y-md">
-              <div className="border-b border-surface-container-highest pb-xs flex items-center justify-between">
-                <div>
-                  <h3 className="font-bold text-headline-md text-on-surface">Chính sách & Thông tin AuraTech</h3>
-                  <p className="text-xs text-secondary mt-1">Bảo hành, đổi trả, giao nhận hàng và bảo mật thông tin khách hàng.</p>
-                </div>
-                <Icon className="text-primary text-[24px]" name="policy" />
-              </div>
-              
-              <div className="space-y-sm text-sm text-on-surface">
-                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
-                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
-                    <Icon name="verified" className="text-base" /> 1. Cam kết bảo hành chính hãng
-                  </h4>
-                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
-                    <li>Điện thoại, laptop, tablet: bảo hành chính hãng <span className="font-bold text-on-surface">12 tháng</span> kể từ ngày giao hàng thành công.</li>
-                    <li>Đồng hồ thông minh: bảo hành <span className="font-bold text-on-surface">12 tháng</span>.</li>
-                    <li>Phụ kiện (tai nghe, sạc, ốp lưng...): theo chính sách riêng của từng hãng, thường từ <span className="font-bold text-on-surface">3–12 tháng</span>.</li>
-                    <li>Miễn phí kiểm tra, tư vấn kỹ thuật tại các trung tâm bảo hành liên kết trên toàn quốc.</li>
-                  </ul>
+          {activeTab === "policy" && (() => {
+            const policies = policiesData?.policies || [];
+            const selectedPolicy = policies.find(p => p.slug === selectedPolicySlug) || policies[0];
+
+            return (
+              <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-md space-y-md">
+                <div className="border-b border-surface-container-highest pb-xs flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bold text-headline-md text-on-surface">Chính sách & Quy định AuraTech</h3>
+                    <p className="text-xs text-secondary mt-1">Thông tin chính thức về bảo hành, đổi trả, giao nhận và các dịch vụ khác.</p>
+                  </div>
+                  <Icon className="text-primary text-[24px]" name="gavel" />
                 </div>
 
-                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
-                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
-                    <Icon name="swap_horiz" className="text-base" /> 2. Chính sách đổi trả 30 ngày
-                  </h4>
-                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
-                    <li>Điện thoại / Tablet / Laptop: đổi trả trong <span className="font-bold text-on-surface">30 ngày</span>, khấu hao 20% (máy mới nguyên seal) hoặc 15% (máy đã kích hoạt) nếu không phải lỗi do nhà sản xuất.</li>
-                    <li>Phụ kiện giá trị dưới 1.000.000đ: đổi trả trong <span className="font-bold text-on-surface">12 tháng</span>, không khấu hao nếu còn nguyên tem, hộp.</li>
-                    <li>Phụ kiện giá trị từ 1.000.000đ trở lên: đổi trả trong <span className="font-bold text-on-surface">15 ngày</span>.</li>
-                    <li><span className="font-bold text-on-surface">Miễn phí 100%</span> (hoàn tiền hoặc đổi máy mới) nếu sản phẩm phát sinh lỗi phần cứng do nhà sản xuất trong 7 ngày đầu tiên.</li>
-                    <li>Điều kiện đủ tiêu chuẩn đổi trả: máy như mới (không trầy xước, không dán decal), hộp và phụ kiện đi kèm đầy đủ, số serial/IMEI trên hộp khớp với máy, đã đăng xuất toàn bộ tài khoản (iCloud, Google, Samsung Account...).</li>
-                  </ul>
-                </div>
-
-                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
-                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
-                    <Icon name="build" className="text-base" /> 3. Quy trình tiếp nhận bảo hành
-                  </h4>
-                  <p className="text-xs leading-relaxed text-secondary">
-                    Quý khách có thể mang sản phẩm trực tiếp đến bất kỳ trung tâm bảo hành ủy quyền của AuraTech trên toàn quốc, hoặc liên hệ Hotline miễn phí <span className="font-bold text-on-surface">1800.2097</span> để được hướng dẫn gửi chuyển phát miễn phí.
-                  </p>
-                </div>
-
-                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
-                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
-                    <Icon name="local_shipping" className="text-base" /> 4. Chính sách giao nhận hàng
-                  </h4>
-                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
-                    <li>Phí vận chuyển đồng giá <span className="font-bold text-on-surface">30.000đ</span> toàn quốc — có thể được miễn phí khi áp dụng voucher Freeship.</li>
-                    <li>Thời gian giao hàng dự kiến: <span className="font-bold text-on-surface">1–2 ngày</span> tại các thành phố lớn, <span className="font-bold text-on-surface">2–5 ngày</span> với khu vực tỉnh/thành khác.</li>
-                    <li>Khách hàng có quyền yêu cầu nhân viên giao hàng mở kiện kiểm tra sản phẩm (đồng kiểm) ngay khi nhận, trước khi xác nhận đã nhận hàng.</li>
-                    <li>Đơn hàng từ <span className="font-bold text-on-surface">10.000.000đ</span> trở lên: yêu cầu xuất trình CCCD trùng khớp thông tin đặt hàng để đối chiếu, nhằm hạn chế gian lận.</li>
-                    <li>Nếu phát hiện sản phẩm lỗi/hư hỏng khi đồng kiểm, AuraTech chịu toàn bộ chi phí thu hồi và đổi mới trong vòng 15 ngày.</li>
-                  </ul>
-                </div>
-
-                <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
-                  <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
-                    <Icon name="lock" className="text-base" /> 5. Chính sách bảo mật thông tin
-                  </h4>
-                  <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
-                    <li>Thông tin thu thập: họ tên, email, số điện thoại, địa chỉ giao hàng, thông tin đăng nhập tài khoản.</li>
-                    <li>Mục đích sử dụng: xử lý đơn hàng và giao hàng, quản lý tài khoản, gửi thông báo khuyến mãi/bảo hành, chăm sóc khách hàng, phòng chống gian lận.</li>
-                    <li>Biện pháp bảo vệ: mã hóa dữ liệu nhạy cảm, giới hạn quyền truy cập chỉ nhân viên có thẩm quyền, tuân thủ quy định pháp luật về an toàn thông tin mạng.</li>
-                    <li>Chia sẻ dữ liệu: chỉ chia sẻ với đối tác vận chuyển, đơn vị thanh toán để phục vụ đơn hàng — <span className="font-bold text-on-surface">không</span> bán hoặc cho thuê dữ liệu khách hàng cho bên thứ ba vì mục đích thương mại khác.</li>
-                    <li>Quý khách có quyền yêu cầu chỉnh sửa, cập nhật hoặc xóa thông tin cá nhân bất kỳ lúc nào tại trang Hồ sơ, hoặc liên hệ Hotline <span className="font-bold text-on-surface">1800.2097</span>.</li>
-                    <li>Dữ liệu cá nhân được lưu trữ cho đến khi khách hàng yêu cầu xóa tài khoản.</li>
-                  </ul>
+                <div className="pt-xs">
+                  {selectedPolicy ? (
+                    <div className="space-y-md">
+                      <div className="flex items-center justify-between border-b border-surface-container-highest pb-xs">
+                        <h4 className="font-extrabold text-sm text-primary flex items-center gap-2">
+                          <Icon name="article" className="text-base text-primary" /> {selectedPolicy.title}
+                        </h4>
+                      </div>
+                      
+                      <div className="max-h-[600px] overflow-y-auto pr-xs scrollbar-thin text-slate-700 dark:text-slate-300">
+                        <MarkdownRenderer content={selectedPolicy.content} />
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-center text-xs text-secondary py-md">Không tìm thấy nội dung chính sách.</p>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {activeTab !== "overview" && activeTab !== "orders" && activeTab !== "reviews" && activeTab !== "vouchers" && activeTab !== "account" && activeTab !== "addresses" && activeTab !== "membership" && activeTab !== "warranty" && activeTab !== "policy" && (
             <div className="bg-surface-container-lowest rounded-lg border border-surface-container-highest p-xl text-center flex flex-col items-center justify-center space-y-sm">
@@ -1420,6 +1677,63 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-[4px] px-2">
                     {section.items.map((item) => {
                       const isActive = activeTab === item.id;
+                      if (item.id === "policy") {
+                        const policies = policiesData?.policies || [];
+                        return (
+                          <div key={item.id} className="flex flex-col">
+                            <button
+                              onClick={() => handleNavClick("policy")}
+                              className={`flex items-center justify-between px-3.5 py-2.5 font-body-sm text-body-sm transition-all duration-200 rounded-xl text-left ${
+                                isActive
+                                  ? "text-primary font-extrabold bg-primary/10 border-l-4 border-primary shadow-[0_2px_8px_rgba(169,0,16,0.06)]"
+                                  : "text-on-surface border-transparent hover:bg-surface-container-low/60 hover:text-primary"
+                              }`}
+                              type="button"
+                            >
+                              <div className="flex items-center min-w-0">
+                                <Icon 
+                                  className={`mr-3 text-[20px] transition-colors ${
+                                    isActive ? "text-primary" : "text-secondary"
+                                  }`} 
+                                  name={item.icon} 
+                                />
+                                <span className="truncate">{item.label}</span>
+                              </div>
+                              <Icon 
+                                name={isPolicyExpanded ? "expand_more" : "chevron_right"} 
+                                className={`text-xs transition-transform duration-200 ${isActive ? "text-primary" : "text-secondary/40"}`} 
+                              />
+                            </button>
+                            
+                            {isPolicyExpanded && (
+                              <div className="pl-6 mt-1 flex flex-col gap-1 border-l border-surface-container-highest ml-5 mb-1 animate-fade-in">
+                                {policies.map((p) => {
+                                  const isSubActive = activeTab === "policy" && selectedPolicySlug === p.slug;
+                                  return (
+                                    <button
+                                      key={p.slug}
+                                      onClick={() => {
+                                        setActiveTab("policy");
+                                        setSelectedPolicySlug(p.slug);
+                                        setSearchParams({ tab: "policy", policy: p.slug });
+                                        setIsMobileSidebarOpen(false);
+                                      }}
+                                      className={`text-left text-[11px] font-semibold py-1.5 px-3 rounded-lg transition-all truncate ${
+                                        isSubActive
+                                          ? "text-primary bg-primary/5 font-extrabold border-l-2 border-primary"
+                                          : "text-secondary hover:text-primary hover:bg-surface-container-low/40"
+                                      }`}
+                                      type="button"
+                                    >
+                                      {p.title}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
                       return (
                         <button
                           key={item.id}

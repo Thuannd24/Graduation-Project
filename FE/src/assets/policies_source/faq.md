@@ -14,7 +14,7 @@ A: AuraTech hỗ trợ 2 kênh mua hàng:
 - **Tại cửa hàng:** Đến trực tiếp hệ thống cửa hàng AuraTech trên toàn quốc để xem hàng thực tế và mua trực tiếp.
 
 **Q: Tôi đặt hàng xong có thể thay đổi địa chỉ giao hàng không?**
-A: Được, nhưng chỉ khi đơn hàng còn ở trạng thái **PENDING** hoặc **CONFIRMED**. Sau khi đơn đã chuyển sang **SHIPPED** (đang vận chuyển) thì không thể thay đổi nữa. Vui lòng liên hệ tổng đài **1800.2097** để được hỗ trợ.
+A: Được, nhưng chỉ khi đơn hàng còn ở trạng thái **PENDING** hoặc **CONFIRMED**. Sau khi đơn đã chuyển sang **SHIPPED** (đang vận chuyển) thì không thể thay đổi nữa. Vui lòng liên hệ tổng đài **0389.468.847** để được hỗ trợ.
 
 **Q: Tôi có thể đặt nhiều sản phẩm trong 1 đơn hàng không?**
 A: Có, bạn có thể thêm nhiều sản phẩm vào giỏ hàng và thanh toán một lần duy nhất.
@@ -47,7 +47,7 @@ A: Tại trang thanh toán (checkout), có ô nhập mã voucher ngay trước k
 A: Có. Link thanh toán VNPAY có hiệu lực **1 giờ** kể từ khi tạo. Nếu không thanh toán kịp, đơn hàng sẽ tự động bị huỷ sau **30 phút** không hoạt động.
 
 **Q: Thanh toán xong nhưng không thấy xác nhận đơn hàng?**
-A: Vui lòng kiểm tra mục **Lịch sử đơn hàng** trong tài khoản. Nếu sau 15 phút vẫn không thấy đơn, liên hệ tổng đài **1800.2097** kèm mã giao dịch VNPAY để được tra cứu.
+A: Vui lòng kiểm tra mục **Lịch sử đơn hàng** trong tài khoản. Nếu sau 15 phút vẫn không thấy đơn, liên hệ tổng đài **0389.468.847** kèm mã giao dịch VNPAY để được tra cứu.
 
 ---
 
@@ -99,10 +99,10 @@ A: Sản phẩm đủ điều kiện đổi trả khi:
 - Sản phẩm bị lỗi kỹ thuật từ nhà sản xuất.
 
 **Q: Tôi muốn đổi size / màu khác thì làm thế nào?**
-A: Liên hệ tổng đài **1800.2097** hoặc đến trực tiếp cửa hàng AuraTech trong vòng **7 ngày** kể từ ngày nhận hàng. Sản phẩm phải còn nguyên vẹn, chưa sử dụng.
+A: Liên hệ tổng đài **0389.468.847** hoặc đến trực tiếp cửa hàng AuraTech trong vòng **7 ngày** kể từ ngày nhận hàng. Sản phẩm phải còn nguyên vẹn, chưa sử dụng.
 
 **Q: Hàng giao bị sai / thiếu thì phải làm gì?**
-A: Liên hệ ngay tổng đài **1800.2097** trong vòng **48 giờ** kể từ khi nhận hàng, kèm ảnh chụp sản phẩm và hộp. AuraTech sẽ xử lý đổi hàng miễn phí.
+A: Liên hệ ngay tổng đài **0389.468.847** trong vòng **48 giờ** kể từ khi nhận hàng, kèm ảnh chụp sản phẩm và hộp. AuraTech sẽ xử lý đổi hàng miễn phí.
 
 ---
 
@@ -147,4 +147,4 @@ A: Tại trang đăng nhập, nhấn **"Quên mật khẩu"** → nhập email h
 A: Có, nếu bạn đã **đăng nhập** vào tài khoản, chatbot có thể tra cứu trạng thái đơn hàng, xem điểm thưởng, và voucher của bạn theo thời gian thực.
 
 **Q: Tôi cần hỗ trợ khẩn cấp, liên hệ thế nào?**
-A: Gọi tổng đài **1800.2097** (miễn phí, 8:00–22:00 hàng ngày) hoặc nhắn tin qua fanpage Facebook AuraTech.
+A: Gọi tổng đài **0389.468.847** (miễn phí, 8:00–22:00 hàng ngày) hoặc nhắn tin qua fanpage Facebook AuraTech.

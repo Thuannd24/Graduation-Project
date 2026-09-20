@@ -279,7 +279,7 @@ export default function Header() {
             <div className="border-t border-slate-100 dark:border-slate-800 p-3 bg-slate-50 dark:bg-slate-900/50 flex flex-col gap-2 shrink-0">
               <div className="flex items-center gap-2.5">
                 <Icon name="support_agent" className="text-red-600 text-base shrink-0" />
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Tư vấn: 1800.2097 (Miễn phí)</span>
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Tư vấn: 0389.468.847</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Icon name="verified_user" className="text-red-600 text-base shrink-0" />

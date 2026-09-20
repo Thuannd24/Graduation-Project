@@ -42,7 +42,8 @@ export const chatApi = {
       headers["X-Guest-Id"] = guestId;
     }
     if (guestName) {
-      headers["X-Guest-Name"] = guestName;
+      // HTTP header values chỉ chấp nhận ISO-8859-1 — tên tiếng Việt có dấu phải encode trước khi gắn vào header.
+      headers["X-Guest-Name"] = encodeURIComponent(guestName);
     }
     return apiClient.get<ChatRoomResponse>("/public/chat/rooms", {
       method: "POST",
@@ -86,6 +87,12 @@ export const chatApi = {
     return apiClient.get<ChatRoomResponse>(`/public/chat/rooms/${roomId}/handover`, {
       method: "PUT"
     });
+  },
+
+  uploadImage: async (roomId: string, file: File): Promise<{ url: string }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return apiClient.upload<{ url: string }>(`/public/chat/rooms/${roomId}/upload-image`, formData);
   },
 
   // --- STAFF / ADMIN APIs ---

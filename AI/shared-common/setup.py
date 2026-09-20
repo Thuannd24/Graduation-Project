@@ -8,6 +8,7 @@ setup(
         "pydantic>=2.0",
         "redis>=4.6.0",
         "pymongo>=4.4.0",
-        "pymysql>=1.1.0"
+        "pymysql>=1.1.0",
+        "python-dotenv>=1.0.0"
     ]
 )

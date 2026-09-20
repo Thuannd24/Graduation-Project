@@ -21,12 +21,12 @@ AI/
 │   ├── Dockerfile
 │   └── requirements.txt
 │
-├── chatbot-service/        # Microservice RAG Chatbot, Intent Classifier & Sentiment (:8002)
+├── chatbot-service/        # Microservice RAG Chatbot "Aura" (:8002) — xem docs/canvas/chatbot-ai.md
 │   ├── app/
-│   │   ├── api/            # API Endpoints (/chat [SSE Stream], /chat/sessions/history)
+│   │   ├── api/            # API Endpoints (/chat, /chat/sessions/history — JSON thường, không SSE)
 │   │   ├── core/           # Cấu hình Chatbot
 │   │   ├── models/         # Chat validation models
-│   │   └── services/       # RAG logic, Intent Classification (PhoBERT), Sentiment, Memory (Redis)
+│   │   └── services/       # nlu/ (LLM-based, fallback từ khoá), rag/ (product keyword-search + policy FAISS), tools.py, memory (Redis)
 │   ├── Dockerfile
 │   └── requirements.txt
 │
@@ -57,7 +57,7 @@ AI/
 4. **Demand Forecasting:** Dự báo nhu cầu tồn kho kho hàng dựa trên dữ liệu lịch sử bằng **LightGBM Regressor** hoặc **Meta Prophet**.
 5. **Customer Segmentation:** Định kỳ chạy phân cụm **K-Means (RFM)** chia nhóm người dùng để cấu hình chính sách khuyến mãi.
 6. **Dynamic Pricing:** Thuật toán đánh giá độ nhạy cảm giá người dùng để xuất hành động cho Camunda Workflow engine.
-7. **RAG Chatbot:** Kết hợp kiến trúc RAG với **Gemini 1.5 Flash** (hoặc GPT-4o-mini) trả về phản hồi dưới dạng streaming tự nhiên thời gian thực (Server-Sent Events).
+7. **RAG Chatbot:** Kiến trúc RAG với **DeepSeek-Chat** (nhà cung cấp LLM duy nhất, không có Gemini/GPT dự phòng) cho cả phân loại ý định lẫn sinh câu trả lời; RAG chính sách dùng FAISS + `multilingual-e5-base` thật, RAG sản phẩm là keyword-search gọi thẳng product-service (không có vector store riêng). Chi tiết: `docs/canvas/chatbot-ai.md`.
 
 ---
 
@@ -67,9 +67,9 @@ AI/
 Khuyên khích dùng môi trường ảo riêng để tránh xung đột thư viện với hệ thống:
 ```bash
 # Tạo virtual environment ở thư mục gốc AI/
-python -m venv venv
+python -m venv venv         # Trên Windows dùng: py -m venv venv
 
-# Kích hoạt trên Windows
+# Kích hoạt trên Windows (PowerShell)
 .\venv\Scripts\activate
 
 # Kích hoạt trên Linux/macOS
@@ -85,7 +85,7 @@ python main.py
 ```
 
 Lặp lại cho các service còn lại:
-* **Chatbot Service:** Cổng `8002` (cần khai báo `GEMINI_API_KEY` trong biến môi trường)
+* **Chatbot Service:** Cổng `8002` (cần khai báo `DEEPSEEK_API_KEY` hoặc `GEMINI_API_KEY` trong biến môi trường)
 * **Recommendations Service:** Cổng `8003`
 * **Forecast Service:** Cổng `8004`
 

@@ -1024,6 +1024,7 @@ public class OrderServiceImpl implements OrderService {
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", order.getId());
             payload.put("userId", order.getUserId());
+            payload.put("email", order.getEmail());
             payload.put("trackingCode", trackingCode);
 
             saveOutboxEvent(String.valueOf(order.getId()),
@@ -1109,6 +1110,7 @@ public class OrderServiceImpl implements OrderService {
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", order.getId());
             payload.put("userId", order.getUserId());
+            payload.put("email", order.getEmail());
             payload.put("trackingCode", order.getTrackingCode());
 
             saveOutboxEvent(String.valueOf(order.getId()),

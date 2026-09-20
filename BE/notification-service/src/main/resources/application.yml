@@ -21,8 +21,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     properties:
@@ -45,9 +45,11 @@ minio:
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  mail:
+    from: ${MAIL_FROM:${MAIL_USERNAME}}
   brand:
     name: AuraTech
     tagline: Công nghệ chính hãng · Giao nhanh toàn quốc
-    support-email: hotro@auratech.vn
-    logo-object: site/auratech-logo.png
+    support-email: hotro@auratechvn.online
+    logo-object: src/assets/images/logo.png
     logo-url: ${BRAND_LOGO_URL:}

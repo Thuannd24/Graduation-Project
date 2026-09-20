@@ -1,36 +1,77 @@
-from typing import List, Dict, Any
+import os
+import re
+from typing import Optional
+
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SYSTEM_PROMPT_FILE = os.path.join(BASE_DIR, "data", "system-prompt.md")
+
+FENCE_RE = re.compile(r"## System Prompt \(Tiếng Việt\)\s*```\s*(.*?)```", re.DOTALL)
+
+FALLBACK_PROMPT = (
+    "Bạn là trợ lý AI của AuraTech. Chỉ trả lời dựa trên thông tin được cung cấp trong "
+    "context. Nếu không có thông tin, hãy nói bạn chưa biết thay vì đoán."
+)
+
+
 class PromptBuilderService:
-    @staticmethod
-    def build_system_prompt(user_name: str, retrieved_context: str) -> str:
-        system_instructions = (
-            "Bạn là trợ lý mua sắm AI thông minh, thân thiện và chuyên nghiệp của shop.\n"
-            "Hãy trả lời khách hàng bằng tiếng Việt tự nhiên, ngắn gọn và súc tích (tối đa 3-4 câu).\n"
-            "Chỉ tư vấn và sử dụng THÔNG TIN SẢN PHẨM được cung cấp dưới đây.\n"
-            "Nếu thông tin không có trong phần sản phẩm hoặc bạn không biết câu trả lời, hãy lịch sự nói:\n"
-            "'Để tôi kiểm tra lại thông tin này với bộ phận hỗ trợ kỹ thuật nhé'.\n"
-            "Tuyệt đối KHÔNG tự bịa đặt giá cả, số lượng tồn kho hay các tính năng không có trong tài liệu.\n\n"
-            f"--- THÔNG TIN KHÁCH HÀNG ---\n"
-            f"Tên khách hàng: {user_name}\n\n"
-            f"--- SẢN PHẨM LIÊN QUAN TRONG KHO (CONTEXT) ---\n"
-            f"{retrieved_context}\n"
-        )
-        return system_instructions
+    _cached_base_prompt: Optional[str] = None
+
+    @classmethod
+    def _load_base_prompt(cls) -> str:
+        if cls._cached_base_prompt is not None:
+            return cls._cached_base_prompt
+
+        try:
+            with open(SYSTEM_PROMPT_FILE, "r", encoding="utf-8") as f:
+                raw = f.read()
+            match = FENCE_RE.search(raw)
+            if match:
+                cls._cached_base_prompt = match.group(1).strip()
+            else:
+                logger.error(f"Could not find fenced system prompt block in {SYSTEM_PROMPT_FILE}")
+                cls._cached_base_prompt = FALLBACK_PROMPT
+        except Exception as e:
+            logger.error(f"Failed to load system prompt file: {e}")
+            cls._cached_base_prompt = FALLBACK_PROMPT
+
+        return cls._cached_base_prompt
 
     @staticmethod
-    def format_llm_messages(system_prompt: str, chat_history: List[Dict[str, Any]], current_message: str) -> List[Dict[str, Any]]:
-        messages = [{"role": "system", "content": system_prompt}]
-        
-        for msg in chat_history:
-            messages.append({
-                "role": "user" if msg['role'] == "user" else "assistant",
-                "content": msg['content']
-            })
-            
-        messages.append({"role": "user", "content": current_message})
-        return messages
+    def build_system_prompt(
+        user_name: str,
+        retrieved_context: str = "",
+        confidence: str = "ok",
+        user_id: Optional[int] = None,
+    ) -> str:
+        parts = [
+            PromptBuilderService._load_base_prompt(),
+            "## ĐỊNH DẠNG ĐẦU RA\n"
+            "Khung chat hiển thị văn bản thuần (plain text), KHÔNG render markdown. "
+            "Do đó KHÔNG dùng **chữ đậm**, *chữ nghiêng*, # tiêu đề, hay khối code. "
+            "Muốn nhấn mạnh thì viết thường, có thể xuống dòng hoặc dùng dấu \"-\" đầu dòng cho danh sách.",
+        ]
+
+        if retrieved_context:
+            parts.append(f"## CONTEXT (Thông tin tra cứu được từ hệ thống)\n{retrieved_context}")
+            if confidence == "disclaimer":
+                parts.append(
+                    "## LƯU Ý\nĐộ liên quan của context ở mức trung bình. "
+                    "Hãy trả lời kèm câu: \"Thông tin có thể chưa đầy đủ, bạn vui lòng kiểm tra "
+                    "lại trên website hoặc liên hệ 0389.468.847 để chắc chắn nhé.\""
+                )
+
+        if user_id:
+            parts.append(
+                "## THÔNG TIN KHÁCH HÀNG HIỆN TẠI\n"
+                f"- Tên: {user_name}\n"
+                "- Đã đăng nhập: Có"
+            )
+
+        return "\n\n".join(parts)
+
 
 prompt_builder_service = PromptBuilderService()

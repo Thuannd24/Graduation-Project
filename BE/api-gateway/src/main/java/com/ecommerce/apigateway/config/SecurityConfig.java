@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .pathMatchers(
                                 "/api/v1/public/**", // Tất cả /public/** là public thật sự
                                 "/api/v1/inventories/**", // Xem tồn kho công khai
+                                "/api/v1/chatbot/**", // AI chatbot: khách chưa đăng nhập vẫn chat được (tư vấn sản phẩm/chính sách); JWT nếu có vẫn được verify và forward bình thường cho các câu hỏi cần đăng nhập (đơn hàng, điểm thưởng...)
                                 "/eureka/**", // Eureka dashboard
                                 "/actuator/health", // Health check (giới hạn chỉ /health, không expose tất cả)
                                 "/fallback/**", // Fallback endpoints của Circuit Breaker

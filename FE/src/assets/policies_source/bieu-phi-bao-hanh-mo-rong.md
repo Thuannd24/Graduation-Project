@@ -6,7 +6,7 @@
 
 ---
 
-Các sản phẩm tại Aura Tech là hàng chính hãng và được bảo hành theo tiêu chuẩn của hãng. Ngoài ra, nhằm mang đến sự an tâm và tiện lợi hơn cho Quý khách hàng, Aura Tech còn cung cấp các gói dịch vụ **bảo hành mở rộng** thêm ngoài chính sách bảo hành tiêu chuẩn của các hãng.
+Các sản phẩm tại AuraTech là hàng chính hãng và được bảo hành theo tiêu chuẩn của hãng. Ngoài ra, nhằm mang đến sự an tâm và tiện lợi hơn cho Quý khách hàng, AuraTech còn cung cấp các gói dịch vụ **bảo hành mở rộng** thêm ngoài chính sách bảo hành tiêu chuẩn của các hãng.
 
 ---
 
@@ -42,7 +42,7 @@ Các sản phẩm tại Aura Tech là hàng chính hãng và được bảo hàn
 - Tặng kèm gói **Bảo hành 1 đổi 1 VIP**.
 - Không giới hạn số lần bảo hành đổi máy.
 - Máy rơi vỡ / vào nước: được hỗ trợ tới **90% chi phí sửa chữa**.
-- Nếu sản phẩm **không thể sửa chữa được**: Aura Tech đổi cho khách một sản phẩm cũ có chất lượng tương đương. Khách hàng chịu phí dịch vụ **10%** giá trị sản phẩm được đổi. Sau khi đổi, gói BHRV-RN hết hiệu lực; sản phẩm đổi được bảo hành **6 tháng** theo chính sách Aura Tech.
+- Nếu sản phẩm **không thể sửa chữa được**: AuraTech đổi cho khách một sản phẩm cũ có chất lượng tương đương. Khách hàng chịu phí dịch vụ **10%** giá trị sản phẩm được đổi. Sau khi đổi, gói BHRV-RN hết hiệu lực; sản phẩm đổi được bảo hành **6 tháng** theo chính sách AuraTech.
 - Được **trợ giá nhập lại** sản phẩm bị hỏng để lên đời nếu không có sản phẩm để đổi.
 - Quỹ bảo hành sửa chữa tính trên **giá niêm yết** sản phẩm.
 
@@ -60,7 +60,7 @@ Các sản phẩm tại Aura Tech là hàng chính hãng và được bảo hàn
 - **Thời gian tham gia:** 24 đến 36 tháng *(bao gồm 12 tháng bảo hành từ nhà sản xuất)*.
 
 **Quyền lợi và dịch vụ bảo hành:**
-- Sau khi hết bảo hành chính hãng, sản phẩm vẫn được Aura Tech tiếp tục bảo hành các lỗi nhà sản xuất theo thời gian gói khách hàng lựa chọn.
+- Sau khi hết bảo hành chính hãng, sản phẩm vẫn được AuraTech tiếp tục bảo hành các lỗi nhà sản xuất theo thời gian gói khách hàng lựa chọn.
 - **Miễn phí** chi phí sửa chữa và thay thế linh kiện.
 - Được đổi sản phẩm tương đương nếu máy hư hỏng nặng không sửa chữa được.
 - Được **trợ giá nhập lại** sản phẩm bị hỏng để lên đời nếu không có sản phẩm để đổi.
@@ -71,7 +71,7 @@ Các sản phẩm tại Aura Tech là hàng chính hãng và được bảo hàn
 
 **Thời gian xử lý:** Từ **7 đến 14 ngày** làm việc. Riêng MacBook, thời gian xử lý bảo hành của hãng có thể lên **3 đến 4 tuần**.
 
-**Địa điểm:** Tại các trung tâm bảo hành Aura Tech hoặc các trung tâm bảo hành của nhà sản xuất.
+**Địa điểm:** Tại các trung tâm bảo hành AuraTech hoặc các trung tâm bảo hành của nhà sản xuất.
 
 ---
 

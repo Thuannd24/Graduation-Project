@@ -1,6 +1,7 @@
 package com.ecommerce.productservice.service.impl;
 
 import com.ecommerce.productservice.dto.ProductDto;
+import com.ecommerce.productservice.dto.ProductListCacheEntry;
 import com.ecommerce.productservice.dto.ProductVariantDto;
 import com.ecommerce.productservice.entity.*;
 import com.ecommerce.productservice.exception.ResourceNotFoundException;
@@ -48,8 +49,22 @@ public class ProductServiceImpl implements ProductService {
     @Lazy
     private final SearchService searchService;
 
+    // Self-injection: @Cacheable chỉ hoạt động khi được gọi TỪ NGOÀI proxy Spring,
+    // gọi thẳng qua "this" trong cùng class sẽ bỏ qua cache (self-invocation không
+    // đi qua proxy). Gọi qua "self" để việc cache getAllProductsCacheable/
+    // getProductsByCategoryCacheable thực sự có tác dụng.
+    @org.springframework.beans.factory.annotation.Autowired
+    @Lazy
+    private ProductServiceImpl self;
+
     @Override
     public Slice<ProductDto> getAllProducts(Boolean active, Pageable pageable) {
+        ProductListCacheEntry cached = self.getAllProductsCacheable(active, pageable);
+        return new SliceImpl<>(cached.getContent(), pageable, cached.isHasNext());
+    }
+
+    @Cacheable(value = "products_list", key = "'all_' + (#active != null ? #active : 'x') + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    public ProductListCacheEntry getAllProductsCacheable(Boolean active, Pageable pageable) {
         Slice<Product> products;
         if (active != null) {
             products = productRepository.findByActive(active, pageable);
@@ -57,17 +72,23 @@ public class ProductServiceImpl implements ProductService {
             products = productRepository.findBy(pageable);
         }
         List<ProductDto> dtos = convertToDtoList(products.getContent());
-        return new SliceImpl<>(dtos, pageable, products.hasNext());
+        return new ProductListCacheEntry(dtos, products.hasNext());
     }
 
     @Override
     public Slice<ProductDto> getProductsByCategory(Long categoryId, Pageable pageable) {
+        ProductListCacheEntry cached = self.getProductsByCategoryCacheable(categoryId, pageable);
+        return new SliceImpl<>(cached.getContent(), pageable, cached.isHasNext());
+    }
+
+    @Cacheable(value = "products_list", key = "'cat_' + #categoryId + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    public ProductListCacheEntry getProductsByCategoryCacheable(Long categoryId, Pageable pageable) {
         List<Long> categoryIds = resolveCategoryIdsWithDescendants(categoryId);
         Slice<Product> products = categoryIds.size() == 1
                 ? productRepository.findByCategoryId(categoryId, pageable)
                 : productRepository.findByCategoryIdIn(categoryIds, pageable);
         List<ProductDto> dtos = convertToDtoList(products.getContent());
-        return new SliceImpl<>(dtos, pageable, products.hasNext());
+        return new ProductListCacheEntry(dtos, products.hasNext());
     }
 
     // Danh mục cha hiển thị luôn sản phẩm của mọi danh mục con (đệ quy), không chỉ sản phẩm gán trực tiếp vào nó
@@ -218,6 +239,10 @@ public class ProductServiceImpl implements ProductService {
                         if (slugsCache != null && newSlug != null) {
                             slugsCache.evict(newSlug);
                         }
+                        Cache listCache = cacheManager.getCache("products_list");
+                        if (listCache != null) {
+                            listCache.clear();
+                        }
                     } catch (Exception e) {
                         log.error("Failed to evict products_slug cache for new product slug: {}", newSlug, e);
                     }
@@ -233,6 +258,10 @@ public class ProductServiceImpl implements ProductService {
                 Cache slugsCache = cacheManager.getCache("products_slug");
                 if (slugsCache != null && newSlug != null) {
                     slugsCache.evict(newSlug);
+                }
+                Cache listCache = cacheManager.getCache("products_list");
+                if (listCache != null) {
+                    listCache.clear();
                 }
             } catch (Exception e) {
                 log.error("Failed to evict products_slug cache for new product slug: {}", newSlug, e);
@@ -397,12 +426,16 @@ public class ProductServiceImpl implements ProductService {
                     try {
                         Cache productsCache = cacheManager.getCache("products");
                         Cache slugsCache = cacheManager.getCache("products_slug");
+                        Cache listCache = cacheManager.getCache("products_list");
                         if (productsCache != null) {
                             productsCache.evict(id);
                         }
                         if (slugsCache != null) {
                             if (finalOldSlug != null) slugsCache.evict(finalOldSlug);
                             if (finalNewSlug != null) slugsCache.evict(finalNewSlug);
+                        }
+                        if (listCache != null) {
+                            listCache.clear();
                         }
                         log.info("Successfully evicted Redis cache for product ID: {} after transaction commit", id);
                     } catch (Exception e) {
@@ -419,12 +452,16 @@ public class ProductServiceImpl implements ProductService {
             try {
                 Cache productsCache = cacheManager.getCache("products");
                 Cache slugsCache = cacheManager.getCache("products_slug");
+                Cache listCache = cacheManager.getCache("products_list");
                 if (productsCache != null) {
                     productsCache.evict(id);
                 }
                 if (slugsCache != null) {
                     if (finalOldSlug != null) slugsCache.evict(finalOldSlug);
                     if (finalNewSlug != null) slugsCache.evict(finalNewSlug);
+                }
+                if (listCache != null) {
+                    listCache.clear();
                 }
             } catch (Exception e) {
                 log.error("Failed to evict Redis cache for product ID: {}", id, e);
@@ -471,11 +508,15 @@ public class ProductServiceImpl implements ProductService {
                         try {
                             Cache productsCache = cacheManager.getCache("products");
                             Cache slugsCache = cacheManager.getCache("products_slug");
+                            Cache listCache = cacheManager.getCache("products_list");
                             if (productsCache != null) {
                                 productsCache.evict(id);
                             }
                             if (slugsCache != null && slug != null) {
                                 slugsCache.evict(slug);
+                            }
+                            if (listCache != null) {
+                                listCache.clear();
                             }
                             log.info("Successfully evicted Redis cache for deleted product ID: {} after transaction commit", id);
                         } catch (Exception e) {
@@ -492,11 +533,15 @@ public class ProductServiceImpl implements ProductService {
                 try {
                     Cache productsCache = cacheManager.getCache("products");
                     Cache slugsCache = cacheManager.getCache("products_slug");
+                    Cache listCache = cacheManager.getCache("products_list");
                     if (productsCache != null) {
                         productsCache.evict(id);
                     }
                     if (slugsCache != null && slug != null) {
                         slugsCache.evict(slug);
+                    }
+                    if (listCache != null) {
+                        listCache.clear();
                     }
                 } catch (Exception e) {
                     log.error("Failed to evict Redis cache for product ID: {}", id, e);

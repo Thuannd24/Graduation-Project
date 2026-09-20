@@ -6,13 +6,9 @@
 
 ---
 
-Chào mừng bạn đến với chương trình Khách hàng thân thiết của Aura Tech. Chương trình được thiết kế nhằm mang lại những đặc quyền, ưu đãi chiết khấu và cơ chế tích điểm hấp dẫn dành riêng cho khách hàng mua sắm tại hệ thống cửa hàng và website Aura Tech.
+Chào mừng bạn đến với chương trình Khách hàng thân thiết của AuraTech. Chương trình được thiết kế nhằm mang lại những đặc quyền, ưu đãi chiết khấu và cơ chế tích điểm hấp dẫn dành riêng cho khách hàng mua sắm tại hệ thống cửa hàng và website AuraTech.
 
-#
-
-#
-
-1. PHÂN HẠNG THÀNH VIÊN VÀ TIÊU CHÍ THĂNG HẠNG
+## 1. Phân hạng thành viên và tiêu chí thăng hạng
 
 Hạng thành viên của khách hàng được thăng cấp tự động dựa trên **Tổng chi tiêu mua sắm tích lũy** của số điện thoại đăng ký:
 
@@ -21,15 +17,11 @@ Hạng thành viên của khách hàng được thăng cấp tự động dựa 
 * **GOLD (Hạng thành viên Vàng):** Tổng chi tiêu tích lũy đạt từ **50.000.000 đ** đến dưới **100.000.000 đ**.
 * **VIP (Hạng thành viên Kim cương):** Tổng chi tiêu tích lũy đạt từ **100.000.000 đ** trở lên.
 
-#
-
-#
-
-2. QUY CHẾ TÍCH LŨY ĐIỂM THƯỞNG 
+## 2. Quy chế tích lũy điểm thưởng
 
 Mỗi hóa đơn mua sắm thực tế của khách hàng (sau khi trừ các voucher và khuyến mãi) sẽ được quy đổi thành điểm tích lũy theo công thức:
 
-$$\text{Điểm tích lũy cơ bản} = \frac{\text{Giá trị đơn hàng thực tế}}{10.000\text{ VNĐ}}$$
+**Điểm tích lũy cơ bản = (Giá trị đơn hàng thực tế) / 10.000 (điểm)**
 
 Hệ số nhân điểm thưởng (Loyalty Multiplier) được áp dụng dựa trên hạng thành viên của khách hàng tại thời điểm thanh toán đơn hàng:
 
@@ -38,13 +30,9 @@ Hệ số nhân điểm thưởng (Loyalty Multiplier) được áp dụng dựa
 * **GOLD:** Hệ số nhân **1.5 x** (Mỗi 10.000 đ chi tiêu = 1.5 điểm thưởng)
 * **VIP:** Hệ số nhân **2.0 x** (Mỗi 10.000 đ chi tiêu = 2.0 điểm thưởng)
 
-#
+## 3. Quy đổi và sử dụng điểm thưởng
 
-#
-
-3. QUY ĐỔI VÀ SỬ DỤNG ĐIỂM THƯỞNG
-
-Khách hàng có thể sử dụng điểm tích lũy để quy đổi thành tiền giảm giá trực tiếp cho các đơn hàng mua sắm tiếp theo tại Aura Tech:
+Khách hàng có thể sử dụng điểm tích lũy để quy đổi thành tiền giảm giá trực tiếp cho các đơn hàng mua sắm tiếp theo tại AuraTech:
 
 * **Tỷ lệ quy đổi điểm:** **1 điểm thưởng = 1.000 VNĐ**.
 * **Quy định sử dụng:**
@@ -52,15 +40,11 @@ Khách hàng có thể sử dụng điểm tích lũy để quy đổi thành ti
 * Số tiền quy đổi tối đa cho mỗi đơn hàng không vượt quá giá trị thanh toán của đơn hàng đó.
 * Điểm tích lũy được quản lý tập trung theo số điện thoại đăng ký tài khoản, không có giá trị chuyển nhượng hoặc quy đổi ra tiền mặt.
 
-#
-
-#
-
-4. CÁC ĐẶC QUYỀN VÀ ƯU ĐÃI THÀNH VIÊN KHÁC
+## 4. Các đặc quyền và ưu đãi thành viên khác
 
 * **Voucher thăng hạng:** Khách hàng được tặng voucher giảm giá trực tiếp vào tài khoản khi thăng hạng lên SILVER (Voucher 100 k), GOLD (Voucher 200 k), và VIP (Voucher 500 k).
 
 * **Ưu đãi phí vận chuyển:** Miễn phí giao hàng tiêu chuẩn toàn quốc đối với tất cả các đơn hàng phát sinh của khách hàng hạng SILVER, GOLD và VIP.
 
 > [! TIP]
-> Hãy luôn đăng nhập tài khoản mua hàng trên website hoặc đọc số điện thoại cho nhân viên thu ngân tại cửa hàng Aura Tech trước khi thanh toán để hệ thống ghi nhận điểm tích lũy và áp dụng ưu đãi thăng hạng chính xác nhất
+> Hãy luôn đăng nhập tài khoản mua hàng trên website hoặc đọc số điện thoại cho nhân viên thu ngân tại cửa hàng AuraTech trước khi thanh toán để hệ thống ghi nhận điểm tích lũy và áp dụng ưu đãi thăng hạng chính xác nhất

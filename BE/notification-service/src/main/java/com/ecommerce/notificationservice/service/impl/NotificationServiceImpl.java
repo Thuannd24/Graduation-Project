@@ -12,6 +12,7 @@ import com.ecommerce.notificationservice.service.NotificationService;
 import com.ecommerce.notificationservice.util.TemplateRenderer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -38,6 +39,9 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationTemplateRepository templateRepository;
     private final FCMTokenRepository fcmTokenRepository;
     private final Optional<JavaMailSender> mailSender;
+
+    @Value("${app.mail.from}")
+    private String mailFromAddress;
 
     @Override
     public void sendNotification(SendNotificationRequest request) {
@@ -126,6 +130,7 @@ public class NotificationServiceImpl implements NotificationService {
 
                 MimeMessagePreparator preparator = mimeMessage -> {
                     MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+                    messageHelper.setFrom(mailFromAddress);
                     messageHelper.setTo(toAddress);
                     messageHelper.setSubject(subText);
                     messageHelper.setText(bodyText, true);
