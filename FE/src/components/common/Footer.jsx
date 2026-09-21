@@ -49,8 +49,8 @@ export default function Footer() {
               <Icon name="phone_in_talk" className="text-xl" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Hotline hỗ trợ (Miễn phí)</p>
-              <a href="tel:18002097" className="text-lg font-black text-slate-900 hover:text-red-600 transition-colors">1800.2097</a>
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Hotline hỗ trợ</p>
+              <a href="tel:0389468847" className="text-lg font-black text-slate-900 hover:text-red-600 transition-colors">0389.468.847</a>
             </div>
           </div>
         </section>

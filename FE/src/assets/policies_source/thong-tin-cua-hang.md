@@ -10,12 +10,12 @@
 
 | Kênh | Thông tin | Giờ hoạt động |
 |---|---|---|
-| **Tổng đài** | 1800.2097 (miễn phí) | 8:00 – 22:00 hàng ngày |
-| **Email** | support@auratech.vn | Phản hồi trong 24h làm việc |
+| **Tổng đài** | 0389.468.847 (miễn phí) | 8:00 – 22:00 hàng ngày |
+| **Email** | support@auratechvn.online | Phản hồi trong 24h làm việc |
 | **Facebook** | facebook.com/AuraTechVN | 8:00 – 22:00 hàng ngày |
 | **Chatbot website** | Góc dưới phải màn hình | 24/7 tự động |
 
-> **Lưu ý:** Tổng đài **1800.2097** hoàn toàn **miễn phí cước** cho mọi mạng di động và điện thoại cố định trên toàn quốc.
+> **Lưu ý:** Tổng đài **0389.468.847** hoàn toàn **miễn phí cước** cho mọi mạng di động và điện thoại cố định trên toàn quốc.
 
 ---
 
@@ -47,7 +47,7 @@ Danh sách cửa hàng cập nhật theo thời gian thực tại trang **Hệ t
 
 ## 5. Quy trình hỗ trợ khi cần khiếu nại
 
-1. Liên hệ tổng đài **1800.2097** mô tả vấn đề
+1. Liên hệ tổng đài **0389.468.847** mô tả vấn đề
 2. Nhân viên ghi nhận và tạo **mã yêu cầu hỗ trợ**
 3. Bộ phận liên quan xử lý trong **1–3 ngày làm việc**
 4. Khách hàng nhận phản hồi qua email hoặc điện thoại

@@ -206,6 +206,30 @@ export const apiClient = {
       method: "DELETE",
       requireAuth: true
     }),
+  upload: async <T>(path: string, formData: FormData): Promise<T> => {
+    const token = getAuthToken();
+    const url = `${API_BASE_URL}${path}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: formData
+    });
+
+    const payload = await response.json().catch(() => null);
+
+    if (!response.ok || payload?.success === false || payload?.code === "ERROR") {
+      throw new Error(getApiErrorMessage(payload, response.status));
+    }
+
+    if (payload && (payload.code === "SUCCESS" || typeof payload.success === "boolean")) {
+      return payload.data as T;
+    }
+
+    return payload as T;
+  },
   uploadAuth: async <T>(path: string, formData: FormData): Promise<T> => {
     if (!hasAuthToken()) {
       throw new Error("Vui lòng đăng nhập để tiếp tục.");

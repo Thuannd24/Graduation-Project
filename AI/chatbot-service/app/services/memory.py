@@ -23,12 +23,13 @@ class MemoryManagerService:
         key = f"chat:{session_id}:history"
         
         try:
-            # Redis stores them as a list of JSON strings
-            data = r.lrange(key, 0, -1)
+            # LPUSH inserts newest at index 0, so lrange(0, N-1) already gives the N most
+            # recent records, newest-first — slice BEFORE reversing, not after (slicing an
+            # already-chronological list would keep the OLDEST records instead).
+            data = r.lrange(key, 0, max_turns * 2 - 1)  # 1 turn = 1 user message + 1 bot reply
             history = [json.loads(x) for x in data]
-            # Since LPUSH inserts at index 0, history is in reverse order. We reverse it back to chronological order.
             history.reverse()
-            return history[:max_turns * 2] # 1 turn = 1 user message + 1 bot reply (2 records)
+            return history
         except Exception as e:
             logger.error(f"Error fetching history from Redis: {e}")
             return []

@@ -29,9 +29,6 @@ export const createWebSocketClient = (options: WebSocketOptions) => {
   const client = new Client({
     brokerURL: getBrokerUrl(),
     connectHeaders: headers,
-    debug: (str) => {
-      console.log("[STOMP Client Debug]", str);
-    },
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,

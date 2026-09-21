@@ -186,8 +186,8 @@ export default function OrderSummary({
             <h4 className="font-extrabold text-slate-800 dark:text-slate-200">Bạn cần hỗ trợ?</h4>
             <p className="text-slate-500 mt-1">
               Gọi ngay hotline{' '}
-              <a href="tel:18002097" className="text-primary font-bold hover:underline">
-                1800.2097
+              <a href="tel:0389468847" className="text-primary font-bold hover:underline">
+                0389.468.847
               </a>{' '}
               để được tư vấn 24/7.
             </p>

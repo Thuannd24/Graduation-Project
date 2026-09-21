@@ -12,20 +12,70 @@ export interface AIProduct {
   matchScore?: number;
 }
 
+export interface OrderStatusCard {
+  type: "order_status";
+  orderId: number;
+  statusCode: string;
+  statusLabel: string;
+  trackingCode?: string | null;
+  finalAmount?: number | null;
+  items?: Array<{
+    productName: string;
+    productImage?: string | null;
+    quantity: number;
+    unitPrice?: number | null;
+    subtotal?: number | null;
+  }>;
+}
+
+export interface WarrantyCard {
+  type: "warranty";
+  orderId: number;
+  items: Array<{
+    productName: string;
+    productImage?: string | null;
+    expiry: string;
+    daysRemaining?: number | null;
+    active: boolean;
+  }>;
+}
+
+export interface LoyaltyCard {
+  type: "loyalty";
+  points: number;
+  value: number;
+}
+
+export interface VouchersCard {
+  type: "vouchers";
+  vouchers: Array<{
+    title: string;
+    code: string;
+    expiresAt: string;
+    discountPercent?: number | null;
+    discountAmount?: number | null;
+    minOrderValue?: number | null;
+  }>;
+}
+
+export type ChatCard = OrderStatusCard | WarrantyCard | LoyaltyCard | VouchersCard;
+
 export interface ChatMessage {
   id: string;
   sender: "user" | "assistant" | "system";
   text: string;
   timestamp: Date;
   products?: AIProduct[];
+  card?: ChatCard | null;
   isEscalated?: boolean;
 }
 
 export const aiApi = {
   // 1. Chatbot AI
-  sendMessage: async (message: string, image?: string, sessionId?: string): Promise<{ message: string; products?: AIProduct[]; intent?: string }> => {
-    const response = await apiClient.post("/chatbot/message", { message, image, session_id: sessionId });
-    return response.data;
+  sendMessage: async (message: string, image?: string, sessionId?: string): Promise<{ message: string; products?: AIProduct[]; intent?: string; card?: ChatCard | null }> => {
+    // apiClient.post already unwraps the {code,message,data} envelope (or passes through
+    // a raw payload as-is) — it does NOT return an axios-style {data: ...} response object.
+    return await apiClient.post("/chatbot/message", { message, image, session_id: sessionId });
   },
 
   escalateSession: async (sessionId: string): Promise<boolean> => {
@@ -42,10 +92,9 @@ export const aiApi = {
   searchByImage: async (imageFile: File): Promise<{ items: AIProduct[]; cropBox: { x1: number; y1: number; x2: number; y2: number } }> => {
     const formData = new FormData();
     formData.append("image", imageFile);
-    const response = await apiClient.post("/search/image", formData, {
+    return await apiClient.post("/search/image", formData, {
       headers: { "Content-Type": "multipart/form-data" }
     });
-    return response.data;
   },
 
   // 3. Recommendations
@@ -54,8 +103,7 @@ export const aiApi = {
       return [];
     }
     try {
-      const response = await apiClient.get(`/recommendations/personal?user_id=${userId || ""}`);
-      return response.data;
+      return await apiClient.get(`/recommendations/personal?user_id=${userId || ""}`);
     } catch (err) {
       console.warn("Recommendation API not available yet.", err);
       return [];
@@ -64,8 +112,7 @@ export const aiApi = {
 
   getCrossSellCombo: async (itemIds: string[]): Promise<AIProduct[]> => {
     try {
-      const response = await apiClient.get(`/recommendations/cross-sell?item_ids=${itemIds.join(",")}`);
-      return response.data;
+      return await apiClient.get(`/recommendations/cross-sell?item_ids=${itemIds.join(",")}`);
     } catch (err) {
       console.warn("Cross-sell API fallback.", err);
       return [];
@@ -75,8 +122,7 @@ export const aiApi = {
   // 4. AI Admin Analytics Charts
   getDemandForecasting: async (): Promise<{ dates: string[]; actual: number[]; forecast: number[] }> => {
     try {
-      const response = await apiClient.get("/admin/analytics/demand-forecasting");
-      return response.data;
+      return await apiClient.get("/admin/analytics/demand-forecasting");
     } catch (err) {
       // Mock data for forecasting graph
       const dates = ["01/07", "03/07", "05/07", "07/07", "09/07", "11/07", "13/07", "15/07", "17/07", "19/07"];
@@ -90,8 +136,7 @@ export const aiApi = {
 
   getAnomalyLogs: async (): Promise<Array<{ id: string; timestamp: string; amount: number; user: string; riskScore: number; reason: string }>> => {
     try {
-      const response = await apiClient.get("/admin/analytics/anomalies");
-      return response.data;
+      return await apiClient.get("/admin/analytics/anomalies");
     } catch (err) {
       return [
         { id: "TX-78391", timestamp: "2026-07-10 14:23:11", amount: 154000000, user: "nguyenvan_a@gmail.com", riskScore: 92, reason: "Giá trị đơn hàng cao đột biến & Đặt liên tiếp 3 đơn trong 5 phút" },
@@ -103,8 +148,7 @@ export const aiApi = {
 
   getCustomerSegmentation: async (): Promise<Array<{ segment: string; count: number; percentage: number; color: string; spendRatio: number }>> => {
     try {
-      const response = await apiClient.get("/admin/analytics/segmentation");
-      return response.data;
+      return await apiClient.get("/admin/analytics/segmentation");
     } catch (err) {
       return [
         { segment: "Khách hàng VIP (Core)", count: 245, percentage: 12.5, color: "#10b981", spendRatio: 45 },

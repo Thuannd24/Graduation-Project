@@ -19,7 +19,7 @@ public class ChatRoom {
     @Id
     private String id;
 
-    @Indexed(unique = true)
+    @Indexed
     private String customerId; // Keycloak User UUID
     private String customerName;
     private String customerEmail;

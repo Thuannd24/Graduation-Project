@@ -19,7 +19,7 @@ Tính năng tra cứu đơn hàng bằng mã đơn hàng và số điện thoạ
 ### 2. Thông tin thanh toán và giao hàng
 
 Mua hàng online bằng cách đặt hàng trên website hoặc các hình thức khác:
-- Gọi tổng đài miễn phí **18002097**
+- Gọi tổng đài miễn phí **0389.468.847**
 - Chat trên Website, Facebook, Email,...
 
 #### a. Giao hàng và thanh toán tại nhà (COD)
@@ -46,7 +46,7 @@ Quý khách được khuyến khích sử dụng **mã QR chuyển khoản** đ�
 
 - **Miễn phí** vận chuyển mọi đơn hàng đối với mọi hạng thành viên
 
-**Phụ thu phí cồng kềnh** *(nếu có)*, áp dụng với các đơn hàng vận chuyển bởi Aura Tech và đối tác giao hàng. Đơn hàng được xác định là cồng kềnh nếu rơi vào một trong các trường hợp:
+**Phụ thu phí cồng kềnh** *(nếu có)*, áp dụng với các đơn hàng vận chuyển bởi AuraTech và đối tác giao hàng. Đơn hàng được xác định là cồng kềnh nếu rơi vào một trong các trường hợp:
 
 1. Khối lượng thực tế > **8 kg**
 2. Khối lượng quy đổi > **10 kg** (D × R × C / 5000)
@@ -60,11 +60,11 @@ Quý khách được khuyến khích sử dụng **mã QR chuyển khoản** đ�
 
 #### a. Phạm vi áp dụng
 
-Aura Tech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồm:
+AuraTech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồm:
 
 - **Giao hàng nội thành**: TP. HCM, Hà Nội và các khu vực trung tâm.
 - **Giao hàng ngoại thành**: Vùng ven, huyện thuộc HCM/HN và các tỉnh thành khác.
-- **Giao hàng liên tỉnh**: Toàn quốc, qua đội ngũ giao nhận của Aura Tech và đối tác 3PLs.
+- **Giao hàng liên tỉnh**: Toàn quốc, qua đội ngũ giao nhận của AuraTech và đối tác 3PLs.
 - **Hàng điện máy / Cồng kềnh**: Giao tận nơi; một số sản phẩm hỗ trợ lắp đặt tùy chính sách.
 
 #### b. Hình thức và dịch vụ giao hàng
@@ -76,7 +76,7 @@ Aura Tech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồ
 |---|---|---|
 | **Hồ Chí Minh** | Giao nhanh từ **1–2 giờ** (bán kính ≤ 10 km, trừ huyện Cần Giờ, Củ Chi, Nhà Bè) | Trong vòng **24–48 giờ** (khoảng cách > 10 km) |
 | **Hà Nội** | Giao nhanh từ **1–2 giờ** (bán kính ≤ 10 km, trừ các huyện ngoại thành xa) | Trong vòng **24–48 giờ** (khoảng cách > 10 km) |
-| **Tỉnh có cửa hàng Aura Tech** *(trừ HCM và HN)* | Trong vòng **24 giờ** (≤ 10 km) | Trong vòng **1–2 ngày** (> 10 km) |
+| **Tỉnh có cửa hàng AuraTech** *(trừ HCM và HN)* | Trong vòng **24 giờ** (≤ 10 km) | Trong vòng **1–2 ngày** (> 10 km) |
 | **Các khu vực còn lại** *(nội tỉnh – liên tỉnh)* | Trong vòng **2–5 ngày** | — |
 
 - **Giao & lắp đặt** *(hàng cồng kềnh/điện máy)*: Điều hòa, máy giặt, tủ lạnh, TV, máy lọc không khí,... Thời gian giao/lắp đặt sẽ được liên hệ xác nhận trước.
@@ -91,7 +91,7 @@ Aura Tech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồ
 
 #### d. Quy định khi giao nhận hàng
 
-- Với đơn hàng từ **10 triệu đồng** trở lên, Aura Tech xin phép kiểm tra thẻ thanh toán và CCCD của chủ thẻ trước khi giao hàng, nhằm hạn chế rủi ro gian lận.
+- Với đơn hàng từ **10 triệu đồng** trở lên, AuraTech xin phép kiểm tra thẻ thanh toán và CCCD của chủ thẻ trước khi giao hàng, nhằm hạn chế rủi ro gian lận.
 
 ---
 
@@ -110,14 +110,14 @@ Aura Tech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồ
 >
 > **Ngày làm việc** là các ngày từ thứ 2 đến thứ 6, không bao gồm thứ 7, Chủ nhật và ngày Lễ, Tết theo quy định pháp luật.
 >
-> **Lưu ý:** Aura Tech sẽ hoàn lại giá trị sản phẩm khách đã thanh toán. Phí vận chuyển *(với sản phẩm không được miễn phí vận chuyển)*, phụ phí, phí chuyển đổi trả góp và các khuyến mãi cộng thêm **sẽ không được hoàn lại**.
+> **Lưu ý:** AuraTech sẽ hoàn lại giá trị sản phẩm khách đã thanh toán. Phí vận chuyển *(với sản phẩm không được miễn phí vận chuyển)*, phụ phí, phí chuyển đổi trả góp và các khuyến mãi cộng thêm **sẽ không được hoàn lại**.
 
 ---
 
 ### 5. Hàng hóa đảm bảo
 
 - Sản phẩm được **quấn bọt khí** trước khi bỏ vào hộp carton và đóng gói trước camera ghi hình.
-- Đơn hàng **trên 1 triệu đồng** được dán **tem vỡ logo Aura Tech** ngoài hộp carton.
+- Đơn hàng **trên 1 triệu đồng** được dán **tem vỡ logo AuraTech** ngoài hộp carton.
 - Trường hợp hộp hàng khi giao đến **không còn nguyên vẹn**, ẩm ướt, móp méo hoặc mất tem vỡ — vui lòng **từ chối nhận** và liên hệ cửa hàng để xử lý.
 
 ---
@@ -130,7 +130,7 @@ Aura Tech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồ
 
 > **Lưu ý:** Các thất thoát, hư hỏng sản phẩm trong quá trình vận chuyển **sẽ không được** hưởng chế độ đổi trả và bảo hành.
 
-- Aura Tech hỗ trợ chi phí vận chuyển với trường hợp sản phẩm phát sinh lỗi **trong 15 ngày**.
+- AuraTech hỗ trợ chi phí vận chuyển với trường hợp sản phẩm phát sinh lỗi **trong 15 ngày**.
 
 ---
 

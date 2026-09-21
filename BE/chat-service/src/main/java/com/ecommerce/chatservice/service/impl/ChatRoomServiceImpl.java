@@ -1,5 +1,6 @@
 package com.ecommerce.chatservice.service.impl;
 
+import com.ecommerce.chatservice.dto.response.ChatMessageResponse;
 import com.ecommerce.chatservice.dto.response.ChatRoomResponse;
 import com.ecommerce.chatservice.entity.ChatRoom;
 import com.ecommerce.chatservice.repository.ChatRoomRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,6 +25,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final StringRedisTemplate redisTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public ChatRoomResponse getOrCreateRoom(String customerId, String name, String email, String avatar) {
@@ -110,7 +113,20 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         room.setStatus("CLOSED");
         room.setUpdatedAt(LocalDateTime.now());
-        return mapToResponse(chatRoomRepository.save(room));
+        ChatRoom saved = chatRoomRepository.save(room);
+
+        ChatMessageResponse systemNotice = ChatMessageResponse.builder()
+                .roomId(roomId)
+                .senderId("system")
+                .senderName("Hệ thống")
+                .senderRole("SYSTEM")
+                .content(isStaff ? "Nhân viên đã kết thúc phiên hỗ trợ này." : "Khách hàng đã kết thúc phiên hỗ trợ này.")
+                .type("SYSTEM_ROOM_CLOSED")
+                .createdAt(LocalDateTime.now())
+                .build();
+        messagingTemplate.convertAndSend("/topic/room/" + roomId, systemNotice);
+
+        return mapToResponse(saved);
     }
 
     @Override

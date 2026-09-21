@@ -67,6 +67,24 @@ public class NotificationKafkaConsumer {
                         .templateId("order_cancelled_template")
                         .build();
                 notificationService.sendNotification(request);
+            } else if ("OrderShippedEvent".equalsIgnoreCase(eventType)) {
+                SendNotificationRequest request = SendNotificationRequest.builder()
+                        .userId(userId)
+                        .email(email)
+                        .orderId(orderId)
+                        .eventType(eventType)
+                        .templateId("order_shipped_template")
+                        .build();
+                notificationService.sendNotification(request);
+            } else if ("OrderDeliveredEvent".equalsIgnoreCase(eventType)) {
+                SendNotificationRequest request = SendNotificationRequest.builder()
+                        .userId(userId)
+                        .email(email)
+                        .orderId(orderId)
+                        .eventType(eventType)
+                        .templateId("order_delivered_template")
+                        .build();
+                notificationService.sendNotification(request);
             }
             ack.acknowledge();
         } catch (Exception e) {

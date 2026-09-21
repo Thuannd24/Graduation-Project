@@ -6,16 +6,21 @@ import com.ecommerce.chatservice.service.ChatMessageService;
 import com.ecommerce.chatservice.service.ChatRoomService;
 import com.ecommerce.chatservice.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 @RestController
 @RequestMapping("/api/v1/admin/chat")
 @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 @RequiredArgsConstructor
+@Slf4j
 public class StaffChatController {
 
     private final ChatRoomService chatRoomService;
@@ -49,9 +54,22 @@ public class StaffChatController {
             @PathVariable String roomId,
             @RequestHeader("X-User-Id") String staffId,
             @RequestHeader("X-User-Name") String staffName) {
-        
-        ChatRoomResponse response = chatRoomService.assignStaff(roomId, staffId, staffName);
+
+        ChatRoomResponse response = chatRoomService.assignStaff(roomId, staffId, decodeHeaderValue(staffName));
         return ApiResponse.success(response);
+    }
+
+    // X-User-Name được Gateway URL-encode để tránh lỗi header non ISO-8859-1 với tên có dấu tiếng Việt.
+    private String decodeHeaderValue(String value) {
+        if (value == null || value.isEmpty()) {
+            return value;
+        }
+        try {
+            return URLDecoder.decode(value, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            log.warn("Failed to URL-decode header value '{}': {}", value, e.getMessage());
+            return value;
+        }
     }
 
     // Close and complete chat room support session

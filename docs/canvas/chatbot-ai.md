@@ -1,306 +1,167 @@
-# Chatbot AI — Hệ Thống Tư Vấn Sản Phẩm Thông Minh
+# Chatbot AI — "Aura", trợ lý tư vấn AuraTech
 
-> Tài liệu kỹ thuật chi tiết về kiến trúc RAG, phân loại ý định (Intent Classification), phân tích cảm xúc (Sentiment Analysis), tích hợp mô hình ngôn ngữ lớn (LLM) và điều phối chuyển tiếp (Escalation).
-
----
-
-## 📌 Tổng Quan Hệ Thống
-
-| Chỉ số | Thông số cấu hình |
-| :--- | :--- |
-| **Kiến trúc chính** | Retrieval-Augmented Generation (RAG) + Tool-Calling Agent |
-| **Số lượng nhãn Intent** | 6 nhóm (phân loại bằng PhoBERT Classifier hoặc LLM) |
-| **Mô hình Sentiment** | PhoBERT-sentiment (ONNX Optimized) |
-| **LLM Provider** | Google Gemini (Gemini 1.5 Flash) |
-| **Giao thức truyền tải** | Server-Sent Events (SSE) Streaming |
-| **Tool-Calling** | 5 công cụ tích hợp trực tiếp với backend API |
-| **Evaluation** | RAGAS (Faithfulness, Answer Relevancy, Context Recall) |
-| **Guardrails** | Off-topic rejection + Confidence threshold + Hallucination prevention |
+> Tài liệu mô tả **đúng hệ thống đang chạy thật** trong `AI/chatbot-service` (không phải bản thiết kế ban đầu). Mọi số liệu, tên model, ngưỡng cấu hình trong file này đều lấy trực tiếp từ code — nếu code đổi mà quên cập nhật file này thì coi như file này sai, không phải ngược lại.
+>
+> Cập nhật lần gần nhất: sau đợt tái cấu trúc + vá lỗi độ chính xác toàn diện (xem mục 9 — lịch sử các lỗi đã sửa).
 
 ---
 
-## 1. Kiến Trúc RAG (Retrieval-Augmented Generation)
+## 0. Tổng quan — khác gì so với bản thiết kế ban đầu
 
-Kiến trúc RAG cho phép LLM không trả lời từ bộ nhớ tĩnh mà chủ động tìm kiếm các thông tin liên quan từ Knowledge Base (cơ sở tri thức) của cửa hàng trước khi sinh câu trả lời. Điều này đảm bảo tính chính xác và khả năng cập nhật của thông tin sản phẩm.
-
-### Đối so sánh giữa Fine-tuning và RAG
-
-| Đặc tính | Fine-tuning LLM trực tiếp | Kiến trúc RAG (Khuyên dùng) |
+| Hạng mục | Thiết kế ban đầu (tài liệu cũ) | Thực tế đang chạy |
 | :--- | :--- | :--- |
-| **Yêu cầu dữ liệu** | Cần hàng nghìn ví dụ Q&A chất lượng cao. | Chỉ cần tài liệu mô tả sản phẩm/FAQ dạng văn bản thô. |
-| **Chi phí huấn luyện** | Rất tốn tài nguyên GPU và thời gian huấn luyện. | Không cần huấn luyện lại LLM, chi phí cực thấp hoặc miễn phí. |
-| **Khả năng cập nhật** | Khi danh mục sản phẩm thay đổi → Bắt buộc phải huấn luyện lại. | Chỉ cần cập nhật Vector Database (khoảng vài giây). |
-| **Độ chính xác** | Dễ gặp hiện tượng ảo tưởng (hallucination) về giá/tồn kho. | Trả lời dựa trên dữ liệu thực tế, có thể trích dẫn nguồn cụ thể. |
-
-### Pipeline RAG đầy đủ
-1. **Pre-processing (Tiền xử lý):** Phân loại câu hỏi của người dùng vào 1 trong 6 intent chính thông qua *Intent Classifier*.
-2. **Retrieval (Truy xuất):**
-   * Nếu là văn bản: Truy vấn hybrid (e5-large + BM25) để tìm Top-5 đoạn mô tả liên quan từ Knowledge Base.
-   * Nếu có ảnh đính kèm: Chạy *Visual Search* để tìm Top-5 sản phẩm tương đồng.
-3. **Context Build (Xây dựng ngữ cảnh):** Gộp nội dung truy xuất được + lịch sử hội thoại gần nhất (tối đa 10 lượt) + thông tin khách hàng để thiết lập Prompt.
-4. **Generation (Sinh câu trả lời):** Gọi API mô hình ngôn ngữ lớn (Gemini 1.5 Flash hoặc GPT-4o-mini) để sinh câu trả lời tự nhiên dưới dạng stream.
-5. **Post-processing & Escalation (Hậu xử lý & Chuyển tiếp):** Phân tích sắc thái cảm xúc tin nhắn người dùng qua *Sentiment Analyzer*. Nếu chỉ số tiêu cực (negative score) vượt ngưỡng `0.75` liên tiếp, hệ thống sẽ cảnh báo admin và đề xuất kết nối nhân viên thật.
-
-### Request Flow Chi Tiết
-```
-[User Message] ──► [Redis: Load Chat History & Postgres: User Profile]
-                      │
-                      ▼
-             [Intent Classifier] ──► (Phân loại vào 6 nhãn)
-                      │
-                      ▼
-             [RAG Retrieval Engine] ──► (asyncio.gather: Text + Visual Search)
-                      │
-                      ▼
-             [Prompt Assembly] ──► (System prompt + Context + History)
-                      │
-                      ▼
-             [LLM API Call] ──► (Stream response về Frontend qua SSE)
-                      │
-                      ▼
-             [Sentiment Analyzer] ──► (Negative > 0.75? ──► Webhook Alert Support Agent)
-```
+| Phân loại Intent | Fine-tune PhoBERT Classifier | **1 lệnh gọi LLM (DeepSeek)**, PhoBERT chỉ còn là fallback từ khoá khi LLM lỗi |
+| Sentiment | PhoBERT-sentiment (ONNX) | **Cùng 1 lệnh gọi LLM ở trên** trả luôn sentiment, fallback từ khoá khi LLM lỗi |
+| LLM sinh câu trả lời | Gemini 1.5 Flash / GPT-4o-mini | **DeepSeek (`deepseek-chat`) — nhà cung cấp DUY NHẤT** cho cả NLU lẫn sinh câu trả lời |
+| Giao thức trả về | SSE streaming (chữ hiện dần) | **JSON thường 1 cục**, không có streaming thật (FE gọi POST thường, không phải EventSource) |
+| Vector Store chính sách | FAISS (đề xuất) | **FAISS thật, đã dùng đúng như đề xuất** ✅ |
+| Vector Store sản phẩm | Hybrid e5-large + BM25 | **Không có** — gọi thẳng API search "chứa chuỗi" của product-service, không phải semantic search |
+| Tool-calling | 5 tool, có `cancel_order` (LLM tự quyết định gọi) | **4 tool đọc dữ liệu thật** (không có tool ghi/huỷ nào) + định tuyến bằng code, không phải LLM tự chọn tool |
+| Đánh giá RAGAS | Đã tích hợp | Có script (`scripts/run_ragas_eval.py`) nhưng cần cài thêm `ragas`/`datasets`, chưa chạy thường xuyên |
+| Tóm tắt hội thoại dài | Có (summarization khi > 10 lượt) | **Không có** — chỉ cắt bớt (sliding window), không tóm tắt |
 
 ---
 
-## 2. Knowledge Base & Vector Store
+## 1. Kiến trúc tổng thể
 
-Knowledge Base (KB) là toàn bộ cơ sở dữ liệu tri thức mà chatbot được phép tiếp cận để phục vụ khách hàng.
+```
+FE (AIChatbotWidget.jsx)
+  │  POST /api/v1/chatbot/message  { session_id, message }
+  ▼
+Gateway :8080  (CircuitBreaker riêng "ai-chatbot-cb", timeout 60s)
+  ▼
+chatbot-service :8002  →  handle_chat_message()
+  │
+  ├─ 1. Lấy 10 lượt chat gần nhất từ Redis (trước khi phân loại, để NLU thấy ngữ cảnh)
+  ├─ 2. NLU: 1 lệnh gọi DeepSeek → {intent, sentiment, order_id, account_topic}
+  ├─ 3. Lưu tin nhắn user vào Redis
+  ├─ 4. Định tuyến theo intent (code quyết định, KHÔNG phải LLM tự chọn tool):
+  │     ├─ order_tracking / order_action → gọi thẳng order/user/promotion-service (KHÔNG qua LLM)
+  │     ├─ off_topic                     → câu từ chối cố định (KHÔNG qua LLM)
+  │     ├─ product_search / price_inquiry → product-service search + lấy thông số chi tiết
+  │     ├─ policy_faq                    → FAISS retrieve + tính điểm tin cậy
+  │     └─ complaint / general_chat      → không có context riêng
+  ├─ 5. Ghép system prompt (nội quy + context vừa lấy + tên khách nếu đã đăng nhập)
+  ├─ 6. Gọi DeepSeek sinh câu trả lời cuối (dùng lại lịch sử đã lấy ở bước 1)
+  └─ 7. Lưu câu trả lời vào Redis → trả JSON {message, intent, products, card}
+```
 
-### Các nguồn dữ liệu trong Knowledge Base
-
-| Nguồn dữ liệu | Nội dung chi tiết | Định dạng | Tần suất cập nhật |
-| :--- | :--- | :--- | :--- |
-| **Product Catalog** | Tên sản phẩm, mô tả chi tiết, giá bán, màu sắc, kích cỡ, chất liệu, số lượng tồn kho. | JSON từ DB | Cập nhật real-time khi có thay đổi sản phẩm |
-| **FAQ & Chính sách** | Quy trình đổi trả hàng, chính sách vận chuyển, bảo hành, các hình thức thanh toán, chương trình khuyến mãi. | Markdown/JSON | Cập nhật khi có thay đổi chính sách lớn |
-| **Mẫu đơn hàng** | Trạng thái xử lý đơn hàng, thời gian giao hàng dự kiến của từng đối tác vận chuyển. | JSON | Khi liên kết thêm đối tác vận chuyển mới |
-| **Cẩm nang chọn lựa** | Hướng dẫn chọn size quần áo/giày dép, mẹo sử dụng và bảo quản sản phẩm. | Markdown | Cập nhật định kỳ theo mùa |
-
-### Chiến lược Chunking (Chia nhỏ tài liệu)
-Để embedding có thể biểu diễn chính xác thông tin chi tiết và không làm vượt quá giới hạn ngữ cảnh (Context Window) của LLM:
-* **Mô tả sản phẩm:** Khuyến nghị độ dài **300–500 tokens / chunk** (Overlap: 50 tokens). Mỗi sản phẩm nên nằm gọn trong 1 chunk chính kèm theo metadata như `item_id`, `category`, `price_range` để lọc (filtering) trước khi tìm kiếm.
-* **FAQ:** Khuyến nghị **200–300 tokens / chunk** (Overlap: 30 tokens).
-* **Chính sách dài:** Khuyến nghị **400–600 tokens / chunk** (Overlap: 80 tokens).
-
-### Lựa chọn cơ sở dữ liệu Vector (Vector Store)
-* **FAISS (Khuyên dùng cho đồ án):** Lưu trữ dạng file cục bộ kết hợp ánh xạ JSON. Ưu điểm là rất nhẹ, tốc độ truy vấn cực nhanh và không cần cài đặt thêm dịch vụ chạy ngầm.
-* **Qdrant:** Thích hợp khi cần lọc metadata phức tạp trên quy mô lớn. Yêu cầu chạy dịch vụ Docker riêng biệt.
-* **ChromaDB:** Tích hợp tốt với LangChain, hỗ trợ lưu trữ bền vững tự động nhưng hiệu năng giảm khi lượng dữ liệu cực lớn.
+File chính: [chatbot.py](../../AI/chatbot-service/app/api/endpoints/chatbot.py) — hàm `handle_chat_message` là điểm vào duy nhất, viết dạng `def` (sync) chứ không phải `async def`, để FastAPI chạy nó trong thread pool (mọi lệnh gọi bên trong đều là `requests.*` chặn luồng, không có `await` thật nào).
 
 ---
 
-## 3. Intent Classification (Phân loại ý định)
+## 2. NLU — Phân loại ý định + cảm xúc trong 1 lệnh gọi
 
-### 6 nhóm Intent chính và hướng xử lý
+File: [app/services/nlu/classifier.py](../../AI/chatbot-service/app/services/nlu/classifier.py)
 
-| Intent | Ví dụ câu hỏi | Hướng xử lý của hệ thống | Cần RAG? |
+Không dùng model phân loại riêng (PhoBERT) như thiết kế ban đầu. Thay vào đó, **1 lệnh gọi DeepSeek duy nhất** với `response_format: json_object`, trả về đúng lúc: intent, sentiment, order_id, account_topic.
+
+**8 nhãn intent** (nhiều hơn 6 nhãn trong thiết kế cũ — tách `order_action` ra khỏi `order_tracking` vì luồng xử lý khác hẳn nhau):
+
+| Intent | Mô tả | Có gọi LLM lần 2? |
+| :--- | :--- | :---: |
+| `product_search` | Tìm/so sánh/tư vấn sản phẩm | Có |
+| `price_inquiry` | Hỏi giá 1 sản phẩm cụ thể | Có |
+| `order_tracking` | Tra trạng thái đơn hàng cụ thể | **Không** |
+| `order_action` | Muốn huỷ đơn / hỏi điểm-voucher-bảo hành **của chính mình** | **Không** |
+| `policy_faq` | Hỏi chính sách/quy định chung — nhãn **mặc định** cho mọi câu hỏi về AuraTech không khớp nhãn khác | Có |
+| `complaint` | Than phiền, khiếu nại | Có (rồi gắn `intent: "escalate"` khi trả về FE) |
+| `off_topic` | Hoàn toàn không liên quan AuraTech — nhãn **hiếm gặp nhất** | **Không** |
+| `general_chat` | Chào hỏi, cảm ơn, hỏi bot là ai | Có |
+
+Điểm quan trọng trong prompt (`NLU_SYSTEM_PROMPT`):
+- **Có đọc 2 tin nhắn gần nhất** để suy luận câu trả lời cộc lốc (ví dụ khách gõ "#1" ngay sau khi Aura hỏi "cho biết mã đơn hàng" — nếu không có ngữ cảnh này, NLU sẽ hiểu sai thành `general_chat`).
+- Phân biệt rõ "muốn huỷ đơn thật" (`order_action`) với "hỏi về hậu quả huỷ đơn" như hoàn tiền/voucher (`policy_faq`) — dù cả 2 đều có chữ "huỷ".
+- Ưu tiên `policy_faq` hơn `off_topic` khi phân vân — tránh từ chối oan các câu hỏi AuraTech không điển hình (quên mật khẩu, tìm cửa hàng, nhân viên báo sai giá...).
+
+**Fallback khi LLM lỗi/hết credit**: [heuristics.py](../../AI/chatbot-service/app/services/nlu/heuristics.py) — thuần từ khoá tiếng Việt, chỉ chạy khi lệnh gọi DeepSeek thất bại (thường do hết credit hoặc lỗi mạng, xảy ra không thường xuyên). Độ chính xác thấp hơn LLM nhiều, chỉ để hệ thống không "chết đứng" khi DeepSeek gặp sự cố.
+
+---
+
+## 3. RAG cho sản phẩm — keyword search, KHÔNG phải semantic search
+
+File: [app/services/rag/product_rag.py](../../AI/chatbot-service/app/services/rag/product_rag.py)
+
+Không có vector store cho sản phẩm (khác thiết kế ban đầu). Lý do: catalog sản phẩm thay đổi liên tục (thêm hàng, sửa giá, hết hàng) — gọi thẳng API tìm kiếm sống của product-service (`GET /api/v1/public/products/search`) đảm bảo luôn thấy dữ liệu mới nhất ngay lập tức, không cần đánh index lại.
+
+**Luồng xử lý 1 câu hỏi sản phẩm:**
+1. **Tách câu so sánh**: nếu câu chứa "vs", "so sánh", "cái nào hơn"... thì tách thành 2 nửa, tìm riêng từng nửa rồi gộp kết quả — tránh việc 2 tên sản phẩm khác hãng "tranh nhau" trong 1 lượt tìm khiến 1 bên biến mất.
+2. **Lọc từ khoá**: bỏ từ đệm tiếng Việt (kể cả không dấu: "may" ↔ "máy"), chuẩn hoá số hiệu Samsung ("s 24" → "s24") — **không** áp dụng cho iPhone/Redmi/iPad vì tên thật của các dòng này vẫn có dấu cách.
+3. **5 bước dò tìm** từ cụ thể → chung chung dần, dừng ngay khi có kết quả.
+4. **Lấy thêm thông số kỹ thuật**: gọi song song (không tuần tự) `GET /api/v1/public/products/{id}` cho từng sản phẩm tìm được để lấy field `attributes` (RAM, CPU, camera...) — API search không có sẵn field này.
+
+**Hạn chế đã biết**: đây vẫn là so khớp chuỗi, không hiểu ngữ nghĩa. Câu hỏi như "sản phẩm nào bán chạy nhất" không thể trả lời đúng vì "độ bán chạy" không phải thuộc tính có thể tìm bằng từ khoá.
+
+---
+
+## 4. RAG cho chính sách — FAISS thật
+
+File: [app/services/rag/policy_rag.py](../../AI/chatbot-service/app/services/rag/policy_rag.py)
+
+Đây là phần **đúng với thiết kế ban đầu**: dữ liệu chính sách (`data/policies/all-policies.json`) được băm nhỏ, encode bằng model embedding đa ngôn ngữ **`intfloat/multilingual-e5-base`** (build bằng [scripts/build_policy_index.py](../../AI/chatbot-service/scripts/build_policy_index.py)), lưu vào FAISS index tại `data/index/policy.index`.
+
+**Ngưỡng độ tin cậy** (khác số trong thiết kế ban đầu — đã hiệu chỉnh lại theo đo đạc thực tế trên model này, xem [config.py](../../AI/chatbot-service/app/core/config.py)):
+
+| Điểm tương đồng cosine | Hành động |
+| :--- | :--- |
+| ≥ **0.82** | Trả lời bình thường, có trích dẫn tên tài liệu nguồn |
+| 0.80 – 0.82 | Trả lời kèm câu cảnh báo "thông tin có thể chưa đầy đủ" |
+| < 0.80 | Từ chối, không gọi LLM, đề nghị gọi hotline |
+
+**Nạp sẵn lúc khởi động** ([main.py](../../AI/chatbot-service/app/main.py) — `@app.on_event("startup")`): lần đầu load model mất ~30-45 giây (tải/nạp model embedding), nếu để tự nạp lúc có câu hỏi đầu tiên sẽ vượt quá timeout của gateway. Nên service luôn trả lời được chính sách ngay từ request đầu tiên sau khi khởi động xong.
+
+**Hạn chế đã biết**: câu hỏi gõ không dấu vẫn có tỷ lệ bị từ chối oan cao hơn (điểm tương đồng rớt dưới ngưỡng) vì model embedding hoạt động kém hơn với văn bản không dấu — chưa có cách sửa rẻ tiền cho việc này.
+
+**Khi thêm/sửa nội dung chính sách**: phải chạy lại `python scripts/build_policy_index.py` rồi **restart chatbot-service** — service đang chạy không tự phát hiện file thay đổi.
+
+---
+
+## 5. Tool-calling — 4 tool đọc dữ liệu thật, không có tool ghi
+
+File: [app/services/tools.py](../../AI/chatbot-service/app/services/tools.py). Khác thiết kế ban đầu ở điểm quan trọng: **LLM không tự quyết định gọi tool nào** — code (`chatbot.py`) định tuyến cứng theo `intent`/`account_topic` mà NLU trả về, sau đó gọi tool tương ứng và đưa kết quả thẳng cho khách, **không qua LLM tổng hợp lại**. An toàn hơn cách để LLM tự "quyết định gọi API" vì không có rủi ro LLM bịa tham số hoặc gọi nhầm.
+
+| Tool | API gọi | Kích hoạt bởi | Cần đăng nhập? |
 | :--- | :--- | :--- | :---: |
-| **product_search** | *"Tìm cho tôi áo khoác gió"* hoặc *"Có giày size 40 không?"* | Gọi Text Search + Visual Search → RAG → LLM | **Có (Full RAG)** |
-| **price_inquiry** | *"Cái này giá bao nhiêu?"* hoặc *"Có giảm giá không?"* | Truy vấn trực tiếp bảng giá trong DB + RAG | **Có (DB Query)** |
-| **order_tracking** | *"Đơn hàng #1234 của tôi khi nào giao?"* | Query bảng đơn hàng bằng `user_id` → Trả về template | **Không** |
-| **policy_faq** | *"Chính sách đổi trả hàng lỗi thế nào?"* | Truy xuất từ FAQ Knowledge Base → LLM sinh câu trả lời | **Có (FAQ KB)** |
-| **complaint** | *"Hàng giao bị nứt vỡ rồi"* hoặc *"Ship quá chậm"* | Ghi nhận lỗi hệ thống → Phản hồi xin lỗi theo mẫu + Chuyển ngay cho nhân viên | **Không (Chuyển tiếp ngay)** |
-| **general_chat** | *"Chào bạn"* hoặc *"Bạn là ai?"* | LLM phản hồi trực tiếp lời chào xã giao | **Không** |
+| `get_order_status` | `GET /api/v1/orders/{id}` (order-service) | `order_tracking` có mã đơn | Có |
+| `get_warranty_info` | `GET /api/v1/orders/warranty/me` | `order_action` + `account_topic=warranty` | Có |
+| `get_loyalty_points` | `GET /api/v1/users/me/loyalty/points` | `order_action` + `account_topic=points` | Có |
+| `get_user_vouchers` | `GET /api/v1/promotions/vouchers/me` | `order_action` + `account_topic=voucher` | Có |
 
-### Phương pháp triển khai bộ phân loại Intent
+**Không có tool `cancel_order` thật.** Khi `account_topic=cancel`, hệ thống trả về **hướng dẫn tĩnh** (`CANCEL_ORDER_GUIDE`) để khách tự huỷ trên web/app — đúng theo yêu cầu bảo mật ban đầu ("không có tool nào có thể ghi/thay đổi dữ liệu").
 
-* **Cách 1: Fine-tune PhoBERT Classifier (Khuyến nghị):**
-  * Tinh chỉnh mô hình phân loại với classification head đầu ra gồm 6 nhãn trên tập dữ liệu từ **1.500 – 3.000 câu ví dụ** (khoảng 300 - 500 câu cho mỗi intent).
-  * **Tham số cấu hình huấn luyện:** Model `vinai/phobert-base`, epochs: `5–10`, learning rate: `2e-5`, batch size: `16`, max length: `128 tokens`.
-  * **Ưu điểm:** Tốc độ suy luận cực kỳ nhanh (`< 10ms`), chạy hoàn toàn offline độc lập, độ chính xác cao.
-* **Cách 2: LLM Zero-shot Classification:**
-  * Sử dụng Prompt hướng dẫn LLM trả về đúng tên intent từ danh sách có sẵn.
-  * **Ưu điểm:** Triển khai ngay lập tức không cần tập dữ liệu huấn luyện.
-  * **Nhược điểm:** Tốn tài nguyên API, làm tăng thời gian phản hồi thêm khoảng `50ms - 100ms` cho mỗi lượt chat.
+**Xác thực**: mọi tool nhận `X-User-Id`, `X-User-Roles`, `Authorization` forward từ gateway (đã verify JWT qua Keycloak) — chatbot-service không tự tin vào `user_id` do client gửi trong body, chỉ tin header do gateway xác thực.
 
 ---
 
-## 4. Sentiment Analysis (Phân tích cảm xúc)
+## 6. LLM Provider — chỉ DeepSeek
 
-Hệ thống phân tích sắc thái cảm xúc tin nhắn đầu vào của khách hàng để đo lường mức độ hài lòng và kịp thời can thiệp khi có xung đột.
+File: [app/services/llm_client.py](../../AI/chatbot-service/app/services/llm_client.py)
 
-### So sánh các mô hình tiếng Việt
+Một hàm `generate_text()` duy nhất gọi `deepseek-chat` qua REST API thuần (`requests`, không SDK) — dùng cho **cả 2** việc: NLU (bước 2) và sinh câu trả lời cuối (bước 6). Không có Gemini/OpenAI dự phòng dù comment cũ ở vài chỗ từng nói vậy.
 
-| Model | Bộ dữ liệu Pretrained | F1-macro | Latency | Dung lượng | Đánh giá / Khuyến nghị |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **PhoBERT-sentiment** | 20GB văn bản tiếng Việt | **0.88 - 0.93** | **~25ms** | 135MB | **Tốt nhất cho tiếng Việt** 🥇 |
-| **ViSoBERT** | Dữ liệu mạng xã hội Việt Nam | 0.86 - 0.91 | ~25ms | 130MB | Hiểu tốt các từ viết tắt, tiếng lóng, icon |
-| **XLM-RoBERTa-large** | Dữ liệu đa ngôn ngữ | 0.84 - 0.90 | ~60ms | 1.1GB | Dung lượng rất nặng, suy luận chậm |
+**Khi DeepSeek lỗi/hết credit**: NLU rơi về heuristic từ khoá (mục 2), câu trả lời cuối rơi về mock — hiển thị thẳng đoạn context RAG vừa lấy được (không phải câu chung chung vô nghĩa), nên vẫn kiểm tra được routing/retrieval dù văn phong không tự nhiên.
 
-### Quy trình huấn luyện & Tối ưu hóa PhoBERT-sentiment
-1. **Chuẩn bị dữ liệu:** Sử dụng tập dữ liệu **UIT-VSFC** (16.175 mẫu) và **VLSP 2016 SA** (khoảng 5.000 mẫu review công nghệ/thương mại điện tử). Gán nhãn thành 3 lớp: `0: negative`, `1: neutral`, `2: positive`.
-2. **Cấu hình Trainer:** epochs: `5`, batch size: `16`, learning rate: `2e-5`, warmup ratio: `0.1`, metric lựa chọn model tốt nhất: `f1_macro`.
-3. **Tối ưu hóa tốc độ (Inference Optimization):** Xuất mô hình sang định dạng **ONNX** để chạy trên thư viện `onnxruntime`. Thời gian xử lý giảm mạnh từ **~25ms xuống còn ~8ms** trên mỗi tin nhắn.
-
-### Quy tắc chuyển tiếp hỗ trợ (Escalation Logic)
-
-| Điều kiện kích hoạt | Hành động của hệ thống | Dữ liệu gửi kèm |
-| :--- | :--- | :--- |
-| **Điểm Negative > 0.75 (1 lần)** | Gắn nhãn cảnh báo (warning) nội bộ để theo dõi. | — |
-| **Điểm Negative > 0.75 (2 lần liên tiếp)** | Gửi thông báo đề xuất chuyển sang chat với nhân viên thật. | Session ID, thông tin khách hàng |
-| **Intent phân loại là `complaint`** | Tự động chuyển tiếp lập tức không cần xét điểm cảm xúc. | Lịch sử mua hàng, chi tiết đơn hàng lỗi |
-| **User nhấn nút "Gặp nhân viên"** | Chuyển tiếp lập tức. | Toàn bộ lịch sử cuộc trò chuyện |
-| **Chatbot báo "Tôi chưa rõ" 3 lần liên tiếp** | Tự động chuyển tiếp. | Danh sách các câu hỏi chưa được giải đáp |
+**Rủi ro timeout**: 1 tin nhắn cần LLM đi qua **2 lệnh gọi DeepSeek tuần tự**, mỗi lệnh timeout 30s → nếu DeepSeek chậm (không lỗi, chỉ chậm), tổng có thể chạm 60 giây. Gateway có route riêng cho chatbot (`ai-chatbot-cb`, timeout 60s, tách khỏi `ai-engine-cb` dùng chung cho search/recommendations/forecast) để chịu được mức này mà không cắt ngang request.
 
 ---
 
-## 5. Tích Hợp Mô Hình Ngôn Ngữ Lớn (LLM) & Vận Hành
+## 7. Quản lý hội thoại
 
-### So sánh các mô hình sinh phản hồi (Generation)
+File: [app/services/memory.py](../../AI/chatbot-service/app/services/memory.py)
 
-| Mô hình | Nhà cung cấp | Giới hạn gói miễn phí | Độ tương thích tiếng Việt | Cửa sổ ngữ cảnh | Đánh giá chung |
-| :--- | :--- | :--- | :---: | :--- | :--- |
-| **gemini-1.5-flash** | Google | **15 RPM, 1 triệu tokens/ngày** | Rất tốt | 1.000.000 tokens | **Lựa chọn tối ưu cho đồ án** 🥇 |
-| **llama-3.1-70b** | Groq | Có gói miễn phí giới hạn | Tốt | 128.000 tokens | Tốc độ sinh chữ cực nhanh |
-| **gpt-4o-mini** | OpenAI | Chỉ có $5 tín dụng trải nghiệm ban đầu | Rất tốt | 128.000 tokens | Chất lượng xuất sắc nhưng tốn phí |
-
-### Quản lý bộ nhớ hội thoại (Memory Management)
-Để tránh hiện tượng tràn cửa sổ ngữ cảnh (Context Window) và tiết kiệm chi phí gọi API khi cuộc trò chuyện kéo dài:
-* **Cơ chế Sliding Window:** Chỉ gửi kèm tối đa **10 lượt chat gần nhất** trong Prompt.
-* **Tóm tắt hội thoại (Summarization):** Khi số lượng lượt chat vượt quá 10, hệ thống sử dụng một tiến trình chạy ngầm gọi LLM để tóm tắt ngắn gọn toàn bộ nội dung thảo luận trước đó thành một đoạn văn 3-4 câu, sau đó inject đoạn tóm tắt này vào đầu System Prompt.
-* **Lưu trữ Redis:** Lịch sử chat được lưu trong Redis dưới dạng list với key `chat:{session_id}:history`. Sử dụng lệnh `LTRIM` để giới hạn độ dài danh sách. Thiết lập thời gian sống (TTL) là **24 giờ**.
-
-### Giao thức truyền tải thời gian thực (Streaming với SSE)
-Sử dụng giao thức **Server-Sent Events (SSE)** thông qua FastAPI `StreamingResponse` để truyền tải câu trả lời từ LLM về frontend dưới dạng từng từ xuất hiện dần (giống ChatGPT), thay vì bắt người dùng phải đợi mô hình hoàn thành toàn bộ câu phản hồi dài.
-
-> [!TIP]
-> **Tính năng chủ động gợi ý (Proactive Recommendation):** Nếu khách hàng di chuyển giữa các trang sản phẩm hoặc ở lại một trang quá 3 phút mà không thực hiện hành động thêm vào giỏ hàng, frontend sẽ tự động kích hoạt chatbot mở lời chào hỏi: *"Tôi thấy bạn đang quan tâm sản phẩm này, tôi có thể hỗ trợ chọn size hoặc màu sắc cho bạn không?"*. Việc này giúp tăng tỷ lệ chuyển đổi (Conversion Rate) thực tế của cửa hàng.
+- Lưu trong Redis, key `chat:{session_id}:history`, dạng list JSON.
+- **Sliding window**: giữ tối đa 10 lượt (20 tin nhắn) gần nhất — **không có tóm tắt (summarization)** khi vượt quá, chỉ cắt bớt tin cũ nhất.
+- TTL 24 giờ, tự xoá.
+- 2 tin gần nhất được đưa vào cả lệnh gọi NLU lẫn lệnh gọi sinh câu trả lời cuối (lấy 1 lần dùng chung, không gọi Redis 2 lần trong 1 request).
 
 ---
 
-## 6. Tool-Calling & Tích Hợp API Backend
+## 8. Guardrails thực tế
 
-Đây là điểm khác biệt cốt lõi giữa một chatbot tĩnh (chỉ trả lời từ tài liệu) và một **AI Agent thực sự**: chatbot có thể chủ động gọi các API của hệ thống backend để tra cứu và thực hiện hành động thật trong thời gian thực.
-
-### Nguyên lý hoạt động
-
-```
-User: "Đơn hàng #123 của tôi đang ở đâu?"
-         ↓
-[Intent Classifier] → order_tracking
-         ↓
-[LLM nhận diện cần gọi tool: get_order_status(order_id=123)]
-         ↓
-[Tool thực thi: GET /api/orders/123]
-         ↓
-[Kết quả thật từ DB: status=SHIPPED, tracking=VN123456]
-         ↓
-[LLM tổng hợp câu trả lời tự nhiên]
-```
-
-### Danh sách 5 Tool tích hợp với hệ thống AuraTech
-
-| Tool | API gọi | Câu hỏi kích hoạt | Xác thực |
-| :--- | :--- | :--- | :--- |
-| **get_order_status** | `GET /api/orders/{id}` | *"Đơn #123 đang ở đâu?"*, *"Khi nào giao hàng?"* | Chỉ xem đơn của chính user đang chat |
-| **cancel_order** | `DELETE /api/orders/{id}/cancel` | *"Huỷ đơn #123 giúp tôi"* | Xác nhận lại với user trước khi thực hiện |
-| **get_loyalty_points** | `GET /api/users/me/points` | *"Tôi có bao nhiêu điểm thưởng?"* | Phải đăng nhập |
-| **get_user_vouchers** | `GET /api/users/me/vouchers` | *"Voucher của tôi còn hiệu lực không?"* | Phải đăng nhập |
-| **get_warranty_info** | `GET /api/orders/{id}/warranty` | *"Bảo hành đơn #123 còn không?"* | Chỉ xem đơn của chính user |
-
-### Cơ chế xác nhận trước khi hành động (Action Confirmation)
-
-Với các tool có tính **phá huỷ** (destructive) như `cancel_order`, hệ thống bắt buộc phải hỏi xác nhận trước:
-
-```
-User: "Huỷ đơn #123 giúp tôi"
-Bot:  "Bạn có chắc muốn huỷ đơn hàng #123
-       (iPhone 15 Pro Max - 28.990.000đ) không?
-       Thao tác này không thể hoàn tác."
-User: "Có, huỷ đi"
-Bot:  [Gọi cancel_order API → Thực hiện huỷ → Thông báo kết quả]
-```
-
-### Xử lý khi user chưa đăng nhập
-
-Nếu user hỏi các thông tin cá nhân (đơn hàng, điểm, voucher) mà chưa xác thực:
-```
-Bot: "Để tra cứu thông tin đơn hàng, bạn vui lòng đăng nhập
-      vào tài khoản AuraTech trước nhé.
-      👉 [Đăng nhập ngay]"
-```
+- **Off-topic**: chặn bằng nhãn intent `off_topic` (LLM quyết định, không phải keyword-match embedding như thiết kế cũ nói).
+- **Ngưỡng tin cậy chính sách**: xem mục 4 (0.82 / 0.80, không phải 0.75/0.65 như thiết kế cũ).
+- **Chống bịa**: system prompt (`data/system-prompt.md`) yêu cầu chỉ trả lời dựa trên context, nói rõ "chưa có thông tin" nếu không có — không có bước "cross-check số liệu" tự động nào khác.
+- **Escalate cảm xúc tiêu cực**: hiện chỉ `logger.warning` khi sentiment_score > 0.80, **chưa** thực sự gửi thông báo Slack/Zalo nào (khác thiết kế cũ nói "Webhook Alert"). Cũng chưa có cơ chế đếm "2 lần tiêu cực liên tiếp" — mỗi lần vượt ngưỡng là 1 lần log độc lập.
+- **`intent: "escalate"`**: chỉ gắn khi intent là `complaint`, để FE bật flow chuyển nhân viên có sẵn.
 
 ---
-
-## 7. Đánh Giá Chất Lượng Chatbot với RAGAS
-
-RAGAS (Retrieval-Augmented Generation Assessment) là framework đánh giá chatbot RAG hiện đại nhất, cho phép đo lường khách quan chất lượng hệ thống mà không cần con người đọc từng câu trả lời.
-
-### 3 Chỉ số đánh giá chính
-
-| Metric | Ý nghĩa | Cách tính | Ngưỡng tốt |
-| :--- | :--- | :--- | :--- |
-| **Faithfulness** | Bot có bịa ra thông tin không có trong tài liệu không? | So sánh câu trả lời với context được retrieve | ≥ 0.85 |
-| **Answer Relevancy** | Câu trả lời có đúng trọng tâm câu hỏi không? | Embedding similarity giữa câu hỏi và câu trả lời | ≥ 0.80 |
-| **Context Recall** | RAG có lấy đúng đoạn tài liệu cần thiết không? | So sánh context retrieve được với ground truth | ≥ 0.75 |
-
-### Cách triển khai đánh giá
-
-```python
-from ragas import evaluate
-from ragas.metrics import faithfulness, answer_relevancy, context_recall
-from datasets import Dataset
-
-# Tập test: 50-100 cặp Q&A mẫu có ground truth
-test_dataset = Dataset.from_dict({
-    "question": ["Chính sách đổi trả trong 30 ngày thế nào?", ...],
-    "answer": [chatbot_answers],           # câu trả lời của bot
-    "contexts": [retrieved_chunks],         # đoạn tài liệu RAG lấy được
-    "ground_truth": [expected_answers]      # câu trả lời đúng
-})
-
-results = evaluate(
-    test_dataset,
-    metrics=[faithfulness, answer_relevancy, context_recall]
-)
-print(results)  # → {faithfulness: 0.91, answer_relevancy: 0.87, context_recall: 0.83}
-```
-
-### Quy trình tạo tập test
-
-1. Chọn **50–100 câu hỏi** bao phủ đều 6 intent
-2. Với mỗi câu: viết sẵn `ground_truth` (câu trả lời mẫu đúng)
-3. Chạy chatbot qua tất cả → thu `answer` và `contexts`
-4. Chạy RAGAS evaluate → có điểm số khách quan
-5. Đưa kết quả vào báo cáo đồ án *(hội đồng rất ấn tượng với phần này)*
-
----
-
-## 8. Guardrails — Kiểm soát Chất Lượng Đầu Ra
-
-### Off-topic Rejection (Từ chối câu hỏi ngoài phạm vi)
-
-Chatbot chỉ hỗ trợ trong phạm vi: **sản phẩm, đơn hàng, bảo hành, chính sách, tài khoản AuraTech**. Các câu hỏi ngoài phạm vi cần được từ chối lịch sự:
-
-```
-User: "Giải bài toán tích phân này giúp tôi"
-Bot:  "Xin lỗi bạn, tôi chỉ có thể hỗ trợ các vấn đề liên quan
-       đến mua sắm và dịch vụ của AuraTech thôi nhé.
-       Tôi có thể giúp bạn tìm sản phẩm, tra đơn hàng
-       hoặc giải đáp chính sách bảo hành không? 😊"
-```
-
-**Cách phát hiện off-topic:** Kết hợp intent classifier (`general_chat` với confidence thấp) + embedding similarity giữa câu hỏi với tập từ khoá domain.
-
-### Confidence Threshold (Ngưỡng tin cậy RAG)
-
-Khi RAG retrieve được context có **similarity score thấp** (tài liệu không liên quan), chatbot không được bịa câu trả lời:
-
-```python
-if max_similarity_score < 0.65:
-    return "Tôi chưa có thông tin chính xác về vấn đề này.
-            Bạn vui lòng liên hệ tổng đài 1800.2097 để được
-            nhân viên hỗ trợ chi tiết hơn nhé."
-```
-
-| Similarity Score | Hành động |
-| :--- | :--- |
-| ≥ 0.75 | Trả lời bình thường dựa trên context |
-| 0.65 – 0.74 | Trả lời kèm disclaimer: *"Thông tin có thể chưa đầy đủ..."* |
-| < 0.65 | Từ chối trả lời + đề nghị liên hệ tổng đài |
-
-### Hallucination Prevention (Ngăn bịa thông tin)
-
-- **System Prompt bắt buộc:** Luôn thêm chỉ thị `"Chỉ trả lời dựa trên thông tin được cung cấp trong context. Nếu không có thông tin, hãy nói 'Tôi không biết' thay vì đoán."` vào System Prompt.
-- **Source Citation:** Yêu cầu LLM trích dẫn nguồn tài liệu khi trả lời chính sách *("Theo chính sách đổi trả của AuraTech...")*.
-- **Number Validation:** Với các con số quan trọng (giá tiền, thời gian bảo hành, % VAT), cross-check lại với dữ liệu gốc trước khi trả về.

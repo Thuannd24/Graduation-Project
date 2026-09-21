@@ -1,5 +1,12 @@
 import os
+from dotenv import load_dotenv
 from pydantic import BaseModel
+
+# One shared env file for every service under AI/ (AI/.env, gitignored — see AI/.env.example).
+# shared_common lives at AI/shared-common/shared_common/, so AI/ is 2 levels up from this file.
+_AI_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv(os.path.join(_AI_ROOT, ".env"))
+
 
 class SharedSettings(BaseModel):
     REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
@@ -17,5 +24,7 @@ class SharedSettings(BaseModel):
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "")
+
 
 shared_settings = SharedSettings()

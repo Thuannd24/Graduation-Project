@@ -1,6 +1,5 @@
 # AuraTech — Hệ Thống Thương Mại Điện Tử Phân Tán (Microservices)
 
-Kiến trúc Microservices hiệu năng cao, giao tiếp qua **gRPC** và **Event-Driven Kafka**, đảm bảo tính nhất quán dữ liệu phân tán.
 
 **Stack:** Spring Boot 3.x · Spring Cloud Gateway · Netflix Eureka · FastAPI · ReactJS · Vite · MariaDB · MongoDB · Redis · Kafka · Elasticsearch · MinIO · Keycloak 24.x
 
@@ -48,9 +47,6 @@ Sau đó chạy từng service trong IntelliJ (Run Spring Boot Application):
 | `notification-service` | 8086 |
 | `promotion-service` | 8087 |
 
-> 💡 **IntelliJ Maven:** `Settings → Build → Maven → Runner → JRE → Java 21`, sau đó chạy `clean` → `package` từ tab Maven.
-
----
 
 ## 🌐 FRONTEND (FE)
 
@@ -62,11 +58,41 @@ npm run dev     # http://localhost:5173
 
 ---
 
+## 🤖 AI SERVICES (Python/FastAPI — độc lập với BE, KHÔNG chạy trong IntelliJ)
+
+> 4 service Python nằm trong `AI/`: `chatbot-service` (8002), `search-service` (8001), `recs-service` (8003), `forecast-service` (8004). Chi tiết kiến trúc: [`AI/README.md`](AI/README.md); riêng chatbot xem thêm [`docs/canvas/chatbot-ai.md`](docs/canvas/chatbot-ai.md).
+
+```bash
+cd AI
+cp .env.example .env       # điền DEEPSEEK_API_KEY để chatbot trả lời thật (không có thì chạy chế độ mock)
+
+python -m venv venv
+.\venv\Scripts\activate     # Linux/macOS: source venv/bin/activate
+```
+
+**Hướng 1 — Docker (chạy cả 4 service cùng lúc):**
+```bash
+docker-compose up --build -d
+```
+
+**Hướng 2 — Chạy từng service (phát triển/debug), ví dụ chatbot-service:**
+```bash
+cd chatbot-service
+pip install -r requirements.txt
+python scripts/build_policy_index.py   # bắt buộc, chỉ cần chạy lần đầu (dựng FAISS index chính sách)
+python main.py                          # cổng 8002
+```
+Lặp lại `pip install -r requirements.txt` + `python main.py` trong thư mục từng service còn lại (`search-service`, `recs-service`, `forecast-service`).
+
+> Cần Redis chạy sẵn (từ `docker-compose-infra.yml` ở BE) để lưu lịch sử chat. Thiếu `order-service`/`user-service`/`promotion-service` vẫn khởi động được, chỉ các câu hỏi tra cứu đơn hàng/điểm thưởng/voucher sẽ báo "chưa tra cứu được".
+
+---
+
 ## 🔧 TOOLS — Khởi Tạo Dữ Liệu DB
 
-Sau khi hệ thống chạy, import ~1.100 sản phẩm (categories, brands, products, variants, ảnh R2, tồn kho) bằng công cụ tại `tools/catalog-import/`.
-
 > 📄 Hướng dẫn chi tiết: [`tools/catalog-import/README.md`](tools/catalog-import/README.md)
+
+**Lấy `ADMIN_TOKEN`:** Đăng nhập admin → F12 → Application → Local Storage → copy `access_token`.
 
 ```bash
 cd tools/catalog-import
@@ -76,39 +102,3 @@ cp .env.example .env     # điền ADMIN_TOKEN (xem bên dưới)
 npm run setup            # import toàn bộ catalog
 npm run seed-inventory   # set tồn kho mặc định = 10/variant
 ```
-
-**Lấy `ADMIN_TOKEN`:** Đăng nhập admin → F12 → Application → Local Storage → copy `access_token`.
-> ⚠️ Token hết hạn sau **15 phút**. Nếu gặp lỗi `401` — lấy token mới, dán vào `.env`, chạy lại (an toàn, dữ liệu cũ sẽ được **update** thay vì tạo trùng).
-
-**Reset DB trước khi import lại (nếu cần):**
-```bash
-docker exec -i infra-mariadb mariadb -u root -proot ecommerce_product_db -e "
-SET FOREIGN_KEY_CHECKS=0;
-TRUNCATE TABLE variant_option_values; TRUNCATE TABLE product_variants;
-TRUNCATE TABLE product_images; TRUNCATE TABLE product_tags;
-TRUNCATE TABLE product_attribute_values; TRUNCATE TABLE products;
-TRUNCATE TABLE brand_categories; TRUNCATE TABLE brands;
-TRUNCATE TABLE category_attributes; TRUNCATE TABLE categories; TRUNCATE TABLE attributes;
-SET FOREIGN_KEY_CHECKS=1;"
-
-docker exec -i infra-mariadb mariadb -u root -proot ecommerce_inventory_db -e "
-SET FOREIGN_KEY_CHECKS=0;
-TRUNCATE TABLE inventories; TRUNCATE TABLE inventory_transactions;
-SET FOREIGN_KEY_CHECKS=1;"
-```
-
----
-
-## 📊 CỔNG DỊCH VỤ & QUẢN TRỊ
-
-| Dịch vụ | URL / Port | Tài khoản |
-|---|---|---|
-| **Frontend** | http://localhost:5173 | Đăng ký trực tiếp / Google OAuth |
-| **API Gateway** | http://localhost:8080 | — |
-| **Eureka Dashboard** | http://localhost:8761 | — |
-| **Keycloak Admin** | http://localhost:8083 | `admin` / `admin` |
-| **MinIO Console** | http://localhost:9001 | `minio` / `12345678a@` |
-| **Kafka UI** | http://localhost:8090 | — |
-| **Redis Insight** | http://localhost:5540 | — |
-| **MariaDB** | localhost:3308 | `root` / `root` |
-| **MongoDB** | localhost:27017 | — |

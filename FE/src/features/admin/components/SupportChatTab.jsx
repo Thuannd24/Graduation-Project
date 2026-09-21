@@ -12,6 +12,7 @@ export default function SupportChatTab() {
   const [searchQuery, setSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const stompClientRef = useRef(null);
+  const imageInputRef = useRef(null);
 
   const staffId = keycloak.subject || "staff_dev";
   const staffName = keycloak.tokenParsed?.name || "Nhân viên hỗ trợ";
@@ -84,8 +85,9 @@ export default function SupportChatTab() {
         const historyMsgs = (historyPage.content || [])
           .map((msg) => ({
             id: msg.id,
-            sender: msg.senderId === matchedRoom.customerId ? "user" : "assistant",
-            text: msg.content,
+            sender: msg.senderRole === "SYSTEM" ? "system" : (msg.senderId === matchedRoom.customerId ? "user" : "assistant"),
+            text: msg.type === "IMAGE" ? "" : msg.content,
+            imageUrl: msg.type === "IMAGE" ? msg.content : undefined,
             timestamp: msg.createdAt
           }))
           .reverse();
@@ -103,8 +105,9 @@ export default function SupportChatTab() {
               const payload = JSON.parse(message.body);
               const stompMsg = {
                 id: payload.id,
-                sender: payload.senderId === matchedRoom.customerId ? "user" : "assistant",
-                text: payload.content,
+                sender: payload.senderRole === "SYSTEM" ? "system" : (payload.senderId === matchedRoom.customerId ? "user" : "assistant"),
+                text: payload.type === "IMAGE" ? "" : payload.content,
+                imageUrl: payload.type === "IMAGE" ? payload.content : undefined,
                 timestamp: payload.createdAt
               };
 
@@ -154,6 +157,28 @@ export default function SupportChatTab() {
       setReplyText("");
     } else {
       console.warn("WebSocket not connected. Reply message not sent.");
+    }
+  };
+
+  const handleSendImage = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || !selectedSessionId) return;
+
+    try {
+      const { url } = await chatApi.uploadImage(selectedSessionId, file);
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.publish({
+          destination: "/app/chat.sendMessage",
+          body: JSON.stringify({
+            roomId: selectedSessionId,
+            content: url,
+            type: "IMAGE"
+          })
+        });
+      }
+    } catch (err) {
+      console.error("Failed to upload chat image", err);
     }
   };
 
@@ -353,13 +378,23 @@ export default function SupportChatTab() {
                       className={`flex ${isUser ? "justify-start" : "justify-end"}`}
                     >
                       <div
-                        className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-xs shadow-sm flex flex-col gap-0.5 ${
+                        className={`max-w-[75%] rounded-2xl text-xs shadow-sm flex flex-col gap-0.5 ${msg.imageUrl ? "p-1.5" : "px-4 py-2.5"} ${
                           isUser
                             ? "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-bl-none border border-slate-100 dark:border-slate-800"
                             : "bg-[#c82229] text-white rounded-br-none"
                         }`}
                       >
-                        <p className="leading-relaxed whitespace-pre-wrap font-medium">{msg.text}</p>
+                        {msg.imageUrl ? (
+                          <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
+                            <img
+                              src={msg.imageUrl}
+                              alt="Ảnh đính kèm"
+                              className="max-w-full max-h-56 rounded-xl object-cover"
+                            />
+                          </a>
+                        ) : (
+                          <p className="leading-relaxed whitespace-pre-wrap font-medium">{msg.text}</p>
+                        )}
                         <span
                           className={`text-[8px] self-end mt-1 font-bold ${
                             isUser ? "text-slate-400" : "text-white/70"
@@ -377,6 +412,20 @@ export default function SupportChatTab() {
               {/* Chat Send Input Box */}
               <div className="bg-white dark:bg-slate-900 p-4 border-t border-slate-200 dark:border-slate-800 shrink-0">
                 <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-2xl px-3 py-2">
+                  <input
+                    type="file"
+                    ref={imageInputRef}
+                    onChange={handleSendImage}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <button
+                    onClick={() => imageInputRef.current?.click()}
+                    className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-500 border-none flex items-center justify-center cursor-pointer transition-all shrink-0"
+                    title="Gửi ảnh"
+                  >
+                    <Icon name="attach_file" className="text-xs" />
+                  </button>
                   <input
                     type="text"
                     placeholder="Nhập nội dung phản hồi khách hàng..."

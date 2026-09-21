@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import { orderApi } from "../../../services/orderApi.ts";
 import { productApi } from "../../../services/productApi.ts";
@@ -8,21 +8,34 @@ import keycloak from "../../../services/keycloak.js";
 // Import modular subcomponents
 import AdminSidebar from "../components/AdminSidebar.jsx";
 import AdminHeader from "../components/AdminHeader.jsx";
-import OverviewTab from "../components/OverviewTab.jsx";
-import OrdersTab from "../components/OrdersTab.jsx";
-import CustomersTab from "../components/CustomersTab.jsx";
-import ProductsTab from "../components/ProductsTab.jsx";
-import InventoryTab from "../components/InventoryTab.jsx";
-import CampaignsTab from "../components/CampaignsTab.jsx";
-import PromotionStatsTab from "../components/PromotionStatsTab.jsx";
-import CategoriesTab from "../components/CategoriesTab.jsx";
-import TransactionsTab from "../components/TransactionsTab.jsx";
-import AddProductTab from "../components/AddProductTab.jsx";
-import AdminRoleTab from "../components/AdminRoleTab.jsx";
-import BrandsTab from "../components/BrandsTab.jsx";
-import ReviewsTab from "../components/ReviewsTab.jsx";
-import AnalyticsAITab from "../components/AnalyticsAITab.jsx";
-import SupportChatTab from "../components/SupportChatTab.jsx";
+
+// Tabs are code-split: only the active tab's chunk (and its heavy deps like
+// recharts / @xyflow/react) is downloaded, instead of bundling all of them upfront.
+const OverviewTab = lazy(() => import("../components/OverviewTab.jsx"));
+const OrdersTab = lazy(() => import("../components/OrdersTab.jsx"));
+const CustomersTab = lazy(() => import("../components/CustomersTab.jsx"));
+const ProductsTab = lazy(() => import("../components/ProductsTab.jsx"));
+const InventoryTab = lazy(() => import("../components/InventoryTab.jsx"));
+const CampaignsTab = lazy(() => import("../components/CampaignsTab.jsx"));
+const PromotionStatsTab = lazy(() => import("../components/PromotionStatsTab.jsx"));
+const CategoriesTab = lazy(() => import("../components/CategoriesTab.jsx"));
+const TransactionsTab = lazy(() => import("../components/TransactionsTab.jsx"));
+const AddProductTab = lazy(() => import("../components/AddProductTab.jsx"));
+const AdminRoleTab = lazy(() => import("../components/AdminRoleTab.jsx"));
+const BrandsTab = lazy(() => import("../components/BrandsTab.jsx"));
+const ReviewsTab = lazy(() => import("../components/ReviewsTab.jsx"));
+const AnalyticsAITab = lazy(() => import("../components/AnalyticsAITab.jsx"));
+const SupportChatTab = lazy(() => import("../components/SupportChatTab.jsx"));
+
+function TabFallback() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "40vh" }}>
+      <span className="material-symbols-outlined" style={{ fontSize: 32, animation: "spin 1s linear infinite" }}>
+        progress_activity
+      </span>
+    </div>
+  );
+}
 
 export default function AdminDashboardPage() {
   const navigate = useNavigate();
@@ -47,10 +60,25 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     fetchOrders();
-    fetchProducts();
-    fetchCategories();
-    fetchUsers();
   }, []);
+
+  // Danh sách sản phẩm/danh mục đầy đủ (dùng cho biểu đồ Overview và ảnh minh họa
+  // trong Orders) chỉ thực sự cần khi mở 2 tab này — tải 1 lần rồi cache, tránh
+  // gọi listAllProducts() (vòng lặp phân trang) mỗi khi vào Dashboard bất kể đang ở tab nào.
+  const needsCatalog = activeTab === "overview" || activeTab === "orders";
+  useEffect(() => {
+    if (needsCatalog && products.length === 0) {
+      fetchProducts();
+      fetchCategories();
+    }
+  }, [needsCatalog]);
+
+  // Danh sách user (size=1000) chỉ cần cho tab Giao dịch.
+  useEffect(() => {
+    if (activeTab === "transactions" && users.length === 0) {
+      fetchUsers();
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
@@ -222,6 +250,7 @@ export default function AdminDashboardPage() {
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-50 dark:bg-slate-950 transition-colors">
         <AdminHeader activeTab={activeTab} darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />
 
+        <Suspense fallback={<TabFallback />}>
         {activeTab === "overview" && (
           <OverviewTab
             orders={orders}
@@ -322,6 +351,7 @@ export default function AdminDashboardPage() {
         {activeTab === "support-chat" && (
           <SupportChatTab />
         )}
+        </Suspense>
       </main>
     </div>
   );
