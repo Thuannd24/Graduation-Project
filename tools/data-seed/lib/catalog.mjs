@@ -16,13 +16,15 @@ export async function loadCatalog() {
   }
 
   const byCategory = new Map();
+  const byId = new Map();
   for (const p of products) {
     const list = byCategory.get(p.categoryId) || [];
     list.push(p);
     byCategory.set(p.categoryId, list);
+    byId.set(p.id, p);
   }
 
   const categoryIds = [...byCategory.keys()];
 
-  return { products, byCategory, categoryIds };
+  return { products, byCategory, byId, categoryIds };
 }

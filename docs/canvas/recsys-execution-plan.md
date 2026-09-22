@@ -19,7 +19,7 @@ Mục đích ban đầu của đồ án: *hành vi người dùng → AI hiểu 
 | Feature **tổng hợp** từ hành vi (11 cột `GROUP BY user`) → rule 1 ngưỡng bắt kịp | Vấn đề không phải model, mà là **cách biểu diễn hành vi**: gộp chuỗi thành vài con số làm mất thông tin |
 | RetailRocket: **3 loại event**, 1,56 event/phiên → thứ tự rỗng | Không đo được thứ tự trên chuỗi quá ngắn và quá nghèo ký hiệu — kết luận về **RetailRocket**, không phải về hành vi người dùng nói chung |
 | **REES46 Cosmetics Shop có `remove_from_cart` thật** *(phát hiện 2026-09-17)* | Bộ công khai **đầu tiên** có tín hiệu "đổi ý" — giả thuyết thứ tự **kiểm lại được trên dữ liệu thật**, không cần chờ traffic riêng. Xem §5.2 |
-| Tracker của dự án: **18 loại action** (`FE_BEHAVIOR_ACTIONS`) | Vẫn giàu nhất, nhưng **không còn là bộ duy nhất có tín hiệu ma sát** — REES46 Cosmetics đã có 1 loại thật |
+| Tracker của dự án: **19 loại action** (`FE_BEHAVIOR_ACTIONS`) | Vẫn giàu nhất, nhưng **không còn là bộ duy nhất có tín hiệu ma sát** — REES46 Cosmetics đã có 1 loại thật |
 | Gợi ý: đồng-xuất-hiện hơn popularity **22,5×** | Có bài toán mà tín hiệu hành vi **đo được rõ ràng** |
 
 ⇒ Thay vì hỏi *"model nào tốt nhất"*, plan hỏi: **biểu diễn hành vi dạng CHUỖI có hơn dạng TỔNG
@@ -71,7 +71,7 @@ Mỗi vị trí trong chuỗi **không phải** chỉ một item, mà là một 
 
 | Thành phần | Nguồn | Ghi chú |
 |---|---|---|
-| `action_type` | 18 loại của tracker · 3 loại ở RetailRocket | **Đây là chiều mà đa số model gợi ý bỏ qua** |
+| `action_type` | 19 loại của tracker · 3 loại ở RetailRocket | **Đây là chiều mà đa số model gợi ý bỏ qua** |
 | `item_id` | — | null với action không gắn item (`SEARCH`, `TAB_HIDDEN`…) |
 | `Δt` (rời rạc hoá) | khoảng cách tới event trước **trong phiên** | phân biệt "liền kề" thật với khe 3 tuần |
 | `weight` (rời rạc hoá) | cột `weight` sẵn có | % scroll, giây dwell |
@@ -311,12 +311,55 @@ trùng 1-trong-3 item xem gần nhất, 23,75% trùng 1-trong-5 (đo trực ti�
 RetailRocket (dữ liệu quá nghèo/ít khiến chuỗi không có thông tin hơn heuristic đơn giản), lần này
 lặp lại trên chính dữ liệu tổng hợp của đồ án.
 
-**Quyết định**: KHÔNG deploy checkpoint SASRec platform_v1 này vào `recs-service` (`is_ready()` sẽ
-từ chối nạp cho tới khi có checkpoint thật sự vượt qua baseline recency). Dùng **recency**
-(`app/services/recency.py`) làm tầng cá nhân hoá mặc định — miễn phí, đo được tốt hơn, không cần
-GPU/model gì. Đây là kết quả âm có giá trị cho báo cáo: xác nhận lần thứ 2 (RetailRocket, rồi
-platform seed) rằng quy mô/chất lượng dữ liệu — không phải kiến trúc model — là yếu tố quyết định
-chuỗi hành vi có thông tin hơn heuristic tầm thường hay không.
+**Quyết định (lúc đó)**: KHÔNG deploy checkpoint SASRec platform_v1 này vào `recs-service`
+(`is_ready()` sẽ từ chối nạp cho tới khi có checkpoint thật sự vượt qua baseline recency). Dùng
+**recency** (`app/services/recency.py`) làm tầng cá nhân hoá mặc định. Đây là kết quả âm có giá
+trị cho báo cáo: xác nhận lần thứ 2 (RetailRocket, rồi platform seed) rằng quy mô/chất lượng dữ
+liệu — không phải kiến trúc model — là yếu tố quyết định chuỗi hành vi có thông tin hơn heuristic
+tầm thường hay không.
+
+### 5.8 ✅ SỬA GỐC RỄ — đo quy luật hành vi thật, viết lại bộ mô phỏng, train lại (2026-09-22)
+
+Thay vì chấp nhận kết quả âm ở 5.7 là điểm dừng, đã truy ra NGUYÊN NHÂN: `tools/data-seed/lib/
+simulate.mjs` (bản cũ) viết CỐ ĐỊNH "mỗi đơn hàng luôn sinh 1 sự kiện VIEW rồi NGAY SAU ĐÓ 1 sự
+kiện ADD_TO_CART cho ĐÚNG CÙNG sản phẩm" (dòng 108-109/138-139 bản cũ) — đây là khuôn mẫu code
+cứng, không phải hành vi có cấu trúc. Recency baseline không "học" gì — nó khai thác đúng lỗ hổng
+này. Dữ liệu bị lỗi ở tầng sinh ra, không phải ở tầng model.
+
+**Cách sửa**: đo trực tiếp cấu trúc phiên duyệt web trên REES46 Cosmetics — dữ liệu người dùng
+THẬT, 5 tháng, 4.513.080 phiên (`recsys_measure_behavior_patterns.py`) — CHỈ lấy thống kê KHÔNG
+PHỤ THUỘC catalog cụ thể (không bê nguyên ma trận category→category vì catalog mỹ phẩm của REES46
+khác hẳn catalog điện thoại/laptop của platform):
+
+| Chỉ số đo trên REES46 thật | Giá trị | Bản cũ của seeder |
+|---|---|---|
+| % thêm giỏ KHÔNG có view trước trong cùng phiên | 78,7% | 0% (luôn ép có view trước) |
+| % thêm giỏ đúng item VỪA xem | 17,5% | 100% (ép cứng) |
+| % sự kiện kế tiếp CÙNG category với sự kiện trước | 63,4% | Không mô hình hoá (mỗi lượt độc lập) |
+| Độ dài phiên (median / mean) | 1 / 3,70 sự kiện | Không có khái niệm phiên nhiều sự kiện thật |
+
+Viết lại `simulate.mjs` dùng ĐÚNG các con số này (lấy mẫu theo phân vị thực đo được, không fit
+họ phân phối tham số áp đặt) để lái nội dung mỗi phiên, đồng thời **giữ nguyên** động lực
+churn/lambda theo tháng đã validate trước đó (không đụng vào phần đã đúng). Kiểm chứng bằng test
+độc lập (catalog giả) trước khi chạy seeder thật; phát hiện và sửa thêm 1 bug khi kiểm chứng
+(timestamp không đảm bảo tăng dần → làm loãng số đo category-stickiness).
+
+**Kết quả sau khi seed lại** (500 user, 155.431 sự kiện — quy luật thật, không phải luật tay):
+
+| | Trước sửa | Sau sửa |
+|---|---|---|
+| Tỉ lệ item lặp liên tiếp | 8,82% | **3,26%** |
+| Target trùng item vừa xem | 14,57% | **3,19%** |
+| Recency baseline recall@10 | 0,2754 | **0,1118** |
+| **SASRec (platform_v1) recall@10** | 0,1976 (thua recency 30%) | **0,1058 (gần NGANG recency 0,1118 — lệch trong khoảng nhiễu, n=501)** |
+
+**Ý nghĩa**: sau khi loại bỏ lợi thế giả tạo của recency (do lỗi sinh dữ liệu), SASRec không còn
+thua xa nữa mà đạt **sát ngang** — tức là model đang học được lượng thông tin **tương đương**
+heuristic đơn giản, thay vì bị heuristic bỏ xa. Đây là bằng chứng cho thấy kết luận ở 5.7 (SASRec
+"thua") một phần là do lỗi tầng dữ liệu, không hoàn toàn do bản chất bài toán — vẫn KHÔNG đủ để
+kết luận SASRec THẮNG (chênh lệch quá nhỏ so với n=501), nhưng là một kết quả trung thực hơn hẳn
+để đưa vào báo cáo, và là minh chứng cụ thể cho luận điểm "chất lượng dữ liệu quyết định, không
+phải kiến trúc model".
 
 ---
 
@@ -340,7 +383,7 @@ chuỗi hành vi có thông tin hơn heuristic tầm thường hay không.
 |---|---|
 | HSTU không build được trên Blackwell (tuần 0) | Bỏ HSTU. eSASRec đã cùng Pareto frontier |
 | Không tái lập được số (tuần 0) | **Dừng**, sửa môi trường |
-| Action-type embedding không thêm gì (tuần 2) | Đo lại trên **cả** Taobao (4 loại) **và** RetailRocket (3 loại). Nếu Taobao dương mà RetailRocket âm ⇒ **bằng chứng trực tiếp** rằng độ giàu bảng chữ cái quyết định, và đó chính là lý do tracker 18 ký hiệu tồn tại |
+| Action-type embedding không thêm gì (tuần 2) | Đo lại trên **cả** Taobao (4 loại) **và** RetailRocket (3 loại). Nếu Taobao dương mà RetailRocket âm ⇒ **bằng chứng trực tiếp** rằng độ giàu bảng chữ cái quyết định, và đó chính là lý do tracker 19 ký hiệu tồn tại |
 | Đầu Risk không vượt 0,7462 (tuần 4) | **Đây là kết quả trung tâm, không phải thất bại**: biểu diễn chuỗi KHÔNG hơn feature tổng hợp trên dữ liệu này ⇒ giải thích được vì sao rule bắt kịp suốt giai đoạn churn |
 | Thừa thời gian | Thêm TIGER/semantic ID (cấu hình GRID: RK-Means, `(3,256)`, bỏ user token) |
 
@@ -352,7 +395,7 @@ chuỗi hành vi có thông tin hơn heuristic tầm thường hay không.
 |---|---|---|
 | **1. Phương pháp** | Tiêu chí 5 điểm "bài toán có đáng dùng ML không", áp lên 3 bài toán thật · giao thức không rò rỉ · sàn nhiễu · đối chứng âm | log churn + tuần 1 |
 | **2. Chính** | Biểu diễn hành vi: **chuỗi vs tổng hợp**. Encoder, feature 3 tầng, hai đầu ra, số đo | tuần 2–4 |
-| **3. Hệ thống** | Tracker 18 ký hiệu → Kafka → encoder → gợi ý + campaign Camunda, E2E thật | tuần 5 |
+| **3. Hệ thống** | Tracker 19 ký hiệu → Kafka → encoder → gợi ý + campaign Camunda, E2E thật | tuần 5 |
 
 **Đóng góp chính:** không phải một con số, mà là **trả lời được — bằng thí nghiệm có đối chứng —
 câu hỏi biểu diễn hành vi dạng nào là đủ cho bài toán nào**, trên 3 bài toán thật, có cả kết quả âm
