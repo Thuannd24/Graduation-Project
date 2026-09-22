@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
 import FilterPanel from "../components/category/FilterPanel.jsx";
@@ -9,7 +9,7 @@ import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi";
 import { PRICE_PRESETS } from "../utils/categoryUtils.js";
 import { useDebounce } from "../hooks/useDebounce.js";
-import { trackBehavior } from "../../../services/behaviorTracker.ts";
+import { trackBehavior, trackImpressions } from "../../../services/behaviorTracker.ts";
 
 const DEFAULT_MAX_PRICE = 50000000;
 
@@ -32,6 +32,26 @@ export default function SearchPage() {
   const maxPrice = Number(searchParams.get("maxPrice") || DEFAULT_MAX_PRICE);
   const onSale = searchParams.get("sale") === "1";
   const sort = searchParams.get("sort") || "featured";
+
+  // FILTER_APPLIED/SORT_APPLIED: bỏ qua lần render đầu (giá trị mặc định từ URL) — chỉ bắn khi
+  // user THỰC SỰ đổi filter/sort sau đó (giống CategoryPage.jsx).
+  const filterMounted = useRef(false);
+  useEffect(() => {
+    if (!filterMounted.current) {
+      filterMounted.current = true;
+      return;
+    }
+    trackBehavior("FILTER_APPLIED");
+  }, [selectedBrands, onSale, minPrice, maxPrice]);
+
+  const sortMounted = useRef(false);
+  useEffect(() => {
+    if (!sortMounted.current) {
+      sortMounted.current = true;
+      return;
+    }
+    trackBehavior("SORT_APPLIED");
+  }, [sort]);
 
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -135,6 +155,12 @@ export default function SearchPage() {
     if (sort === "rating_desc") return list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     return list;
   }, [filteredProducts, sort]);
+
+  // Ghi nhận sản phẩm THẬT SỰ hiển thị cho user sau khi lọc/sắp xếp xong — không phải toàn bộ
+  // allProducts đã tải (có thể lớn hơn nhiều những gì user thấy).
+  useEffect(() => {
+    if (sortedProducts.length > 0) trackImpressions(sortedProducts.map((p) => p.id));
+  }, [sortedProducts]);
 
   const filterPanelProps = {
     brands: availableBrands,

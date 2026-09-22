@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
 import CategoryTabs from "../components/category/CategoryTabs.jsx";
@@ -11,6 +11,7 @@ import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi";
 import { useCategoryFilters } from "../hooks/useCategoryFilters.js";
 import { useDebounce } from "../hooks/useDebounce.js";
+import { trackBehavior, trackImpressions } from "../../../services/behaviorTracker.ts";
 import {
   flattenCategories,
   getRootCategories,
@@ -307,6 +308,31 @@ export default function CategoryPage() {
     const start = (safePage - 1) * ITEMS_PER_PAGE;
     return sortedProducts.slice(start, start + ITEMS_PER_PAGE);
   }, [sortedProducts, safePage]);
+
+  // Chỉ ghi nhận đúng trang đang hiển thị, không phải toàn bộ sortedProducts đã lọc/sắp xếp.
+  useEffect(() => {
+    if (paginatedProducts.length > 0) trackImpressions(paginatedProducts.map((p) => p.id));
+  }, [paginatedProducts]);
+
+  // FILTER_APPLIED/SORT_APPLIED: bỏ qua lần render đầu (giá trị mặc định từ URL, chưa phải hành
+  // vi chủ động của user) — chỉ bắn khi user THỰC SỰ đổi filter/sort sau đó.
+  const filterMounted = useRef(false);
+  useEffect(() => {
+    if (!filterMounted.current) {
+      filterMounted.current = true;
+      return;
+    }
+    trackBehavior("FILTER_APPLIED");
+  }, [selectedBrands, onSale, minPrice, maxPrice, specFilters]);
+
+  const sortMounted = useRef(false);
+  useEffect(() => {
+    if (!sortMounted.current) {
+      sortMounted.current = true;
+      return;
+    }
+    trackBehavior("SORT_APPLIED");
+  }, [sort]);
 
   const activePromotions =
     categoryPromotions[categorySlug] ||

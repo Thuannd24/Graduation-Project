@@ -5,7 +5,7 @@
  * docs/canvas/churn-risk-log.md mục 2026-08-04) đo được rằng với chỉ 3 loại event
  * (xem/thêm giỏ/mua) thì THỨ TỰ hành vi không mang thêm thông tin nào (ΔAUC −0,0009), vì bigram
  * gần như trùng với số đếm. Bảng chữ cái hành vi phải phong phú hơn thì thứ tự mới có gì để mang —
- * module này bắn thêm 13 loại event (xem shared_common/contracts.py::FE_BEHAVIOR_ACTIONS).
+ * module này bắn thêm 14 loại event, gồm cả IMPRESSION (xem shared_common/contracts.py::FE_BEHAVIOR_ACTIONS).
  *
  * 3 nguyên tắc bất di bất dịch ở đây:
  *  1. KHÔNG BAO GIỜ làm hỏng UX. Mọi thứ bọc try/catch, listener `passive`, gửi fire-and-forget,
@@ -36,7 +36,8 @@ export type BehaviorAction =
   | "PRODUCT_ZOOM"
   | "SEARCH"
   | "FILTER_APPLIED"
-  | "SORT_APPLIED";
+  | "SORT_APPLIED"
+  | "IMPRESSION";
 
 interface QueuedEvent {
   actionType: BehaviorAction;
@@ -117,6 +118,26 @@ export function trackBehavior(
     });
     // Đầy hàng đợi thì gửi ngay, không chờ hết chu kỳ — tránh mất event khi người dùng hoạt động dày.
     if (queue.length >= MAX_QUEUE) flushBehavior();
+  } catch {
+    /* nuốt im lặng */
+  }
+}
+
+const MAX_IMPRESSIONS_PER_LIST = 20; // tran an toan hang doi, danh sach dai (vd 100 SP tim kiem)
+                                       // chi can top-N thuc su hien thi cho user, khong can toan bo
+
+/** Ghi nhận danh sách sản phẩm vừa HIỂN THỊ cho user (chưa chắc được click) — lấp khoảng trống
+ * "gợi ý đưa ra mà bị bỏ qua" mà tracker trước đây không phân biệt được với "chưa từng đưa ra".
+ * Bắn 1 event/sản phẩm (fan-out), tái dùng `itemId` số ít sẵn có — không đổi shape event. Gọi
+ * trong `useEffect` sau khi 1 danh sách sản phẩm được render xong (trang chủ/tìm kiếm/danh mục). */
+export function trackImpressions(productIds: Array<number | string>, categoryId?: number | null): void {
+  try {
+    const capped = productIds.slice(0, MAX_IMPRESSIONS_PER_LIST);
+    for (const id of capped) {
+      const numericId = typeof id === "string" ? Number(id) : id;
+      if (!Number.isFinite(numericId)) continue;
+      trackBehavior("IMPRESSION", { itemId: numericId, categoryId: categoryId ?? null });
+    }
   } catch {
     /* nuốt im lặng */
   }
