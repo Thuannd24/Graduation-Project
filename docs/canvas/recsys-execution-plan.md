@@ -214,12 +214,51 @@ DỮ LIỆU CÔNG KHAI THẬT rằng thứ tự hành vi mang thông tin — kh�
 null thật vì chỉ 3 ký hiệu). Khác biệt duy nhất giữa hai bộ: **`remove_from_cart`** — bigram
 `cart→remove→cart` mã hoá "đổi ý", điều 3 ký hiệu không biểu diễn được.
 
-⚠️ **Giới hạn phải nói kèm:** (1) độ lớn tuyệt đối khiêm tốn — AUC tăng 0,0067, không phải bước
-nhảy; (2) mới đo trên 1 tháng, chưa mở rộng ra 5 tháng; (3) chưa so với rule (cây depth-1/2/3/6)
-để biết rule có hưởng lợi được từ thứ tự hay không — làm theo đúng nguyên tắc "rule phải được nhận
-cùng bộ feature" (mục 10.1 `feature-space-upgrade-plan.md`) là việc tiếp theo.
+### 5.4 ✅ XÁC NHẬN BỀN VỮNG — mở rộng ra cả 5 tháng (2026-09-18)
 
-### 5.3 Khoảng cách với production mà KHÔNG bộ công khai nào lấp được
+Nghi vấn "có thể chỉ là đặc thù tháng 12 (Black Friday/Giáng sinh)" đã được kiểm — **sai**. Gộp cả
+5 tháng (Oct 2019 – Feb 2020, xử lý TỪNG THÁNG rồi nối lại để an toàn bộ nhớ — xem ghi chú kỹ thuật
+trong `cosmetics_build_dataset.py`):
+
+| | Tháng 12 lẻ (926K mẫu) | **5 tháng gộp (5,76M mẫu, 397.575 user)** |
+|---|---|---|
+| AUC không thứ tự | 0,6376 | 0,6584 |
+| AUC có thứ tự | 0,6443 | **0,6659** |
+| Δ ghép cặp | +0,00666 ± 0,00203 | **+0,00749 ± 0,00113** |
+| Fold dương | 25/25 | 5/5 |
+| \|Δ\|/std | 3,3× | **6,6×** |
+| Đối chứng âm | −0,00009 ± 0,00052 | **−0,00001 ± 0,00005** (sạch hơn) |
+
+Tỉ lệ bỏ giỏ ổn định 75,9%–80,9% qua cả 5 tháng, không tháng nào lệch bất thường. **Hiệu ứng "đổi ý"
+(`cart → remove_from_cart`) là thật và bền vững**, không phải nhiễu một tháng.
+
+⚠️ **Đánh đổi kỹ thuật cần nói rõ:** vì lý do an toàn bộ nhớ (máy chỉ 16GB RAM, ứng dụng khác đã
+chiếm phần lớn), mỗi tháng được xử lý **độc lập** — `cum_*` (số đếm luỹ tiến) là "trong tháng đang
+xét", không phải "từ đầu lịch sử toàn bộ 5 tháng". Session vốn đã luôn ngắn hơn 1 tháng nên không
+ảnh hưởng gì; đây thực chất là phép đo **sạch hơn** cho câu hỏi hiện tại (5 tháng = 5 lượt lặp lại
+độc lập để kiểm tính bền vững, thay vì 1 mẫu dồn chung có thể lẫn hiệu ứng chuyển tiếp giữa các tháng).
+
+#### Permutation importance — xác nhận lại trên 5 tháng, cùng kết luận
+
+| | Tháng 12 (926K mẫu) | **5 tháng (5,76M mẫu)** |
+|---|---|---|
+| Feature mạnh nhất | `sess_cum_bg_2_3` (cart→remove) | **`sess_cum_bg_2_3`** — cùng feature |
+| Giá trị | 0,01711 | 0,01358 |
+| Gấp feature thứ 2 | 5× | 2,3× (thứ 2: `2_2`, tự lặp cart, 0,00581) |
+| Số cụm tương quan (từ 23 feature) | 21 | 20 — vẫn gần độc lập |
+| Feature liên quan `purchase` | ~0 | ~0, vài số âm nhỏ |
+
+Bigram `cart → remove_from_cart` **vẫn là tín hiệu mạnh nhất** ở quy mô gấp 6,2× — không phải nhiễu
+ngẫu nhiên trúng một tháng. Permutation theo cụm khớp gần như tuyệt đối với permutation theo cột
+(chênh lệch lớn nhất < 0,0004) — cấu trúc liên kết y hệt tháng 12: một trục trung tâm
+(`cart↔remove_from_cart`), phần còn lại là biến thể yếu hơn cùng cơ chế "đổi ý".
+
+⚠️ **Giới hạn còn lại:** (1) độ lớn tuyệt đối vẫn khiêm tốn — AUC tăng 0,0075–0,0067, không phải
+bước nhảy; (2) chưa so với rule (cây depth-1/2/3/6) để biết rule có hưởng lợi được từ thứ tự hay
+không — theo yêu cầu, KHÔNG làm phép so này (mục tiêu hiện tại là "feature có giá trị và liên kết
+với nhau", không phải "AI hơn rule").
+
+### 5.5 Khoảng cách với production mà KHÔNG bộ công khai nào lấp được
 
 Phải nêu thẳng ở mục giới hạn của báo cáo:
 
@@ -233,7 +272,7 @@ Phải nêu thẳng ở mục giới hạn của báo cáo:
 Đây là giới hạn **của cả ngành** — mọi công trình được trích (TIGER, HSTU, eSASRec) đều đo trên
 đúng những bộ này.
 
-### 5.4 Thứ dự án này có mà không bộ công khai nào có
+### 5.6 Thứ dự án này có mà không bộ công khai nào có
 
 | | Số loại hành vi |
 |---|---|
@@ -248,6 +287,36 @@ RetailRocket (3 loại, không loại nào mang ý nghĩa ma sát).
 được hiển thị"*. Thêm vào rẻ (một action type mới + danh sách item id), và nó lấp đúng khoảng cách
 số 1 ở mục 5.3. Sau bước đó, dữ liệu của dự án **về chất** gần production hơn mọi bộ công khai trừ
 TAOBAO-MM — dù về lượng thì nhỏ hơn nhiều. Đây là điểm đáng nêu khi bảo vệ.
+
+### 5.7 ⚠️ KẾT QUẢ ÂM — SASRec platform_v1 thua cả recency baseline tầm thường (2026-09-21)
+
+Đã train thử SASRec (`training/experiments/recsys_platform_sasrec.py`) trên dữ liệu **THẬT** của
+platform (`ecommerce_order_db.user_events`: 501 user, 64.571 sự kiện view/cart, 20.139 item) —
+không phải REES46 Cosmetics — để nối vào `recs-service` (item index thật, `item_id_map` khớp
+`Product.id`, xem thảo luận kiến trúc trong `AI/recs-service/app/services/sasrec.py`).
+
+| Chiến lược | recall@10 | recall@20 |
+|---|---|---|
+| Popularity (toàn cục) | 0,0020 | 0,0020 |
+| **SASRec (platform_v1)** | 0,1976 | 0,2255 |
+| **Recency — "gợi ý lại item vừa xem", không cần model** | **0,2754** | **0,3034** |
+
+SASRec thắng Popularity ~100 lần trông ấn tượng, nhưng **thua một quy tắc không học gì cả**
+("recommend lại item vừa xem, khử trùng lặp"). Popularity toàn cục là baseline yếu cho đúng kiểu
+dữ liệu này (bỏ qua lịch sử cá nhân), nên thắng nó không chứng minh SASRec học được gì.
+
+**Chẩn đoán**: seeder khiến user quay lại đúng vài sản phẩm cũ rất thường xuyên — 20,6% target
+trùng 1-trong-3 item xem gần nhất, 23,75% trùng 1-trong-5 (đo trực tiếp trên dữ liệu). Tín hiệu
+"vừa xem gần đây" áp đảo bất kỳ pattern chuỗi nào ở quy mô 501 user — cùng bài học đã đo trên
+RetailRocket (dữ liệu quá nghèo/ít khiến chuỗi không có thông tin hơn heuristic đơn giản), lần này
+lặp lại trên chính dữ liệu tổng hợp của đồ án.
+
+**Quyết định**: KHÔNG deploy checkpoint SASRec platform_v1 này vào `recs-service` (`is_ready()` sẽ
+từ chối nạp cho tới khi có checkpoint thật sự vượt qua baseline recency). Dùng **recency**
+(`app/services/recency.py`) làm tầng cá nhân hoá mặc định — miễn phí, đo được tốt hơn, không cần
+GPU/model gì. Đây là kết quả âm có giá trị cho báo cáo: xác nhận lần thứ 2 (RetailRocket, rồi
+platform seed) rằng quy mô/chất lượng dữ liệu — không phải kiến trúc model — là yếu tố quyết định
+chuỗi hành vi có thông tin hơn heuristic tầm thường hay không.
 
 ---
 
