@@ -88,6 +88,23 @@ class FaissStore:
         if mtime > self._loaded_mtime:
             self.load()
 
+    def vectors_by_product(self) -> dict:
+        """{productId: vector trung bình đã normalize} đọc lại từ index (dùng lại khi build similar)."""
+        if not self.is_ready:
+            return {}
+        with self._lock:
+            index, ids = self._index, list(self._ids)
+        all_vecs = index.reconstruct_n(0, index.ntotal)
+        grouped: dict = {}
+        for pid, vec in zip(ids, all_vecs):
+            grouped.setdefault(pid, []).append(vec)
+        out = {}
+        for pid, vs in grouped.items():
+            v = np.mean(vs, axis=0)
+            n = np.linalg.norm(v)
+            out[pid] = (v / n if n > 0 else v).astype("float32")
+        return out
+
     def build(self, vectors: np.ndarray, product_ids: Sequence[int]) -> None:
         """Dựng index mới trong RAM từ ma trận (n, dim) đã normalize."""
         import faiss

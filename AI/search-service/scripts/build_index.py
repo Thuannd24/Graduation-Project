@@ -14,6 +14,7 @@ Chạy local (từ AI/search-service, đã cài requirements):
     python scripts/build_index.py --skip-text         # chỉ build ảnh (bỏ qua e5-large ~2GB)
 """
 import argparse
+import gc
 import html
 import os
 import re
@@ -35,6 +36,9 @@ from app.services.visual_search import visual_search_service  # noqa: E402
 from shared_common.logger import get_logger  # noqa: E402
 
 logger = get_logger("build_index")
+
+IMAGE_CHUNK = 128
+IMAGE_MAX_SIDE = 448
 
 _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
@@ -89,22 +93,34 @@ def build_image_index(
     jobs: List[Tuple[int, str]] = [
         (p["id"], url) for p in products for url in p["images"][:max_images]
     ]
-    logger.info(f"[image] Tải {len(jobs)} ảnh ({workers} luồng, cache: {search_settings.img_cache_dir})...")
-
-    t0 = time.time()
-    with ThreadPoolExecutor(max_workers=workers) as pool:
-        images = list(pool.map(lambda job: load_image_from_url(job[1]), jobs))
-    ok = [(pid, img) for (pid, _), img in zip(jobs, images) if img is not None]
-    logger.info(f"[image] Tải xong {len(ok)}/{len(jobs)} ảnh trong {time.time() - t0:.0f}s.")
-    if not ok:
-        raise RuntimeError("Không tải được ảnh nào — kiểm tra kết nối mạng / URL ảnh trong DB.")
-
-    logger.info(f"[image] Encode bằng {search_settings.VISION_MODEL_NAME}...")
+    logger.info(
+        f"[image] {len(jobs)} ảnh, xử lý theo lô {IMAGE_CHUNK} ({workers} luồng tải, "
+        f"cache: {search_settings.img_cache_dir}), encode bằng {search_settings.VISION_MODEL_NAME}..."
+    )
     model = visual_search_service._get_model()
-    vectors = model.encode(
-        [img for _, img in ok], batch_size=batch_size, normalize_embeddings=True, show_progress_bar=True
-    ).astype("float32")
-    ids = [pid for pid, _ in ok]
+
+    # Tải + encode từng lô rồi bỏ ảnh đi — chỉ giữ vector 512-dim. Giữ nguyên cả catalog ảnh
+    # đã giải mã (~2MB/ảnh) trong RAM sẽ bị OOM kill giữa chừng.
+    t0 = time.time()
+    ids: List[int] = []
+    chunks: List[np.ndarray] = []
+    failed = 0
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for start in range(0, len(jobs), IMAGE_CHUNK):
+            batch = jobs[start: start + IMAGE_CHUNK]
+            images = list(pool.map(lambda job: load_image_from_url(job[1], max_side=IMAGE_MAX_SIDE), batch))
+            ok = [(pid, img) for (pid, _), img in zip(batch, images) if img is not None]
+            failed += len(batch) - len(ok)
+            if ok:
+                vecs = model.encode([img for _, img in ok], batch_size=batch_size, normalize_embeddings=True)
+                chunks.append(np.asarray(vecs, dtype="float32"))
+                ids.extend(pid for pid, _ in ok)
+            done = min(start + IMAGE_CHUNK, len(jobs))
+            logger.info(f"[image] {done}/{len(jobs)} ảnh ({failed} lỗi) — {time.time() - t0:.0f}s")
+
+    if not ids:
+        raise RuntimeError("Không tải được ảnh nào — kiểm tra kết nối mạng / URL ảnh trong DB.")
+    vectors = np.vstack(chunks)
 
     visual_search_service.store.build(vectors, ids)
     visual_search_service.store.save()
@@ -187,6 +203,12 @@ def main() -> int:
     image_vecs: Dict[int, np.ndarray] = {}
     if not args.skip_text:
         text_vecs = build_text_index(products, args.batch_size)
+        # Giải phóng e5 (~2GB RAM) trước khi nạp CLIP + ảnh
+        text_search_service.model = None
+        gc.collect()
+    elif not args.skip_similar and text_search_service.store.load():
+        text_vecs = text_search_service.store.vectors_by_product()
+        logger.info(f"[text] Bỏ qua encode, dùng lại {len(text_vecs)} vector từ text index đã build.")
     if not args.skip_image:
         image_vecs = build_image_index(products, args.max_images, args.workers, args.batch_size)
     if not args.skip_similar and (text_vecs or image_vecs):
