@@ -4,6 +4,37 @@ import { motion } from "framer-motion";
 import Icon from "../../../components/common/Icon.jsx";
 import { aiApi } from "../../../services/aiApi.ts";
 
+const FULL_IMAGE = { x: 0, y: 0, width: 100, height: 100 };
+const CENTER_AREA = { x: 20, y: 20, width: 60, height: 60 };
+
+const isFullImage = (box) => box.x <= 0 && box.y <= 0 && box.width >= 100 && box.height >= 100;
+
+// Cắt ảnh theo vùng người dùng chọn (% của ảnh) ngay trên trình duyệt trước khi upload,
+// để server chỉ encode phần chứa sản phẩm.
+async function cropImageFile(file, box) {
+  const bitmap = await createImageBitmap(file);
+  const sx = Math.round((box.x / 100) * bitmap.width);
+  const sy = Math.round((box.y / 100) * bitmap.height);
+  const sw = Math.max(1, Math.round((box.width / 100) * bitmap.width));
+  const sh = Math.max(1, Math.round((box.height / 100) * bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = sw;
+  canvas.height = sh;
+  canvas.getContext("2d").drawImage(bitmap, sx, sy, sw, sh, 0, 0, sw, sh);
+  bitmap.close?.();
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
+  if (!blob) return file;
+  return new File([blob], file.name.replace(/\.[^.]+$/, "") + "-crop.jpg", { type: "image/jpeg" });
+}
+
+// cropBox YOLO trả về theo % của ảnh ĐÃ cắt → quy đổi về % của ảnh gốc để vẽ overlay.
+const composeBox = (outer, inner) => ({
+  x: outer.x + (inner.x * outer.width) / 100,
+  y: outer.y + (inner.y * outer.height) / 100,
+  width: (inner.width * outer.width) / 100,
+  height: (inner.height * outer.height) / 100
+});
+
 export default function VisualSearchModal({ isOpen, onClose }) {
   const navigate = useNavigate();
   const [imageSrc, setImageSrc] = useState(null);
@@ -11,7 +42,7 @@ export default function VisualSearchModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState("");
   const [error, setError] = useState("");
-  const [cropBox, setCropBox] = useState({ x: 10, y: 10, width: 80, height: 80 }); // Percentage-based crop box
+  const [cropBox, setCropBox] = useState(FULL_IMAGE); // Vùng tìm kiếm, % theo ảnh gốc
   const dragRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -38,6 +69,7 @@ export default function VisualSearchModal({ isOpen, onClose }) {
 
   const loadImage = (file) => {
     setError("");
+    setCropBox(FULL_IMAGE);
     setImageFile(file);
     const reader = new FileReader();
     reader.onload = () => {
@@ -52,23 +84,21 @@ export default function VisualSearchModal({ isOpen, onClose }) {
     setError("");
     setLoading(true);
     try {
-      // Step 1: Detect
-      setCurrentStep("YOLO v8 đang phát hiện vật thể và tối ưu hóa vùng biên...");
-      await new Promise((r) => setTimeout(r, 800));
+      const useCrop = !isFullImage(cropBox);
+      if (useCrop) {
+        setCurrentStep("Đang cắt vùng ảnh đã chọn...");
+      }
+      const uploadFile = useCrop ? await cropImageFile(imageFile, cropBox) : imageFile;
 
-      // Step 2: Crop & Embed
-      setCurrentStep("Trích xuất đặc trưng vector bằng mô hình CLIP (ViT-B/32)...");
-      await new Promise((r) => setTimeout(r, 850));
+      setCurrentStep("Đang trích xuất đặc trưng ảnh và tìm sản phẩm tương tự...");
+      const results = await aiApi.searchByImage(uploadFile);
 
-      // Step 3: FAISS Search
-      setCurrentStep("Đang khớp vector trên FAISS Index (ANN Search)...");
-      const results = await aiApi.searchByImage(imageFile);
-
-      // Save to sessionStorage for SearchPage to retrieve.
-      // Ưu tiên cropBox từ backend (YOLO); nếu YOLO tắt (null) thì dùng khung người dùng chọn.
+      // Lưu cho SearchPage. cropBox từ server (YOLO) tính trên ảnh đã upload → đổi về ảnh gốc;
+      // YOLO tắt (null) thì hiển thị vùng người dùng chọn (nếu có).
+      const displayBox = results.cropBox ? composeBox(cropBox, results.cropBox) : useCrop ? cropBox : null;
       sessionStorage.setItem("visual_search_results", JSON.stringify(results.items));
       sessionStorage.setItem("visual_search_image", imageSrc || "");
-      sessionStorage.setItem("visual_search_crop", JSON.stringify(results.cropBox ?? cropBox));
+      sessionStorage.setItem("visual_search_crop", JSON.stringify(displayBox));
 
       onClose();
       navigate("/search?imageSearch=true");
@@ -148,37 +178,41 @@ export default function VisualSearchModal({ isOpen, onClose }) {
                 Kéo thả hình ảnh vào đây hoặc bấm để chọn tệp
               </h4>
               <p className="text-[10px] text-slate-400 max-w-xs">
-                Hỗ trợ định dạng JPG, PNG. Aura AI sẽ tự động khoanh vùng vật thể sản phẩm bằng mô hình YOLOv8.
+                Hỗ trợ định dạng JPG, PNG. Aura AI dùng mô hình CLIP để tìm sản phẩm có hình ảnh tương tự.
               </p>
             </div>
           ) : (
             /* Crop & Confirm State */
             <div className="space-y-4">
-              <div className="relative max-h-[350px] overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-950 flex items-center justify-center border border-slate-200 dark:border-slate-800">
-                <img
-                  src={imageSrc}
-                  alt="Search query"
-                  className="max-h-[350px] object-contain select-none"
-                />
+              <div className="max-h-[350px] overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-950 flex items-center justify-center border border-slate-200 dark:border-slate-800">
+                {/* Bọc ảnh trong khung inline để % của overlay khớp đúng kích thước ảnh */}
+                <div className="relative inline-block">
+                  <img
+                    src={imageSrc}
+                    alt="Search query"
+                    className="block max-h-[350px] object-contain select-none"
+                  />
 
-                {/* Simulated Crop Area Overlay (Resized relative cropbox overlay) */}
-                <div
-                  style={{
-                    position: "absolute",
-                    left: `${cropBox.x}%`,
-                    top: `${cropBox.y}%`,
-                    width: `${cropBox.width}%`,
-                    height: `${cropBox.height}%`,
-                    border: "2px solid #ef4444",
-                    boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.4)",
-                    pointerEvents: "none"
-                  }}
-                  className="rounded-sm"
-                >
-                  <span className="absolute -top-6 left-0 bg-rose-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow flex items-center gap-1">
-                    <Icon name="center_focus_strong" className="text-[10px]" />
-                    YOLO v8: Product detected
-                  </span>
+                  {!isFullImage(cropBox) && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: `${cropBox.x}%`,
+                        top: `${cropBox.y}%`,
+                        width: `${cropBox.width}%`,
+                        height: `${cropBox.height}%`,
+                        border: "2px solid #ef4444",
+                        boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.4)",
+                        pointerEvents: "none"
+                      }}
+                      className="rounded-sm"
+                    >
+                      <span className="absolute -top-6 left-0 bg-rose-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow flex items-center gap-1">
+                        <Icon name="center_focus_strong" className="text-[10px]" />
+                        Vùng tìm kiếm
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -186,20 +220,20 @@ export default function VisualSearchModal({ isOpen, onClose }) {
               <div className="flex items-center justify-between text-[11px] text-slate-500 bg-slate-50 dark:bg-slate-950/40 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
                 <span className="flex items-center gap-1">
                   <Icon name="info" className="text-rose-600 text-xs" />
-                  Bạn có thể kéo điều chỉnh vùng ảnh để tăng độ chính xác tìm kiếm sản phẩm.
+                  Nếu ảnh có nhiều vật thể, chọn "Vùng giữa" để chỉ tìm theo sản phẩm ở giữa ảnh.
                 </span>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setCropBox({ x: 20, y: 20, width: 60, height: 60 })}
+                    onClick={() => setCropBox(CENTER_AREA)}
                     className="px-2 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded font-bold hover:bg-slate-50 cursor-pointer"
                   >
-                    Thu nhỏ
+                    Vùng giữa
                   </button>
                   <button
-                    onClick={() => setCropBox({ x: 5, y: 5, width: 90, height: 90 })}
+                    onClick={() => setCropBox(FULL_IMAGE)}
                     className="px-2 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded font-bold hover:bg-slate-50 cursor-pointer"
                   >
-                    Khôi phục
+                    Toàn ảnh
                   </button>
                 </div>
               </div>

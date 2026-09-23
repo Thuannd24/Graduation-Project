@@ -24,6 +24,8 @@ services:
     volumes:
       # Giữ FAISS index + cache ảnh sau khi build (không mất khi restart container)
       - search-index-data:/data
+      # Cache model HuggingFace (CLIP ~600MB, e5-large ~2GB): chỉ tải 1 lần, không mất khi rebuild
+      - search-model-cache:/root/.cache
     networks:
       - ecommerce-network
 
@@ -94,3 +96,4 @@ networks:
 
 volumes:
   search-index-data:
+  search-model-cache:

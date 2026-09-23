@@ -55,6 +55,10 @@ class TextSearchService:
         return [{"id": pid, "score": score} for pid, score in hits]
 
     def search(self, query: str, top_k: int = 10) -> List[Dict[str, Any]]:
+        self.store.reload_if_changed()
+        if not self.store.is_ready:
+            # Chưa build text index ⇒ đừng nạp e5-large (~2GB) vô ích; hybrid dùng BM25
+            return []
         vec = self.encode_query(query)
         return self.search_semantic(vec, top_k=top_k)
 

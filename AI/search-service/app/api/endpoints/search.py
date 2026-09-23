@@ -10,6 +10,7 @@ from app.models.search import (
 from app.services.hybrid_search import hybrid_search_service
 from app.services.visual_search import visual_search_service
 from app.services import catalog
+from app.services.image_loader import InvalidImageError
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
@@ -53,6 +54,14 @@ def get_autocomplete_suggestions(q: str = Query(..., description="Autocomplete p
 
 # ── VISUAL SEARCH ─────────────────────────────────────────────────────────────
 
+def _require_image_index() -> None:
+    store = visual_search_service.store
+    store.reload_if_changed()
+    if not store.is_ready:
+        # Không nạp CLIP vô ích khi chưa có index — báo rõ để admin chạy build_index.py
+        raise HTTPException(status_code=503, detail="Chỉ mục ảnh sản phẩm chưa được xây dựng. Vui lòng thử lại sau.")
+
+
 def _visual_response(items, crop_box) -> ApiResponse:
     return success(VisualSearchResponse(
         total=len(items),
@@ -72,10 +81,13 @@ async def find_similar_by_image(
     upload = image or file  # FE gửi field 'image'; giữ tương thích 'file'
     if upload is None:
         raise HTTPException(status_code=422, detail="Thiếu file ảnh (field 'image' hoặc 'file').")
+    _require_image_index()
     try:
         vector, crop_box = visual_search_service.process_upload(upload.file)
         items = visual_search_service.search_similar_images(vector, top_k=top_k)
         return _visual_response(items, crop_box)
+    except InvalidImageError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error executing visual search: {e}")
         raise HTTPException(status_code=500, detail="Visual search failed")
@@ -92,10 +104,13 @@ async def multimodal_search(
     upload = image or file
     if upload is None:
         raise HTTPException(status_code=422, detail="Thiếu file ảnh.")
+    _require_image_index()
     try:
         vector, crop_box = visual_search_service.process_upload(upload.file)
         items = visual_search_service.search_multimodal(vector, q, top_k=top_k)
         return _visual_response(items, crop_box)
+    except InvalidImageError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error executing multimodal search: {e}")
         raise HTTPException(status_code=500, detail="Multimodal search failed")

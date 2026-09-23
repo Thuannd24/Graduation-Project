@@ -48,6 +48,7 @@ function stringifyErrorValue(value: unknown): string[] {
     if (typeof record.defaultMessage === "string") return [record.defaultMessage];
     if (typeof record.reason === "string") return [record.reason];
     if (typeof record.error === "string") return [record.error];
+    if (typeof record.msg === "string") return [record.msg]; // FastAPI validation item
 
     return Object.entries(record).flatMap(([key, item]) => {
       const messages = stringifyErrorValue(item);
@@ -69,7 +70,8 @@ function getApiErrorMessage(payload: unknown, status: number): string {
     ...(hasGenericValidationMessage ? [] : stringifyErrorValue(record?.message)),
     ...stringifyErrorValue(record?.data),
     ...stringifyErrorValue(record?.errors),
-    ...stringifyErrorValue(record?.error)
+    ...stringifyErrorValue(record?.error),
+    ...stringifyErrorValue(record?.detail) // FastAPI (AI services) trả lỗi ở "detail"
   ].filter(Boolean);
 
   const uniqueMessages = Array.from(new Set(messages));
