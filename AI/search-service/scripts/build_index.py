@@ -38,6 +38,7 @@ from shared_common.logger import get_logger  # noqa: E402
 logger = get_logger("build_index")
 
 IMAGE_CHUNK = 128
+HOLDOUT_MIN_IMAGES = 4  # khớp scripts/evaluate.py --holdout last
 IMAGE_MAX_SIDE = 448
 
 _TAG_RE = re.compile(r"<[^>]+>")
@@ -87,11 +88,18 @@ def build_text_index(products: List[Dict], batch_size: int) -> Dict[int, np.ndar
 
 # ── 2. Image ─────────────────────────────────────────────────────────────────
 
+def image_urls_for_index(p: Dict, max_images: int, holdout_last: bool) -> List[str]:
+    urls = list(p["images"])
+    if holdout_last and len(urls) >= HOLDOUT_MIN_IMAGES:
+        urls = urls[:-1]  # ảnh cuối để dành làm ảnh test "chưa từng thấy" (scripts/evaluate.py)
+    return urls[:max_images] if max_images > 0 else urls
+
+
 def build_image_index(
-    products: List[Dict], max_images: int, workers: int, batch_size: int
+    products: List[Dict], max_images: int, workers: int, batch_size: int, holdout_last: bool = False
 ) -> Dict[int, np.ndarray]:
     jobs: List[Tuple[int, str]] = [
-        (p["id"], url) for p in products for url in p["images"][:max_images]
+        (p["id"], url) for p in products for url in image_urls_for_index(p, max_images, holdout_last)
     ]
     logger.info(
         f"[image] {len(jobs)} ảnh, xử lý theo lô {IMAGE_CHUNK} ({workers} luồng tải, "
@@ -183,7 +191,10 @@ def main() -> int:
     ap.add_argument("--skip-image", action="store_true", help="Không build image index (CLIP)")
     ap.add_argument("--skip-similar", action="store_true", help="Không ghi product_similarities")
     ap.add_argument("--limit", type=int, default=0, help="Chỉ lấy N sản phẩm đầu (thử nhanh)")
-    ap.add_argument("--max-images", type=int, default=3, help="Số ảnh tối đa / sản phẩm")
+    ap.add_argument("--max-images", type=int, default=0,
+                    help="Số ảnh tối đa / sản phẩm (0 = tất cả — index nhiều góc chụp cho kết quả tốt hơn)")
+    ap.add_argument("--holdout-last", action="store_true",
+                    help="CHỈ ĐỂ ĐÁNH GIÁ: bỏ ảnh cuối của sản phẩm có >=4 ảnh khỏi index")
     ap.add_argument("--workers", type=int, default=8, help="Số luồng tải ảnh")
     ap.add_argument("--batch-size", type=int, default=32)
     ap.add_argument("--similar-top-k", type=int, default=20)
@@ -210,7 +221,9 @@ def main() -> int:
         text_vecs = text_search_service.store.vectors_by_product()
         logger.info(f"[text] Bỏ qua encode, dùng lại {len(text_vecs)} vector từ text index đã build.")
     if not args.skip_image:
-        image_vecs = build_image_index(products, args.max_images, args.workers, args.batch_size)
+        image_vecs = build_image_index(
+            products, args.max_images, args.workers, args.batch_size, holdout_last=args.holdout_last
+        )
     if not args.skip_similar and (text_vecs or image_vecs):
         build_similarities(image_vecs, text_vecs, args.similar_top_k, args.image_weight)
 

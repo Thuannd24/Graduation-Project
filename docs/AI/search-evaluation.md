@@ -10,7 +10,7 @@
 | Catalog | 1.123 sản phẩm active (MariaDB `ecommerce_product_db`), 19 danh mục |
 | Ảnh | ảnh chính + `product_images` (trung bình ~9 ảnh/sản phẩm) — CDN R2 |
 | Text index | `intfloat/multilingual-e5-large` (1024-d), 1.123 vector — passage = tên + thương hiệu + danh mục + mô tả |
-| Image index | `clip-ViT-B-32` (512-d), 3 ảnh đầu/sản phẩm = 3.110 vector, 0 ảnh lỗi |
+| Image index | `clip-ViT-B-32` (512-d). Mục 3: 3 ảnh đầu/sản phẩm = 3.110 vector. **Hiện tại (mục 5): tất cả ảnh = 10.287 vector**, 0 ảnh lỗi |
 | Keyword | Elasticsearch 8.10 index `products` (product-service đồng bộ), BM25 `name^3, brand^2, categoryName^2, description` |
 | Similar items | trộn cosine ảnh 60% + text 40%, top-20/sản phẩm → MongoDB `product_similarities` (1.123 document) |
 | Thời gian build | text ≈ 25 phút (e5-large trên CPU) · ảnh ≈ 7–8 phút (có cache) |
@@ -98,11 +98,49 @@ e5-large trên CPU: ~350 ms/truy vấn và 25 phút để build 1.123 sản ph�
 | Lỗi DNS tạm thời khi tải ảnh CDN | 8 ảnh lỗi | Retry 3 lần có backoff → 0 lỗi |
 | PNG nền trong suốt bị đổi thành nền đen | 73 ảnh chính (6.5%) | Ghép nền trắng — đo lại: **không khác biệt có ý nghĩa** (Tie@1 held-out 48.5% → 46.5%, trong biên nhiễu n=200) |
 
-## 5. Tái lập
+## 5. Cải thiện ảnh chưa từng thấy (thí nghiệm `scripts/experiment_visual.py`)
+
+### 5.1. Giao thức
+Giao thức ở mục 3 (index 3 ảnh đầu, test bằng ảnh #4) không so được khi index nhiều ảnh hơn, nên đổi sang:
+
+- Ảnh test = **ảnh cuối** của mỗi sản phẩm có ≥4 ảnh; ảnh này **không bao giờ nằm trong index**.
+- Loại 31 sản phẩm có ảnh cuối trùng byte với ảnh khác của chính nó (nếu giữ lại, index sẽ "khớp hộ").
+- 862 sản phẩm truy vấn, chia ngẫu nhiên **TUNE 431** (chỉ để chọn cấu hình) và **TEST 431** (chỉ để báo cáo).
+- *TEST-PHOTO*: tập con TEST mà ảnh cuối là **ảnh chụp sản phẩm** (lọc zero-shot bằng CLIP, 381/431). Kiểm tra bằng mắt: phần bị loại chủ yếu là ảnh cạnh máy, banner quảng cáo, thẻ AppleCare+. Bộ lọc không hoàn hảo: một số ảnh "Trong hộp có gì" vẫn lọt vào.
+
+Ảnh cuối của sản phẩm thường khó hơn ảnh #4 (ảnh cạnh, ảnh chi tiết, banner), nên các số ở đây **thấp hơn mục 3 và không so trực tiếp được** với mục 3.
+
+### 5.2. Kết quả (TEST, không dùng để chọn cấu hình)
+
+| Cấu hình | TEST Tie@1 | Tie@5 | CatP@5 | TEST-PHOTO Tie@1 | Tie@5 | CatP@5 |
+|---|---|---|---|---|---|---|
+| 3 ảnh/SP (cũ) | 14.8% | 26.9% | 49.2% | 16.8% | 30.2% | 53.2% |
+| **Tất cả ảnh/SP** | **37.8%** | **52.7%** | **69.5%** | **41.2%** | **57.0%** | **71.7%** |
+| Tất cả ảnh + gộp `lse(0.02)` (tốt nhất trên TUNE) | 36.4% | 51.5% | 68.2% | 39.6% | 55.9% | 70.7% |
+
+Ảnh người dùng tự chụp (augment), TEST Tie@1: 8.4% → **15.8%** khi index tất cả ảnh.
+
+Kiểm tra lại qua **HTTP endpoint thật** (`evaluate.py --holdout last`, 300 mẫu, index build bằng `--holdout-last`): Tie@1 = **36.7%**, Tie@5 = 52.7%, CatP@5 = 69.7%, p50 = 111 ms. Kết quả khớp thí nghiệm offline (37.8%). Index 10.287 vector (gấp ~3.3 lần) không làm chậm truy vấn.
+
+### 5.3. Kết luận
+- **Index tất cả ảnh của sản phẩm: tăng ~2.5 lần** (Tie@1 14.8% → 37.8%). Nguyên nhân chính của lỗi cũ là thiếu góc chụp: người dùng gửi ảnh mặt sau/cạnh trong khi index chỉ có ảnh mặt trước. **Đã áp dụng** (`build_index.py --max-images` mặc định 0 = tất cả).
+- **Gộp điểm nhiều ảnh (top2, lse) và TTA (lật ảnh, crop giữa): không cải thiện.** Cấu hình tốt nhất trên TUNE lại kém `max` trên TEST (36.4% so với 37.8%), tức chỉ là nhiễu ⇒ **không áp dụng**, giữ code đơn giản.
+- Lỗi còn lại chủ yếu là nhầm giữa các đời máy gần như y hệt nhau (iPhone 13 Pro ↔ 13 Pro Max, S25 Ultra ↔ S24). Đây là giới hạn của CLIP zero-shot. Hướng tiếp theo: huấn luyện adapter/metric learning trên các ảnh của cùng sản phẩm, hoặc thử DINOv2.
+- Sửa kèm: FAISS chỉ lấy `top_k×4` vector nên với ~9 ảnh/sản phẩm có thể trả < top_k sản phẩm ⇒ tăng độ sâu lên `max(top_k×20, 200)`.
+
+## 6. Tái lập
 
 ```bash
-docker exec -it ai-search-service python scripts/build_index.py              # build đầy đủ
-docker exec -it ai-search-service python scripts/evaluate.py --samples 200 --out /data/eval.json
+# Production: index tất cả ảnh
+docker exec -it ai-search-service python scripts/build_index.py
+
+# Thí nghiệm offline (cache embedding ở /data/exp, lần đầu ~17 phút, các lần sau vài phút)
+docker exec -it ai-search-service python scripts/experiment_visual.py --sheet /data/photo_sheet.jpg
+
+# Kiểm tra qua HTTP: build index bỏ ảnh cuối → evaluate → NHỚ build lại production
+docker exec -it ai-search-service python scripts/build_index.py --skip-text --holdout-last
+docker exec -it ai-search-service python scripts/evaluate.py --samples 300 --skip-text --holdout last
+docker exec -it ai-search-service python scripts/build_index.py --skip-text
 ```
 
-`--index-images` của `evaluate.py` phải bằng `--max-images` lúc build (mặc định 3), để ảnh held-out thật sự nằm ngoài index.
+Số liệu mục 3 dùng giao thức cũ: `build_index.py --max-images 3` + `evaluate.py --holdout index --index-images 3`.

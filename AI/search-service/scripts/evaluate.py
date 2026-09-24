@@ -196,11 +196,29 @@ def image_twins(products: Dict[int, Dict]) -> Dict[str, set]:
     return {url: by_hash[h] for url, h in url_hash.items()}
 
 
-def eval_visual(base_url: str, products: Dict[int, Dict], samples: int, index_images: int, rng: random.Random):
+def eval_visual(base_url: str, products: Dict[int, Dict], samples: int, index_images: int, rng: random.Random,
+                holdout: str = "index"):
     twins_of = image_twins(products)
-    candidates = [pid for pid, p in products.items() if len(p["images"]) > index_images]
+    if holdout == "last":
+        # Khớp build_index --holdout-last: ảnh cuối của sản phẩm có >= 4 ảnh nằm ngoài index.
+        # Bỏ sản phẩm có ảnh cuối trùng byte với ảnh khác của chính nó (index sẽ "khớp hộ").
+        def held_idx(p):
+            return len(p["images"]) - 1
+
+        candidates = [
+            pid for pid, p in products.items()
+            if len(p["images"]) >= 4 and p["images"][-1] in twins_of
+            and sum(twins_of.get(u) is twins_of[p["images"][-1]] for u in p["images"]) == 1
+        ]
+        label = "ảnh cuối"
+    else:
+        def held_idx(p):
+            return index_images
+
+        candidates = [pid for pid, p in products.items() if len(p["images"]) > index_images]
+        label = f"ảnh #{index_images + 1}"
     picked = rng.sample(candidates, min(samples, len(candidates)))
-    print(f"\n[VISUAL] {len(picked)} sản phẩm có ảnh held-out (ảnh #{index_images + 1}), top_k=10")
+    print(f"\n[VISUAL] {len(picked)} sản phẩm có ảnh held-out ({label}), top_k=10")
 
     # Làm nóng: lần gọi đầu nạp CLIP, không tính vào latency
     first = load_image_from_url(products[picked[0]]["images"][0])
@@ -211,11 +229,11 @@ def eval_visual(base_url: str, products: Dict[int, Dict], samples: int, index_im
     for i, pid in enumerate(picked, 1):
         p = products[pid]
         img_seen = load_image_from_url(p["images"][0])
-        img_held = load_image_from_url(p["images"][index_images])
+        img_held = load_image_from_url(p["images"][held_idx(p)])
         if img_seen is None or img_held is None:
             continue
         tw_seen = twins_of.get(p["images"][0], set()) - {pid}
-        tw_held = twins_of.get(p["images"][index_images], set()) - {pid}
+        tw_held = twins_of.get(p["images"][held_idx(p)], set()) - {pid}
         ids, ms = post_image(base_url, to_jpeg(img_seen), 10)
         seen.add(ids, pid, products, ms, tw_seen)
         ids, ms = post_image(base_url, to_jpeg(img_held), 10)
@@ -296,6 +314,8 @@ def main() -> int:
     ap.add_argument("--base-url", default="http://localhost:8001/api/v1/public")
     ap.add_argument("--samples", type=int, default=150)
     ap.add_argument("--index-images", type=int, default=3, help="= --max-images lúc build_index")
+    ap.add_argument("--holdout", choices=["index", "last"], default="last",
+                    help="last: ảnh cuối (index build bằng --holdout-last); index: ảnh #index-images+1")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--skip-visual", action="store_true")
     ap.add_argument("--skip-text", action="store_true")
@@ -308,7 +328,7 @@ def main() -> int:
 
     report: Dict[str, object] = {"samples": args.samples, "seed": args.seed}
     if not args.skip_visual:
-        report["visual"] = eval_visual(args.base_url, products, args.samples, args.index_images, rng)
+        report["visual"] = eval_visual(args.base_url, products, args.samples, args.index_images, rng, args.holdout)
     if not args.skip_text:
         report["text"], report["intent"] = eval_text(products, args.samples, rng)
 
