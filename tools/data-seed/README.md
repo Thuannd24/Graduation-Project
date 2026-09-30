@@ -81,6 +81,32 @@ Sinh **theo lô user** (`--chunk`, mặc định 250): bộ nhớ tỉ lệ theo
 tổng số user (bản cũ dồn toàn bộ sự kiện vào 1 mảng — 5.000 user × 19 hành vi ≈ 6,6 triệu object,
 tiến trình node >2GB). Mỗi user ~1.500 sự kiện/12 tháng (IMPRESSION chiếm phần lớn).
 
+## DB cho app, FILE cho train (từ 2026-09-30)
+
+MariaDB dev (Docker, buffer pool mặc định 128MB, đĩa ảo chậm) ghi được chỉ ~7–8 nghìn dòng/phút
+khi bảng đã lớn: 5.000 user (7,4 triệu sự kiện) mất hàng giờ, xoá 3,1 triệu dòng trong 1 câu DELETE
+mất >1h rồi InnoDB còn purge nền thêm hàng giờ. Vì vậy tách vai trò:
+
+| Mục đích | Lệnh | Quy mô |
+|---|---|---|
+| Demo app + churn (đọc từ DB) | `node seed.mjs --force --users 1000` | ~1.000 user, ~1,5 triệu sự kiện |
+| Train recsys trên GPU thuê | `node seed.mjs --out ../../data/training-sets/v1_20000u --users 20000 --now 2026-09-30T00:00:00Z` | 20.000 user, 30,3 triệu sự kiện, 2,4GB CSV, ~4 phút |
+
+`--out` KHÔNG ghi DB (chỉ đọc catalog), xuất `user_events.csv`, `orders.csv`, `order_items.csv`,
+`reviews.csv`, `user_profiles_ground_truth.csv` (**nhãn sinh** — chỉ để đánh giá churn, không dùng làm
+feature) + `manifest.json` (tham số, commit git, kết quả fidelity, snapshot `behaviorTargets`).
+user_id tất định `seedu-000001…`; kèm `--now` cố định thì chạy lại ra **đúng từng byte** (đã kiểm md5).
+Từ chối ghi vào thư mục đã có tập dữ liệu. Voucher không xuất (tham chiếu id nội bộ bảng `users`).
+
+Kiểm tra toàn vẹn trước khi train (local và sau khi upload lên máy GPU), đọc theo chunk, RAM ~0,5GB:
+
+```bash
+python validate_training_set.py ../../data/training-sets/v1_20000u   # exit 1 nếu có lỗi
+```
+
+Script train đọc thẳng file: `EVENTS_CSV=<dir>/user_events.csv python recsys_platform_sasrec.py`
+(không cần DB/pymysql).
+
 ## Cấu trúc
 
 - `lib/random.mjs` — PRNG có seed (reproducible) + lấy mẫu phân phối (Poisson, log-normal, Pareto)
@@ -93,7 +119,10 @@ tiến trình node >2GB). Mỗi user ~1.500 sự kiện/12 tháng (IMPRESSION ch
 - `test/` — test tự động (`npm test`), không cần DB
 - `lib/users.mjs` — tạo user (10 qua Keycloak Admin API để login thật, còn lại chỉ trong DB)
 - `lib/writeData.mjs` — ghi `orders`/`order_items`/`user_events` vào `ecommerce_order_db`
-- `lib/cleanupData.mjs` — xoá dữ liệu seed (nhận diện qua email `*@seed.internal`/`demo_user_*@demo.local`)
+- `lib/cleanupData.mjs` — xoá dữ liệu seed (nhận diện qua email `*@seed.internal`/`demo_user_*@demo.local`),
+  xoá THEO LÔ (1 câu DELETE khổng lồ = 1 transaction InnoDB khổng lồ)
+- `lib/exportCsv.mjs` — chế độ `--out`: ghi nối tiếp CSV theo lô user
+- `validate_training_set.py` — kiểm tra toàn vẹn tập `--out`
 
 ## Xác minh sau khi seed
 

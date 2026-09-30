@@ -489,12 +489,50 @@ REES46 hơn — chỉ cần sửa 1 số trong `behaviorTargets.mjs`, bộ đo s
 **Việc CHƯA làm** (nhắc lại thứ tự đã thống nhất: sửa seeder → xong recsys → **mới** retrain
 churn-risk model — không đụng vào churn cho tới khi phần này xong hẳn):
 - ~~Test edge-case cho simulator~~ — xong (test/simulate.test.mjs).
-- Seed lại DB bằng bộ sinh đã sửa (DB hiện vẫn chứa dữ liệu 2.000 user sinh TRƯỚC các sửa hôm nay).
+- ~~Seed lại DB bằng bộ sinh đã sửa~~ — xong 2026-09-30: 1.000 user, 1.498.818 sự kiện, 7.163 đơn,
+  2.202 review, fidelity 16/16; cả xoá dữ liệu cũ lẫn ghi chỉ mất **7 phút** (trước sửa: >2,8h cho 5.000
+  user). Truy vấn kiểm tra trên DB: 0 sự kiện/review ở tương lai, 0 đơn lặp sản phẩm.
 - **Để dành GPU** (không chạy trên máy local — xem memory "train nặng để dành GPU"): train SASRec
   platform_v1 nhiều seed + bootstrap CI SASRec vs Recency (hạ tầng đã sẵn: `run_platform_multiseed.sh`,
   `recsys_platform_bootstrap_ci.py`, recency tính cùng user trong 1 lần chạy); REES46 full-spec; ablation.
   Nên cân nhắc tăng batch/dùng embedding thưa trước khi thuê (đo được: batch 256 nhanh ~3,6×; Adam
   cập nhật đặc toàn bảng embedding tốn ~25ms cố định/bước) — kiểm tra hội tụ tương đương trước.
+
+#### 2026-09-30 (chiều) — DB không chịu nổi quy mô train → tách "DB cho app, FILE cho train"
+
+**Sự cố khi seed thật 5.000 user vào DB** (dry-run ước ~20 phút, thực tế ~2,8h và chưa xong):
+- Ghi chỉ ~7–8 nghìn dòng/phút. Nguyên nhân đo được: MariaDB Docker dùng buffer pool mặc định
+  **128MB** (index `user_events` lớn hơn nhiều → mỗi insert đọc đĩa), đĩa ảo Docker ~85 lần đọc/giây,
+  và `session_id` ngẫu nhiên (UUID) làm insert rải khắp B-tree.
+- `--force` xoá 3,1 triệu dòng bằng **1 câu DELETE** = 1 transaction InnoDB khổng lồ (~52K dòng/phút,
+  >1h), sau đó InnoDB còn **purge nền** hàng giờ (~26K undo record/phút), làm chậm luôn lần ghi sau.
+
+**Sửa trong tool**: xoá theo lô (`cleanupData.mjs`: 1.000 đơn / 20 user mỗi câu); session_id tuần tự
+theo user (`seed-<user>-s00001`, insert gần như nối đuôi index — có test); lô insert 4.000 dòng
+(28.000 tham số < giới hạn 65.535).
+
+**Quyết định (người dùng chọn "DB vừa phải + xuất file cho train")**: DB chỉ seed ~1.000 user (đủ cho
+demo app + churn); dữ liệu train lớn xuất file bằng chế độ mới `node seed.mjs --out <dir>` — không đụng
+DB, tất định (`--now` cố định ⇒ chạy lại ra đúng từng byte, đã kiểm md5 cả 5 file), kèm `manifest.json`
+(tham số, commit git, fidelity, snapshot mục tiêu). `recsys_platform_sasrec.py` đọc được file qua
+`EVENTS_CSV=` (máy GPU không cần DB/pymysql) — đã chạy thử đầu-cuối.
+
+**Kiểm tra toàn vẹn bắt được 3 lỗi CÓ SẴN của bộ sinh** mà báo cáo fidelity không nhìn thấy (ảnh hưởng
+cả chế độ ghi DB), viết thành `validate_training_set.py` + 2 test chống tái phát (11/11 test đạt):
+
+| Lỗi | Nguyên nhân | Sửa |
+|---|---|---|
+| Sự kiện SAU mốc "hiện tại" (11/296K) | Phiên bắt đầu sát `now` kéo dài qua mốc | Lọc phần sau `now` (phiên đang dở tại lúc chụp dữ liệu) |
+| Review ở tương lai (13/430) | Review = ngày đơn + 1–14 ngày, không chặn | Bỏ review chưa tới ngày viết |
+| 1 sản phẩm thành 2 dòng trong cùng đơn (11 đơn) | 2 phiên của cùng đơn tình cờ chọn cùng SP | Gộp số lượng như giỏ thật |
+
+Cả 3 sửa đều lọc/gộp SAU khi rút số ngẫu nhiên → không đổi dòng RNG, các thống kê khác giữ nguyên.
+
+**Tập train v1** (`data/training-sets/v1_20000u/`, gitignored): 20.000 user · **30.307.289 sự kiện** ·
+1.727.009 phiên · 148.313 đơn · 44.741 review · 2,4GB CSV. Sinh 4,3 phút, RAM tiến trình đỉnh 1,0GB.
+Fidelity **16/16 đạt** (cart-target 17,70/3,80/78,50% vs thật 17,48/3,85/78,67%; stickiness 0,4995 vs
+0,4921; bỏ dở 98,27% vs 98,59%; recency recall@10 = 0,103). `validate_training_set.py` **ĐẠT** (3,5 phút,
+RAM 0,5GB); số phiên đếm độc lập khớp đúng thống kê của bộ sinh.
 
 ---
 

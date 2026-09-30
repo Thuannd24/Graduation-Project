@@ -37,6 +37,20 @@ import {
 import { cleanupSeedData } from "./lib/cleanupData.mjs";
 import { FidelityStats } from "./lib/fidelity.mjs";
 import { closePool } from "./lib/db.mjs";
+import { CsvExporter } from "./lib/exportCsv.mjs";
+import { TARGETS, TOLERANCE, REGRESSION_GUARDS } from "./lib/behaviorTargets.mjs";
+import { execSync } from "node:child_process";
+import path from "node:path";
+
+function gitRevision() {
+  try {
+    const rev = execSync("git rev-parse HEAD", { encoding: "utf8" }).trim();
+    const dirty = execSync("git status --porcelain -- .", { encoding: "utf8" }).trim() !== "";
+    return { commit: rev, toolDirty: dirty };
+  } catch {
+    return null;
+  }
+}
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -72,6 +86,8 @@ function parseArgs(argv) {
     else if (a === "--demo-users" && argv[i + 1]) args.demoUsers = Number(argv[++i]);
     else if (a === "--months" && argv[i + 1]) args.months = Number(argv[++i]);
     else if (a === "--chunk" && argv[i + 1]) args.chunk = Math.max(1, Number(argv[++i]));
+    else if (a === "--out" && argv[i + 1]) args.out = argv[++i];
+    else if (a === "--now" && argv[i + 1]) args.now = argv[++i];
     else if (a === "--help") args.help = true;
   }
   return args;
@@ -86,6 +102,12 @@ Data seed tool cho churn-risk detection (xem docs/canvas/churn-risk-implementati
   node seed.mjs --force                     Xoá seed cũ (nếu có) rồi sinh lại
   node seed.mjs --users 500 --demo-users 10 --months 12 --seed 42
   node seed.mjs --chunk 250                 Số user xử lý mỗi lô (bộ nhớ tỉ lệ theo lô, không theo tổng)
+  node seed.mjs --out ../../data/training-sets/v1 --users 20000
+                                            KHÔNG ghi DB: xuất CSV (user_events/orders/order_items)
+                                            + manifest.json — dữ liệu train quy mô lớn mang lên GPU.
+                                            Chỉ đọc catalog thật từ DB. user_id tất định (seedu-000001).
+  node seed.mjs --now 2026-09-30T00:00:00Z  Mốc "hiện tại" cố định → cùng seed + cùng catalog ra
+                                            đúng cùng file (mặc định: thời điểm chạy).
 
 Mọi lần chạy (kể cả --dry-run) in "báo cáo độ trung thực" so với số đo từ dữ liệu người dùng thật
 (lib/behaviorTargets.mjs). --dry-run trả exit code 2 nếu có mục KHÔNG ĐẠT — dùng làm cổng kiểm tra.
@@ -171,8 +193,19 @@ async function main() {
   loadEnvFile();
   const args = parseArgs(process.argv.slice(2));
   if (args.help) return printHelp();
+  if (args.out && args.dryRun) {
+    console.error("--out và --dry-run loại trừ nhau (--out đã không ghi DB).");
+    process.exit(1);
+  }
+  // Chế độ file: không đụng bảng user/order/event nào trong DB, chỉ đọc catalog.
+  const writesDb = !args.dryRun && !args.out;
+  const now = args.now ? new Date(args.now) : new Date();
+  if (Number.isNaN(now.getTime())) {
+    console.error(`--now không hợp lệ: ${args.now}`);
+    process.exit(1);
+  }
 
-  if (!args.dryRun) {
+  if (writesDb) {
     const existing = await countExistingSeedUsers();
     if (existing > 0 && !args.force) {
       console.error(
@@ -191,28 +224,43 @@ async function main() {
   const catalog = await loadCatalog();
   console.log(`Catalog: ${catalog.products.length} sản phẩm, ${catalog.categoryIds.length} category.`);
 
+  let exporter = null;
+  if (args.out) {
+    exporter = new CsvExporter(path.resolve(args.out));
+    exporter.init(); // từ chối nếu thư mục đã có tập dữ liệu — không ghi đè
+    console.log(`Chế độ xuất file → ${exporter.outDir}`);
+  }
+
   const rng = new Rng(args.seed);
   const profiles = generateUserProfiles(rng, args.users, catalog.categoryIds);
 
-  console.log(`Tạo ${args.users} user (${args.demoUsers} qua Keycloak để demo login)...`);
-  const users = await ensureSeedUsers(args.users, args.demoUsers, { dryRun: args.dryRun });
+  let users;
+  if (args.out) {
+    // id tất định (không phải UUID ngẫu nhiên như bản ghi DB) → file tái lập được theo seed.
+    users = Array.from({ length: args.users }, (_, i) => ({
+      keycloakUserId: `seedu-${String(i + 1).padStart(6, "0")}`,
+      isDemo: false,
+    }));
+  } else {
+    console.log(`Tạo ${args.users} user (${args.demoUsers} qua Keycloak để demo login)...`);
+    users = await ensureSeedUsers(args.users, args.demoUsers, { dryRun: args.dryRun });
+  }
   const userIds = users.map((u) => u.keycloakUserId);
 
-  const now = new Date();
   const windowStart = new Date(now.getTime() - args.months * 30 * DAY_MS);
   const profileByUserId = new Map(userIds.map((uid, i) => [uid, profiles[i]]));
   // Dry-run không có user_id nội bộ/order_id thật — dùng id giả TUẦN TỰ chỉ để review/voucher có chỗ
   // tham chiếu lúc tính thống kê xem trước (KHÔNG ghi đi đâu).
-  const internalUserIdMap = args.dryRun
-    ? new Map(userIds.map((uid, i) => [uid, i + 1]))
-    : await fetchInternalUserIdMap(userIds);
+  const internalUserIdMap = writesDb
+    ? await fetchInternalUserIdMap(userIds)
+    : new Map(userIds.map((uid, i) => [uid, i + 1]));
 
   const stats = new SeedStats();
   const fidelity = new FidelityStats();
   let fakeOrderId = 0;
 
   console.log(
-    `Mô phỏng + ${args.dryRun ? "tính thống kê" : "ghi DB"} theo lô ${args.chunk} user, ${args.months} tháng gần nhất (tính đến ${now.toISOString()})...`
+    `Mô phỏng + ${args.out ? "xuất CSV" : args.dryRun ? "tính thống kê" : "ghi DB"} theo lô ${args.chunk} user, ${args.months} tháng gần nhất (tính đến ${now.toISOString()})...`
   );
   for (let start = 0; start < userIds.length; start += args.chunk) {
     const chunkIds = userIds.slice(start, start + args.chunk);
@@ -223,7 +271,9 @@ async function main() {
     });
     fidelity.addEvents(events);
 
-    if (args.dryRun) {
+    if (exporter) {
+      exporter.assignOrderIds(orders);
+    } else if (args.dryRun) {
       orders.forEach((o) => { o.dbId = ++fakeOrderId; });
     } else {
       await writeOrders(rng, orders); // gán order.dbId = auto-increment THẬT (review/voucher cần)
@@ -233,15 +283,19 @@ async function main() {
     // Review/voucher sinh SAU khi có order_id. Voucher duyệt theo map user → PHẢI truyền đúng map
     // của lô hiện tại, truyền map toàn bộ user sẽ sinh voucher trùng ở mỗi lô.
     const chunkProfileMap = new Map(chunkIds.map((uid, i) => [uid, chunkProfiles[i]]));
-    const reviews = generateReviews(rng, profileByUserId, orders);
+    const reviews = generateReviews(rng, profileByUserId, orders, { now });
     const vouchers = generateIssuedVouchers(rng, chunkProfileMap, internalUserIdMap, groupDeliveredOrdersByUser(orders), {
       windowStart,
       windowEnd: now,
       now,
     });
-    if (!args.dryRun) {
+    if (writesDb) {
       await writeReviews(reviews);
       await writeVouchers(vouchers);
+    } else if (exporter) {
+      // Voucher không xuất: tham chiếu user_id NỘI BỘ của bảng users (không tồn tại ở chế độ file)
+      // và không dùng cho train recsys. Vẫn sinh để dòng số ngẫu nhiên giống hệt chế độ DB.
+      exporter.appendChunk({ orders, events, reviews, userIds: chunkIds, profiles: chunkProfiles });
     }
     stats.addChunk({ orders, events, reviews, vouchers });
     const done = Math.min(start + args.chunk, userIds.length);
@@ -250,6 +304,29 @@ async function main() {
 
   summarize(profiles, users, stats);
   const fidelityOk = fidelity.printReport();
+  if (exporter) {
+    const { actionCounts, ...fidelitySummary } = fidelity.summary();
+    const manifest = exporter.finalize({
+      kind: "synthetic-behavior-dataset",
+      note: "Dữ liệu TỔNG HỢP, thống kê hành vi neo theo REES46 + Taobao (lib/behaviorTargets.mjs). Không phải người dùng thật.",
+      generatedAt: new Date().toISOString(),
+      params: { seed: args.seed, users: args.users, months: args.months, chunk: args.chunk, now: now.toISOString() },
+      catalog: { products: catalog.products.length, categories: catalog.categoryIds.length },
+      git: gitRevision(),
+      fidelity: { allPass: fidelityOk, summary: fidelitySummary, actionCounts, checks: fidelity.checks() },
+      targets: { TARGETS, TOLERANCE, REGRESSION_GUARDS },
+      stats: {
+        orders: stats.orders, cancelled: stats.cancelled, events: stats.events,
+        sessions: stats.sessions, reviews: stats.reviews, churners: profiles.filter((p) => p.willChurn).length,
+      },
+    });
+    console.log(`Đã ghi: ${Object.entries(manifest.files).map(([f, n]) => `${f} (${n.toLocaleString("vi-VN")} dòng)`).join(", ")} + manifest.json`);
+    if (!fidelityOk) {
+      console.error("CẢNH BÁO: có mục độ trung thực KHÔNG ĐẠT — xem manifest.json trước khi dùng tập này để train.");
+      process.exitCode = 2;
+    }
+    return;
+  }
   if (args.dryRun) {
     console.log("(--dry-run) Không ghi gì vào DB.");
     if (!fidelityOk) process.exitCode = 2; // dùng được như cổng kiểm tra trước khi seed thật

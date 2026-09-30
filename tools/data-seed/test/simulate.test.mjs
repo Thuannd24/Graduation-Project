@@ -6,6 +6,7 @@ import { Rng } from "../lib/random.mjs";
 import { generateUserProfiles } from "../lib/profiles.mjs";
 import { simulateAllUsers } from "../lib/simulate.mjs";
 import { FidelityStats } from "../lib/fidelity.mjs";
+import { generateReviews } from "../lib/reviews.mjs";
 import { makeCatalog } from "./helpers.mjs";
 
 const NOW = new Date("2026-09-30T00:00:00Z");
@@ -81,6 +82,42 @@ test("edge-case: 1 user, 1 tháng", () => {
   f.addEvents(events);
   assert.equal(f.summary().badEvents, 0);
   assert.ok(Array.isArray(orders));
+});
+
+test("session id duy nhất toàn cục và tăng dần trong mỗi user (insert tuần tự vào index DB)", () => {
+  const { events } = generate({ users: 40 });
+  const ownerOf = new Map();
+  const lastSeqOfUser = new Map();
+  for (const e of events) {
+    const prevOwner = ownerOf.get(e.sessionId);
+    assert.ok(prevOwner === undefined || prevOwner === e.userId, `session ${e.sessionId} thuộc 2 user`);
+    ownerOf.set(e.sessionId, e.userId);
+    const seq = Number(e.sessionId.slice(e.sessionId.lastIndexOf("-s") + 2));
+    assert.ok(seq >= (lastSeqOfUser.get(e.userId) ?? 0), `session id giảm trong user ${e.userId}`);
+    lastSeqOfUser.set(e.userId, seq);
+  }
+});
+
+test("không có sự kiện/đơn/review nào sau mốc `now` (dữ liệu là ảnh chụp tại now)", () => {
+  // 400 user × 12 tháng: đủ để có phiên bắt đầu sát now (lỗi cũ: phiên vắt qua mốc, review +14 ngày).
+  const { events, orders } = generate({ users: 400 });
+  assert.equal(events.filter((e) => e.createdAt > NOW).length, 0);
+  assert.equal(orders.filter((o) => o.createdAt > NOW).length, 0);
+  orders.forEach((o, i) => { o.dbId = i + 1; });
+  const profileByUserId = new Map(generateUserProfiles(new Rng(42), 400, makeCatalog().categoryIds).map((p, i) => [`u${i}`, p]));
+  const reviews = generateReviews(new Rng(7), profileByUserId, orders, { now: NOW });
+  assert.ok(reviews.length > 0);
+  assert.equal(reviews.filter((r) => r.createdAt > NOW).length, 0);
+});
+
+test("mỗi đơn không lặp sản phẩm; tổng tiền = tổng dòng", () => {
+  const { orders } = generate({ users: 300 });
+  for (const o of orders) {
+    const ids = o.items.map((it) => it.productId);
+    assert.equal(new Set(ids).size, ids.length, "sản phẩm lặp trong 1 đơn — phải gộp số lượng");
+    for (const it of o.items) assert.equal(it.subtotal, it.unitPrice * it.quantity);
+    assert.equal(o.items.reduce((s, it) => s + it.subtotal, 0), o.totalAmount);
+  }
 });
 
 test("chống tái phát lỗi view→cart cứng: đa số lượt thêm giỏ KHÔNG phải item vừa xem", () => {

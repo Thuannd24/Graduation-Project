@@ -152,12 +152,15 @@ function rhythmicTimestamp(rng, start, end, profile) {
   return t;
 }
 
-/** Id phiên tổng hợp, sinh từ RNG có seed (KHÔNG dùng crypto.randomUUID) để giữ toàn bộ dataset
- * reproducible theo --seed, giống mọi giá trị khác trong bộ sinh dữ liệu này. */
-function randomSessionId(rng) {
-  let hex = "";
-  for (let i = 0; i < 16; i++) hex += rng.int(0, 15).toString(16);
-  return `seed-${hex}`;
+/** Bộ sinh id phiên cho 1 user: `seed-<userId>-s00001`, `-s00002`... — TĂNG DẦN trong mỗi user.
+ * Bản cũ dùng 16 ký tự hex ngẫu nhiên: mỗi phiên rơi vào 1 vị trí NGẪU NHIÊN của index
+ * `idx_user_events_session`, nên khi bảng + index lớn hơn buffer pool MariaDB (mặc định 128MB) mỗi
+ * insert thành 1 lần đọc/ghi đĩa ngẫu nhiên — đo được ~7-8K dòng/phút, tức ~15 giờ cho 5.000 user.
+ * Id tăng dần theo user → insert gần như tuần tự (cùng kiểu index theo user_id đang có). Vẫn
+ * reproducible (không dùng crypto.randomUUID), vẫn duy nhất toàn cục vì chứa userId. */
+function makeSessionIdGenerator(userId) {
+  let seq = 0;
+  return () => `seed-${userId}-s${String(++seq).padStart(5, "0")}`;
 }
 
 function pickFromCategory(rng, catalog, categoryId) {
@@ -265,9 +268,9 @@ const P_DIFF_GIVEN_2VIEWS = Math.min(1 - P_SAME_GIVEN_VIEWS, CART_TARGET_PROBS.d
  * Trả về `cartTargetProduct` — sản phẩm THỰC SỰ được thêm giỏ.
  */
 function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSpreadMinutes, opts = {}) {
-  const { forceCart = false, sessionKind = "pureview" } = opts;
+  const { forceCart = false, sessionKind = "pureview", nextSessionId } = opts;
   const events = [];
-  const sessionId = randomSessionId(rng);
+  const sessionId = nextSessionId();
   const clock = makeSeededClock(rng, anchorTime);
   const push = (actionType, { itemId = null, categoryId = null, weight = null } = {}) => {
     events.push({ userId, itemId, categoryId, actionType, createdAt: clock.now(), sessionId, weight });
@@ -408,6 +411,7 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
 function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
   const orders = [];
   const events = [];
+  const nextSessionId = makeSessionIdGenerator(userId);
 
   for (let month = 1; month <= totalMonths; month++) {
     const { start, end } = monthWindow(now, totalMonths, month);
@@ -429,7 +433,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
         const anchor = new Date(orderDate.getTime() - rng.int(10, 360) * 60 * 1000);
         const { events: sessionEvents, cartTargetProduct } = simulateSession(
           rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-          { forceCart: true, sessionKind: "order" }
+          { forceCart: true, sessionKind: "order", nextSessionId }
         );
         events.push(...sessionEvents);
 
@@ -438,7 +442,14 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
         const unitPrice = Number(product.price);
         const subtotal = unitPrice * quantity;
         totalAmount += subtotal;
-        items.push({ productId: product.id, productName: product.name, unitPrice, quantity, subtotal });
+        // 2 phiên của cùng đơn có thể cùng chọn 1 sản phẩm → giỏ thật GỘP số lượng, không tách 2 dòng.
+        const same = items.find((x) => x.productId === product.id);
+        if (same) {
+          same.quantity += quantity;
+          same.subtotal += subtotal;
+        } else {
+          items.push({ productId: product.id, productName: product.name, unitPrice, quantity, subtotal });
+        }
       }
 
       const isCancelled = rng.bool(profile.cancelProb);
@@ -449,7 +460,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
       // --- Funnel checkout (BEGIN_CHECKOUT -> phí ship -> mã giảm giá), 1 lần/đơn ngay trước
       // thời điểm đặt hàng. Không có số đo thật (REES46 không có khái niệm coupon) — gắn vào
       // `priceSensitivity` đã có sẵn (user nhạy giá thử mã nhiều hơn) thay vì hằng số vô căn cứ. ---
-      const checkoutSessionId = randomSessionId(rng);
+      const checkoutSessionId = nextSessionId();
       const checkoutAt = new Date(orderDate.getTime() - 60 * 1000);
       events.push({ userId, itemId: null, categoryId: null, actionType: ACTION_BEGIN_CHECKOUT,
                     createdAt: new Date(checkoutAt.getTime() - 5 * 60 * 1000), sessionId: checkoutSessionId, weight: null });
@@ -481,7 +492,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
       const anchor = rhythmicTimestamp(rng, start, end, profile);
       const { events: sessionEvents } = simulateSession(
         rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-        { forceCart: true, sessionKind: "abandon" }
+        { forceCart: true, sessionKind: "abandon", nextSessionId }
       );
       events.push(...sessionEvents);
     }
@@ -496,13 +507,16 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
       const anchor = rhythmicTimestamp(rng, start, end, profile);
       const { events: sessionEvents } = simulateSession(
         rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-        { forceCart: false, sessionKind: "pureview" }
+        { forceCart: false, sessionKind: "pureview", nextSessionId }
       );
       events.push(...sessionEvents);
     }
   }
 
-  return { orders, events };
+  // Phiên bắt đầu sát `now` có thể kéo dài qua mốc đó — dữ liệu là ảnh chụp tại `now`, nên phần
+  // sau mốc chưa xảy ra (phiên đang dở). Lọc SAU khi mô phỏng để không đổi dòng số ngẫu nhiên.
+  const nowMs = now.getTime();
+  return { orders, events: events.filter((e) => e.createdAt.getTime() <= nowMs) };
 }
 
 /** Sinh dữ liệu cho toàn bộ user, trả về mảng gộp orders/events kèm userId tương ứng. */

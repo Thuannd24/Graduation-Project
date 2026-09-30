@@ -89,7 +89,9 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
   return { ordersWritten: orders.length, itemsWritten: totalItemsWritten };
 }
 
-export async function writeEvents(events, { batchSize = 1000 } = {}) {
+// 4000 dòng × 7 cột = 28.000 tham số/câu (giới hạn prepared statement 65.535) — ít câu/commit hơn
+// hẳn lô 1000 cũ; với innodb_flush_log_at_trx_commit=1 mỗi commit là 1 lần fsync.
+export async function writeEvents(events, { batchSize = 4000 } = {}) {
   const rows = events.map((e) => [
     e.userId,
     e.sessionId || null,

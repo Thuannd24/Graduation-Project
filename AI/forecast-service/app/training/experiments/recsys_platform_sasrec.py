@@ -26,7 +26,6 @@ import json
 import os
 
 import numpy as np
-import pymysql
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -88,21 +87,45 @@ def pad_left(seq: list[int], maxlen: int) -> np.ndarray:
     return out
 
 
+def load_rows_from_csv(path: str) -> list[tuple]:
+    """Doc `user_events.csv` do `node tools/data-seed/seed.mjs --out <dir>` xuat (may GPU thue khong
+    co DB). Cung bo loc + thu tu voi cau SQL o duoi. Doc theo chunk, chi giu 3 cot can thiet."""
+    import pandas as pd
+
+    parts = []
+    for chunk in pd.read_csv(path, usecols=["user_id", "item_id", "action_type", "created_at"],
+                             dtype={"user_id": str, "action_type": str}, chunksize=2_000_000):
+        chunk = chunk[chunk.action_type.isin(["VIEW_PRODUCT", "ADD_TO_CART"]) & chunk.item_id.notna()]
+        parts.append(chunk[["user_id", "item_id", "created_at"]])
+    df = pd.concat(parts, ignore_index=True)
+    df["created_at"] = pd.to_datetime(df.created_at, utc=True)
+    # File ghi theo phien (don -> bo gio -> xem thuan), KHONG theo thoi gian -> phai sap lai
+    df = df.sort_values(["user_id", "created_at"], kind="stable")
+    return list(zip(df.user_id, df.item_id.astype("int64"), df.created_at))
+
+
 def main() -> None:
-    print("Doc user_events THAT tu ecommerce_order_db ...")
-    conn = pymysql.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD,
-                            database="ecommerce_order_db")
-    cur = conn.cursor()
-    # Chi lay hanh dong THAT gan voi san pham (view/cart) - dung logic loc giong het
-    # behavior_consumer.py._write_to_redis (bo qua vi-hanh-vi FE khong phai chon san pham)
-    cur.execute(
-        "SELECT user_id, item_id, created_at FROM user_events "
-        "WHERE action_type IN ('VIEW_PRODUCT','ADD_TO_CART') AND item_id IS NOT NULL "
-        "ORDER BY user_id, created_at"
-    )
-    rows = cur.fetchall()
-    conn.close()
-    print(f"{len(rows):,} dong hanh vi that (VIEW_PRODUCT/ADD_TO_CART)")
+    events_csv = os.environ.get("EVENTS_CSV")
+    if events_csv:
+        print(f"Doc user_events tu file {events_csv} ...")
+        rows = load_rows_from_csv(events_csv)
+    else:
+        import pymysql  # chi can khi doc DB — may GPU chay EVENTS_CSV khong phai cai
+
+        print("Doc user_events THAT tu ecommerce_order_db ...")
+        conn = pymysql.connect(host=DB_HOST, port=DB_PORT, user=DB_USER, password=DB_PASSWORD,
+                               database="ecommerce_order_db")
+        cur = conn.cursor()
+        # Chi lay hanh dong THAT gan voi san pham (view/cart) - dung logic loc giong het
+        # behavior_consumer.py._write_to_redis (bo qua vi-hanh-vi FE khong phai chon san pham)
+        cur.execute(
+            "SELECT user_id, item_id, created_at FROM user_events "
+            "WHERE action_type IN ('VIEW_PRODUCT','ADD_TO_CART') AND item_id IS NOT NULL "
+            "ORDER BY user_id, created_at"
+        )
+        rows = cur.fetchall()
+        conn.close()
+    print(f"{len(rows):,} dong hanh vi (VIEW_PRODUCT/ADD_TO_CART)")
 
     user_seqs: dict[str, list[int]] = {}
     for user_id, item_id, _ts in rows:

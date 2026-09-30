@@ -12,7 +12,7 @@ function clampRating(x) {
 
 /** `orders` phải đã được `writeOrders()` gán `dbId` thật (order_id) trước khi gọi hàm này — review
  * cần tham chiếu 1 order_id có thật trong DB, không phải id tự bịa. */
-export function generateReviews(rng, profileByUserId, orders) {
+export function generateReviews(rng, profileByUserId, orders, { now = null } = {}) {
   const reviews = [];
 
   for (const order of orders) {
@@ -26,6 +26,8 @@ export function generateReviews(rng, profileByUserId, orders) {
     const createdAt = new Date(
       order.createdAt.getTime() + rng.int(MIN_DAYS_AFTER_DELIVERY, MAX_DAYS_AFTER_DELIVERY) * DAY_MS
     );
+    // Đơn giao sát `now` → review "vài ngày sau" chưa được viết tại thời điểm chụp dữ liệu.
+    if (now && createdAt > now) continue;
 
     reviews.push({
       productId: item.productId,
