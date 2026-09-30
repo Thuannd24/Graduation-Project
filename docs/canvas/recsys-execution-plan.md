@@ -534,6 +534,12 @@ Fidelity **16/16 đạt** (cart-target 17,70/3,80/78,50% vs thật 17,48/3,85/78
 0,4921; bỏ dở 98,27% vs 98,59%; recency recall@10 = 0,103). `validate_training_set.py` **ĐẠT** (3,5 phút,
 RAM 0,5GB); số phiên đếm độc lập khớp đúng thống kê của bộ sinh.
 
+**Bàn giao sang máy GPU thuê** (việc tiếp theo — phần dataset đã xong):
+1. Nén + upload `data/training-sets/v1_20000u/` (2,4GB CSV; pandas đọc thẳng `.csv.gz`).
+2. `python tools/data-seed/validate_training_set.py <dir>` — phải ĐẠT (bắt file cụt/hỏng khi copy).
+3. `EVENTS_CSV=<dir>/user_events.csv bash run_platform_multiseed.sh` → `recsys_platform_bootstrap_ci.py`
+   (SASRec vs Recency, nhiều seed + CI). Ghi kết quả trung thực vào §5.9 dù thắng hay thua.
+
 ---
 
 ## 6. Lịch
