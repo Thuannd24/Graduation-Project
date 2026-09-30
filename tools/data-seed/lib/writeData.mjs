@@ -93,14 +93,15 @@ export async function writeEvents(events, { batchSize = 1000 } = {}) {
   const rows = events.map((e) => [
     e.userId,
     e.sessionId || null,
-    e.itemId,
-    e.categoryId,
+    e.itemId ?? null,
+    e.categoryId ?? null,
     e.actionType,
     toSqlDatetime(e.createdAt),
+    e.weight ?? null, // % cuộn (SCROLL_DEPTH) / giây dừng (PAGE_DWELL) -- trước đây bị bỏ sót
   ]);
   await bulkInsert(
     `${DB.ORDER}.user_events`,
-    ["user_id", "session_id", "item_id", "category_id", "action_type", "created_at"],
+    ["user_id", "session_id", "item_id", "category_id", "action_type", "created_at", "weight"],
     rows,
     batchSize
   );
