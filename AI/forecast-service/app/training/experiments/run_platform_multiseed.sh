@@ -3,10 +3,19 @@
 # RESUMABLE: seed nao da co file ket qua thi bo qua -- phien lam viec bi ngat giua chung (da xay ra
 # nhieu lan) khong lam mat cac seed da xong. Ket qua luu vao data/ (gitignore, KHONG phai scratchpad
 # tam cua Claude -- scratchpad da tung bi don sach sau vai ngay, mat het ket qua).
+#
+# Chay duoc ca Windows (Git Bash, may dev) lan Linux (may GPU thue) — duong dan lay theo vi tri
+# script, khong ghi cung. Tren may GPU:
+#   EVENTS_CSV=/root/data/v1_20000u/user_events.csv OUT_DIR=/root/results \
+#   BATCH_SIZE=512 MAXLEN=50 D_MODEL=64 bash run_platform_multiseed.sh
+# (bien moi truong EVENTS_CSV/BATCH_SIZE/... truyen thang xuong recsys_platform_sasrec.py)
 set -u
-PY="${PY:-D:/ai_venv/Scripts/python.exe}"
-EXP_DIR="D:/JAVA/Graduation-Project/AI/forecast-service/app/training/experiments"
-OUT_DIR="${OUT_DIR:-D:/JAVA/Graduation-Project/data/experiment-results/platform_sasrec}"
+EXP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(cd "$EXP_DIR/../../../../.." && pwd)"
+if [ -z "${PY:-}" ]; then
+  if [ -x "D:/ai_venv/Scripts/python.exe" ]; then PY="D:/ai_venv/Scripts/python.exe"; else PY="python3"; fi
+fi
+OUT_DIR="${OUT_DIR:-$REPO_DIR/data/experiment-results/platform_sasrec}"
 SEEDS="${SEEDS:-42 123 7}"
 mkdir -p "$OUT_DIR"
 export PYTHONIOENCODING=utf-8

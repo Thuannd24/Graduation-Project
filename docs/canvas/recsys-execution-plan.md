@@ -534,11 +534,73 @@ Fidelity **16/16 đạt** (cart-target 17,70/3,80/78,50% vs thật 17,48/3,85/78
 0,4921; bỏ dở 98,27% vs 98,59%; recency recall@10 = 0,103). `validate_training_set.py` **ĐẠT** (3,5 phút,
 RAM 0,5GB); số phiên đếm độc lập khớp đúng thống kê của bộ sinh.
 
+**Chuẩn bị script train trước khi thuê — đo trên máy local với tập 20K thật, 20 bước train (2026-09-30)**
+
+Mục đích: biết job thật sự cần gì để chọn máy đúng, và không để GPU đứng chờ CPU trong giờ thuê.
+
+| Đo được | Trước sửa | Sau sửa | Cách sửa |
+|---|---|---|---|
+| Baseline Popularity | duyệt ~32K item/user (20K user ≈ 640 triệu vòng Python) | 2,7s | dừng khi đủ top-k |
+| Dựng batch (6,16 triệu mẫu/epoch) | `__getitem__` Python từng mẫu | **0%** thời gian bước train | vector hoá numpy (mảng phẳng + offset); đã so **giống hệt** 8.852 mẫu với cách cũ |
+| Nạp CSV mỗi seed | 104s | 67s lần đầu, **3,8s** các seed sau | cache bản đã lọc/sắp (ghi nguyên tử, có số phiên bản) |
+| RAM tiến trình | 2,2GB | **1,1GB** | bỏ 6,2 triệu tuple (user, item, Timestamp); chuỗi dựng thẳng — đã so giống hệt |
+| Mẫu âm | `numpy.choice(p=…)` trên CPU mỗi bước | `torch.multinomial` trên GPU | |
+
+Kết quả (loss, recall) trước/sau tối ưu **giống hệt từng chữ số** → tối ưu không đổi ngữ nghĩa.
+
+**Phát hiện**: loss khởi đầu 17,5–18,2 (kỳ vọng ≈ ln 51 = 3,9) do `nn.Embedding` mặc định N(0,1) → điểm
+có độ lệch ~√d. Thêm `EMB_INIT=scaled` (std = d^-0,5 → loss khởi đầu 4,30); **giữ mặc định cũ** để khớp
+kết quả trước, quyết định trên GPU theo loss sau 1 epoch. Không đổi state_dict → recs-service nạp được
+(đã thử nạp checkpoint d=64, maxlen=50 bằng đúng class của recs-service).
+
+`run_platform_multiseed.sh` bỏ đường dẫn Windows ghi cứng (Linux được); chạy thử trọn vòng 2 seed +
+bootstrap CI: OK. Thêm `MAX_STEPS` (đo tốc độ, in ước lượng thời gian 1 epoch đầy đủ) và `timing_s`,
+`config` vào file kết quả.
+
+**Hệ quả cho cấu hình máy thuê** (từ số đo, không đoán): RAM hệ thống ≥ 16GB là dư (tiến trình 1,1GB);
+CPU ≥ 4 nhân đủ (dựng batch ~0%); VRAM vài GB là đủ (model nhỏ) — chọn 3090/4090 vì **tốc độ**, không
+vì bộ nhớ; disk 20–40GB; upload = 240MB (gzip nén ~10×) → nút thắt là mạng upload ở nhà, không phải máy
+thuê. CPU local: ~780 mẫu/s ⇒ 1 epoch ~2,2h — xác nhận phải dùng GPU.
+
+**⚠️ 2026-09-30 — PHÁT HIỆN: catalog trong DB KHÔNG phải catalog của web → CHẶN bước thuê GPU**
+
+Kiểm tra nguồn "catalog thật" mà `data-seed` đọc (`products WHERE active=1`, 32.593 SP, 80 category):
+- 32.443 SP là **Olist** (Kaggle, Brazil) do `tools/real-data-seed` import 2026-08-04 — tên ghép từ
+  category (`"baby (Olist #72dd2e7b)"`), giá BRL×6000, category `Olist: bed bath table`…, 0 ảnh.
+- 150 SP giả tên `"<Loại> <Hãng> Model N"` (id 1–150, tạo 2026-07-27).
+- **0 / 1.123** SP thật của web (scrape cellphones.com.vn, có ảnh R2, `tools/catalog-import/manifests/`).
+
+Các báo cáo trước ghi "catalog thật của hệ thống" là **sai** theo nghĩa "catalog web bán" — đúng chỉ theo
+nghĩa "catalog đang nằm trong DB". Dataset v1 (DB 1.000 user + CSV 20K) gắn với product_id Olist. Phần
+thống kê hành vi (REES46/Taobao) độc lập catalog → giữ nguyên; chỉ cần sinh lại sau khi chốt catalog.
+
+Đọc thiết kế hệ thống (chỉ phần quyết định) để chốt: **web là cửa hàng CHUYÊN ĐIỆN TỬ** (kiểu CellphoneS),
+không phải sàn đa ngành kiểu Shopee — schema product-service tổng quát (EAV attribute + cây category +
+variant) nhưng mọi thứ phía trên đều thiên điện tử: tên "AuraTech"; trang chủ = Flash deal · Gợi ý cho
+bạn · Điện thoại/Máy tính bảng · Phụ kiện · Laptop · Thương hiệu; `ProductCard` có biến thể `laptop`
+hiện thông số; entity có `warrantyPeriod`/`specsRaw`, attribute mẫu `cpu`/`ram`; catalog-import scrape
+19 ngành điện tử. Quyết định ngưỡng "bỏ dở" theo Taobao (§ trên) cũng đã lập luận từ "platform bán
+điện thoại/laptop". ⇒ Catalog đúng = 1.123 SP điện tử; Olist (không ảnh, hàng Brazil) lệch domain.
+
+Người dùng hỏi chi phí nếu đổi web thành sàn đa ngành (kiểu Shopee). Quét từ khoá (không đọc hết file):
+**BE + AI gần như tổng quát** (EAV attribute/category/variant; chỉ tính năng bảo hành + fallback
+`storage`→`size` ở giỏ hàng); **FE ghi cứng ở trang chủ** (`CategoryDualSection`/`AccessoriesSection`/
+`LaptopShowcaseSection` ~1.100 dòng), `categoryUtils` (map từ khoá ngành + `LAPTOP_SPEC_FILTERS` RAM cứng),
+icon Header, khuyến mãi laptop ở CategoryPage, gợi ý chatbot → ước **2–3 ngày** code. Phần đắt thật là
+**catalog đa ngành có tên/ảnh/thuộc tính tiếng Việt**: Olist không dùng được cho web (không tên, không
+ảnh, giá BRL); scraper hiện chỉ cho cellphones.com.vn → phải viết scraper + mirror ảnh + map thuộc tính
+mới, ước **3–5+ ngày** và rủi ro chặn bot/điều khoản. Lợi ích cho đồ án nhỏ vì recsys/churn/chatbot không
+phụ thuộc ngành hàng.
+
 **Bàn giao sang máy GPU thuê** (việc tiếp theo — phần dataset đã xong):
 1. Nén + upload `data/training-sets/v1_20000u/` (2,4GB CSV; pandas đọc thẳng `.csv.gz`).
 2. `python tools/data-seed/validate_training_set.py <dir>` — phải ĐẠT (bắt file cụt/hỏng khi copy).
-3. `EVENTS_CSV=<dir>/user_events.csv bash run_platform_multiseed.sh` → `recsys_platform_bootstrap_ci.py`
-   (SASRec vs Recency, nhiều seed + CI). Ghi kết quả trung thực vào §5.9 dù thắng hay thua.
+3. Đo tốc độ: `MAX_STEPS=200 N_EPOCHS=1 BATCH_SIZE=512 MAXLEN=50 D_MODEL=64 EVENTS_CSV=… python
+   recsys_platform_sasrec.py` → ước lượng thời gian thật. Rồi 1 epoch đầy đủ: nếu loss vẫn cao bất
+   thường (≫ 4) thì dùng `EMB_INIT=scaled`.
+4. `EVENTS_CSV=<dir>/user_events.csv OUT_DIR=… BATCH_SIZE=512 MAXLEN=50 D_MODEL=64 bash
+   run_platform_multiseed.sh` (trong `tmux`) → 3 seed + bootstrap CI SASRec vs Recency. Ghi kết quả
+   trung thực vào §5.9 dù thắng hay thua.
 
 ---
 
