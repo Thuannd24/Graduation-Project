@@ -49,7 +49,7 @@ N_EPOCHS = int(os.environ.get("N_EPOCHS", "30"))
 N_NEGATIVES = int(os.environ.get("N_NEGATIVES", "50"))
 LR = 1e-3
 TOP_K_LIST = [10, 20]
-SEED = 42
+SEED = int(os.environ.get("SEED", "42"))
 
 torch.manual_seed(SEED)
 rng = np.random.default_rng(SEED)
@@ -146,6 +146,20 @@ def main() -> None:
                 pop_hits[k] += 1
     n_eval = len(targets)
     pop_recall = {k: pop_hits[k] / n_eval for k in TOP_K_LIST}
+
+    # ============ Baseline Recency ("goi y lai item vua xem") tren DUNG cung user/target voi SASRec
+    # — de bootstrap CI la so sanh CAP (paired) chinh xac, khong ghep so tu 2 script khac nhau.
+    # Day la doi chung bat buoc theo production_reference/7_sasrec_evaluation_metrics.md. ============
+    recency_per_user: dict[str, dict[str, bool]] = {}
+    for uid, t in targets.items():
+        ranked, seen_set = [], set()
+        for it in reversed(train_seqs[uid]):
+            if it not in seen_set:
+                ranked.append(it)
+                seen_set.add(it)
+        recency_per_user[str(uid)] = {f"hit@{k}": bool(t in ranked[:k]) for k in TOP_K_LIST}
+    recency_recall = {k: sum(h[f"hit@{k}"] for h in recency_per_user.values()) / n_eval for k in TOP_K_LIST}
+    print(f"Recency (cung user/target): recall@10={recency_recall[10]:.4f} recall@20={recency_recall[20]:.4f}")
     print(f"Popularity (tren chinh tap platform, {n_eval} user danh gia): "
           f"recall@10={pop_recall[10]:.4f} recall@20={pop_recall[20]:.4f}")
 
@@ -220,10 +234,11 @@ def main() -> None:
 
     # ============ Danh gia SASRec tren chinh tap nay ============
     model.eval()
-    eval_inputs, eval_targets = [], []
+    eval_inputs, eval_targets, eval_users = [], [], []
     for uid, seq in train_seqs.items():
         eval_inputs.append(pad_left(seq, MAXLEN))
         eval_targets.append(targets[uid])
+        eval_users.append(uid)
     eval_inputs = np.stack(eval_inputs)
 
     all_item_emb = model.item_emb.weight
@@ -239,6 +254,9 @@ def main() -> None:
             ranked_lists.extend((topk_idx - 1).tolist())
 
     results = {}
+    per_user_hits = {}  # uid -> {"hit@10": bool, "hit@20": bool} -- can cho bootstrap CI sau nay
+    for uid, t, r in zip(eval_users, eval_targets, ranked_lists):
+        per_user_hits[str(uid)] = {f"hit@{k}": bool(t in r[:k]) for k in TOP_K_LIST}
     for k in TOP_K_LIST:
         hits = sum(1 for t, r in zip(eval_targets, ranked_lists) if t in r[:k])
         results[f"recall@{k}"] = round(hits / len(eval_targets), 4)
@@ -260,11 +278,15 @@ def main() -> None:
 
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         json.dump({
+            "seed": SEED,
             "n_users_total": len(user_seqs), "n_users_trainable": len(train_seqs),
             "n_items": n_items, "n_train_samples": len(dataset),
             "sasrec": results, "popularity_same_protocol": {f"recall@{k}": round(pop_recall[k], 4) for k in TOP_K_LIST},
-            "note": "So sanh CHI trong noi bo tap platform (~500 user) — KHONG so voi so REES46 "
-                    "(khac protocol, khac catalog, khac quy mo 600 lan).",
+            "recency_same_protocol": {f"recall@{k}": round(recency_recall[k], 4) for k in TOP_K_LIST},
+            "per_user_hits": per_user_hits,  # SASRec, de bootstrap CI
+            "recency_per_user_hits": recency_per_user,  # cung user -> paired bootstrap
+            "note": "So sanh CHI trong noi bo tap platform — KHONG so voi so REES46 "
+                    "(khac protocol, khac catalog, khac quy mo).",
         }, f, ensure_ascii=False, indent=2)
     print(f"Da luu {OUT_PATH}")
 
