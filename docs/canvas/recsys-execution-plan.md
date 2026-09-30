@@ -361,6 +361,141 @@ kết luận SASRec THẮNG (chênh lệch quá nhỏ so với n=501), nhưng l�
 để đưa vào báo cáo, và là minh chứng cụ thể cho luận điểm "chất lượng dữ liệu quyết định, không
 phải kiến trúc model".
 
+### 5.9 🔄 Mở rộng đủ 19 hành vi + cross-validate bằng Taobao (2026-09-22 → 2026-09-25, đang tiếp tục)
+
+**Bối cảnh**: sau 5.8, user chỉ ra 2 việc còn thiếu trước khi tin dùng bộ sinh dataset: (1) seeder
+chỉ sinh 2/19 loại hành vi (VIEW/CART) dù tracker đã theo dõi đủ 19 loại — không phản ánh đúng luận
+điểm "bảng chữ cái hành vi giàu" mà cả đồ án dựa vào; (2) 5 con số cốt lõi ở 5.8 chỉ đo từ **1**
+dataset thật (REES46) — cần cross-validate bằng nguồn độc lập thứ 2 trước khi tin dùng.
+
+**Việc đã làm**:
+
+1. **Mở rộng `simulate.mjs` lên đủ 19 hành vi** — thêm REMOVE_FROM_CART (đúng bigram đã chứng minh
+   mang thông tin ở §5.3), IMPRESSION, UPDATE_CART_QTY, CLEAR_CART, VIEW_CART, BEGIN_CHECKOUT,
+   VIEW_SHIPPING_FEE, COUPON_APPLIED/FAILED, TAB_HIDDEN/VISIBLE, SCROLL_DEPTH, PAGE_DWELL,
+   PRODUCT_ZOOM, SEARCH, FILTER_APPLIED, SORT_APPLIED — gắn đúng vị trí trong phễu mua hàng
+   (`sessionKind`: order/abandon/pureview quyết định funnel sau khi thêm giỏ). Sửa thêm
+   `writeData.mjs` (thiếu cột `weight`, cần cho SCROLL_DEPTH/PAGE_DWELL) và `catalog.mjs` (thêm
+   map `byId`). Validate bằng test độc lập (catalog giả 10 category): đủ cả 19 loại xuất hiện,
+   không có event lỗi kiểu dữ liệu, category-stickiness/cart-target vẫn khớp thiết kế.
+
+2. **Đo cross-validate bằng Taobao UserBehavior** (dataset thật thứ 2, đã có sẵn: 100.150.807 sự
+   kiện, không có `session_id` thật nên phải suy luận phiên bằng ngắt quãng 30 phút — xem
+   `recsys_measure_behavior_patterns_taobao.py`). Kết quả đầy đủ (16.574.600 phiên suy luận):
+
+   | Chỉ số | REES46 (phiên thật) | Taobao (phiên suy luận) | Quyết định |
+   |---|---|---|---|
+   | Độ dài phiên median/mean | 1 / 3,70 | 3 / 6,04 | Giữ REES46 (phụ thuộc ranh giới phiên, Taobao suy luận nên dài hơn máy móc) |
+   | % cart không có view trước | 78,7% | 84,5% | Lệch <10 điểm % → giữ REES46 |
+   | % cart = item vừa xem | 17,5% | 1,6% | Giữ REES46 (phụ thuộc ranh giới phiên) |
+   | % cùng category với sự kiện trước | 63,4% | 47,1% | **Đổi**: trung bình có trọng số theo số quan sát = 49,2% (Taobao có ~7× số quan sát) |
+
+   → Chỉ `P_SAME_CATEGORY` đổi (0,6343 → 0,4921), các tham số khác giữ nguyên vì lệch do suy luận
+   phiên (nhiễu kỹ thuật), không phải khác biệt hành vi thật.
+
+3. **Seed lại + validate lại nhiều vòng** (2000 user, ~3,1 triệu sự kiện — quy mô lớn hơn 4× lần
+   đo ở 5.8 vì 19 hành vi sinh ra nhiều sự kiện/user hơn hẳn 2 hành vi cũ, ~17,79 event/phiên).
+   Negative control vẫn giữ nguyên kết luận ở quy mô lớn hơn: lặp liên tiếp 3,07% (so với 3,26% ở
+   5.8), recency baseline recall@10=0,1179 (so với 0,1118) — **ổn định, không phải may rủi của mẫu
+   nhỏ n=501**.
+
+4. **Sự cố kỹ thuật gặp phải** (ghi lại để không lặp lại): quá trình đo Taobao (100 triệu dòng,
+   ~35-45 phút) bị dừng dở 2 lần do phiên làm việc kết thúc giữa chừng (không phải RAM) — script
+   không có checkpoint, phải chạy lại từ đầu cả 2 lần. Sau đó RAM hệ thống thật sự xuống mức nguy
+   hiểm (thấp nhất 0,46GB, dưới cả mốc crash 0,71GB từng gặp) do tải chung từ nhiều ứng dụng khác
+   (VSCode, Chrome, Docker/WSL2) cộng dồn — đã yêu cầu user đóng bớt ứng dụng, không tự ý kill tiến
+   trình không rõ chủ (Docker/Java/Node khác). Một lần kill nhầm chính tiến trình `node seed.mjs`
+   đang ghi dữ liệu (tưởng là rò rỉ vì WorkingSet hiện số âm — thực ra là lỗi hiển thị tràn số của
+   PowerShell khi tiến trình dùng >2GB), làm seed dở dang (114/5.000 user) phải xoá và chạy lại.
+
+**Đang làm (tại thời điểm ghi log này)**: train lại SASRec platform_v1 trên dữ liệu 2000-user mới
+với **nhiều seed khác nhau** (thay vì 1 lần chạy duy nhất như 5.7/5.8) để tính khoảng tin cậy
+(bootstrap CI) cho so sánh SASRec vs recency, theo yêu cầu làm sâu hơn về mặt thống kê thay vì chỉ
+nhìn 1 điểm số rồi kết luận "trong khoảng nhiễu" bằng cảm tính. Script đã sửa để nhận `SEED` qua
+biến môi trường và lưu kết quả từng user (`per_user_hits`) phục vụ bootstrap. Kết quả seed đầu tiên
+(42) bị ngắt ở epoch 20/30 do phiên làm việc kết thúc — đang chạy lại.
+
+**2026-09-30 — tiếp tục sau 5 ngày gián đoạn**:
+
+- **Mất kết quả**: scratchpad tạm của phiên (nơi lưu JSON seed 42/123 và kết quả đo Taobao) đã bị
+  dọn sạch sau nhiều ngày. Số liệu đã ghi ở trên (seed 42: recall@10=0,1154/@20=0,1834; seed 123:
+  0,1224/0,1829) vẫn còn trong log này, nhưng file `per_user_hits` cần cho bootstrap thì mất → phải
+  train lại. **Bài học đã áp dụng**: kết quả giờ lưu vào `data/experiment-results/platform_sasrec/`
+  (gitignore, bền vững), không dùng scratchpad nữa.
+- **Đối chiếu 2 script đo REES46 độc lập**: trong thời gian gián đoạn, một phiên làm việc khác viết
+  `recsys_behavior_stats.py` đo cùng dữ liệu (ghi ở §10, ra "cart khớp item đã xem = 21,96%") — lệch
+  với số 17,5% ở trên. Đọc code 2 script: **không mâu thuẫn, chỉ khác định nghĩa** — script kia đếm
+  "cart trùng item đã xem BẤT KỲ đâu trong phiên" (chỉ `cart`); script ở đây tách thành "trùng item
+  vừa xem gần nhất" (17,5%) + "trùng item khác đã xem" (3,9%) = **21,4%** (tính cả `purchase`).
+  Category-stickiness cả 2 đều ra 63,4%. → 2 cách viết code độc lập cho cùng kết quả, thêm 1 lớp
+  kiểm chứng cho tham số đang dùng.
+- **Sửa quy trình đánh giá cho đúng chuẩn**: `recsys_platform_sasrec.py` giờ tính **luôn recency trên
+  đúng cùng user/target** trong cùng 1 lần chạy và lưu `recency_per_user_hits` bên cạnh
+  `per_user_hits` của SASRec → bootstrap CI là **so sánh cặp (paired)** thật, không ghép số từ 2
+  script khác nhau. Thêm `recsys_platform_bootstrap_ci.py` (paired bootstrap trên user, B=1000,
+  CI 95% cho hiệu SASRec−Recency mỗi seed + trung bình/độ lệch chuẩn qua các seed) và
+  `run_platform_multiseed.sh` (**chạy tiếp được khi bị ngắt** — seed nào đã có kết quả thì bỏ qua).
+- **Giám sát RAM**: thay cơ chế hẹn giờ kiểm tra thưa (5-15 phút/lần — đã để lọt 1 lần RAM tụt từ an
+  toàn xuống 1,48GB giữa 2 lần kiểm tra) bằng watchdog chạy liên tục (kiểm tra mỗi 5 giây, tự kill
+  tiến trình train nếu RAM < 1,5GB).
+
+**2026-09-30 (tiếp) — đổi hướng: kiểm chứng DATASET bằng phép đo rẻ, train nặng để dành GPU**
+
+User nhắc lại đúng phạm vi đã giao: *làm chuẩn tool sinh dataset; bước train nặng thì thuê GPU*.
+Lượt train SASRec 3 seed đang chạy (~2,8 giờ/seed trên CPU — batch 32 + Adam cập nhật đặc toàn bộ
+bảng embedding 32.586 item mỗi bước, đo được ~25ms cố định/bước) **đã dừng** — đưa vào danh sách
+việc cho GPU. Kiểm chứng bộ sinh dữ liệu từ nay bằng **đo chính dữ liệu sinh ra**, không bằng train
+model nhiều giờ.
+
+Thêm vào tool (`tools/data-seed/`):
+- `lib/behaviorTargets.mjs` — số đo thật + dung sai ở **1 chỗ duy nhất** (trước rải trong
+  simulate.mjs, không có gì kiểm tra dữ liệu sinh ra thật sự đạt số đó).
+- `lib/fidelity.mjs` — đo dữ liệu sinh ra bằng **đúng định nghĩa** đã đo REES46/Taobao, in bảng
+  đạt/không đạt; chạy tự động mỗi lần seed (kể cả `--dry-run`, exit code 2 nếu không đạt).
+- `test/` — 8 test `node --test` không cần DB: fidelity, tái lập theo seed, item_id có thật, edge-case
+  (category 1 sản phẩm, catalog 1 category, 1 user/1 tháng), chống tái phát lỗi view→cart.
+- `seed.mjs` sinh **theo lô user** (`--chunk`) — bộ nhớ không còn phình theo tổng số user (bản cũ dồn
+  6,6 triệu sự kiện vào 1 mảng khi thử 5.000 user, node >2GB — đúng nguyên nhân 1 lần khủng hoảng RAM).
+
+**Bộ đo phát hiện ngay 4 chỗ lệch** mà nhìn tham số không thấy (đo trên catalog giả cùng hình dạng
+catalog thật, 300 user, chạy < 1 giây):
+
+| Lệch (trước sửa) | Nguyên nhân trong code | Sau sửa (catalog THẬT, 500 user) |
+|---|---|---|
+| % cart không xem gì trước: 0% vs thật 42% | Luôn đặt lượt thêm giỏ SAU ≥1 lượt xem | 41,98% |
+| Độ dài phiên median 2 vs 1 | Cùng nguyên nhân | 1 |
+| Category-stickiness 0,647 vs 0,492 | Nhánh "đổi category" bốc trúng lại category cũ ngẫu nhiên | 0,4998 |
+| % cart = item khác đã xem 1,1% vs 3,85% | Nhánh này cần ≥2 item đã xem — thiếu xác suất có điều kiện; dung sai ±5 điểm % cố định quá lỏng nên không bắt được | 3,96% (dung sai giờ tương đối với tỉ lệ nhỏ) |
+
+Mục cuối — **tỉ lệ xem mà không thêm giỏ**: đo thêm trên Taobao (mẫu 8 triệu sự kiện, 1,3 triệu phiên;
+cart-target 1,58/13,8/84,6% và stickiness 0,4706 khớp gần tuyệt đối lần đo toàn bộ 100 triệu dòng →
+mẫu đại diện tốt): **Taobao 98,59%** vs REES46 87,79%; tỉ lệ sự kiện Taobao: xem 89,5% · cart 5,6% ·
+mua 2,0% · yêu thích 2,9%. Chênh lệch do **tỉ lệ cart/view toàn cục của ngành hàng** (mỹ phẩm giá rẻ
+mua lặp ~1 cart/1,4 view; sàn tổng hợp ~1 cart/12 view) — không phụ thuộc cách cắt phiên nên không áp
+quy tắc "ưu tiên phiên thật". **Chọn Taobao** cho chỉ số này: platform bán điện thoại/laptop (giá cao,
+cân nhắc lâu) gần sàn tổng hợp hơn shop mỹ phẩm. Simulator vốn đã sinh 98,35% → không phải đổi volume
+sự kiện (vốn gắn với đặc trưng churn đã hiệu chỉnh). *Có thể đảo quyết định nếu xác định platform giống
+REES46 hơn — chỉ cần sửa 1 số trong `behaviorTargets.mjs`, bộ đo sẽ báo phần nào cần chỉnh.*
+
+**Kết quả cuối của tool** (2026-09-30):
+- `npm test`: **8/8 đạt** (không cần DB).
+- `seed.mjs --dry-run` trên catalog THẬT (32.593 SP, 80 category): **16/16 mục độ trung thực đạt** —
+  cart-target 17,37/3,96/78,68% (thật 17,48/3,85/78,67%), stickiness 0,4998 (thật 0,4921), % cart
+  không xem trước 41,98% (thật 42%), bỏ dở 98,35% (thật-Taobao 98,59%), recency recall@10 = 0,10
+  (bản lỗi cũ 0,2754).
+- Mở rộng: **5.000 user → 7,44 triệu sự kiện, RAM tiến trình đỉnh 670MB** (bản cũ >2GB), độ trung thực
+  vẫn 16/16 đạt ở quy mô này.
+
+**Việc CHƯA làm** (nhắc lại thứ tự đã thống nhất: sửa seeder → xong recsys → **mới** retrain
+churn-risk model — không đụng vào churn cho tới khi phần này xong hẳn):
+- ~~Test edge-case cho simulator~~ — xong (test/simulate.test.mjs).
+- Seed lại DB bằng bộ sinh đã sửa (DB hiện vẫn chứa dữ liệu 2.000 user sinh TRƯỚC các sửa hôm nay).
+- **Để dành GPU** (không chạy trên máy local — xem memory "train nặng để dành GPU"): train SASRec
+  platform_v1 nhiều seed + bootstrap CI SASRec vs Recency (hạ tầng đã sẵn: `run_platform_multiseed.sh`,
+  `recsys_platform_bootstrap_ci.py`, recency tính cùng user trong 1 lần chạy); REES46 full-spec; ablation.
+  Nên cân nhắc tăng batch/dùng embedding thưa trước khi thuê (đo được: batch 256 nhanh ~3,6×; Adam
+  cập nhật đặc toàn bảng embedding tốn ~25ms cố định/bước) — kiểm tra hội tụ tương đương trước.
+
 ---
 
 ## 6. Lịch
@@ -412,3 +547,122 @@ lẫn dương.
 - Không sửa hợp đồng Kafka / node BPMN đã chạy — chỉ thay nguồn sinh `churnProbability`
 - Không tự viết lại khung so sánh khi `transformer_benchmark` đã có
 - Không báo cáo cải thiện **dưới sàn nhiễu**
+
+---
+
+## 10. Nhật ký production wiring & hạ tầng (2026-09-18 → 2026-09-24)
+
+Tiếp diễn trực tiếp từ §5.3-§5.7 — chuyển từ "đo trên dữ liệu nghiên cứu" sang "gắn vào hệ thống thật
+và phát hiện khoảng cách với production". Ghi theo đúng convention `churn-risk-log.md`.
+
+### 2026-09-18 → 2026-09-21 — SASRec full-scale: 2 lần crash, 2 lần sửa đúng gốc rễ
+
+Chạy `recsys_sasrec.py` full 307K user (không subsample) hai lần, cả hai lần đều bị dừng — nhưng vì
+2 lý do khác nhau, không phải cùng 1 bug lặp lại:
+
+1. **Lần 1**: tiến trình bị cắt ngang vì **phiên làm việc trước kết thúc** (không phải lỗi kỹ thuật).
+   Checkpoint dừng đúng ở epoch 1/15 — không mất dữ liệu nhờ đã có cơ chế lưu mỗi epoch (thêm từ vụ
+   phát hiện thiếu `torch.save` ở §mục cũ).
+2. **Lần 2 (resume)**: RAM hệ thống tụt xuống **0,71GB free** giữa epoch 2 — **kill khẩn cấp thủ công**
+   theo đúng quy tắc an toàn RAM đã thiết lập từ đầu dự án. Không phải bug code — là hệ quả của việc
+   chạy song song với khối lượng RAM nền (VSCode+Chrome) đã chiếm ~10-13GB trên máy 16GB.
+
+**Sửa thêm 2 việc quan trọng nhân dịp này** (không chỉ vá tạm):
+- Thêm **cơ chế resume từ checkpoint** (`RESUME` env, so khớp `config` trước khi nạp `state_dict` +
+  `optimizer_state_dict`) — để lần dừng sau không phải train lại từ đầu.
+- Sửa **device-agnostic** (`torch.device("cuda" if torch.cuda.is_available() else "cpu")` thay vì
+  hardcode `"cpu"`) — chuẩn bị cho khả năng thuê GPU sau này mà không cần sửa code.
+
+### 2026-09-21 — Audit `recs-service` thật: phát hiện model giả đang chạy production
+
+Dùng subagent audit toàn bộ hạ tầng production (event pipeline, serving API, cache, message broker,
+Camunda) đối chiếu với kiến trúc recommender chuẩn. Phát hiện quan trọng nhất:
+
+- `AI/recs-service/app/services/sasrec.py` đang dùng **1 class LSTM giả** ("Dummy SASRec class" —
+  comment trong code cũ), không liên quan gì tới kiến trúc đã nghiên cứu; nếu thiếu file trọng số còn
+  tự sinh **trọng số ngẫu nhiên** và trả về product id bịa (`prod_{idx}`).
+- `popularity.py` cũng mock hoàn toàn (`Mocking values for base structure`).
+- Điểm sáng: pipeline churn-risk → Camunda (`risk_scheduler.py` → Kafka → `PromotionKafkaConsumer` →
+  `Trigger_Event_ChurnRisk` → voucher) là **mảnh E2E thật hoàn chỉnh nhất** trong toàn hệ thống.
+
+**Đã sửa** (không chỉ ghi nhận): thay kiến trúc SASRec giả bằng đúng kiến trúc Transformer khớp
+`recsys_sasrec.py`; thêm cơ chế **`item_space` gating** — chỉ nạp checkpoint gắn nhãn
+`"platform_v1"` kèm `item_id_map`, từ chối mọi checkpoint train trên dataset nghiên cứu (index không
+tương ứng với `Product.id` thật, xem lý do kỹ thuật ở §dưới); thêm `catalog.py` (tra cứu tên/giá thật
+từ `ecommerce_product_db`) và `popularity.py` dùng query thật thay mock. Test end-to-end thật (chạy
+uvicorn + Docker MariaDB/Redis thật) xác nhận cold-start → `popularity`, có lịch sử → chiến lược đang
+active, cơ chế chặn checkpoint sai log đúng cảnh báo thiết kế.
+
+### 2026-09-21 — Train `platform_v1` trên dữ liệu thật của web: kết quả âm quan trọng
+
+Chi tiết đầy đủ ở §5.7. Tóm tắt: SASRec train trên `user_events` thật (501 user, item_id thật) đạt
+recall@10=0,1976 — **thua** 1 heuristic không cần model ("gợi ý lại item vừa xem", recall@10=0,2754).
+Chẩn đoán gốc rễ: `tools/data-seed/lib/simulate.mjs:105-109` sinh CỨNG mọi đơn hàng theo mẫu
+`view(product X) → cart(product X)` cùng 1 item — không phải hành vi người dùng biến thiên tự nhiên.
+**Quyết định đã note nhớ** (xem memory phiên): sửa lại `simulate.mjs` theo quy luật đo từ REES46 +
+mở rộng phát đủ 19 hành vi, rồi mới retrain `platform_v1` VÀ churn-risk cùng lúc.
+
+### 2026-09-22 — Impression tracking: lấp khoảng trống §5.6 + phát hiện 3 hành vi "chết"
+
+Thêm `ACTION_IMPRESSION` vào `contracts.py` (19 hành vi, không còn 18) và nối `trackImpressions()`
+vào 3 nơi render danh sách sản phẩm (`CategoryPage.jsx`, `SearchPage.jsx`, `SuggestedSection.jsx`).
+
+Nhân dịp rà soát toàn bộ 19 hành vi, phát hiện **3 hành vi đã khai báo trong `contracts.py`/
+`behaviorTracker.ts` từ 2026-08-04 nhưng CHƯA BAO GIỜ có nơi gọi thật trong FE**: `PRODUCT_ZOOM`,
+`FILTER_APPLIED`, `SORT_APPLIED` — đúng đề mục "chưa làm" đã ghi từ khi xây tracker
+(`churn-risk-log.md:1706-1707`). Đã vá cả 3: `PRODUCT_ZOOM` vào `ProductDetailPage.jsx` (click zoom
+ảnh), `FILTER_APPLIED`/`SORT_APPLIED` vào `CategoryPage.jsx` + `SearchPage.jsx` (useEffect theo dõi
+state filter/sort, bỏ qua lần render đầu). Xác nhận lại bằng grep: cả 14/14 vi hành vi giờ đều có nơi
+bắn thật. Build FE pass.
+
+### 2026-09-23 — Điều tra hiệu năng CPU: loại 3 giả thuyết, tìm đúng nguyên nhân
+
+Trước khi quyết định thuê GPU, đo thử để trả lời "vì sao ngay cả RTX 3090 vẫn cần nhiều giờ train":
+
+1. **Loại**: lấy mẫu âm có trọng số (`rng.choice(p=...)`) — chỉ ~5 giây/epoch, không phải nút thắt.
+2. **Loại**: 2 loại mask (causal+padding) khác dtype tắt fast-path PyTorch — hợp nhất lại không cải
+   thiện đáng kể (~190ms/batch, trong khoảng nhiễu đo được).
+3. **Loại**: batch nhỏ gây phí tổn cố định trên CPU — tăng batch 256→4096 vẫn ~664-737 μs/mẫu, gần
+   như không đổi ⇒ **CPU tỉ lệ thẳng theo compute, không phải overhead-bound**.
+4. `torch.compile()` không test được (thiếu MSVC trên Windows) — để thử trên máy thuê Linux.
+
+**Kết luận**: không có bug để sửa miễn phí — chi phí ~700μs/mẫu là thật, khớp đúng thời gian đã đo
+(27 phút/epoch cấu hình nhỏ). Vì CPU không được lợi khi tăng batch nhưng GPU thì có (nhiều lõi song
+song), vẫn có cơ sở tin GPU nhanh hơn đáng kể — nhưng phải đo thật trên máy thuê (giai đoạn smoke-test
+trong plan thuê GPU), không suy diễn thêm từ số CPU.
+
+### 2026-09-24 — Đối chiếu `AI/forecast-service/production_reference/*.md` (tài liệu chuyên gia)
+
+Đối chiếu toàn bộ implementation với 6 tài liệu tham khảo production/academic đã có sẵn trong repo.
+Kết quả quan trọng nhất: `7_sasrec_evaluation_metrics.md` xác nhận **đúng nguyên văn** phương pháp đã
+tự phát hiện — *"A strong production evaluation standard requires testing SASRec against a simple
+Recency heuristic... If the ML model cannot beat this dumb rule, it should not be deployed."* — tức
+việc từ chối deploy `platform_v1` (mục trên) là đúng chuẩn khắt khe nhất ngành đòi hỏi, không phải
+tự đặt thanh chuẩn thấp.
+
+Phần lõi thuật toán (causal masking, sampled softmax, HR@K/NDCG@K, đối chứng Recency+Popularity,
+Coverage@K chống popularity bias) đạt chuẩn đầy đủ. Phần hạ tầng vận hành (cache, ANN serving, retrain
+tự động, model versioning, A/B test, monitoring/dashboard CTR-conversion-lift, item-to-item cho khách
+vãng lai) **chưa có** — khác biệt quan trọng cần nói rõ trong báo cáo: đây là 2 loại thiếu khác nhau
+(kỹ thuật vận hành chưa làm, KHÔNG phải "AI chưa đủ giỏi" — điểm này tách biệt với kết quả âm của
+`platform_v1` ở trên, không được gộp chung khi trình bày).
+
+### 2026-09-24 — Đo quy luật hành vi thật từ REES46 để sửa `simulate.mjs`
+
+Chạy `recsys_behavior_stats.py` (mới, xử lý từng tháng + `gc.collect()` — an toàn bộ nhớ) trên toàn
+bộ 5 tháng REES46 Cosmetics (4.513.080 session, 16,7 triệu event). Kết quả — khác đáng kể so với luật
+cứng hiện tại của `simulate.mjs`:
+
+| Đại lượng đo được | Số thật (REES46) | Luật hiện tại của `simulate.mjs` |
+|---|---|---|
+| Session dài bao nhiêu event | median=1, mean=3,70, p90=8 | Không mô hình hoá session — mỗi đơn hàng tự coi là 1 đơn vị |
+| Cart có trùng ĐÚNG item vừa xem trong session không | **chỉ 21,96%** | **Luôn luôn** (dòng 108-109, cứng 100%) |
+| Số SP khác đã xem cùng category trước khi cart | median=0, p90=2, 75,5% trường hợp = 0 | Không mô hình hoá — không có khái niệm "xem trước" |
+| Tỉ lệ đổi category giữa 2 event liên tiếp | 36,57% | `PREFERRED_CATEGORY_WEIGHT=0.7` — không đo từ đâu cả |
+
+**Phát hiện quan trọng nhất**: chỉ ~22% lượt cart thật sự khớp với item vừa xem trong CÙNG session —
+luật cứng "view(X) → cart(X)" của `simulate.mjs` đang mô phỏng đúng 1 kịch bản chỉ xảy ra ở thiểu số
+user thật, 78% còn lại cart đến từ nơi khác (session trước, tìm trực tiếp, gợi ý...). Đây chính là cơ
+chế sinh ra artifact "recency luôn thắng" đã phát hiện ở `platform_v1`.
+
+Số liệu lưu `behavior_stats.json`, dùng làm tham số thiết kế cho bản `simulate.mjs` mới.

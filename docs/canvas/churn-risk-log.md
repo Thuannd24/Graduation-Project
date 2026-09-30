@@ -1809,3 +1809,26 @@ lượng **mức được/mất** nếu hành vi thật có dạng đó (~+0,10 
   model-vs-rule không còn vượt sàn nhiễu) — xem bảng đối chiếu đầy đủ ở mục 2026-08-03. Nguyên nhân
   là lượt lấy mẫu RNG mới (seeder đổi mã → chuỗi random dịch), KHÔNG phải seeder sinh dữ liệu sai;
   `churn-risk-feature-overview.md` mục 3.2 hiện chưa cập nhật theo số mới.
+
+---
+
+## 2026-09-24 — Re-mở việc "chưa làm" từ 2026-08-04: tracker 19 hành vi vẫn chưa test được với churn
+
+Trong lúc làm việc bên nhánh `ai/behavoir` (Bài toán 3 — recsys), quay lại đọc đúng mục "Việc CHƯA
+làm" đã ghi ở trên (2026-08-04, dòng ~1701) và xác nhận: **3 lý do chặn liệt kê khi đó vẫn còn nguyên
+2/3**, không phải đã tự giải quyết theo thời gian:
+
+1. ~~Chưa nối `PRODUCT_ZOOM`/`FILTER_APPLIED`/`SORT_APPLIED` vào UI~~ — **đã vá xong** (2026-09-22,
+   xem `recsys-execution-plan.md` §10) — cả 14/14 vi hành vi giờ có nơi bắn thật trong FE.
+2. **Chưa có traffic thật** — vẫn đúng, web chưa có user thật.
+3. **Bộ sinh dữ liệu tổng hợp chưa phát đủ 19 hành vi** — vẫn đúng, `simulate.mjs` chỉ sinh
+   `VIEW_PRODUCT`/`ADD_TO_CART` theo mẫu cứng (phát hiện thêm: mẫu này còn có 1 lỗi thiết kế khác —
+   luôn sinh `view(X) → cart(X)` cùng 1 item mọi đơn hàng, xem `recsys-execution-plan.md` §5.7 — lỗi
+   này ảnh hưởng CẢ recsys lẫn khả năng tái dùng seeder cho churn).
+
+**Quyết định** (đã lưu memory phiên, không chỉ ghi ở đây): việc sửa `simulate.mjs` để (a) sinh hành vi
+thật hơn (không hardcode view→cart cùng item) và (b) phát đủ 19 hành vi thay vì 2, sẽ **đồng thời** mở
+khoá cả 2 việc đang treo — retrain `platform_v1` (recsys) VÀ lần đầu tiên test được liệu 19 hành vi
+micro có thêm thông tin gì cho churn ngoài 11 feature production hay không. Thứ tự bắt buộc: sửa
+seeder xong → xong việc recsys đang làm → mới retrain churn. Không retrain churn trước khi seeder mới
+sẵn sàng — làm vậy sẽ lãng phí vì seeder cũ không phát được tín hiệu mới nào để model học thêm.
