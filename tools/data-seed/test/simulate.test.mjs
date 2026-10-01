@@ -19,11 +19,12 @@ function generate({ users = 300, months = 12, seed = 42, catalog = makeCatalog()
 }
 
 test("dữ liệu sinh ra khớp số đo từ dữ liệu người dùng thật (mọi mục fidelity đạt)", () => {
-  // 800 user: độ tập trung lượt xem theo SP méo khi quá thưa (300 user / ~5K SP → ít lượt mỗi SP);
-  // số đo thật tính trên hàng triệu lượt.
-  const { events } = generate({ users: 800 });
+  // 1500 user: độ tập trung lượt xem theo SP méo thấp khi quá thưa (800 user / ~7K SP → top 10% ≈ 0,605, sát
+  // ngưỡng dưới 0,607); 1500 user cho ≈ 0,62 ổn định qua 3 seed, khớp catalog Tiki thật 2000 user (0,625).
+  const { events, orders, catalog } = generate({ users: 1500 });
   const f = new FidelityStats();
   f.addEvents(events);
+  f.addOrders(orders, (pid) => catalog.rootOf.get(catalog.byId.get(pid)?.categoryId));
   const failed = f.checks().filter((r) => !r.pass);
   assert.deepEqual(
     failed.map((r) => `${r.name}: sinh=${r.got} thật=${r.want} (${r.rule})`),
