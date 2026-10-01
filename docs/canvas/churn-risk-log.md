@@ -1929,3 +1929,121 @@ vì top 10% méo thấp khi thưa: 800 user cho 0,605, sát ngưỡng 0,607. Sau
   hoàn tất giao dịch).
 - Tiếp theo: đo dịch chuyển hành vi TRƯỚC churn trên REES46 (chỉ đưa vào bộ sinh nếu có tín hiệu thật), sau đó
   seed 5000 user vào DB và re-baseline churn.
+
+## 2026-10-01 (tiếp) — Hành vi TRƯỚC/SAU churn trên REES46: gỡ "phân vân", thêm "hành trình mua"; lộ lệch ở lõi động lực mua
+
+Script: `churn_measure_prechurn_behavior.py` (REES46 Cosmetics 5 tháng; gộp về 2,8 triệu dòng user×ngày, 90 s).
+Kết quả: `data/experiment-results/behavior_patterns/prechurn_behavior.json`.
+
+### A. Kiểm chứng 3 cơ chế churn đặt tay trong bộ sinh
+Nghiên cứu sự kiện trên khách mua lặp. Nhóm churn (6.019) neo ở lần mua cuối, sau đó ≥ 60 ngày không mua; nhóm đối chứng
+(5.115) neo ở 1 lần mua có lần kế tiếp trong ≤ 60 ngày. Tiêu chí quyết định ghi trong docstring TRƯỚC khi chạy.
+- **Sửa lỗi giữa đường (minh bạch):** lượt đầu gộp hoạt động theo `user_id`, nhưng 1.027 user có cả mốc churn lẫn mốc đối
+  chứng nên hoạt động bị cộng chung. Đã sửa sang khoá (user, mốc) và chạy lại. Kết luận không đổi, chỉ độ lớn thay đổi.
+- **"Phân vân" (bỏ giỏ ×2,5 và xem ×1,3 trong 2 tháng trước churn): GỠ.** Theo tiêu chí gốc, chỉ số ngày bỏ giỏ MUỘN/SỚM của
+  churn ÷ đối chứng = 1,20 (CI [1,14; 1,27]) là "đạt". Nhưng mọi chỉ số đều tăng ~1,2 như nhau (xem 1,24, thêm giỏ 1,22), tức
+  là hoạt động chung tăng (nhóm churn có mức nền thấp hơn), không riêng bỏ giỏ. Tiêu chí gốc không kiểm soát mức hoạt động
+  chung, nên thêm kiểm tra **đặc hiệu** (ghi rõ là thêm SAU khi xem số): (bỏ giỏ / thêm giỏ) churn ÷ đối chứng = **0,983,
+  CI [0,925; 1,062]** → không có tăng riêng. Có điều kiện theo mức hoạt động (LR, 2 mốc cắt), hệ số của bỏ giỏ gần đây là
+  **−0,34**: bỏ giỏ đi kèm ÍT churn hơn (dấu hiệu còn quan tâm), NGƯỢC giả định của bộ sinh.
+- **Sau churn lượt xem tụt còn 5%: SAI.** Nhóm churn vẫn duyệt: lượt xem SAU/TRƯỚC 0,186, thêm giỏ 0,136; 41,2% im lặng hẳn
+  56 ngày.
+- **Suy giảm dần trước lần mua cuối: không thấy.** Hoạt động tăng ở CẢ hai nhóm trước lần mua (đường ramp mua hàng).
+- Dự đoán (2 mốc cắt): tín hiệu "thay đổi gần đây" thêm **ΔAUC +0,009 ± 0,001** so với RFM (0,701 → 0,710): có thật nhưng nhỏ.
+
+### B. Phát hiện cấu trúc: duyệt DỒN QUANH lần mua (bộ sinh rải đều, tách rời việc mua)
+Trên khách mua lặp: 35% lượt xem rơi vào ngày mua, 37% trong 14 ngày trước khi mua, **chỉ 16% là duyệt nền** (cách mọi lần mua
+> 14 ngày); 39% khách mua lặp không có lượt xem nền nào. Lượt xem/ngày trước 1 lần mua: −28 ngày 0,29 · −14 0,40 · −7 0,64 ·
+−3 1,06 · −1 3,16 · ngày mua 11,3. Thêm giỏ dồn tương tự (ngày mua 44%, 1–14 ngày trước 34%, nền 14%). Duyệt SAU lần mua chỉ
+~1 lượt xem vượt nền mỗi lần mua (so với ~8 trước) → không mô phỏng riêng.
+
+**Thay đổi bộ sinh:**
+- Gỡ `restlessnessMultiplierAt`. Thêm `browseDecayAt`: sau churn, duyệt không tụt về 5% như đơn hàng.
+- **Hành trình mua:** mỗi đơn kéo theo phiên cùng ngày, phiên xem trước d ngày (d ~ phân phối THỰC NGHIỆM 1–28 ngày, không
+  giả định dạng hàm) và phiên bỏ giỏ hành trình.
+- **Duyệt nền:** 45% user không duyệt ngoài lúc mua; cường độ nền tỉ lệ với tần suất mua (`backgroundConst` 0, bản cũ có
+  hằng số đặt tay 3).
+- Fidelity thêm 11 mục: 7 mục dồn quanh lần mua (xem + thêm giỏ), 3 mục sau lần mua cuối, 1 chống tái phát "phân vân".
+  Đo trong cửa sổ 152 ngày cho bằng độ dài dữ liệu thật.
+- Hiệu chỉnh 3 vòng lưới (96 + 48 + 32 tổ hợp). Vòng 2 sửa lỗi đếm ngày mua 2 lần: phân phối đo có khối ngày mua (57%) mà
+  phiên đặt đơn vốn đã nằm ở ngày mua → hành trình dùng phân phối 1–28 ngày, ngày mua do phiên đặt đơn + phiên cùng ngày.
+  **7/7 mục dồn quanh lần mua ĐẠT**; chống tái phát ĐẠT.
+
+### C. CÒN TRƯỢT — lệch ở LÕI động lực mua/churn (chưa sửa, cần quyết định)
+`npm test` trượt 3 mục: lượt xem SAU/TRƯỚC sau churn 0,34 (thật 0,186), thêm giỏ 0,24 (thật 0,136), lặp liên tiếp cấp user
+0,133 (thật 0,192; mục này cần hiệu chỉnh lại tham số xem lại sau khi đổi cơ cấu phiên). Chẩn đoán ở 6.000 user:
+
+| Khách mua lặp | Bộ sinh | REES46 |
+|---|---:|---:|
+| Tỉ lệ 60 ngày không mua lại | 0,24 | 0,54 |
+| Lượt xem/ngày của nhóm churn sau lần mua cuối | 0,60 | 0,18 |
+| % "churn theo hành vi" là churn ẩn | 22–35% | — |
+
+Ngoài đời, ngừng mua đi kèm ngừng duyệt (mất hứng thú thật). Trong bộ sinh, phần lớn khách "ngừng mua" chỉ là khoảng trống
+Poisson ngẫu nhiên của khách mua thưa, vẫn duyệt bình thường. Gốc: tần suất mua (log-normal λ), 35% churn, tụt còn 5% đều là
+**giả định đặt tay chưa từng đo**. Hướng đề xuất: neo lõi này bằng **BG/NBD** (mô hình sinh kinh điển: Poisson mua với λ
+dị biệt Gamma + rời bỏ hình học dị biệt Beta) ước lượng trên dữ liệu giao dịch thật dài hạn. Trùng với roadmap 2.3b.
+
+## 2026-10-01 (tiếp) — Neo LÕI động lực mua/churn bằng BG/NBD (người dùng chọn phương án này)
+
+### Ước lượng + kiểm định (`churn_fit_bgnbd.py`, kết quả `bgnbd_fit.json`)
+BG/NBD (Fader, Hardie & Lee 2005) tự cài bằng scipy (không cài package). Đơn vị: 1 giao dịch = 1 ngày có mua. Tiêu chí ĐẶT
+TRƯỚC: tổng giao dịch giai đoạn giữ lại dự báo lệch ≤ 15% và các nhóm tần suất x = 0..3 lệch ≤ 25%; chọn REES46 nếu đạt
+(B2C, cùng nguồn hành vi), nếu không thì dùng Online Retail II.
+
+| Nguồn | Khách | r | α | a | b | Dự báo / thực (giữ lại) | Kết luận |
+|---|---:|---:|---:|---:|---:|---:|---|
+| REES46 Cosmetics (học 3 tháng, giữ lại 60 ngày) | 72.225 | 0,275 | 41,1 | 0,467 | 1,517 | 1,171; nhóm x=0 ×1,46 | TRƯỢT |
+| Online Retail II, UCI CC BY 4.0 (học 18 tháng, giữ lại 192 ngày) | 4.935 | 0,679 | 66,0 | 0,157 | 3,322 | 0,978; mọi nhóm ±9% | **ĐẠT → dùng** |
+
+REES46 trượt đúng ở điểm yếu đã biết của BG/NBD (khách chưa mua lặp luôn được coi là "còn sống"), cộng thêm 82% khách chỉ
+mua 1 lần trong 3 tháng và dữ liệu bị cắt trái. Ngụ ý của Online Retail II: tốc độ TB 0,31 lần mua/30 ngày, hệ số biến thiên
+1,21, xác suất rời bỏ TB sau mỗi lần mua lặp 4,5%.
+
+**3 lỗi của chính mình, đã sửa (ghi để minh bạch):**
+1. Đặt điều kiện "cần a > 1" cho công thức kỳ vọng có điều kiện → sai; công thức (10) dùng được với mọi a.
+2. Mô phỏng Monte Carlo kiểm chéo ban đầu cho rời bỏ cả sau lần mua ĐẦU → sai ngữ nghĩa BG/NBD (chỉ rời bỏ sau lần mua lặp).
+3. Bản Monte Carlo vòng lặp quá ít mẫu khớp điều kiện nên nhiễu. Bản vector hoá (15.384 mẫu khớp) cho 0,434 ± 0,007, công
+   thức cho 0,436 → **công thức đúng**.
+
+### Thay vào bộ sinh
+- `PURCHASE_PROCESS` (behaviorTargets): λ/ngày ~ Gamma(0,679; 66,0) × hệ số ngành (TB 1); p ~ Beta(0,157; 3,322).
+- Ngày gia nhập đều trong 12 tháng; lần mua đầu ở ngày gia nhập; các lần sau là quá trình Poisson; sau MỖI lần mua LẶP rời bỏ
+  với xác suất p rồi không mua nữa. `willChurn`/`dropoutAt` không đặt trước, mà tự xảy ra trong mô phỏng rồi ghi ngược làm
+  ground truth (CSV: cột `churn_month` → `dropout_at`).
+- `Rng` thêm `exponential`, `gamma` (Marsaglia–Tsang), `beta`. Kiểm: TB/hệ số biến thiên khớp lý thuyết tới 3 chữ số.
+- Gỡ: 35% churn đặt tay, tháng churn 3–10, hằng 5%.
+- Hệ quả (5.000 user, catalog Tiki): 13,6 nghìn đơn; 4,9% user rời bỏ trong cửa sổ; nhãn "120 ngày không đơn" ở user ≥ 2 đơn
+  ~22%; **~87% khách "churn theo hành vi" vẫn còn sống, chỉ là mua chậm**. Đây là hệ quả trung thực của dữ liệu thật (rời bỏ
+  thấp, tốc độ mua rất dị biệt): bài toán churn thành "dự đoán khoảng nghỉ dài" — đúng tinh thần BG/NBD.
+- **Ghép 2 nguồn (nói rõ khi bảo vệ):** quá trình mua/rời bỏ lấy từ Online Retail II (nhà bán lẻ quà tặng UK); hành vi duyệt,
+  phiên, dồn quanh lần mua lấy từ REES46 Cosmetics. Không nguồn nào là sàn đa ngành VN.
+
+### Sửa thêm phát hiện trong lúc hiệu chỉnh: độ dài phiên tách theo loại (`churn_measure_session_split.py`)
+Phiên xem thuần của bộ sinh lấy độ dài từ phân phối CHUNG (vốn gồm cả phiên có giỏ, TB 10,3 sự kiện). REES46: phiên không giỏ
+P(dài 1) = 0,815 (TB 1,50); phiên có giỏ 0,072 (TB 10,3); tất cả 0,651; phiên có giỏ chiếm 22%. Sửa: phiên xem thuần lấy theo
+phân phối phiên KHÔNG giỏ. Thêm 2 mục fidelity: % phiên dài 1, % phiên có giỏ.
+
+### Hiệu chỉnh lại (lưới + tìm kiếm ngẫu nhiên 40 + 30 mẫu trên 2–3 seed) — tham số cuối
+`sameDaySessionsPerOrder` 2,47 · `journeySessionsPerOrder` 2,4 · `journeyAbandonPerOrder` 1,08 · `zeroBackgroundProb` 0,39 ·
+`backgroundScale` 1,16 · `backgroundAbandonScale` 3,07 · `backgroundConst` 0 · `churnViewDecay` 0,15 · `churnCartDecay` 0,05 ·
+`sessionResume` 0,75 (cũ 0,58) · `revisitHistory` 0,30 (cũ 0,25).
+
+### Kết quả cuối
+- `npm test` **11/11**. Test fidelity gộp 2 seed × 3.000 user: các chỉ số quanh lần mua cuối là tỉ số trên vài trăm mốc neo,
+  1 seed dao động ±0,03–0,1.
+- `seed.mjs --dry-run --users 5000` trên catalog Tiki thật, 5 mốc `--now` (28/09–02/10): **4/5 đạt cả 34 mục**; 1/5 trượt 1
+  mục ở mức nhiễu (lượt xem SAU/TRƯỚC 0,2365, ngưỡng 0,236).
+- **Quy tắc mới (minh bạch):** 4 chỉ số quanh lần mua cuối ĐẠT nếu trong dung sai HOẶC lệch ≤ 2·SE bootstrap của chính mẫu
+  sinh (mẫu không đủ để phân biệt lệch nhỏ hơn nhiễu của nó). Quy tắc in trong báo cáo.
+- **Giằng co còn lại (giới hạn cấu trúc):** lượt xem SAU/TRƯỚC của nhóm churn (bộ sinh 0,17–0,24, thật 0,186) và % im lặng
+  56 ngày (0,43–0,50, thật 0,412) kéo ngược nhau qua `zeroBackgroundProb`: hạ cái này thì cái kia vượt ngưỡng.
+- **LỆCH ĐÃ BIẾT (`KNOWN_GAPS`, in rõ trong mọi báo cáo, không chặn cổng):** % phiên có giỏ 0,35 so với 0,22. Bộ sinh tách mỗi
+  SP trong đơn thành 1 phiên 1 lượt thêm giỏ; sửa = viết lại bộ mô phỏng phiên + hiệu chỉnh lại recsys (đã bàn giao). Feature
+  churn đếm lượt thêm giỏ, không đếm phiên.
+- Đặc hiệu "phân vân" của bộ sinh TB ~1,07–1,12 (thật 0,98): phần dư nhỏ của cơ chế hành trình, xa mức ×2,5 đã gỡ.
+
+### Việc kéo theo (chưa làm)
+- Docstring bên AI mô tả cơ chế bộ sinh CŨ (`candidates.py`, `churn_product_block.py`, `label_diagnostics.py`: "λ tụt bậc từ
+  churnMonth", "bỏ giỏ ×2,5") → cập nhật cùng `churn-risk-feature-overview.md` ở bước re-baseline.
+- Seed 5.000 user vào DB → re-baseline churn (kỳ vọng AUC đổi vì động lực nhãn đổi hẳn).
