@@ -45,6 +45,14 @@ export async function loadCatalog({ popularityFile = process.env.POPULARITY_FILE
     }
   }
   const catalog = indexCatalog(products);
+  // Ngành GỐC của mỗi danh mục (đi ngược parent_id tới gốc) — cho chu kỳ mua lại theo ngành.
+  const cats = await query(`SELECT id, parent_id AS parentId, slug FROM ${DB.PRODUCT}.categories`);
+  const byCatId = new Map(cats.map((c) => [c.id, c]));
+  catalog.rootOf = new Map(cats.map((c) => {
+    let cur = c;
+    for (let guard = 0; cur.parentId != null && byCatId.has(cur.parentId) && guard < 10; guard++) cur = byCatId.get(cur.parentId);
+    return [c.id, cur.slug];
+  }));
   catalog.popularitySource = pop
     ? `${withSales}/${products.length} SP có số đã bán thật (Tiki), còn lại log-normal dự phòng`
     : `log-normal dự phòng (không thấy ${popularityFile})`;

@@ -49,6 +49,28 @@ export function itemConcentration(countsMap, frac = 0.1) {
   return { nItems: c.length, topShare: top / total, gini: g / (asc.length * total) };
 }
 
+const DAY_MS = 86_400_000;
+const MIN_GAPS_PER_ROOT = 30; // ngành có ít khoảng cách hơn thì bỏ khỏi so sánh (quá ít để ước lượng trung vị)
+
+function ranks(arr) {
+  const idx = arr.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]);
+  const r = new Array(arr.length);
+  for (let i = 0; i < idx.length;) {
+    let j = i;
+    while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
+    for (let k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2 + 1;
+    i = j + 1;
+  }
+  return r;
+}
+function spearman(a, b) {
+  const ra = ranks(a), rb = ranks(b);
+  const ma = mean(ra), mb = mean(rb);
+  let num = 0, da = 0, db = 0;
+  for (let i = 0; i < ra.length; i++) { num += (ra[i] - ma) * (rb[i] - mb); da += (ra[i] - ma) ** 2; db += (rb[i] - mb) ** 2; }
+  return da && db ? num / Math.sqrt(da * db) : null;
+}
+
 const mean = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);
 
 export class FidelityStats {
@@ -72,6 +94,7 @@ export class FidelityStats {
     this.recencyHits10 = 0;
     this.viewsPerItem = new Map(); // độ tập trung lượt xem theo SP (đuôi dài)
     this.sessViewPairs = 0;
+    this.repurchaseGaps = new Map(); // ngành gốc → [khoảng cách ngày giữa 2 lần mua cùng ngành]
     this.sessViewRepeats = 0;
   }
 
@@ -152,6 +175,47 @@ export class FidelityStats {
     }
   }
 
+  /** Chu kỳ mua lại theo ngành — mọi đơn của 1 user phải nằm trọn trong 1 lần gọi (như addEvents).
+   * `rootOfProduct(productId)` → slug ngành gốc. Đơn vị: NGÀY có mua trong ngành (gộp nhiều SP cùng ngày). */
+  addOrders(orders, rootOfProduct) {
+    const daysByUserRoot = new Map();
+    for (const o of orders) {
+      const day = Math.floor(o.createdAt.getTime() / DAY_MS);
+      for (const it of o.items) {
+        const root = rootOfProduct(it.productId);
+        if (!root) continue;
+        const key = `${o.userId}|${root}`;
+        if (!daysByUserRoot.has(key)) daysByUserRoot.set(key, new Set());
+        daysByUserRoot.get(key).add(day);
+      }
+    }
+    for (const [key, set] of daysByUserRoot) {
+      const root = key.slice(key.indexOf("|") + 1);
+      const d = [...set].sort((a, b) => a - b);
+      if (!this.repurchaseGaps.has(root)) this.repurchaseGaps.set(root, []);
+      for (let i = 1; i < d.length; i++) this.repurchaseGaps.get(root).push(d[i] - d[i - 1]);
+    }
+  }
+
+  categoryRepurchaseSummary() {
+    const target = TARGETS.categoryRepurchase.relativeToGrocery;
+    const med = new Map();
+    for (const [root, gaps] of this.repurchaseGaps) {
+      if (gaps.length >= MIN_GAPS_PER_ROOT) med.set(root, percentile([...gaps].sort((a, b) => a - b), 50));
+    }
+    const base = med.get("bach-hoa-online");
+    if (!base) return null;
+    const roots = [...med.keys()].filter((r) => target[r] != null);
+    const gen = roots.map((r) => med.get(r) / base);
+    const tgt = roots.map((r) => target[r]);
+    const male = roots.length ? mean(roots.map((_, i) => Math.abs(Math.log(gen[i] / tgt[i])))) : null;
+    return {
+      roots: Object.fromEntries(roots.map((r, i) => [r, { generatedRatio: +gen[i].toFixed(3), target: tgt[i], medianGapDays: med.get(r), gaps: this.repurchaseGaps.get(r).length }])),
+      spearman: roots.length >= 4 ? spearman(gen, tgt) : null,
+      meanAbsLogError: male,
+    };
+  }
+
   summary() {
     const sl = [...this.sessionLengths].sort((a, b) => a - b);
     const vb = [...this.viewsBeforeFirstCart].sort((a, b) => a - b);
@@ -175,6 +239,7 @@ export class FidelityStats {
       recencyRecallAt10: this.recencyEvalUsers ? this.recencyHits10 / this.recencyEvalUsers : null,
       itemPopularity: itemConcentration(this.viewsPerItem),
       sessionViewRepeatRate: this.sessViewPairs ? this.sessViewRepeats / this.sessViewPairs : null,
+      categoryRepurchase: this.categoryRepurchaseSummary(),
       actionCounts: Object.fromEntries(this.actionCounts),
       missingActions: ALL_ACTIONS.filter((a) => this.actionCounts.get(a) === 0),
       unknownActions: Object.fromEntries(this.unknownActions),
@@ -219,6 +284,13 @@ export class FidelityStats {
     rate("Recency recall@10 (cấp user)", s.recencyRecallAt10, TARGETS.userSequence.recencyRecallAt10);
     rate("% xem lặp liên tiếp (cấp user)", s.consecutiveRepeatRate, TARGETS.userSequence.consecutiveRepeatRate);
     max("[chống tái phát] % cart = item VỪA xem", s.cartTarget.sameAsLastView, REGRESSION_GUARDS.maxCartSameAsLastView);
+    if (s.categoryRepurchase) {
+      // Ngưỡng đặt TRƯỚC khi xem kết quả (2026-10-01): thứ hạng chu kỳ giữa các ngành phải khớp (Spearman ≥ 0,5)
+      // và tỉ lệ so với Bách hoá lệch trung bình ≤ ~28% (|log| ≤ 0,25). Chỉ so TỈ LỆ (Amazon: review ≠ lần mua).
+      const cr = s.categoryRepurchase;
+      rows.push({ name: "Chu kỳ mua lại theo ngành — tương quan hạng", got: cr.spearman, want: 0.5, pass: cr.spearman != null && cr.spearman >= 0.5, rule: "Spearman ≥ 0,5" });
+      rows.push({ name: "Chu kỳ mua lại theo ngành — sai số tỉ lệ", got: cr.meanAbsLogError, want: 0.25, pass: cr.meanAbsLogError != null && cr.meanAbsLogError <= 0.25, rule: "TB |log tỉ lệ| ≤ 0,25" });
+    }
     rows.push({ name: "Đủ 19 loại hành vi", got: 19 - s.missingActions.length, want: 19, pass: s.missingActions.length === 0, rule: "bằng đúng" });
     rows.push({ name: "Action lạ ngoài 19 loại", got: Object.keys(s.unknownActions).length, want: 0, pass: Object.keys(s.unknownActions).length === 0, rule: "bằng đúng" });
     rows.push({ name: "Sự kiện sai kiểu dữ liệu", got: s.badEvents, want: 0, pass: s.badEvents === 0, rule: "bằng đúng" });

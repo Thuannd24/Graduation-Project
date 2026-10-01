@@ -209,6 +209,15 @@ function pickFromCategory(rng, catalog, categoryId) {
   return pickAny(rng, catalog);
 }
 
+function pickFromCategoryExcluding(rng, catalog, categoryId, excludeIds) {
+  let p = null;
+  for (let attempt = 0; attempt < 10; attempt++) {
+    p = pickFromCategory(rng, catalog, categoryId);
+    if (!excludeIds || !excludeIds.has(p.id)) return p;
+  }
+  return p;
+}
+
 function pickPreferredOrRandom(rng, catalog, profile) {
   const usePreferred = profile.preferredCategories.length > 0 && rng.bool(PREFERRED_CATEGORY_WEIGHT);
   if (usePreferred) return pickFromCategory(rng, catalog, rng.choice(profile.preferredCategories));
@@ -342,7 +351,7 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
 
   const viewedThisSession = []; // theo đúng thứ tự đã xem trong phiên
   const viewedIds = new Set();
-  let lastCategoryId = null;
+  let lastCategoryId = opts.intentCategoryId ?? null; // phiên mua theo "ý định" ngành (chu kỳ mua lại)
   let cartTargetProduct = null;
   const tabAwayAtIndex = rng.bool(P_SESSION_HAS_TAB_AWAY) && nViews > 1 ? rng.int(0, nViews - 2) : -1;
 
@@ -358,7 +367,11 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
       // Không liên quan tới lượt xem TRONG phiên — đi thẳng từ danh sách/tìm kiếm, hoặc đã xem ở
       // phiên KHÁC từ trước (trường hợp PHỔ BIẾN NHẤT trong dữ liệu thật). Vẫn có quán tính
       // category (số đo stickiness tính trên cả cặp view→cart), loại trừ item đã xem trong phiên.
-      cartTargetProduct = pickNextProduct(rng, catalog, profile, lastCategoryId, viewedIds);
+      // Đơn có "ý định" mua lại 1 ngành (chu kỳ mua lại) → SP thêm giỏ lấy TRONG ngành đó (vẫn theo độ phổ biến);
+      // không có ý định thì giữ quán tính category như cũ.
+      cartTargetProduct = opts.intentCategoryId != null
+        ? pickFromCategoryExcluding(rng, catalog, opts.intentCategoryId, viewedIds)
+        : pickNextProduct(rng, catalog, profile, lastCategoryId, viewedIds);
     }
     clock.advance(20, 1800);
     push(ACTION_ADD_TO_CART, { itemId: cartTargetProduct.id, categoryId: cartTargetProduct.categoryId });
@@ -409,7 +422,7 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
 
     let product = null;
     const roll = rng.next();
-    if (i === 0 && history && rng.bool(GENERATION.sessionResume)) {
+    if (i === 0 && history && opts.intentCategoryId == null && rng.bool(GENERATION.sessionResume)) {
       product = history.pickBefore(rng, anchorTime, null, true); // mở phiên bằng SP đang xem dở
     } else if (!mustBeNew && viewedThisSession.length >= 1 && roll < GENERATION.repeatPrev) {
       product = viewedThisSession[viewedThisSession.length - 1];
@@ -468,12 +481,49 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
   return { events, cartTargetProduct };
 }
 
+/** Tốc độ mua tương đối của 1 danh mục = 1 / (chu kỳ mua lại của ngành gốc, so với Bách hoá) — đo trên Amazon
+ * Reviews 2023 (TARGETS.categoryRepurchase). Danh mục không thuộc ngành đã đo → 1. */
+function categoryRate(catalog, categoryId) {
+  const root = catalog.rootOf?.get(categoryId);
+  const rel = root != null ? TARGETS.categoryRepurchase.relativeToGrocery[root] : undefined;
+  return rel ? Math.pow(1 / rel, GENERATION.categoryRateExponent) : 1;
+}
+
+/** Hệ số tần suất đặt đơn của user theo NGÀNH họ hay mua, chuẩn hoá để TRUNG BÌNH toàn bộ user = 1 (danh mục
+ * ưa thích được chọn đều trong mọi danh mục, xem profiles.mjs) — mặt bằng tần suất (gắn với cơ chế churn) giữ
+ * nguyên, nhưng người thích ngành chu kỳ ngắn (sách, đồ em bé) mua dày hơn, ngành lâu bền (điện thoại) thưa hơn.
+ * Vì sao cần (2026-10-01): khi tần suất KHÔNG phụ thuộc ngành, người chỉ thích điện thoại vẫn mua điện thoại theo
+ * nhịp đơn chung → khoảng cách mua lại sinh ra ngược chiều số đo (Spearman −0,3 ÷ −0,4). */
+function userCategoryRateMultiplier(catalog, profile) {
+  if (!catalog.rootOf || profile.preferredCategories.length === 0) return 1;
+  if (catalog._meanCategoryRate == null) {
+    catalog._meanCategoryRate = catalog.categoryIds.reduce((a, c) => a + categoryRate(catalog, c), 0) / catalog.categoryIds.length;
+  }
+  const m = profile.preferredCategories.reduce((a, c) => a + categoryRate(catalog, c), 0) / profile.preferredCategories.length;
+  return m / catalog._meanCategoryRate;
+}
+
+/** "Ý định" ngành cho 1 SP trong đơn: danh mục ưa thích, xác suất ∝ tốc độ mua của ngành (1/chu kỳ); với xác suất
+ * intentExploreProb thì không có ý định (mua thử — phiên tự chọn như cũ). */
+function chooseIntentCategory(rng, catalog, profile) {
+  if (!catalog.rootOf || profile.preferredCategories.length === 0) return null;
+  if (rng.bool(GENERATION.intentExploreProb)) return null;
+  const w = profile.preferredCategories.map((c) => categoryRate(catalog, c));
+  let r = rng.next() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < w.length; i++) {
+    r -= w[i];
+    if (r <= 0) return profile.preferredCategories[i];
+  }
+  return profile.preferredCategories[profile.preferredCategories.length - 1];
+}
+
 /** Sinh toàn bộ order + user_events cho MỘT user qua `totalMonths` tháng gần nhất tính đến `now`. */
 function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
   const orders = [];
   const events = [];
   const nextSessionId = makeSessionIdGenerator(userId);
   const history = makeViewHistory();
+  const rateMult = userCategoryRateMultiplier(catalog, profile);
 
   for (let month = 1; month <= totalMonths; month++) {
     const { start, end } = monthWindow(now, totalMonths, month);
@@ -483,9 +533,9 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
     // --- Đơn hàng thật: mỗi item trong đơn = 1 phiên có thêm giỏ (nội dung phiên thật, không
     // còn ghép cứng view-cart cùng item — xem simulateSession). Tần suất/tháng giữ NGUYÊN như
     // bản cũ (gắn với động lực churn đã được validate ở feature engineering, không đụng vào).
-    const numOrders = rng.poisson(profile.lambdaBase * decay);
-    for (let o = 0; o < numOrders; o++) {
-      const orderDate = rhythmicTimestamp(rng, start, end, profile);
+    const numOrders = rng.poisson(profile.lambdaBase * decay * rateMult);
+    const orderDates = Array.from({ length: numOrders }, () => rhythmicTimestamp(rng, start, end, profile)).sort((a, b) => a - b);
+    for (const orderDate of orderDates) {
       const numItems = rng.int(1, 3);
       const items = [];
       let totalAmount = 0;
@@ -495,7 +545,8 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
         const anchor = new Date(orderDate.getTime() - rng.int(10, 360) * 60 * 1000);
         const { events: sessionEvents, cartTargetProduct } = simulateSession(
           rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-          { forceCart: true, sessionKind: "order", nextSessionId, history }
+          // mỗi SP trong đơn là 1 quyết định mua riêng, rơi vào ngành ưa thích ∝ tốc độ mua của ngành
+          { forceCart: true, sessionKind: "order", nextSessionId, history, intentCategoryId: chooseIntentCategory(rng, catalog, profile) }
         );
         events.push(...sessionEvents);
 

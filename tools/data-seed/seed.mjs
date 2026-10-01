@@ -271,6 +271,7 @@ async function main() {
       now,
     });
     fidelity.addEvents(events);
+    fidelity.addOrders(orders, (pid) => catalog.rootOf?.get(catalog.byId.get(pid)?.categoryId));
 
     if (exporter) {
       exporter.assignOrderIds(orders);

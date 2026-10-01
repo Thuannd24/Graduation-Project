@@ -1847,3 +1847,85 @@ với cơ chế sinh. Nhặt vào `churn-risk-roadmap.md` (đúng thứ tự: l�
 - 2.3b: BG/NBD + Gamma-Gamma làm mốc xác suất kinh điển cho LR (+ CLV cho expected_loss ở 3.1).
 - 3.1b: nối điểm rủi ro vào module Campaigns có sẵn, kèm holdout.
 Loại: "gỡ app" (web không có app mobile), "giao trễ/hoàn trả" (không có dữ liệu nguồn → sinh ra là vòng tròn).
+
+## 2026-10-01 (tiếp) — Roadmap 1.2: chu kỳ mua lại THEO NGÀNH trong bộ sinh, neo bằng Amazon Reviews 2023
+
+**Nguyên tắc (người dùng duyệt):** cơ chế liên quan churn chỉ được đưa vào bộ sinh khi **đo được trên dữ liệu
+thật**; không đo được thì để ngoài, hoặc khai báo là giả định và dùng làm đối chứng âm.
+
+### Nguồn số đo — thử 2 nguồn, giữ 1
+1. **REES46 đa ngành** (`churn_measure_category_repurchase.py`): **KHÔNG neo được**. Cửa sổ chỉ 61 ngày nên mọi
+   khoảng cách bị cắt ở ≤ 60 ngày; ngành lâu bền chỉ hiện ra qua tỉ lệ mua lặp thấp, không đo được chu kỳ. Shop
+   này cũng không bán tạp hoá/sữa/tã. Giữ script để minh bạch, không dùng số.
+2. **Amazon Reviews 2023, bản 5-core** (`churn_measure_amazon_repurchase.py`, 11 ngành, 63 triệu khoảng cách):
+   khoảng cách trung vị giữa 2 ngày review liên tiếp cùng ngành của 1 user. **Review ≠ lần mua** (không phải ai
+   mua cũng review), nên khoảng cách tuyệt đối bị thổi phồng. Vì vậy **chỉ dùng tỉ lệ so với ngành Tạp hoá**,
+   giả định tỉ lệ review/mua gần nhau giữa các ngành (giả định này ghi rõ khi bảo vệ).
+
+| Ngành Amazon | Trung vị (ngày) | Tỉ lệ / Tạp hoá | → ngành gốc Tiki |
+|---|---:|---:|---|
+| Books | 65 | 0,586 | nha-sach-tiki |
+| Baby_Products / Toys (TB) | 87 / 118 | 0,924 | do-choi-me-be |
+| Grocery_and_Gourmet_Food | 111 | 1,000 | bach-hoa-online |
+| Beauty / Health (TB) | 109 / 130 | 1,077 | lam-dep-suc-khoe |
+| Clothing_Shoes_and_Jewelry | 125 | 1,126 | thoi-trang-nam, thoi-trang-nu |
+| Home_and_Kitchen | 130 | 1,171 | nha-cua-doi-song, dien-gia-dung (proxy) |
+| Sports_and_Outdoors | 137 | 1,234 | the-thao-da-ngoai |
+| Electronics | 167 | 1,505 | thiet-bi-kts, laptop-may-vi-tinh |
+| Cell_Phones_and_Accessories | 191 | 1,721 | dien-thoai-may-tinh-bang |
+
+Đích: `TARGETS.categoryRepurchase` trong `tools/data-seed/lib/behaviorTargets.mjs`. Fidelity có 2 mục mới:
+**Spearman (thứ hạng chu kỳ giữa các ngành) ≥ 0,5** và **trung bình |log(tỉ lệ sinh / tỉ lệ thật)| ≤ 0,25**.
+Ngưỡng đặt TRƯỚC khi hiệu chỉnh. Mỗi ngành cần ≥ 30 khoảng cách mới được tính.
+
+### Mô hình — lần thử 1 SAI, ghi lại để minh bạch
+- **Lần 1 ("độ tới hạn"):** số đơn mỗi user giữ nguyên; mỗi đơn chọn ngành theo độ "đến hạn" Weibull từ lần mua
+  trước của ngành đó. Kết quả **Spearman −0,3 đến −0,4 (ngược chiều)**. Lý do: khi tần suất đặt đơn của user không
+  phụ thuộc ngành, user thích ngành chu kỳ dài chỉ có ít ngành để luân phiên, nên khoảng cách cùng ngành lại ngắn
+  (thiên lệch chọn mẫu). Gán ý định theo từng SP thay vì từng đơn: không cứu được. Đã bỏ.
+- **Lần 2 (đang dùng, chuẩn trong lý thuyết):** mỗi danh mục ưa thích của user là một luồng mua riêng, tốc độ
+  ∝ (1 / tỉ_lệ_chu_kỳ_ngành)^`categoryRateExponent`. Tần suất đặt đơn của user nhân với trung bình tốc độ các ngành
+  họ thích, **chuẩn hoá để trung bình toàn bộ user = 1**. Mỗi SP trong đơn chọn ngành ưa thích theo tốc độ đó;
+  với xác suất `intentExploreProb` thì mua thử ngoài sở thích.
+
+### Hiệu chỉnh (catalog Tiki thật, 2000 user, 12 tháng)
+| intentExploreProb | Spearman | MALE | |
+|---|---:|---:|---|
+| 0,30 | 0,430 | 0,157 | trượt Spearman |
+| **0,15** | 0,554 | 0,149 | đạt |
+| 0,05 | 0,390 | 0,132 | trượt Spearman |
+
+Số mũ 1 (đúng lý thuyết) **không ổn định giữa các seed**: seed 7 cho Spearman 0,474 (trượt). Nguyên nhân là tín
+hiệu bị pha loãng vì mua thử ngoài sở thích và vì mỗi user trộn nhiều ngành. Quét số mũ trên 4 seed:
+
+| số mũ | Spearman (seed 42 / 7 / 123 / 2024) | MALE TB |
+|---|---|---:|
+| 1 | 0,554 / **0,474** / – / – | 0,168 |
+| 1,5 | 0,563 / 0,715 / 0,734 / 0,734 (TB 0,69) | 0,129 |
+| **2** | 0,931 / 0,711 / 0,798 / 0,826 (TB 0,82) | **0,117** |
+
+**Chốt `categoryRateExponent = 2`, `intentExploreProb = 0,15`** (khớp số thật tốt nhất ở cả 2 thước đo, đạt ở mọi
+seed). Đã gỡ tham số thừa `repurchaseBaseDays` / `repurchaseShape` của lần 1.
+
+### Kiểm tra không phá các số đã hiệu chỉnh cho churn
+- `node seed.mjs --dry-run --users 2000` trên catalog Tiki trong DB: **22/22 mục fidelity ĐẠT** (Spearman chu kỳ
+  0,74, MALE 0,11; recency 0,54; top 10% 0,62).
+- Tổng số đơn và tỉ lệ nhãn churn (3000 user, catalog test) **giữ nguyên**: 22.061 → 21.995 đơn; tỉ lệ "không đơn
+  trong 120 ngày" ở user ≥ 2 đơn 30,5% → 30,8%. Cơ chế chỉ **phân bổ lại** tần suất giữa user (người thích ngành
+  mua nhanh mua dày hơn), không đổi mặt bằng.
+
+### Phát hiện phụ: catalog giả của unit test lệch hình dạng catalog thật
+Unit test fidelity trượt recency (0,57 so với 0,508), dù catalog Tiki thật đạt. Tách lỗi: kể cả khi **tắt** cơ chế
+mới, catalog giả vẫn cao hơn catalog thật khoảng 5 điểm (seed 7 đã trượt từ trước). Nguyên nhân: catalog giả dùng
+trọng số log-normal dự phòng σ=2, dồn quá mức **trong danh mục** (top 10% trong danh mục 0,70 so với thật 0,565);
+phiên duyệt bám danh mục nên độ dồn này quyết định recency. Sửa `test/helpers.mjs` để mô phỏng số đã bán đúng
+phân phối đo trên manifests Tiki: tỉ lệ SP chưa bán theo danh mục TB 0,23 (lệch 0,25); log(số_bán+1) của SP đã bán
+TB 3,75, lệch giữa danh mục 1,41, lệch trong danh mục 1,74; cỡ danh mục 2–300. Test fidelity nâng 800 → 1500 user,
+vì top 10% méo thấp khi thưa: 800 user cho 0,605, sát ngưỡng 0,607. Sau sửa, catalog giả bám sát catalog thật
+(3 seed: top 10% 0,619–0,622, recency 0,51–0,53; Tiki: 0,625 / 0,504). **`npm test` 11/11.**
+
+### Còn lại của mục này
+- Import catalog Tiki đã đủ: **6.526 SP active** trong DB (2 file cuối client báo timeout 305 s, nhưng server vẫn
+  hoàn tất giao dịch).
+- Tiếp theo: đo dịch chuyển hành vi TRƯỚC churn trên REES46 (chỉ đưa vào bộ sinh nếu có tín hiệu thật), sau đó
+  seed 5000 user vào DB và re-baseline churn.

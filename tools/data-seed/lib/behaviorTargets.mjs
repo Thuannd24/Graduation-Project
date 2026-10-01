@@ -72,6 +72,30 @@ export const TARGETS = {
   // theo lỗi cũ, CHƯA TỪNG đo trên dữ liệu thật — và đẩy dữ liệu sinh ra xa thực tế:
   //   REES46 mỹ phẩm 0,508 / 19,2% · REES46 đa ngành 0,488 / 31,3% · Taobao (đã lọc trùng) 0,169 / 0,3%.
   userSequence: { recencyRecallAt10: 0.5081, consecutiveRepeatRate: 0.1921 },
+
+  // CHU KỲ MUA LẠI THEO NGÀNH (churn-risk-roadmap 1.2) — khoảng cách TRUNG VỊ giữa 2 lần mua cùng ngành, CHIA cho
+  // của Bách hoá. Nguồn: Amazon Reviews 2023 (McAuley-Lab), bản 5-core, ~63 triệu khoảng cách
+  // (churn_measure_amazon_repurchase.py, 2026-10-01). CHỈ dùng tỉ lệ: review ≠ lần mua (khoảng cách tuyệt đối bị
+  // kéo dài). REES46 đa ngành (không có bách hoá, 2 tháng) và Olist (2,2% khách mua lại) không neo được.
+  // Ghép ngành Tiki ↔ Amazon: Đồ chơi–Mẹ&bé = TB(Baby 0,784, Toys 1,063); Làm đẹp–Sức khoẻ = TB(Beauty 0,982,
+  // Health 1,171); Điện gia dụng = Home_and_Kitchen làm ĐẠI DIỆN (Amazon không có 5-core Appliances).
+  categoryRepurchase: {
+    relativeToGrocery: {
+      "bach-hoa-online": 1.0,
+      "nha-sach-tiki": 0.586,
+      "do-choi-me-be": 0.924,
+      "lam-dep-suc-khoe": 1.077,
+      "thoi-trang-nu": 1.126,
+      "thoi-trang-nam": 1.126,
+      "nha-cua-doi-song": 1.171,
+      "dien-gia-dung": 1.171,
+      "the-thao-da-ngoai": 1.234,
+      "thiet-bi-kts-phu-kien-so": 1.505,
+      "laptop-may-vi-tinh-linh-kien": 1.505,
+      "dien-thoai-may-tinh-bang": 1.721,
+    },
+    proxies: { "dien-gia-dung": "Home_and_Kitchen" },
+  },
 };
 
 // THAM SỐ SINH hành vi chuyển tiếp/xem lại — KHÔNG phải số đo: hiệu chỉnh (calibrate) để các chỉ số ĐẦU RA
@@ -93,6 +117,12 @@ export const GENERATION = {
   revisitHistory: 0.25,       // P(SP mới trong phiên lấy từ lịch sử phiên cũ)
   sessionResume: 0.58,        // P(phiên mở đầu bằng SP xem gần nhất của phiên trước) — 0,65 làm recency trên catalog giả 0,56 (> 0,558)
   historyRecencyDecay: 1,     // trọng số chọn từ lịch sử ∝ decay^hạng-gần-đây (1 = đều trong 20 SP gần nhất)
+  // Chu kỳ mua lại theo ngành (TARGETS.categoryRepurchase): mỗi danh mục ưa thích là 1 luồng mua, tốc độ ∝
+  // (1 / tỉ_lệ_chu_kỳ_ngành)^categoryRateExponent; tần suất đặt đơn của user nhân hệ số theo ngành họ thích, CHUẨN
+  // HOÁ để trung bình toàn bộ user không đổi (mặt bằng tần suất gắn với churn giữ nguyên). Thay mô hình "độ tới
+  // hạn" (thử trước, 2026-10-01): khi tần suất không phụ thuộc ngành, khoảng cách sinh ra ngược chiều số đo.
+  categoryRateExponent: 2,   // hiệu chỉnh: 1 (lý thuyết) không ổn định giữa các seed vì bị pha loãng bởi explore + trộn nhiều ngành ưa thích
+  intentExploreProb: 0.15,    // P(SP trong đơn không theo ngành ưa thích — mua thử ngành khác)
 };
 
 // Tham số SINH độ phổ biến (catalogIndex.mjs / catalog.mjs) — hiệu chỉnh để dữ liệu sinh đạt
