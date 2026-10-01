@@ -1832,3 +1832,18 @@ khoá cả 2 việc đang treo — retrain `platform_v1` (recsys) VÀ lần đ�
 micro có thêm thông tin gì cho churn ngoài 11 feature production hay không. Thứ tự bắt buộc: sửa
 seeder xong → xong việc recsys đang làm → mới retrain churn. Không retrain churn trước khi seeder mới
 sẵn sàng — làm vậy sẽ lãng phí vì seeder cũ không phát được tín hiệu mới nào để model học thêm.
+
+## 2026-10-01 — Đối chiếu tư vấn "churn cho TMĐT", nhặt ý có giá trị vào roadmap
+
+Người dùng đưa một bài tư vấn chung về dự đoán churn cho TMĐT (churn động theo danh mục, feature RFM biến
+động/hành vi/trải nghiệm/nhạy giá, BG/NBD + Gamma-Gamma, Gradient Boosting, mô hình chuỗi, kích hoạt marketing
+tự động). Đối chiếu với hiện trạng: phần lớn **đã có** (RFM, bỏ giỏ, phiên, săn mã, rating dùng làm đối chứng
+âm, `recency_over_median_gap` ≈ ý "vượt 1,5–2× chu kỳ"); slope/xu hướng **cố ý loại** từ trước vì vòng tròn
+với cơ chế sinh. Nhặt vào `churn-risk-roadmap.md` (đúng thứ tự: làm SAU khi xong recsys):
+- 0.2: thêm nhãn churn ĐỘNG theo chu kỳ mua của chính khách (k × khoảng cách trung vị, k ∈ {1,5; 2}) vào lưới.
+- 1.2: chu kỳ mua lại THEO NGÀNH HÀNG trong bộ sinh (tiêu dùng nhanh vs lâu bền) — chỉ có nghĩa từ khi web là
+  sàn đa ngành; neo số thật bằng REES46 đa ngành; ghi chú KHÔNG làm lén lúc sinh dataset recsys vì đổi thời
+  điểm đặt đơn sẽ chạm tần suất mua đã hiệu chỉnh cho churn.
+- 2.3b: BG/NBD + Gamma-Gamma làm mốc xác suất kinh điển cho LR (+ CLV cho expected_loss ở 3.1).
+- 3.1b: nối điểm rủi ro vào module Campaigns có sẵn, kèm holdout.
+Loại: "gỡ app" (web không có app mobile), "giao trễ/hoàn trả" (không có dữ liệu nguồn → sinh ra là vòng tròn).

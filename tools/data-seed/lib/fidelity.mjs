@@ -35,6 +35,20 @@ function percentile(sorted, p) {
   return sorted[idx];
 }
 
+/** Tỉ lệ lượt rơi vào top `frac` SP + Gini — ĐÚNG định nghĩa recsys_measure_item_popularity.py. */
+export function itemConcentration(countsMap, frac = 0.1) {
+  const c = [...countsMap.values()].sort((a, b) => b - a);
+  const total = c.reduce((a, b) => a + b, 0);
+  if (!c.length || !total) return { nItems: 0, topShare: null, gini: null };
+  const k = Math.max(1, Math.round(c.length * frac));
+  let top = 0;
+  for (let i = 0; i < k; i++) top += c[i];
+  const asc = [...c].reverse();
+  let g = 0;
+  asc.forEach((x, i) => { g += (2 * (i + 1) - asc.length - 1) * x; });
+  return { nItems: c.length, topShare: top / total, gini: g / (asc.length * total) };
+}
+
 const mean = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);
 
 export class FidelityStats {
@@ -56,12 +70,16 @@ export class FidelityStats {
     this.userRepeatPairs = 0;
     this.recencyEvalUsers = 0;
     this.recencyHits10 = 0;
+    this.viewsPerItem = new Map(); // độ tập trung lượt xem theo SP (đuôi dài)
+    this.sessViewPairs = 0;
+    this.sessViewRepeats = 0;
   }
 
   addEvents(events) {
     for (const e of events) {
       if (!e.actionType || !(e.createdAt instanceof Date) || Number.isNaN(e.createdAt.getTime())) this.badEvents++;
       if (e.itemId != null && typeof e.itemId !== "number") this.badEvents++;
+      if (e.actionType === VIEW && e.itemId != null) this.viewsPerItem.set(e.itemId, (this.viewsPerItem.get(e.itemId) || 0) + 1);
       if (this.actionCounts.has(e.actionType)) this.actionCounts.set(e.actionType, this.actionCounts.get(e.actionType) + 1);
       else this.unknownActions.set(e.actionType, (this.unknownActions.get(e.actionType) || 0) + 1);
     }
@@ -77,6 +95,9 @@ export class FidelityStats {
         .sort((a, b) => a.createdAt - b.createdAt);
       if (vc.length === 0) continue; // vd phiên chỉ có funnel checkout — REES46 không có tương đương
       this.sessionLengths.push(vc.length);
+      // lặp liền nhau trong phiên trên chuỗi CHỈ lượt xem (đúng recsys_measure_revisit_patterns.py)
+      const vOnly = vc.filter((e) => e.actionType === VIEW);
+      for (let j = 1; j < vOnly.length; j++) { this.sessViewPairs++; if (vOnly[j].itemId === vOnly[j - 1].itemId) this.sessViewRepeats++; }
 
       const viewedOrder = [];
       const viewedSet = new Set();
@@ -84,7 +105,9 @@ export class FidelityStats {
       let firstCartSeen = false;
       for (let i = 0; i < vc.length; i++) {
         const e = vc[i];
-        if (i > 0) {
+        // Stickiness trên cặp KHÁC SP (cùng định nghĩa Taobao — bộ dữ liệu đã lọc trùng); cặp cùng SP luôn
+        // cùng category và do tham số xem lại riêng quyết định (TARGETS.revisit).
+        if (i > 0 && e.itemId !== vc[i - 1].itemId) {
           if (e.categoryId === vc[i - 1].categoryId) this.sameCat++;
           else this.diffCat++;
         }
@@ -150,6 +173,8 @@ export class FidelityStats {
       abandonRate: this.viewedItems ? this.viewedNeverCarted / this.viewedItems : null,
       consecutiveRepeatRate: this.userPairs ? this.userRepeatPairs / this.userPairs : null,
       recencyRecallAt10: this.recencyEvalUsers ? this.recencyHits10 / this.recencyEvalUsers : null,
+      itemPopularity: itemConcentration(this.viewsPerItem),
+      sessionViewRepeatRate: this.sessViewPairs ? this.sessViewRepeats / this.sessViewPairs : null,
       actionCounts: Object.fromEntries(this.actionCounts),
       missingActions: ALL_ACTIONS.filter((a) => this.actionCounts.get(a) === 0),
       unknownActions: Object.fromEntries(this.unknownActions),
@@ -186,10 +211,14 @@ export class FidelityStats {
     rate("% cart = item VỪA xem", s.cartTarget.sameAsLastView, TARGETS.cartTarget.sameAsLastView);
     rate("% cart = item KHÁC đã xem", s.cartTarget.differentSeenItem, TARGETS.cartTarget.differentSeenItem);
     rate("% cart không có view trước", s.cartTarget.noPriorView, TARGETS.cartTarget.noPriorView);
-    rate("Category-stickiness", s.pSameCategory, TARGETS.pSameCategory);
+    rate("Category-stickiness (cặp khác SP)", s.pSameCategory, TARGETS.pSameCategory);
     rate("Tỉ lệ xem mà không thêm giỏ", s.abandonRate, TARGETS.abandonRate);
-    max("[chống tái phát] recency recall@10", s.recencyRecallAt10, REGRESSION_GUARDS.maxRecencyRecallAt10);
-    max("[chống tái phát] % item lặp liên tiếp", s.consecutiveRepeatRate, REGRESSION_GUARDS.maxConsecutiveRepeatRate);
+    rate("Độ tập trung lượt xem — top 10% SP", s.itemPopularity.topShare, TARGETS.itemPopularity.viewTop10Share);
+    rate("Độ tập trung lượt xem — Gini", s.itemPopularity.gini, TARGETS.itemPopularity.viewGini);
+    rate("% xem lặp liền nhau trong phiên", s.sessionViewRepeatRate, TARGETS.revisit.repeatPrev);
+    rate("Recency recall@10 (cấp user)", s.recencyRecallAt10, TARGETS.userSequence.recencyRecallAt10);
+    rate("% xem lặp liên tiếp (cấp user)", s.consecutiveRepeatRate, TARGETS.userSequence.consecutiveRepeatRate);
+    max("[chống tái phát] % cart = item VỪA xem", s.cartTarget.sameAsLastView, REGRESSION_GUARDS.maxCartSameAsLastView);
     rows.push({ name: "Đủ 19 loại hành vi", got: 19 - s.missingActions.length, want: 19, pass: s.missingActions.length === 0, rule: "bằng đúng" });
     rows.push({ name: "Action lạ ngoài 19 loại", got: Object.keys(s.unknownActions).length, want: 0, pass: Object.keys(s.unknownActions).length === 0, rule: "bằng đúng" });
     rows.push({ name: "Sự kiện sai kiểu dữ liệu", got: s.badEvents, want: 0, pass: s.badEvents === 0, rule: "bằng đúng" });

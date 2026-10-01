@@ -1,4 +1,5 @@
 import { Rng } from "../lib/random.mjs";
+import { indexCatalog, fallbackWeight } from "../lib/catalogIndex.mjs";
 
 /** Catalog giả CÙNG HÌNH DẠNG catalog thật (80 category, kích thước lệch nhau — catalog thật:
  * 32.593 SP, category nhỏ nhất 1 SP, lớn nhất 2.999 SP) nhưng nhỏ hơn để test chạy nhanh, không cần DB.
@@ -14,12 +15,8 @@ export function makeCatalog({ nCategories = 80, seed = 7, sizes = null } = {}) {
       id++;
     }
   }
-  const byCategory = new Map();
-  const byId = new Map();
-  for (const p of products) {
-    if (!byCategory.has(p.categoryId)) byCategory.set(p.categoryId, []);
-    byCategory.get(p.categoryId).push(p);
-    byId.set(p.id, p);
-  }
-  return { products, byCategory, byId, categoryIds: [...byCategory.keys()] };
+  // Trọng số độ phổ biến dự phòng (log-normal tất định theo id) — cùng đường đi với catalog thật không có
+  // số bán; indexCatalog dựng mảng tích luỹ để simulate chọn SP theo độ phổ biến.
+  for (const p of products) p.weight = fallbackWeight(p.id);
+  return indexCatalog(products);
 }

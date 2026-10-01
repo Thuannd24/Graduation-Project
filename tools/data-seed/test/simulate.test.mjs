@@ -19,7 +19,9 @@ function generate({ users = 300, months = 12, seed = 42, catalog = makeCatalog()
 }
 
 test("dữ liệu sinh ra khớp số đo từ dữ liệu người dùng thật (mọi mục fidelity đạt)", () => {
-  const { events } = generate();
+  // 800 user: độ tập trung lượt xem theo SP méo khi quá thưa (300 user / ~5K SP → ít lượt mỗi SP);
+  // số đo thật tính trên hàng triệu lượt.
+  const { events } = generate({ users: 800 });
   const f = new FidelityStats();
   f.addEvents(events);
   const failed = f.checks().filter((r) => !r.pass);
@@ -126,5 +128,6 @@ test("chống tái phát lỗi view→cart cứng: đa số lượt thêm giỏ 
   f.addEvents(events);
   const s = f.summary();
   assert.ok(s.cartTarget.sameAsLastView < 0.3, `sameAsLastView=${s.cartTarget.sameAsLastView} — lỗi cũ là 1.0`);
-  assert.ok(s.recencyRecallAt10 < 0.2, `recency recall@10=${s.recencyRecallAt10} — lỗi cũ là 0.2754`);
+  // Không còn chặn recency < 0,2: đo trên dữ liệu thật (REES46, cùng cách ghi log với web) recency recall@10
+  // = 0,508 — người dùng thật xem lại rất nhiều; ngưỡng cũ đặt theo lỗi chứ chưa từng đo (2026-10-01).
 });

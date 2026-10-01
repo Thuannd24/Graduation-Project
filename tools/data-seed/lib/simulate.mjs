@@ -1,5 +1,6 @@
 import { lambdaDecayAt, restlessnessMultiplierAt } from "./profiles.mjs";
-import { TARGETS, PCT_LEVELS } from "./behaviorTargets.mjs";
+import { TARGETS, PCT_LEVELS, GENERATION } from "./behaviorTargets.mjs";
+import { pickWeighted } from "./catalogIndex.mjs";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const MONTH_MS = 30 * DAY_MS; // đơn giản hoá: "tháng" = 30 ngày, đủ dùng cho dữ liệu tổng hợp
@@ -84,7 +85,6 @@ const PREFERRED_CATEGORY_WEIGHT = 0.7; // 70% hành vi rơi vào category ưa th
 const {
   sessionLengthPcts: SESSION_LENGTH_PCTS,
   viewsBeforeFirstCartPcts: VIEWS_BEFORE_CART_PCTS,
-  pSameCategory: P_SAME_CATEGORY,
   cartTarget: CART_TARGET_PROBS,
 } = TARGETS;
 
@@ -163,16 +163,56 @@ function makeSessionIdGenerator(userId) {
   return () => `seed-${userId}-s${String(++seq).padStart(5, "0")}`;
 }
 
+/** Lịch sử xem của 1 user qua các phiên — cho hành vi "xem lại SP đã xem ở phiên cũ" (REES46 đo được).
+ * Phiên không được sinh theo thứ tự thời gian (theo tháng → đơn → bỏ giỏ → xem thuần) nên chỉ lấy SP
+ * xem ở phiên có mốc SỚM HƠN phiên hiện tại (không "xem lại" thứ chưa từng xem); ưu tiên gần đây. */
+function makeViewHistory(maxKeep = 300, candidates = 20) {
+  const items = [];
+  return {
+    add(time, product) {
+      items.push({ t: time.getTime(), product });
+      if (items.length > maxKeep) items.shift();
+    },
+    pickBefore(rng, time, excludeIds, mostRecent = false) {
+      const t = time.getTime();
+      const cand = [];
+      for (let i = items.length - 1; i >= 0 && cand.length < candidates; i--) {
+        const it = items[i];
+        if (it.t < t && !(excludeIds && excludeIds.has(it.product.id))) cand.push(it);
+      }
+      if (!cand.length) return null;
+      if (mostRecent) return cand.reduce((a, b) => (b.t > a.t ? b : a)).product;
+      // gần đây hơn → dễ được xem lại hơn: trọng số decay^hạng (theo thời điểm)
+      cand.sort((a, b) => b.t - a.t);
+      const d = GENERATION.historyRecencyDecay;
+      let total = 0;
+      const w = cand.map((_, r) => (total += Math.pow(d, r)));
+      const x = rng.next() * total;
+      return cand[w.findIndex((c) => c > x)].product;
+    },
+  };
+}
+
+/** Chọn SP toàn catalog THEO ĐỘ PHỔ BIẾN (trọng số `weight`, xem catalogIndex.mjs). Bản cũ chọn đều
+ * (`rng.choice`) → không có đuôi dài: top 10% SP chỉ chiếm ~13% lượt xem, trong khi dữ liệu thật
+ * ~66% (Taobao) — baseline Popularity trên dữ liệu sinh vì thế gần 0, phi thực tế. */
+function pickAny(rng, catalog) {
+  return catalog.cum ? pickWeighted(rng, catalog.products, catalog.cum) : rng.choice(catalog.products);
+}
+
 function pickFromCategory(rng, catalog, categoryId) {
   const list = catalog.byCategory.get(categoryId);
-  if (list && list.length > 0) return rng.choice(list);
-  return rng.choice(catalog.products);
+  if (list && list.length > 0) {
+    const cum = catalog.cumByCategory?.get(categoryId);
+    return cum ? pickWeighted(rng, list, cum) : rng.choice(list);
+  }
+  return pickAny(rng, catalog);
 }
 
 function pickPreferredOrRandom(rng, catalog, profile) {
   const usePreferred = profile.preferredCategories.length > 0 && rng.bool(PREFERRED_CATEGORY_WEIGHT);
   if (usePreferred) return pickFromCategory(rng, catalog, rng.choice(profile.preferredCategories));
-  return rng.choice(catalog.products);
+  return pickAny(rng, catalog);
 }
 
 /** Nhánh "ĐỔI category": sản phẩm KHÁC category `excludeCategoryId`. Không loại trừ thì 1 lượt
@@ -187,18 +227,18 @@ function pickSwitchProduct(rng, catalog, profile, excludeCategoryId) {
   }
   // user chỉ ưa đúng 1 category trùng category cũ: lấy toàn catalog cho tới khi khác category
   for (let attempt = 0; attempt < 50; attempt++) {
-    const p = rng.choice(catalog.products);
+    const p = pickAny(rng, catalog);
     if (p.categoryId !== excludeCategoryId) return p;
   }
-  return rng.choice(catalog.products);
+  return pickAny(rng, catalog);
 }
 
 /** Chọn sản phẩm kế tiếp trong phiên: GIỮ category với xác suất đúng bằng số đo thật
- * (`P_SAME_CATEGORY`), còn lại ĐỔI hẳn sang category khác. `excludeIds`: không chọn lại item đã
+ * (`GENERATION.pSameCategoryNew`, hiệu chỉnh để stickiness cặp khác SP khớp số đo), còn lại ĐỔI hẳn sang category khác. `excludeIds`: không chọn lại item đã
  * có (dùng cho lượt thêm giỏ "không có view trước" — nếu bốc trúng item đã xem thì số đo sẽ tính
  * nhầm thành "cart item đã xem"). Quyết định giữ/đổi chỉ lấy 1 lần, không làm lệch tỉ lệ khi thử lại. */
 function pickNextProduct(rng, catalog, profile, lastCategoryId, excludeIds = null) {
-  const stay = lastCategoryId != null && rng.bool(P_SAME_CATEGORY);
+  const stay = lastCategoryId != null && rng.bool(GENERATION.pSameCategoryNew);
   let p = null;
   for (let attempt = 0; attempt < 10; attempt++) {
     p = stay ? pickFromCategory(rng, catalog, lastCategoryId) : pickSwitchProduct(rng, catalog, profile, lastCategoryId);
@@ -357,11 +397,30 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
     }
   };
 
-  for (let i = 0; i <= nViews; i++) {
-    if (forceCart && i === viewsBeforeCart) placeCart(); // sau ĐÚNG k lượt xem (k có thể = 0)
-    if (i === nViews) break;
+  // XEM LẠI (đo trên REES46 — web ghi log giống REES46: mỗi lần mở trang chi tiết = 1 VIEW_PRODUCT, không
+  // lọc trùng; Taobao đã lọc trùng nên không dùng được cho phần này). Lượt thêm giỏ đặt theo số item
+  // PHÂN BIỆT đã xem (đúng định nghĩa đo viewsBeforeFirstCart), lượt xem lặp không tính.
+  const history = opts.history || null;
+  let cartPlaced = false;
+  for (let i = 0; i < nViews; i++) {
+    if (forceCart && !cartPlaced && viewedIds.size === viewsBeforeCart) { placeCart(); cartPlaced = true; }
+    // còn vừa đủ lượt để đạt k item phân biệt trước cart → bắt buộc xem item mới
+    const mustBeNew = forceCart && !cartPlaced && nViews - i <= viewsBeforeCart - viewedIds.size;
 
-    const product = pickNextProduct(rng, catalog, profile, lastCategoryId);
+    let product = null;
+    const roll = rng.next();
+    if (i === 0 && history && rng.bool(GENERATION.sessionResume)) {
+      product = history.pickBefore(rng, anchorTime, null, true); // mở phiên bằng SP đang xem dở
+    } else if (!mustBeNew && viewedThisSession.length >= 1 && roll < GENERATION.repeatPrev) {
+      product = viewedThisSession[viewedThisSession.length - 1];
+    } else if (!mustBeNew && viewedIds.size >= 2 && roll < GENERATION.repeatPrev + GENERATION.revisitSession) {
+      const last = viewedThisSession[viewedThisSession.length - 1];
+      const earlier = viewedThisSession.filter((p) => p.id !== last.id);
+      product = earlier[rng.int(0, earlier.length - 1)];
+    } else if (history && rng.bool(GENERATION.revisitHistory)) {
+      product = history.pickBefore(rng, anchorTime, viewedIds);
+    }
+    if (!product) product = pickNextProduct(rng, catalog, profile, lastCategoryId, mustBeNew ? viewedIds : null);
     lastCategoryId = product.categoryId;
     if (i > 0 || (forceCart && viewsBeforeCart === 0)) clock.advance(5, sessionSpreadMinutes * 60 || 180);
 
@@ -380,7 +439,7 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
     viewedIds.add(product.id);
 
     // PRODUCT_ZOOM: xác suất cao hơn với lượt xem NGAY TRƯỚC lượt thêm giỏ (quan tâm thật sự).
-    const isRightBeforeCart = forceCart && i === viewsBeforeCart - 1;
+    const isRightBeforeCart = forceCart && !cartPlaced && viewedIds.size === viewsBeforeCart;
     if (rng.bool(isRightBeforeCart ? P_VIEW_GETS_ZOOM_IF_CART_TARGET : P_VIEW_GETS_ZOOM)) {
       clock.advance(2, 20);
       push(ACTION_PRODUCT_ZOOM, { itemId: product.id, categoryId: product.categoryId });
@@ -393,6 +452,8 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
       push(ACTION_TAB_VISIBLE);
     }
   }
+  if (forceCart && !cartPlaced) placeCart(); // k = số item phân biệt == tổng lượt xem (hoặc phiên chỉ có cart)
+  if (history) for (const p of viewedThisSession) history.add(anchorTime, p);
 
   // --- Trang trí cuối phiên: mức độ cuộn trang + thời gian dừng lại, tỉ lệ thuận với độ dài
   // phiên (phiên dài hơn = engagement cao hơn = cuộn sâu hơn/dừng lâu hơn) ---
@@ -412,6 +473,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
   const orders = [];
   const events = [];
   const nextSessionId = makeSessionIdGenerator(userId);
+  const history = makeViewHistory();
 
   for (let month = 1; month <= totalMonths; month++) {
     const { start, end } = monthWindow(now, totalMonths, month);
@@ -433,7 +495,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
         const anchor = new Date(orderDate.getTime() - rng.int(10, 360) * 60 * 1000);
         const { events: sessionEvents, cartTargetProduct } = simulateSession(
           rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-          { forceCart: true, sessionKind: "order", nextSessionId }
+          { forceCart: true, sessionKind: "order", nextSessionId, history }
         );
         events.push(...sessionEvents);
 
@@ -492,7 +554,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
       const anchor = rhythmicTimestamp(rng, start, end, profile);
       const { events: sessionEvents } = simulateSession(
         rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-        { forceCart: true, sessionKind: "abandon", nextSessionId }
+        { forceCart: true, sessionKind: "abandon", nextSessionId, history }
       );
       events.push(...sessionEvents);
     }
@@ -507,7 +569,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
       const anchor = rhythmicTimestamp(rng, start, end, profile);
       const { events: sessionEvents } = simulateSession(
         rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-        { forceCart: false, sessionKind: "pureview", nextSessionId }
+        { forceCart: false, sessionKind: "pureview", nextSessionId, history }
       );
       events.push(...sessionEvents);
     }
