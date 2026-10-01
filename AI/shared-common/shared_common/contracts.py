@@ -74,6 +74,12 @@ CART_ACTION_MAP = {
 # Action nào tính là "đã thêm vào giỏ" khi tính feature has_abandoned_cart / conversion rate.
 CART_ADD_ACTIONS = {ACTION_ADD_TO_CART, ACTION_UPDATE_CART_QTY}
 
+# Action được đẩy vào Redis `*:history` — chuỗi recs-service dùng để GỢI Ý. Phải khớp đúng tập mà
+# `recsys_platform_sasrec.py` train (VIEW_PRODUCT/ADD_TO_CART): REMOVE_FROM_CART là tín hiệu "KHÔNG
+# muốn" và UPDATE_CART_QTY là lặp lại 1 item đã có trong giỏ — đẩy vào sẽ biến item vừa bị xoá khỏi
+# giỏ thành "quan tâm gần nhất" (đo được 2026-09-26, xem docs/canvas/recsys-behavior-flow-review.md).
+HISTORY_ACTIONS = {ACTION_VIEW_PRODUCT, ACTION_ADD_TO_CART}
+
 # --- Vi hành vi (micro-behavior) do FE bắn trực tiếp ---
 # Vì sao cần: thí nghiệm trên clickstream thật (RetailRocket, xem
 # docs/canvas/churn-risk-log.md mục 2026-08-04) đo được rằng với chỉ 3 loại event

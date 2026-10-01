@@ -19,6 +19,7 @@ from shared_common.contracts import (
     ACTION_VIEW_PRODUCT,
     CART_ACTION_MAP,
     FE_BEHAVIOR_ACTIONS,
+    HISTORY_ACTIONS,
     history_key_for,
     HISTORY_MAX_LEN,
     HISTORY_TTL_SECONDS,
@@ -164,7 +165,9 @@ class BehaviorEventConsumer:
         # tương tác thật với sản phẩm (xem/thêm giỏ). Vi hành vi từ FE (mở giỏ, cuộn trang, rời
         # tab...) tuy có thể mang `itemId` bối cảnh nhưng KHÔNG phải hành vi chọn sản phẩm — đẩy
         # vào đây sẽ làm nhiễu gợi ý (vd rời tab 5 lần ở 1 sản phẩm biến nó thành "quan tâm nhất").
-        if event["action_type"] in FE_BEHAVIOR_ACTIONS:
+        # Whitelist thay vì blacklist FE action: REMOVE_FROM_CART/UPDATE_CART_QTY trước đây lọt vào
+        # đây (xem HISTORY_ACTIONS). Bảng `user_events` vẫn ghi MỌI action như cũ.
+        if event["action_type"] not in HISTORY_ACTIONS:
             return
 
         key = history_key_for(user_id=event["user_id"], session_id=event["session_id"])

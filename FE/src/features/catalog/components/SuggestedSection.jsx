@@ -1,40 +1,35 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import ProductCarousel from "./ProductCarousel";
 import Icon from "../../../components/common/Icon";
 import { trackImpressions } from "../../../services/behaviorTracker.ts";
 
+// Mỗi tab = MỘT nguồn gợi ý thật từ recs-service (`source`), không còn là 3 cách sắp xếp lại cùng một
+// danh sách như trước (tab "xu hướng" sắp theo rating vốn = 0 cho mọi SP nên vô nghĩa). Tách "khám phá"
+// khỏi "xem lại" để đo riêng từng khối — xem docs/canvas/recsys-p1-assessment-and-plan.md, quyết định D1.
 const MAIN_TABS = [
-  { id: "suggest", label: "GỢI Ý TỪ AURA AI" },
-  { id: "trend", label: "XU HƯỚNG MUA SẮM" },
-  { id: "personal", label: "DÀNH RIÊNG CHO BẠN" },
+  { id: "for_you", label: "GỢI Ý CHO BẠN", empty: "Chưa có gợi ý dành cho bạn lúc này" },
+  { id: "recent", label: "XEM GẦN ĐÂY", empty: "Bạn chưa xem sản phẩm nào gần đây" },
+  { id: "trending", label: "XU HƯỚNG MUA SẮM", empty: "Chưa có dữ liệu xu hướng" },
 ];
 
-export default function SuggestedSection({ products: apiProducts, loading: apiLoading }) {
-  const suggested = apiProducts ?? [];
-  const loading = apiLoading;
+export default function SuggestedSection({ lists, loading }) {
+  const [activeTab, setActiveTab] = useState("for_you");
 
-  const [activeTab, setActiveTab] = useState("suggest");
+  const filtered = useMemo(() => (lists?.[activeTab] ?? []).slice(0, 10), [lists, activeTab]);
+  const emptyMessage = MAIN_TABS.find((t) => t.id === activeTab)?.empty;
 
-  // Filter or sort suggested products based on active tab
-  const filtered = useMemo(() => {
-    let list = [...suggested];
-    if (activeTab === "trend") {
-      list = list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    } else if (activeTab === "personal") {
-      list = list.sort((a, b) => {
-        const discA = Number(a.oldPrice || 0) - Number(a.price || 0);
-        const discB = Number(b.oldPrice || 0) - Number(b.price || 0);
-        return discB - discA;
-      });
-    }
-    return list.slice(0, 10);
-  }, [suggested, activeTab]);
-
-  // Ghi nhận sản phẩm AI THẬT SỰ hiển thị cho user ở tab đang mở — nền tảng để sau này đo được
-  // "gợi ý đưa ra mà bị bỏ qua" (impression) so với "được click", không chỉ đếm click một mình.
+  // Ghi nhận sản phẩm THẬT SỰ hiển thị ở tab đang mở — nền tảng để đo "gợi ý đưa ra mà bị bỏ qua"
+  // (impression) so với "được click". Mỗi tab chỉ ghi 1 lần cho mỗi lần tải danh sách: trước đây đổi
+  // qua lại giữa các tab bắn impression lặp lại cho cùng sản phẩm, làm phồng số lần hiển thị.
+  const trackedTabs = useRef(new Set());
   useEffect(() => {
-    if (filtered.length > 0) trackImpressions(filtered.map((p) => p.id));
-  }, [filtered]);
+    trackedTabs.current = new Set();
+  }, [lists]);
+  useEffect(() => {
+    if (filtered.length === 0 || trackedTabs.current.has(activeTab)) return;
+    trackedTabs.current.add(activeTab);
+    trackImpressions(filtered.map((p) => p.id));
+  }, [filtered, activeTab]);
 
 
   return (
@@ -305,7 +300,7 @@ export default function SuggestedSection({ products: apiProducts, loading: apiLo
             </div>
           ) : filtered.length === 0 ? (
             <div style={{ textAlign: "center", padding: "40px 0", color: "#9CA3AF", fontSize: 13, fontWeight: 600 }}>
-              Chưa có gợi ý dành cho bạn lúc này
+              {emptyMessage}
             </div>
           ) : (
             <ProductCarousel

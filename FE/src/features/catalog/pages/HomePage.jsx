@@ -40,7 +40,8 @@ const SLIDE_TITLES = [
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [personalizedProducts, setPersonalizedProducts] = useState([]);
+  const [recommendations, setRecommendations] = useState({ for_you: [], recent: [], trending: [] });
+  const [recsLoading, setRecsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [newsList, setNewsList] = useState([]);
@@ -56,10 +57,16 @@ export default function HomePage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // 3 tab của khối gợi ý = 3 nguồn thật, tải song song (mỗi request ~15 ms ở recs-service)
   useEffect(() => {
-    aiApi.getPersonalizedRecommendations()
-      .then(setPersonalizedProducts)
-      .catch(() => {});
+    Promise.all([
+      aiApi.getRecommendations("for_you"),
+      aiApi.getRecommendations("recent"),
+      aiApi.getRecommendations("trending"),
+    ])
+      .then(([for_you, recent, trending]) => setRecommendations({ for_you, recent, trending }))
+      .catch(() => {})
+      .finally(() => setRecsLoading(false));
   }, []);
 
   useEffect(() => {
@@ -255,7 +262,7 @@ export default function HomePage() {
       <FlashDealSection products={products} loading={loading} />
 
       {/* Ảnh 2: Gợi ý cho bạn */}
-      <SuggestedSection products={personalizedProducts} loading={loading} />
+      <SuggestedSection lists={recommendations} loading={recsLoading} />
 
       {/* Ảnh 3: Điện thoại / Máy tính bảng */}
       <CategoryDualSection categories={categories} />

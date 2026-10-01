@@ -52,6 +52,11 @@ services:
       - REDIS_PORT=6379
       - DB_HOST=infra-mariadb
       - DB_PORT=3306
+      # Checkpoint SASRec platform_v1: đặt file vào AI/models/sasrec.pt (gitignored, sinh lại được bằng
+      # recsys_platform_sasrec.py). Thiếu file thì service tự rơi về Recency/Popularity, không lỗi.
+      - MODEL_WEIGHTS_PATH=/workspace/recs-service/data/models/sasrec.pt
+    volumes:
+      - ./models:/workspace/recs-service/data/models
     networks:
       - ecommerce-network
 

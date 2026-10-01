@@ -1,4 +1,4 @@
-import { apiClient, hasAuthToken } from "./apiClient.ts";
+import { apiClient } from "./apiClient.ts";
 
 export interface AIProduct {
   id: string | number;
@@ -19,6 +19,17 @@ export interface ChatMessage {
   timestamp: Date;
   products?: AIProduct[];
   isEscalated?: boolean;
+}
+
+export type RecommendationSource = "auto" | "for_you" | "recent" | "trending";
+
+// recs-service trả thẳng MẢNG (không bọc {code, data}), nên apiClient trả nguyên payload — đọc
+// `.data` như trước sẽ ra `undefined` (carousel gợi ý luôn rỗng, CartPage gọi `.length` trên undefined).
+// Nhận cả 2 dạng để không phụ thuộc việc sau này có bọc envelope hay không.
+function asProductList(payload: unknown): AIProduct[] {
+  if (Array.isArray(payload)) return payload as AIProduct[];
+  const data = (payload as { data?: unknown } | null)?.data;
+  return Array.isArray(data) ? (data as AIProduct[]) : [];
 }
 
 export const aiApi = {
@@ -49,13 +60,19 @@ export const aiApi = {
   },
 
   // 3. Recommendations
-  getPersonalizedRecommendations: async (userId?: string): Promise<AIProduct[]> => {
-    if (!hasAuthToken()) {
-      return [];
-    }
+  // Danh tính KHÔNG truyền qua query nữa: gateway inject X-User-Id từ JWT (nếu đăng nhập) và apiClient
+  // luôn gửi X-Session-Id — nên khách chưa đăng nhập cũng nhận gợi ý theo phiên đang duyệt. Tham số
+  // `_userId` giữ lại chỉ để không vỡ chỗ gọi cũ.
+  getPersonalizedRecommendations: async (_userId?: string): Promise<AIProduct[]> => {
+    return aiApi.getRecommendations("auto");
+  },
+
+  // Mỗi khối UI lấy đúng 1 nguồn (tách "xem lại" khỏi "khám phá" — quyết định D1 trong
+  // docs/canvas/recsys-p1-assessment-and-plan.md): for_you = SASRec (món mới), recent = món vừa xem,
+  // trending = phổ biến 30 ngày. "auto" = thang sasrec → recency → popularity như trước.
+  getRecommendations: async (source: RecommendationSource, topK = 10): Promise<AIProduct[]> => {
     try {
-      const response = await apiClient.get(`/recommendations/personal?user_id=${userId || ""}`);
-      return response.data;
+      return asProductList(await apiClient.get(`/public/recommendations/personal?top_k=${topK}&source=${source}`));
     } catch (err) {
       console.warn("Recommendation API not available yet.", err);
       return [];
@@ -64,8 +81,7 @@ export const aiApi = {
 
   getCrossSellCombo: async (itemIds: string[]): Promise<AIProduct[]> => {
     try {
-      const response = await apiClient.get(`/recommendations/cross-sell?item_ids=${itemIds.join(",")}`);
-      return response.data;
+      return asProductList(await apiClient.get(`/recommendations/cross-sell?item_ids=${itemIds.join(",")}`));
     } catch (err) {
       console.warn("Cross-sell API fallback.", err);
       return [];

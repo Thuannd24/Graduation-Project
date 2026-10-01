@@ -107,13 +107,20 @@ class SasRecService:
 
     def recommend(self, item_history: List[int], top_k: int = 10) -> List[Dict[str, Any]]:
         """Trả về [{product_id, score}] — KHÔNG kèm name/price (tra cứu catalog thật là việc của
-        endpoint, xem `catalog.get_products_by_ids`), và KHÔNG bịa dữ liệu khi rỗng."""
+        endpoint, xem `catalog.get_products_by_ids`), và KHÔNG bịa dữ liệu khi rỗng.
+
+        `item_history` là NEWEST-FIRST, đúng như đọc từ Redis (`behavior_consumer.py` dùng LPUSH).
+        """
         self._ensure_loaded()
         if self.model is None or not item_history:
             return []
 
+        # Model train trên chuỗi CŨ -> MỚI (item mới nhất ở vị trí cuối, nơi lấy `h[:, -1]`). Trước
+        # đây đưa thẳng list newest-first vào nên `[-maxlen:]` lấy nhầm các item CŨ NHẤT và đảo
+        # ngược thứ tự — đo được HR@10 0,094 -> 0,066 (docs/canvas/recsys-behavior-flow-review.md).
+        chronological = list(reversed(item_history))
         # +1 vi index 0 danh cho pad token trong embedding
-        idx_seq = [self.item_to_idx[i] + 1 for i in item_history if i in self.item_to_idx]
+        idx_seq = [self.item_to_idx[i] + 1 for i in chronological if i in self.item_to_idx]
         if not idx_seq:
             # Toan bo lich su la item chua tung xuat hien luc train platform_v1 (vd item moi thêm)
             return []
