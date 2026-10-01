@@ -96,6 +96,14 @@ nếu mọi phương án đều cho base rate quá lệch hoặc AUC sập về 
 
 **Khi đổi:** tăng `FEATURE_VERSION`, chạy lại `train` + `ablation`, ghi lại số cũ để đối chiếu.
 
+**Bổ sung 2026-10-01 — nhãn churn ĐỘNG theo chu kỳ mua của chính khách** (thêm vào lưới phương án, không
+thay thế): user bị gắn cờ khi thời gian từ đơn cuối > k × khoảng cách mua trung vị CỦA CHÍNH HỌ (k ∈ {1,5; 2}),
+user < 2 đơn dùng mốc của ngành hàng họ mua. Lý do: web đã thành SÀN ĐA NGÀNH — tã/bách hoá 30 ngày không mua
+đã đáng lo, điện tử 180 ngày vẫn bình thường; một cửa sổ cố định cho cả sàn gán nhãn sai cả hai đầu.
+`recency_over_median_gap` (đã có ở block gap dispersion) chính là phần feature của ý này. **Phụ thuộc:** 1.2
+(chu kỳ mua lại theo ngành hàng) — trên dữ liệu sinh hiện tại mọi ngành cùng một nhịp nên nhãn động chưa có
+nghĩa.
+
 ---
 
 ## Tầng 1 — Sửa nguồn dữ liệu (mở khoá phần lớn roadmap feature)
@@ -124,7 +132,8 @@ tiếp với nhãn (sinh review tỉ lệ với retention thì model chỉ tìm 
 | Nhịp giờ/ngày trong tuần | giờ hoạt động ưa thích, thiên lệch cuối tuần | Entropy hoạt động, đều đặn hành vi |
 | Review sau khi mua | xu hướng review (độc lập với churn), thiên lệch điểm | `review_count`, `avg_rating_given` |
 | Lịch sử voucher + độ sâu biến thiên | độ nhạy giá (đã có) → chọn mức giảm | `voucher_usage_rate`, và **là tiền đề của uplift modeling** |
-| Lặp xem có chủ đích | ý định theo sản phẩm | `repeat_view_ratio` (hiện median 1.0 = vô dụng) |
+| Lặp xem có chủ đích | ý định theo sản phẩm | `repeat_view_ratio` (hiện median 1.0 = vô dụng) — **đã làm 2026-10-01** cho recsys (xem lại đo trên REES46: lặp trong phiên 10,6%, quay lại SP phiên cũ 16,7%) |
+| **Chu kỳ mua lại theo ngành hàng** (thêm 2026-10-01) | mỗi ngành gốc 1 nhịp mua lại (tiêu dùng nhanh: tã, sữa, bách hoá ≈ tuần–tháng; lâu bền: điện tử, gia dụng ≈ năm), user mua theo nhịp của ngành mình hay mua | Nhãn churn động (0.2), `recency_over_median_gap` có nghĩa theo ngành. **Neo số thật:** đo tỉ lệ mua lại cùng ngành trên REES46 đa ngành (có `category_code`: electronics/appliances/apparel/kids…) — chỉ 2 tháng nên chỉ đo được nhịp ngắn; ngành lâu bền phải ghi rõ là ước lượng. **Lưu ý:** đổi thời điểm đặt đơn sẽ chạm tần suất mua đã hiệu chỉnh cho churn → làm ở pha churn, không làm lén lúc sinh dataset cho recsys |
 
 **Tiêu chí thành công:** mỗi bảng/cột mới có phân bố **lệch thật** (không phẳng, không hằng số), và
 feature tính từ nó có phương sai > 0 trên ≥80% user. **Tiêu chí DỪNG:** nếu một bổ sung chỉ tái tạo
@@ -153,6 +162,14 @@ chuyển trọng tâm luận điểm sang Tầng 3 (nơi AI thắng về *năng 
 grouped CV ± std sẽ phát hiện. **Tiêu chí thành công:** ΔAUC > sàn nhiễu. Nếu không đạt, ghi lại là
 "đã thử, LR đủ" — đó là kết luận hợp lệ và có giá trị (bảo vệ được lựa chọn LR ban đầu).
 
+### 2.3b. Mốc xác suất kinh điển: BG/NBD + Gamma-Gamma (thêm 2026-10-01)
+Mô hình chuẩn của ngành TMĐT cho "khách còn hoạt động không" (P(alive)) và giá trị mua tiếp (CLV), chỉ dùng
+lịch sử đơn (recency, frequency, T, monetary) — không cần feature hành vi. **Việc:** fit trên cùng temporal
+split với LR, so AUC/PR-AUC của `1 − P(alive)` với xác suất churn của LR; Gamma-Gamma ước CLV để dùng ở 3.1
+(thay `monetary` thô trong `expected_loss`). **Giá trị khi bảo vệ:** trả lời được câu "model + feature hành vi có
+hơn mô hình xác suất kinh điển không" — nếu KHÔNG hơn, đó vẫn là kết luận trung thực và hữu ích. Chi phí thấp
+(thư viện `lifetimes`/`pymc-marketing`, vài trăm dòng).
+
 ### 2.4. Dọn feature không đóng góp
 7/11 feature có permutation importance ≈ 0 hoặc âm (`cart_abandon_count` **−0.0011** dù coef LR
 +2.99). Sau khi sửa nhãn, đo lại rồi cân nhắc bỏ hẳn khỏi `FEATURE_COLUMNS`. Model gọn hơn = dễ
@@ -171,6 +188,15 @@ Chừng nào chưa có Tầng 4 thì `P(voucher hiệu quả)` là hằng số g
 định**, không được trình bày như số đo.
 
 **Phụ thuộc:** 0.1 (calibration). **Tiêu chí thành công:** báo lại bảng revenue-recall@K sau hiệu chỉnh.
+
+### 3.1b. Nối điểm rủi ro vào module Campaigns có sẵn (thêm 2026-10-01)
+Admin đã có module **Campaigns** (luồng điều kiện rẽ nhánh + phát voucher, `FE/src/features/admin/components/
+campaigns/`). **Việc:** thêm điều kiện theo điểm rủi ro churn (đã hiệu chỉnh ở 0.1) để demo trọn vòng
+**dự đoán → hành động**: rủi ro 50–70% → gợi ý SP đúng gu (recs-service) + freeship; > 80% → voucher mạnh; ngưỡng
+là tham số campaign, không hardcode. Kèm nhóm đối chứng không gửi (holdout) để Tầng 4 đo được hiệu quả thật.
+
+**Đã cân nhắc và LOẠI (2026-10-01):** "gỡ cài đặt app" — web không có app mobile; "giao trễ / hoàn trả" — hệ thống
+không có dữ liệu nguồn, sinh ra thì thành tự bịa rồi tự đoán lại (suy luận vòng tròn).
 
 ### 3.2. Next Best Action từ 4 phân khúc đã học
 4 phân khúc giờ dùng được thật (VIP 1146 · New 759 · At Risk 727 · Hibernating 368, `match_distance`
