@@ -1,8 +1,15 @@
-import { lambdaDecayAt, restlessnessMultiplierAt } from "./profiles.mjs";
 import { TARGETS, PCT_LEVELS, GENERATION } from "./behaviorTargets.mjs";
 import { pickWeighted } from "./catalogIndex.mjs";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+// Phân phối số ngày phiên "hành trình" đi trước lần mua (TARGETS.purchaseCoupling.leadPmf, d = 1..28).
+const LEAD_CDF = (() => { let c = 0; return TARGETS.purchaseCoupling.leadPmf.map((p) => (c += p)); })();
+function sampleLeadDays(rng) {
+  const u = rng.next() * LEAD_CDF[LEAD_CDF.length - 1];
+  let i = 0;
+  while (i < LEAD_CDF.length - 1 && LEAD_CDF[i] < u) i++;
+  return i + 1;
+}
 const MONTH_MS = 30 * DAY_MS; // đơn giản hoá: "tháng" = 30 ngày, đủ dùng cho dữ liệu tổng hợp
 
 const ORDER_STATUS_DELIVERED = "DELIVERED";
@@ -84,6 +91,7 @@ const PREFERRED_CATEGORY_WEIGHT = 0.7; // 70% hành vi rơi vào category ưa th
 // TRA dữ liệu sinh ra thực sự đạt đúng các con số này, không chỉ "đặt tham số rồi hy vọng".
 const {
   sessionLengthPcts: SESSION_LENGTH_PCTS,
+  sessionLengthNoCartPcts: SESSION_LENGTH_NOCART_PCTS,
   viewsBeforeFirstCartPcts: VIEWS_BEFORE_CART_PCTS,
   cartTarget: CART_TARGET_PROBS,
 } = TARGETS;
@@ -341,7 +349,8 @@ function simulateSession(rng, catalog, profile, userId, anchorTime, sessionSprea
     clock.advance(1, 5);
   }
 
-  let total = Math.max(1, Math.min(Math.round(sampleFromPercentiles(rng, SESSION_LENGTH_PCTS)), 50));
+  // Phiên xem thuần lấy độ dài từ phân phối phiên KHÔNG có giỏ (thật: 81,5% dài 1 sự kiện); phiên có giỏ giữ phân phối chung.
+  let total = Math.max(1, Math.min(Math.round(sampleFromPercentiles(rng, forceCart ? SESSION_LENGTH_PCTS : SESSION_LENGTH_NOCART_PCTS)), 50));
   let viewsBeforeCart = 0;
   if (forceCart) {
     viewsBeforeCart = Math.max(0, Math.round(sampleFromPercentiles(rng, VIEWS_BEFORE_CART_PCTS)));
@@ -524,17 +533,32 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
   const nextSessionId = makeSessionIdGenerator(userId);
   const history = makeViewHistory();
   const rateMult = userCategoryRateMultiplier(catalog, profile);
+  const winStart = monthWindow(now, totalMonths, 1).start.getTime();
+  const nowMs = now.getTime();
 
-  for (let month = 1; month <= totalMonths; month++) {
-    const { start, end } = monthWindow(now, totalMonths, month);
-    const decay = lambdaDecayAt(profile, month);
-    const restless = restlessnessMultiplierAt(profile, month);
+  // --- Dòng thời gian mua theo BG/NBD (PURCHASE_PROCESS): lần mua đầu ở thời điểm gia nhập; các lần sau là quá trình
+  // Poisson tốc độ λ (× hệ số ngành, trung bình 1); sau MỖI lần mua lặp rời bỏ với xác suất dropoutP → không mua nữa.
+  // Thời điểm trong ngày giữ nhịp giờ/ngày của user (rhythmicTimestamp trên cửa sổ 1 ngày).
+  const birth = winStart + profile.birthFrac * (nowMs - winStart);
+  const ratePerMs = (profile.lambdaBase * rateMult) / MONTH_MS;
+  const rawTimes = [birth];
+  let dropoutAt = null;
+  for (let t = birth; ratePerMs > 0;) {
+    t += rng.exponential(ratePerMs);
+    if (t > nowMs) break;
+    rawTimes.push(t);
+    if (rng.bool(profile.dropoutP)) { dropoutAt = t; break; }
+  }
+  profile.willChurn = dropoutAt != null;
+  profile.dropoutAt = dropoutAt != null ? new Date(dropoutAt) : null;
+  const orderDates = rawTimes.map((t) => {
+    const dayStart = new Date(Math.floor(t / DAY_MS) * DAY_MS);
+    return rhythmicTimestamp(rng, dayStart, new Date(dayStart.getTime() + DAY_MS), profile);
+  }).filter((d) => d.getTime() <= nowMs);
 
-    // --- Đơn hàng thật: mỗi item trong đơn = 1 phiên có thêm giỏ (nội dung phiên thật, không
-    // còn ghép cứng view-cart cùng item — xem simulateSession). Tần suất/tháng giữ NGUYÊN như
-    // bản cũ (gắn với động lực churn đã được validate ở feature engineering, không đụng vào).
-    const numOrders = rng.poisson(profile.lambdaBase * decay * rateMult);
-    const orderDates = Array.from({ length: numOrders }, () => rhythmicTimestamp(rng, start, end, profile)).sort((a, b) => a - b);
+  {
+    // --- Đơn hàng thật: mỗi item trong đơn = 1 phiên có thêm giỏ (nội dung phiên thật, không còn ghép cứng view-cart
+    // cùng item — xem simulateSession) + hành trình mua + phễu checkout.
     for (const orderDate of orderDates) {
       const numItems = rng.int(1, 3);
       const items = [];
@@ -563,6 +587,25 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
         } else {
           items.push({ productId: product.id, productName: product.name, unitPrice, quantity, subtotal });
         }
+      }
+
+      // --- Hành trình mua: phiên xem thuần trong những ngày TRƯỚC đơn (dữ liệu thật: lượt xem dồn quanh lần mua,
+      // chỉ 16% là duyệt nền). Lệch giờ trong ngày ngẫu nhiên để không trùng giờ đặt đơn.
+      const numJourney = rng.poisson(GENERATION.journeySessionsPerOrder);
+      const numJourneyAbandon = rng.poisson(GENERATION.journeyAbandonPerOrder);
+      const numSameDay = rng.poisson(GENERATION.sameDaySessionsPerOrder);
+      for (let s = 0; s < numSameDay + numJourney + numJourneyAbandon; s++) {
+        // cùng ngày: phiên trước giờ đặt đơn 30 phút–6 giờ; hành trình: đi trước d ngày (leadPmf), lệch giờ ngẫu nhiên
+        const sameDay = s < numSameDay;
+        const anchor = sameDay
+          ? new Date(orderDate.getTime() - rng.int(30, 6 * 60) * 60 * 1000)
+          : new Date(orderDate.getTime() - sampleLeadDays(rng) * DAY_MS + rng.int(-6 * 60, 6 * 60) * 60 * 1000);
+        const isAbandon = s >= numSameDay + numJourney;
+        const { events: sessionEvents } = simulateSession(
+          rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
+          { forceCart: isAbandon, sessionKind: isAbandon ? "abandon" : "pureview", nextSessionId, history }
+        );
+        events.push(...sessionEvents);
       }
 
       const isCancelled = rng.bool(profile.cancelProb);
@@ -597,39 +640,40 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
         items,
       });
     }
+  }
 
-    // --- Bỏ giỏ hàng KHÔNG dẫn tới đơn (tín hiệu rủi ro rời bỏ) — tần suất/tháng giữ NGUYÊN
-    // như bản cũ (gắn với churn), chỉ đổi nội dung phiên bên trong.
-    const numAbandon = rng.poisson(profile.lambdaBase * decay * restless * 0.8);
-    for (let a = 0; a < numAbandon; a++) {
-      const anchor = rhythmicTimestamp(rng, start, end, profile);
-      const { events: sessionEvents } = simulateSession(
-        rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-        { forceCart: true, sessionKind: "abandon", nextSessionId, history }
-      );
-      events.push(...sessionEvents);
-    }
-
-    // --- Xem thuần tuý, không thêm giỏ (nhiễu nền + tín hiệu "bỏ dở", đo được 87,8% lượt xem
-    // không dẫn tới thêm giỏ trong cùng phiên trên dữ liệu thật) — tần suất/tháng giữ NGUYÊN.
+  // --- Duyệt NỀN (ngoài hành trình mua): chỉ user backgroundBrowser, từ lúc gia nhập; sau khi rời bỏ còn ×churnViewDecay
+  // (xem) / ×churnCartDecay (bỏ giỏ) — hiệu chỉnh theo TARGETS.preChurn. Mỗi tháng tách 2 đoạn trước/sau rời bỏ.
+  if (profile.backgroundBrowser) {
     const avgViewsPerSession = (profile.sessionPureViewBatch + 1) / 2;
-    const numPureViewSessions = rng.poisson(
-      (profile.baselineViewsPerMonth * decay * (restless > 1 ? 1.3 : 1)) / avgViewsPerSession
-    );
-    for (let s = 0; s < numPureViewSessions; s++) {
-      const anchor = rhythmicTimestamp(rng, start, end, profile);
-      const { events: sessionEvents } = simulateSession(
-        rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
-        { forceCart: false, sessionKind: "pureview", nextSessionId, history }
-      );
-      events.push(...sessionEvents);
+    for (let month = 1; month <= totalMonths; month++) {
+      const { start, end } = monthWindow(now, totalMonths, month);
+      const s0 = Math.max(start.getTime(), birth);
+      if (s0 >= end.getTime()) continue;
+      const cut = dropoutAt != null ? Math.min(Math.max(dropoutAt, s0), end.getTime()) : end.getTime();
+      for (const [a, b, churned] of [[s0, cut, false], [cut, end.getTime(), true]]) {
+        if (b <= a) continue;
+        const frac = (b - a) / MONTH_MS;
+        const viewRate = (profile.baselineViewsPerMonth * GENERATION.backgroundScale * (churned ? GENERATION.churnViewDecay : 1)) / avgViewsPerSession;
+        const cartRate = profile.lambdaBase * 0.8 * GENERATION.backgroundAbandonScale * (churned ? GENERATION.churnCartDecay : 1);
+        const numAbandon = rng.poisson(cartRate * frac);
+        const numPure = rng.poisson(viewRate * frac);
+        for (let s = 0; s < numAbandon + numPure; s++) {
+          const anchor = rhythmicTimestamp(rng, new Date(a), new Date(b), profile);
+          const isAbandon = s < numAbandon;
+          const { events: sessionEvents } = simulateSession(
+            rng, catalog, profile, userId, anchor, profile.sessionBrowseSpreadMinutes,
+            { forceCart: isAbandon, sessionKind: isAbandon ? "abandon" : "pureview", nextSessionId, history }
+          );
+          events.push(...sessionEvents);
+        }
+      }
     }
   }
 
-  // Phiên bắt đầu sát `now` có thể kéo dài qua mốc đó — dữ liệu là ảnh chụp tại `now`, nên phần
-  // sau mốc chưa xảy ra (phiên đang dở). Lọc SAU khi mô phỏng để không đổi dòng số ngẫu nhiên.
-  const nowMs = now.getTime();
-  return { orders, events: events.filter((e) => e.createdAt.getTime() <= nowMs) };
+  // Dữ liệu là ảnh chụp tại `now` của platform có `totalMonths` tháng tuổi: bỏ phần sau `now` (phiên đang dở) và trước
+  // ngày platform mở (phiên hành trình đi trước lần mua đầu của user gia nhập sớm). Lọc SAU khi mô phỏng.
+  return { orders, events: events.filter((e) => e.createdAt.getTime() <= nowMs && e.createdAt.getTime() >= winStart) };
 }
 
 /** Sinh dữ liệu cho toàn bộ user, trả về mảng gộp orders/events kèm userId tương ứng. */

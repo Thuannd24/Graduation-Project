@@ -84,6 +84,35 @@ export class Rng {
     return xm / Math.pow(u, 1 / alpha);
   }
 
+  /** Exponential(rate) — khoảng cách giữa 2 sự kiện của quá trình Poisson. */
+  exponential(rate) {
+    return -Math.log(Math.max(this.next(), 1e-300)) / rate;
+  }
+
+  /** Gamma(shape, scale) — Marsaglia & Tsang (2000); shape < 1 dùng phép tăng cường Gamma(shape+1)·U^(1/shape). */
+  gamma(shape, scale = 1) {
+    if (shape < 1) return this.gamma(shape + 1, scale) * Math.pow(Math.max(this.next(), 1e-300), 1 / shape);
+    const d = shape - 1 / 3;
+    const c = 1 / Math.sqrt(9 * d);
+    for (;;) {
+      let x, v;
+      do {
+        x = this.normal();
+        v = 1 + c * x;
+      } while (v <= 0);
+      v = v * v * v;
+      const u = this.next();
+      if (u < 1 - 0.0331 * x ** 4 || Math.log(Math.max(u, 1e-300)) < 0.5 * x * x + d * (1 - v + Math.log(v))) return d * v * scale;
+    }
+  }
+
+  /** Beta(a, b) qua 2 biến Gamma. */
+  beta(a, b) {
+    const x = this.gamma(a);
+    const y = this.gamma(b);
+    return x + y > 0 ? x / (x + y) : 0;
+  }
+
   /** Số nguyên Poisson(lambda) — dùng cho số đơn hàng/số sự kiện trong 1 khoảng thời gian.
    * Thuật toán Knuth, đủ nhanh cho lambda vừa phải (< ~30, phù hợp quy mô đồ án). */
   poisson(lambda) {

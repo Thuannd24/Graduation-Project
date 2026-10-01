@@ -11,20 +11,24 @@ import { makeCatalog } from "./helpers.mjs";
 
 const NOW = new Date("2026-09-30T00:00:00Z");
 
-function generate({ users = 300, months = 12, seed = 42, catalog = makeCatalog() } = {}) {
+function generate({ users = 300, months = 12, seed = 42, catalog = makeCatalog(), idPrefix = "u" } = {}) {
   const rng = new Rng(seed);
   const profiles = generateUserProfiles(rng, users, catalog.categoryIds);
-  const ids = Array.from({ length: users }, (_, i) => `u${i}`);
+  const ids = Array.from({ length: users }, (_, i) => `${idPrefix}${i}`);
   return { catalog, ...simulateAllUsers(rng, profiles, ids, catalog, { totalMonths: months, now: NOW }) };
 }
 
 test("dữ liệu sinh ra khớp số đo từ dữ liệu người dùng thật (mọi mục fidelity đạt)", () => {
-  // 1500 user: độ tập trung lượt xem theo SP méo thấp khi quá thưa (800 user / ~7K SP → top 10% ≈ 0,605, sát
-  // ngưỡng dưới 0,607); 1500 user cho ≈ 0,62 ổn định qua 3 seed, khớp catalog Tiki thật 2000 user (0,625).
-  const { events, orders, catalog } = generate({ users: 1500 });
+  // GỘP 2 seed × 3000 user (id không trùng) vào 1 bộ đo: các chỉ số quanh lần mua cuối là TỈ SỐ trên vài trăm mốc
+  // neo churn — 1 seed 3000 user dao động ±0,03–0,1 giữa các seed (đo 2026-10-01), sát ngưỡng. Gộp = thêm dữ liệu,
+  // cùng định nghĩa. Độ tập trung lượt xem cũng cần đủ lượt/SP (quá thưa → top 10% méo thấp).
+  const catalog = makeCatalog();
   const f = new FidelityStats();
-  f.addEvents(events);
-  f.addOrders(orders, (pid) => catalog.rootOf.get(catalog.byId.get(pid)?.categoryId));
+  for (const [seed, idPrefix] of [[42, "a"], [7, "b"]]) {
+    const { events, orders } = generate({ users: 3000, seed, catalog, idPrefix });
+    f.addEvents(events);
+    f.addOrders(orders, (pid) => catalog.rootOf.get(catalog.byId.get(pid)?.categoryId));
+  }
   const failed = f.checks().filter((r) => !r.pass);
   assert.deepEqual(
     failed.map((r) => `${r.name}: sinh=${r.got} thật=${r.want} (${r.rule})`),

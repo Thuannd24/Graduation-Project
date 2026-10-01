@@ -20,8 +20,8 @@ const FILES = {
   orderItems: ["order_id", "product_id", "unit_price", "quantity", "subtotal"],
   reviews: ["order_id", "product_id", "user_id", "rating", "created_at"],
   // NHÃN SINH (ground truth của simulator) — chỉ dùng để ĐÁNH GIÁ model churn, KHÔNG được đưa
-  // vào làm feature (sẽ là rò rỉ nhãn). churn_month: tháng (1..months) bắt đầu rời bỏ.
-  profiles: ["user_id", "will_churn", "churn_month", "price_sensitivity", "preferred_categories"],
+  // vào làm feature (sẽ là rò rỉ nhãn). dropout_at: thời điểm lần mua lặp cuối mà sau đó rời bỏ (BG/NBD, rỗng nếu chưa rời bỏ).
+  profiles: ["user_id", "will_churn", "dropout_at", "price_sensitivity", "preferred_categories"],
 };
 
 export class CsvExporter {
@@ -79,7 +79,7 @@ export class CsvExporter {
 
     fs.appendFileSync(this.paths.profiles, userIds.map((uid, i) => {
       const p = profiles[i];
-      return line([uid, p.willChurn ? 1 : 0, p.willChurn ? p.churnMonth : "", p.priceSensitivity.toFixed(4), p.preferredCategories.join("|")]);
+      return line([uid, p.willChurn ? 1 : 0, p.dropoutAt ? p.dropoutAt.toISOString() : "", p.priceSensitivity.toFixed(4), p.preferredCategories.join("|")]);
     }).join(""));
     this.rows.profiles += userIds.length;
   }

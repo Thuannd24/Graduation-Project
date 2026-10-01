@@ -25,6 +25,12 @@ export const TARGETS = {
   // 50 để 1 phiên tổng hợp không nuốt bộ nhớ vô ích; không ảnh hưởng median/mean đáng kể.
   sessionLengthPcts: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 5, 8, 15, 50],
   sessionLength: { median: 1, mean: 3.7 },
+  // Độ dài phiên TÁCH theo loại (churn_measure_session_split.py, REES46 Cosmetics 5 tháng, 4,48 triệu phiên, 2026-10-01):
+  // phiên KHÔNG có giỏ ngắn hơn hẳn — phiên xem thuần của bộ sinh phải lấy mẫu từ phân phối này, không từ phân phối
+  // chung (vốn gồm cả phiên có giỏ, TB 10,3 sự kiện).
+  sessionLengthNoCartPcts: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 4, 427],
+  sessionLenOneShare: 0.6514,     // P(phiên dài đúng 1 sự kiện view/cart), mọi phiên
+  sessionWithCartShare: 0.2201,   // tỉ lệ phiên có ≥ 1 lượt thêm giỏ
 
   // Số item PHÂN BIỆT đã xem trước lượt thêm giỏ ĐẦU TIÊN của phiên (REES46). p40 = 0: ~40% phiên
   // có thêm giỏ mà KHÔNG xem sản phẩm nào trước đó trong phiên (thêm thẳng từ danh sách).
@@ -96,6 +102,51 @@ export const TARGETS = {
     },
     proxies: { "dien-gia-dung": "Home_and_Kitchen" },
   },
+  // HÀNH VI QUANH LẦN MUA CUỐI (churn) — REES46 Cosmetics 5 tháng (churn_measure_prechurn_behavior.py, 2026-10-01).
+  // Khách mua lặp; nhóm churn neo ở lần mua cuối (sau đó ≥ 60 ngày không mua), nhóm đối chứng neo ở 1 lần mua có lần
+  // kế tiếp trong ≤ 60 ngày. TRƯỚC = ngày −42..−1, SAU = ngày +1..+56 (tỉ lệ / ngày).
+  //  - churn VẪN DUYỆT sau lần mua cuối: lượt xem SAU/TRƯỚC 0,186, thêm giỏ 0,136; 41,2% im lặng hẳn.
+  //  - KHÔNG có "phân vân" trước churn: (bỏ giỏ / thêm giỏ) MUỘN/SỚM của churn ÷ đối chứng = 0,983, CI95 [0,925; 1,062];
+  //    có điều kiện theo mức hoạt động, bỏ giỏ gần đây đi kèm ÍT churn hơn (hệ số chuẩn hoá −0,34).
+  preChurn: {
+    churnPostOverPreViews: 0.186,
+    churnPostOverPreCarts: 0.136,
+    churnZeroActivityPost: 0.412,
+    abandonPerCartSpecificity: 0.983,
+    abandonPerCartSpecificityCI: [0.925, 1.062],
+  },
+  // DUYỆT DỒN QUANH LẦN MUA — cùng nguồn/script (purchase_coupling). Khách mua lặp (≥ 2 ngày mua trong 152 ngày); tỉ
+  // trọng lượt xem theo khoảng cách tới lần mua gần nhất. "Nền" = cách mọi lần mua > 14 ngày. Lượt xem/ngày trước 1 lần
+  // mua: −28 ngày 0,29 · −14 0,40 · −7 0,64 · −3 1,06 · −1 3,16 · ngày mua 11,3.
+  // leadPmf[d−1] = tỉ trọng lượt xem "hành trình" (vượt mức nền) đi trước lần mua d ngày, d = 1..28 (khối CHÍNH NGÀY mua
+  // do phiên đặt đơn + phiên cùng ngày đảm nhận, hiệu chỉnh theo viewSharePurchaseDay — tránh đếm ngày mua 2 lần).
+  // Thêm giỏ dồn quanh lần mua y như lượt xem (cart*). Duyệt SAU lần mua chỉ ~1 lượt xem vượt nền (so với ~8 trước) →
+  // không mô phỏng riêng.
+  purchaseCoupling: {
+    viewSharePurchaseDay: 0.3528,
+    viewShare1to14Before: 0.3705,
+    viewShareBackground: 0.1597,
+    zeroBackground: 0.3911,
+    leadPmf: [0.3526, 0.1569, 0.0959, 0.0726, 0.0585, 0.0417, 0.0444, 0.0352, 0.0208, 0.0166, 0.0181, 0.017, 0.0121, 0.0144, 0.0119, 0.0085, 0.0029, 0.0043, 0.0014, 0.0045, 0.0031, 0.0009, 0.0047, 0.0001, 0.0, 0.0, 0.0, 0.0009],
+    cartSharePurchaseDay: 0.4355,
+    cartShare1to14Before: 0.3371,
+    cartShareBackground: 0.1365,
+  },
+};
+
+// QUÁ TRÌNH MUA + RỜI BỎ — BG/NBD (Fader, Hardie & Lee 2005) ước lượng trên giao dịch THẬT (churn_fit_bgnbd.py,
+// 2026-10-01). Mỗi khách: tốc độ mua λ/ngày ~ Gamma(r, α); sau MỖI lần mua LẶP rời bỏ vĩnh viễn với xác suất p ~ Beta(a, b).
+// Nguồn: Online Retail II (UCI, CC BY 4.0) — học 18 tháng, kiểm định 192 ngày giữ lại: tổng giao dịch dự báo/thực 0,978,
+// mọi nhóm tần suất trong ±9% (ĐẠT tiêu chí đặt trước ±15% / ±25%). REES46 Cosmetics TRƯỢT (1,17; nhóm mua 1 lần
+// dự báo ×1,46 — điểm yếu đã biết của BG/NBD + 82% khách mua 1 lần trong 3 tháng + cắt trái) nên theo quy tắc đặt trước
+// dùng Online Retail II. Thay giả định đặt tay cũ (λ log-normal(log 0,5; 0,9)/tháng, 35% churn ở tháng 3–10, tụt còn 5%).
+// Giới hạn: bán lẻ quà tặng UK (có khách sỉ) — tốc độ/rời bỏ là của 1 nhà bán lẻ thật, không phải sàn đa ngành VN.
+export const PURCHASE_PROCESS = {
+  r: 0.6791,
+  alpha: 66.007,
+  a: 0.1566,
+  b: 3.3216,
+  source: "Online Retail II (UCI) — churn_fit_bgnbd.py",
 };
 
 // THAM SỐ SINH hành vi chuyển tiếp/xem lại — KHÔNG phải số đo: hiệu chỉnh (calibrate) để các chỉ số ĐẦU RA
@@ -110,12 +161,14 @@ export const TARGETS = {
 // Đầu ra (catalog Tiki): stickiness 0,520 · lặp trong phiên 0,111 · recency 0,529 · lặp cấp user
 // 0,159 · top10 0,633 (mục tiêu 0,492 / 0,106 / 0,508 / 0,192 / 0,657). repeatPrev < số đo 0,1064 vì SP hot
 // đôi khi bị bốc trúng lại tình cờ (đuôi dài) — cộng lại đúng số đo.
+// HIỆU CHỈNH LẠI 2026-10-01 (sau khi thay lõi mua bằng BG/NBD + thêm hành trình mua + độ dài phiên tách loại): mọi
+// tham số dưới đây là bộ cuối của tìm kiếm ngẫu nhiên trên 2–3 seed; số đầu ra & lịch sử: docs/canvas/churn-risk-log.md.
 export const GENERATION = {
   pSameCategoryNew: 0.66,     // P(giữ category) khi chọn SP MỚI (bù cho lượt quay lại SP cũ hay đổi category)
   repeatPrev: 0.08,           // P(xem lại ngay SP vừa xem)
   revisitSession: 0.1442,     // P(quay lại SP đã xem trước đó trong phiên) — giữ số đo
-  revisitHistory: 0.25,       // P(SP mới trong phiên lấy từ lịch sử phiên cũ)
-  sessionResume: 0.58,        // P(phiên mở đầu bằng SP xem gần nhất của phiên trước) — 0,65 làm recency trên catalog giả 0,56 (> 0,558)
+  revisitHistory: 0.3,       // P(SP mới trong phiên lấy từ lịch sử phiên cũ)
+  sessionResume: 0.75,        // P(phiên mở đầu bằng SP xem gần nhất của phiên trước) — hiệu chỉnh lại 2026-10-01 sau khi đổi cơ cấu phiên (hành trình mua)
   historyRecencyDecay: 1,     // trọng số chọn từ lịch sử ∝ decay^hạng-gần-đây (1 = đều trong 20 SP gần nhất)
   // Chu kỳ mua lại theo ngành (TARGETS.categoryRepurchase): mỗi danh mục ưa thích là 1 luồng mua, tốc độ ∝
   // (1 / tỉ_lệ_chu_kỳ_ngành)^categoryRateExponent; tần suất đặt đơn của user nhân hệ số theo ngành họ thích, CHUẨN
@@ -123,6 +176,22 @@ export const GENERATION = {
   // hạn" (thử trước, 2026-10-01): khi tần suất không phụ thuộc ngành, khoảng cách sinh ra ngược chiều số đo.
   categoryRateExponent: 2,   // hiệu chỉnh: 1 (lý thuyết) không ổn định giữa các seed vì bị pha loãng bởi explore + trộn nhiều ngành ưa thích
   intentExploreProb: 0.15,    // P(SP trong đơn không theo ngành ưa thích — mua thử ngành khác)
+  // Sau tháng churn (TARGETS.preChurn): đơn hàng vẫn ×0,05 (CHURN_DECAY_FACTOR — churn = ngừng mua), nhưng DUYỆT thì
+  // không tụt theo: hệ số riêng cho phiên xem thuần và phiên bỏ giỏ, hiệu chỉnh để SAU/TRƯỚC đo được khớp số thật.
+  churnViewDecay: 0.15,
+  churnCartDecay: 0.05,
+  // Duyệt dồn quanh lần mua (TARGETS.purchaseCoupling): mỗi đơn kéo theo Poisson(journeySessionsPerOrder) phiên xem
+  // thuần + Poisson(journeyAbandonPerOrder) phiên bỏ giỏ, đi trước d ngày, d ~ leadPmf (phân phối THỰC NGHIỆM, không
+  // giả định dạng hàm). Duyệt nền: user có xác suất zeroBackgroundProb không duyệt ngoài lúc mua; còn lại xem nền =
+  // (backgroundConst + 8 × lambdaBase) × backgroundScale lượt/tháng, bỏ giỏ nền = lambdaBase × 0,8 × backgroundAbandonScale.
+  // backgroundConst: phần duyệt KHÔNG gắn với tần suất mua (bản cũ đặt tay 3).
+  journeySessionsPerOrder: 2.4,
+  journeyAbandonPerOrder: 1.08,
+  sameDaySessionsPerOrder: 2.47,  // phiên xem thuần CÙNG NGÀY trước giờ đặt đơn (ngày mua thật ~11 lượt xem)
+  zeroBackgroundProb: 0.39,
+  backgroundScale: 1.16,
+  backgroundAbandonScale: 3.07,
+  backgroundConst: 0,
 };
 
 // Tham số SINH độ phổ biến (catalogIndex.mjs / catalog.mjs) — hiệu chỉnh để dữ liệu sinh đạt
@@ -151,4 +220,14 @@ export const TOLERANCE = {
 // bị BỎ (2026-10-01) vì đo trên dữ liệu thật cho thấy chúng sai hướng — thay bằng TARGETS.userSequence.
 export const REGRESSION_GUARDS = {
   maxCartSameAsLastView: 0.3,
+};
+
+// LỆCH ĐÃ BIẾT — mục fidelity lệch số thật vì GIỚI HẠN CẤU TRÚC đã phân tích, chưa sửa (có lý do + phạm vi ảnh hưởng).
+// Báo cáo vẫn in rõ "LỆCH ĐÃ BIẾT" kèm số sinh/thật; KHÔNG chặn cổng kiểm tra. Chỉ thêm mục vào đây khi đã ghi lý do
+// trong docs/canvas/churn-risk-log.md — không dùng để giấu mục trượt chưa hiểu.
+export const KNOWN_GAPS = {
+  "% phiên có thêm giỏ":
+    "bộ sinh tách mỗi SP trong đơn thành 1 phiên 1 lượt thêm giỏ (thật: phiên có giỏ TB 10,3 sự kiện, nhiều lượt thêm giỏ) → " +
+    "quá nhiều phiên có giỏ (~35% so với 22%). Sửa = viết lại bộ mô phỏng phiên (đơn nhiều SP trong 1 phiên) + hiệu chỉnh " +
+    "lại chỉ số cấp phiên của recsys (đã bàn giao). Feature churn đếm lượt thêm giỏ, không đếm phiên — 2026-10-01.",
 };
