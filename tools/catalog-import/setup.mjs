@@ -6,6 +6,7 @@
  * Usage:
  *   node setup.mjs                 # import + flush cache
  *   node setup.mjs --dry-run       # chỉ validate, không ghi DB, không flush cache
+ *   node setup.mjs --dir manifests-tiki   # import thư mục khác (catalog đa ngành từ scrape-tiki.mjs)
  */
 
 import fs from "node:fs";
@@ -63,8 +64,10 @@ async function main() {
     process.exit(1);
   }
 
-  const manifestsDir = path.join(__dirname, "manifests");
-  const files = fs.readdirSync(manifestsDir).filter((f) => f.endsWith(".json")).sort();
+  const dirArg = process.argv.indexOf("--dir");
+  const manifestsDir = path.join(__dirname, dirArg !== -1 ? process.argv[dirArg + 1] : "manifests");
+  // "_" đầu tên = file phụ (vd _popularity.json của scrape-tiki), không phải manifest
+  const files = fs.readdirSync(manifestsDir).filter((f) => f.endsWith(".json") && !f.startsWith("_")).sort();
 
   console.log(`\n📦 Import ${files.length} file manifest (${dryRun ? "DRY-RUN" : "APPLY"}) → ${baseUrl}\n`);
 

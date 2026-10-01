@@ -145,8 +145,8 @@ export default function Footer() {
 
       {/* Copyright footer bottom */}
       <div className="max-w-container-max mx-auto px-6 mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
-        <p>© 2026 AuraTech. All rights reserved.</p>
-        <p className="text-slate-400 tracking-wider uppercase font-semibold">High-performance retail environment.</p>
+        <p>© 2026 AuraTech — web demo đồ án tốt nghiệp.</p>
+        <p className="text-slate-400 text-center md:text-right">Một phần dữ liệu sản phẩm (tên, hình ảnh, mô tả) minh hoạ từ Tiki.vn, chỉ phục vụ học tập, không kinh doanh.</p>
       </div>
     </footer>
   );
