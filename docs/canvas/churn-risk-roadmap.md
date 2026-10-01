@@ -133,7 +133,7 @@ tiếp với nhãn (sinh review tỉ lệ với retention thì model chỉ tìm 
 | Review sau khi mua | xu hướng review (độc lập với churn), thiên lệch điểm | `review_count`, `avg_rating_given` |
 | Lịch sử voucher + độ sâu biến thiên | độ nhạy giá (đã có) → chọn mức giảm | `voucher_usage_rate`, và **là tiền đề của uplift modeling** |
 | Lặp xem có chủ đích | ý định theo sản phẩm | `repeat_view_ratio` (hiện median 1.0 = vô dụng) — **đã làm 2026-10-01** cho recsys (xem lại đo trên REES46: lặp trong phiên 10,6%, quay lại SP phiên cũ 16,7%) |
-| **Chu kỳ mua lại theo ngành hàng** (thêm 2026-10-01) | mỗi ngành gốc 1 nhịp mua lại (tiêu dùng nhanh: tã, sữa, bách hoá ≈ tuần–tháng; lâu bền: điện tử, gia dụng ≈ năm), user mua theo nhịp của ngành mình hay mua | Nhãn churn động (0.2), `recency_over_median_gap` có nghĩa theo ngành. **Neo số thật:** đo tỉ lệ mua lại cùng ngành trên REES46 đa ngành (có `category_code`: electronics/appliances/apparel/kids…) — chỉ 2 tháng nên chỉ đo được nhịp ngắn; ngành lâu bền phải ghi rõ là ước lượng. **Lưu ý:** đổi thời điểm đặt đơn sẽ chạm tần suất mua đã hiệu chỉnh cho churn → làm ở pha churn, không làm lén lúc sinh dataset cho recsys |
+| **Chu kỳ mua lại theo ngành hàng** (thêm 2026-10-01) | mỗi ngành gốc 1 nhịp mua lại (tiêu dùng nhanh: tã, sữa, bách hoá ≈ tuần–tháng; lâu bền: điện tử, gia dụng ≈ năm), user mua theo nhịp của ngành mình hay mua | Nhãn churn động (0.2), `recency_over_median_gap` có nghĩa theo ngành. **Neo số thật:** đo tỉ lệ mua lại cùng ngành trên REES46 đa ngành (có `category_code`: electronics/appliances/apparel/kids…) — chỉ 2 tháng nên chỉ đo được nhịp ngắn; ngành lâu bền phải ghi rõ là ước lượng. **Lưu ý:** đổi thời điểm đặt đơn sẽ chạm tần suất mua đã hiệu chỉnh cho churn → làm ở pha churn, không làm lén lúc sinh dataset cho recsys. **ĐÃ LÀM 2026-10-01:** REES46 không neo được (cửa sổ 61 ngày); neo bằng tỉ lệ chu kỳ Amazon Reviews 2023 (11 ngành), mô hình luồng mua theo ngành, 22/22 fidelity đạt, mặt bằng nhãn churn giữ nguyên — xem churn-risk-log.md |
 
 **Tiêu chí thành công:** mỗi bảng/cột mới có phân bố **lệch thật** (không phẳng, không hằng số), và
 feature tính từ nó có phương sai > 0 trên ≥80% user. **Tiêu chí DỪNG:** nếu một bổ sung chỉ tái tạo
@@ -191,7 +191,8 @@ Chừng nào chưa có Tầng 4 thì `P(voucher hiệu quả)` là hằng số g
 
 ### 3.1b. Nối điểm rủi ro vào module Campaigns có sẵn (thêm 2026-10-01)
 Admin đã có module **Campaigns** (luồng điều kiện rẽ nhánh + phát voucher, `FE/src/features/admin/components/
-campaigns/`). **Việc:** thêm điều kiện theo điểm rủi ro churn (đã hiệu chỉnh ở 0.1) để demo trọn vòng
+campaigns/`). **Sửa 2026-10-01:** điều kiện `Condition_ChurnRiskTier` (rẽ nhánh theo tier rủi ro) **đã có sẵn** trong luồng Camunda — phần MỚI thật sự chỉ là **nhóm holdout** và đo hiệu quả. Đoạn dưới giữ làm mô tả đích đến.
+**Việc (gốc):** thêm điều kiện theo điểm rủi ro churn (đã hiệu chỉnh ở 0.1) để demo trọn vòng
 **dự đoán → hành động**: rủi ro 50–70% → gợi ý SP đúng gu (recs-service) + freeship; > 80% → voucher mạnh; ngưỡng
 là tham số campaign, không hardcode. Kèm nhóm đối chứng không gửi (holdout) để Tầng 4 đo được hiệu quả thật.
 
