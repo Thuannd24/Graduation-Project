@@ -49,6 +49,8 @@ N_EPOCHS = int(os.environ.get("N_EPOCHS", "30"))
 N_NEGATIVES = int(os.environ.get("N_NEGATIVES", "50"))
 # "default" = giu nguyen nhu recsys_sasrec.py/ket qua cu; "scaled" = xem SASRec.__init__
 EMB_INIT = os.environ.get("EMB_INIT", "default")
+# In loss moi LOG_EVERY epoch (chay dai khong giam sat, vd Colab qua dem: dat 1 de thay tien do)
+LOG_EVERY = max(1, int(os.environ.get("LOG_EVERY", "5")))
 # Chi de DO TOC DO (vd tren may GPU truoc khi chay that): dung moi epoch sau N buoc, 0 = tat
 MAX_STEPS = int(os.environ.get("MAX_STEPS", "0"))
 LR = 1e-3
@@ -301,7 +303,7 @@ def main() -> None:
                 break
         avg_loss = total_loss / n_batches
         dt = time.perf_counter() - t_epoch
-        if (epoch + 1) % 5 == 0 or epoch == 0 or MAX_STEPS:
+        if (epoch + 1) % LOG_EVERY == 0 or epoch == 0 or MAX_STEPS:
             print(f"  epoch {epoch+1}/{N_EPOCHS}: loss={avg_loss:.4f} | {dt:.1f}s "
                   f"({n_batches * BATCH_SIZE / dt:,.0f} mau/s, dung batch {100 * t_data / dt:.0f}% thoi gian)")
         if MAX_STEPS:
