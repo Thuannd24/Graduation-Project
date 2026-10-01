@@ -52,6 +52,14 @@ public class UserEvent {
     @Column(name = "weight")
     private Double weight;
 
+    /**
+     * Nơi hành vi xảy ra, hiện dùng cho IMPRESSION: khối gợi ý nào (for_you/recent/trending) hay trang
+     * search/category. Không có cột này thì không tính được CTR theo từng khối gợi ý. Nullable — dữ
+     * liệu cũ và các action khác giữ NULL. Tập giá trị: IMPRESSION_SOURCES trong shared_common/contracts.py.
+     */
+    @Column(name = "source", length = 30)
+    private String source;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 }

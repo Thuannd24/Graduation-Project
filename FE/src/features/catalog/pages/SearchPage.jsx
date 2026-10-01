@@ -159,7 +159,7 @@ export default function SearchPage() {
   // Ghi nhận sản phẩm THẬT SỰ hiển thị cho user sau khi lọc/sắp xếp xong — không phải toàn bộ
   // allProducts đã tải (có thể lớn hơn nhiều những gì user thấy).
   useEffect(() => {
-    if (sortedProducts.length > 0) trackImpressions(sortedProducts.map((p) => p.id));
+    if (sortedProducts.length > 0) trackImpressions(sortedProducts.map((p) => p.id), "search");
   }, [sortedProducts]);
 
   const filterPanelProps = {

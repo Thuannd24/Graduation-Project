@@ -111,7 +111,12 @@ ACTION_SORT_APPLIED = "SORT_APPLIED"                # sắp xếp (thường là
 # không phân biệt được "gợi ý đưa ra mà bị bỏ qua" với "chưa từng đưa ra". Bắn 1 event/item hiển
 # thị trong danh sách (fan-out, tái dùng `itemId` số ít có sẵn — KHÔNG đổi schema `user_events`,
 # xem thảo luận tại sao chọn fan-out thay vì cột mảng mới trong commit thêm action này).
-ACTION_IMPRESSION = "IMPRESSION"                    # item xuất hiện trong 1 danh sách hiển thị
+ACTION_IMPRESSION = "IMPRESSION"                    # item xuất hiện trong 1 danh sách hiển thị; weight = vị trí (1 = đầu)
+
+# Cột `user_events.source` (VARCHAR(30), nullable) — nơi IMPRESSION xảy ra. 3 giá trị đầu khớp tham số
+# `source` của recs-service (3 tab khối gợi ý trang chủ); search/category là trang danh sách thường.
+# Endpoint ingest chỉ nhận các giá trị này, cùng lý do với FE_BEHAVIOR_ACTIONS.
+IMPRESSION_SOURCES = {"for_you", "recent", "trending", "search", "category"}
 
 # Tập action FE được phép bắn. Endpoint ingest CHỈ nhận các giá trị này — chặn client bịa
 # action_type lạ làm bẩn bảng `user_events` (và làm vỡ mọi feature đếm theo action).

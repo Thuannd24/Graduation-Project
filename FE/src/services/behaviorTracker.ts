@@ -18,6 +18,8 @@
  * tốc chuột/hover thuần desktop, vì TMĐT Việt Nam đa số truy cập bằng mobile.
  */
 
+import { getAuthToken } from "./apiClient.ts";
+
 const ENDPOINT = "/public/behavior/events";
 const FLUSH_INTERVAL_MS = 10_000;
 const MAX_QUEUE = 200; // khớp MAX_BATCH_SIZE ở app/models/behavior.py
@@ -39,11 +41,16 @@ export type BehaviorAction =
   | "SORT_APPLIED"
   | "IMPRESSION";
 
+/** Nơi IMPRESSION xảy ra -> cột `user_events.source`. Phải khớp IMPRESSION_SOURCES ở
+ * shared_common/contracts.py (backend từ chối giá trị lạ). 3 giá trị đầu = 3 tab khối gợi ý trang chủ. */
+export type ImpressionSource = "for_you" | "recent" | "trending" | "search" | "category";
+
 interface QueuedEvent {
   actionType: BehaviorAction;
   itemId?: number | null;
   categoryId?: number | null;
   weight?: number | null;
+  source?: ImpressionSource | null;
   timestamp: string;
   sessionId: string | null;
 }
@@ -53,6 +60,9 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api/
 let queue: QueuedEvent[] = [];
 let flushTimer: ReturnType<typeof setInterval> | null = null;
 let initialised = false;
+// Trạng thái của "trang" hiện tại — reset mỗi lần đổi route (xem `notifyRouteChange`)
+let pageEnteredAt = Date.now();
+const scrollMilestonesSent = new Set<number>();
 
 /** Dùng CHUNG session id với apiClient (cùng khoá sessionStorage) để event vi hành vi và event
  * nghiệp vụ (xem SP/giỏ hàng) ghép được vào cùng một phiên khi phân tích chuỗi. */
@@ -70,26 +80,45 @@ function getSessionId(): string | null {
   }
 }
 
+function postBatch(url: string, body: string, token: string | null): Promise<Response> {
+  // `keepalive` cho phép request sống sót qua điều hướng/đóng tab — giống sendBeacon nhưng
+  // set được header Authorization (sendBeacon thì không).
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body,
+    keepalive: true,
+  });
+}
+
 function sendBatch(events: QueuedEvent[], useBeacon: boolean): void {
   if (events.length === 0) return;
   const url = `${API_BASE_URL}${ENDPOINT}`;
   const body = JSON.stringify({ events });
 
   try {
-    // Lúc rời trang, fetch thường bị hủy giữa đường -> sendBeacon là cách duy nhất còn kịp gửi.
-    if (useBeacon && typeof navigator !== "undefined" && navigator.sendBeacon) {
+    // Gửi kèm token để gateway inject X-User-Id — trước đây không gửi nên MỌI vi hành vi lưu với
+    // user_id = NULL, không ghép được với VIEW/CART của cùng người dùng (docs/canvas/
+    // recsys-behavior-flow-review.md lỗi #7).
+    const token = getAuthToken();
+    if (!token && useBeacon && typeof navigator !== "undefined" && navigator.sendBeacon) {
+      // Khách chưa đăng nhập, đang rời trang: beacon là cách chắc chắn nhất còn kịp gửi.
       navigator.sendBeacon(url, new Blob([body], { type: "application/json" }));
       return;
     }
-    // `keepalive` cho phép request sống sót qua điều hướng trang.
-    void fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body,
-      keepalive: true,
-    }).catch(() => {
-      /* nuốt im lặng: ghi nhận hành vi không được làm người dùng thấy lỗi */
-    });
+    void postBatch(url, body, token)
+      .then((res) => {
+        // Token hết hạn -> gateway trả 401 cho cả route public. Gửi lại không kèm token để không mất
+        // lô event (vẫn ghép được theo session_id).
+        if (res.status === 401 && token) return postBatch(url, body, null);
+        return res;
+      })
+      .catch(() => {
+        /* nuốt im lặng: ghi nhận hành vi không được làm người dùng thấy lỗi */
+      });
   } catch {
     /* nuốt im lặng */
   }
@@ -105,7 +134,7 @@ export function flushBehavior(useBeacon = false): void {
 /** Đưa 1 vi hành vi vào hàng đợi. An toàn khi gọi ở bất kỳ đâu, kể cả trước khi `initBehaviorTracker`. */
 export function trackBehavior(
   actionType: BehaviorAction,
-  opts: { itemId?: number | null; categoryId?: number | null; weight?: number | null } = {}
+  opts: { itemId?: number | null; categoryId?: number | null; weight?: number | null; source?: ImpressionSource | null } = {}
 ): void {
   try {
     queue.push({
@@ -113,7 +142,9 @@ export function trackBehavior(
       itemId: opts.itemId ?? null,
       categoryId: opts.categoryId ?? null,
       weight: opts.weight ?? null,
-      timestamp: new Date().toISOString().slice(0, 19), // LocalDateTime-compatible, khớp BE Java
+      source: opts.source ?? null,
+      // UTC, không hậu tố Z — cùng quy ước với BE Java (LocalDateTime.now(ZoneOffset.UTC)) và NOW() của DB
+      timestamp: new Date().toISOString().slice(0, 19),
       sessionId: getSessionId(),
     });
     // Đầy hàng đợi thì gửi ngay, không chờ hết chu kỳ — tránh mất event khi người dùng hoạt động dày.
@@ -129,15 +160,39 @@ const MAX_IMPRESSIONS_PER_LIST = 20; // tran an toan hang doi, danh sach dai (vd
 /** Ghi nhận danh sách sản phẩm vừa HIỂN THỊ cho user (chưa chắc được click) — lấp khoảng trống
  * "gợi ý đưa ra mà bị bỏ qua" mà tracker trước đây không phân biệt được với "chưa từng đưa ra".
  * Bắn 1 event/sản phẩm (fan-out), tái dùng `itemId` số ít sẵn có — không đổi shape event. Gọi
- * trong `useEffect` sau khi 1 danh sách sản phẩm được render xong (trang chủ/tìm kiếm/danh mục). */
-export function trackImpressions(productIds: Array<number | string>, categoryId?: number | null): void {
+ * trong `useEffect` sau khi 1 danh sách sản phẩm được render xong (trang chủ/tìm kiếm/danh mục).
+ *
+ * `weight` = VỊ TRÍ hiển thị (1 = đầu danh sách): không có vị trí thì không tách được "không bấm vì
+ * không thích" khỏi "không bấm vì nằm cuối, không ai kéo tới" (position bias).
+ * `source` = danh sách nằm ở đâu (tab gợi ý nào / search / category) — để tính CTR theo từng khối. */
+export function trackImpressions(
+  productIds: Array<number | string>,
+  source: ImpressionSource,
+  categoryId?: number | null
+): void {
   try {
     const capped = productIds.slice(0, MAX_IMPRESSIONS_PER_LIST);
-    for (const id of capped) {
+    capped.forEach((id, index) => {
       const numericId = typeof id === "string" ? Number(id) : id;
-      if (!Number.isFinite(numericId)) continue;
-      trackBehavior("IMPRESSION", { itemId: numericId, categoryId: categoryId ?? null });
-    }
+      if (!Number.isFinite(numericId)) return;
+      trackBehavior("IMPRESSION", { itemId: numericId, categoryId: categoryId ?? null, weight: index + 1, source });
+    });
+  } catch {
+    /* nuốt im lặng */
+  }
+}
+
+/** Gọi mỗi khi SPA đổi route (xem `BehaviorRouteTracker` trong App.jsx): ghi thời gian dừng của trang
+ * vừa rời và reset mốc cuộn cho trang mới.
+ *
+ * Trước đây chỉ nghe `popstate` — nhưng React Router (`BrowserRouter`) đổi trang bằng `pushState`, và
+ * `popstate` CHỈ bắn khi bấm Back/Forward. Hệ quả: bấm link bình thường thì PAGE_DWELL không bao giờ
+ * được ghi, còn mốc SCROLL_DEPTH đã bắn ở trang đầu thì không bắn lại ở mọi trang sau trong phiên. */
+export function notifyRouteChange(): void {
+  try {
+    trackBehavior("PAGE_DWELL", { weight: Math.round((Date.now() - pageEnteredAt) / 1000) });
+    pageEnteredAt = Date.now();
+    scrollMilestonesSent.clear();
   } catch {
     /* nuốt im lặng */
   }
@@ -149,8 +204,7 @@ export function initBehaviorTracker(): void {
   initialised = true;
 
   try {
-    let pageEnteredAt = Date.now();
-    const scrollMilestonesSent = new Set<number>();
+    pageEnteredAt = Date.now();
 
     // --- Rời tab / quay lại: tín hiệu "đi so giá ở nơi khác", có trên cả mobile ---
     document.addEventListener("visibilitychange", () => {
@@ -184,12 +238,8 @@ export function initBehaviorTracker(): void {
     // `passive: true` — bắt buộc, nếu không sẽ làm chậm cuộn trang trên mobile.
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // SPA đổi route: reset mốc cuộn + mốc thời gian dừng cho "trang" mới.
-    window.addEventListener("popstate", () => {
-      trackBehavior("PAGE_DWELL", { weight: Math.round((Date.now() - pageEnteredAt) / 1000) });
-      pageEnteredAt = Date.now();
-      scrollMilestonesSent.clear();
-    });
+    // Đổi route trong SPA (kể cả Back/Forward) do `notifyRouteChange` xử lý — không nghe `popstate`
+    // ở đây nữa để khỏi ghi PAGE_DWELL 2 lần khi bấm Back.
 
     window.addEventListener("pagehide", () => flushBehavior(true));
 

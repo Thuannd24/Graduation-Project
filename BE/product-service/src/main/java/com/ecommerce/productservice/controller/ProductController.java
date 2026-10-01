@@ -45,16 +45,25 @@ public class ProductController {
         return ApiResponse.success(productService.getProductsByCategory(categoryId, pageable));
     }
 
+    // Chỉ ghi VIEW_PRODUCT khi client NÓI RÕ đây là người dùng đang xem trang chi tiết (opt-in).
+    // Endpoint này còn được gọi để LẤY DỮ LIỆU ở nhiều nơi (admin Inventory gọi hàng loạt, trang đơn
+    // hàng, hồ sơ, đánh giá...) — trước đây mọi lời gọi đều bị tính là "xem", làm bẩn chuỗi hành vi
+    // mà gợi ý/churn học từ đó. Opt-in để nơi gọi mới mặc định KHÔNG sinh lượt xem giả.
+    private static final String TRACK_VIEW_HEADER = "X-Track-View";
+
     @GetMapping("/api/v1/public/products/{id}")
     public ApiResponse<ProductDto> getProductById(
             @PathVariable Long id,
             @RequestHeader(value = "X-User-Id", required = false) String userId,
-            @RequestHeader(value = "X-Session-Id", required = false) String sessionId) {
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId,
+            @RequestHeader(value = TRACK_VIEW_HEADER, required = false) String trackView) {
         ProductDto product = productService.getProductById(id);
         if (product == null) {
             throw new RuntimeException("Product not found with id: " + id);
         }
-        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
+        if ("1".equals(trackView)) {
+            productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
+        }
         return ApiResponse.success(product);
     }
 
@@ -62,12 +71,15 @@ public class ProductController {
     public ApiResponse<ProductDto> getProductBySlug(
             @PathVariable String slug,
             @RequestHeader(value = "X-User-Id", required = false) String userId,
-            @RequestHeader(value = "X-Session-Id", required = false) String sessionId) {
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId,
+            @RequestHeader(value = TRACK_VIEW_HEADER, required = false) String trackView) {
         ProductDto product = productService.getProductBySlug(slug);
         if (product == null) {
             throw new RuntimeException("Product not found with slug: " + slug);
         }
-        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
+        if ("1".equals(trackView)) {
+            productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
+        }
         return ApiResponse.success(product);
     }
 

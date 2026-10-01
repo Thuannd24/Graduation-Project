@@ -6,6 +6,7 @@ HTTP nào. Lỗi xử lý 1 message không được làm chết cả consumer lo
 """
 import asyncio
 import json
+import time
 from datetime import datetime
 
 from aiokafka import AIOKafkaConsumer
@@ -20,6 +21,7 @@ from shared_common.contracts import (
     CART_ACTION_MAP,
     FE_BEHAVIOR_ACTIONS,
     HISTORY_ACTIONS,
+    IMPRESSION_SOURCES,
     history_key_for,
     HISTORY_MAX_LEN,
     HISTORY_TTL_SECONDS,
@@ -34,6 +36,20 @@ INSERT_USER_EVENT_SQL = text(
     INSERT INTO user_events (user_id, session_id, item_id, category_id, action_type, weight, created_at)
     VALUES (:user_id, :session_id, :item_id, :category_id, :action_type, :weight, :created_at)
     """
+)
+INSERT_USER_EVENT_WITH_SOURCE_SQL = text(
+    """
+    INSERT INTO user_events (user_id, session_id, item_id, category_id, action_type, weight, source, created_at)
+    VALUES (:user_id, :session_id, :item_id, :category_id, :action_type, :weight, :source, :created_at)
+    """
+)
+# Cột `source` do Hibernate của order-service tự thêm (ddl-auto: update, xem UserEvent.java) khi nó
+# khởi động lại. Consumer KHÔNG giả định cột đã có: nếu forecast-service được deploy trước, INSERT có
+# `source` sẽ lỗi và làm mất MỌI event. Kiểm 1 lần, thiếu thì ghi như cũ (bỏ qua source).
+SOURCE_RECHECK_SECONDS = 300
+HAS_SOURCE_COLUMN_SQL = text(
+    "SELECT COUNT(*) FROM information_schema.columns "
+    "WHERE table_schema = DATABASE() AND table_name = 'user_events' AND column_name = 'source'"
 )
 
 
@@ -50,6 +66,7 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "category_id": payload.get("categoryId"),
                 "action_type": ACTION_VIEW_PRODUCT,
                 "weight": None,
+                "source": None,
                 "created_at": payload["timestamp"],
             }
         if topic == TOPIC_CART_UPDATED:
@@ -64,6 +81,7 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "category_id": None,  # CartUpdatedEvent không mang category
                 "action_type": action_type,
                 "weight": None,
+                "source": None,
                 "created_at": payload["timestamp"],
             }
         if topic == TOPIC_USER_BEHAVIOR:
@@ -80,7 +98,9 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "item_id": payload.get("itemId"),
                 "category_id": payload.get("categoryId"),
                 "action_type": action_type,
-                "weight": payload.get("weight"),  # % scroll / giây dwell, None với action không có số
+                "weight": payload.get("weight"),  # % scroll / giây dwell / vị trí impression
+                # Giá trị lạ bị bỏ (NULL) thay vì bỏ cả event — source là ngữ cảnh phụ, không bắt buộc
+                "source": payload.get("source") if payload.get("source") in IMPRESSION_SOURCES else None,
                 "created_at": payload["timestamp"],
             }
     except KeyError as e:
@@ -92,7 +112,8 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
 
 
 def _parse_timestamp(raw: str) -> datetime:
-    """BE Java ghi timestamp bằng LocalDateTime.now().toString() (ISO, không timezone)."""
+    """ISO không timezone, quy ước là UTC cho MỌI nguồn: FE `toISOString()`, BE Java
+    `LocalDateTime.now(ZoneOffset.UTC)` — cùng múi giờ với NOW() của DB."""
     return datetime.fromisoformat(raw)
 
 
@@ -100,6 +121,8 @@ class BehaviorEventConsumer:
     def __init__(self):
         self._consumer: AIOKafkaConsumer | None = None
         self._task: asyncio.Task | None = None
+        self._has_source = False
+        self._source_checked_at = float("-inf")
 
     async def start(self):
         self._consumer = AIOKafkaConsumer(
@@ -179,18 +202,30 @@ class BehaviorEventConsumer:
         redis_client.ltrim(key, 0, HISTORY_MAX_LEN - 1)
         redis_client.expire(key, HISTORY_TTL_SECONDS)
 
+    def _has_source_column(self, conn) -> bool:
+        # Đã thấy cột thì nhớ luôn; chưa thấy thì kiểm lại mỗi SOURCE_RECHECK_SECONDS để tự dùng cột
+        # ngay khi order-service khởi động lại và Hibernate thêm nó, không cần restart consumer.
+        now = time.monotonic()
+        if not self._has_source and now - self._source_checked_at >= SOURCE_RECHECK_SECONDS:
+            self._source_checked_at = now
+            self._has_source = bool(conn.execute(HAS_SOURCE_COLUMN_SQL).scalar())
+            if not self._has_source:
+                logger.warning("user_events chua co cot `source` (order-service chua khoi dong lai?) — ghi khong kem source")
+        return self._has_source
+
     def _write_to_db(self, event: dict, created_at: datetime):
         engine = get_engine(shared_settings.DB_NAME)
+        params = {
+            "user_id": event["user_id"],
+            "session_id": event["session_id"],
+            "item_id": event["item_id"],
+            "category_id": event["category_id"],
+            "action_type": event["action_type"],
+            "weight": event.get("weight"),
+            "created_at": created_at,
+        }
         with engine.begin() as conn:
-            conn.execute(
-                INSERT_USER_EVENT_SQL,
-                {
-                    "user_id": event["user_id"],
-                    "session_id": event["session_id"],
-                    "item_id": event["item_id"],
-                    "category_id": event["category_id"],
-                    "action_type": event["action_type"],
-                    "weight": event.get("weight"),
-                    "created_at": created_at,
-                },
-            )
+            if self._has_source_column(conn):
+                conn.execute(INSERT_USER_EVENT_WITH_SOURCE_SQL, {**params, "source": event.get("source")})
+            else:
+                conn.execute(INSERT_USER_EVENT_SQL, params)

@@ -28,7 +28,7 @@ export default function SuggestedSection({ lists, loading }) {
   useEffect(() => {
     if (filtered.length === 0 || trackedTabs.current.has(activeTab)) return;
     trackedTabs.current.add(activeTab);
-    trackImpressions(filtered.map((p) => p.id));
+    trackImpressions(filtered.map((p) => p.id), activeTab);
   }, [filtered, activeTab]);
 
 

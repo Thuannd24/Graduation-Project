@@ -311,7 +311,7 @@ export default function CategoryPage() {
 
   // Chỉ ghi nhận đúng trang đang hiển thị, không phải toàn bộ sortedProducts đã lọc/sắp xếp.
   useEffect(() => {
-    if (paginatedProducts.length > 0) trackImpressions(paginatedProducts.map((p) => p.id));
+    if (paginatedProducts.length > 0) trackImpressions(paginatedProducts.map((p) => p.id), "category");
   }, [paginatedProducts]);
 
   // FILTER_APPLIED/SORT_APPLIED: bỏ qua lần render đầu (giá trị mặc định từ URL, chưa phải hành
