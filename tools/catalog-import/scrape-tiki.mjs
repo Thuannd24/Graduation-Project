@@ -138,6 +138,37 @@ function htmlToText(html) {
 
 const clean = (s, max) => String(s ?? "").replace(/ /g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 
+// Bảng màu chuẩn (tên → hex): backend bắt buộc mỗi giá trị của thuộc tính màu có mã màu. Màu Tiki là chữ tự do
+// do người bán nhập ("01 ĐEN", "Xanh Navy Cổ Tròn") → quy về tên chuẩn theo từ khoá; thứ tự quan trọng (cụ thể
+// trước chung: "xanh lá" trước "xanh"). Giá trị không chứa từ khoá màu nào thì KHÔNG phải màu → chuyển sang
+// "Phân loại", không gán màu bừa.
+const COLOR_PALETTE = [
+  [/xanh\s*(lá|la|rêu|reu|olive|mint|bạc hà|bac ha)/i, "Xanh lá", "#16a34a"],
+  [/xanh\s*(navy|đen|đậm|dam)|navy/i, "Xanh navy", "#1e3a5f"],
+  [/xanh\s*(ngọc|ngoc|cổ vịt|co vit|teal)/i, "Xanh ngọc", "#0d9488"],
+  [/xanh\s*(da trời|nhạt|nhat|sky|baby)/i, "Xanh da trời", "#38bdf8"],
+  [/xanh|blue/i, "Xanh dương", "#2563eb"],
+  [/đen|black/i, "Đen", "#1a1a1a"],
+  [/trắng|trang\b|white/i, "Trắng", "#f8fafc"],
+  [/xám|xam\b|gr[ae]y|ghi/i, "Xám", "#6b7280"],
+  [/bạc|silver/i, "Bạc", "#94a3b8"],
+  [/đỏ|đô|red|burgundy/i, "Đỏ", "#dc2626"],
+  [/hồng|hong\b|pink/i, "Hồng", "#ec4899"],
+  [/tím|purple|violet|lavender/i, "Tím", "#7c3aed"],
+  [/vàng|yellow|gold/i, "Vàng", "#f59e0b"],
+  [/cam\b|orange/i, "Cam", "#f97316"],
+  [/nâu|brown|cà phê|coffee|chocolate/i, "Nâu", "#92400e"],
+  [/kem|cream|beige|\bbe\b|nude/i, "Kem", "#f5f0e1"],
+  [/rêu|olive/i, "Xanh lá", "#16a34a"],
+];
+function canonicalColor(value) {
+  const v = String(value || "").normalize("NFC");
+  for (const [re, name] of COLOR_PALETTE) if (re.test(v)) return name;
+  return null;
+}
+const CANONICAL_AXES = new Set(["color", "size", "storage"]);
+const AXIS_NAMES = { color: "Màu sắc", size: "Kích thước", storage: "Dung lượng", phan_loai: "Phân loại" };
+
 /** Tên trục biến thể Tiki ("Màu sắc", "Chọn màu:", "Bảng size", "Dung lượng"...) → mã thuộc tính dùng chung.
  * So trên chữ CÓ DẤU: "màu" (color) khác "mẫu" (kiểu dáng) — bỏ dấu thì cả hai thành "mau". */
 function axisCode(name) {
@@ -245,7 +276,7 @@ async function main() {
       for (const g of d.specifications || []) {
         for (const at of g.attributes || []) {
           if (!at.code || SKIP_SPEC_CODES.has(at.code)) continue;
-          const val = htmlToText(at.value).slice(0, 300);
+          const val = htmlToText(at.value).slice(0, 250); // product_attribute_values.value là varchar(255)
           if (!val) continue;
           const code = slugify(at.code).replace(/-/g, "_").slice(0, 50);
           specs[code] = val;
@@ -257,37 +288,62 @@ async function main() {
         }
       }
 
-      // biến thể
-      const axes = (d.configurable_options || []).map((o) => ({ key: o.code, code: axisCode(o.name), name: o.name }));
-      const seenCodes = new Set();
-      for (const ax of axes) { while (seenCodes.has(ax.code)) ax.code += "_2"; seenCodes.add(ax.code); }
-      for (const ax of axes) {
-        if (!attributes.has(ax.code)) {
-          attributes.set(ax.code, {
-            code: ax.code,
-            name: ax.code === "color" ? "Màu sắc" : ax.code === "size" ? "Kích thước" : ax.code === "storage" ? "Dung lượng" : ax.name,
-            valueType: "select", isColor: ax.code === "color",
-            allowedValues: null, // null = giữ danh sách sẵn có (vd bảng màu+hex của "color"), không ghi đè
-          });
+      // biến thể: chỉ giữ 3 trục CHUẨN (color/size/storage); mọi trục khác (người bán tự đặt: "Dòng iPhone",
+      // "Áo nam lẻ"...— >300 kiểu) gộp vào 1 thuộc tính "Phân loại". Màu quy về bảng màu chuẩn có hex; trục màu
+      // chứa giá trị không phải màu, hoặc quy chuẩn làm 2 biến thể trùng nhau → giữ chữ gốc ở "Phân loại".
+      const rawVariants = (d.configurable_products || [])
+        .filter((v) => v.inventory_status !== "discontinued" && Number(v.price) > 0)
+        .slice(0, MAX_VARIANTS);
+      const usedCanon = new Set();
+      const axes = (d.configurable_options || []).map((o) => {
+        const c = axisCode(o.name);
+        const canon = CANONICAL_AXES.has(c) && !usedCanon.has(c);
+        if (canon) usedCanon.add(c);
+        return { key: o.code, code: canon ? c : "phan_loai" };
+      });
+      const colorAx = axes.find((a) => a.code === "color");
+      if (colorAx && !rawVariants.every((v) => !clean(v[colorAx.key], 100) || canonicalColor(clean(v[colorAx.key], 100)))) {
+        colorAx.code = "phan_loai";
+      }
+      const buildOptions = () => rawVariants.map((v) => {
+        const options = {};
+        const extra = [];
+        for (const ax of axes) {
+          const val = clean(v[ax.key], 100);
+          if (!val) continue;
+          if (ax.code === "phan_loai") extra.push(val);
+          else options[ax.code] = ax.code === "color" ? canonicalColor(val) : val;
+        }
+        if (extra.length) options.phan_loai = extra.join(" / ").slice(0, 100);
+        return options;
+      });
+      let optionList = buildOptions();
+      const sig = (o) => JSON.stringify(Object.entries(o).sort());
+      if (colorAx?.code === "color" && new Set(optionList.map(sig)).size < optionList.length) {
+        colorAx.code = "phan_loai"; // quy chuẩn màu làm trùng tổ hợp → giữ chữ gốc
+        optionList = buildOptions();
+      }
+      for (const code of new Set(optionList.flatMap((o) => Object.keys(o)))) {
+        if (!attributes.has(code)) {
+          // allowedValues điền ở bước cuối (finalizeSelectAttributes): HỢP giá trị của MỌI file — import ghi đè
+          // danh sách theo từng file, mỗi file chỉ mang danh sách riêng thì mất giá trị của file khác.
+          // "phan_loai": kiểu text — hợp giá trị ~5.700 mục (163KB) vượt cột TEXT 64KB của attributes.allowed_values;
+          // FE dựng lựa chọn biến thể từ chính variantAttr nên không phụ thuộc kiểu thuộc tính.
+          attributes.set(code, { code, name: AXIS_NAMES[code], valueType: code === "phan_loai" ? "text" : "select", isColor: code === "color", allowedValues: null });
         }
         const s = variantAxes.get(childSlug) || new Set();
-        s.add(ax.code);
+        s.add(code);
         variantAxes.set(childSlug, s);
       }
-      const variants = (d.configurable_products || [])
-        .filter((v) => v.inventory_status !== "discontinued" && Number(v.price) > 0)
-        .slice(0, MAX_VARIANTS)
-        .map((v) => {
-          const options = {};
-          for (const ax of axes) if (clean(v[ax.key], 100)) options[ax.code] = clean(v[ax.key], 100);
-          const pr = prices(v.price, v.original_price);
-          return {
-            sku: `TK${v.id}`,
-            price: pr.price, salePrice: pr.salePrice, costPrice: Math.round(Number(v.price) * 0.7),
-            imageUrl: v.images?.[0]?.large_url || v.images?.[0]?.medium_url || v.thumbnail_url || "",
-            active: true, options,
-          };
-        });
+      const variants = rawVariants.map((v, idx) => {
+        const pr = prices(v.price, v.original_price);
+        return {
+          sku: `TK${v.id}`,
+          price: pr.price, salePrice: pr.salePrice, costPrice: Math.round(Number(v.price) * 0.7),
+          imageUrl: v.images?.[0]?.large_url || v.images?.[0]?.medium_url || v.thumbnail_url || "",
+          active: true, options: optionList[idx],
+        };
+      });
 
       // slug duy nhất, gọn
       let slug = slugify(d.url_key || d.name).replace(/-p\d+$/, "").slice(0, 150) + `-tk${d.id}`;
@@ -350,12 +406,56 @@ async function main() {
   }
 
   fs.writeFileSync(path.join(OUT, "_popularity.json"), JSON.stringify(popularity, null, 1));
+  finalizeSelectAttributes();
   console.log("\n=== Tổng kết");
   console.table(summary);
   console.log(`Request mạng thực tế: ${netRequests} (phần còn lại lấy từ cache ${CACHE})`);
 }
 
-/** Đúng các luật của CatalogImportServiceImpl.validateManifest — bắt lỗi trước khi gửi backend. */
+/** Thuộc tính dạng chọn (select): backend (AttributeServiceImpl.validateAttribute) BẮT BUỘC allowedValues là JSON
+ * [{name}] không rỗng, thuộc tính màu thì mỗi phần tử có `hex` — luật này KHÔNG có trong dry-run nên lần import
+ * đầu (2026-10-01) hỏng ở bước tạo thuộc tính. Gom HỢP giá trị của mọi manifest trong thư mục (import ghi đè danh
+ * sách theo từng file) rồi ghi cùng 1 danh sách vào mọi file. */
+function finalizeSelectAttributes() {
+  const files = fs.readdirSync(OUT).filter((f) => f.startsWith("tiki-") && f.endsWith(".json"));
+  const manifests = files.map((f) => [f, JSON.parse(fs.readFileSync(path.join(OUT, f), "utf8"))]);
+  const values = new Map(); // code → Set
+  for (const [, m] of manifests) {
+    const selectCodes = new Set(m.attributes.filter((a) => a.valueType === "select").map((a) => a.code));
+    for (const p of m.products) for (const v of p.variants) for (const [k, x] of Object.entries(v.options)) {
+      if (!selectCodes.has(k)) continue;
+      if (!values.has(k)) values.set(k, new Set());
+      values.get(k).add(x);
+    }
+  }
+  const hexOf = new Map(COLOR_PALETTE.map(([, name, hex]) => [name, hex]));
+  const allowed = new Map([...values].map(([code, set]) => [code, JSON.stringify(
+    [...set].sort((a, b) => a.localeCompare(b, "vi")).map((name) => (code === "color" ? { name, hex: hexOf.get(name) } : { name })),
+  )]));
+  const problems = [];
+  for (const [f, m] of manifests) {
+    for (const a of m.attributes) {
+      if (a.valueType !== "select") continue;
+      a.allowedValues = allowed.get(a.code) || null;
+      const opts = a.allowedValues ? JSON.parse(a.allowedValues) : [];
+      if (!opts.length) problems.push(`${f}: ${a.code} rỗng`);
+      if (a.isColor && opts.some((o) => !o.hex)) problems.push(`${f}: màu thiếu hex`);
+      const bytes = Buffer.byteLength(a.allowedValues || "", "utf8");
+      if (bytes > MAX_ALLOWED_VALUES_BYTES) problems.push(`${f}: ${a.code} allowedValues ${bytes} byte > cột TEXT ${MAX_ALLOWED_VALUES_BYTES}`);
+    }
+    fs.writeFileSync(path.join(OUT, f), JSON.stringify(m, null, 2));
+  }
+  console.log(`Thuộc tính chọn (hợp ${files.length} file): ` + [...values].map(([c, s]) => `${c}=${s.size}`).join(", "));
+  if (problems.length) { console.error("✗ Thuộc tính chọn sai luật backend:", problems.slice(0, 10)); process.exitCode = 1; }
+}
+
+// Giới hạn cột DB mà backend KHÔNG kiểm trước — vượt là cả giao dịch import (~5 phút/file) rollback ở cuối.
+const MAX_ATTR_VALUE = 255;          // product_attribute_values.value varchar(255)
+const MAX_ALLOWED_VALUES_BYTES = 65535; // attributes.allowed_values TEXT
+
+/** Đúng các luật của CatalogImportServiceImpl.validateManifest — bắt lỗi trước khi gửi backend — cộng giới hạn
+ * cột DB đã làm hỏng lần import đầu (2026-10-01). Luật allowedValues của thuộc tính chọn kiểm ở
+ * finalizeSelectAttributes (cần hợp mọi file). */
 function validateManifest(m) {
   const errs = [];
   const norm = (s) => String(s ?? "").trim().toLowerCase();
@@ -375,7 +475,11 @@ function validateManifest(m) {
     if (p.brandSlug && !brandSlugs.has(norm(p.brandSlug))) errs.push(`Product ${p.slug} brand lạ`);
     if (!(p.price > 0)) errs.push(`Product ${p.slug} price <= 0`);
     if (p.salePrice != null && p.salePrice >= p.price) errs.push(`Product ${p.slug} salePrice >= price`);
-    for (const v of p.variants) { if (!v.sku) errs.push(`SKU trống ở ${p.slug}`); if (skus.has(norm(v.sku))) errs.push(`Trùng SKU ${v.sku}`); skus.add(norm(v.sku)); }
+    for (const v of p.variants) {
+      if (!v.sku) errs.push(`SKU trống ở ${p.slug}`); if (skus.has(norm(v.sku))) errs.push(`Trùng SKU ${v.sku}`); skus.add(norm(v.sku));
+      for (const [k, x] of Object.entries(v.options || {})) if (String(x).length > MAX_ATTR_VALUE) errs.push(`${p.slug} biến thể ${k} dài ${String(x).length} > ${MAX_ATTR_VALUE}`);
+    }
+    for (const [k, x] of Object.entries(p.specs || {})) if (String(x).length > MAX_ATTR_VALUE) errs.push(`${p.slug} thông số ${k} dài ${String(x).length} > ${MAX_ATTR_VALUE}`);
   }
   return errs;
 }
