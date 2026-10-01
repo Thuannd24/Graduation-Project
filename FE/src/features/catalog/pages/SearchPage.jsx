@@ -7,11 +7,11 @@ import ProductToolbar from "../components/category/ProductToolbar.jsx";
 import ProductGridSkeleton from "../components/category/ProductGridSkeleton.jsx";
 import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi";
-import { PRICE_PRESETS } from "../utils/categoryUtils.js";
+import { PRICE_PRESETS, PRICE_MAX } from "../utils/categoryUtils.js";
 import { useDebounce } from "../hooks/useDebounce.js";
 import { trackBehavior, trackImpressions } from "../../../services/behaviorTracker.ts";
 
-const DEFAULT_MAX_PRICE = 50000000;
+const DEFAULT_MAX_PRICE = PRICE_MAX;
 
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();

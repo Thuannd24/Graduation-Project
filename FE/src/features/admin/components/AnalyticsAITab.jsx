@@ -54,7 +54,7 @@ export default function AnalyticsAITab() {
         // Build dynamic stock planning recommendations from actual database products
         const planning = [
           {
-            productName: prods[0]?.name || "iPhone 15 Pro Max 256GB Titanium",
+            productName: prods[0]?.name || "Sản phẩm mẫu",
             currentStock: 12,
             forecastDemand: 45,
             status: "critical",
@@ -457,7 +457,7 @@ export default function AnalyticsAITab() {
                     <Icon name="campaign" /> Kích hoạt Chiến Dịch Khuyến Mãi Nhắm Mục Tiêu (Targeted AI Campaign)
                   </h4>
                   <p className="text-[11px] text-white/80 font-medium max-w-2xl leading-relaxed">
-                    Hệ thống AI đề xuất gửi mã giảm giá <strong>Giảm 10% Phụ kiện</strong> cho nhóm <strong>Khách hàng nguy cơ rời bỏ</strong> để tăng tỉ lệ giữ chân (Retention rate) và kích thích tái mua sắm.
+                    Hệ thống AI đề xuất gửi mã giảm giá <strong>Giảm 10% đơn tiếp theo</strong> cho nhóm <strong>Khách hàng nguy cơ rời bỏ</strong> để tăng tỉ lệ giữ chân (Retention rate) và kích thích tái mua sắm.
                   </p>
                 </div>
                 <button

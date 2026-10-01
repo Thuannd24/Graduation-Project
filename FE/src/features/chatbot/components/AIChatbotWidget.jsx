@@ -68,9 +68,9 @@ function AnimatedRobotMascot({ waving = true, size = 56 }) {
 }
 
 const STARTER_PROMPTS = [
-  { text: "Tư vấn iPhone giá tốt nhất", icon: "phone_iphone" },
-  { text: "Chính sách bảo hành ra sao?", icon: "shield" },
-  { text: "Tìm laptop tầm trung", icon: "laptop_mac" },
+  { text: "Gợi ý quà tặng dưới 500 nghìn", icon: "redeem" },
+  { text: "Chính sách đổi trả ra sao?", icon: "shield" },
+  { text: "Tìm sản phẩm đang giảm giá", icon: "local_offer" },
   { text: "Yêu cầu gặp nhân viên trực tuyến", icon: "support_agent" }
 ];
 
@@ -94,7 +94,7 @@ export default function AIChatbotWidget() {
         {
           id: "welcome",
           sender: "assistant",
-          text: "Xin chào! Tôi là Aura AI - Trợ lý mua sắm thông minh của bạn. Tôi có thể tư vấn cấu hình sản phẩm, chính sách bảo hành, hoặc tìm sản phẩm theo hình ảnh. Bạn cần tôi hỗ trợ gì hôm nay?",
+          text: "Xin chào! Tôi là Aura AI - Trợ lý mua sắm thông minh của bạn. Tôi có thể tư vấn sản phẩm ở mọi ngành hàng, chính sách đổi trả, hoặc tìm sản phẩm theo hình ảnh. Bạn cần tôi hỗ trợ gì hôm nay?",
           timestamp: new Date()
         }
       ]);

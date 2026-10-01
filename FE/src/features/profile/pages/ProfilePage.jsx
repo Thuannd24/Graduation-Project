@@ -1293,13 +1293,12 @@ export default function ProfilePage() {
               <div className="space-y-sm text-sm text-on-surface">
                 <div className="p-sm bg-surface-container-low rounded-lg border border-surface-container-highest">
                   <h4 className="font-bold text-primary flex items-center gap-1.5 mb-xs">
-                    <Icon name="verified" className="text-base" /> 1. Cam kết bảo hành chính hãng
+                    <Icon name="verified" className="text-base" /> 1. Chính sách bảo hành
                   </h4>
                   <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
-                    <li>Điện thoại, laptop, tablet: bảo hành chính hãng <span className="font-bold text-on-surface">12 tháng</span> kể từ ngày giao hàng thành công.</li>
-                    <li>Đồng hồ thông minh: bảo hành <span className="font-bold text-on-surface">12 tháng</span>.</li>
-                    <li>Phụ kiện (tai nghe, sạc, ốp lưng...): theo chính sách riêng của từng hãng, thường từ <span className="font-bold text-on-surface">3–12 tháng</span>.</li>
-                    <li>Miễn phí kiểm tra, tư vấn kỹ thuật tại các trung tâm bảo hành liên kết trên toàn quốc.</li>
+                    <li>Sản phẩm có bảo hành (điện tử, gia dụng...): theo <span className="font-bold text-on-surface">thời hạn ghi trên trang sản phẩm</span>, tính từ ngày giao hàng thành công.</li>
+                    <li>Sản phẩm không kèm bảo hành (thời trang, mỹ phẩm, thực phẩm...): áp dụng chính sách đổi trả bên dưới.</li>
+                    <li>Tra cứu thời hạn bảo hành còn lại của từng sản phẩm tại tab <span className="font-bold text-on-surface">Bảo hành</span>.</li>
                   </ul>
                 </div>
 
@@ -1308,11 +1307,10 @@ export default function ProfilePage() {
                     <Icon name="swap_horiz" className="text-base" /> 2. Chính sách đổi trả 30 ngày
                   </h4>
                   <ul className="text-xs leading-relaxed text-secondary list-disc list-inside space-y-0.5">
-                    <li>Điện thoại / Tablet / Laptop: đổi trả trong <span className="font-bold text-on-surface">30 ngày</span>, khấu hao 20% (máy mới nguyên seal) hoặc 15% (máy đã kích hoạt) nếu không phải lỗi do nhà sản xuất.</li>
-                    <li>Phụ kiện giá trị dưới 1.000.000đ: đổi trả trong <span className="font-bold text-on-surface">12 tháng</span>, không khấu hao nếu còn nguyên tem, hộp.</li>
-                    <li>Phụ kiện giá trị từ 1.000.000đ trở lên: đổi trả trong <span className="font-bold text-on-surface">15 ngày</span>.</li>
-                    <li><span className="font-bold text-on-surface">Miễn phí 100%</span> (hoàn tiền hoặc đổi máy mới) nếu sản phẩm phát sinh lỗi phần cứng do nhà sản xuất trong 7 ngày đầu tiên.</li>
-                    <li>Điều kiện đủ tiêu chuẩn đổi trả: máy như mới (không trầy xước, không dán decal), hộp và phụ kiện đi kèm đầy đủ, số serial/IMEI trên hộp khớp với máy, đã đăng xuất toàn bộ tài khoản (iCloud, Google, Samsung Account...).</li>
+                    <li>Đổi trả trong <span className="font-bold text-on-surface">30 ngày</span> kể từ ngày nhận hàng nếu sản phẩm lỗi do nhà sản xuất, giao sai/thiếu hoặc không đúng mô tả.</li>
+                    <li>Mỹ phẩm, thực phẩm, đồ lót: chỉ đổi trả khi còn <span className="font-bold text-on-surface">nguyên seal, tem niêm phong</span>.</li>
+                    <li><span className="font-bold text-on-surface">Hoàn tiền 100%</span> hoặc đổi sản phẩm mới nếu lỗi thuộc về người bán/nhà sản xuất.</li>
+                    <li>Điều kiện đổi trả: sản phẩm còn nguyên tem, nhãn mác, hộp và quà tặng kèm (nếu có); đồ điện tử cần đăng xuất tài khoản cá nhân trên thiết bị.</li>
                   </ul>
                 </div>
 

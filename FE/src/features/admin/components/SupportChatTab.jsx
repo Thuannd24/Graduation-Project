@@ -15,19 +15,19 @@ export default function SupportChatTab() {
     const initMockData = () => {
       const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
       if (activeSessions.length === 0) {
-        const mockSessions = ["session_iphone_user", "session_warranty_help", "session_guest_9918"];
+        const mockSessions = ["session_order_user", "session_return_help", "session_guest_9918"];
         localStorage.setItem("aura_escalated_sessions", JSON.stringify(mockSessions));
 
         // Mock chat 1
         localStorage.setItem(
-          "aura_chat_session_session_iphone_user",
+          "aura_chat_session_session_order_user",
           JSON.stringify({
             isEscalated: true,
             messages: [
               { id: "welcome", sender: "assistant", text: "Xin chào! Tôi có thể hỗ trợ gì cho bạn?", timestamp: new Date(Date.now() - 600000).toISOString() },
-              { id: "msg_1", sender: "user", text: "Tôi muốn mua trả góp iPhone 16 Pro Max, thủ tục cần những gì và lãi suất thế nào?", timestamp: new Date(Date.now() - 500000).toISOString() },
-              { id: "msg_2", sender: "assistant", text: "Dạ, để mua trả góp iPhone 16 Pro Max bạn có thể chọn qua công ty tài chính hoặc thẻ tín dụng...", timestamp: new Date(Date.now() - 400000).toISOString() },
-              { id: "msg_3", sender: "user", text: "Tôi muốn gặp nhân viên để tư vấn trực tiếp hồ sơ công ty tài chính", timestamp: new Date(Date.now() - 300000).toISOString() }
+              { id: "msg_1", sender: "user", text: "Đơn áo khoác của tôi khi nào giao?", timestamp: new Date(Date.now() - 500000).toISOString() },
+              { id: "msg_2", sender: "assistant", text: "Dạ, đơn hàng dự kiến giao trong 2 ngày tới ạ.", timestamp: new Date(Date.now() - 400000).toISOString() },
+              { id: "msg_3", sender: "user", text: "Ok bạn.", timestamp: new Date(Date.now() - 300000).toISOString() }
             ],
             lastUpdated: Date.now() - 300000
           })
@@ -35,13 +35,13 @@ export default function SupportChatTab() {
 
         // Mock chat 2
         localStorage.setItem(
-          "aura_chat_session_session_warranty_help",
+          "aura_chat_session_session_return_help",
           JSON.stringify({
             isEscalated: true,
             messages: [
               { id: "welcome", sender: "assistant", text: "Chào bạn, bạn cần hỗ trợ gì?", timestamp: new Date(Date.now() - 1200000).toISOString() },
-              { id: "msg_1", sender: "user", text: "Máy Macbook mua được 3 tháng bị sọc màn hình thì bảo hành thế nào?", timestamp: new Date(Date.now() - 1000000).toISOString() },
-              { id: "msg_2", sender: "user", text: "Yêu cầu gặp nhân viên tư vấn bảo hành trực tiếp", timestamp: new Date(Date.now() - 900000).toISOString() }
+              { id: "msg_1", sender: "user", text: "Mỹ phẩm đã mở hộp có đổi trả được không?", timestamp: new Date(Date.now() - 1000000).toISOString() },
+              { id: "msg_2", sender: "user", text: "Tôi cần gặp nhân viên hỗ trợ.", timestamp: new Date(Date.now() - 900000).toISOString() }
             ],
             lastUpdated: Date.now() - 900000
           })
@@ -54,7 +54,7 @@ export default function SupportChatTab() {
             isEscalated: true,
             messages: [
               { id: "welcome", sender: "assistant", text: "AuraTech xin chào! Tôi giúp gì được cho bạn?", timestamp: new Date(Date.now() - 2000000).toISOString() },
-              { id: "msg_1", sender: "user", text: "Shop có sẵn laptop Asus ROG Zephyrus G14 ở chi nhánh HN không?", timestamp: new Date(Date.now() - 1800000).toISOString() }
+              { id: "msg_1", sender: "user", text: "Shop còn size M của váy hoa không?", timestamp: new Date(Date.now() - 1800000).toISOString() }
             ],
             lastUpdated: Date.now() - 1800000
           })

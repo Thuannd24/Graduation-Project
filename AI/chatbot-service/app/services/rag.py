@@ -73,7 +73,7 @@ class RagEngineService:
         logger.info("Using mock response generator...")
         mock_reply = (
             "Dựa trên thông tin kho hàng của chúng tôi, tôi khuyên bạn nên lựa chọn sản phẩm phù hợp. "
-            "Sản phẩm này hiện đang có mức giá ưu đãi và có đầy đủ chế độ bảo hành chính hãng từ cửa hàng. "
+            "Sản phẩm này hiện đang có mức giá ưu đãi và chính sách đổi trả rõ ràng từ cửa hàng. "
             "Bạn có muốn tôi hỗ trợ đặt hàng ngay không?"
         )
         # Simulate typing latency

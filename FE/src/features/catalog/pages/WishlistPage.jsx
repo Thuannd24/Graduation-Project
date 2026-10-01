@@ -91,7 +91,7 @@ export default function WishlistPage() {
               Chưa có sản phẩm yêu thích
             </h3>
             <p className="text-sm text-slate-500 leading-relaxed mb-6">
-              Hãy khám phá cửa hàng và thả tim ❤️ những sản phẩm công nghệ bạn ưng ý nhất nhé!
+              Hãy khám phá cửa hàng và thả tim ❤️ những sản phẩm bạn ưng ý nhất nhé!
             </p>
             <Link
               to="/category"

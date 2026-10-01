@@ -190,7 +190,7 @@ function EmptyCart() {
         </h3>
         
         <p className="text-[11px] text-slate-505 dark:text-slate-400 max-w-xs mx-auto mb-5 leading-relaxed font-semibold">
-          Có vẻ như bạn chưa chọn được sản phẩm công nghệ nào. Hãy lấp đầy giỏ hàng bằng những ưu đãi cực hấp dẫn dưới đây!
+          Có vẻ như bạn chưa chọn được sản phẩm nào. Hãy lấp đầy giỏ hàng bằng những ưu đãi cực hấp dẫn dưới đây!
         </p>
 
         <Link
@@ -423,8 +423,8 @@ export default function CartPage() {
                 </h2>
                 <p className="text-[10.5px] text-slate-400 font-medium">
                   {items.length > 0 
-                    ? "Sản phẩm thường được mua cùng các thiết bị trong giỏ hàng của bạn (FP-Growth Association)" 
-                    : "Khám phá các thiết bị công nghệ đỉnh cao đang được yêu thích nhất"
+                    ? "Sản phẩm thường được mua cùng các món trong giỏ hàng của bạn (FP-Growth Association)" 
+                    : "Khám phá những sản phẩm đang được yêu thích nhất"
                   }
                 </p>
               </div>

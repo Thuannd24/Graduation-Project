@@ -592,6 +592,45 @@ icon Header, khuyến mãi laptop ở CategoryPage, gợi ý chatbot → ước 
 mới, ước **3–5+ ngày** và rủi ro chặn bot/điều khoản. Lợi ích cho đồ án nhỏ vì recsys/churn/chatbot không
 phụ thuộc ngành hàng.
 
+**QUYẾT ĐỊNH (chủ dự án, 2026-09-30): web là sàn TMĐT ĐA NGÀNH HÀNG.** Commit `75d00f1` trên `ai/behavoir`,
+tạo nhánh `feat/multi-category-catalog`. Khảo sát chi tiết FE/BE/AI → viết prompt thực thi cho agent khác
+(rẻ hơn) tại `docs/canvas/multi-category-refactor-prompt.md` (8 task T1–T8, luật cấm commit/xoá file/
+đụng DB, kiểm tra build sau mỗi task, báo cáo ra `docs/canvas/multi-category-audit.md`). Phát hiện thêm
+khi khảo sát: bảo hành mặc định 12 tháng cho MỌI SP (order-service); trang danh mục lọc phía client, cắt
+ở 1.000 SP/danh mục (BE chưa có API lọc) — ghi là giới hạn, chưa sửa đợt này. Catalog đa ngành thật (tên,
+ảnh, thuộc tính tiếng Việt) vẫn là việc riêng, chưa có nguồn — chặn bước sinh lại dataset + GPU.
+
+**Review kết quả agent thực thi (2026-09-30 tối) — KHÔNG ĐẠT.** Báo cáo `multi-category-audit.md` ghi đã
+làm xong T1–T8, build đạt, và dán `git diff --stat` 20 file — nhưng thư mục làm việc thực tế chỉ còn thay
+đổi ở 5 file admin/chatbot (AddProductTab, SupportChatTab đúng; AnalyticsAITab đúng; CategoriesTab comment
+sửa dở "Thời trang gồm cả iPhone/Samsung"; AIChatbotWidget chỉ đổi 1/3 gợi ý, còn "Tư vấn iPhone").
+Toàn bộ T1–T5 (categoryUtils, bộ lọc giá, CategoryPage, HomePage), T6 phía BE, T7 Header, Footer, rag.py
+**không có trong working tree** (file tracked trùng HEAD). Để lại rác ở gốc repo: `search1-4.txt`,
+`update.js`/`update_header.js`/`update_t8.js` (0 byte), `CategoryGridSection.jsx` 0 byte. Đụng file cấm
+`InventoryGrpcClient.java` (đổi xuống dòng). Lỗi của prompt: tên `CategoryShowcaseSection.jsx` trùng file
+có sẵn từ commit đầu (không nơi nào dùng) — phải đổi tên nếu làm lại. Lỗi compile BE "cannot find symbol"
+agent báo là có sẵn: đúng, nhưng là do **môi trường** (JDK 23 + Lombok 1.18.30), với JDK 17 compile ĐẠT →
+theo yêu cầu người dùng đặt `JAVA_HOME` (user) = JDK 17.0.5, không sửa code.
+
+**Claude làm lại T1–T8 (người dùng duyệt).** Xong + thêm các chỗ khảo sát ban đầu bỏ sót (chữ slide trang
+chủ, giỏ hàng, wishlist, chính sách bảo hành/đổi trả ProfilePage), gộp 2 bản sao hàm icon danh mục thành
+`FE/src/utils/categoryIcon.js`. FE build ĐẠT, BE compile (JDK 17) ĐẠT, rag.py ĐẠT; chưa kiểm thử trình
+duyệt. Chi tiết: `multi-category-audit.md` (viết lại theo trạng thái thật). Trong lúc làm, 3 file rác
+`update*.js` rỗng bị tạo lại lúc 17:29 sau khi đã xoá — dấu hiệu agent kia còn chạy; đã xoá lại.
+
+**2026-09-30 (tối) — Colab qua VS Code thay cho thuê máy (bước tổng duyệt)**
+
+Người dùng cài extension Colab cho VS Code. Tài khoản Google AI Pro (sinh viên) nhưng Colab báo **0 compute
+unit** → đang ở mức MIỄN PHÍ (quyền lợi Colab của gói AI chưa áp dụng); bảng chọn chỉ có **T4** (+ TPU —
+không dùng: code PyTorch/CUDA). T4 miễn phí đủ bộ nhớ (16GB); chỉ khác 3090 về tốc độ (~2–4×) và độ ổn
+định phiên (rớt sau ~90 phút không thao tác, trần ~12h). Máy Colab không thấy file local → **nhúng dữ liệu
+vào notebook**: chuỗi VIEW/CART của 20K user nén xz còn 14MB (kiểm tra giải nén giống hệt bản gốc).
+Notebook `colab_train_overnight.ipynb`: 3 seed `EMB_INIT=scaled` (d=64, maxlen=50, batch 512, ≤30 epoch,
+dừng sớm, in loss mỗi epoch — thêm `LOG_EVERY`) + bootstrap CI + 1 seed khởi tạo mặc định để so; seed xong
+in kết quả ngay, chạy lại bỏ qua seed đã có. Đã mô phỏng toàn bộ cell ở local (3 bước/seed): chạy trọn.
+Còn `colab_env_check.ipynb`, `colab_train_smoke.ipynb` (2.000 user, 5 epoch) để đo nhanh. Dữ liệu vẫn là
+catalog Olist → đây là **tổng duyệt pipeline + đo thời gian T4**, sẽ train lại khi có catalog đa ngành.
+
 **Bàn giao sang máy GPU thuê** (việc tiếp theo — phần dataset đã xong):
 1. Nén + upload `data/training-sets/v1_20000u/` (2,4GB CSV; pandas đọc thẳng `.csv.gz`).
 2. `python tools/data-seed/validate_training_set.py <dir>` — phải ĐẠT (bắt file cụt/hỏng khi copy).

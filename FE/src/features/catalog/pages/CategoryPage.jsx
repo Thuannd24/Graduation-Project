@@ -17,18 +17,12 @@ import {
   getRootCategories,
   resolveCategory,
   formatCategoryName,
-  isLaptopCategory,
-  matchesLegacyCategory,
   productMatchesSpec,
   fetchAllCategoryProducts,
   PRICE_PRESETS,
 } from "../utils/categoryUtils.js";
 
 const ITEMS_PER_PAGE = 12;
-
-const categoryPromotions = {
-  laptop: [],
-};
 
 export default function CategoryPage() {
   const filters = useCategoryFilters();
@@ -139,6 +133,11 @@ export default function CategoryPage() {
     return scoredFilters.sort((a, b) => b.score - a.score);
   }, [categoryAttributes, products]);
 
+  const specLabels = useMemo(
+    () => Object.fromEntries(dynamicSpecFilters.map((f) => [f.key, f.label])),
+    [dynamicSpecFilters]
+  );
+
   const activePricePreset = useMemo(
     () => PRICE_PRESETS.find((p) => p.min === minPrice && p.max === maxPrice) || null,
     [minPrice, maxPrice]
@@ -156,9 +155,7 @@ export default function CategoryPage() {
 
   useEffect(() => {
     if (!categorySlug && rootCategories.length > 0) {
-      const preferred =
-        rootCategories.find((c) => (c.slug || "").includes("laptop")) ||
-        rootCategories[0];
+      const preferred = rootCategories[0];
       if (preferred?.slug) setCategory(preferred.slug);
     }
   }, [categorySlug, rootCategories, setCategory]);
@@ -192,9 +189,6 @@ export default function CategoryPage() {
           items = await fetchAllCategoryProducts(productApi, activeCategory.id);
         } else {
           items = await productApi.listProducts();
-          if (categorySlug) {
-            items = items.filter((p) => matchesLegacyCategory(p, categorySlug));
-          }
         }
         if (!cancelled) setProducts(items);
       } catch (err) {
@@ -334,10 +328,9 @@ export default function CategoryPage() {
     trackBehavior("SORT_APPLIED");
   }, [sort]);
 
-  const activePromotions =
-    categoryPromotions[categorySlug] ||
-    (isLaptopCategory(activeCategory) ? categoryPromotions.laptop : []) ||
-    [];
+  // Khuyến mãi theo danh mục: chưa có nguồn dữ liệu (trước đây chỉ có khung rỗng cho laptop) —
+  // nối promotion-service vào đây khi cần; khối hiển thị bên dưới giữ nguyên.
+  const activePromotions = [];
 
   const subCategories = useMemo(() => {
     const parent = parentCategory || activeCategory;
@@ -428,6 +421,7 @@ export default function CategoryPage() {
         minPrice={minPrice}
         maxPrice={maxPrice}
         specFilters={specFilters}
+        specLabels={specLabels}
         defaultMaxPrice={DEFAULT_MAX_PRICE}
         onRemoveBrand={toggleBrand}
         onRemoveSale={() => updateFilters({ sale: null })}

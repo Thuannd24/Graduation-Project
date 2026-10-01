@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Icon from "../../../../components/common/Icon.jsx";
 import { formatVnd } from "../../../../utils/format.js";
-import { LAPTOP_SPEC_FILTERS, PRICE_PRESETS } from "../../utils/categoryUtils.js";
+import { PRICE_PRESETS, PRICE_MAX } from "../../utils/categoryUtils.js";
 
 function FilterSection({ title, defaultOpen = true, children }) {
   return (
@@ -114,15 +114,15 @@ export default function FilterPanel({
           <input
             type="number"
             placeholder="Đến"
-            value={maxPrice >= 50000000 ? "" : maxPrice}
+            value={maxPrice >= PRICE_MAX ? "" : maxPrice}
             onChange={(e) =>
-              onPriceChange({ min: minPrice, max: Number(e.target.value) || 50000000 })
+              onPriceChange({ min: minPrice, max: Number(e.target.value) || PRICE_MAX })
             }
             className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-xs"
           />
         </div>
         <p className="text-[11px] text-slate-400 mt-2">
-          {formatVnd(minPrice)} – {formatVnd(maxPrice)}
+          {formatVnd(minPrice)} – {maxPrice >= PRICE_MAX ? "Không giới hạn" : formatVnd(maxPrice)}
         </p>
       </FilterSection>
 
