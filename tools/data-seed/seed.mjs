@@ -38,7 +38,7 @@ import { cleanupSeedData } from "./lib/cleanupData.mjs";
 import { FidelityStats } from "./lib/fidelity.mjs";
 import { closePool } from "./lib/db.mjs";
 import { CsvExporter } from "./lib/exportCsv.mjs";
-import { TARGETS, TOLERANCE, REGRESSION_GUARDS } from "./lib/behaviorTargets.mjs";
+import { TARGETS, TOLERANCE, REGRESSION_GUARDS, GENERATION, POPULARITY } from "./lib/behaviorTargets.mjs";
 import { execSync } from "node:child_process";
 import path from "node:path";
 
@@ -223,6 +223,7 @@ async function main() {
   console.log("Nạp catalog sản phẩm thật...");
   const catalog = await loadCatalog();
   console.log(`Catalog: ${catalog.products.length} sản phẩm, ${catalog.categoryIds.length} category.`);
+  console.log(`Độ phổ biến SP: ${catalog.popularitySource}`);
 
   let exporter = null;
   if (args.out) {
@@ -315,6 +316,7 @@ async function main() {
       git: gitRevision(),
       fidelity: { allPass: fidelityOk, summary: fidelitySummary, actionCounts, checks: fidelity.checks() },
       targets: { TARGETS, TOLERANCE, REGRESSION_GUARDS },
+      generation: { GENERATION, POPULARITY, popularitySource: catalog.popularitySource },
       stats: {
         orders: stats.orders, cancelled: stats.cancelled, events: stats.events,
         sessions: stats.sessions, reviews: stats.reviews, churners: profiles.filter((p) => p.willChurn).length,

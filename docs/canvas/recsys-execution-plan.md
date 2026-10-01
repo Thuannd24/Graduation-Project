@@ -592,6 +592,79 @@ icon Header, khuyến mãi laptop ở CategoryPage, gợi ý chatbot → ước 
 mới, ước **3–5+ ngày** và rủi ro chặn bot/điều khoản. Lợi ích cho đồ án nhỏ vì recsys/churn/chatbot không
 phụ thuộc ngành hàng.
 
+**2026-09-30 (tối) — Colab qua VS Code thay cho thuê máy (bước tổng duyệt)**
+
+Người dùng cài extension Colab cho VS Code. Tài khoản Google AI Pro (sinh viên) nhưng Colab báo **0 compute
+unit** → đang ở mức MIỄN PHÍ (quyền lợi Colab của gói AI chưa áp dụng); bảng chọn chỉ có **T4** (+ TPU —
+không dùng: code PyTorch/CUDA). T4 miễn phí đủ bộ nhớ (16GB); chỉ khác 3090 về tốc độ (~2–4×) và độ ổn
+định phiên (rớt sau ~90 phút không thao tác, trần ~12h). Máy Colab không thấy file local → **nhúng dữ liệu
+vào notebook**: chuỗi VIEW/CART của 20K user nén xz còn 14MB (kiểm tra giải nén giống hệt bản gốc).
+Notebook `colab_train_overnight.ipynb`: 3 seed `EMB_INIT=scaled` (d=64, maxlen=50, batch 512, ≤30 epoch,
+dừng sớm, in loss mỗi epoch — thêm `LOG_EVERY`) + bootstrap CI + 1 seed khởi tạo mặc định để so; seed xong
+in kết quả ngay, chạy lại bỏ qua seed đã có. Đã mô phỏng toàn bộ cell ở local (3 bước/seed): chạy trọn.
+Còn `colab_env_check.ipynb`, `colab_train_smoke.ipynb` (2.000 user, 5 epoch) để đo nhanh. Dữ liệu vẫn là
+catalog Olist → đây là **tổng duyệt pipeline + đo thời gian T4**, sẽ train lại khi có catalog đa ngành.
+
+#### 2026-10-01 — Đo thêm trên dữ liệu thật: độ phổ biến đuôi dài + hành vi XEM LẠI (sửa phương pháp)
+
+**(1) Độ tập trung độ phổ biến SP** (`recsys_measure_item_popularity.py`, tỉ lệ lượt xem rơi vào top 10% SP;
+đo cả trên mẫu 7.000 SP ≈ cỡ catalog web → gần như y hệt toàn catalog):
+
+| Nguồn | top 10% | Gini |
+|---|---|---|
+| REES46 mỹ phẩm (5 tháng) | 0,645 | 0,757 |
+| Taobao (20 triệu dòng) | 0,657 | 0,735 |
+| REES46 đa ngành (10/2019) | 0,826 | 0,880 |
+| **Bộ sinh cũ (chọn SP đều nhau)** | **0,315** | **0,40** |
+
+Bộ sinh cũ thiếu hẳn đuôi dài → baseline Popularity gần 0 (recall@10 0,0005), phi thực tế. Sửa: chọn SP theo
+trọng số (mảng tích luỹ + tìm nhị phân, `lib/catalogIndex.mjs`); trọng số = (số đã bán THẬT trên Tiki + 1)^α
+(α = 0,7 hiệu chỉnh trên catalog Tiki: top10 0,652, Gini 0,761), SP không có số bán → log-normal tất định
+(σ = 1,8 → 0,653). Thêm 2 mục vào báo cáo fidelity (top 10%, Gini; mục tiêu Taobao 0,657/0,735 vì 2 nguồn
+độc lập khớp ~0,65).
+
+**(2) Recency và lặp liên tiếp — 2 "ngưỡng chống tái phát" CHƯA TỪNG đo trên dữ liệu thật**
+(`recsys_measure_recency_baseline.py`, đúng giao thức fidelity.mjs, mẫu 10% user):
+
+| Nguồn | recency recall@10 | lặp liên tiếp |
+|---|---|---|
+| REES46 mỹ phẩm | 0,508 | 19,2% |
+| REES46 đa ngành | 0,488 | 31,3% |
+| Taobao | 0,169 | 0,3% |
+| Ngưỡng cũ trong fidelity | ≤ 0,20 | ≤ 6% |
+
+Taobao gần như 0% lặp liên tiếp → bộ dữ liệu Taobao đã **lọc trùng** sự kiện liền nhau; REES46 ghi nguyên
+mọi lượt tải trang. **Web đồ án ghi giống REES46**: product-service phát `product-viewed-events` mỗi lần GET
+chi tiết SP, `behavior_consumer.py` ghi thẳng `user_events`, không lọc. ⇒ Ngưỡng cũ (đặt theo lỗi view→cart
+cũ) đẩy dữ liệu sinh RA XA thực tế; việc "giảm lặp liên tiếp 8,82%→3,26%" ở §5.8 tưởng đúng hướng nhưng
+thực tế người dùng xem lại rất nhiều. Hệ quả dây chuyền: category-stickiness REES46 0,634 vs Taobao 0,471
+(đang lấy trung bình 0,492) có thể lệch cũng vì Taobao mất các cặp "cùng item" (luôn cùng category) — đang
+đo kiểm chứng (`recsys_measure_revisit_patterns.py`: stickiness trên cặp KHÁC item + xác suất xem lại).
+Nguyên tắc mới: chỉ số chịu ảnh hưởng của lượt xem lặp lấy theo nguồn ghi log GIỐNG hệ thống (REES46).
+
+**(3) Hành vi xem lại trên REES46** (`recsys_measure_revisit_patterns.py`, 962K lượt xem, 160K user, phiên
+thật): xem lại ngay SP vừa xem 10,6% · quay lại SP đã xem trước đó trong phiên 14,4% · SP xem lần đầu trong phiên
+là SP của phiên cũ 16,7% · stickiness mọi cặp 0,619 / cặp KHÁC SP 0,574. Giả thuyết lọc trùng đúng MỘT PHẦN
+(0,62→0,57 khi bỏ cặp trùng); phần còn lại so với Taobao 0,47 là khác biệt hành vi thật (mỹ phẩm 1 ngành).
+
+**Sửa bộ sinh + kiểm tra:**
+- `simulate.mjs`: lượt xem có thể là xem lại SP vừa xem / SP đã xem trong phiên / SP từ phiên cũ (chỉ phiên có mốc
+  SỚM hơn), phiên có thể mở đầu bằng SP đang xem dở; lượt thêm giỏ đặt theo số item PHÂN BIỆT đã xem (đúng
+  định nghĩa đo).
+- Tách **số đo thật** (`TARGETS`, chỉ để kiểm) khỏi **tham số sinh** (`GENERATION`, hiệu chỉnh) — vì xác suất cấp
+  phiên ≠ chỉ số cấp user (lượt quay lại SP cũ hay đổi category; người dùng mở phiên mới bằng SP đang xem dở).
+- `fidelity.mjs`: stickiness đo trên cặp KHÁC SP (cùng định nghĩa Taobao); thêm "lặp liền nhau trong phiên"
+  (mục tiêu 0,1064 — giữ tham số cấp phiên bị kiểm, không trôi tự do); recency + lặp cấp user so với số đo THẬT
+  (0,508 / 0,192) thay ngưỡng cũ; chốt chặn lỗi cũ chuyển sang đúng dấu hiệu của nó (cart = SP vừa xem ≤ 0,3).
+- Hiệu chỉnh lưới 36 + 24 tổ hợp trên catalog Tiki thật (chấm theo tổng độ lệch chuẩn hoá, chọn tổ hợp mọi mục
+  cách ngưỡng an toàn): `pSameCategoryNew 0,66 · repeatPrev 0,08 · revisitSession 0,1442 · revisitHistory 0,25 ·
+  sessionResume 0,58`, `salesAlpha 0,7`, `fallbackSigma 2,0` (hiệu chỉnh lại sau khi có xem lại). Đầu ra trên
+  catalog Tiki: stickiness 0,520 · lặp trong phiên 0,111 · recency 0,529 · lặp cấp user 0,159 · top10 0,633 —
+  **20/20 mục đạt**; `npm test` **11/11**. Còn lệch có ghi nhận: lặp cấp user thấp hơn thật (0,159 vs 0,192) —
+  REES46 có thể chứa sự kiện view nhân đôi do cách ghi log mà bộ sinh không mô phỏng.
+- Hệ quả cho bước train: dữ liệu mới có Recency mạnh như thật (~0,5) và Popularity có tín hiệu — SASRec phải vượt
+  mốc khó hơn nhưng TRUNG THỰC hơn.
+
 **Bàn giao sang máy GPU thuê** (việc tiếp theo — phần dataset đã xong):
 1. Nén + upload `data/training-sets/v1_20000u/` (2,4GB CSV; pandas đọc thẳng `.csv.gz`).
 2. `python tools/data-seed/validate_training_set.py <dir>` — phải ĐẠT (bắt file cụt/hỏng khi copy).
