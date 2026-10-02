@@ -7,7 +7,7 @@ HTTP nào. Lỗi xử lý 1 message không được làm chết cả consumer lo
 import asyncio
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 from aiokafka import AIOKafkaConsumer
 from sqlalchemy import text
@@ -17,6 +17,9 @@ from shared_common.contracts import (
     TOPIC_PRODUCT_VIEWED,
     TOPIC_CART_UPDATED,
     TOPIC_USER_BEHAVIOR,
+    TOPIC_ORDER_EVENTS,
+    ACTION_PURCHASE,
+    ORDER_PURCHASE_EVENT_TYPES,
     ACTION_VIEW_PRODUCT,
     CART_ACTION_MAP,
     FE_BEHAVIOR_ACTIONS,
@@ -46,6 +49,9 @@ INSERT_USER_EVENT_WITH_SOURCE_SQL = text(
 # Cột `source` do Hibernate của order-service tự thêm (ddl-auto: update, xem UserEvent.java) khi nó
 # khởi động lại. Consumer KHÔNG giả định cột đã có: nếu forecast-service được deploy trước, INSERT có
 # `source` sẽ lỗi và làm mất MỌI event. Kiểm 1 lần, thiếu thì ghi như cũ (bỏ qua source).
+ORDER_ITEMS_SQL = text("SELECT product_id, quantity FROM order_items WHERE order_id = :order_id")
+ORDER_USER_SQL = text("SELECT user_id FROM orders WHERE id = :order_id")
+
 SOURCE_RECHECK_SECONDS = 300
 HAS_SOURCE_COLUMN_SQL = text(
     "SELECT COUNT(*) FROM information_schema.columns "
@@ -125,10 +131,11 @@ class BehaviorEventConsumer:
         self._source_checked_at = float("-inf")
 
     async def start(self):
+        # TOPIC_ORDER_EVENTS: lần đầu subscribe, group chưa có offset cho topic này nên đọc lại TỪ ĐẦU
+        # (auto_offset_reset="earliest") -> tự backfill PURCHASE cho các đơn đã xác nhận còn trong retention.
+        topics = [TOPIC_PRODUCT_VIEWED, TOPIC_CART_UPDATED, TOPIC_USER_BEHAVIOR, TOPIC_ORDER_EVENTS]
         self._consumer = AIOKafkaConsumer(
-            TOPIC_PRODUCT_VIEWED,
-            TOPIC_CART_UPDATED,
-            TOPIC_USER_BEHAVIOR,
+            *topics,
             bootstrap_servers=shared_settings.KAFKA_BOOTSTRAP_SERVERS,
             group_id="forecast-service-behavior-group",
             enable_auto_commit=False,
@@ -136,10 +143,7 @@ class BehaviorEventConsumer:
         )
         await self._consumer.start()
         self._task = asyncio.create_task(self._consume_loop())
-        logger.info(
-            f"BehaviorEventConsumer started, subscribed to "
-            f"[{TOPIC_PRODUCT_VIEWED}, {TOPIC_CART_UPDATED}, {TOPIC_USER_BEHAVIOR}]"
-        )
+        logger.info(f"BehaviorEventConsumer started, subscribed to {topics}")
 
     async def stop(self):
         if self._task:
@@ -152,7 +156,7 @@ class BehaviorEventConsumer:
         try:
             async for msg in self._consumer:
                 try:
-                    await self._handle_message(msg.topic, msg.value)
+                    await self._handle_message(msg.topic, msg.value, msg.timestamp)
                 except Exception as e:
                     # 1 message lỗi không được làm chết consumer loop.
                     logger.error(f"Failed to process message from {msg.topic}: {e}")
@@ -161,8 +165,10 @@ class BehaviorEventConsumer:
         except asyncio.CancelledError:
             pass
 
-    async def _handle_message(self, topic: str, raw_value: bytes):
+    async def _handle_message(self, topic: str, raw_value: bytes, kafka_timestamp_ms: int | None = None):
         payload = json.loads(raw_value.decode("utf-8"))
+        if topic == TOPIC_ORDER_EVENTS:
+            return self._handle_order_event(payload, kafka_timestamp_ms)
         event = _parse_message(topic, payload)
         if event is None:
             return
@@ -201,6 +207,38 @@ class BehaviorEventConsumer:
         redis_client.lpush(key, event["item_id"])
         redis_client.ltrim(key, 0, HISTORY_MAX_LEN - 1)
         redis_client.expire(key, HISTORY_TTL_SECONDS)
+
+    def _handle_order_event(self, payload, kafka_timestamp_ms: int | None) -> int:
+        """Đơn được xác nhận -> 1 dòng PURCHASE cho mỗi sản phẩm (weight = số lượng). Trả số dòng đã ghi.
+
+        - Payload từ outbox qua Debezium có thể bị mã hoá JSON 2 lần (chuỗi JSON bên trong) — giải lần 2.
+        - OrderConfirmedEvent không mang danh sách sản phẩm -> tra `order_items` (cùng DB consumer đang ghi).
+        - Thời điểm = timestamp của MESSAGE KAFKA (epoch ms -> UTC), KHÔNG lấy `timestamp` trong payload:
+          OrderServiceImpl ghi bằng LocalDateTime.now() (giờ máy chạy JVM), sẽ lệch 7h trên máy giờ VN.
+          Timestamp Kafka do Debezium đặt lúc publish (trễ vài giây sau commit), và vẫn đúng khi đọc lại
+          message cũ (backfill).
+        - PURCHASE KHÔNG vào Redis history: ngoài HISTORY_ACTIONS, giữ khớp tập dữ liệu SASRec đang train."""
+        if isinstance(payload, str):
+            payload = json.loads(payload)
+        if payload.get("eventType") not in ORDER_PURCHASE_EVENT_TYPES or payload.get("orderId") is None:
+            return 0
+        order_id = int(payload["orderId"])
+        created_at = (datetime.fromtimestamp(kafka_timestamp_ms / 1000, tz=timezone.utc).replace(tzinfo=None)
+                      if kafka_timestamp_ms else datetime.now(timezone.utc).replace(tzinfo=None))
+
+        engine = get_engine(shared_settings.DB_NAME)
+        with engine.connect() as conn:
+            items = conn.execute(ORDER_ITEMS_SQL, {"order_id": order_id}).all()
+            user_id = payload.get("userId") or conn.execute(ORDER_USER_SQL, {"order_id": order_id}).scalar()
+        if not user_id:
+            logger.warning(f"Don {order_id} xac nhan nhung khong tim thay user_id — bo qua PURCHASE")
+            return 0
+        for product_id, quantity in items:
+            self._write_to_db({
+                "user_id": str(user_id), "session_id": None, "item_id": int(product_id), "category_id": None,
+                "action_type": ACTION_PURCHASE, "weight": float(quantity or 1), "source": None,
+            }, created_at)
+        return len(items)
 
     def _has_source_column(self, conn) -> bool:
         # Đã thấy cột thì nhớ luôn; chưa thấy thì kiểm lại mỗi SOURCE_RECHECK_SECONDS để tự dùng cột

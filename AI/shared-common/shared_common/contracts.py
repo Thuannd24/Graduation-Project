@@ -63,6 +63,10 @@ ACTION_ADD_TO_CART = "ADD_TO_CART"
 ACTION_UPDATE_CART_QTY = "UPDATE_CART_QTY"
 ACTION_REMOVE_FROM_CART = "REMOVE_FROM_CART"
 ACTION_CLEAR_CART = "CLEAR_CART"
+# Mua thật: ghi khi đơn được XÁC NHẬN (đã thanh toán / xác nhận COD), 1 dòng mỗi sản phẩm, weight = số lượng.
+# Không dùng OrderCreatedEvent vì gồm cả đơn sau đó bị huỷ / thanh toán lỗi.
+ACTION_PURCHASE = "PURCHASE"
+ORDER_PURCHASE_EVENT_TYPES = {"OrderConfirmedEvent"}
 
 CART_ACTION_MAP = {
     "ADD_ITEM": ACTION_ADD_TO_CART,
