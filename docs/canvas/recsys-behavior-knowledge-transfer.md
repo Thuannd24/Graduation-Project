@@ -420,7 +420,35 @@ Model chỉ biết **id**. Bước cuối là tra bảng `products` (chỉ lấy
 `price` ưu tiên giá khuyến mãi. `oldPrice` chỉ có khi đang giảm giá thật (FE sẽ gạch ngang). Sản phẩm đã ẩn hoặc xoá bị
 bỏ qua, không bịa dữ liệu.
 
-### 6.5 Tốc độ
+### 6.5 Cổng deploy: chỉ phục vụ model đã thắng baseline (GĐ4)
+
+Checkpoint cho phục vụ nên sinh bằng [`evaluation/train_serving.py`](../../AI/recs-service/evaluation/train_serving.py)
+thay cho script cũ:
+
+```bash
+cd AI/recs-service
+python -m evaluation.train_serving --source platform --out ../models/sasrec.pt [--require-significant]
+```
+
+1. Chạy harness: chia theo thời gian, SASRec nhiều seed, so với baseline tốt nhất trên track **explore** (đúng bài toán
+   của tab "Gợi ý cho bạn").
+2. **Cổng:** mặc định qua khi HR@10 trung bình của SASRec ≥ baseline tốt nhất. `--require-significant` chặt hơn:
+   phải thắng có ý nghĩa thống kê.
+3. Train lại trên **toàn bộ** dữ liệu với số epoch đã chọn, lưu checkpoint kèm khối `eval` (kết quả, tiêu chí, git
+   commit, thời điểm).
+
+Khi recs-service nạp checkpoint:
+
+| Checkpoint | Hành vi |
+|---|---|
+| Có `eval`, **qua cổng** | Nạp |
+| Có `eval`, **không qua cổng** | **Không nạp**; tầng SASRec tắt, tab "Gợi ý cho bạn" dùng Popularity (đã loại món đã xem) |
+| Không có `eval` (checkpoint cũ) | Vẫn nạp để giữ tương thích, nhưng ghi cảnh báo |
+
+`GET /health` có trường `sasrec` cho biết tầng SASRec đang **bật hay tắt, vì sao**, và kết quả cổng của checkpoint đang
+chạy, nên không cần đọc log.
+
+### 6.6 Tốc độ
 
 Đo được: **p50 ≈ 13 ms, p95 ≈ 17 ms** với tầng SASRec, thấp hơn nhiều so với mục tiêu 200 ms của plan. Model nhỏ
 (khoảng 210 KB) và chạy CPU là đủ.
@@ -532,7 +560,9 @@ Kết quả lần chạy 2026-10-01 trên **dữ liệu platform** (seed tổng 
 Cách đọc:
 - Explore: SASRec có số cao nhất, nhưng so với ItemKNN thì chênh **+0,016 [−0,016; +0,045]**, tức **chưa có ý nghĩa
   thống kê**. Repeat: ItemKNN, SASRec và Recency chênh nhau đều chưa có ý nghĩa thống kê.
-- SASRec **ít thiên về món phổ biến** nhất (ARP@10 ≈ 0,0008, so với 0,0016 của ItemKNN). Đây là điểm cộng đáng nêu.
+- SASRec cấu hình hiện tại **ít thiên về món phổ biến** nhất (ARP@10 ≈ 0,0008, so với 0,0016 của ItemKNN). ⚠️ Nhưng
+  thí nghiệm GĐ3 (mục 8.6) cho thấy điều này **một phần do cách lấy mẫu negative chưa hiệu chỉnh** đẩy model ra xa món
+  phổ biến: thêm logQ thì ARP tăng lên khoảng 0,0025. Vì vậy chưa nên trình bày đây là ưu điểm của bản thân kiến trúc.
 - Với khoảng 150–250 case thì **không đủ dữ liệu để phân thắng thua**: mức nhiễu giữa các seed (±0,009) xấp xỉ một nửa
   chênh lệch cần đo. Vì vậy kết luận **bắt buộc** phải chạy trên REES46/Taobao.
 - **Không so** các số này với 8.3 (0,267 / 0,094), vì hai cách chia dữ liệu khác nhau.
@@ -543,6 +573,60 @@ cd AI/recs-service
 python -m evaluation.run --source platform --seeds 3 --out eval_platform.json        # khoảng 17 phút trên CPU
 python -m evaluation.run --source csv --csv <file> --user-col <c> --item-col <c> --ts-col <c> [--category-col <c>] --seeds 3
 ```
+
+### 8.6 Thí nghiệm cải tiến SASRec (GĐ3) — `--ablation`
+
+Thêm `--ablation` thì harness chạy cả **thang cấu hình**. Mỗi bậc chồng lên bậc trước và chỉ đổi **đúng một yếu tố**,
+nên chênh lệch giữa hai bậc liền nhau là tác dụng của riêng yếu tố đó:
+
+| Bậc | Đổi gì | Kiểm tra giả thuyết |
+|---|---|---|
+| `base` | Cấu hình đang phục vụ | Mốc |
+| `+neg256` | Số đáp án sai 50 → 256 | Câu trắc nghiệm khó hơn thì model học tốt hơn? |
+| `+logQ` | Trừ log xác suất lấy mẫu khỏi điểm | Negative lấy theo độ phổ biến nên khi chưa hiệu chỉnh, model bị đẩy **ra xa** món phổ biến; logQ gỡ méo này. Kỳ vọng ARP **tăng** và độ chính xác tăng (xem ARP để thấy đánh đổi) |
+| `+maxlen50` | Đọc 15 → 50 món gần nhất | Lịch sử dài hơn có ích? |
+| `+action` | Cộng **embedding loại hành vi** vào từng vị trí | Mắt xích **Behavior Tracking → AI** |
+| `+action(shuffled)` | **Đối chứng âm**: xáo loại hành vi trong chuỗi | Phân biệt "học được từ loại hành vi" với "chỉ có thêm tham số" |
+
+**Phép đo trung tâm** là dòng `+action - +action(shuffled) [doi chung am]` trong phần so sánh ghép cặp. Chỉ khi chênh
+lệch này **dương và có ý nghĩa** (CI95 không chứa 0) thì mới được kết luận rằng loại hành vi mang thông tin. Ngược lại
+thì đó là kết quả âm, cũng có giá trị cho báo cáo (nhánh rẽ ở §7 của [execution-plan](recsys-execution-plan.md)).
+
+Lệnh cho từng bộ dữ liệu (harness đọc thẳng file gốc, không cần tiền xử lý):
+```bash
+# REES46 Cosmetics: 5 file theo tháng, có tiêu đề, thời gian dạng "2019-10-01 00:00:00 UTC"
+python -m evaluation.run --source csv --csv "data/2019-*.csv,data/2020-*.csv" --user-col user_id \
+    --item-col product_id --ts-col event_time --category-col category_id --action-col event_type --seeds 3 --ablation
+
+# Taobao UserBehavior: không có tiêu đề, thời gian unix giây; lấy mẫu ổn định 10% user cho vừa CPU
+python -m evaluation.run --source csv --csv UserBehavior.csv --names user,item,category,behavior,ts \
+    --user-col user --item-col item --ts-col ts --ts-unit s --category-col category --action-col behavior \
+    --user-fraction 0.1 --seeds 3 --ablation
+```
+Tuỳ chọn thêm: `--keep-actions cart,remove_from_cart,purchase` để bỏ bớt loại hành vi cho nhẹ RAM. Lưu ý việc này đổi
+cả bài toán, vì target cũng chỉ còn các hành vi được giữ lại.
+
+⚠️ Taobao chỉ kéo dài **khoảng 9 ngày** (xem execution-plan §5.1), nên mốc 80/90% tương ứng vài ngày cuối. Dùng Taobao
+cho câu hỏi "loại hành vi có thông tin không", **không** dùng để kết luận về hành vi dài hạn.
+
+**Chạy thử trên dữ liệu platform (2026-10-02, 2 seed, 1 giờ 56 phút)**, chỉ để kiểm code chạy đúng đầu-cuối, **không**
+dùng để kết luận (seed tổng hợp, khoảng 150–250 case, chỉ 2 loại hành vi là xem và thêm giỏ):
+
+| Bậc | Explore HR@10 | Repeat HR@10 | ARP@10 (explore) |
+|---|---|---|---|
+| base | 0,051 | 0,323 | 0,0008 |
+| +neg256 | 0,051 | 0,333 | 0,0008 |
+| +logQ | 0,051 | **0,381** (+0,048, có ý nghĩa) | 0,0026 |
+| +maxlen50 | 0,037 | 0,403 | 0,0022 |
+| +action | 0,034 | 0,335 | 0,0023–0,0051 |
+| +action(shuffled) | 0,034 | 0,339 | 0,0023–0,0051 |
+
+Điều rút ra cho **lần chạy trên dữ liệu thật**, chưa phải kết luận về model:
+- `+action` gần như **trùng** đối chứng xáo trộn. Điều này dễ hiểu, vì ở platform 93% là `VIEW_PRODUCT`, xáo trộn
+  gần như không đổi gì. Phép đo này chỉ có ý nghĩa trên bộ có nhiều loại hành vi (REES46, Taobao).
+- Ở `+action` seed 1, model **dừng sớm ngay epoch 2** và tụt mạnh. Nguyên nhân: NDCG trên validation khoảng 150 case
+  rất nhiễu, mà patience 3 quá ngắn. Khi chạy dữ liệu thật nên dùng `--patience 5` (nới đều cho mọi bậc để so sánh
+  công bằng) và ít nhất 3 seed.
 
 ---
 
@@ -575,6 +659,7 @@ python -m evaluation.run --source csv --csv <file> --user-col <c> --item-col <c>
 | Gọi API chi tiết SP ở đâu cũng tính là "xem" | Opt-in: chỉ khi có header `X-Track-View: 1` (chỉ ProductDetailPage gửi) | Gọi không header: 0 view; có header: 1 view |
 | `PAGE_DWELL`/`SCROLL_DEPTH` chỉ reset khi bấm Back | `notifyRouteChange()` mỗi lần đổi route | FE build OK (cần xem trên trình duyệt) |
 | `IMPRESSION` không có vị trí, nguồn | `weight` = vị trí, cột mới `source` | Dòng IMPRESSION có `(weight=1,2,3, source=for_you)`; source lạ → 422 |
+| Chưa ghi lượt **mua** | Consumer nghe `order-events`; đơn **xác nhận** → `PURCHASE` mỗi sản phẩm (`weight` = số lượng), tra `order_items`; thời điểm = timestamp Kafka (UTC). Không vào Redis history | 3/3 sản phẩm đúng số lượng, lệch 0 s; `OrderCreatedEvent` không bị tính |
 
 ⚠️ **Cần báo P2 (churn)**: từ GĐ1, `user_events.created_at` của **mọi** nguồn là UTC. Dữ liệu cũ do Java ghi khi chạy
 trên máy giờ VN thì lệch +7 giờ. Feature nào so `created_at` với `NOW()` (vd "hoạt động trong N ngày") giờ đã đúng múi
@@ -608,6 +693,7 @@ không tự viết chuỗi.
 | `weight` | `SCROLL_DEPTH` = % cuộn, `PAGE_DWELL` = giây, `IMPRESSION` = vị trí (1 = đầu) |
 | `source` | `IMPRESSION_SOURCES = {for_you, recent, trending, search, category}`; giá trị lạ → 422 |
 | Ghi VIEW_PRODUCT | Chỉ khi request có header `X-Track-View: 1` (opt-in, chỉ ProductDetailPage gửi) |
+| Ghi PURCHASE | Từ `order-events`, chỉ `ORDER_PURCHASE_EVENT_TYPES = {OrderConfirmedEvent}`; `session_id` NULL; `weight` = số lượng. ⚠️ `order-events` là topic **dùng chung** (inventory, notification, payment, promotion cũng nghe): **không** publish message test lên đó |
 | User id | Keycloak UUID (chuỗi), ví dụ `42d23463-560c-…` |
 | Checkpoint | `{model_state_dict, config{n_items,d_model,n_blocks,n_heads,maxlen}, item_space="platform_v1", item_id_map{product_id→index}, epoch}` |
 

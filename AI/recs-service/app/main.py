@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import recs_settings
 from app.api.endpoints import recommend
+from app.services.sasrec import sasrec_service
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
@@ -24,10 +25,12 @@ app.include_router(recommend.router, prefix=recs_settings.API_V1_STR)
 
 @app.get("/health")
 def health_check():
+    sasrec_service.is_ready()  # nạp lười: lần gọi đầu tiên mới đọc checkpoint
     return {
         "status": "UP",
         "service": recs_settings.PROJECT_NAME,
-        "weights_path": recs_settings.MODEL_WEIGHTS_PATH
+        "weights_path": recs_settings.MODEL_WEIGHTS_PATH,
+        "sasrec": sasrec_service.status,  # đang bật hay tắt, vì sao, kết quả cổng đánh giá
     }
 
 if __name__ == "__main__":

@@ -59,6 +59,12 @@ class SasRecService:
         self.idx_to_item: Dict[int, int] = {}
         self.maxlen = 20
         self._load_attempted = False
+        # Vì sao tầng SASRec đang bật/tắt — hiện ở /health để vận hành không phải đọc log
+        self.status: Dict[str, Any] = {"loaded": False, "reason": "chua thu nap"}
+
+    def _skip(self, reason: str, level: str = "warning") -> None:
+        getattr(logger, level)(f"SASRec khong duoc nap: {reason}")
+        self.status = {"loaded": False, "reason": reason}
 
     def _ensure_loaded(self) -> None:
         if self._load_attempted:
@@ -67,21 +73,30 @@ class SasRecService:
 
         path = recs_settings.MODEL_WEIGHTS_PATH
         if not os.path.exists(path):
-            logger.warning(f"Khong tim thay checkpoint SASRec tai {path} — dung Popularity fallback")
-            return
+            return self._skip(f"khong tim thay checkpoint tai {path}")
         try:
             ckpt = torch.load(path, map_location="cpu", weights_only=False)
         except Exception as e:
-            logger.error(f"Loi doc checkpoint SASRec ({path}): {e}")
-            return
+            return self._skip(f"loi doc checkpoint {path}: {e}", "error")
 
         if ckpt.get("item_space") != "platform_v1" or "item_id_map" not in ckpt:
-            logger.warning(
-                f"Checkpoint SASRec tai {path} co item_space={ckpt.get('item_space')!r} "
-                "(khong phai 'platform_v1', hoac thieu item_id_map) — index cua model nay KHONG "
-                "tuong ung voi product_id that cua platform. Bo qua, dung Popularity fallback."
+            return self._skip(
+                f"item_space={ckpt.get('item_space')!r} (khong phai 'platform_v1', hoac thieu item_id_map) — "
+                "index cua model nay KHONG tuong ung voi product_id that cua platform"
             )
-            return
+
+        # Cổng đánh giá (GĐ4): checkpoint sinh bởi `evaluation.train_serving` mang khối `eval`. Không qua cổng
+        # (thua baseline tốt nhất trên track explore) thì KHÔNG nạp — thà phục vụ tầng sau còn hơn phục vụ
+        # model kém. Checkpoint cũ chưa có khối này vẫn nạp (giữ tương thích) nhưng cảnh báo.
+        evaluation = ckpt.get("eval")
+        if evaluation is not None and not evaluation.get("passed_gate", False):
+            return self._skip(
+                f"khong qua cong danh gia: SASRec HR@10={evaluation.get('sasrec_hr10')} < "
+                f"{evaluation.get('best_baseline')}={evaluation.get('best_baseline_hr10')} ({evaluation.get('track')})"
+            )
+        if evaluation is None:
+            logger.warning(f"Checkpoint {path} chua co ket qua danh gia — van nap; nen tao lai bang "
+                           "`python -m evaluation.train_serving`")
 
         try:
             cfg = ckpt["config"]
@@ -89,13 +104,19 @@ class SasRecService:
             model.load_state_dict(ckpt["model_state_dict"])
             model.eval()
         except Exception as e:
-            logger.error(f"Checkpoint SASRec co item_space dung nhung load that bai: {e}")
-            return
+            return self._skip(f"item_space dung nhung load that bai: {e}", "error")
 
         self.model = model
         self.maxlen = cfg["maxlen"]
         self.item_to_idx = {int(k): int(v) for k, v in ckpt["item_id_map"].items()}
         self.idx_to_item = {v: k for k, v in self.item_to_idx.items()}
+        self.status = {
+            "loaded": True, "path": path, "n_items": len(self.item_to_idx), "epoch": ckpt.get("epoch"),
+            "eval": None if evaluation is None else {
+                k: evaluation.get(k) for k in ("track", "sasrec_hr10", "best_baseline", "best_baseline_hr10",
+                                               "rule", "generated_at", "git_sha")
+            },
+        }
         logger.info(
             f"Da nap SASRec platform_v1 tu {path}: {len(self.item_to_idx):,} item, "
             f"epoch={ckpt.get('epoch')}"
