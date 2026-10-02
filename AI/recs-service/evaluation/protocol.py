@@ -30,6 +30,9 @@ class Case:
     user: str
     history: list[int]  # index nội bộ, CŨ -> MỚI
     target: int
+    # Loại hành vi của từng vị trí trong `history` (index nội bộ 0..n_actions-1), song song với history.
+    # Rỗng khi dữ liệu không có cột action. Chỉ model "action-aware" (GĐ3) dùng; baseline bỏ qua.
+    history_actions: list[int] = field(default_factory=list)
 
     @property
     def is_repeat(self) -> bool:
@@ -44,6 +47,12 @@ class Split:
     n_items: int
     item_index: dict[int, int]  # item id thật -> index nội bộ 0..n_items-1
     stats: dict = field(default_factory=dict)
+    train_actions: dict[str, list[int]] = field(default_factory=dict)  # song song với train_seqs
+    action_index: dict[str, int] = field(default_factory=dict)  # tên action -> index nội bộ
+
+    @property
+    def n_actions(self) -> int:
+        return len(self.action_index)
 
     def cases(self, which: str, track: str) -> list[Case]:
         cases = self.val if which == "val" else self.test
@@ -55,26 +64,40 @@ def _quantile_time(ts: pd.Series, q: float) -> pd.Timestamp:
 
 
 def temporal_split(df: pd.DataFrame, q_val: float = 0.8, q_test: float = 0.9) -> Split:
-    """`df` có cột (user_id, item_id, ts), đã sort theo ts (xem data._normalise)."""
+    """`df` có cột (user_id, item_id, ts[, action]), đã sort theo ts (xem data._normalise)."""
     t_val, t_test = _quantile_time(df["ts"], q_val), _quantile_time(df["ts"], q_test)
     train_df = df[df["ts"] < t_val]
+    has_action = "action" in df.columns
 
     item_index = {item: i for i, item in enumerate(sorted(train_df["item_id"].unique()))}
-    train_seqs = {u: [item_index[i] for i in g["item_id"]] for u, g in train_df.groupby("user_id", sort=False)}
+    action_index = {a: i for i, a in enumerate(sorted(df["action"].unique()))} if has_action else {}
+
+    def sequences(frame: pd.DataFrame) -> dict[str, tuple[list[int], list[int]]]:
+        """user -> (item, action) theo thời gian; bỏ item ngoài vocab train (item lạnh)."""
+        out = {}
+        for u, g in frame.groupby("user_id", sort=False):
+            actions = g["action"] if has_action else [None] * len(g)
+            pairs = [(item_index[i], action_index[a] if has_action else 0)
+                     for i, a in zip(g["item_id"], actions) if i in item_index]
+            out[u] = ([p[0] for p in pairs], [p[1] for p in pairs] if has_action else [])
+        return out
+
+    train = sequences(train_df)
+    train_seqs = {u: items for u, (items, _) in train.items()}
+    train_actions = {u: acts for u, (_, acts) in train.items()} if has_action else {}
 
     def build_cases(history_df: pd.DataFrame, target_df: pd.DataFrame) -> tuple[list[Case], int]:
-        histories = {u: [item_index[i] for i in g["item_id"] if i in item_index]
-                     for u, g in history_df.groupby("user_id", sort=False)}
+        histories = sequences(history_df)
         firsts = target_df.groupby("user_id", sort=False).head(1)
         cases, cold = [], 0
         for user, item in zip(firsts["user_id"], firsts["item_id"]):
-            history = histories.get(user)
+            history, actions = histories.get(user, ([], []))
             if not history:
                 continue  # user chưa có lịch sử trước mốc: bài toán cold-start user, không thuộc protocol này
             if item not in item_index:
                 cold += 1
                 continue
-            cases.append(Case(user, history, item_index[item]))
+            cases.append(Case(user, history, item_index[item], actions))
         return cases, cold
 
     val, cold_val = build_cases(train_df, df[(df["ts"] >= t_val) & (df["ts"] < t_test)])
@@ -86,5 +109,6 @@ def temporal_split(df: pd.DataFrame, q_val: float = 0.8, q_test: float = 0.9) ->
         "val_cases": len(val), "test_cases": len(test),
         "cold_target_dropped": {"val": cold_val, "test": cold_test},
         "test_repeat_rate": round(float(np.mean([c.is_repeat for c in test])), 4) if test else None,
+        "actions": sorted(action_index) if has_action else None,
     }
-    return Split(train_seqs, val, test, len(item_index), item_index, stats)
+    return Split(train_seqs, val, test, len(item_index), item_index, stats, train_actions, action_index)

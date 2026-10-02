@@ -94,7 +94,80 @@ def test_itemknn_and_popularity_fill_to_k():
     assert Popularity().fit(TRAIN, 5).rank([], 1, exclude_seen=False) == [4]
 
 
+def test_split_carries_actions_aligned_with_history():
+    df = _toy_df()
+    df["action"] = ["view" if i % 3 else "cart" for i in range(len(df))]
+    split = temporal_split(df)
+    assert split.n_actions == 2
+    for c in split.test:
+        assert len(c.history_actions) == len(c.history)
+    for u, seq in split.train_seqs.items():
+        assert len(split.train_actions[u]) == len(seq)
+
+
+# ---------- đọc file bộ công khai ----------
+def test_load_csv_rees46_style_glob_utc_and_filter(tmp_path):
+    from evaluation.data import load_csv
+    header = "event_time,event_type,product_id,category_id,user_id\n"
+    (tmp_path / "2019-Oct.csv").write_text(header + "2019-10-01 00:00:02 UTC,view,10,1,7\n"
+                                           "2019-10-01 00:00:01 UTC,cart,11,1,7\n")
+    (tmp_path / "2019-Nov.csv").write_text(header + "2019-11-01 00:00:00 UTC,remove_from_cart,11,1,8\n")
+    df, cats = load_csv(str(tmp_path / "2019-*.csv"), "user_id", "product_id", "event_time", "category_id", "event_type",
+                        keep_actions=["cart", "remove_from_cart"])
+    assert list(df["action"]) == ["cart", "remove_from_cart"]  # bỏ view, sort theo thời gian qua 2 file
+    assert df["ts"].dt.tz is None and str(df["ts"].iloc[0]) == "2019-10-01 00:00:01"
+    assert cats[11] == 1
+
+
+def test_load_csv_taobao_style_headerless_unix_and_user_sample(tmp_path):
+    from evaluation.data import load_csv
+    lines = "".join(f"{u},{100 + u},5,pv,{1511544070 + u}\n" for u in range(200))
+    (tmp_path / "UserBehavior.csv").write_text(lines)
+    kw = dict(names=["user", "item", "category", "behavior", "ts"], ts_unit="s")
+    full, _ = load_csv(str(tmp_path / "UserBehavior.csv"), "user", "item", "ts", None, "behavior", **kw)
+    half, _ = load_csv(str(tmp_path / "UserBehavior.csv"), "user", "item", "ts", None, "behavior", user_fraction=0.5, **kw)
+    again, _ = load_csv(str(tmp_path / "UserBehavior.csv"), "user", "item", "ts", None, "behavior", user_fraction=0.5, **kw)
+    assert len(full) == 200 and str(full["ts"].iloc[0]) == "2017-11-24 17:21:10"
+    assert 50 < len(half) < 150 and list(half["user_id"]) == list(again["user_id"])  # mẫu ổn định
+
+
 # ---------- SASRec ----------
+def test_ablation_ladder_changes_one_factor_per_step():
+    from dataclasses import asdict
+    from evaluation.run import ABLATION_LADDER
+    labels = [label for label, _ in ABLATION_LADDER]
+    assert labels[0] == "base" and labels[-2:] == ["+action", "+action(shuffled)"]
+    for (_, prev), (label, cur) in zip(ABLATION_LADDER, ABLATION_LADDER[1:]):
+        changed = {k for k, v in asdict(cur).items() if asdict(prev)[k] != v}
+        assert len(changed) == 1, f"{label} doi {changed}"
+
+
+@pytest.mark.parametrize("extra", [{"logq": True}, {"use_action": True}, {"use_action": True, "shuffle_actions": True}])
+def test_sasrec_variants_train_and_recommend(extra):
+    seqs = {f"u{i}": [0, 1, 2, 3] * 3 for i in range(10)}
+    acts = {u: [0, 1] * 6 for u in seqs}
+    val = [Case("v", [0, 1, 2], 3, [0, 1, 0])] * 3
+    cfg = SASRecConfig(max_epochs=2, patience=5, batch_size=16, **extra)
+    s = SASRecRecommender(cfg, seed=0).fit(seqs, 4, val, train_actions=acts, n_actions=2)
+    recs = s.recommend_many([Case("t", [0, 1], 2, [0, 1])], 2, exclude_seen=True)[0]
+    assert len(recs) == 2 and not ({0, 1} & set(recs))
+
+
+def test_shuffle_control_really_permutes_actions():
+    s = SASRecRecommender(SASRecConfig(use_action=True, shuffle_actions=True), seed=0)
+    s._shuffle_rng = np.random.default_rng(0)
+    actions = [0] * 10 + [1] * 10
+    shuffled = s._maybe_shuffle(actions)
+    assert sorted(shuffled) == sorted(actions) and shuffled != actions  # giữ phân phối, phá thứ tự
+    plain = SASRecRecommender(SASRecConfig(use_action=True), seed=0)
+    assert plain._maybe_shuffle(actions) == actions
+
+
+def test_use_action_requires_action_data():
+    with pytest.raises(ValueError):
+        SASRecRecommender(SASRecConfig(use_action=True)).fit({"u": [0, 1, 2]}, 3)
+
+
 def test_sasrec_trainer_smoke():
     rng = np.random.default_rng(0)
     seqs = {f"u{i}": list(np.tile([0, 1, 2, 3], 4)[rng.integers(0, 4):][:12]) for i in range(30)}
