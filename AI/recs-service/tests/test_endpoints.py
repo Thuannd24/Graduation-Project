@@ -24,6 +24,12 @@ def client(monkeypatch, fake_redis):
     return TestClient(app)
 
 
+def test_service_adds_no_cors_headers_gateway_owns_cors(client):
+    # Gateway đã thêm Access-Control-Allow-Origin; service thêm lần nữa -> header lặp -> trình duyệt chặn
+    r = client.get("/api/v1/public/recommendations/personal", headers={"Origin": "http://localhost:5173"})
+    assert "access-control-allow-origin" not in {k.lower() for k in r.headers}
+
+
 def test_header_identity_is_used(client):
     r = client.get("/api/v1/recommendations/personal", headers={"X-User-Id": USER})
     assert r.status_code == 200

@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import recs_settings
 from app.api.endpoints import recommend
 from app.services.sasrec import sasrec_service
@@ -13,14 +12,10 @@ app = FastAPI(
     version="1.0.0"
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+# KHÔNG thêm CORSMiddleware: browser chỉ gọi service này QUA api-gateway, và gateway đã tự thêm header CORS
+# (CorsConfig.java) — giống mọi service Java. Trước đây middleware này thêm Access-Control-Allow-Origin LẦN
+# THỨ HAI, trình duyệt thấy header bị lặp nên chặn MỌI response gợi ý: khối gợi ý trang chủ và cross-sell chưa
+# từng hiện được trên trình duyệt (phát hiện 2026-10-02 khi test bằng Chromium; script Python không bị CORS).
 app.include_router(recommend.router, prefix=recs_settings.API_V1_STR)
 
 @app.get("/health")
