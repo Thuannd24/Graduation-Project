@@ -550,6 +550,7 @@ function simulateUser(rng, profile, catalog, userId, totalMonths, now) {
     if (rng.bool(profile.dropoutP)) { dropoutAt = t; break; }
   }
   profile.willChurn = dropoutAt != null;
+  profile.rateMult = rateMult; // ground truth cho phân tích trần dự đoán (churn_signal_decomposition.py), KHÔNG phải feature
   profile.dropoutAt = dropoutAt != null ? new Date(dropoutAt) : null;
   const orderDates = rawTimes.map((t) => {
     const dayStart = new Date(Math.floor(t / DAY_MS) * DAY_MS);

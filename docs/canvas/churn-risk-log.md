@@ -2047,3 +2047,125 @@ phân phối phiên KHÔNG giỏ. Thêm 2 mục fidelity: % phiên dài 1, % phi
 - Docstring bên AI mô tả cơ chế bộ sinh CŨ (`candidates.py`, `churn_product_block.py`, `label_diagnostics.py`: "λ tụt bậc từ
   churnMonth", "bỏ giỏ ×2,5") → cập nhật cùng `churn-risk-feature-overview.md` ở bước re-baseline.
 - Seed 5.000 user vào DB → re-baseline churn (kỳ vọng AUC đổi vì động lực nhãn đổi hẳn).
+
+## 2026-10-02 — Đào lại cốt lõi: churn dự đoán dựa vào đâu? (phân rã nhãn + trần lý thuyết)
+
+Câu hỏi của người dùng: "dựa vào đâu để dự đoán user sẽ rời bỏ". Trả lời bằng đo, không bằng lập luận. Panel xuất từ mô phỏng
+(không cần DB; Docker đang treo): `tools/data-seed/export-churn-panel.mjs`, 5.000 user × **24 tháng**, đúng định nghĩa production
+(5 mốc cắt, ≥ 2 đơn DELIVERED, nhãn = không có đơn trong 120 ngày sau mốc) kèm ground truth ẩn. Phân tích:
+`AI/forecast-service/app/training/experiments/churn_signal_decomposition.py` → `behavior_patterns/churn_signal_decomposition.json`.
+Panel: 9.744 dòng / 2.236 user / churn 41,9% (ở 12 tháng chỉ ~3.600 dòng; 24 tháng gấp ~2,7 lần). Grouped CV 5 fold theo user.
+
+### 1. Nhãn "không mua trong 120 ngày" gồm gì
+| | Tỉ lệ trong các dòng bị gắn churn |
+|---|---:|
+| Đã rời bỏ thật (BG/NBD: đã rớt trước mốc cắt) | **24,6%** |
+| Còn sống nhưng mua chậm / xui thời điểm | **75,4%** |
+Ở nhóm còn sống, 35,2% vẫn bị gắn churn. → Model churn phần lớn dự đoán "ai mua ít/chậm", không phải "ai đã bỏ đi".
+
+### 2. Trần lý thuyết (biết ground truth)
+Oracle AUC **0,879**. Chỉ biết tốc độ mua thật: 0,756. Chỉ biết cờ đã chết: 0,623. (Phần còn lại là may rủi, không ai dự đoán nổi.)
+
+### 3. Từng loại tín hiệu (AUC theo nhãn 120 ngày)
+| Tín hiệu | AUC |
+|---|---:|
+| recency đơn lẻ / frequency đơn lẻ | 0,701 / 0,706 |
+| recency chia nhịp mua thô của chính khách | 0,589 (tệ hơn: nhịp ước từ 2–4 đơn rất nhiễu) |
+| LR production, 6 feature từ orders | 0,748 ± 0,012 |
+| LR production, **11 feature** (thêm 5 hành vi) | **0,766 ± 0,016** |
+| LR 11 feature + log1p | 0,771 ± 0,016 |
+| BG/NBD kỳ vọng số lần mua (không train) | 0,769 |
+| LR 11 log1p + BG/NBD kỳ vọng | **0,787 ± 0,012** |
+| Cây tăng cường 11 feature + t_x + T | 0,782 ± 0,016 |
+Feature hành vi đơn lẻ: days_since_last_activity 0,714 · category_diversity 0,696 · cart_abandon 0,675 · recent_view 0,660 · view_to_cart 0,654.
+
+### 4. Hai mục tiêu khác nhau (phát hiện quan trọng)
+Nhận diện **người đã chết thật** (tỉ lệ 10,3% panel): `1 − p_alive` của BG/NBD đạt AUC **0,798**; recency 0,759;
+days_since_last_activity 0,748; LR 11 feature *huấn luyện cho mục tiêu này* 0,792. Nhưng LR 11 feature huấn luyện theo **nhãn 120 ngày**
+chấm theo "đã chết" chỉ **0,719**. → Model production đang tối ưu mục tiêu "ngừng mua 120 ngày"; cho campaign "cứu khách sắp bỏ" thì
+75% người bị gắn cờ sẽ tự quay lại. Đây là quyết định thiết kế cần chốt (giữ nhãn 120 ngày, hay thêm điểm "đã rời bỏ" từ BG/NBD).
+
+### 5. Chỗ phải rút lại / sửa
+- Từng viết "feature hành vi không thể mang thêm thông tin vì rời bỏ độc lập với hành vi" → **SAI**. Hành vi thêm +0,017 AUC
+  (0,748 → 0,766) qua 2 đường: cường độ duyệt ∝ tốc độ mua (GIẢ ĐỊNH trong bộ sinh) và duyệt tụt sau khi rời bỏ (ĐÃ ĐO trên REES46:
+  SAU/TRƯỚC 0,186). Đã sửa docstring `churn_signal_decomposition.py`.
+- Đề xuất log1p cho `monetary`/`frequency`: **không đáng kể** (6 feature: 0,748 → 0,747; 11 feature: 0,766 → 0,771, trong sai số).
+
+### 6. Giới hạn
+Dữ liệu tổng hợp, mô phỏng trên catalog giả của test (không phải DB). BG/NBD dùng đúng tham số đã sinh dữ liệu nên **lạc quan hơn thực tế**
+(ngoài đời phải fit trên dữ liệu của chính mình). Số hành vi phụ thuộc giả định "duyệt ∝ tốc độ mua". Khoảng 0,79 → 0,88 là phần
+thông tin không đọc được từ dữ liệu quan sát; ngoài đời có thể nằm ở trải nghiệm xấu (giao trễ, hoàn tiền) nhưng không kiểm chứng được ở đây.
+Kỳ vọng AUC khi re-baseline trên DB: **~0,77 ± 0,02**, không phải 0,84.
+
+### Chưa commit
+`tools/data-seed/export-churn-panel.mjs`, `churn_signal_decomposition.py`, `churn_bgnbd_benchmark.py` (chưa chạy, cần DB),
+dòng `profile.rateMult` trong `simulate.mjs`, sửa cắt tên sản phẩm 200 ký tự trong `writeData.mjs`.
+
+### 2026-10-02 (tiếp) — Nhãn cố định 120 ngày LỆCH theo chu kỳ mua của ngành hàng (người dùng chỉ ra, đã đo)
+Người dùng: "mỗi mặt hàng có một tần suất mua khác nhau". Đúng — và nhãn cố định 120 ngày phạt khách mua ngành chu kỳ dài.
+Đo trên panel 24 tháng/5.000 user (`export-churn-panel.mjs`, cột `cycle_rel` = chu kỳ TB của các ngành khách ưa thích, so với Bách hoá = 1;
+khoảng 0,59–1,72; chia 3 nhóm theo tertile):
+
+| | Nhóm NHANH (cycle 0,92) | Nhóm CHẬM (cycle 1,38) |
+|---|---:|---:|
+| Tỉ lệ bị gắn churn @120 ngày cố định | **35,0%** | **49,5%** |
+| Đã rời bỏ thật | 10,6% | 11,1% |
+| % người bị gắn churn thật ra còn sống | 69,9% | 77,6% |
+| Cửa sổ nhãn động (120 × cycle / trung vị, kẹp 60–150): TB ngày | 98 | 142 |
+| Tỉ lệ churn @cửa sổ động | 39,1% | 45,3% |
+
+→ Chênh 14,4 điểm % ở nhãn cố định **hoàn toàn là hiện vật của cửa sổ** (tỉ lệ rời bỏ thật gần như bằng nhau); cửa sổ động thô thu còn 6,2 điểm.
+Phần còn lại do hệ số co giãn thô + khách khác nhau về tốc độ mua cá nhân. Giới hạn: "rời bỏ độc lập với ngành" là THIẾT KẾ của bộ sinh;
+tỉ lệ chu kỳ ngành lấy từ Amazon (đo thật), nhưng độ lớn tác động lên nhãn là kết quả mô phỏng.
+
+Phương án (chưa chọn): **A** cửa sổ nhãn theo chu kỳ ngành khách ưa thích (cần join `order_items` → danh mục ở product DB);
+**B** cửa sổ theo nhịp mua của CHÍNH khách (k × khoảng cách trung vị; chỉ cần `orders`, nhiễu khi ít đơn);
+**C** điểm không phụ thuộc cửa sổ: `p_alive`/kỳ vọng số lần mua của BG/NBD (λ riêng từng khách đã thấm cả hiệu ứng ngành; chỉ cần `orders`);
+**D** churn THEO NGÀNH (khách × ngành gốc) — trung thành nhất với ý "mỗi mặt hàng một tần suất", thiết kế lại lớn → hướng phát triển.
+
+### 2026-10-02 (tiếp) — "Chờ hết chu kỳ churn thì quá muộn": cửa sổ can thiệp sau khi thêm giỏ (REES46, đo thật)
+Người dùng chỉ ra 3 điều: (1) nhãn 120/180 ngày không đúng cho mọi khách vì tần suất mua khác nhau; (2) chờ đủ chu kỳ mới gắn nhãn thì **quá muộn**
+(thêm giỏ rồi không mua → hết chu kỳ → đã mua chỗ khác); (3) tín hiệu nằm ở **liên kết dữ liệu** (cart → xem SP khác → cart tiếp = đang phân vân;
+cart → thoát → vài ngày không vào lại = dấu hiệu) hơn là thông tin đơn lẻ. Điểm (1) đã đo ở mục trên. Điểm (2) đo ở đây:
+`churn_measure_cart_recovery.py`, REES46 Cosmetics, **3.570.193 episode giỏ** (lần thêm giỏ đầu của mỗi cặp user×sản phẩm, chỉ lấy episode ≥ 30 ngày trước cuối dữ liệu).
+
+| Mốc sau khi thêm giỏ | Đã mua cùng SP (tích luỹ) | Đã mua BẤT KỲ SP (tích luỹ) | Chưa mua tới mốc → % còn mua cùng SP trong 30 ngày | → % còn mua bất kỳ SP |
+|---|---:|---:|---:|---:|
+| 1 giờ | 13,3% | 18,0% | 13,9% | 37,0% |
+| 6 giờ | 16,9% | 24,5% | 10,2% | 31,6% |
+| 24 giờ | 19,3% | 29,3% | 7,4% | 27,0% |
+| 3 ngày | 21,5% | 34,5% | 4,8% | 21,1% |
+| 7 ngày | 23,1% | 39,2% | 2,9% | 15,0% |
+| 30 ngày | 25,3% | 48,3% | — | — |
+
+Đọc: 74,7% giỏ không bao giờ thành đơn (cùng SP, 30 ngày). Trong số giỏ CÓ mua lại: **52,5% trong 1 giờ, 76,3% trong 24 giờ, 91,3% trong 7 ngày**.
+Khả năng quay lại mua cùng SP rơi từ 13,9% (sau 1h) xuống 2,9% (sau 7 ngày) — giảm ~5 lần trong 1 tuần. Nhãn 120 ngày chỉ "thấy" khách khi cơ hội gần như đã mất.
+Giới hạn: 1 shop mỹ phẩm; "mua chỗ khác" không quan sát được (chỉ đo không mua lại ở chính shop này); giỏ có thể là ý định thấp (so giá, lưu tạm).
+
+**Tự đối chiếu với bằng chứng cũ (không được dùng để bác bỏ điểm 3):**
+- RetailRocket "thứ tự hành vi ΔAUC −0,0009": đo đặc trưng THỨ TỰ trên nhãn churn cấp user dài hạn (cùng loại nhãn muộn) với bảng chữ cái 3 ký hiệu → không phải phép thử giả thuyết của người dùng.
+- REES46 event study "bỏ giỏ không tăng riêng trước lần mua cuối (0,983)": đo SỐ LẦN bỏ giỏ gộp — chính là loại "thông tin đơn lẻ" bị phê bình.
+→ Giả thuyết "liên kết > đơn lẻ, neo vào sự kiện, đích ngắn hạn" **chưa được kiểm chứng**, chưa bị bác bỏ. 5 feature hành vi production đều là đếm/tỉ lệ cửa sổ 7/30 ngày, không có thứ tự và Δt.
+Dữ liệu tổng hợp KHÔNG kiểm chứng được điểm này (chính bộ sinh tạo ra hành vi → vòng tròn); chỉ dữ liệu thật có session (REES46) làm được.
+
+## 2026-10-02 (chiều) — Chốt kiến trúc dữ liệu "mỗi lớp một nguồn thật" + kiểm chứng feature huỷ đơn trên dữ liệu thật
+
+**Quyết định của chủ dự án** (sau khi chỉ ra bộ sinh phải là TRANSFORM dữ liệu thật, không phải mô phỏng tham số):
+catalog = Tiki · hành vi + giao dịch trong DB = **REES46 đa ngành 12/2019–4/2020 transform** (một sàn thật, không trộn nguồn
+thứ hai, kể cả mỹ phẩm) · tính năng nguồn không có (huỷ, review, voucher, vi hành vi) = dữ liệu phát sinh thật trên hệ thống ·
+câu hỏi nghiên cứu cho phần thiếu = thí nghiệm RIÊNG trên bộ thật có biến đó cùng khách. Bộ sinh mô phỏng chỉ còn cho unit test.
+Đối chiếu schema + 2 lỗi của nguồn REES46 (log giỏ 10–11/2019; mã ngành từ 12/2019): `docs/canvas/rees46-transform-mapping.md`.
+
+### Feature huỷ đơn — Online Retail II (`churn_cancel_feature_onlineretail.py`)
+Nguồn hành vi trong DB không ghi huỷ đơn → `cancel_rate` hằng số. Thay vì ghép huỷ đơn của người khác, kiểm chứng trên Online
+Retail II (hoá đơn 'C…' thật của cùng khách, 12/2009–12/2011). Nhãn kiểu production (≥ 2 ngày mua, không mua trong 120 ngày),
+15 mốc cắt mỗi 30 ngày, **39.224 dòng / 3.479 khách**, churn 42,3%, GroupKFold 5 theo khách. Tiêu chí đặt trước: ΔAUC > 2·std.
+
+| Model | RFM | RFM + huỷ đơn | ΔAUC | PR-AUC | Đạt? |
+|---|---:|---:|---:|---:|:-:|
+| Logistic | 0,7604 ± 0,0105 | 0,7615 ± 0,0104 | +0,0011 ± 0,0013 | 0,672 → 0,672 | ❌ |
+| Gradient Boosting | 0,7633 ± 0,0092 | 0,7634 ± 0,0099 | +0,0001 ± 0,0025 | 0,673 → 0,674 | ❌ |
+
+Đơn lẻ, feature huỷ có tín hiệu (AUC 0,56–0,63; tốt nhất `days_since_last_cancel` 0,629) nhưng **trùng thông tin với RFM**: khách
+có huỷ đơn churn ÍT hơn (34,1% so với 51,8%) vì mua nhiều thì huỷ nhiều. → Bỏ `cancel_rate` khỏi model production **không mất gì
+đo được**. Giới hạn: bán lẻ quà tặng UK (nhiều khách sỉ); 'C…' gộp huỷ và trả hàng.

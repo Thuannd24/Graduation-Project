@@ -13,6 +13,8 @@ function toSqlDatetime(date) {
 /** Insert orders theo batch, dùng `result.insertId` (id của dòng ĐẦU trong batch multi-row
  * insert — đúng với InnoDB single-connection, không có ghi đồng thời nào khác trong lúc seed)
  * để suy ra order_id cho từng order_item tương ứng mà không cần query lại. */
+const ORDER_ITEM_NAME_MAX = 200;
+
 export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
   const pool = getPool();
   const orderColumns = [
@@ -68,10 +70,14 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
         itemRows.push([
           orderId,
           item.productId,
-          item.productName,
+          // order_items.product_name là varchar(200) — bản chụp tên lúc đặt; tên Tiki dài tới 250 ký tự (34 SP).
+          String(item.productName ?? "").slice(0, ORDER_ITEM_NAME_MAX),
           item.unitPrice,
           item.quantity,
           item.subtotal,
+          item.variantId ?? null,     // hệ thống thật luôn ghi biến thể khi SP có biến thể (dữ liệu transform điền)
+          item.variantAttr ?? null,
+          item.productImage ?? null,
         ]);
       }
     });
@@ -79,7 +85,7 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
     if (itemRows.length > 0) {
       await bulkInsert(
         `${DB.ORDER}.order_items`,
-        ["order_id", "product_id", "product_name", "unit_price", "quantity", "subtotal"],
+        ["order_id", "product_id", "product_name", "unit_price", "quantity", "subtotal", "variant_id", "variant_attr", "product_image"],
         itemRows
       );
       totalItemsWritten += itemRows.length;
