@@ -2267,3 +2267,43 @@ bắt tương tác giữa các feature trình tự tốt hơn) — để ngỏ c
 
 File kết quả: `data/experiment-results/behavior_patterns/cart_sequence_early_warning.json`.
 Script: `AI/forecast-service/app/training/experiments/cart_sequence_early_warning.py`.
+
+## 2026-10-05 (tối, tiếp) — Tầng 2.2: Benchmark Rule vs AI trên dữ liệu thật
+
+Tiếp theo thứ tự ưu tiên bảo vệ đồ án (0.1 hiệu chỉnh → 0.2 sửa nhãn → 2.1 re-baseline → **2.2 benchmark
+rule vs AI**): 3 bước đầu đã xong qua việc chuyển hẳn sang dữ liệu REES46 thật (xem 2 mục trên). Con số
+2.2 cũ ("L1 path ~2 feature đạt AUC 0,93") đo trên dữ liệu synthetic cũ, không còn giá trị tham chiếu —
+chạy lại bằng `rule_benchmark_on_real_rees46.py`, gọi NGUYÊN VĂN `rule_benchmark.py::run_rule_benchmark()`
+(không viết lại logic so sánh) trên cùng panel thật 31.458 dòng / 10.501 user, nhãn orders 60 ngày.
+
+| Phương pháp | F1 | AUC | Ghi chú |
+|---|---:|---:|---|
+| Rule viết tay `days_inactive>7 AND cart_abandon>=1` (ví dụ trong feature-overview.md) | 0,187 | — | rất yếu |
+| Rule viết tay `recency>30 AND cart_abandon>=2` | 0,066 | — | rất yếu |
+| Rule viết tay `recency>90` | 0,016 | — | rất yếu |
+| Rule 1 biến tối ưu (`recency >= 4`) | 0,8179 | 0,6889 | quét lưới, chọn trên train |
+| Rule 2 biến AND tối ưu (`recency>=2 AND frequency>=2`) | 0,8187 | — (nhị phân) | |
+| Cây quyết định depth 1 | 0,8152 | 0,667 | `days_since_last_activity<=12.5` |
+| Cây quyết định depth 2 | 0,8179 | 0,7203 | |
+| **Cây quyết định depth 3 (rule TỐT NHẤT tìm được)** | **0,8245** | 0,733 | |
+| **Model LogReg + hiệu chỉnh isotonic (production)** | **0,8244** | **0,7352** | |
+
+**Phán quyết**: `f1_gap = model − rule_tốt_nhất = −0,0001`, sàn nhiễu (std F1 model) = 0,0031 →
+**model KHÔNG thắng rule tốt nhất về F1, nằm trong nhiễu**. Nhưng model có **AUC cao nhất trong mọi
+phương pháp** (0,7352, nhỉnh hơn cây sâu 3 là 0,733, và rõ ràng hơn mọi rule nông hơn) — tức khả năng
+**xếp hạng** khách theo rủi ro tốt hơn bất kỳ rule nào. Rule tốt nhất (cây sâu 3, hoặc rule 2 biến)
+chỉ trả nhãn nhị phân — **không xếp hạng được**, nên về nguyên tắc không dùng được cho phân bổ ngân
+sách voucher theo tổn thất kỳ vọng (`expected_loss = P × monetary`, cần P liên tục) dù F1 cao ngang
+model. Rule viết tay đơn giản ("vài câu if/else") thua xa cả hai (F1 0,016–0,187) — câu trả lời trực
+tiếp cho phản biện "sao không viết rule cho xong".
+
+**Đọc kết quả, đúng tinh thần đã chuẩn bị trước (roadmap "Rủi ro lớn nhất")**: đây KHÔNG phải thất bại.
+Đây là câu trả lời trung thực: *ở hệ thống này, AI không thắng rule về độ chính xác phân loại (F1) —
+cả hai đều bị trần bởi cùng 2-3 chiều thông tin hữu dụng thật (`recency`, `frequency`,
+`days_since_last_activity`) — nhưng AI thắng về NĂNG LỰC: cho xác suất liên tục để xếp hạng và phân bổ
+ngân sách, việc một rule nhị phân về nguyên tắc không làm được.* Luận điểm này không phụ thuộc AUC có
+cao hơn rule hay không, và đã có số đo thật hậu thuẫn ở cả hai vế.
+
+File kết quả: `data/experiment-results/behavior_patterns/rule_benchmark_rees46_real.json`.
+Script: `AI/forecast-service/app/training/experiments/rule_benchmark_on_real_rees46.py` (wrapper mỏng,
+gọi lại `app/training/rule_benchmark.py` gốc không sửa).
