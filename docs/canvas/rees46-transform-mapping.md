@@ -157,3 +157,17 @@ sự kiện giỏ lặp hoặc bot. Phép đo nguyên nhân bị ngắt khi phi�
 5. Thí nghiệm cảnh báo sớm theo giỏ (neo vào sự kiện giỏ dở, đích 7 ngày, so đặc trưng đơn lẻ vs liên kết).
 6. Commit các file mới (chưa commit): transform/, load-transformed.mjs, export-churn-panel.mjs, các script experiments churn_*,
    sửa writeData.mjs/simulate.mjs, docs.
+
+## 8. Phát hiện phụ (2026-10-05): `product_variants.variant_attr` rỗng toàn bộ trong DB
+Không phải lỗi transform — kiểm tra trực tiếp: cả 20.325 dòng `ecommerce_product_db.product_variants` đều có
+`variant_attr = NULL` (100%), kể cả các SP không liên quan REES46. Lỗi nằm ở bước import catalog Tiki trước đó
+(`tools/catalog-import`), ngoài phạm vi việc hôm nay — ghi nhận để xử lý riêng, không chặn việc nạp REES46.
+
+## 9. Phát hiện thứ 3 của nguồn (2026-10-05): 4 ngày mất gần hết log mua hàng
+Quét `daily_profile.py` toàn bộ 152 ngày (12/2019–4/2020): **01/01, 02/01, 20/04, 21/04/2020** có lượt mua
+tụt còn 0–3.574 (bình thường ~29.000/ngày) trong khi lượt xem và thêm giỏ vẫn bình thường — không phải nghỉ lễ
+thật (nghỉ lễ thì cả 3 loại cùng giảm), mà là lỗi ghi log phía nguồn. Chỉ 4/152 ngày (2,6%).
+Biến động theo tuần còn lại (cart/purchase 1,77–4,21 lần) nằm trong dao động bình thường của 1 cửa hàng thật,
+không phải vấn đề cần sửa.
+**Xử lý:** loại 4 ngày này khỏi dữ liệu MUA HÀNG khi transform (`BROKEN_PURCHASE_DAYS` trong `rees46_transform.py`),
+giữ nguyên view/cart các ngày đó. Không suy đoán số thay thế.

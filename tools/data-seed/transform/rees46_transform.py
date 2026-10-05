@@ -70,6 +70,11 @@ ROOT_MAP_L1 = {
 }
 FASHION = ["thoi-trang-nam", "thoi-trang-nu"]
 
+# Ngày bị LỖI GHI LOG purchase (view/cart vẫn bình thường trong ngày đó -> không phải nghỉ lễ thật, loại ra khỏi
+# nguồn mua hàng; daily_profile.py, 2026-10-05): 01-02/01/2020 (3.574 rồi 0 lượt mua, bình thường ~29.000/ngày),
+# 20-21/04/2020 (22, 29 lượt mua). Chỉ 4/152 ngày (2,6%).
+BROKEN_PURCHASE_DAYS = {"2020-01-01", "2020-01-02", "2020-04-20", "2020-04-21"}
+
 
 def h(x) -> int:
     return int.from_bytes(hashlib.blake2b(str(x).encode(), digest_size=8).digest(), "big")
@@ -246,7 +251,7 @@ def main() -> None:
     ue.to_csv(f"{out}/user_events.csv", index=False)
 
     # --- 6. đơn hàng ---
-    pur = ev[ev["event_type"] == "purchase"]
+    pur = ev[(ev["event_type"] == "purchase") & (~ev["ts"].dt.strftime("%Y-%m-%d").isin(BROKEN_PURCHASE_DAYS))]
     orders, items = [], []
     for oid, ((u, sess), g) in enumerate(pur.groupby(["uid", "user_session"], sort=False), start=1):
         total = 0.0
@@ -279,7 +284,8 @@ def main() -> None:
                   + ", ".join(f.split(".")[0] for f in args.files),
         "note": "Hành vi THẬT, chỉ ánh xạ sang schema/catalog hệ thống. Đối chiếu: docs/canvas/rees46-transform-mapping.md",
         "params": {"frac": args.frac, "fx_usd_vnd": args.fx, "now": args.now, "week_shift": weeks},
-        "excluded": "10–11/2019: ghi log giỏ lỗi (61,5% phiên có mua không có lượt thêm giỏ; 12/2019: 1,0%)",
+        "excluded": "10–11/2019: ghi log giỏ lỗi (61,5% phiên có mua không có lượt thêm giỏ; 12/2019: 1,0%); "
+                   "01-02/01/2020 và 20-21/04/2020: lượt mua gần như mất (view/cart vẫn bình thường) -> loại khỏi orders",
         "assumptions": [
             "mã ngành của nguồn 12–4 bị sai → suy lại từ tham chiếu 10–11 (id cũ / đa số SP cũ / đa số brand); không suy được → hash",
             "apparel/accessories tách nam/nữ theo hash(category_id); auto → Thiết bị số",

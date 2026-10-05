@@ -2169,3 +2169,101 @@ Retail II (hoá đơn 'C…' thật của cùng khách, 12/2009–12/2011). Nhã
 Đơn lẻ, feature huỷ có tín hiệu (AUC 0,56–0,63; tốt nhất `days_since_last_cancel` 0,629) nhưng **trùng thông tin với RFM**: khách
 có huỷ đơn churn ÍT hơn (34,1% so với 51,8%) vì mua nhiều thì huỷ nhiều. → Bỏ `cancel_rate` khỏi model production **không mất gì
 đo được**. Giới hạn: bán lẻ quà tặng UK (nhiều khách sỉ); 'C…' gộp huỷ và trả hàng.
+
+## 2026-10-05 — Re-baseline + ablation lại trên dữ liệu REES46 thật (trả lời roadmap "đừng tin 11 feature là đủ")
+
+Sau khi nạp 332.347 user / 102.004 đơn / 7.378.602 sự kiện REES46 thật vào DB (transform, không mô phỏng —
+xem `rees46-transform-mapping.md`), re-baseline lại model churn và chạy lại ablation TRÊN DỮ LIỆU THẬT thay vì
+bộ sinh giả lập 342 user cũ (nơi feature mở rộng bị sinh cố ý độc lập với nhãn → kết luận cũ có nguy cơ thiên lệch).
+
+**Thiết kế thời gian**: dữ liệu thật chỉ trải ~151 ngày (2026-05-03→2026-10-01, do nguồn REES46 giới hạn
+12/2019–4/2020) → không đủ cho lưới cutoff production (`[270,240,210,180,150]` ngày + nhãn 120 ngày, cần ≥390
+ngày). Dùng `label_window_days=60`, 5 mốc cắt 2026-05-18→2026-08-02 (cách đều, ≥15 ngày lịch sử tối thiểu),
+`label_version` đổi tên để kích hoạt bypass so sánh AUC của `_retrain_gate()` (nhãn khác nhãu cũ, không so được).
+Panel builder viết lại bằng pandas-trong-RAM (`fast_panel_builder.py`/`fast_candidates_builder.py`) vì SQL tổng
+hợp gốc (COUNT DISTINCT, correlated subquery) mất 25-35+ phút/truy vấn trên MariaDB qua Docker/WSL2 kể cả có
+index — đã xác minh khớp 100% công thức gốc (rfm.py/behavior.py/candidates.py nguyên văn) trên mẫu 8 user qua
+truy vấn SQL trực tiếp theo từng user.
+
+**Re-baseline (`retrain_on_real_rees46.py`)**: panel 31.458 dòng / 10.501 user (lọc ≥2 đơn DELIVERED từ 774.301).
+AUC = 0,7354 ± 0,0138, F1 = 0,7643, precision 0,7969 / recall 0,7344. Qua `_retrain_gate`, model mới đã lên
+production (`churn_classifier` version `20261005T152145239424`). KMeans silhouette 0,3484, chênh churn-rate
+46,95 điểm % (At Risk 84,26% vs VIP 37,31%) — phân khúc vẫn tách biệt rõ trên dữ liệu thật.
+
+**Ablation (`ablation_on_real_rees46.py`)**, cùng thiết kế thời gian, cùng panel size (xác nhận nhất quán nội bộ):
+
+| Block | ΔAUC | Sàn nhiễu | Kết luận |
+|---|---:|---:|:-:|
+| gap_dispersion | +0,0016 | 0,0138 | LOẠI (trong nhiễu) |
+| noise_control | +0,0032 | | LOẠI |
+| session | +0,0007 | | LOẠI |
+| abandon_shape | +0,0004 | | LOẠI |
+| review / voucher / temporal_rhythm | 0,0000 | | LOẠI |
+| **all_candidates** (gộp 7 block, 28 feature) | +0,0044 | | LOẠI |
+
+`gap_dispersion` — feature được yêu cầu ưu tiên thử lại — **vẫn LOẠI trên dữ liệu thật**, với biên độ còn nhỏ
+hơn ΔAUC của `noise_control` (chính là đối chứng âm cố ý vô nghĩa). Kết luận cũ "11 feature production là đủ"
+**được xác nhận lại trên dữ liệu thật**, không còn là nghi vấn do cách bộ sinh giả lập cũ cố tình làm feature
+mở rộng độc lập với nhãn.
+
+**Permutation importance** (11 feature baseline): `days_since_last_activity` áp đảo (auc_drop=0,1441 ± 0,011),
+`recency` (0,0134), `frequency` (0,0045), `category_diversity_viewed` (0,0032) — 7 feature còn lại auc_drop ≈ 0.
+**L1 path**: 3 feature (`category_diversity_viewed`, `days_since_last_activity`, `recency`) đã đạt AUC 0,7316 —
+sát baseline 11-feature (0,7354); tăng lên 6-9 feature chỉ lãi thêm ~0,003-0,005 AUC.
+
+**Đọc chung**: model churn hiện tại gần như hoàn toàn dựa vào ĐỘ MỚI hoạt động (ngày + sự kiện), không phải
+cường độ/đa dạng hành vi. Điều này củng cố thêm cho giả thuyết "liên kết dữ liệu > thông tin đơn lẻ" ghi ở
+2026-10-02: nếu tín hiệu sớm thật sự nằm trong THỨ TỰ sự kiện (cart→xem lại→cart lại = do dự; cart→im lặng =
+rời bỏ) chứ không phải đếm/tỉ lệ gộp, thì 11 feature RFM+behavior hiện tại — dù "đủ" theo nghĩa ablation — có
+thể đang bỏ lỡ đúng loại tín hiệu sớm mà nhãn 60-120 ngày không bắt được. Việc tiếp theo: thí nghiệm cảnh báo
+sớm theo chuỗi sự kiện giỏ hàng (xem roadmap, đích ngắn hạn ~7 ngày thay vì nhãn 60/120 ngày dài).
+
+File kết quả đầy đủ: `data/experiment-results/behavior_patterns/ablation_rees46_real.json` và
+`retrain_rees46_real.json`.
+
+## 2026-10-05 (tối) — Kiểm chứng "liên kết dữ liệu > thông tin đơn lẻ" ở đích ngắn hạn (24h→7 ngày)
+
+Ablation cùng ngày (mục trên) xác nhận 11 feature RFM/behavior đủ cho nhãn 60 ngày — nhưng đó không
+bác bỏ được giả thuyết của chủ dự án (2026-10-02: "đợi hết chu kỳ churn thì quá muộn, dấu hiệu rời bỏ
+diễn ra ngay trước đó, bài toán là sự LIÊN KẾT dữ liệu chứ không phải thông tin đơn lẻ"), vì nhãn 60
+ngày quá xa để đo tín hiệu sớm. Đổi hẳn đơn vị quan sát để kiểm đúng phạm vi giả thuyết:
+`cart_sequence_early_warning.py`.
+
+**Thiết kế**: đơn vị = "episode giỏ" (lần `ADD_TO_CART`/`UPDATE_CART_QTY` đầu tiên của 1 cặp user-item,
+trên dữ liệu REES46 thật trong DB — không dùng nguồn rời, giữ đúng "mỗi lớp một nguồn thật"). Điểm
+quyết định = cart_time + 24h (quan sát 1 ngày đầu). Nhãn = có mua lại ĐÚNG item đó trong (quyết định,
+cart+7 ngày] hay không (mốc 7 ngày lấy từ `cart_recovery.json`: 91,3% lượt quay lại xảy ra trong 7
+ngày). 133.404 episode (sau khi cắt bỏ phần sát cuối dữ liệu để tránh cụt), tỉ lệ dương 5,61% (thấp vì
+phần lớn chuyển đổi nhanh trong 24h đầu đã bị loại khỏi nhãn theo thiết kế — chỉ còn "chuyển đổi
+muộn" là mục tiêu). GroupKFold 5 theo user, MinMaxScaler + LogisticRegression(class_weight='balanced')
+— cùng pipeline `train.py`/`ablation.py`.
+
+| Bộ feature | AUC | Ghi chú |
+|---|---:|---|
+| Set A — đếm/gộp 24h (4 feature, không thứ tự) | 0,6321 ± 0,0091 | kiểu feature production hiện tại, đổi cửa sổ |
+| **Set A+B — thêm 7 feature liên kết/trình tự** | **0,6486 ± 0,0047** | |
+| Set A + đối chứng âm ngẫu nhiên (hash) | 0,6314 ± 0,0095 | không đổi — xác nhận sàn nhiễu đúng |
+
+ΔAUC(B) = **+0,0165**, vượt sàn nhiễu (std Set A = 0,0091) → **GIỮ (vượt sàn nhiễu)** — lần đầu tiên
+trong toàn bộ lịch sử ablation của đồ án một block mở rộng vượt tiêu chí này. Đối chứng âm không nhích
+(−0,0007), loại khả năng đây là nhiễu may mắn.
+
+**Permutation importance** (bộ A+B): `viewed_same_item_again` (quay lại xem CHÍNH sản phẩm đã thêm
+giỏ — do dự nhưng còn quan tâm) mạnh nhất, auc_drop=0,0422 — vượt mọi feature đếm/gộp trong Set A.
+Tiếp theo `last_event_is_other_view` (0,0255 — đang so sánh SP khác) và `gap_dispersion_hours` (0,0138
+— nhịp sự kiện bất thường). `last_event_is_recart` và `silence_full_window` gần như vô dụng riêng lẻ
+(trùng thông tin với feature khác trong block).
+
+**Đọc kết quả**: nhãn càng dài (60-120 ngày) thì cấu trúc trình tự càng bị "trung bình hoá" mất —
+nhưng ở đích ngắn hạn, bám sát đúng sự kiện (giỏ hàng), trình tự sự kiện cho tín hiệu thêm THẬT, đo
+được bằng số, không phải trực giác. Đây là bằng chứng ủng hộ hướng "cảnh báo sớm theo sự kiện" thay
+vì (hoặc bổ sung cho) model churn cấp-user dài hạn hiện tại — phù hợp để đưa vào báo cáo đồ án như một
+phát hiện có giá trị học thuật, không phụ thuộc vào việc model production 60 ngày có đổi hay không.
+
+**Giới hạn cần nói thẳng**: AUC 0,65 là tín hiệu thật nhưng còn yếu (so với AUC ~0,74 của model churn
+cấp-user) — phù hợp cho mục đích NGHIÊN CỨU/minh hoạ luận điểm, chưa đề xuất thay thế model production
+hiện tại trong phạm vi đồ án. Dùng cùng logistic regression đơn giản, chưa thử model phi tuyến (có thể
+bắt tương tác giữa các feature trình tự tốt hơn) — để ngỏ cho phần "hướng phát triển" của báo cáo.
+
+File kết quả: `data/experiment-results/behavior_patterns/cart_sequence_early_warning.json`.
+Script: `AI/forecast-service/app/training/experiments/cart_sequence_early_warning.py`.
