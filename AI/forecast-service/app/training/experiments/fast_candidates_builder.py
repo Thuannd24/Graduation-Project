@@ -49,7 +49,9 @@ def _abandon_shape(events: pd.DataFrame, orders_by_user: dict, as_of: pd.Timesta
     if cart.empty:
         return pd.DataFrame(columns=BLOCK_ABANDON_SHAPE)
     recent_mask = cart["created_at"] >= as_of - pd.Timedelta(days=ABANDON_WINDOW_DAYS)
-    grace = pd.Timedelta(hours=ABANDON_GRACE_HOURS)
+    # np.timedelta64 (không phải pd.Timedelta) — tránh lỗi dtype searchsorted tuỳ phiên bản numpy
+    # (xem fast_compute.py cùng hàm, đã xác nhận lỗi thật 2026-10-06).
+    grace = np.timedelta64(ABANDON_GRACE_HOURS, "h")
     times, users = cart["created_at"].to_numpy(), cart["user_id"].to_numpy()
     not_covered = np.zeros(len(cart), dtype=bool)
     for i in range(len(cart)):

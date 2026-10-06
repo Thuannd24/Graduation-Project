@@ -174,7 +174,7 @@ async def trigger_risk_scan():
         result = await risk_scheduler.run_risk_scan()
         return result
     except Exception as e:
-        logger.error(f"Error triggering risk scan: {e}")
+        logger.error(f"Error triggering risk scan: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 import numpy as np

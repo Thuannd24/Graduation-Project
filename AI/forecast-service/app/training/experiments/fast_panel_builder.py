@@ -82,7 +82,9 @@ def rfm_features(orders: pd.DataFrame, as_of: pd.Timestamp) -> pd.DataFrame:
 def _cart_abandon_count(cart_ev: pd.DataFrame, orders_by_user: dict[str, np.ndarray]) -> pd.Series:
     """NOT EXISTS order với o.created_at BETWEEN event.created_at AND event.created_at + grace — per sự kiện,
     tra theo đúng user (không giới hạn as_of cho phía orders, giữ nguyên hành vi SQL gốc)."""
-    grace = pd.Timedelta(hours=ABANDON_GRACE_HOURS)
+    # np.timedelta64 (không phải pd.Timedelta) — tránh lỗi dtype của numpy.datetime64 + pd.Timedelta
+    # tuỳ phiên bản numpy (xem fast_compute.py cùng hàm, đã xác nhận lỗi thật 2026-10-06).
+    grace = np.timedelta64(ABANDON_GRACE_HOURS, "h")
     abandoned = np.zeros(len(cart_ev), dtype=bool)
     times = cart_ev["created_at"].to_numpy()
     users = cart_ev["user_id"].to_numpy()

@@ -2463,3 +2463,65 @@ không kiểm tra bằng cách gọi HTTP thật (thay vì chỉ gọi hàm Pyth
 
 File mới: `shared_common/features/fast_compute.py`, `shared_common/features/feature_store.py`.
 File sửa: `risk_scoring.py`, `risk_scheduler.py`, `app/api/endpoints/forecast.py`.
+
+## 2026-10-06 (tiếp) — E2E thật: tìm & sửa 2 bug production, xác nhận risk-scan chạy trọn vòng
+
+Tiếp tục yêu cầu "làm hết cho hoàn thiện 100%" (trong phạm vi AI service, đã thống nhất không khởi
+động toàn bộ 13 service BE vì ngoài phạm vi). Kích hoạt thật `POST /api/v1/risk/trigger-scan` (không
+chỉ gọi hàm Python) — phát hiện liên tiếp nhiều vấn đề, tất cả đã xử lý xong:
+
+### Vấn đề 0 — Môi trường: VM WSL2 giới hạn chỉ 2GB RAM
+`.wslconfig` giới hạn `memory=2GB` cho TOÀN BỘ VM chạy MariaDB+Kafka+Elasticsearch+Keycloak+MongoDB+
+Redis+PostgreSQL+forecast-service — quá nhỏ, gây swap-thrashing (đo được `free -h` trong VM: còn
+<1GB free, swap 85%) khiến Docker Desktop tự treo (lỗi 500 trên chính API quản lý container), không
+liên quan gì tới SQL hay code. **Xử lý tạm thời** (theo yêu cầu "tăng tạm rồi cài lại cũ"): tăng lên
+7GB để chạy test, dừng tạm 4 container không liên quan churn AI (Elasticsearch/Keycloak/MongoDB/
+PostgreSQL) để giải phóng thêm RAM, test xong khôi phục `.wslconfig` về 2GB và bật lại 4 container.
+**Khuyến nghị lâu dài** (chưa áp dụng, để chủ dự án quyết định): tăng vĩnh viễn lên 6-8GB — máy có
+15.9GB, mức 2GB thấp hơn 4 lần so với mặc định của WSL2 (50% RAM máy).
+
+### Bug #1 — `run_risk_scan()` chặn event loop, làm Kafka consumer nền rớt heartbeat
+Hàm `async def run_risk_scan()` chạy thẳng code đồng bộ (DB/pandas, vài phút) bên trong, chặn asyncio
+event loop khiến `behavior_consumer` (coroutine nền cùng loop) bỏ lỡ heartbeat Kafka → mất coordinator.
+**Sửa**: tách toàn bộ phần tính toán đồng bộ thành `_compute_selection()`, gọi qua
+`starlette.concurrency.run_in_threadpool` — chỉ phần publish Kafka (thật sự async) chạy trên event
+loop chính. (Lưu ý: fix này chưa loại bỏ hẳn hiện tượng heartbeat rớt do GIL vẫn bị chiếm trong lúc
+tính toán CPU nặng ở thread khác — nhưng không còn gây lỗi sai kết quả, xem Bug #2.)
+
+### Bug #2 — lỗi THẬT, đã sửa: `np.searchsorted` lệch dtype tuỳ phiên bản numpy
+Lỗi `'<' not supported between instances of 'int' and 'Timestamp'` lặp lại ổn định qua HTTP thật
+nhưng KHÔNG xảy ra khi gọi cùng logic trực tiếp bằng script (môi trường dev dùng numpy 2.4.6/pandas
+3.0.6, trong khi container production dùng numpy 2.2.6/pandas 2.3.3 — cài theo `requirements.txt`
+pin cũ hơn). Traceback đầy đủ (lấy được sau khi thêm `exc_info=True` vào log lỗi) trỏ đúng
+`fast_compute.py::_cart_abandon_count`, tại `np.searchsorted`. Nguyên nhân: `t1 = t0 + grace` với
+`t0` là `numpy.datetime64` (từ `.to_numpy()`) và `grace = pd.Timedelta(...)` — phép cộng này có thể
+trả về `pd.Timestamp` thay vì giữ `numpy.datetime64` tuỳ phiên bản numpy/pandas xử lý interop; khi đó
+`np.searchsorted(mảng_datetime64, t1=Timestamp)` lỗi nội bộ numpy (so sánh int64 thô của mảng với đối
+tượng Timestamp). **Sửa**: đổi `grace` thành `np.timedelta64(ABANDON_GRACE_HOURS, "h")` (numpy thuần,
+không bao giờ tạo `pd.Timestamp`) — áp dụng cho cả 3 nơi có cùng pattern: `fast_compute.py` (production),
+`fast_panel_builder.py` và `fast_candidates_builder.py` (script thực nghiệm, phòng ngừa nếu sau này
+chạy trên môi trường numpy khác).
+
+**Bài học quan trọng**: bug này image/môi trường-cụ-thể — không bao giờ lộ ra khi test bằng script
+độc lập trên máy dev (numpy mới hơn), CHỈ lộ ra khi test đúng qua container production thật. Đây là lý
+do không được coi "đã test bằng Python trực tiếp" là tương đương "đã test qua production" khi có khác
+biệt phiên bản thư viện giữa 2 môi trường.
+
+### Kết quả cuối — verify E2E thật qua HTTP, không giả lập
+```
+Risk scan done: 332.349 user chấm điểm -> 17.737 trong dân số hợp lệ (>= 2 đơn DELIVERED) ->
+10.563 at-risk -> 0 đủ điều kiện (có bỏ giỏ hàng trong 24h) -> 0 published
+(ngân sách 50, bỏ qua 0 người xếp sau) [ngưỡng=0.38, model đã hiệu chỉnh=True]
+```
+0 published là **đúng theo dữ liệu**, không phải lỗi: dữ liệu REES46 đóng băng tới 2026-10-01, "giờ"
+thật đã là 2026-10-06 (5 ngày sau) — quy tắc thời điểm ("vừa bỏ giỏ trong 24h gần NOW() thật") không
+có gì để khớp trên dữ liệu lịch sử tĩnh. Đây là giới hạn đã biết của việc test bằng dữ liệu transform
+lịch sử, không phải bug — ghi vào known_limitations nếu cần.
+
+**Kết luận**: toàn bộ chuỗi tính feature (feature store) → chấm điểm → lọc dân số → lọc theo thời điểm
+→ xếp hạng ngân sách → gọi Kafka producer (code path, dù 0 item để publish lần này) đã chạy trọn vẹn,
+đúng, không lỗi, qua đúng con đường HTTP thật mà production/FE sẽ gọi — không phải suy luận gián tiếp
+nữa.
+
+File sửa: `shared_common/features/fast_compute.py`, `risk_scheduler.py`, `forecast.py` (thêm
+`exc_info=True`), `fast_panel_builder.py`, `fast_candidates_builder.py`.

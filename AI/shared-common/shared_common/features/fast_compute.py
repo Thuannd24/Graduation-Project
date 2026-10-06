@@ -84,8 +84,15 @@ def rfm_features(orders: pd.DataFrame, as_of: pd.Timestamp) -> pd.DataFrame:
 
 def _cart_abandon_count(cart_ev: pd.DataFrame, orders_by_user: dict[str, np.ndarray]) -> pd.Series:
     """NOT EXISTS order với o.created_at BETWEEN event.created_at AND event.created_at + grace —
-    per sự kiện, tra theo đúng user (không giới hạn as_of cho phía orders, giữ nguyên hành vi SQL gốc)."""
-    grace = pd.Timedelta(hours=ABANDON_GRACE_HOURS)
+    per sự kiện, tra theo đúng user (không giới hạn as_of cho phía orders, giữ nguyên hành vi SQL gốc).
+
+    `grace` CỐ Ý là `np.timedelta64` (không phải `pd.Timedelta`) — `numpy.datetime64 + pd.Timedelta`
+    có thể trả về `pd.Timestamp` thay vì `numpy.datetime64` tuỳ phiên bản numpy/pandas (đã đo: numpy
+    2.2.6 trong container production lỗi `'<' not supported between instances of 'int' and
+    'Timestamp'` ngay tại `np.searchsorted` bên dưới, dù numpy 2.4.6 ở máy dev không lỗi — xem
+    churn-risk-log.md mục 2026-10-06). Cộng `np.timedelta64` giữ nguyên dtype `datetime64`, không bao
+    giờ tạo ra đối tượng `pd.Timestamp` lẫn vào mảng numpy thuần."""
+    grace = np.timedelta64(ABANDON_GRACE_HOURS, "h")
     abandoned = np.zeros(len(cart_ev), dtype=bool)
     times = cart_ev["created_at"].to_numpy()
     users = cart_ev["user_id"].to_numpy()
