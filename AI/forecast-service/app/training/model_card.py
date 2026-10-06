@@ -18,16 +18,26 @@ from app.training.train import MODEL_NAME_CLASSIFIER, MODEL_NAME_KMEANS
 
 # Giới hạn đã biết, tĩnh — không suy ra được từ metadata (là kết luận định tính từ quá trình làm,
 # không phải con số). Giữ NGẮN và trỏ về log để không lặp lại toàn bộ phân tích ở đây.
+# Cập nhật 2026-10-05: chuyển hẳn từ bộ sinh synthetic sang transform REES46 THẬT (nạp vào DB) —
+# xem docs/canvas/rees46-transform-mapping.md + churn-risk-log.md mục 2026-10-02/2026-10-05.
 KNOWN_LIMITATIONS = [
-    "Dữ liệu seed là tổng hợp (synthetic) — metric đo việc model có phục hồi được cấu trúc sinh dữ "
-    "liệu hay không, không phải đo việc dự đoán đúng hành vi người thật.",
+    "Hành vi/giao dịch là REES46 THẬT (transform, không mô phỏng) nhưng chỉ phủ 12/2019–4/2020 "
+    "(~151 ngày) của MỘT sàn khác, ánh xạ sang catalog Tiki thật theo quy tắc xác định (danh mục + "
+    "giá gần nhất) — không phải người dùng Tiki thật mua hàng Tiki thật.",
     "Chỉ áp dụng cho khách có ≥2 đơn DELIVERED (khớp dân số huấn luyện) — chấm điểm ngoài dân số này "
     "là ngoại suy.",
-    "Mốc cắt lùi về ≥150 ngày (do cửa sổ nhãn 120 ngày) — model học từ dữ liệu 5–9 tháng trước.",
-    "Mở rộng đặc trưng đã thử và không thành công (3 khối, kể cả đối chứng âm, đều không vượt sàn "
-    "nhiễu) — xem docs/canvas/churn-risk-log.md mục Tầng 2.2/ablation.",
+    "Cửa sổ nhãn 60 ngày (không phải 120 — đổi vì dữ liệu thật chỉ trải ~151 ngày), mốc cắt lùi "
+    "61–137 ngày trước cuối dữ liệu.",
+    "Mở rộng đặc trưng (7 khối, kể cả gap_dispersion) đã thử lại trên dữ liệu THẬT ở nhãn 60 ngày, "
+    "vẫn không vượt sàn nhiễu — xem churn-risk-log.md mục 2026-10-05/ablation. Ở đích NGẮN HẠN khác "
+    "(24h→7 ngày, cấp episode giỏ hàng chứ không phải nhãn churn cấp-user) feature trình tự CÓ vượt "
+    "sàn nhiễu (+0,0165 AUC) — hai bài toán khác nhau, không suy luận chéo giữa hai kết luận này.",
     "Hệ số Logistic Regression KHÔNG đọc được như độ quan trọng do đa cộng tuyến — dùng permutation "
     "importance trong `feature_importance` thay thế.",
+    "Rule-based tốt nhất (cây quyết định sâu 3, dò lưới) gần ngang F1 với model (chênh trong sàn "
+    "nhiễu) trên dữ liệu thật — model chỉ vượt trội rõ ở khả năng XẾP HẠNG liên tục (AUC cao nhất mọi "
+    "phương pháp; phân bổ ngân sách theo tổn thất kỳ vọng cứu thêm 12,75×–60,27× doanh thu rủi ro so "
+    "với rule nhị phân) — xem churn-risk-log.md Tầng 2.2/3.1.",
     "Chưa có vòng phản hồi từ kết quả campaign (model không học từ việc voucher có hiệu quả hay "
     "không) — xem docs/canvas/churn-risk-roadmap.md Tầng 4.",
 ]

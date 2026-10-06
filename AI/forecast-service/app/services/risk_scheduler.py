@@ -10,6 +10,7 @@ from app.kafka.risk_producer import RiskEventProducer
 from app.services.risk_scoring import ModelNotTrainedError, effective_threshold, risk_scoring_service
 from app.training.labels import MIN_DELIVERED_ORDERS_FOR_CHURN
 from shared_common.config import shared_settings
+from shared_common.features import feature_store
 from shared_common.features.behavior import has_recent_abandoned_cart
 from shared_common.logger import get_logger
 from shared_common.pool import get_engine
@@ -48,6 +49,11 @@ class RiskScheduler:
         N người đáng cứu nhất trong số thực sự đủ điều kiện.
         """
         try:
+            # Tính lại feature store TRƯỚC khi chấm điểm, đúng chu kỳ scan — đây là nơi "làm mới
+            # dữ liệu" cho toàn bộ chu kỳ tiếp theo (admin endpoint gọi predict() giữa 2 lần scan
+            # sẽ đọc lại đúng bản vừa refresh ở đây, không tự tính SQL chậm). Xem feature_store.py.
+            engine = get_engine(shared_settings.DB_NAME)
+            feature_store.refresh(engine)
             df = risk_scoring_service.predict()
         except ModelNotTrainedError as e:
             logger.warning(f"Risk scan skipped: {e}")

@@ -8,7 +8,18 @@
 > [`churn-risk-implementation-plan.md`](churn-risk-implementation-plan.md) = plan Phase 0–7 đã xong ·
 > [`churn-risk-log.md`](churn-risk-log.md) = timeline thực tế + mọi số đo · **file này** = đi đâu tiếp.
 >
-> Mọi con số dưới đây là **đo thật** trên run `20260728T094356024384`, không phải mục tiêu ước lượng.
+> Mọi con số dưới đây là **đo thật** trên run `20260728T094356024384`, không phải mục tiêu ước lượng —
+> **TRỪ các mục đã đánh dấu ✅ bên dưới**, nơi con số đã được đo lại trên dữ liệu thật mới hơn.
+
+> **Cập nhật 2026-10-05 — đã chuyển hẳn từ bộ sinh synthetic sang transform REES46 THẬT** (nạp vào DB,
+> xem `rees46-transform-mapping.md` + `churn-risk-log.md` mục 2026-10-02/2026-10-05). Việc này giải
+> quyết nhiều mục bên dưới "miễn phí" (không phải vì đã làm đúng việc đó, mà vì tiền đề của nó đổi):
+> `session_id` giờ THẬT (§1.1 hết áp dụng — nguồn REES46 có session thật, không cần sửa write-path nữa,
+> nhưng bug write-path ở `behavior_consumer.py:45` SẼ vẫn ảnh hưởng dữ liệu MỚI ghi sau khi demo chạy
+> thật — chưa kiểm tra lại); nhãn đổi thành orders/60 ngày (§0.2, ép buộc bởi dữ liệu thật chỉ trải
+> ~151 ngày, không phải do lưới phương án đã quét như kế hoạch gốc); re-baseline + ablation + rule vs
+> AI + phân bổ ngân sách (§2.1/2.2/3.1) đã chạy lại trên dữ liệu thật. **Tầng 1 (làm giàu bộ sinh bằng
+> tham số ẩn) gần như không còn ý nghĩa** — không còn bộ sinh để làm giàu, trừ phần dùng cho unit test.
 
 ---
 
@@ -48,7 +59,11 @@ số này phụ thuộc vấn đề A** — phải đo lại sau khi hiệu ch�
 
 ## Tầng 0 — Sửa nền đo lường (CHẶN ĐƯỜNG, làm trước tiên)
 
-### 0.1. Kiểm định & hiệu chỉnh xác suất  ⬅ *ưu tiên cao nhất toàn roadmap*
+### 0.1. Kiểm định & hiệu chỉnh xác suất  ⬅ *ưu tiên cao nhất toàn roadmap* — ✅ XONG (đã có từ trước, dùng lại cho dữ liệu thật)
+
+Model production (`train.py::_fit_calibrated`) đã bọc `CalibratedClassifierCV(isotonic)`; re-baseline
+2026-10-05 trên dữ liệu thật dùng đúng pipeline này (`calibration_method: isotonic` trong model card).
+Không chạy lại lưới so sánh 3 phương án lần nữa — isotonic đã được chọn và áp dụng, xem bên dưới.
 
 **Vì sao trước cả việc sửa nhãn:** đây là việc duy nhất có thể làm cho một kết quả **đã báo cáo** trở
 thành sai. Cụ thể: mô hình fit với `class_weight='balanced'` ước lượng hậu nghiệm dưới tiên nghiệm
@@ -75,7 +90,11 @@ không". **Tiêu chí DỪNG:** nếu nguyên trạng đã calibrated tốt (ECE
 **Rủi ro cần nói thẳng:** kết quả có thể làm **giảm** con số 3,7–7,7×. Vẫn phải làm — một con số
 sai có lợi cho mình thì tệ hơn là không có số nào.
 
-### 0.2. Định nghĩa lại nhãn churn
+### 0.2. Định nghĩa lại nhãn churn — ✅ XONG (ép buộc bởi dữ liệu thật, không qua lưới phương án gốc)
+
+Nhãn mới: `source=orders`, cửa sổ **60 ngày** (không phải lưới 60/90/120 như kế hoạch — dữ liệu thật
+chỉ trải ~151 ngày nên 60 ngày là lựa chọn duy nhất còn đủ ≥5 mốc cắt có nghĩa), `min_delivered_orders=2`.
+`label_version=churn_label_v3_orders_60d_min2_rees46real`. Xem `churn-risk-log.md` mục 2026-10-05.
 
 **Việc:** chạy chẩn đoán **không phá hoại** trước khi đổi production — tính nhãn ở lưới phương án
 (cửa sổ 60/90/120 ngày) × (chỉ đơn hàng / đơn hoặc hoạt động) × (mọi user / chỉ user ≥2 đơn
@@ -106,9 +125,14 @@ nghĩa.
 
 ---
 
-## Tầng 1 — Sửa nguồn dữ liệu (mở khoá phần lớn roadmap feature)
+## Tầng 1 — Sửa nguồn dữ liệu (mở khoá phần lớn roadmap feature) — phần lớn hết áp dụng, xem cập nhật đầu file
 
-### 1.1. Sửa write-path `session_id` (lỗi thật, không phải thiếu seed)
+### 1.1. Sửa write-path `session_id` (lỗi thật, không phải thiếu seed) — dữ liệu LỊCH SỬ hết áp dụng, write-path CHƯA kiểm tra lại
+
+REES46 transform đã nạp `session_id` thật (từ `user_session` gốc) cho toàn bộ dữ liệu hành vi hiện có
+trong DB — không còn NULL hàng loạt. Nhưng đây là dữ liệu NẠP SẴN (batch), không đi qua
+`behavior_consumer.py`; nếu hệ thống chạy thật và ghi event MỚI, bug dưới đây (hardcode `None`) vẫn còn
+nguyên, CHƯA kiểm tra lại trong phiên 2026-10-05. Giữ nguyên mô tả gốc:
 
 [`behavior_consumer.py:45`](../../AI/forecast-service/app/kafka/behavior_consumer.py#L45) hardcode
 `"session_id": None` cho `ProductViewedEvent` kèm ghi chú *"chưa track session cho guest"*. Đường
@@ -120,7 +144,13 @@ chung `session:{sid}:history`).
 
 **Tiêu chí thành công:** tỉ lệ `session_id` NULL trên event MỚI < 5%; `events_per_session` > 1.
 
-### 1.2. Làm giàu bộ sinh dữ liệu — **bằng tham số ẩn, không bằng dán nhãn**
+### 1.2. Làm giàu bộ sinh dữ liệu — **bằng tham số ẩn, không bằng dán nhãn** — ❌ HẾT Ý NGHĨA (2026-10-05)
+
+Không còn bộ sinh synthetic để làm giàu cho production nữa — `seed.mjs`/`simulate.mjs` chỉ còn dùng cho
+unit test (xem `project_data_architecture_one_source_per_layer` trong memory). review/voucher/discount
+vẫn thiếu trong nguồn thật REES46 — xử lý theo nguyên tắc "mỗi lớp một nguồn thật": để trống thật (model
+không dùng được) hoặc kiểm chứng RIÊNG trên nguồn thật khác có đúng feature đó (đã làm cho huỷ đơn, xem
+`churn_cancel_feature_onlineretail.py`), không sinh tham số ẩn giả nữa. Giữ bảng gốc để tham khảo lịch sử:
 
 Đây là nút cổ chai thật của mọi việc mở rộng feature. Nguyên tắc bắt buộc, giống Phase 3 gốc: thêm
 **tham số ẩn** cho mỗi user và để cấu trúc *tự xuất hiện*; **không** sinh feature tương quan trực
@@ -143,11 +173,15 @@ thông tin đã có (kiểm tra bằng tương quan Spearman > 0.9 với feature
 
 ## Tầng 2 — Mô hình hoá lại (chỉ có nghĩa sau Tầng 0)
 
-### 2.1. Re-baseline toàn bộ trên nhãn mới
-Chạy lại `train` + `ablation` + 3 block ứng viên đã có. Kỳ vọng trung thực: **AUC sẽ thấp hơn 0.9379**
-— đó là dấu hiệu bài toán đã thật, không phải hồi quy chất lượng.
+### 2.1. Re-baseline toàn bộ trên nhãn mới — ✅ XONG (2026-10-05, trên dữ liệu THẬT)
+AUC thật: **0,7354 ± 0,0138** (thấp hơn 0,9379 cũ đúng như dự đoán — bài toán đã thật). 7 khối ứng viên
+(kể cả `gap_dispersion`) chạy lại, vẫn LOẠI. Chi tiết: `churn-risk-log.md` mục 2026-10-05.
 
-### 2.2. Benchmark Rule vs AI (hướng 1 — giờ mới đo được)
+### 2.2. Benchmark Rule vs AI — ✅ XONG (2026-10-05, trên dữ liệu THẬT) — không ưu tiên đào sâu thêm
+Model KHÔNG thắng rule tốt nhất (cây sâu 3) về F1 (0,8244 vs 0,8245, trong nhiễu) nhưng AUC cao nhất
+mọi phương pháp (0,7352). **User (2026-10-05): khoảng cách này là bình thường ở quy mô dữ liệu/độ phức
+tạp hiện tại, không cần đào sâu thêm** — xem feedback trong memory. Dùng Tầng 3.1 (dưới) làm luận điểm
+chính thay vì phần này. Nội dung kế hoạch gốc giữ nguyên để tham khảo:
 **Cách làm đúng:** quét **lưới ngưỡng** để lấy **rule TỐT NHẤT** theo F1, rồi mới so với model. Tự
 chọn một rule yếu rồi đánh bại nó thì người phản biện sẽ nói baseline được dựng để thua.
 
@@ -157,10 +191,15 @@ chứng ablation đang **chống lại** kỳ vọng của hướng 1. Sau khi s
 đúng không. **Tiêu chí DỪNG:** nếu rule tốt nhất vẫn tiệm cận model, **chấp nhận và công bố** — rồi
 chuyển trọng tâm luận điểm sang Tầng 3 (nơi AI thắng về *năng lực*, không phải về *độ chính xác*).
 
-### 2.3. So sánh thuật toán (Random Forest / XGBoost / LightGBM)
-**Chỉ làm sau 2.1 và 2.2.** Với ~500 user độc lập, mô hình phi tuyến nhiều tham số rất dễ overfit;
-grouped CV ± std sẽ phát hiện. **Tiêu chí thành công:** ΔAUC > sàn nhiễu. Nếu không đạt, ghi lại là
-"đã thử, LR đủ" — đó là kết luận hợp lệ và có giá trị (bảo vệ được lựa chọn LR ban đầu).
+### 2.3. So sánh thuật toán — ✅ XONG, MỞ RỘNG TỐI ĐA (2026-10-05, trên dữ liệu THẬT)
+Theo yêu cầu người dùng: cài thêm `xgboost`/`lightgbm`/`catboost` vào venv, thử **10 thuật toán** (kể cả
+LR) trải 70 năm phát triển ML, mới nhất → cũ nhất: CatBoost/LightGBM/XGBoost/GradientBoosting-sklearn/
+RandomForest **đều nhỉnh hơn LR (+0,0014 đến +0,0082) nhưng không vượt sàn nhiễu** (0,0138); SVM RBF/
+Decision Tree đơn/KNN/Gaussian Naive Bayes **đều TỆ HƠN LR rõ rệt** (−0,012 đến −0,026). **Kết luận
+cuối, đã thử hết khả năng hợp lý: Logistic Regression là lựa chọn tốt nhất trong nhóm dễ giải thích,
+nhóm boosting hiện đại không đủ hơn để đáng đánh đổi.** Chi tiết đầy đủ: `churn-risk-log.md` mục
+2026-10-05 (Tầng 2.3 mở rộng). `xgboost`/`lightgbm`/`catboost` chỉ dùng cho script thực nghiệm này,
+KHÔNG thêm vào `requirements.txt` production (model production vẫn là Logistic Regression).
 
 ### 2.3b. Mốc xác suất kinh điển: BG/NBD + Gamma-Gamma (thêm 2026-10-01)
 Mô hình chuẩn của ngành TMĐT cho "khách còn hoạt động không" (P(alive)) và giá trị mua tiếp (CLV), chỉ dùng
@@ -181,7 +220,12 @@ giải thích, ít bất định hệ số hơn, và "chứng minh N feature là
 
 Đây là nơi luận điểm "vì sao cần AI" vững nhất, **không phụ thuộc** việc AI có chính xác hơn rule.
 
-### 3.1. Phân bổ ngân sách theo tổn thất kỳ vọng — mở rộng cái đã có
+### 3.1. Phân bổ ngân sách theo tổn thất kỳ vọng — mở rộng cái đã có — ✅ ĐO LẠI TRÊN DỮ LIỆU THẬT (2026-10-05)
+**Số mạnh nhất hiện có cho luận điểm Tầng 3**, đo lại trên dữ liệu thật: hệ số nhân `by_expected_loss`
+so với `by_probability` = **60,27× (K=25) → 33,53× (K=50) → 18,38× (K=100) → 12,75× (K=200)** — CAO HƠN
+số cũ 3,7–7,7× đo trên synthetic. Chi tiết + giới hạn (phụ thuộc giả định fx): `churn-risk-log.md` mục
+2026-10-05 (Tầng 3.1). Phần "mở rộng chi phí" bên dưới (phụ thuộc Tầng 4) vẫn CHƯA làm.
+
 Đã chạy: `expected_loss = P × monetary`, cắt theo `RISK_MAX_VOUCHERS_PER_SCAN`. **Mở rộng:** đưa
 **chi phí** vào bài toán — `giá trị kỳ vọng = P × monetary × P(voucher hiệu quả) − chi phí voucher`.
 Chừng nào chưa có Tầng 4 thì `P(voucher hiệu quả)` là hằng số giả định — **phải khai báo rõ là giả
@@ -211,6 +255,19 @@ cần code thêm**. Việc còn lại là thiết kế campaign mẫu + đo.
 **Tiêu chí DỪNG:** nếu ánh xạ vẫn là bảng tra do người chọn, **nói thẳng như vậy** — chỉ có phân khúc
 là học được, còn chính sách là do người. Chính sách *học được* cần Tầng 4.
 
+**Xác minh 2026-10-05 (đọc trực tiếp code, không chỉ roadmap):** khối building-block đã có THẬT và
+dùng được ngay, không cần code thêm — `FE/.../campaigns/constants.js`: `Trigger_Event_ChurnRisk` →
+`Condition_ChurnRiskTier` (rẽ nhánh theo NGƯỠNG % xác suất rời bỏ, `BranchEditor.jsx`) → route tới
+nhiều loại action khác nhau (`Action_IssueVoucher_Percent/Fixed/Freeship`, `Action_Loyalty_Point`,
+`Action_Upgrade_MemberRank`, `Action_Send_Email`). Admin kéo-thả trong UI ra được đúng luồng "rủi ro
+cao → voucher mạnh, rủi ro vừa → freeship" mà không cần ai code thêm.
+Hai điểm CHƯA có (để không hiểu nhầm là đã xong hẳn):
+1. Chưa có campaign MẪU nào dựng sẵn — `DEFAULT_NODES` hiện chỉ là khung rỗng ("Bắt đầu → Kết thúc").
+   Việc còn lại chỉ là thao tác UI/seed data (vài phút), không phải thiếu engineering.
+2. `Condition_ChurnRiskTier` rẽ nhánh theo **ngưỡng % người tự đặt** (vd ≥80%), KHÔNG rẽ theo đúng
+   4 phân khúc KMeans (VIP/New/At Risk/Hibernating) như mô tả gốc ở trên — vẫn là "rule trên con số
+   AI", khớp đúng tiêu chí DỪNG đã nêu: phân khúc học được, ngưỡng/chính sách vẫn do người chọn.
+
 ### 3.3. Cá nhân hoá mức ưu đãi
 **Phụ thuộc cứng vào Tầng 4** (cần uplift: ai *sẽ tự quay lại* vs ai *cần voucher mới quay lại*).
 Làm trước Tầng 4 thì chỉ là rule trên `discount_dependency` — đúng thứ đang cố chứng minh là kém.
@@ -218,7 +275,7 @@ Làm trước Tầng 4 thì chỉ là rule trên `discount_dependency` — đún
 
 ---
 
-## Tầng 4 — Vòng phản hồi (giá trị dài hạn lớn nhất, đo được ít nhất hiện nay)
+## Tầng 4 — Vòng phản hồi (giá trị dài hạn lớn nhất, đo được ít nhất hiện nay) — phần THIẾT KẾ (đủ cho bảo vệ đồ án) coi như đã có ở 4 bước dưới; phần THỰC NGHIỆM để sau đồ án
 
 **Trạng thái trung thực:** *không thể đánh giá* trong phạm vi đồ án. Dữ liệu synthetic thì phải tự
 viết luôn model phản hồi rồi AI học lại chính nó (vòng tròn hoàn toàn); dữ liệu thật chỉ có ~10 user
@@ -238,25 +295,27 @@ cáo dưới mục "hướng phát triển" **kèm thiết kế cụ thể**, kh
 
 ## Tầng 5 — Vận hành (làm dần, không chặn ai)
 
-| Việc | Vì sao | Tiêu chí |
-|---|---|---|
-| Giám sát drift feature | Model chỉ predict, không refit; phân bố lệch đi thì im lặng sai | Cảnh báo khi PSI/KS của feature vượt ngưỡng |
-| Lịch retrain + gate | Hiện train chạy tay | Retrain tự động, **chỉ thay model nếu AUC mới ≥ AUC cũ − std** |
-| Model card | Trả lời "model nào, feature version nào, metric bao nhiêu, giới hạn gì" | 1 trang sinh tự động từ `run_log.jsonl` |
-| Sửa `FutureWarning` | `rfm.py:62`, `behavior.py:133` sẽ đổi hành vi ở pandas mới | Không còn warning |
-| Bỏ endpoint dữ liệu giả | `/admin/analytics/{anomalies,segmentation}` đang trả **dữ liệu hardcode** | Nối vào số thật hoặc xoá — giữ lại là rủi ro trình bày số giả như số thật |
+| Việc | Vì sao | Tiêu chí | Trạng thái |
+|---|---|---|---|
+| Giám sát drift feature | Model chỉ predict, không refit; phân bố lệch đi thì im lặng sai | Cảnh báo khi PSI/KS của feature vượt ngưỡng | Chưa làm |
+| Lịch retrain + gate | Hiện train chạy tay | Retrain tự động, **chỉ thay model nếu AUC mới ≥ AUC cũ − std** | Gate đã có (`_retrain_gate`), lịch tự động chưa làm |
+| Model card | Trả lời "model nào, feature version nào, metric bao nhiêu, giới hạn gì" | 1 trang sinh tự động từ `run_log.jsonl` | ✅ Đã có (`model_card.py`), `known_limitations` vừa cập nhật khớp dữ liệu thật 2026-10-05 |
+| Sửa `FutureWarning` | `rfm.py:62`, `behavior.py:133` sẽ đổi hành vi ở pandas mới | Không còn warning | ✅ Đã sửa từ trước (dùng `np.nan` thay `pd.NA`, xem comment tại chỗ) |
+| Bỏ endpoint dữ liệu giả | `/admin/analytics/{anomalies,segmentation}` đang trả **dữ liệu hardcode** | Nối vào số thật hoặc xoá — giữ lại là rủi ro trình bày số giả như số thật | ✅ Đã xử lý: `segmentation` nối số thật (`risk_scoring_service.predict()`); `anomalies`/`demand-forecasting` giữ mock nhưng có cờ `is_demo_data`+`note` rõ ràng, FE hiển thị banner |
 
 ---
 
 ## 3. Phân tầng theo mục tiêu
 
-**Cần cho bảo vệ đồ án (thứ tự này, không đổi):**
+**Cần cho bảo vệ đồ án (thứ tự này, không đổi) — ✅ 0.1/0.2/2.1/2.2/3.1/5(model card+endpoint) ĐÃ XONG
+(2026-10-05, trên dữ liệu thật):**
 0.1 hiệu chỉnh xác suất → 0.2 sửa nhãn → 2.1 re-baseline → 2.2 benchmark rule vs AI →
-3.1 phân bổ ngân sách (đo lại) → 4 kiến trúc feedback loop (thiết kế, không thực nghiệm) →
-5 model card + xoá endpoint giả.
+3.1 phân bổ ngân sách (đo lại) → **4 kiến trúc feedback loop (thiết kế, không thực nghiệm) — CÒN LẠI,
+việc tiếp theo** → 5 model card + xoá endpoint giả.
 
-**Dài hạn thật (sau đồ án):** 1.1 + 1.2 làm giàu dữ liệu → 2.3 so sánh thuật toán → 2.4 dọn feature →
-3.2 NBA → 4 thực nghiệm feedback loop → 3.3 cá nhân hoá mức ưu đãi → 5 drift + retrain gate.
+**Dài hạn thật (sau đồ án):** 1.1 (write-path session_id khi có event mới) + 1.2 (hết ý nghĩa, xem đầu
+file) → 2.3 so sánh thuật toán → 2.4 dọn feature → 3.2 NBA → 4 thực nghiệm feedback loop →
+3.3 cá nhân hoá mức ưu đãi → 5 drift + retrain gate tự động.
 
 **KHÔNG làm, và vì sao:**
 

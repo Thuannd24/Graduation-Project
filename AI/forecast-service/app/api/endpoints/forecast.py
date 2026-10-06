@@ -13,7 +13,10 @@ from app.training.label_diagnostics import run_label_diagnostics
 from app.training.rule_benchmark import run_rule_benchmark
 from app.training.model_card import build_model_card
 from app.state import behavior_producer, risk_scheduler
+from shared_common.config import shared_settings
+from shared_common.features import feature_store
 from shared_common.logger import get_logger
+from shared_common.pool import get_engine
 
 logger = get_logger(__name__)
 router = APIRouter()
@@ -273,7 +276,11 @@ def get_admin_segmentation():
         )
     rows.sort(key=lambda r: -r["count"])
 
-    return {"data": rows, "is_demo_data": False, "note": None}
+    computed_at = feature_store.last_computed_at(get_engine(shared_settings.DB_NAME))
+    return {
+        "data": rows, "is_demo_data": False, "note": None,
+        "computed_at": computed_at.isoformat() if computed_at is not None else None,
+    }
 
 
 @router.post("/public/behavior/events")

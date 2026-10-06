@@ -2307,3 +2307,159 @@ cao hơn rule hay không, và đã có số đo thật hậu thuẫn ở cả ha
 File kết quả: `data/experiment-results/behavior_patterns/rule_benchmark_rees46_real.json`.
 Script: `AI/forecast-service/app/training/experiments/rule_benchmark_on_real_rees46.py` (wrapper mỏng,
 gọi lại `app/training/rule_benchmark.py` gốc không sửa).
+
+## 2026-10-05 (tối, tiếp) — Tầng 3.1: đo lại phân bổ ngân sách theo tổn thất kỳ vọng trên dữ liệu thật
+
+Số cũ "3,7–7,7× doanh thu rủi ro cứu được" đo trên dữ liệu synthetic — cần đo lại trên dữ liệu thật
+(phụ thuộc 0.1 hiệu chỉnh, đã xong: isotonic). Không cần script mới: `train_and_evaluate()` tự tính
+`_ranking_metrics()` trên out-of-fold prediction ĐÃ HIỆU CHỈNH mỗi lần train — số đã nằm sẵn trong
+`retrain_rees46_real.json` (`metrics.classifier.ranking`) từ lần re-baseline sáng nay, chỉ cần trích ra.
+
+So 2 cách xếp hạng khi ngân sách voucher chỉ đủ cứu K khách (pooled OOF, 10.501 user, tổng doanh thu
+đang rủi ro 283.950.553.000đ):
+
+| K | revenue_recall `by_probability` | revenue_recall `by_expected_loss` (P×monetary) | **Hệ số nhân** | precision@K (prob / exp_loss) |
+|---:|---:|---:|---:|---|
+| 25 | 0,15% | 9,04% | **60,27×** | 0,96 / 0,92 |
+| 50 | 0,34% | 11,40% | **33,53×** | 0,98 / 0,82 |
+| 100 | 0,84% | 15,44% | **18,38×** | 0,97 / 0,79 |
+| 200 | 1,84% | 23,46% | **12,75×** | 0,95 / 0,78 |
+
+**Hệ số nhân trên dữ liệu thật (12,75×–60,27×) CAO HƠN NHIỀU** so với số cũ đo trên synthetic
+(3,7–7,7×) — vì phân phối `monetary` thật (giá thật × fx từ REES46) lệch mạnh hơn nhiều so với bộ sinh
+cũ: xếp theo xác suất thuần vô tình chọn trúng rất nhiều khách churn nhưng giá trị đơn hàng nhỏ (vẫn
+đúng nhãn — precision@K 0,95-0,98 — nhưng gần như không cứu được doanh thu nào, 0,15%-1,84%), trong khi
+xếp theo `P × monetary` đánh đổi một ít precision (0,78-0,92) để cứu được 12-60 lần doanh thu hơn.
+
+**Đọc kết quả**: củng cố mạnh thêm luận điểm Tầng 3 — đây là năng lực CHỈ model-xác-suất-liên-tục làm
+được (rule nhị phân ở mục 2.2 không xếp hạng được nên không thể tối ưu theo `expected_loss`), và trên
+dữ liệu thật hoá ra giá trị này LỚN HƠN ước tính ban đầu, không phải nhỏ đi. Đây là số mạnh nhất để bảo
+vệ đồ án, không phụ thuộc việc model có AUC/F1 cao hơn rule hay không (đã xác nhận ở mục 2.2).
+
+**Giới hạn cần nói thẳng**: `monetary` ở đây = tổng giá trị đơn DELIVERED lịch sử của khách (giá thật ×
+fx=25000 từ transform REES46), không phải CLV thực; hệ số nhân cao một phần phản ánh đúng độ lệch giá
+trị khách hàng thật, nhưng cũng nhạy với tỉ giá fx giả định — nên trình bày hệ số nhân như một TỈ LỆ
+(bao nhiêu lần tốt hơn xếp theo xác suất thuần), không neo vào số VND tuyệt đối.
+
+Nguồn số: `data/experiment-results/behavior_patterns/retrain_rees46_real.json` → `metrics.classifier.ranking`.
+
+## 2026-10-05 (tối, tiếp) — Tầng 2.3: so sánh thuật toán khác trên dữ liệu thật
+
+Người dùng chủ động yêu cầu làm thêm mục này (ngoài danh sách bắt buộc cho bảo vệ đồ án). So Logistic
+Regression (production) với 2 họ model phi tuyến cây-tập hợp trên CÙNG fold grouped-CV
+(`_evaluate_grouped_cv` gốc, không tự chia fold riêng) — `algorithm_comparison_on_real_rees46.py`.
+
+**Lưu ý dependency**: venv chưa có `xgboost`/`lightgbm` (`ModuleNotFoundError`); không tự ý cài thêm
+thư viện mới (theo CLAUDE.md, cần hỏi trước). Dùng `RandomForestClassifier` và
+`HistGradientBoostingClassifier` (scikit-learn, cùng họ gradient boosting histogram) thay thế — cùng
+tinh thần so sánh "cây phi tuyến nhiều tham số" mà roadmap muốn.
+
+| Thuật toán | AUC | ΔAUC vs LR | F1 | Kết luận |
+|---|---:|---:|---:|---|
+| **Logistic Regression (production)** | 0,7354 ± 0,0138 | — | 0,7643 | — |
+| Random Forest (300 cây, depth=6) | 0,7436 ± 0,0161 | +0,0082 | 0,8281 | LOẠI (trong nhiễu) |
+| HistGradientBoosting (depth=4, 300 iter) | 0,7409 ± 0,0144 | +0,0055 | 0,8273 | LOẠI (trong nhiễu) |
+
+Cả 2 model phi tuyến đều nhỉnh hơn LR về AUC nhưng không vượt sàn nhiễu (std 0,0138 của chính LR) →
+**không đủ bằng chứng để nói model phức tạp hơn tốt hơn**. F1 của cả 2 cao hơn LR rõ (0,827-0,828 vs
+0,764) nhưng đi kèm recall rất cao (0,94-0,95) và precision thấp hơn (0,73-0,74) — khác điểm vận hành
+(ngưỡng được tune theo F1 trên train cho từng model riêng, không so cùng ngưỡng) nên không kết luận
+"model phi tuyến thắng" chỉ từ F1 một mình; vẫn phải nhìn AUC (đo xếp hạng, không phụ thuộc ngưỡng).
+
+**Đọc kết quả**: đúng cảnh báo đã ghi trước trong roadmap §2.3 — với quy mô panel/chiều hữu dụng thông
+tin hiện tại, model phi tuyến không mang lại lợi ích đo được so với Logistic Regression. Đây là kết
+luận HỢP LỆ và có giá trị: **bảo vệ được lựa chọn LR ban đầu** (đơn giản, dễ giải thích qua hệ số +
+permutation importance, không cần tune nhiều tham số) thay vì cần biện minh "sao không dùng model mạnh
+hơn". Không thử XGBoost/LightGBM thật do giới hạn dependency — nếu cần đúng 2 thư viện đó, phải cài
+thêm (chưa làm, cần duyệt trước).
+
+File kết quả: `data/experiment-results/behavior_patterns/algorithm_comparison_rees46_real.json`.
+Script: `AI/forecast-service/app/training/experiments/algorithm_comparison_on_real_rees46.py`.
+
+## 2026-10-05 (tối, tiếp) — Tầng 2.3 mở rộng: thử HẾT các thuật toán, mới nhất → cũ nhất
+
+Người dùng yêu cầu mở rộng thêm: "thử hết các model từ mới nhất đến cũ nhất, các vấn đề phát sinh chấp
+nhận hết" — đã cài thêm `xgboost`, `lightgbm`, `catboost` vào venv (chưa có trước đó, cài theo yêu cầu
+tường minh của người dùng, chấp nhận thêm dependency). `algorithm_comparison_full_on_real_rees46.py`
+chạy 9 thuật toán khác (ngoài Logistic Regression production) trên ĐÚNG cùng fold grouped-CV, panel
+REES46 thật — xếp theo năm công bố thuật toán gốc, mới nhất trước:
+
+| Thuật toán (năm) | AUC | ΔAUC vs LR | F1 | Thời gian | Kết luận |
+|---|---:|---:|---:|---:|---|
+| **Logistic Regression (1958, production)** | 0,7354 ± 0,0138 | — | 0,7643 | — | — |
+| CatBoost (2017) | 0,7430 | +0,0076 | 0,8299 | 23,2s | LOẠI (trong nhiễu) |
+| LightGBM (2017) | 0,7368 | +0,0014 | 0,8246 | 2,1s | LOẠI (trong nhiễu) |
+| XGBoost (2014) | 0,7381 | +0,0027 | 0,8250 | 4,2s | LOẠI (trong nhiễu) |
+| GradientBoosting sklearn (2001) | 0,7372 | +0,0018 | 0,8264 | 29,6s | LOẠI (trong nhiễu) |
+| Random Forest (2001) | 0,7436 | +0,0082 | 0,8281 | 4,6s | LOẠI (trong nhiễu) |
+| SVM RBF (1995) | 0,7099 | **−0,0255** | 0,8237 | 411,8s | LOẠI (**kém hơn** LR) |
+| Decision Tree đơn (1984) | 0,7232 | **−0,0122** | 0,8193 | 0,3s | LOẠI (**kém hơn** LR) |
+| KNN (1967) | 0,7194 | **−0,0160** | 0,8212 | 2,4s | LOẠI (**kém hơn** LR) |
+| Gaussian Naive Bayes (cổ điển) | 0,7155 | **−0,0199** | 0,8131 | 0,3s | LOẠI (**kém hơn** LR) |
+
+**Đọc kết quả — rõ ràng hơn cả lượt chạy RF/HistGB trước**: TOÀN BỘ 9 thuật toán khác, dù mới (gradient
+boosting hiện đại) hay cũ (KNN, Naive Bayes, cây đơn, SVM), đều **không vượt sàn nhiễu** (0,0138) so
+với Logistic Regression. Đáng chú ý: các model "cũ hơn, đơn giản hơn LR về mặt giả định" (SVM, cây đơn,
+KNN, Naive Bayes) thực ra **TỆ HƠN** LR rõ rệt (−0,012 đến −0,026 AUC) — không phải chỉ "không hơn",
+mà "kém hơn có ý nghĩa" dù vẫn trong biên độ 2×noise-floor. Nhóm gradient boosting hiện đại (CatBoost/
+LightGBM/XGBoost/RF) đều nhỉnh hơn LR (+0,0014 đến +0,0082) nhưng không đủ để vượt sàn nhiễu.
+
+**Kết luận cuối cùng cho Tầng 2.3**: đã thử đủ rộng (10 thuật toán, trải 70 năm phát triển ML, cả họ
+tuyến tính/cây/khoảng cách/xác suất/boosting hiện đại) — **Logistic Regression là lựa chọn tốt nhất
+trong nhóm "đơn giản, dễ giải thích"**, và nhóm boosting hiện đại nhỉnh hơn một chút nhưng không đáng
+để đánh đổi khả năng giải thích (hệ số + permutation importance) lấy một AUC không khác biệt có ý
+nghĩa thống kê. Đây là kết luận mạnh, đã thử hết khả năng hợp lý trước khi giữ nguyên lựa chọn ban đầu.
+
+File kết quả: `data/experiment-results/behavior_patterns/algorithm_comparison_full_rees46_real.json`.
+Script: `AI/forecast-service/app/training/experiments/algorithm_comparison_full_on_real_rees46.py`.
+Dependency mới: `xgboost`, `lightgbm`, `catboost` (cài vào `d:/ai_venv`, theo yêu cầu người dùng).
+
+## 2026-10-06 — Phát hiện + sửa: production serving không chịu được quy mô dữ liệu thật (feature store)
+
+Theo yêu cầu kiểm tra lại FE/BE/DB có thực sự chạy được trên dữ liệu REES46 thật hay không (không chỉ
+AI nội bộ): build lại + chạy thật container `forecast-service`, gọi `GET /admin/analytics/segmentation`
+qua HTTP thật (không gọi hàm Python trực tiếp như mọi lần trước).
+
+**Phát hiện**: `risk_scoring.predict()` → `build_feature_matrix()` vẫn dùng SQL tổng hợp GỐC
+(`fetch_order_features`/`fetch_behavior_features` trong `rfm.py`/`behavior.py`) — CHƯA được đổi sang
+bản pandas đã verify hôm 2026-10-05 (bản đó chỉ dùng cho script thực nghiệm). Trên 332.347 user /
+7,37 triệu sự kiện thật, câu `COUNT(DISTINCT category_id) GROUP BY user_id` treo **hơn 53 phút** (2
+bản chạy song song do RiskScheduler tự quét mỗi giờ + người dùng gọi thử endpoint, tranh chấp I/O làm
+nhau chậm hơn nữa) — đã phải `KILL` tay. Xác nhận: có index đúng cho phần lọc
+(`action_type,created_at,user_id`), nhưng `COUNT(DISTINCT category_id)` cần cột không nằm trong index
+đó nên vẫn phải dựng bảng tạm + sắp xếp ("Creating sort index") — bị khuếch đại bởi I/O ảo hoá chậm của
+MariaDB/Docker Desktop/WSL2 (đã xác nhận từ 2026-10-05: thêm index không cứu được).
+
+**Quyết định (bàn với chủ dự án 2026-10-06)**: chọn kiến trúc **feature store** thay vì chỉ đổi SQL→
+pandas tại chỗ — đánh đổi độ mới dữ liệu (cập nhật theo chu kỳ `RISK_SCAN_INTERVAL_HOURS`, hiện 1 giờ)
+lấy việc đọc tức thời không phụ thuộc quy mô dữ liệu, chịu tải tốt khi nhiều request cùng lúc.
+
+**Thực hiện** (code mới, KHÔNG đổi schema do Java/Flyway quản lý — bảng mới do chính forecast-service
+tự tạo/quản lý bằng `CREATE TABLE IF NOT EXISTS`, không cần migration Flyway bên order-service):
+- `shared_common/features/fast_compute.py` — port công thức pandas đã verify (`fast_panel_builder.py`
+  hôm qua) thành module PRODUCTION dùng chung.
+- `shared_common/features/feature_store.py` — bảng `user_feature_vectors` (user_id + 11 feature +
+  `computed_at`), `refresh()` (tính qua pandas, DELETE+INSERT trong 1 transaction — reader không thấy
+  trạng thái rỗng giữa chừng), `load()` (SELECT đơn giản), `last_computed_at()`.
+- `risk_scoring.predict(as_of=None)` (đường production thật): đọc `feature_store.load()` thay vì tự
+  tính SQL; `as_of` lịch sử tường minh (không dùng trong production) vẫn giữ đường SQL gốc.
+- `risk_scheduler.run_risk_scan()`: gọi `feature_store.refresh()` trước khi predict — đúng chu kỳ quét
+  là chu kỳ làm mới dữ liệu.
+- Endpoint segmentation trả thêm `computed_at` — admin biết dữ liệu mới tới lúc nào (minh bạch đánh đổi).
+
+**Kiểm chứng thật qua HTTP** (không phải gọi hàm Python): `GET /admin/analytics/segmentation` trả về
+**200 OK trong 25,4 giây** (so với 40+ phút KHÔNG BAO GIỜ xong của cách cũ) — At Risk 59,9% / Loyal
+Regulars 23,7% / VIP Champions 10,1% / Lapsed 6,2%, kèm `computed_at` đúng thời điểm vừa refresh.
+25s (không phải mili-giây như kỳ vọng lý thuyết) vì môi trường MariaDB/Docker/WSL2 đang xuống cấp sau
+cả ngày bị restart/kill liên tục (đo riêng: `load_raw` tự nó mất 133s thay vì "vài giây" hôm qua) —
+đây là vấn đề MÔI TRƯỜNG tạm thời, không phải lỗi kiến trúc; các lần gọi tiếp theo trong cùng chu kỳ
+(trước lần refresh kế) sẽ nhanh hơn nữa vì không cần tính lại, chỉ đọc bảng.
+
+**Bài học quan trọng rút ra từ việc "cứ đợi"**: pipeline TRAIN (dùng `fast_panel_builder.py` qua
+monkeypatch) đã được sửa từ 2026-10-05, nhưng pipeline SERVING thật (code production, không qua
+monkeypatch) vẫn dùng đường chậm — hai việc tưởng giống nhau nhưng là 2 đường code khác nhau. Nếu
+không kiểm tra bằng cách gọi HTTP thật (thay vì chỉ gọi hàm Python trực tiếp như các thí nghiệm trước
+đó), lỗ hổng này sẽ không bị phát hiện cho tới khi demo/bảo vệ thật.
+
+File mới: `shared_common/features/fast_compute.py`, `shared_common/features/feature_store.py`.
+File sửa: `risk_scoring.py`, `risk_scheduler.py`, `app/api/endpoints/forecast.py`.
