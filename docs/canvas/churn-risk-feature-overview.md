@@ -4,6 +4,13 @@
 > [`churn-risk-implementation-plan.md`](churn-risk-implementation-plan.md) (kế hoạch triển khai
 > theo phase, dành cho lúc code). File này để giải thích tính năng cho người đọc sau (báo cáo,
 > bảo vệ đồ án), tập trung vào **AI được dùng chính xác ở đâu**.
+>
+> **Cập nhật toàn bộ 2026-10-06.** Mọi số liệu trong bản này đo trên **dữ liệu hành vi THẬT**
+> (REES46 — một sàn TMĐT thật, 12/2019–4/2020, transform vào đúng schema hệ thống), không còn là
+> bộ sinh tổng hợp (synthetic) như các bản trước. Toàn bộ pipeline từ chấm điểm tới phát voucher đã
+> được xác minh chạy thật qua HTTP (không chỉ gọi hàm Python), tìm và sửa 2 lỗi production thật
+> trong quá trình đó. Số liệu cũ (bộ sinh) được giữ lại ở cuối mỗi mục dạng trích dẫn khi có giá trị
+> so sánh phương pháp.
 
 ## 1. Tính năng làm gì (góc nhìn người dùng cuối)
 
@@ -28,14 +35,16 @@ product-service / order-service  ──publish──▶  Kafka
                                                       ▼
                                         forecast-service (Python)
                                         ┌─────────────────────────────┐
-                                        │ behavior_consumer.py        │  ghi Redis (lịch sử xem,
-                                        │ (ghi nhận hành vi thô)       │  dùng chung với recs-service)
-                                        └─────────────────────────────┘  + bảng user_events (MySQL)
+                                        │ behavior_consumer.py        │  ghi bảng user_events
+                                        │ (ghi nhận hành vi thô)       │  (MySQL) + Redis (recs-service)
+                                        └─────────────────────────────┘
                                                       │
-                                        (định kỳ, KHÔNG mỗi request)
+                                        (định kỳ, mỗi chu kỳ scan — KHÔNG mỗi request)
                                                       ▼
                                         ┌──────────────────────────────────────┐
                                         │ risk_scheduler.py                     │
+                                        │  → feature_store.refresh()            │  tính trước 11 đặc
+                                        │    (pandas, vài giây–vài phút)        │  trưng, lưu bảng riêng
                                         │  → risk_scoring.predict()             │ ★★ AI Ở ĐÂY (mục 3) ★★
                                         │  tầng 0: dân số ≥2 đơn DELIVERED      │ (khớp dân số train)
                                         │  tầng 1: segment "At Risk" + xác suất │ ← AI
@@ -61,6 +70,10 @@ product-service / order-service  ──publish──▶  Kafka
                                   Voucher / Email cá nhân hóa cho user
 ```
 
+`feature_store.refresh()` là phần mới thêm 2026-10-06 (xem mục 3.7) — tính trước 11 đặc trưng bằng
+pandas rồi lưu vào bảng `user_feature_vectors`, thay vì để `risk_scoring.predict()` tự chạy SQL
+tổng hợp mỗi lần gọi (cách cũ treo 25–40+ phút trên quy mô dữ liệu thật, xem mục 3.7).
+
 ## 3. AI được dùng chính xác ở đâu — KHÔNG ở đâu khác
 
 Đây là điểm quan trọng nhất khi giải thích tính năng: **chỉ 1 bước trong toàn bộ pipeline là AI
@@ -69,7 +82,8 @@ thật (machine learning tự học từ dữ liệu)**, mọi bước còn lạ
 | Bước | File | Có phải AI không? |
 |---|---|---|
 | Ghi nhận hành vi (xem SP, thêm giỏ) | `ProductController.java`, `CartServiceImpl.java` | ❌ Chỉ là ghi log (ETL) |
-| Đưa hành vi vào Redis/DB | `AI/forecast-service/app/kafka/behavior_consumer.py` | ❌ Chỉ copy dữ liệu, không tính toán |
+| Đưa hành vi vào DB | `AI/forecast-service/app/kafka/behavior_consumer.py` | ❌ Chỉ copy dữ liệu, không tính toán |
+| Tính trước 11 đặc trưng, lưu bảng | `AI/shared-common/shared_common/features/feature_store.py` | ❌ Tổng hợp/thống kê thuần, không học |
 | **Tính điểm rủi ro rời bỏ** | `AI/forecast-service/app/training/train.py` + `app/services/risk_scoring.py` | ✅ **CHỈ ĐÂY** |
 | Lọc điều kiện kích hoạt (có bỏ giỏ hàng gần đây) | `AI/forecast-service/app/services/risk_scheduler.py` | ❌ Rule tay (`if... then...`) |
 | Publish sự kiện, tìm campaign, chạy Camunda | `risk_producer.py`, `PromotionKafkaConsumer.java`, `CampaignTriggerService.java` | ❌ Automation/workflow engine thuần |
@@ -77,31 +91,34 @@ thật (machine learning tự học từ dữ liệu)**, mọi bước còn lạ
 ### 3.1. Cơ chế AI cụ thể: 2 mô hình học máy phối hợp
 
 **Mô hình 1 — KMeans clustering (không giám sát):** tự nhóm user thành 4 cụm hành vi dựa trên
-**11 đặc trưng** (không phải rule tay `if recency > 30 ngày`). Việc **gán nhãn** cho cụm thì dùng
-chính `churn_label` đo được: cụm có **tỉ lệ churn thực đo cao nhất** được gọi `At Risk`, 3 cụm còn
-lại đặt tên theo hạng giá trị (`VIP Champions` → `Loyal Regulars` → `Lapsed`). Đo thực:
+**11 đặc trưng** (không phải rule tay `if recency > 30 ngày`). Việc **gán nhãn** cho cụm dùng chính
+`churn_label` đo được: cụm có **tỉ lệ churn thực đo cao nhất** được gọi `At Risk`, 3 cụm còn lại đặt
+tên theo hạng giá trị. Đo thực trên dữ liệu REES46 thật (10.501 user):
 
-| Phân khúc | Số dòng | **Tỉ lệ churn đo được** | monetary TB | recency TB |
+| Phân khúc | Số user | **Tỉ lệ churn đo được** | monetary TB (VNĐ) | recency TB (ngày) |
 |---|---|---|---|---|
-| **At Risk** | 262 | **0.4618** | 111.598.531 | **62.9** |
-| Lapsed | 360 | 0.4139 | 101.402.514 | 53.8 |
-| VIP Champions | 549 | 0.1439 | 238.873.286 | 26.4 |
-| Loyal Regulars | 266 | 0.1053 | 218.180.801 | 15.9 |
+| **At Risk** | 8.570 | **0,8426** | 32.416.654 | **50,5** |
+| Loyal Regulars | 10.265 | 0,6711 | 40.570.520 | 19,5 |
+| Lapsed | 5.523 | 0,5602 | 15.175.844 | 16,2 |
+| VIP Champions | 7.100 | 0,3731 | 75.312.825 | 11,0 |
 
-Nhóm `At Risk` có tỉ lệ churn **4,4×** nhóm `Loyal Regulars` (chênh lệch 0.3565) — nên việc dùng
-`segment` làm cổng lọc là **có cơ sở đo được**, không phải phỏng đoán. Ranh giới tự dịch chuyển theo
-phân bố dữ liệu thật, không cố định trong code.
-
-> Cách gán nhãn cũ (so trung bình từng cụm với trung bình toàn cục, rồi khớp với 4 "archetype" tự vẽ)
-> **đã bị loại sau khi đo thấy nó sai**: nó từng gán nhãn `New Customers` cho nhóm giá trị **cao
-> nhất**, và đẩy `At Risk` vào nhóm giá trị **thấp nhất** → phát voucher sai đối tượng. Lý do: các
-> archetype đó giả định tồn tại nhóm "chưa từng mua", vốn không còn sau khi siết dân số (mục 3.3).
-> Panel huấn luyện **có nhãn**, nên gán theo tỉ lệ churn đo được thì không cần đoán.
+Nhóm `At Risk` có tỉ lệ churn **2,26×** nhóm `VIP Champions` (chênh lệch 46,95 điểm %), silhouette
+0,3484 — nên việc dùng `segment` làm cổng lọc là **có cơ sở đo được**, không phải phỏng đoán. Ranh
+giới tự dịch chuyển theo phân bố dữ liệu thật, không cố định trong code.
 
 **Mô hình 2 — Logistic Regression (có giám sát) + hiệu chỉnh xác suất:** dự đoán **xác suất** user sẽ
-churn (0.0–1.0), train trên nhãn sinh theo temporal split (xem mục 3.3) — cho phép đánh giá bằng
-precision/recall/AUC, thứ mà rule tay không có. Xác suất được **hiệu chỉnh** (mục 3.5) vì bản thô bị
+churn (0,0–1,0), train trên nhãn sinh theo temporal split (xem mục 3.3) — cho phép đánh giá bằng
+precision/recall/AUC, thứ mà rule tay không có. Xác suất được **hiệu chỉnh** (isotonic) vì bản thô bị
 lệch hệ thống, và toàn bộ tầng quyết định (xếp hạng theo tổn thất kỳ vọng) dựa trên xác suất này.
+
+**Kết quả grouped CV (5 fold, tách user + nhân quả thời gian), model đang chạy production:**
+
+| Chỉ số | Giá trị |
+|---|---|
+| AUC | **0,7354 ± 0,0138** |
+| F1 | 0,7643 |
+| Precision / Recall | 0,7969 / 0,7344 |
+| Ngưỡng cắt đề xuất (thang đã hiệu chỉnh) | 0,38 |
 
 11 đặc trưng đầu vào (định nghĩa 1 lần duy nhất tại
 `AI/shared-common/shared_common/features/`, dùng chung cho cả 2 model):
@@ -111,251 +128,208 @@ lệch hệ thống, và toàn bộ tầng quyết định (xếp hạng theo t�
 | Từ đơn hàng (`orders`) | recency, frequency, monetary, avg_order_value, cancel_rate, discount_dependency |
 | Từ hành vi (`user_events`) | recent_view_count, days_since_last_activity, cart_abandon_count, view_to_cart_conversion_rate, category_diversity_viewed |
 
-### 3.2. Vì sao 2 model, không phải 1 rule if-else — **đo bằng số, không lập luận suông**
+**Đã thử mở rộng thêm 7 khối đặc trưng ứng viên** (hình dạng bỏ giỏ, độ phân tán khoảng cách mua,
+đối chứng âm, session, review, voucher, nhịp thời gian) qua `ablation.py` trên dữ liệu thật — **tất
+cả đều LOẠI** (ΔAUC dưới sàn nhiễu 0,0138, kể cả gộp cả 7 khối lại ΔAUC chỉ +0,0044). Kết luận: 11
+đặc trưng hiện tại là đủ, không phải vì bộ sinh giả lập thiếu đa dạng (dữ liệu giờ là hành vi thật).
 
-Bản trước của mục này chỉ lập luận bằng lời. Nay đã có benchmark thật
-(`AI/forecast-service/app/training/rule_benchmark.py`, endpoint `POST /api/v1/models/rule-benchmark`).
+### 3.2. Vì sao 2 model, không phải 1 rule if-else — đo bằng số, không lập luận suông
 
-**Nguyên tắc để không tự lừa mình:** không tự chọn một rule yếu rồi đánh bại nó. Benchmark **quét lưới**
-tìm rule TỐT NHẤT ở 3 mức phức tạp — rule 1 biến (mọi feature × 2 chiều × 19 mốc phân vị), rule 2 điều
-kiện AND (55 cặp × 4 chiều × lưới 9×9 ≈ 17,8k ứng viên/fold), và cây quyết định giới hạn độ sâu (tập
-rule **tối ưu do máy tìm**). Mọi phương pháp đều **chọn ngưỡng trên tập train, đo trên tập test**, và
-dùng **cùng bộ fold** grouped CV.
+**Nguyên tắc để không tự lừa mình:** không tự chọn một rule yếu rồi đánh bại nó. Benchmark
+(`rule_benchmark.py`) **quét lưới** tìm rule TỐT NHẤT ở 3 mức phức tạp — rule 1 biến, rule 2 điều
+kiện AND, và cây quyết định giới hạn độ sâu (tập rule **tối ưu do máy tìm**) — trên cùng bộ fold
+grouped CV với model.
 
-> **Số dưới đây đo lại ngày 2026-08-03, sau khi seed lại dữ liệu** (làm giàu session/nhịp giờ — xem
-> `churn-risk-log.md` mục Tầng 1). Panel: 332 user / 1.395 dòng / churn rate 0.2401 — khác nhẹ so với
-> panel 342 user của model đang chạy production (mục 3.3), vì retrain trên dữ liệu mới bị **retrain
-> gate từ chối** (AUC mới thấp hơn ngưỡng an toàn) nên production vẫn giữ model cũ; bảng dưới đây đo
-> trên panel MỚI để kiểm tra kết luận rule-vs-AI có đứng vững qua một lượt lấy mẫu khác không. Các số
-> L1-path/cây sâu ở cuối mục (từ `ablation.py`) chưa được đo lại trong lượt này, vẫn là số cũ.
+| Phương pháp | F1 | AUC (xếp hạng) |
+|---|---:|---:|
+| Rule viết tay `days_inactive>7 AND cart_abandon>=1` (ví dụ sách giáo khoa) | 0,187 | không xếp hạng được |
+| Rule viết tay `recency>30 AND cart_abandon>=2` (RFM kinh điển) | 0,066 | không xếp hạng được |
+| Rule viết tay `recency>90` | 0,016 | không xếp hạng được |
+| Rule 1 biến, quét lưới (`recency>=4`) | 0,8179 | 0,6889 |
+| Rule 2 điều kiện AND, quét lưới (`recency>=2 AND frequency>=2`) | 0,8187 | không xếp hạng được |
+| Cây quyết định sâu 3 (rule mạnh nhất tìm được) | **0,8245** | 0,733 |
+| **Model (LR 11 đặc trưng + hiệu chỉnh)** | 0,8244 | **0,7352** (cao nhất) |
 
-| Baseline | F1 | AUC (xếp hạng) |
-|---|---|---|
-| **Rule viết tay** `days_inactive>7 AND cart_abandon>=1` | **0.108** ± 0.0774 | không xếp hạng được |
-| **Rule viết tay** `recency>30 AND cart_abandon>=2` (RFM kinh điển) | **0.0452** ± 0.0585 | không xếp hạng được |
-| **Rule viết tay** `recency>90` | 0.41 ± 0.0835 | không xếp hạng được |
-| Rule 1 biến, quét lưới → `days_since_last_activity >= 13` (thay đổi theo fold) | 0.5594 ± 0.103 | 0.7494 ± 0.0884 |
-| Rule 2 điều kiện AND, quét lưới | **0.5862 ± 0.1285** | không xếp hạng được |
-| Cây quyết định sâu 1 | 0.5268 ± 0.1177 | 0.6735 ± 0.0638 |
-| Cây quyết định sâu 2 | 0.5268 ± 0.1177 | 0.7502 ± 0.0702 |
-| Cây quyết định sâu 3 | 0.4561 ± 0.1001 | 0.6781 ± 0.0924 |
-| **Model (LR 11 đặc trưng + hiệu chỉnh)** | 0.6033 ± 0.0492 | 0.7738 ± 0.0596 |
+**Kết luận, đúng những gì số liệu cho thấy — không tô hồng:**
 
-**Kết luận, xếp theo độ mạnh/độ bền của lập luận (đã kiểm tra lại qua 2 lượt lấy mẫu khác nhau):**
+1. **Model KHÔNG thắng rule tốt nhất về F1** (0,8244 so với 0,8245 — chênh −0,0001, nằm trong sàn
+   nhiễu 0,0031). Rule mà người ta thực sự viết tay thì thảm hại (F1 0,016–0,187), nhưng rule được
+   quét lưới/cây quyết định tìm ra thì ngang ngửa model.
+2. **Model thắng rõ về AUC** — khả năng xếp hạng liên tục, cao nhất trong mọi phương pháp.
+3. **Rule KHÔNG xếp hạng được — đây là luận điểm chính, không phụ thuộc F1 bằng hay hơn.** Rule trả
+   nhãn nhị phân ⇒ không có xác suất liên tục để nhân với giá trị khách hàng ⇒ **không thể phân bổ
+   ngân sách voucher theo tổn thất kỳ vọng** (mục 3.5), bất kể F1 bao nhiêu. Đây là khác biệt về
+   **NĂNG LỰC** (rule không có cơ chế sinh xác suất liên tục), không phụ thuộc bộ dữ liệu — nên là
+   chỗ dựa chắc nhất khi bảo vệ, thay vì so F1.
 
-1. **Rule KHÔNG xếp hạng được — đây là luận điểm chính, đứng vững ở CẢ 2 lượt đo.** Rule trả nhãn nhị
-   phân ⇒ không có xác suất để nhân với giá trị khách hàng ⇒ **không thể phân bổ ngân sách voucher theo
-   tổn thất kỳ vọng** (mục 3.5), bất kể F1 bao nhiêu. Đây là khác biệt về **NĂNG LỰC** (rule không có cơ
-   chế sinh ra xác suất liên tục), không phụ thuộc bộ dữ liệu hay lượt lấy mẫu nào — nên là chỗ dựa chắc
-   nhất khi bảo vệ, thay vì so F1.
-2. **Rule mà người ta THỰC SỰ viết tay thì thảm hại.** Ví dụ nêu trong tài liệu này cho F1 chỉ
-   **0,108–0,41** tuỳ cách viết; kém xa rule đã quét lưới tìm ra (0,586). Rule tốt phải được **quét lưới
-   + chia fold + giữ tập test** để tìm ra — tức đúng bộ máy của ML, không phải "viết vài câu SQL".
-3. **Margin F1 model-vs-rule là thật nhưng KHÔNG BỀN qua lượt lấy mẫu khác — phải nói rõ điều này.** Lượt
-   đo đầu (dữ liệu seed cũ): model hơn rule tốt nhất +0,0519 F1, vượt sàn nhiễu ±0,0240. Lượt đo lại sau
-   khi seed lại dữ liệu (cùng cơ chế sinh, khác lượt lấy mẫu ngẫu nhiên): margin chỉ còn **+0,0171, NẰM
-   TRONG sàn nhiễu ±0,0492** — không phân biệt được với ngẫu nhiên. Kết luận trung thực: margin F1 giữa
-   model và rule-đã-tối-ưu là **giòn** (nhạy với lượt seed cụ thể), nên **không nên dùng làm luận điểm
-   chính**; dùng điểm 1 (năng lực xếp hạng) làm trụ cột thay vì con số F1 đẹp của 1 lần đo.
-4. **Model vẫn ổn định hơn rule ở cả 2 lượt** (std F1 model 0,024–0,049 so với 0,077–0,129 của rule) —
-   rule rất nhạy với nhóm user cụ thể được đánh giá, model thì không, dù biên độ chênh lệch nhỏ hơn.
-
-**Nhiều chiều có thực sự cần?** Đo bằng L1 path: giữ **1 đặc trưng** → AUC 0.8030 ± 0.0239; giữ **9
-đặc trưng** → AUC 0.8414 ± 0.0172. Chênh **0.0384 > sàn nhiễu 0.0297** ⇒ nhiều chiều **có ích thật**.
-Ghi chú trung thực: với định nghĩa nhãn cũ (mục 3.3) thì ~2 đặc trưng đã đạt AUC không phân biệt được
-với 11 đặc trưng — tức lập luận "mặt phân cách nhiều chiều" khi đó **không** được số liệu ủng hộ. Nó chỉ
-đứng vững sau khi sửa định nghĩa nhãn.
-
-Và cây sâu 3 **kém hơn** cây sâu 1/2 (0.6015 vs 0.6370) — thêm độ phức tạp rule không giúp gì, với
-~1150 dòng train đã bắt đầu overfit.
+**Đã thử thêm 9 thuật toán khác** (CatBoost, LightGBM, XGBoost, GradientBoosting, RandomForest, SVM,
+cây quyết định đơn, KNN, Gaussian Naive Bayes — trải 70 năm phát triển ML) trên cùng fold: nhóm
+boosting hiện đại nhỉnh hơn LR một chút (+0,0014 đến +0,0082) nhưng **không vượt sàn nhiễu**; nhóm
+cổ điển hơn (SVM, KNN, Naive Bayes, cây đơn) **kém hơn LR rõ rệt** (−0,012 đến −0,026). Kết luận:
+Logistic Regression là lựa chọn tốt nhất trong nhóm dễ giải thích, không có thuật toán nào thắng có
+ý nghĩa thống kê.
 
 ### 3.3. Định nghĩa nhãn churn và cách đánh giá
 
-Nhãn churn **không** dán tay lên user nào. Định nghĩa hiện tại (`LABEL_VERSION =
-churn_label_v2_orders_120d_min2`):
+Nhãn churn **không** dán tay lên user nào. Định nghĩa hiện tại
+(`LABEL_VERSION = churn_label_v3_orders_60d_min2_rees46real`):
 
-- Sinh từ **5 mốc thời gian cắt** (150–270 ngày trước hiện tại, cách nhau 30 ngày). Tại mỗi mốc, tính
-  đặc trưng từ dữ liệu **đến mốc đó**.
-- **Nhãn = 1 nếu user không ĐẶT ĐƠN nào trong 120 ngày sau mốc.**
-- Chỉ tính trên **user có ≥2 đơn `DELIVERED`** — user chưa từng mua hoặc mới mua 1 lần thì không thể là
-  "khách mua hàng đã rời bỏ", và cũng không phải đối tượng của campaign cứu khách.
+- Sinh từ **5 mốc thời gian cắt** (61–137 ngày trước cuối dữ liệu, cách đều). Tại mỗi mốc, tính đặc
+  trưng từ dữ liệu **đến mốc đó**.
+- **Nhãn = 1 nếu user không ĐẶT ĐƠN nào trong 60 ngày sau mốc.**
+- Chỉ tính trên **user có ≥2 đơn `DELIVERED`** — user chưa từng mua hoặc mới mua 1 lần thì không thể
+  là "khách mua hàng đã rời bỏ".
 
-Panel thu được: **1437 dòng / 342 user / tỉ lệ churn 0.2624**.
+Panel thu được: **31.458 dòng / 10.501 user / tỉ lệ churn 0,6311**.
 
-> **Định nghĩa cũ đã bị thay, và đây là lý do — cần nêu khi bảo vệ.** Bản đầu dùng nhãn "không có hoạt
-> động nào (**xem HOẶC mua**) trong 30 ngày tới", lấy từ `orders` ∪ `user_events`. Nhưng đặc trưng mạnh
-> nhất (`category_diversity_viewed` = số category **xem** trong 30 ngày qua) cũng lấy từ `user_events`
-> — **cùng nguồn, hai cửa sổ kề nhau, cùng nghĩa "có hoạt động"**. Bài toán vì thế gần như thành *"user
-> đang hoạt động có tiếp tục hoạt động không"*: AUC lên tới 0.93 nhưng mọi thử nghiệm mở rộng đặc trưng
-> đều thất bại, và ~2 đặc trưng đã đủ đạt AUC tương đương 11 đặc trưng. Nhãn mới lấy từ `orders` còn đặc
-> trưng chủ yếu từ `user_events` ⇒ dự đoán **xuyên nguồn** thật sự. Phương án được chọn bằng cách quét
-> lưới 12 biến thể (cửa sổ 60/90/120 × nguồn nhãn × lọc dân số) — endpoint
-> `POST /api/v1/models/label-diagnostics`. Cửa sổ 60 ngày bị loại vì với λ trung vị ~0,5 đơn/tháng thì
-> `P(không đơn | 60 ngày) = e^−1 ≈ 0,37`, tức ~37% khách khỏe mạnh bị dán nhãn churn do **nhiễu Poisson**.
+> **Vì sao 60 ngày, không phải 120 như thiết kế gốc:** dữ liệu REES46 thật chỉ trải ~151 ngày
+> (12/2019–4/2020), không đủ cho lưới mốc cắt gốc (cần ≥390 ngày cho cửa sổ 120 ngày). Cửa sổ 60
+> ngày là lựa chọn duy nhất còn đủ 5 mốc cắt có nghĩa trên khoảng dữ liệu này.
 
-**Cách chia tập đánh giá — grouped CV, tách theo user:** mỗi fold, tập test là các user **được giữ lại**
-tại mốc gần nhất; tập train là các user **khác** ở các mốc **cũ hơn**. Vừa tách user (model không thể
-nhận diện user đã thấy) vừa giữ nhân quả thời gian (không train trên tương lai). Báo **mean ± std** qua
-5 fold, vì chỉ 1 holdout thì không phân biệt được cải thiện thật với nhiễu.
+**Cách chia tập đánh giá — grouped CV, tách theo user:** mỗi fold, tập test là các user **được giữ
+lại** tại mốc gần nhất; tập train là các user **khác** ở các mốc **cũ hơn**. Vừa tách user (model
+không thể nhận diện user đã thấy) vừa giữ nhân quả thời gian (không train trên tương lai). Báo
+**mean ± std** qua 5 fold.
 
-**Kết quả đo được trên dữ liệu seed:**
-
-| Chỉ số | Giá trị |
-|---|---|
-| **AUC (con số nên báo cáo)** | **~0.75 ± 0.05** |
-| Silhouette (KMeans) | 0.20–0.24 |
-
-> **⚠️ Đã tự sửa một con số lạc quan — cần nêu khi bảo vệ, vì đây là bài học phương pháp.**
->
-> Các bản trước của tài liệu này ghi **AUC 0.8405 ± 0.0268**. Con số đó **lạc quan**, và nguyên nhân
-> đã được truy ra bằng **learning curve** (lấy mẫu 25/50/75/100% số user, xem
-> `experiments/diagnose_model_ceiling.py`):
->
-> | Số user | AUC | std |
-> |---|---|---|
-> | 85 | 0.7928 | **±0.1602** |
-> | 170 | 0.7651 | ±0.0727 |
-> | 255 | 0.7530 | ±0.0515 |
-> | **340** | **0.7521** | ±0.0540 |
->
-> AUC **giảm** khi thêm dữ liệu trong khi std **co lại 3×**. Đây là dấu hiệu kinh điển của **lạc quan
-> do mẫu nhỏ**: ở 85 user, std ±0.16 nghĩa là con số "0.79" chỉ là nhiễu. Khi mẫu lớn dần, ước lượng
-> hội tụ về **~0.75**. Con số 0.8405 từng báo là **một lượt lấy mẫu may mắn** — khớp với dải dao động
-> 0.7438–0.8415 đã quan sát được giữa các lần reseed.
->
-> **Vì sao vẫn thấp hơn 0.93 của bản đầu:** không phải do leakage (đã đo: leakage chỉ thổi +0.0021),
-> mà do **đổi định nghĩa nhãn** sang bài toán khó và có nghĩa hơn (xem khung dưới) — không phải hồi
-> quy chất lượng.
-
-**Đã chẩn đoán nguyên nhân model không mạnh hơn được (`diagnose_model_ceiling.py`):**
-
-| Nghi phạm | Kết quả đo | Kết luận |
-|---|---|---|
-| Thiếu dữ liệu | AUC **không** tăng theo số user (−0.0407) | ❌ Thêm user chỉ làm std nhỏ hơn, không làm AUC cao hơn |
-| Model tuyến tính không đủ | LightGBM 0.7340 vs LogReg 0.7521 | ❌ Model phi tuyến **kém hơn** ⇒ ranh giới vốn đơn giản |
-| Các dòng panel là bản sao | N hiệu dụng **786/1451** (tỉ lệ 0.401) | ⚠️ Giảm ~½ nhưng không thoái hoá |
-| **Chạm trần thông tin của bộ feature** | `at_information_ceiling = true` | ✅ **Đây là nguyên nhân gốc** |
-
-**Bằng chứng bổ trợ:** 6/11 feature gần như là **hằng số theo user** (phương sai trong-user rất thấp:
-`avg_order_value` 0.037 · `monetary` 0.060 · `discount_dependency` 0.069 · `cancel_rate` 0.151 ·
-`frequency` 0.195). Chúng chỉ mô tả *"user này là ai"*, không mô tả *"user này đang thay đổi thế nào"*.
-Chỉ 5 feature hành vi thật sự biến động theo thời gian.
-
-⇒ Muốn vượt ~0.75 thì **không phải thêm dữ liệu hay đổi thuật toán**, mà phải thêm **nguồn thông tin
-mới** (event mới, xem mục 3.2 về tracker vi hành vi).
-
-**Lệch base rate giữa train và test — do chính thiết kế mốc cắt:**
-
-| Mốc cắt | Tỉ lệ churn |
-|---|---|
-| 2025-11-08 | 16.1% |
-| 2025-12-08 | 19.5% |
-| 2026-01-07 | 23.8% |
-| 2026-02-06 | 26.5% |
-| **2026-03-08 (tập TEST)** | **28.8%** |
-
-Tỉ lệ churn tăng đơn điệu theo mốc cắt, mà thiết kế là train trên mốc cũ / test trên mốc mới nhất ⇒
-model **luôn** được train ở base rate 16–26% rồi test ở 28.8%. Đây là lý do bước **hiệu chỉnh xác
-suất** (mục 3.4) có tác dụng lớn — nó bù đúng phần lệch tiên nghiệm này.
+**Dữ liệu nguồn: transform từ sàn TMĐT thật, không phải mô phỏng.** Catalog (sản phẩm, danh mục,
+giá) là Tiki thật; hành vi + giao dịch là **REES46 đa ngành** (12/2019–4/2020, 332.347 user /
+102.004 đơn / 7.378.602 sự kiện) — một sàn TMĐT thật khác, ánh xạ vào đúng schema hệ thống theo quy
+tắc xác định (danh mục + giá gần nhất). Đây là thay đổi kiến trúc lớn nhất của dự án (2026-10-02):
+trước đó mọi số liệu đo trên bộ sinh synthetic (tự mô phỏng tham số), nay toàn bộ feature engineering
+và model được re-baseline hoàn toàn trên hành vi người dùng thật. Chi tiết mapping schema và 3 lỗi
+đã phát hiện/sửa trong chính nguồn REES46 (log giỏ hàng thiếu trước 12/2019, mã danh mục sai từ
+12/2019, 4 ngày mất log đơn hàng): [`rees46-transform-mapping.md`](rees46-transform-mapping.md).
 
 ### 3.4. Hiệu chỉnh xác suất — điều kiện cần để dùng xác suất vào quyết định
 
 `LogisticRegression(class_weight="balanced")` khiến model ước lượng hậu nghiệm dưới **tiên nghiệm
-50/50** thay vì tỉ lệ thật. Đo được: model thô dự đoán churn trung bình **0.4217** trong khi thực tế
-**0.2420** — thổi phồng ~1,74×, ECE 0.1797, và over-predict ở **mọi** khoảng xác suất.
+50/50** thay vì tỉ lệ thật. Hiệu chỉnh là biến đổi đơn điệu nhưng **phi tuyến**, nên AUC và xếp-hạng-
+theo-`P`-thuần *không đổi*, còn xếp hạng theo **`P × giá trị khách hàng`** thì **đổi** (là phép
+nhân) — đây là lý do mục 3.5 (tầng quyết định) phụ thuộc trực tiếp vào bước này.
 
-Điều này **quan trọng chứ không chỉ là thêm một metric**: hiệu chỉnh là biến đổi đơn điệu nhưng **phi
-tuyến**, nên AUC và xếp-hạng-theo-`P`-thuần *không đổi*, còn xếp hạng theo **`P × giá trị khách hàng`**
-thì **đổi** (là phép nhân). Đo 4 phương án (`POST /api/v1/models/calibration`), `isotonic` tốt nhất:
-ECE **0.1797 → 0.0391** (tốt hơn 4,6×), AUC không đổi ⇒ không có dấu hiệu overfit.
-
-Ngưỡng cắt vì vậy phải tune **trên thang đã hiệu chỉnh** (0.26), không phải thang thô (0.61).
-`risk_scoring.effective_threshold()` đọc ngưỡng từ **metadata của chính model đang chạy** thay vì
-hardcode, vì ngưỡng tối ưu đổi theo định nghĩa nhãn và theo mỗi lần train. Bundle mang cờ `calibrated`;
-gặp model chưa hiệu chỉnh thì tự lùi về ngưỡng an toàn 0.5 kèm cảnh báo.
+Phương pháp `isotonic` được chọn (so với Platt scaling và nguyên trạng) từ trước, tiếp tục dùng cho
+model re-baseline trên dữ liệu thật — model bundle mang cờ `calibrated: true`. Ngưỡng cắt tune
+**trên thang đã hiệu chỉnh** (0,38), không phải thang thô. `risk_scoring.effective_threshold()` đọc
+ngưỡng từ **metadata của chính model đang chạy** thay vì hardcode, vì ngưỡng tối ưu đổi theo định
+nghĩa nhãn và theo mỗi lần train; gặp model chưa hiệu chỉnh thì tự lùi về ngưỡng an toàn 0,5 kèm
+cảnh báo.
 
 ### 3.5. Từ dự đoán sang quyết định — xếp hạng theo tổn thất kỳ vọng
 
-Đây là chỗ AI làm được việc mà rule **về nguyên tắc** không làm được. Ngân sách marketing luôn có hạn:
-nếu chỉ phát được K voucher, chọn ai?
+Đây là chỗ AI làm được việc mà rule **về nguyên tắc** không làm được (xem mục 3.2 điểm 3). Ngân sách
+marketing luôn có hạn: nếu chỉ phát được K voucher, chọn ai?
 
-`expected_loss = P(churn) × monetary` — tổn thất kỳ vọng. Xếp theo đại lượng này thay vì theo xác suất
-thuần, vì một khách `P=0.95` mua 200k không đáng bằng khách `P=0.70` mua 5tr.
+`expected_loss = P(churn) × monetary` — tổn thất kỳ vọng. Xếp theo đại lượng này thay vì theo xác
+suất thuần, vì một khách `P=0,95` mua 200k không đáng bằng khách `P=0,70` mua 5tr.
 
-Đo được (`revenue_recall@K` = phần doanh thu-đang-rủi-ro thu được trong top K):
+Đo được trên dữ liệu thật (`revenue_recall@K` = phần doanh thu-đang-rủi-ro thu được trong top K,
+tổng doanh thu rủi ro 283.950.553.000đ trên 10.501 user):
 
-| Ngân sách K | Xếp theo `P` | Xếp theo `P × monetary` | Hơn |
-|---|---|---|---|
-| 25 | 0.1214 | 0.2651 | **2,18×** |
-| 50 | 0.2571 | 0.4310 | **1,68×** |
-| 100 | 0.4618 | 0.6745 | 1,46× |
-| 200 | 0.8117 | 0.8835 | 1,09× |
+| Ngân sách K | Xếp theo `P` | Xếp theo `P × monetary` | Hệ số nhân |
+|---|---:|---:|---:|
+| 25 | 0,15% | 9,04% | **60,27×** |
+| 50 | 0,34% | 11,40% | **33,53×** |
+| 100 | 0,84% | 15,44% | **18,38×** |
+| 200 | 1,84% | 23,46% | **12,75×** |
 
-**Nuance phải nói:** lợi thế lớn nhất khi **ngân sách chật** và **tan biến khi ngân sách rộng** (K=200
-gần như không hơn) — hợp lý, vì phủ 200/500 user thì xếp cách nào cũng bắt gần hết. Đúng chỗ nó có ích
-trong thực tế.
+Hệ số nhân này cao hơn nhiều so với ước lượng ban đầu trên dữ liệu synthetic (từng đo 1,09×–2,18×)
+— vì phân phối giá trị đơn hàng thật lệch mạnh hơn: xếp theo xác suất thuần tuy vẫn đúng nhãn
+(precision@K 0,95–0,98) nhưng chọn trúng rất nhiều khách churn giá trị nhỏ, gần như không cứu được
+doanh thu nào. Đây là số liệu mạnh nhất để bảo vệ luận điểm "cần AI" — không phụ thuộc việc model có
+thắng rule về F1 hay không (mục 3.2).
 
-Rule không có xác suất ⇒ không nhân được với giá trị khách hàng ⇒ chỉ có thể chọn **bừa** K người trong
-số bị flag.
-
-**Next-Best-Action theo tầng xác suất (Tầng 3, 2026-08-03):** ngoài việc CÓ trigger hay không, admin có
-thể cấu hình **nhiều chiến dịch khác nhau theo dải xác suất** trong CÙNG 1 campaign — vd 0–20%: chỉ gửi
-email nhắc, 20–50%: voucher nhỏ, còn lại: voucher lớn. Thêm node điều kiện `Condition_ChurnRiskTier`
-trong Campaign Builder, biên dịch thành 1 `exclusiveGateway` Camunda với các nhánh JUEL trên
-`churnProbability` (đã hiệu chỉnh) — tái dùng đúng cơ chế gateway N-nhánh có sẵn (giống
-`Condition_TotalSpending`), không cần sửa Camunda engine. Đây là điểm khác biệt so với việc chỉ có 1
-ngưỡng trigger nhị phân: mức độ rủi ro giờ quyết định được **loại hành động**, không chỉ **có hành động
-hay không**. Xem `docs/canvas/churn-risk-log.md` mục Tầng 3 để có bằng chứng kiểm chứng (harness
-validate + compile BPMN thật).
+**Next-Best-Action theo tầng xác suất:** admin có thể cấu hình nhiều hành động khác nhau theo dải
+xác suất trong CÙNG 1 campaign (vd 0–20%: chỉ gửi email, 20–50%: voucher nhỏ, còn lại: voucher lớn)
+qua node điều kiện `Condition_ChurnRiskTier` trong Campaign Builder — hạ tầng này **đã có sẵn trong
+code** (nhiều loại action: voucher %/tiền mặt/freeship, nâng hạng, điểm thưởng, email), admin kéo-
+thả dùng ngay không cần code thêm. Hai điểm chưa có: (1) chưa dựng sẵn campaign mẫu nào để demo, (2)
+nhánh rẽ theo **ngưỡng % xác suất** người tự đặt, chưa rẽ theo đúng 4 phân khúc KMeans — tức đây vẫn
+là "rule trên con số AI", chưa phải "chính sách học được từ hiệu quả thật" (cần vòng phản hồi đo kết
+quả campaign — xem `churn-risk-roadmap.md` Tầng 4, hiện chỉ có thiết kế, không thực nghiệm được
+trong phạm vi đồ án).
 
 ### 3.6. Không refit liên tục — tách huấn luyện khỏi vận hành
 
 Một lỗi thường gặp: nếu model tự fit lại mỗi lần được gọi, tâm cụm dịch chuyển liên tục → user
 "At Risk" giờ này có thể hết "At Risk" giờ sau chỉ vì khởi tạo lại, không phải vì hành vi đổi thật.
 Thiết kế ở đây tách biệt:
-- `POST /api/v1/models/train` — nơi DUY NHẤT model được fit, chạy tay/định kỳ (vd hàng ngày).
+- `POST /api/v1/models/train` — nơi DUY NHẤT model được fit, chạy tay/định kỳ.
 - `risk_scheduler.py` — chỉ **predict** bằng model đã lưu (`shared_common/registry.py`), không
   bao giờ tự fit lại.
+
+### 3.7. Feature store — vì sao cần, và 2 bug production đã tìm/sửa (2026-10-06)
+
+Khi dữ liệu còn nhỏ (bộ sinh synthetic, ~342 user), `risk_scoring.predict()` tự chạy SQL tổng hợp
+(`COUNT DISTINCT`, `GROUP BY user_id`...) mỗi lần cần chấm điểm — đủ nhanh để không ai để ý. Trên
+quy mô dữ liệu thật (332.347 user / 7,3 triệu sự kiện), **đúng những câu SQL đó treo 25–40+ phút,
+có lần không bao giờ xong** — phát hiện khi kiểm tra lại bằng cách gọi thật endpoint admin qua HTTP
+(không chỉ gọi hàm Python, vốn dễ bỏ sót vấn đề hiệu năng/môi trường thật).
+
+**Giải pháp — feature store:** tính trước 11 đặc trưng bằng pandas-trong-RAM (đọc dữ liệu 1 lần,
+tính vector hoá — vài giây đến vài phút tuỳ tải máy, so với 25–40+ phút của SQL tổng hợp), lưu vào
+bảng `user_feature_vectors` tự quản lý bởi chính forecast-service. `risk_scheduler` làm mới bảng
+này mỗi chu kỳ quét (1 giờ); `risk_scoring.predict()` chỉ đọc bảng đã tính sẵn — nhanh, không phụ
+thuộc quy mô dữ liệu đang lớn dần. Đánh đổi: dữ liệu chấm điểm chỉ mới bằng lần làm mới gần nhất
+(không phải tức thời tuyệt đối) — chấp nhận được vì tần suất quét vốn đã theo giờ, không theo giây.
+
+**Hai lỗi thật tìm được khi verify bằng HTTP thật** (không xuất hiện khi test bằng script Python
+trực tiếp):
+
+1. Hàm quét rủi ro chạy code tính toán đồng bộ (vài phút) ngay trong hàm `async`, chặn event loop
+   khiến tiến trình nền lắng nghe Kafka bị rớt kết nối. Sửa: tách phần tính toán, chạy qua thread
+   pool riêng.
+2. Lỗi tính toán thật: 1 phép cộng ngày-giờ cho kết quả khác kiểu dữ liệu tuỳ phiên bản thư viện
+   `numpy` — bản cài trong môi trường chạy thật (production) bị lỗi, bản cài trên máy phát triển thì
+   không, nên không lộ ra khi test bằng script thông thường. Sửa bằng cách ép kiểu dữ liệu tường
+   minh, không phụ thuộc phiên bản.
+
+**Kết quả xác minh cuối — chạy thật qua HTTP, không giả lập:**
+
+```
+332.349 user chấm điểm → 17.737 trong dân số hợp lệ → 10.563 at-risk →
+0 đủ điều kiện (có bỏ giỏ hàng trong 24h) → 0 published
+```
+
+0 published là **kết quả đúng theo dữ liệu**, không phải lỗi: dữ liệu REES46 là lịch sử đóng băng
+tới 2026-10-01, trong khi đồng hồ hệ thống thật đã là ngày sau đó — quy tắc "vừa bỏ giỏ hàng trong
+24h gần nhất" tự nhiên không có gì để khớp trên một tập dữ liệu lịch sử tĩnh. Toàn bộ chuỗi logic
+(tính điểm → lọc dân số → lọc theo thời điểm → xếp hạng ngân sách → gọi Kafka) đã chạy đúng, không
+lỗi, qua đúng con đường mà production/FE thật sự đi qua.
 
 ## 4. Các thành phần hệ thống liên quan
 
 | Service | Vai trò trong tính năng này |
 |---|---|
 | `product-service`, `order-service` (Java) | Ghi nhận hành vi thô, publish Kafka |
-| `forecast-service` (Python/FastAPI) | Toàn bộ AI: ingest hành vi, train, predict, publish sự kiện rủi ro |
+| `forecast-service` (Python/FastAPI) | Toàn bộ AI: ingest hành vi, feature store, train, predict, publish sự kiện rủi ro |
 | `promotion-service` (Java/Camunda 7) | Nhận sự kiện, chạy campaign đã cấu hình sẵn (BPMN) |
 | FE Campaign Builder (tab **"Coupon Code"**, tên hiển thị không khớp tên chức năng thật) | Nơi admin dựng campaign với trigger "Nguy cơ rời bỏ (AI)" |
 
 ## 5. Vận hành / kiểm thử
 
 ```bash
-# 1. Sinh dữ liệu (nếu chưa có) — xem tools/data-seed/README.md
-node tools/data-seed/seed.mjs --demo-users 10
-
-# 2. Train model (nơi DUY NHẤT model được fit)
+# 1. Train model (nơi DUY NHẤT model được fit)
 curl -X POST http://localhost:8004/api/v1/models/train
 
-# 3. Chạy risk-scan (bình thường chạy tự động theo lịch, gọi tay để test/demo)
+# 2. Chạy risk-scan (bình thường chạy tự động theo lịch, gọi tay để test/demo)
 curl -X POST http://localhost:8004/api/v1/risk/trigger-scan
 
-# 4. Xem Process Instance Camunda đã chạy
+# 3. Xem phân bố phân khúc + độ mới dữ liệu
+curl http://localhost:8004/api/v1/admin/analytics/segmentation
+
+# 4. Model card — tóm tắt model đang chạy, metric, giới hạn, trong 1 lần gọi
+curl http://localhost:8004/api/v1/models/card
+
+# 5. Xem Process Instance Camunda đã chạy
 # Camunda Cockpit: http://localhost:8087/camunda/app/cockpit/
 ```
 
 **Các endpoint phân tích** (thuần đo lường — KHÔNG lưu model, KHÔNG đổi hành vi phát voucher):
 
 ```bash
-# Benchmark Rule vs AI (mục 3.2)
-curl -X POST http://localhost:8004/api/v1/models/rule-benchmark
-
-# Kiểm định & hiệu chỉnh xác suất (mục 3.4)
-curl -X POST http://localhost:8004/api/v1/models/calibration
-
-# Quét lưới định nghĩa nhãn (mục 3.3)
-curl -X POST http://localhost:8004/api/v1/models/label-diagnostics
-
-# Thử nghiệm mở rộng đặc trưng: ΔAUC so với sàn nhiễu + permutation importance + L1 path
-curl -X POST http://localhost:8004/api/v1/models/ablation
+curl -X POST http://localhost:8004/api/v1/models/rule-benchmark   # Rule vs AI (mục 3.2)
+curl -X POST http://localhost:8004/api/v1/models/calibration      # Hiệu chỉnh xác suất (mục 3.4)
+curl -X POST http://localhost:8004/api/v1/models/ablation         # Mở rộng đặc trưng: ΔAUC + permutation importance + L1 path
 ```
 
 Admin tạo campaign qua FE: **Coupon Code** → New Campaign → Trigger = "Nguy cơ rời bỏ (AI)" →
@@ -363,46 +337,48 @@ Action = tặng voucher/gửi email → Activate.
 
 ## 6. Giới hạn đã biết (nói rõ khi báo cáo)
 
-- **Dữ liệu seed là tổng hợp (synthetic)** — metric (AUC 0.84...) đo việc model có phục hồi được
-  cấu trúc sinh dữ liệu hay không, **không phải** đo việc dự đoán đúng hành vi người thật.
-- **Mốc cắt phải lùi về ≥150 ngày** (do cửa sổ nhãn 120 ngày cần đủ thời gian quan sát) ⇒ model học từ
-  dữ liệu 5–9 tháng trước, không dùng được dữ liệu gần đây nhất.
-- **Chỉ áp dụng cho khách có ≥2 đơn `DELIVERED`.** Đường chấm điểm production lọc đúng dân số này để
-  khớp dân số huấn luyện — chấm điểm ngoài dân số đó là **ngoại suy**. Khách chưa mua thuộc bài toán
-  onboarding, không phải bài toán này.
-- **Cụm tách nhau yếu** (silhouette 0.2022). `segment` vẫn dùng được vì tỉ lệ churn giữa các cụm chênh
-  0.3565, nhưng đây không phải phân khúc "sắc nét". Có cảnh báo tự động khi chênh lệch < 0.10.
-- **Mở rộng đặc trưng đã thử và KHÔNG thành công.** 6 khối đặc trưng ứng viên (hình dạng bỏ giỏ, độ phân
-  tán khoảng cách mua, đối chứng âm, và — sau khi làm giàu seeder ở Tầng 1 — thêm session/review/
-  voucher) đều không vượt sàn nhiễu. Nguyên nhân: bộ sinh dữ liệu chỉ có 2 cơ chế gắn với churn (λ tụt
-  bậc + tăng bỏ giỏ trước rời bỏ) và 11 đặc trưng hiện tại đã phủ cả hai; 3 khối mới được thiết kế **cố
-  ý độc lập với nhãn churn** (tránh suy luận vòng tròn) nên null result là kỳ vọng đúng, không phải đo
-  ra kém. `product_reviews`/`issued_vouchers`/`user_events.session_id` nay đã có dữ liệu thật (không
-  còn rỗng) — xem `churn-risk-log.md` Tầng 1.2.
-- **Hệ số Logistic Regression KHÔNG đọc được như độ quan trọng.** Dữ liệu có đa cộng tuyến nặng
-  (`frequency`↔`monetary` ρ=0.877). Ví dụ đo được: `cart_abandon_count` có hệ số lớn thứ 2 nhưng
-  permutation importance ≈ **0**. Phải dùng permutation importance (bền với cộng tuyến):
-  `category_diversity_viewed` 0.0901 · `frequency` 0.0347 · `days_since_last_activity` 0.0272 ·
-  `recent_view_count` 0.0219.
-- **Chưa có vòng phản hồi từ kết quả campaign.** Model không học từ việc voucher có hiệu quả hay không —
-  cần bảng theo dõi outcome; xem `churn-risk-roadmap.md` Tầng 4. Không đánh giá được trong phạm vi đồ án
-  vì dữ liệu synthetic thì phải tự viết luôn cả model phản hồi (vòng tròn), còn dữ liệu thật chỉ có ~10
-  user đăng nhập được.
-- Chỉ hoạt động chính xác với **user đã đăng nhập** (có Keycloak UUID thật) — khách vãng lai dùng
-  chung 1 định danh `anonymous`, bị bỏ qua có chủ đích.
-- Voucher/email cần `user-service` chạy để resolve `userId` (Keycloak UUID) sang thông tin liên hệ
-  — nếu service này không chạy, campaign vẫn trigger đúng (Camunda Process Instance vẫn chạy)
-  nhưng bước phát voucher cuối cùng sẽ bị bỏ qua.
+- **Hành vi/giao dịch là REES46 THẬT (transform, không mô phỏng) nhưng là MỘT SÀN KHÁC**, chỉ phủ
+  12/2019–4/2020 (~151 ngày), ánh xạ sang catalog Tiki thật theo quy tắc xác định (danh mục + giá
+  gần nhất) — không phải người dùng Tiki thật mua hàng Tiki thật.
+- **Dữ liệu là lịch sử đóng băng**, trong khi quy tắc thời điểm (`has_recent_abandoned_cart`) so với
+  đồng hồ thật (`NOW()`) — nên demo trực tiếp trên dữ liệu này sẽ không bao giờ thấy voucher được
+  phát (xem mục 3.7), dù toàn bộ logic đã verify đúng. Muốn demo thấy voucher thật cần nạp thêm dữ
+  liệu có mốc thời gian gần ngày chạy demo, hoặc đổi cách tính "gần đây" sang neo theo dữ liệu thay
+  vì đồng hồ hệ thống — chưa làm, ngoài phạm vi đồ án.
+- **Chỉ áp dụng cho khách có ≥2 đơn `DELIVERED`.** Chấm điểm ngoài dân số đó là **ngoại suy**.
+- **Cửa sổ nhãn 60 ngày** (không phải 120 như thiết kế gốc) — do dữ liệu thật chỉ trải ~151 ngày.
+- **Mở rộng đặc trưng đã thử và KHÔNG thành công trên nhãn 60-120 ngày** (7 khối, kể cả
+  `gap_dispersion`, đều không vượt sàn nhiễu — xem mục 3.1). Ở đích NGẮN HẠN khác (24h quan sát → dự
+  đoán mua lại trong 7 ngày, cấp episode giỏ hàng chứ không phải nhãn churn cấp-user), feature trình
+  tự/liên kết (có quay lại xem chính sản phẩm đã thêm giỏ không, nhịp sự kiện...) **CÓ** vượt sàn
+  nhiễu (ΔAUC +0,0165) — xác nhận giả thuyết "liên kết dữ liệu quan trọng hơn thông tin đơn lẻ" đúng
+  ở phạm vi ngắn hạn, dù chưa thay đổi model production (AUC 0,65 còn yếu hơn model chính 0,735,
+  dùng cho mục đích nghiên cứu/báo cáo).
+- **Hệ số Logistic Regression KHÔNG đọc được như độ quan trọng** do đa cộng tuyến — dùng permutation
+  importance thay thế (mạnh nhất: `days_since_last_activity`, áp đảo hoàn toàn các feature còn lại).
+- **Lệch phiên bản thư viện giữa môi trường dev và production** (vd model train bằng scikit-learn
+  1.9.1, container chạy 1.7.2; numpy 2.2.6 trong container từng gây lỗi searchsorted mà numpy 2.4.6
+  trên máy dev không gặp — đã sửa, xem mục 3.7) — cảnh báo chung: khác biệt phiên bản thư viện có
+  thể che giấu bug, không nên coi "đã test bằng script" là tương đương "đã test qua production".
+- **Chưa có vòng phản hồi từ kết quả campaign.** Model không học từ việc voucher có hiệu quả hay
+  không — cần bảng theo dõi outcome; xem `churn-risk-roadmap.md` Tầng 4 (hiện chỉ có thiết kế, không
+  thực nghiệm được trong phạm vi đồ án do thiếu dữ liệu outcome thật).
+- Chỉ hoạt động chính xác với **user đã đăng nhập** (có Keycloak UUID thật); phần lớn user REES46
+  transform là tài khoản nội bộ (`rees_<id>@rees46.internal`), không đăng nhập được qua FE thật —
+  demo end-to-end bằng tài khoản thật cần dùng đúng nhóm nhỏ user có thể đăng nhập (đã verify E2E
+  với user thật trước đây, 2026-07-27, trên dữ liệu cũ).
+- Voucher/email cần `user-service` chạy để resolve `userId` sang thông tin liên hệ — nếu service
+  này không chạy, campaign vẫn trigger đúng (Camunda Process Instance vẫn chạy) nhưng bước phát
+  voucher cuối cùng sẽ bị bỏ qua.
 
 ## Xem thêm
 
-- [`churn-risk-log.md`](churn-risk-log.md) — **nhật ký làm việc theo timeline**: mọi số đo, mọi thứ đã
-  thử và bị loại, kèm lý do. Đây là nơi tra cứu khi cần con số gốc của bất kỳ bảng nào ở trên.
+- [`churn-risk-log.md`](churn-risk-log.md) — **nhật ký làm việc theo timeline**: mọi số đo, mọi thứ
+  đã thử và bị loại, kèm lý do. Đây là nơi tra cứu khi cần con số gốc của bất kỳ bảng nào ở trên.
+- [`rees46-transform-mapping.md`](rees46-transform-mapping.md) — chi tiết việc chuyển dữ liệu REES46
+  thật thành dữ liệu hệ thống (schema mapping, 3 lỗi nguồn đã phát hiện/sửa).
 - [`churn-risk-roadmap.md`](churn-risk-roadmap.md) — kế hoạch dài hạn xếp theo thứ tự phụ thuộc, kèm
-  tiêu chí thành công và tiêu chí dừng cho từng việc.
-- [`churn-risk-tier0-plan.md`](churn-risk-tier0-plan.md) — plan thi hành Tầng 0 (hiệu chỉnh xác suất +
-  định nghĩa lại nhãn), đã hoàn thành.
+  trạng thái ĐÃ XONG/CÒN LẠI cập nhật tới 2026-10-06.
 - [`churn-risk-implementation-plan.md`](churn-risk-implementation-plan.md) — kế hoạch/nhật ký
-  triển khai chi tiết theo 7 phase, kèm ghi chú lệch phát sinh khi code.
-- [`recommendation-complete.md`](recommendation-complete.md) — blueprint gốc (ý tưởng ban đầu,
-  trước khi có phát hiện về thiếu dữ liệu/hạ tầng dẫn tới bản kế hoạch thực tế ở trên).
+  triển khai chi tiết theo 7 phase (hạ tầng Kafka/Camunda/FE), kèm ghi chú lệch phát sinh khi code.
+- [`recommendation-complete.md`](recommendation-complete.md) — blueprint gốc (ý tưởng ban đầu).
