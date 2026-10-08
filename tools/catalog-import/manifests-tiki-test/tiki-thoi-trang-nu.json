@@ -1,0 +1,3163 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-01T02:35:20.948Z",
+  "note": "Catalog đa ngành từ API công khai Tiki.vn (root c931: Thời trang nữ). Dùng phi thương mại cho đồ án. Nguồn: Tiki.vn",
+  "attributes": [
+    {
+      "code": "origin",
+      "name": "Xuất xứ (Made in)",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": null
+    },
+    {
+      "code": "size",
+      "name": "Kích thước",
+      "valueType": "select",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "organization_name",
+      "name": "Tên đơn vị/tổ chức chịu trách nhiệm về hàng hóa",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "organization_address",
+      "name": "Địa chỉ tổ chức chịu trách nhiệm về hàng hóa",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "brand_country",
+      "name": "Xuất xứ thương hiệu",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "filter_color",
+      "name": "Màu sắc",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    }
+  ],
+  "categories": [
+    {
+      "slug": "thoi-trang-nu",
+      "name": "Thời trang nữ",
+      "parentSlug": null,
+      "sortOrder": 7,
+      "active": true,
+      "imageUrl": "https://salt.tikicdn.com/ts/category/55/5b/80/48cbaafe144c25d5065786ecace86d38.png",
+      "icon": "checkroom"
+    },
+    {
+      "slug": "do-lot-nu",
+      "name": "Đồ lót nữ",
+      "parentSlug": "thoi-trang-nu",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "checkroom"
+    },
+    {
+      "slug": "do-ngu-do-mac-nha-nu",
+      "name": "Đồ ngủ - Đồ mặc nhà nữ",
+      "parentSlug": "thoi-trang-nu",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "checkroom"
+    },
+    {
+      "slug": "dam-vay-lien",
+      "name": "Đầm nữ",
+      "parentSlug": "thoi-trang-nu",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "checkroom"
+    },
+    {
+      "slug": "ao-vest-ao-khoac-nu",
+      "name": "Áo vest - Áo khoác nữ",
+      "parentSlug": "thoi-trang-nu",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "checkroom"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "do-lot-nu",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-lot-nu",
+      "attributeCode": "size",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-lot-nu",
+      "attributeCode": "origin",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-lot-nu",
+      "attributeCode": "brand_country",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-lot-nu",
+      "attributeCode": "organization_name",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-lot-nu",
+      "attributeCode": "organization_address",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "size",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "origin",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "material",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "organization_name",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "organization_address",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "filter_color",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "attributeCode": "brand_country",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dam-vay-lien",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dam-vay-lien",
+      "attributeCode": "size",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dam-vay-lien",
+      "attributeCode": "origin",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dam-vay-lien",
+      "attributeCode": "dimensions",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dam-vay-lien",
+      "attributeCode": "organization_address",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dam-vay-lien",
+      "attributeCode": "organization_name",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "attributeCode": "size",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "attributeCode": "origin",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "attributeCode": "brand_country",
+      "isVariant": false,
+      "isRequired": false
+    }
+  ],
+  "brands": [
+    {
+      "slug": "miley-lingerie",
+      "name": "Miley Lingerie",
+      "logoUrl": "",
+      "description": "Miley Lingerie — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "thoi-trang-nu",
+        "do-lot-nu"
+      ]
+    },
+    {
+      "slug": "luckyjqr",
+      "name": "LuckyJQR",
+      "logoUrl": "",
+      "description": "LuckyJQR — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "thoi-trang-nu",
+        "do-lot-nu"
+      ]
+    },
+    {
+      "slug": "wannabe",
+      "name": "Wannabe",
+      "logoUrl": "",
+      "description": "Wannabe — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "thoi-trang-nu",
+        "do-ngu-do-mac-nha-nu"
+      ]
+    },
+    {
+      "slug": "arctic-hunter",
+      "name": "ARCTIC HUNTER",
+      "logoUrl": "",
+      "description": "ARCTIC HUNTER — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "thoi-trang-nu",
+        "dam-vay-lien"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "ao-lot-nu-form-ba-lo-thong-hoi-tron-big-size-1397-size-xxl-3xl-tk279104033",
+      "name": "Áo lót nữ form ba lỗ thông hơi trơn big size 1397 – Size XXL–3XL",
+      "categorySlug": "do-lot-nu",
+      "brandSlug": null,
+      "description": "Áo lót nữ form ba lỗ thông hơi trơn big size 1397 – Size XXL–3XL\nThoáng mát – Co giãn tốt – Thoải mái cả ngày\n Thông tin sản phẩm\n• Tên sản phẩm: Áo lót nữ form ba lỗ thông hơi trơn big size 1397\n• Size: XXL – 3XL (phù hợp cho người từ ~60–85kg, tùy dáng)\n• Kiểu dáng: Áo lót ba lỗ, không gọng, không đệm dày\n• Màu sắc: Trắng, kem, da, xám (như hình)\n• Chất liệu: Vải cotton pha thun cao cấp, mềm mịn, thoáng khí\n• Đối tượng: Phụ nữ trung niên, người có vòng ngực lớn, cần áo lót big size\n Ưu điểm nổi bật\n Form big size chuẩn – ôm nhẹ, không bó siết, không gây hằn da Thiết kế ba lỗ thông hơi – thoáng mát, thấm hút mồ hôi tốt Không gọng – không khó chịu – mặc cả ngày vẫn dễ chịu Chất vải co giãn 4 chiều – nâng đỡ vừa phải, giữ form tự nhiên Kiểu trơn basic – dễ mặc ở nhà, đi ngủ hoặc mặc trong áo ngoài\n Công dụng & hoàn cảnh sử dụng\n• Mặc hàng ngày, mặc ở nhà, đi ngủ\n• Phù hợp phụ nữ big size, phụ nữ sau sinh, trung niên\n• Phù hợp thời tiết nóng, người hay ra mồ hôi\n Hướng dẫn chọn size\n• XXL: ~60–70kg\n• 3XL: ~70–85kg (Số kg mang tính tham khảo, vui lòng inbox shop để được tư vấn chuẩn nhất)\n Hướng dẫn bảo quản\n• Giặt tay hoặc giặt máy chế độ nhẹ\n• Không dùng chất tẩy mạnh\n• Phơi nơi thoáng mát, tránh ánh nắng gắt\n Từ khóa SEO gợi ý: áo lót nữ big size, áo lót nữ không gọng, áo lót ba lỗ nữ, áo lót thông hơi, áo ngực big size XXL 3XL, áo lót nữ trung niên\n\nNguồn: Tiki.vn",
+      "price": 108000,
+      "salePrice": 90720,
+      "costPrice": 63504,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/3d/b3/65/97ff38ec27690d2e4dc6f2fb274c40ed.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/3d/b3/65/97ff38ec27690d2e4dc6f2fb274c40ed.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/61/62/2f/7b7f6389760dd49b49fe9ee6416f380d.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d4/d8/8c/7fa660696df4ab9aa2a9ea929ffd7201.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/4f/a5/2f/2870aaa8331a231fa734be188c51d9c0.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/01/88/f1/f5cf18f01ff618084e3851473f68f8b1.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Trung Quốc"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Trung Quốc"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279104035",
+          "price": 108000,
+          "salePrice": 90720,
+          "costPrice": 63504,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/88/f1/f5cf18f01ff618084e3851473f68f8b1.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "XXL"
+          }
+        },
+        {
+          "sku": "TK279104037",
+          "price": 108000,
+          "salePrice": 90720,
+          "costPrice": 63504,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/3d/b3/65/97ff38ec27690d2e4dc6f2fb274c40ed.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "3XL"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "combo-5-quan-lot-visco-mem-mai-phoi-ren-miley-lingerie-fbt-tk278721617",
+      "name": "Combo 5 Quần Lót Visco Mềm Mại Phối Ren - Miley Lingerie - FBT",
+      "categorySlug": "do-lot-nu",
+      "brandSlug": "miley-lingerie",
+      "description": "CẢM GIÁC MẶC ÊM ÁI NHƯ LÀN DA THỨ HAI - Làm từ 94% Visco & 6% Spandex, chất liệu mềm mịn, thoáng khí và thân thiện với làn da nhạy cảm. Giúp bạn cảm thấy khô thoáng, dễ chịu suốt cả ngày, kể cả trong thời tiết nóng ẩm.\nĐÁY LÓT COTTON KHÁNG KHUẨN: Giúp hút ẩm và khô thoáng suốt cả ngày vận động\nNHẸ MÀ VẪN GIỮ FORM: Thiết kế dáng bikini ôm nhẹ phần hông, vải Visco co giãn mềm mịn, không bai dão sau giặt. Kiểu dáng tối giản, lưng thun êm ái, tạo cảm giác “nhẹ tênh” và dễ chịu suốt cả ngày.\nKHÔNG GÂY CỘM – NHÃN IN LASER – Thiết kế không gắn nhãn truyền thống, giúp loại bỏ cảm giác ngứa ngáy, cọ xát – mặc như không.\nSản phẩm gồm 5 màu sắc khác nhau, đáp ứng nhu cầu sở thích mặc và giặt hằng ngày.\n***LƯU Ý về quy định đổi trả hàng:\n- Để bảo vệ sức khỏe cộng đồng, mà mang đến sản phẩm chất lượng nhất cho khách hàng, Miley không áp dụng đổi trả đối với mặt hàng quần lót. Trừ các trường hợp lỗi từ phía NSX.\n- Các trường hợp lỗi phát sinh do sản xuất, giao thiếu và giao sai,... Khách hàng vui lòng phản hồi lại cho Miley Lingerie trong 5 ngày làm việc (tính từ ngày KH nhận được ĐH) - Sau thời gian này, Miley Lingerie sẽ từ chối xử lý.\n- Áp dụng đổi trả 1 lần duy nhất cho các ĐH áo ngực. Nếu Qúy KH không chắc chắn về size, Miley Lingerie khuyến khích KH nhắn tin để được tư vấn, tránh trường hợp đổi trả không mong muốn.\nVới hơn 1 triệu sản phẩm bán ra hằng năm với rất nhiều phản hồi 5*. Miley Lingerie hy vọng tiếp tục mang đền trải nghiệm tốt nhất cho KH\n#thoải_mái #nhẹ_ê_mềm_thoáng #quần_lót #quần_Lót_Nữ #quần_sịp_nữ #combo_quần_lót_nữ #set_quần_chip #quần_lót_ren\n#FREESHIP #lingeries #underwear #noiy #quanlotnu #aolot #bra #scarlettcharm #quanlotnam #quầntànghình #khôngviền #quầnkhángkhuẩn\n\nNguồn: Tiki.vn",
+      "price": 348500,
+      "salePrice": null,
+      "costPrice": 243950,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1c/2e/4b/5c313ac5409da5d34d343f2787904b06.png",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/1c/2e/4b/5c313ac5409da5d34d343f2787904b06.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/a4/e1/d3/32f6b545e1d31c2ad7b82a022ca7fbb5.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/42/d4/e0/43767f743826327a03477b9b4b7026be.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/4c/02/a2/244afa4013ed580308705ee2ce681e69.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/11/89/bb/09b76c917a1918f77dded9403518d8aa.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Anh, Việt Nam",
+        "organization_name": "Miley Lingerie",
+        "organization_address": "Việt Nam",
+        "brand_country": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Anh, Việt Nam",
+        "Tên đơn vị/tổ chức chịu trách nhiệm về hàng hóa": "Miley Lingerie",
+        "Địa chỉ tổ chức chịu trách nhiệm về hàng hóa": "Việt Nam",
+        "Xuất xứ thương hiệu": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK278721619",
+          "price": 348500,
+          "salePrice": 305505,
+          "costPrice": 213854,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1c/2e/4b/5c313ac5409da5d34d343f2787904b06.png",
+          "active": true,
+          "options": {
+            "size": "Size S"
+          }
+        },
+        {
+          "sku": "TK278721621",
+          "price": 348500,
+          "salePrice": 305505,
+          "costPrice": 213854,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/11/89/bb/09b76c917a1918f77dded9403518d8aa.png",
+          "active": true,
+          "options": {
+            "size": "size M"
+          }
+        },
+        {
+          "sku": "TK278721625",
+          "price": 348500,
+          "salePrice": 305505,
+          "costPrice": 213854,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/11/89/bb/09b76c917a1918f77dded9403518d8aa.png",
+          "active": true,
+          "options": {
+            "size": "Size XL"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ao-nguc-nu-cup-ngang-miley-lingerie-brm09102-tk278699921",
+      "name": "Áo ngực nữ cúp ngang Cao Cấp Miley Lingerie",
+      "categorySlug": "do-lot-nu",
+      "brandSlug": "miley-lingerie",
+      "description": "Áo Ngực Cúp Ngang Tháo dây Miley Lingerie\n- Áo cúp ngang kiểu dáng basic, khóa cài phía sau\n- Mút áo mỏng 1cm không gò bó, chèn ép tạo cảm giác thoải mái cho Vòng 1 của bạn\n- Cúp ôm nửa bầu ngực, dây áo có thể tháo rời để diện cùng áo ống, đầm cúp ngực\n- Áo có gọng giúp định hình dáng ngực đẹp hơn\n- Chất liệu thun lạnh cao cấp, co dãn, thoáng mát và êm dịu cho da\n- Đường may chắc chắn, tinh tế và sắc sảo\n- Nguyên liệu nhập khẩu. Sản xuất tại Việt Nam bởi công ty TNHH SX TM DV Cánh Đỏ.\n\nNguồn: Tiki.vn",
+      "price": 199000,
+      "salePrice": null,
+      "costPrice": 139300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/9b/13/14/dd87390f8733ecbb615c6a9449fe9b8f.png",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/9b/13/14/dd87390f8733ecbb615c6a9449fe9b8f.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/6b/df/05/4a02f2df29a99e4785dd12b283857cb8.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/f5/da/d4/7185d96192e6d10bfa8a485ec80ccec6.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/c5/5e/33/911c9943a5324fe87ef44980fda8a8bf.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/43/da/76/a132fad7c6a5ba8ca88bac8447887eb5.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam",
+        "brand_country": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam",
+        "Xuất xứ thương hiệu": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK278699943",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/6b/df/05/d5bf6efc3bfa922dce1034419b83314a.jpg",
+          "active": true,
+          "options": {
+            "size": "34B",
+            "color": "Màu đen"
+          }
+        },
+        {
+          "sku": "TK278699951",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/6b/df/05/d5bf6efc3bfa922dce1034419b83314a.jpg",
+          "active": true,
+          "options": {
+            "size": "38B",
+            "color": "Màu đen"
+          }
+        },
+        {
+          "sku": "TK278699931",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/83/10/374cd272b36af16232b71c8ca5986fdd.png",
+          "active": true,
+          "options": {
+            "size": "34B",
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "TK278699967",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/21/8f/4f/2cc3ba44b82145259c1cb94744935f8a.png",
+          "active": true,
+          "options": {
+            "size": "34B",
+            "color": "Màu đỏ"
+          }
+        },
+        {
+          "sku": "TK278699965",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/21/8f/4f/2cc3ba44b82145259c1cb94744935f8a.png",
+          "active": true,
+          "options": {
+            "size": "34A",
+            "color": "Màu đỏ"
+          }
+        },
+        {
+          "sku": "TK278699939",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/83/10/374cd272b36af16232b71c8ca5986fdd.png",
+          "active": true,
+          "options": {
+            "size": "38B",
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "TK7778570",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/9b/13/14/dd87390f8733ecbb615c6a9449fe9b8f.png",
+          "active": true,
+          "options": {
+            "size": "38A",
+            "color": "Da"
+          }
+        },
+        {
+          "sku": "TK278699947",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/6b/df/05/d5bf6efc3bfa922dce1034419b83314a.jpg",
+          "active": true,
+          "options": {
+            "size": "36B",
+            "color": "Màu đen"
+          }
+        },
+        {
+          "sku": "TK278699963",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/4d/94/8f28779376ba0b87b091c3645e078484.jpg",
+          "active": true,
+          "options": {
+            "size": "38B",
+            "color": "Xám"
+          }
+        },
+        {
+          "sku": "TK278699969",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/21/8f/4f/2cc3ba44b82145259c1cb94744935f8a.png",
+          "active": true,
+          "options": {
+            "size": "36A",
+            "color": "Màu đỏ"
+          }
+        },
+        {
+          "sku": "TK278699971",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/21/8f/4f/2cc3ba44b82145259c1cb94744935f8a.png",
+          "active": true,
+          "options": {
+            "size": "36B",
+            "color": "Màu đỏ"
+          }
+        },
+        {
+          "sku": "TK278699949",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/6b/df/05/d5bf6efc3bfa922dce1034419b83314a.jpg",
+          "active": true,
+          "options": {
+            "size": "38A",
+            "color": "Màu đen"
+          }
+        },
+        {
+          "sku": "TK278699945",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/6b/df/05/d5bf6efc3bfa922dce1034419b83314a.jpg",
+          "active": true,
+          "options": {
+            "size": "36A",
+            "color": "Màu đen"
+          }
+        },
+        {
+          "sku": "TK7778568",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/43/da/76/a132fad7c6a5ba8ca88bac8447887eb5.png",
+          "active": true,
+          "options": {
+            "size": "36B",
+            "color": "Da"
+          }
+        },
+        {
+          "sku": "TK278699975",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/21/8f/4f/2cc3ba44b82145259c1cb94744935f8a.png",
+          "active": true,
+          "options": {
+            "size": "38B",
+            "color": "Màu đỏ"
+          }
+        },
+        {
+          "sku": "TK278699933",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/83/10/374cd272b36af16232b71c8ca5986fdd.png",
+          "active": true,
+          "options": {
+            "size": "36A",
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "TK278699935",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/83/10/374cd272b36af16232b71c8ca5986fdd.png",
+          "active": true,
+          "options": {
+            "size": "36B",
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "TK278699953",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/4d/94/8f28779376ba0b87b091c3645e078484.jpg",
+          "active": true,
+          "options": {
+            "size": "34A",
+            "color": "Xám"
+          }
+        },
+        {
+          "sku": "TK7778572",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/43/da/76/a132fad7c6a5ba8ca88bac8447887eb5.png",
+          "active": true,
+          "options": {
+            "size": "38B",
+            "color": "Da"
+          }
+        },
+        {
+          "sku": "TK7778562",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/3a/83/3c/30306f4d2722a62dc59e482010434ecb.png",
+          "active": true,
+          "options": {
+            "size": "34A",
+            "color": "Trắng"
+          }
+        },
+        {
+          "sku": "TK278699959",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/4d/94/8f28779376ba0b87b091c3645e078484.jpg",
+          "active": true,
+          "options": {
+            "size": "36B",
+            "color": "Xám"
+          }
+        },
+        {
+          "sku": "TK278699957",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/4d/94/8f28779376ba0b87b091c3645e078484.jpg",
+          "active": true,
+          "options": {
+            "size": "36A",
+            "color": "Xám"
+          }
+        },
+        {
+          "sku": "TK278699961",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/4d/94/8f28779376ba0b87b091c3645e078484.jpg",
+          "active": true,
+          "options": {
+            "size": "38A",
+            "color": "Xám"
+          }
+        },
+        {
+          "sku": "TK278699955",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/4d/94/8f28779376ba0b87b091c3645e078484.jpg",
+          "active": true,
+          "options": {
+            "size": "34B",
+            "color": "Xám"
+          }
+        },
+        {
+          "sku": "TK278699973",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/21/8f/4f/2cc3ba44b82145259c1cb94744935f8a.png",
+          "active": true,
+          "options": {
+            "size": "38A",
+            "color": "Màu đỏ"
+          }
+        },
+        {
+          "sku": "TK278699937",
+          "price": 199000,
+          "salePrice": 179518,
+          "costPrice": 125663,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/83/10/374cd272b36af16232b71c8ca5986fdd.png",
+          "active": true,
+          "options": {
+            "size": "38A",
+            "color": "Trắng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "combo-bao-quan-lot-mien-giat-tien-loi-travel-mate-nu-5-cai-bao-size-m-vong-mong-84-94-cm-tk278149879",
+      "name": "Combo 5 quần lót nữ du lịch dùng 1 lần Size L 45-55kg",
+      "categorySlug": "do-lot-nu",
+      "brandSlug": "luckyjqr",
+      "description": "Tên sản phẩm: Quần lót dùng một lần dành cho nữ - Chất liệu - An toàn, tiện lợi, thoải mái.\nThông số sản phẩm:\nChất liệu: VẢI GIẤY - PP (Polypropylene)\nMàu sắc: Trắng\nKích thước: Từ M đến XXXL\nĐóng gói: 5 chiếc/ túi\nĐặc điểm nổi bật:\nSợi tổng hợp không dệt, siêu nhẹ, thoáng khí và có tính kháng khuẩn tự nhiên.\nPP giúp tăng độ bền của sản phẩm, đồng thời giữ cho quần luôn sạch sẽ và an toàn trong quá trình sử dụng.\nThiết kế tiện lợi:\nKiểu dáng cơ bản, vừa vặn với cơ thể, phù hợp với đa dạng kích thước và vóc dáng.\nĐường may mềm mại, không gây kích ứng da, tạo cảm giác dễ chịu dù sử dụng trong thời gian dài.\nAn toàn và vệ sinh:\nĐược đóng gói riêng lẻ, đảm bảo vệ sinh tuyệt đối khi mang theo và sử dụng.\nPhù hợp với tiêu chuẩn vệ sinh và an toàn, không chứa hóa chất độc hại, an toàn cho làn da nhạy cảm.\nỨng dụng đa năng\nDu lịch và công tác: Lý tưởng để mang theo khi đi xa, giúp tiết kiệm không gian hành lý và tránh phải giặt giũ.\nSau sinh hoặc bệnh viện: Được thiết kế để sử dụng tiện lợi và đảm bảo vệ sinh trong thời gian nằm viện.\nHoạt động ngoài trời: Phù hợp khi tham gia các hoạt động cắm trại, dã ngoại hoặc các sự kiện thể thao.\nHướng dẫn sử dụng:\nLấy quần ra khỏi bao bì và sử dụng trực tiếp.\nKhông cần giặt lại trước khi mặc.\nSau khi sử dụng, vứt vào thùng rác đúng nơi quy định.\nLợi ích:\nTiết kiệm thời gian: Không cần giặt quần lót sau khi sử dụng, tiết kiệm thời gian cho những người bận rộn.\nVệ sinh tối ưu: Đóng gói và sản xuất trong môi trường khép kín, đảm bảo không bị nhiễm bẩn.\nCam kết từ shop:\nSản phẩm đúng mô tả, chất lượng cao.\nĐảm bảo vệ sinh và an toàn trong quá trình sử dụng.\nĐổi trả nếu phát hiện lỗi từ nhà sản xuất.\nQuần lót dùng một lần dành cho nữ chất liệu PP là giải pháp hoàn hảo cho nhu cầu vệ sinh cá nhân, mang lại sự tiện lợi và an toàn cho người sử dụng.\n\nNguồn: Tiki.vn",
+      "price": 110000,
+      "salePrice": null,
+      "costPrice": 77000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/f0/09/a8/6a2114ac252a4b3abfdb053f3d2ba581.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/f0/09/a8/6a2114ac252a4b3abfdb053f3d2ba581.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/b0/14/7b/a7741be7084f68a70a4d39264823241a.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/6f/af/0e/d3e0e66267073104f469edda69e42abe.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/17/70/a1/d9aa0080d02ac55bf80880f31c0a4f19.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/8f/5e/24/011ca5bc66bac3685c1b977fa5363796.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": []
+    },
+    {
+      "slug": "combo-5-quan-lot-nu-su-tam-tron-khong-vien-mong-nhe-892-co-gian-4-chieu-thoang-mat-khong-lo-vien-size-l-xl-xxl-tk278004504",
+      "name": "Combo 5 Quần Lót Nữ Su Tăm Trơn Không Viền Mỏng Nhẹ 892 – Co Giãn 4 Chiều, Thoáng Mát, Không Lộ Viền (Size L/XL/XXL)",
+      "categorySlug": "do-lot-nu",
+      "brandSlug": null,
+      "description": "Combo 5 Quần Lót Nữ Su Tăm Trơn Không Viền Mỏng Nhẹ 892 – Co Giãn 4 Chiều, Thoáng Mát, Không Lộ Viền (Size L/XL/XXL)\n Điểm nổi bật\n• Combo 5 chiếc: Thỏa sức thay đổi mỗi ngày, tiết kiệm tối đa chi phí.\n• Chất liệu su tăm cao cấp: Mềm mịn, siêu nhẹ, ôm khít cơ thể nhưng không gò bó.\n• Thiết kế không viền – seamless: Hoàn hảo dưới mọi trang phục ôm sát, không lo hằn vết, không lộ đường may.\n• Co giãn 4 chiều: Đảm bảo ôm vừa vặn, phù hợp với mọi vóc dáng, vận động thoải mái cả ngày.\n• Thoáng khí, thấm hút mồ hôi: Duy trì sự khô thoáng, sạch sẽ, hạn chế vi khuẩn gây mùi.\n• Size đa dạng: L, XL, XXL – phù hợp cho người vóc dáng từ trung bình đến mập.\n Thông số kỹ thuật\nTiêu chí\nChi tiết\nMã sản phẩm\n892\nSố lượng\nCombo 5 quần\nChất liệu\nSu tăm co giãn 90% nylon + 10% spandex\nKiểu dáng\nTrơn, không viền (seamless)\nMàu sắc\nXám, xanh đen, hồng phấn, xanh rêu, be – giao ngẫu nhiên theo combo\nSize\nL (45–55 kg), XL (55–65 kg), XXL (65–75 kg)\nXuất xứ\nTrung Quốc\n Lợi ích khi sử dụng\n• Tự tin vận động không lo vết hằn: Thiết kế không đường may nổi và chất liệu co giãn siêu mềm cho bạn thoải mái hoạt động, tập gym, yoga hay mang cả ngày đi làm.\n• Thoáng mát – kháng khuẩn: Công nghệ dệt su tăm thoáng khí, hút ẩm nhanh, ngăn ngừa vi khuẩn phát triển, bảo vệ sức khỏe vùng nhạy cảm.\n• Bền đẹp lâu dài: Giặt máy hay giặt tay đều giữ form dáng, không bai nhão, phai màu.\n Hướng dẫn sử dụng & bảo quản\n• Giặt tay hoặc giặt máy với nước lạnh (<30 °C), dùng túi giặt bảo vệ.\n• Không dùng chất tẩy mạnh, tránh phơi nắng gắt.\n Tại sao chọn chúng tôi?\n• Giao hàng nhanh – nhận ngay trong 1–2 ngày.\n• Đổi trả dễ dàng nếu sai size hoặc lỗi kỹ thuật.\n• Chăm sóc khách hàng tận tâm, hỗ trợ 24/7.\n Nhanh tay “Thêm vào giỏ” để sở hữu Combo 5 Quần Lót Nữ Su Tăm Trơn Không Viền 892, trải nghiệm sự mỏng nhẹ – thoáng mát – siêu ôm dáng mỗi ngày!\n\nNguồn: Tiki.vn",
+      "price": 210000,
+      "salePrice": 163800,
+      "costPrice": 114660,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/de/92/b3/ccea410c5904d9b2f718e6e92aacfe9a.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/de/92/b3/ccea410c5904d9b2f718e6e92aacfe9a.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d7/53/bb/08031783f076ce8dc7675d896b3b13b1.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/b5/9a/db/5a5d1eaf88ce123e47b6035a1bc82cd3.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/de/f4/17/9ec7498ed166a68c4e66282b5c3f7f4e.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Trung Quốc"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Trung Quốc"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK278004508",
+          "price": 230000,
+          "salePrice": 179400,
+          "costPrice": 125580,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/b5/9a/db/5a5d1eaf88ce123e47b6035a1bc82cd3.jpg",
+          "active": true,
+          "options": {
+            "size": "XL"
+          }
+        },
+        {
+          "sku": "TK278004506",
+          "price": 210000,
+          "salePrice": 163800,
+          "costPrice": 114660,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/de/92/b3/ccea410c5904d9b2f718e6e92aacfe9a.jpg",
+          "active": true,
+          "options": {
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK278004510",
+          "price": 240000,
+          "salePrice": 187200,
+          "costPrice": 131040,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/b5/9a/db/5a5d1eaf88ce123e47b6035a1bc82cd3.jpg",
+          "active": true,
+          "options": {
+            "size": "XXL"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "do-bo-thu-dong-trung-nien-nesa-shop-chat-lieu-ni-ngoai-co-dan-mem-min-set-do-di-choi-sang-trong-quy-phai-cho-chi-em-tk279092268",
+      "name": "Đồ bộ thu đông trung niên Nesa Shop, Chất liệu Nỉ ngoại co dãn, mềm mịn, Set đồ đi chơi sang trọng quý phái cho chị em",
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "brandSlug": null,
+      "description": "Đồ bộ thu đông trung niên, Chất liệu Nỉ ngoại mềm mại, ấm áp, co dãn, set đồ bộ đi chơi, sang trọng, quý phái BT23, đồ bộ nữ trung niên đồ mặc nhà.\n THÔNG TIN SẢN PHẨM:\n1. Tên sản phẩm: Đồ bộ nữ trung niên chất liệu Nỉ NeSa Shop.\n2. Đăc điểm của Đồ bộ nữ trung niên đồ mặc nhà:\n- Đồ bộ trung niên nữ thiết kế theo phong cách trẻ trung, phá cách.\n- Đồ bộ thu đông nữ phù hợp với tuổi trung niên, các chị em, các bà mặc đều xinh. Các Chị em có thể diện bộ trung niên đi chơi, đi chợ, du lịch hay mặc ở nhà đều rất lịch sự, trẻ trung và sang trọng.\n- Form bộ đồ trung niên thu đông vừa ôm, vải co giãn.\n- Áo bộ Nỉ trung niên là áo dài tay, quần là quần dài, ống vừa, lưng thun.\n3. Chất liệu:\nĐồ bộ Trung niên nữ được may bằng chất liệu Nỉ nhập ngoại cao cấp, ấm áp, thấm hút mồ hôi cực tốt, vải dày dặn, không quá dày, không phai màu, không xù lông.\n4. Màu sắc:\nBộ nỉ thu đông trung niên có 04 màu\n- Tím\n- Nâu\n- Đen\n- Trắng\n5. Kích cỡ:\nĐồ bộ trung niên nữ có đủ size: từ 38-65kg.\n- Size M (38-49kg)\n- Size L (50-58kg)\n- Size XL (59-65kg)\nForm đồ bộ Nỉ nữ vừa ôm nên quý khách nên trừ hao (đặt lớn hơn 1 size) nếu có vòng ngực, vòng bụng lớn hoặc bắp tay to nhé!\n6. Hướng dẫn bảo quản & sử dụng:\n- Bộ đồ thu đông nên giặt với nước lạnh và xà phòng có độ kiềm thấp, không được giặt chung với các loại quần áo màu khác\n- Khi phơi nên phơi ở những nơi thoáng mát, có thể phơi dưới ánh nắng nhẹ, không quá gắt.\n- Bộ thu đông nữ có thể ủi hoặc là với nhiệt, nhiệt độ là hoặc ủi cần phù hợp để tránh làm mất màu, hư vải.\nChúc quý khách vui vẻ và hài lòng khi mua sắm tại NeSa Shop️\n#bộ_đồ #đồ_bộ_nữ_thu_đông #đồ_mặc_nhà #đồ_bộ #đồ_bộ_nữ_mặc_nhà #bộ_nữ_umi #bộ_thu_đông_cho_nữ #đồ_bộ_mặc_ở_nhà #bô_mặc_nhà_thu_đông #đồ_bộ_dài_tay_nữ #bộ_mặc_nhà_dài_tay #đồ_bộ_dài_tay_nữ #bộ_thể_thao_thu_đông #bộ_mặc_nhà_thu_đông #bộ_mặc_nhà_dài_tay #bộ_thể_thao #đồ_bộ_thể_thao #đồ_bộ_nữ_trung_niên_đồ_mặc_nhà\n\nNguồn: Tiki.vn",
+      "price": 189000,
+      "salePrice": 145000,
+      "costPrice": 101500,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/d1/58/ff/86b85a4c2763531bfb5752c8afadbc7b.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d1/58/ff/86b85a4c2763531bfb5752c8afadbc7b.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/7a/f4/6e/d7c6552e491613767b5532add0704ead.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d5/ae/1b/2641a0862ecec72a13b22f5c5600c59a.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam",
+        "material": "Nỉ"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam",
+        "Chất liệu": "Nỉ"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279092270",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/d1/58/ff/86b85a4c2763531bfb5752c8afadbc7b.jpg",
+          "active": true,
+          "options": {
+            "color": "TÍM",
+            "size": "M (38-49kg)"
+          }
+        },
+        {
+          "sku": "TK279092272",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "NÂU",
+            "size": "M (38-49kg)"
+          }
+        },
+        {
+          "sku": "TK279092276",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "trắng",
+            "size": "M (38-49kg)"
+          }
+        },
+        {
+          "sku": "TK279092274",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "ĐEN",
+            "size": "M (38-49kg)"
+          }
+        },
+        {
+          "sku": "TK279092284",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "trắng",
+            "size": "L (50-59kg)"
+          }
+        },
+        {
+          "sku": "TK279092282",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "ĐEN",
+            "size": "L (50-59kg)"
+          }
+        },
+        {
+          "sku": "TK279092278",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "TÍM",
+            "size": "L (50-59kg)"
+          }
+        },
+        {
+          "sku": "TK279092292",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "trắng",
+            "size": "XL (60-65kg)"
+          }
+        },
+        {
+          "sku": "TK279092280",
+          "price": 189000,
+          "salePrice": 145000,
+          "costPrice": 101500,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/1a/5a/0d9843ae0ae73799f8d5dbde4ca64d40.jpg",
+          "active": true,
+          "options": {
+            "color": "NÂU",
+            "size": "L (50-59kg)"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "do-bo-mac-nha-cao-cap-tk277207572",
+      "name": "đồ bộ mặc nhà cao cấp",
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "brandSlug": null,
+      "description": "Đồ bộ mặc nhà chất liệu mềm mị thoáng mát , mẫu mã đa dạng gia cả cạnh tranh , đồ bộ bên shop luôn cam kết Hàn tự chụp, chuẩn hình chuẩn mẫu như đã đăng\nHàng đủ 4 size cho các chị em\nSize S ( 40kg - 47kg)\nSize M ( 48kg - 53kg)\nSize L ( 54kg - 58kg)\nSize XL ( 59kg - 64kg)\nGửi ảnh cho shop để được tư vấn size ạ.\nTuyển sỉ toàn quốc ib cho shop ạ\n\nNguồn: Tiki.vn",
+      "price": 190000,
+      "salePrice": null,
+      "costPrice": 133000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/29/2d/aec96a127a1840dca4d20970c6b80161.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/00/29/2d/aec96a127a1840dca4d20970c6b80161.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277207574",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/29/2d/aec96a127a1840dca4d20970c6b80161.jpg",
+          "active": true,
+          "options": {
+            "color": "XANH LÁ",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK277207588",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/37/e5/ab/168b72a0f5b9124bf8fd34ae74aeeb33.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "XL"
+          }
+        },
+        {
+          "sku": "TK277207576",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/29/2d/aec96a127a1840dca4d20970c6b80161.jpg",
+          "active": true,
+          "options": {
+            "color": "XANH LÁ",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK277207586",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/37/e5/ab/168b72a0f5b9124bf8fd34ae74aeeb33.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK277207580",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/29/2d/aec96a127a1840dca4d20970c6b80161.jpg",
+          "active": true,
+          "options": {
+            "color": "XANH LÁ",
+            "size": "XL"
+          }
+        },
+        {
+          "sku": "TK277207584",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/37/e5/ab/168b72a0f5b9124bf8fd34ae74aeeb33.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK277207578",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/29/2d/aec96a127a1840dca4d20970c6b80161.jpg",
+          "active": true,
+          "options": {
+            "color": "XANH LÁ",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK277207582",
+          "price": 190000,
+          "salePrice": null,
+          "costPrice": 133000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/37/e5/ab/168b72a0f5b9124bf8fd34ae74aeeb33.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "S"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "set-vay-ngu-2-day-ren-dai-sexy-de-thuong-freesize-tk276491587",
+      "name": "Set Váy Ngủ 2 Dây Ren Dài Sexy Dễ Thương Freesize",
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "brandSlug": null,
+      "description": "Set Váy Ngủ 2 Dây Ren Dài Sexy Dễ Thương Freesize (Dưới 75kg)\nĐiểm nhấn: váy 2 dây - mẫu ren form váy dài\nĐồ ngủ không chỉ giúp cho bạn thấy thoải mái, dễ chịu hơn khi nghỉ ngơi mà nó còn giúp góp phần tạo nên niềm hạnh phúc ngọt ngào êm ái cho đời sống vợ chồng. Để tạo niềm đam mê nồng nàn cho đêm yêu đương, các nhà thiết kế thời trang đã không ngừng sáng tạo và thổi hồn vào đầm ngủ dành cho phái đẹp thật gợi cảm và quyến rũ.\nCác màu nhẹ nhàng, Form dáng đầm tinh tế kèm phụ kiện và điểm nhấn mạnh các đường cong thon gọn hoàn hảo cho phái nữ.\nThiết kế táo bạo nhưng vẫn đầy cuốn hút nhờ kiểu giáng quyến rũ, nữ tính đem đến cho phái đẹp một phong cách thật tự tin và năng động. kiểu dáng mới lạ và ấn tượng giúp chị em phái nữ trở nên hấp dẫn, ngọt ngào hơn trong mắt đấng mày râu!\n\nNguồn: Tiki.vn",
+      "price": 198000,
+      "salePrice": null,
+      "costPrice": 138600,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/71/b2/0d/f103662918a013a521c3b2e080cda3df.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/71/b2/0d/f103662918a013a521c3b2e080cda3df.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/6f/96/90/17bd275d2a01d3be0d137fe1be546607.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d9/26/05/d68721e406a555425b401cb7c2a8283c.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/b4/f3/34/82a7b82141e10f433cb0668abde8927d.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/5c/d7/c3/704e4054da10128e722909faf543e0ac.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK276491589",
+          "price": 198000,
+          "salePrice": null,
+          "costPrice": 138600,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/05/a4/20/e733d3532a0f3690b2b476a38233311e.jpg",
+          "active": true,
+          "options": {
+            "color": "Màu xanh ngọc"
+          }
+        },
+        {
+          "sku": "TK276491591",
+          "price": 198000,
+          "salePrice": null,
+          "costPrice": 138600,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/71/b2/0d/f103662918a013a521c3b2e080cda3df.jpg",
+          "active": true,
+          "options": {
+            "color": "Màu Đen"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dam-ngu-phi-lua-cao-cap-wannabe-dns86-don-gian-nu-tinh-tk270443570",
+      "name": "Đầm ngủ phi lụa cao cấp WANNABE DNS86 váy ngủ 2 dây kiểu dáng đơn giản nữ tính với phần lưng ba lỗ khoét sâu năng động",
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "brandSlug": "wannabe",
+      "description": "Đầm ngủ phi lụa cao cấp Wannabe DNS86 thiết kế vừa đơn giản thoải mái. đầm ngủ hai dây chữ A không kén dáng cùng phần lưng kiểu 3 lỗ trẻ trung làm bật lên vẻ nữ tính năng động đáng yêu của bạn gái khi mặc chiếc đầm ngủ này\nChất liệu: đầm ngủ phi lụa DNS86 thiết kế trên chất liệu satin lụa mềm mại cao cấp không nhăn không nóng mang đến cảm giác thư giản thoải mái cho nàng sau một ngày dài làm việc mệt mỏi\nKiểu đầm: đầm ngủ chữ A không kén dáng, cổ tim thoải mái nhẹ nhàng\nDây vai: hai dây, sử dụng tăng đơ cùng màu có thể tăng giảm chiều dài thuận tiện\nĐường may: sử dụng máy chuyên dụng nên đường chỉ chìm sâu mỹ thuật co giãn tốt không gây tức chật đứt đường chỉ khi vận động\nLoại: đầm ngủ ngắn, đầm ngủ hai dây\nƯu điểm: đầm ngủ rất nữ tính, thoải mái, đơn giản. Top 10 đầm ngủ được tìm kiếm nhiều nhất\nPhù hợp: 18 - 50 tuổi\nMàu sắc đầm ngủ: Cacao, Tím môn, Đỏ\nĐầm ngủ có 3 size: M, L, XL (số đo mẫu: cao m75, 3 vòng: 81-58-87)\nĐầm ngủ Wannabe được Sản xuất tại Việt Nam\nWANNABE CAM KẾT:\n- Hình ảnh đầm ngủ đều do Wannabe thực hiện sản xuất và chụp ảnh. Đầm ngủ giống hình 98%, 2% do chênh lệch ánh sáng khi chụp\n- Hỗ trợ đổi màu size cho tất cả đầm ngủ Wannabe (ngoại trừ quần lót và sản phẩm kèm quần lót)\n- Đổi đầm ngủ miễn phí nếu lỗi từ Wannabe (các khách hàng vui lòng quay video khi mở hàng để Wannabe hỗ trợ nhanh nhất có thể)\nWANNABE YOUR LOVE\n#damngu #vayngu #vayngudethuong #vayngudep #vayngusexy #damngudep #damngulua #damngumuahe #damngusexy #vayngulua #wannabe #WANNABE #wanabe #damngu2day #damngunu #vayngu2day #vay #dam #vaynu #đamsomi #pijama #pijamas #wanabe #wanabi #thoitrangonha\n\nNguồn: Tiki.vn",
+      "price": 350000,
+      "salePrice": null,
+      "costPrice": 245000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/c6/b0/e5/5900f6a0366511af52ca19b2e0e528ca.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/c6/b0/e5/5900f6a0366511af52ca19b2e0e528ca.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam",
+        "organization_name": "WANNABE",
+        "organization_address": "H20 đường số 4, KDC Phú Mỹ, Q.7, HCM",
+        "material": "lụa",
+        "filter_color": "Tím",
+        "brand_country": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam",
+        "Tên đơn vị/tổ chức chịu trách nhiệm về hàng hóa": "WANNABE",
+        "Địa chỉ tổ chức chịu trách nhiệm về hàng hóa": "H20 đường số 4, KDC Phú Mỹ, Q.7, HCM",
+        "Chất liệu": "lụa",
+        "Màu sắc": "Tím",
+        "Xuất xứ thương hiệu": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK270443574",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/c6/b0/e5/5900f6a0366511af52ca19b2e0e528ca.jpg",
+          "active": true,
+          "options": {
+            "color": "Cacao",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK270443586",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/43/da/7c/2f222f50c300db43666d5bee08ec4b67.jpg",
+          "active": true,
+          "options": {
+            "color": "Cacao",
+            "size": "XL"
+          }
+        },
+        {
+          "sku": "TK270443580",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/43/da/7c/233394349eeca3cdc7cc78f2fb175152.jpg",
+          "active": true,
+          "options": {
+            "color": "Cacao",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK270443578",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/42/f6/f9/9e51b6bad883ec53bff162fe0417e67c.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK270443582",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/0d/21/4b/c2a318fd605dc438db19355802edc796.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím môn",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK270443584",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/42/f6/f9/72043edf04bba86f76b609fef9531d61.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "size": "XL"
+          }
+        },
+        {
+          "sku": "TK270443576",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/0d/21/4b/7901bfe7b6bba394c20261dbcbf579e2.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím môn",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK270443572",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/42/f6/f9/eb626eaadf1f14efbc5e0abeb73bd6d0.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK270443588",
+          "price": 350000,
+          "salePrice": 330000,
+          "costPrice": 231000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/0d/21/4b/cbac1af0bcb39aeb90a3978fb55aaf9c.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím môn",
+            "size": "XL"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "do-ngu-nu-wannabe-dns71-dam-ngu-hai-day-ra-cup-lot-mut-nu-tinh-quyen-ru-tk262803154",
+      "name": "Đầm ngủ WANNABE DNS71 váy ngủ 2 dây cúp ngực lót mút mỏng tạo dáng cho người mặc in hoa ngọt ngào nữ tính quyến rũ",
+      "categorySlug": "do-ngu-do-mac-nha-nu",
+      "brandSlug": "wannabe",
+      "description": "Đồ ngủ nữ Wannabe DNS71 thiết kế tinh tế làm bật lên vẻ nữ tính pha chút ngọt ngào với dáng đầm ngủ hai dây rã cúp, lót mút mang đến cảm giác vòng 1 đầy đặn cùng form dáng đầm ngủ chữ A không kén dáng xẻ 1 bên tôn lên đôi chân dài gợi cảm quyến rũ cho phái nữ khi mặc chiếc đầm ngủ 2 dây này\nChất liệu: đầm ngủ lụa hoa mềm mại nhẹ nhàng tạo cảm giác thoáng mát trong mùa nóng oi bức này\nKiểu dáng: đầm ngủ chữ A, đầm ngủ ngắn, đầm ngủ 2 dây\nDây vai: sử dụng tăng đơ có thể tăng giảm chiều dài thuận tiện\nTrang trí: viền ren hoa đinh ngực xinh xắn\nĐường may: đầm ngủ WANNABE sử dụng máy chuyên dụng ziczac nên đường chỉ chìm sâu mỹ thuật co giãn tốt không gây tức chật đứt đường chỉ khi vận động\nƯu điểm: nữ tính, thoải mái, quyến rũ\nPhù hợp: 18 - 45 tuổi\nMàu sắc: Kem\nĐầm ngủ có 2 size: M, L\nĐầm ngủ được sản xuất tại Việt Nam\nSẢN PHẨM ĐƯỢC LÊN Ý TƯỞNG VÀ SẢN XUẤT BỞI:\nCÔNG TY TNHH SX TM DV NỮ HOÀNG THỜI TRANG\nWANNABE CAM KẾT:\n- Hình ảnh đầm ngủ đều do Wannabe thực hiện sản xuất và chụp ảnh\n- Hỗ trợ đổi màu size cho tất cả đầm ngủ Wannabe (ngoại trừ quần lót và các sản phẩm kèm quần lót)\n- Đổi đầm ngủ miễn phí nếu lỗi từ Wannabe (các khách hàng vui lòng quay video khi mở hàng để Wannabe hỗ trợ nhanh nhất có thể)\nWANNABE YOUR LOVE\n#damngu #vayngu #vayngudethuong #vayngudep #vayngusexy #damngudep #damngulua #damngumuahe #damngusexy #vayngulua #wannabe #WANNABE #wanabe #damngu2day #damngunu #vayngu2day #vay #dam #vaynu #đamsomi #pijama #pijamas #wanabe #wanabi #thoitrangonha\n\nNguồn: Tiki.vn",
+      "price": 390000,
+      "salePrice": null,
+      "costPrice": 273000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/09/e5/95/10bb0b7426eb126380e5361c400af1a5.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/09/e5/95/10bb0b7426eb126380e5361c400af1a5.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/e8/68/8a/023efe1e3fdd2e0e6862e83b287854ea.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam",
+        "organization_name": "WANNABE",
+        "organization_address": "H20 đường 4, KDC Phú Mỹ, Q.7, HCM",
+        "material": "lụa mango",
+        "filter_color": "Kem",
+        "brand_country": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam",
+        "Tên đơn vị/tổ chức chịu trách nhiệm về hàng hóa": "WANNABE",
+        "Địa chỉ tổ chức chịu trách nhiệm về hàng hóa": "H20 đường 4, KDC Phú Mỹ, Q.7, HCM",
+        "Chất liệu": "lụa mango",
+        "Màu sắc": "Kem",
+        "Xuất xứ thương hiệu": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK271126192",
+          "price": 390000,
+          "salePrice": 370000,
+          "costPrice": 259000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/62/76/ab/8ab89da83f9d2b47f36cb4b822de5b9b.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "size": "m"
+          }
+        },
+        {
+          "sku": "TK262803156",
+          "price": 390000,
+          "salePrice": 370000,
+          "costPrice": 259000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/42/d9/cb/0ac01589f3786b13e0a05e002b7400aa.jpg",
+          "active": true,
+          "options": {
+            "color": "Kem",
+            "size": "m"
+          }
+        },
+        {
+          "sku": "TK271126198",
+          "price": 390000,
+          "salePrice": 370000,
+          "costPrice": 259000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/8c/80/a5/abc5ed86b74b355c2d245eaf81bdd4dc.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "l"
+          }
+        },
+        {
+          "sku": "TK271126196",
+          "price": 390000,
+          "salePrice": 370000,
+          "costPrice": 259000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/8c/80/a5/b18f9f74435f212de339c40511bd3785.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "m"
+          }
+        },
+        {
+          "sku": "TK271126194",
+          "price": 390000,
+          "salePrice": 370000,
+          "costPrice": 259000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/62/76/ab/bfae4cbfb875d42077d3c518a9628607.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "size": "l"
+          }
+        },
+        {
+          "sku": "TK262803158",
+          "price": 390000,
+          "salePrice": 370000,
+          "costPrice": 259000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/09/e5/95/10bb0b7426eb126380e5361c400af1a5.jpg",
+          "active": true,
+          "options": {
+            "color": "Kem",
+            "size": "l"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dam-xoe-linen-cao-cap-do-ben-cao-mat-min-tham-hut-mo-hoi-may-vien-ti-mi-san-xuat-doc-quyen-tai-kieu-oanh-designer-tk279491793",
+      "name": "Đầm xoè linen cao cấp,độ bền cao,mát mịn,thấm hút mồ hôi,may viền tỉ mỉ,sản xuất độc quyền tại Kiều Oanh Designer",
+      "categorySlug": "dam-vay-lien",
+      "brandSlug": null,
+      "description": "ĐẦM LINEN TRUNG NIÊN CAO CẤP \nĐầm xoè xếp ly với 2 túi bên hông chất liệu Linen ,thiết kế và sản xuất độc quyền tại Kiều Oanh Designer,phom dáng chuẩn chỉnh,giúp tôn dáng và tạo cảm giác thanh lịch,sang trọng khi mặc.Form đầm được nghiên cứu kỹ để mặc thoải mái,che khuyết điểm tốt và phù hợp nhiều độ tuổi. \nĐường may phía trong được viền tỉ mỉ,giúp tránh các mép vải cọ sát trực tiếp vào da gây tổn thương,ngứa và khó chịu cho người mặc,đồng thời tăng độ bền và giữ form đầm đẹp hơn trong quá trình sử dụng.\nCHẤT LIỆU LINEN CAO CẤP\nVải Linen có độ bền cao,thấm hút mồ hôi tốt và tản nhiệt nhanh,tạo cảm giác thoáng mát khi mặc. \nBề mặt vải mang vẻ đẹp nhăn tự nhiên đặc trưng của Linen,tạo nét sang trọng và tinh tế riêng biệt. \nSIZE HIỆN CÓ\nShop hiện có sẵn 3 màu,3 size chuẩn: M – L – XL \nCác size khác hoặc cần may theo vóc dáng sẽ được nhận đặt may riêng theo yêu cầu. \nLƯU Ý KHI CHỌN SIZE & MÀU SẮC\nSize M: phù hợp khoảng (48–53 kg Ngực 86-88 Eo 72-74 Mông 90-92 )\nSize L: phù hợp khoảng (54–58 kg Ngực 90-92 Eo 76-78 Mông 94-96 )\nSize XL: phù hợp khoảng (58–62 kg Ngực 94-96 Eo 80-82 Mông 98-100) \nBảng size mang tính chất tham khảo vì còn tùy chiều cao,số đo vòng ngực, bụng và sở thích mặc ôm hoặc rộng thoải mái của mỗi người. \nMàu sắc sản phẩm thực tế có thể chênh lệch nhẹ do ánh sáng khi chụp hình và thiết bị hiển thị khác nhau,tuy nhiên shop luôn cố gắng giữ màu sắc gần giống thực tế nhất.\nHƯỚNG DẪN SỬ DỤNG & BẢO QUẢN\nKhuyến khích giặt tay để giữ độ bền và phom dáng sản phẩm. \nNếu cần giặt máy,bắt buộc cho sản phẩm vào túi giặt để bảo vệ chất liệu Linen \nCAM KẾT TỪ SHOP\nCam kết sản phẩm đúng chất lượng vải như mô tả. \nHình ảnh chụp thực tế đúng sản phẩm từ bên ngoài đến bên trong \nCHÍNH SÁCH BẢO HÀNH & ĐỔI TRẢ\nĐổi trả trong thời hạn 05 ngày kể từ ngày khách nhận được hàng.\nHỗ trợ đổi trả khi sản phẩm không đúng chất lượng hoặc mô tả.\nHỗ trợ đổi size nếu khách mặc không vừa. \nĐiều kiện hỗ trợ: sản phẩm còn nguyên thẻ tag,chưa qua sử dụng. \nKhách vui lòng chụp hình lỗi hoặc tình trạng sản phẩm để Shop hỗ trợ nhanh hơn.\nTRƯỜNG HỢP KHÔNG ĐƯỢC ĐỔI TRẢ\nHàng đã qua sữ dụng,đã gỡ thẻ tag\nQuá 15 ngày kể từ khi nhận hàng \n#damlinen #vaylinen #damxoexeply #vayxoexeply #damdahoi #vayxeply #dambigsize #vaycongso #damcongso #damdaopho #damsuong #vaysuong #setbo #setbocongso\n\nNguồn: Tiki.vn",
+      "price": 790000,
+      "salePrice": null,
+      "costPrice": 553000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/4b/db/82/2aef39673d7eca66a869d9bff5b7a532.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/4b/db/82/2aef39673d7eca66a869d9bff5b7a532.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/49/89/b3/0e93c6b8de0ad6c52208f93de3276339.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "organization_address": "1168/104 Trường Sa Phú Nhuận TPHCM",
+        "organization_name": "Kiều Oanh Designer",
+        "origin": "Anh, Việt Nam"
+      },
+      "specsRaw": {
+        "Địa chỉ tổ chức chịu trách nhiệm về hàng hóa": "1168/104 Trường Sa Phú Nhuận TPHCM",
+        "Tên đơn vị/tổ chức chịu trách nhiệm về hàng hóa": "Kiều Oanh Designer",
+        "Xuất xứ (Made in)": "Anh, Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279491957",
+          "price": 790000,
+          "salePrice": 760000,
+          "costPrice": 532000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/0c/6c/8e/d93206ce6983b3353ef2699b9861c009.jpg",
+          "active": true,
+          "options": {
+            "color": "Màu be",
+            "size": "L(53-58)kg"
+          }
+        },
+        {
+          "sku": "TK279491950",
+          "price": 790000,
+          "salePrice": 760000,
+          "costPrice": 532000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/4b/db/82/2aef39673d7eca66a869d9bff5b7a532.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu đậm",
+            "size": "M(48-53)kg"
+          }
+        },
+        {
+          "sku": "TK279491956",
+          "price": 790000,
+          "salePrice": 760000,
+          "costPrice": 532000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/0c/6c/8e/c6e49e02efa0e7935398fd7bf3727c81.jpg",
+          "active": true,
+          "options": {
+            "color": "Màu be",
+            "size": "M(48-53)kg"
+          }
+        },
+        {
+          "sku": "TK279491954",
+          "price": 790000,
+          "salePrice": 760000,
+          "costPrice": 532000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/d6/f3/26a401c9e03ef214f75eae302e5cffbe.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh bích",
+            "size": "L(53-58)kg"
+          }
+        },
+        {
+          "sku": "TK279491952",
+          "price": 1116000,
+          "salePrice": 1086000,
+          "costPrice": 760200,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/49/89/b3/0e93c6b8de0ad6c52208f93de3276339.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu đậm",
+            "size": "XL(58-63)kg"
+          }
+        },
+        {
+          "sku": "TK279491953",
+          "price": 790000,
+          "salePrice": 760000,
+          "costPrice": 532000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/d6/f3/9d7b1723b0ef39f22b3a6bcbb417baf5.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh bích",
+            "size": "M(48-53)kg"
+          }
+        },
+        {
+          "sku": "TK279491958",
+          "price": 790000,
+          "salePrice": 760000,
+          "costPrice": 532000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/0c/6c/8e/585da102adfefde2488780c6582408cb.jpg",
+          "active": true,
+          "options": {
+            "color": "Màu be",
+            "size": "XL(58-63)kg"
+          }
+        },
+        {
+          "sku": "TK279491951",
+          "price": 790000,
+          "salePrice": 760000,
+          "costPrice": 532000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/49/89/b3/0e93c6b8de0ad6c52208f93de3276339.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu đậm",
+            "size": "L(53-58)kg"
+          }
+        },
+        {
+          "sku": "TK279491955",
+          "price": 1116000,
+          "salePrice": 1086000,
+          "costPrice": 760200,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/28/d6/f3/bbea5b14f833d64c4d61c879b737682e.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh bích",
+            "size": "XL(58-63)kg"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ao-so-mi-vay-dang-dai-chat-lieu-dui-mem-min-form-dai-rong-kieu-han-quoc-ao-vay-nu-nesa-shop-at15-tk278539824",
+      "name": "Áo sơ mi váy dáng dài, chất liệu đũi tơ mềm mịn, form dài rộng kiểu Hàn Quốc, áo váy nữ, NeSa Shop AT15",
+      "categorySlug": "dam-vay-lien",
+      "brandSlug": null,
+      "description": "Áo sơ mi váy dáng dài, chất liệu đũi mềm mịn, áo váy nữ, form dài rộng kiểu Hàn Quốc.\n THÔNG TIN SẢN PHẨM: \n1.Tên sản phẩm: Áo sơ mi váy dáng dài, chất liệu đũi mềm mịn, áo váy nữ, form dài rộng kiểu Hàn Quốc, NeSa Shop.\n2. Đặc điểm của Sơ mi dáng váy, áo váy nữ:\n- Sơ mi dáng váy, form dài rộng, kiểu dáng trẻ trung, năng động.\n- Áo váy nữ có thể phối hợp với quần short, quần jean, quần legging hoặc mặc như váy bình thường đều phù hợp và phong cách. \n- Áo sơ mi phom dài dáng suông mang phong cách Hàn Quốc áo váy dài qua đầu gối 10cm.\n- Áo váy mặc lên giống như 1 chiếc váy, có thể mặc thêm quần short hoặc chỉ cần mặc cùng quần lót khi mặc váy.\n- Áo váy phù hợp với mọi lứa tuổi, tùy vào độ tuổi mà khách hàng có thể chọn màu sắc sao cho phù hợp nhất với mình. Váy sơ mi bạn có thể mặc đi làm, đi chơi, đi du lịch hay đi tham dự tiệc đều đẹp và lịch sự.\n- Áo váy được thiết kế và sản xuất tại Việt Nam. \n- Shop cam kết áo kiểu dạng váy chuẩn từ đường may, mũi chỉ, chất liệu vải và form dáng y như quảng cáo nên khách yên tâm về chất lượng sản phẩm. \n3. Chất liệu:\n- Áo váy nữ may bằng chất liệu Đũi Quảng Châu loại 1, trên mặt vải có những gân nhỏ li ti, vải mềm, mịn, không xù lông, không nhăn, không phai màu và thấm hút mồ hôi tốt. Áo váy chất Đũi mặc mát, nhẹ, cầm mềm rũ. \n4. Kích cỡ:\nÁo váy nữ có đủ size: từ 38-70kg. \n- Size M (38- 49kg) \n- Size L (50-55kg) \n- Size XL (56-61kg) \n- Size 2XL (62-70kg) \n- Form áo váy sơ mi là form rộng nên khách chỉ nên trừ hao nếu có vòng ngực quá lớn.\n5. Màu sắc:\nVáy sơ mi Hàn Quốc có 02 màu: \n- Vàng\n- Trắng\nChúc quý khách vui vẻ và hài lòng khi mua sắm tại NeSa Shop️\n#sơmidángváy #áováynữ #áosơmiváy #sơmidài #áováy #váysơmi #áosơmikiểunữ #váysơmihànquốc #váysơmitrắng #áosơmiphomdàihànquốc #áosơmiformdàirộng #áosơmikiểu #váysơmidángdài #áonữáokiểu #váysơmibầu #áokiểuáosơmi #áokiểunữ #áođũinữ\n\nNguồn: Tiki.vn",
+      "price": 179000,
+      "salePrice": 89500,
+      "costPrice": 62650,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/61/da/10/139771cf82bde25b70f8a69b5d565c48.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/61/da/10/139771cf82bde25b70f8a69b5d565c48.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/2c/09/ee/295cbb607a330a895e910506b4489a79.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/59/8d/88/81558aa0e85bc584328671ddd14c5dda.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/2f/6d/6a/dbca035068ce1094acaa36a20cc75d67.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/a8/30/12/7e5e0b56ab12810d2da13d4419f8c6ca.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK278539856",
+          "price": 179000,
+          "salePrice": 89500,
+          "costPrice": 62650,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/61/da/10/139771cf82bde25b70f8a69b5d565c48.jpg",
+          "active": true,
+          "options": {
+            "color": "Vàng",
+            "size": "M (38- 49kg)"
+          }
+        },
+        {
+          "sku": "TK278539858",
+          "price": 179000,
+          "salePrice": 99000,
+          "costPrice": 69300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1c/3f/03/6403e0f72b70a59335a942f6c00a4d12.jpg",
+          "active": true,
+          "options": {
+            "color": "Vàng",
+            "size": "XL (56-61kg)"
+          }
+        },
+        {
+          "sku": "TK278539857",
+          "price": 179000,
+          "salePrice": 99000,
+          "costPrice": 69300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1c/3f/03/6403e0f72b70a59335a942f6c00a4d12.jpg",
+          "active": true,
+          "options": {
+            "color": "Vàng",
+            "size": "L (50-55kg)"
+          }
+        },
+        {
+          "sku": "TK278539852",
+          "price": 179000,
+          "salePrice": 99000,
+          "costPrice": 69300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1c/3f/03/6403e0f72b70a59335a942f6c00a4d12.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "M (38- 49kg)"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dam-tieu-thu-phoi-co-sang-chanh-thiet-ke-di-lam-di-choi-deu-dep-tk277761511",
+      "name": "Đầm tiểu thư phối cổ sang chảnh thiết kế đi làm đi chơi đều đẹp",
+      "categorySlug": "dam-vay-lien",
+      "brandSlug": null,
+      "description": "THÔNG TIN NGƯỜI MẶC\nSize S: sản phẩm vòng eo rộng 64cm - 66cm, vòng ngực rộng 84cm-86cm, vòng mông rộng 86cm-88cm\nSize M: sản phẩm vòng eo rộng 68cm- 70cm, vòng ngực rộng 88cm-90cm, vòng mông rộng 88cm-90cm\nSize L: sản phẩm vòng eo rộng 72cm- 74cm , vòng ngực rộng 92cm-94cm, vòng mông rộng 92cm-94cm\nSize XL: sản phẩm vòng eo rộng 76cm- 80cm, vòng ngực rộng 94cm-96cm, vòng mông rộng 94cm-96cm\nMàu sắc: hồng, trắng\nChất liệu: cotton\n\nNguồn: Tiki.vn",
+      "price": 219000,
+      "salePrice": null,
+      "costPrice": 153300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/ac/83/9d/b71545e213c173cea51f462dab86a996.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/ac/83/9d/b71545e213c173cea51f462dab86a996.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "dimensions": "THÔNG TIN NGƯỜI MẶC\nSize S: sản phẩm vòng eo rộng 64cm - 66cm, vòng ngực rộng 84cm-86cm, vòng mông rộng 86cm-88cm\nSize M: sản phẩm vòng eo rộng 68cm- 70cm, vòng ngực rộng 88cm-90cm, vòng mông rộng 88cm-90cm\nSize L: sản phẩm vòng eo rộng 72cm- 74cm , vòng ngực rộng 92cm-94cm, vòng mông rộng 92cm-94cm",
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Kích thước": "THÔNG TIN NGƯỜI MẶC\nSize S: sản phẩm vòng eo rộng 64cm - 66cm, vòng ngực rộng 84cm-86cm, vòng mông rộng 86cm-88cm\nSize M: sản phẩm vòng eo rộng 68cm- 70cm, vòng ngực rộng 88cm-90cm, vòng mông rộng 88cm-90cm\nSize L: sản phẩm vòng eo rộng 72cm- 74cm , vòng ngực rộng 92cm-94cm, vòng mông rộng 92cm-94cm",
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277761515",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/58/7c/cc/132606565c1d18d0eac5cf7a906f22c7.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK277761523",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/58/7c/cc/132606565c1d18d0eac5cf7a906f22c7.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK277761513",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/ac/83/9d/b71545e213c173cea51f462dab86a996.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK277761519",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/58/7c/cc/132606565c1d18d0eac5cf7a906f22c7.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK277761517",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/ac/83/9d/b71545e213c173cea51f462dab86a996.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK277761525",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/ac/83/9d/b71545e213c173cea51f462dab86a996.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "XL"
+          }
+        },
+        {
+          "sku": "TK277761521",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/ac/83/9d/b71545e213c173cea51f462dab86a996.jpg",
+          "active": true,
+          "options": {
+            "color": "Hồng",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK277761527",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/58/7c/cc/132606565c1d18d0eac5cf7a906f22c7.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "XL"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dam-linen-dang-suong-co-v-co-tui-2-ben-suon-kem-day-rut-eo-tre-trung-ton-dang-da218-tk277312432",
+      "name": "Đầm Linen dáng suông cỏ V có túi 2 bên sườn kèm dây rút eo trẻ trung, tôn dáng da218",
+      "categorySlug": "dam-vay-lien",
+      "brandSlug": "arctic-hunter",
+      "description": "Shop chuyên cung cấp quần âu, áo sơ mi, áo kiểu, chân váy, đầm thiết kế với giá cực hợp lý và uy tín trên thị trường, chất lượng đảm bảo.\n Uy tín luôn đặt lên hàng đầu để tương lai luôn phát triển\n Tư vấn tận tình, luôn lắng nghe chia sẻ của quý khách về sản phẩm để cải thiện chất lượng và phục vụ thật chu đáo hơn\n CAM KẾT KHI MUA HÀNG\n Sản phẩm chất lượng đúng mô tả.\n Sử dụng hình ảnh trải sàn tự chụp tại Shop\n Hỗ trợ đổi hàng với toàn bộ sản phẩm đáp ứng “Chính sách đổi hàng”\n CHI TIẾT SẢN PHẨM :\n-Đầm được thiết kế thanh nhã với kiểu dáng trẻ trung\n-Đầm được may từ chất liệu cao cấp cho cảm giác mềm mại, thoáng mát và vô cùng dễ chịu khi mặc.\n-Dễ dàng bảo quản, giặt ủi, chất liệu mau khô\n-Màu sắc tươi tắn, trẻ trung giúp phái đẹp them tự tin mỗi khi xuống phố\n Phù hợp với nhiều phong cách, dễ mix với chân váy, quần âu\n Chất liệu bền đẹp mang lại sự thoải mái, thoáng mát, thấm hút mồ hôi tốt, phù hợp nơi văn phòng, cafe\n HƯỚNG DẪN CHỌN SIZE\n- Bảng size phù hợp với người từ 40-67kg\nS(<45), M (46<50KG); L (50-55KG); XL(56-62KG); XXL (62-67KG)\n✪ Size có thể thay đổi tùy vào chiều cao mỗi người. Các nàng tham khảo bảng size gợi ý nhé\n✪ Các bạn khó chọn SIZE hoặc phân vân đừng ngại ngần cứ chat với Shop để tư vấn chọn size chuẩn và hướng dẫn các vấn đề sau khi mua hàng nhé\n HƯỚNG DẪN SỬ DỤNG VÀ BẢO QUẢN:\n*Lưu ý: Quá trình vận chuyển có thể khiến sản phẩm hằn nếp gấp. Quý khách vui lòng treo hoặc giặt nước và phơi treo lần đầu để sản phẩm tự hồi về trạng thái như ban đầu.\n* Không nên ngâm chung với trang phục dễ bị ra màu\n CHÍNH SÁCH ĐỔI HÀNG:\n Hỗ trợ đổi size trong vòng 07 ngày kể từ ngày nhận hàng\n Hàng gửi đổi phải còn nguyên nhãn mác, chưa giặt tẩy sử dụng, không có mùi lạ (mùi cơ thể, nước hoa,...)\n#dam2day #vay2day #damxuong #damsuong #vayxuong #vaysuong #damdangxuong #vaydangsuong\n\nNguồn: Tiki.vn",
+      "price": 380000,
+      "salePrice": null,
+      "costPrice": 266000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/57/ee/7d/ecabf58e7f514c5bf568165c0483f270.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/57/ee/7d/ecabf58e7f514c5bf568165c0483f270.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/00/e7/6e/54f0cd7196237779a0de381c6639370d.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d4/d5/56/e18acc02d9ed94029712fc6d5e72335e.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/e9/32/49/6a92b9aff4aead8d65b7c671d8fb7720.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/3d/2a/f9/7c116e9804e48ec4467123a7f31ca651.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277312436",
+          "price": 380000,
+          "salePrice": 360000,
+          "costPrice": 252000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/e7/6e/54f0cd7196237779a0de381c6639370d.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK277312434",
+          "price": 380000,
+          "salePrice": 360000,
+          "costPrice": 252000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/e7/6e/54f0cd7196237779a0de381c6639370d.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK277312438",
+          "price": 380000,
+          "salePrice": 360000,
+          "costPrice": 252000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/e7/6e/54f0cd7196237779a0de381c6639370d.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK277312442",
+          "price": 380000,
+          "salePrice": 360000,
+          "costPrice": 252000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/57/ee/7d/ecabf58e7f514c5bf568165c0483f270.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "2XL"
+          }
+        },
+        {
+          "sku": "TK277312440",
+          "price": 380000,
+          "salePrice": 360000,
+          "costPrice": 252000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/e7/6e/54f0cd7196237779a0de381c6639370d.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "XL"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dam-hai-day-cham-bi-sang-chanh-tk277287590",
+      "name": "Đầm hai dây chấm bi sang chảnh",
+      "categorySlug": "dam-vay-lien",
+      "brandSlug": null,
+      "description": "Đầm hai dây chấm bi sang chảnh\nTHÔNG TIN NGƯỜI MẶC\nSize S: sản phẩm vòng eo rộng 64cm - 66cm, vòng ngực rộng 84cm-86cm, vòng mông rộng 86cm-88cm\nSize M: sản phẩm vòng eo rộng 68cm- 70cm, vòng ngực rộng 88cm-90cm, vòng mông rộng 88cm-90cm\nSize L: sản phẩm vòng eo rộng 72cm- 74cm , vòng ngực rộng 92cm-94cm, vòng mông rộng 92cm-94cm\nSize XL: sản phẩm vòng eo rộng 76cm- 80cm, vòng ngực rộng 94cm-96cm, vòng mông rộng 94cm-96cm\nMàu sắc: TRẮNG\nChất liệu: KAKI\nCam Kết\n⇔ Nhận hàng và thanh toán tiền tại nhà. \n⇔ Cam kết về chất lượng sản phẩm.\n⇔ Được đổi hàng, đổi mẫu, đổi màu, đổi size tùy thích nếu QK mặc không vừa.\nXINH THÔI CHƯA ĐỦ, PHẢI SANG NỮA CÁC NÀNG NHÉ!\n\nNguồn: Tiki.vn",
+      "price": 219000,
+      "salePrice": null,
+      "costPrice": 153300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/9d/2b/ba/3cc502094f43943eb120bf6d2c93e822.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/9d/2b/ba/3cc502094f43943eb120bf6d2c93e822.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "dimensions": "THÔNG TIN NGƯỜI MẶC\nSize S: sản phẩm vòng eo rộng 64cm - 66cm, vòng ngực rộng 84cm-86cm, vòng mông rộng 86cm-88cm\nSize M: sản phẩm vòng eo rộng 68cm- 70cm, vòng ngực rộng 88cm-90cm, vòng mông rộng 88cm-90cm\nSize L: sản phẩm vòng eo rộng 72cm- 74cm , vòng ngực rộng 92cm-94cm, vòng mông rộng 92cm-94cm",
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Kích thước": "THÔNG TIN NGƯỜI MẶC\nSize S: sản phẩm vòng eo rộng 64cm - 66cm, vòng ngực rộng 84cm-86cm, vòng mông rộng 86cm-88cm\nSize M: sản phẩm vòng eo rộng 68cm- 70cm, vòng ngực rộng 88cm-90cm, vòng mông rộng 88cm-90cm\nSize L: sản phẩm vòng eo rộng 72cm- 74cm , vòng ngực rộng 92cm-94cm, vòng mông rộng 92cm-94cm",
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277287598",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/9d/2b/ba/3cc502094f43943eb120bf6d2c93e822.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "XL"
+          }
+        },
+        {
+          "sku": "TK277287594",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/9d/2b/ba/3cc502094f43943eb120bf6d2c93e822.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK277287596",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/9d/2b/ba/3cc502094f43943eb120bf6d2c93e822.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK277287592",
+          "price": 219000,
+          "salePrice": 202730,
+          "costPrice": 141911,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/9d/2b/ba/3cc502094f43943eb120bf6d2c93e822.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng",
+            "size": "S"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ao-khoac-chong-nang-mua-he-cho-nu-ao-chong-nang-trum-dau-thoang-khi-cach-nhiet-chong-tia-cuc-tim-upf50-tk278591395",
+      "name": "Áo khoác chống nắng mùa hè cho nữ,áo chống nắng trùm đầu thoáng khí, cách nhiệt, chống tia cực tím upf50+",
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "brandSlug": null,
+      "description": "MÔ TẢ SẢN PHẨM\n- Áo được trang bị mũ liền rộng vành, mang lại sự bảo vệ toàn diện cho khuôn mặt, cổ và tai của bạn. Vành rộng giúp che chắn khỏi ánh nắng mặt trời một cách hiệu quả, giảm thiểu tác động của tia UV. Bạn có thể thoải mái tham gia vào các hoạt động ngoài trời mà không lo về sự tổn thương của da.\n- Chất liệu áo khoác được chọn cẩn thận với chỉ số UPF50+, mang đến mức độ bảo vệ tối đa khỏi tia UV có hại. Điều này đảm bảo rằng da của bạn sẽ được bảo vệ một cách tuyệt đối, ngăn ngừa khỏi những tổn thương và lão hóa do tác động của ánh nắng mặt trời.\n- Chất liệu mát lạnh thấm hút mồ hôi hiệu quả, giúp bạn luôn khô ráo và thoáng mát trong suốt quá trình hoạt động. Không còn lo lắng về cảm giác ẩm ướt và bí bách, bạn có thể tập trung vào hoạt động của mình mà không bị làm phiền.\n- Sản phẩm được thiết kế với màu sắc thời trang sẽ giúp bạn tự tin khoe phong cách riêng của mình, các chi tiết tinh tế như cổ áo đứng, túi cài kéo, và các đường may chắc chắn, mang lại vẻ ngoài đẹp mắt và hiện đại.\n- Ngoài ra áo có chỗ xỏ ngón tay để che đi phần mu bàn tay khi lái xe để không bị bắt nắng, dù có sử dụng bao tay thì cũng không bị kéo ngược tay áo lên trên \nTÍNH NĂNG NỔI BẬT\nChất liệu chống UV: Sử dụng chất liệu cao cấp có khả năng chống tia UV độc đáo, giúp bảo vệ làn da khỏi tác động có hại của ánh nắng mặt trời.\nThiết kế đa dạng: Áo khoác có nhiều kiểu dáng và màu sắc phù hợp với nhiều phong cách và sở thích của người dùng.\nBảo vệ toàn diện: Thiết kế với tay áo dài và cổ cao, bảo vệ cổ, vai, và tay khỏi tác động của tia UV.\nChất liệu thoáng khí: Sử dụng chất liệu thoáng khí, hút ẩm và nhanh khô, giúp bạn cảm thấy thoải mái và dễ chịu trong mọi hoạt động.\nDễ dàng mang theo: Áo khoác nhẹ nhàng và linh hoạt, dễ dàng gấp gọn và mang theo bất cứ khi nào bạn cần.\n THÔNG TIN SẢN PHẨM\n- Màu sắc: Xám nhạt,Trắng, Xám, Xanh da trời, Xanh mint nhạt,Tím\n- Hàm lượng thành phần vải chính: 98%\n- Kiểu khóa đóng: Dây kéo\n- Loại tay áo: Tay áo Raglan\n- Thành phần vải chính: vải thông hơi\n- Kích thước: S,M,L\n- Chiều dài áo: ngắn\n- Chiều dài tay áo: Dài tay\n- Chỉ số chống nắng: UPF50 +\n\nNguồn: Tiki.vn",
+      "price": 255000,
+      "salePrice": null,
+      "costPrice": 178500,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/c2/87/77/29655e4d9c244e8cd8d27c2cc64f1b41.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/c2/87/77/29655e4d9c244e8cd8d27c2cc64f1b41.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/94/e2/84/9faab6e685c35d06deadd4158057bd1a.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/e2/ae/cd/7ce42cb830e20ec7204ef1d2cef98910.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "brand_country": "Trung Quốc",
+        "origin": "Trung Quốc"
+      },
+      "specsRaw": {
+        "Xuất xứ thương hiệu": "Trung Quốc",
+        "Xuất xứ (Made in)": "Trung Quốc"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK278591417",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/94/e2/84/9faab6e685c35d06deadd4158057bd1a.jpg",
+          "active": true,
+          "options": {
+            "color": "TRẮNG",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK278591407",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/c2/87/77/29655e4d9c244e8cd8d27c2cc64f1b41.jpg",
+          "active": true,
+          "options": {
+            "color": "TRẮNG",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK278591423",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/12/06/d1/e2aefe1c921da87b965cc9168a7ed087.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK278591427",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/94/e2/84/9faab6e685c35d06deadd4158057bd1a.jpg",
+          "active": true,
+          "options": {
+            "color": "TRẮNG",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK278591413",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/12/06/d1/e2aefe1c921da87b965cc9168a7ed087.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK278591411",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/33/5e/ef/07c756d0786b5f2c12b6e4dc2ec06093.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Dương Nhạt",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK278591415",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2f/e1/aa/460411c47cc724f31429efe3df7e9495.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh nhạt",
+            "size": "M"
+          }
+        },
+        {
+          "sku": "TK278591425",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2f/e1/aa/460411c47cc724f31429efe3df7e9495.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh nhạt",
+            "size": "L"
+          }
+        },
+        {
+          "sku": "TK278591405",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2f/e1/aa/460411c47cc724f31429efe3df7e9495.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh nhạt",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK278591400",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/33/5e/ef/07c756d0786b5f2c12b6e4dc2ec06093.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Dương Nhạt",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK278591397",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/33/5e/ef/4e63d10cfd196a6324ca2ed49f77c023.jpg",
+          "active": true,
+          "options": {
+            "color": "Màu Xám",
+            "size": "S"
+          }
+        },
+        {
+          "sku": "TK278591403",
+          "price": 255000,
+          "salePrice": 231000,
+          "costPrice": 161700,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/12/06/d1/e2aefe1c921da87b965cc9168a7ed087.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "size": "S"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "lz-ao-khoac-nhung-tam-xo-ngon-kem-tui-trong-phoi-vien-non-de-thuong-hang-dep-a2196-tk277965173",
+      "name": "[LZ] Áo khoác nhung tăm xỏ ngón ( kèm túi trong) phối viền nón dễ thương hàng đẹp-A2196",
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "brandSlug": null,
+      "description": "Áo khoác nữ nhung chống nắng, chất nhung tăm xỏ ngón mềm mại, kèm túi trong tiện dụng. Thiết kế phối viền nón ngộ nghĩnh, tạo điểm nhấn đáng yêu và xinh xắn. Chất liệu nhung cao cấp, êm ái, giúp bảo vệ da khỏi ánh nắng mặt trời. Đường may tinh tế và chắc chắn, mang lại sự thoải mái và độ bền. Sản phẩm vừa thời trang vừa thiết thực, lý tưởng cho các cô nàng yêu thích sự duyên dáng.\n ☆ THÔNG TIN SẢN PHẨM: Áo Khoác nữ với Chất liệu Nhung QC Ngoại cực mát; mang phong cách thời trang thời thượng các bạn trẻ; không những giúp bạn giữ ấm trong mùa lạnh mà còn có thể chống nắng, chống gió, chống bụi, chống rét, chống tia UV cực tốt, rất tiện lợi nhé!!! (Được sử dụng nhiều trong dịp Lễ hội, Đi chơi, Dã ngoại, Dạo phố, Du lịch...) Màu sắc: Y hình. Đường may kỹ, tinh tế, sắc xảo. Form chuẩn Unisex Nam Nữ Couple đều mặc được. Giao hàng tận nơi. Nhận hàng rồi thanh toán. ️ CAM KẾT TỪ SHOP: - Hàng thật 100% như hình. - Giao hàng đúng mẫu mã, size màu khách đặt. - Tất cả sản phẩm giao hang COD toàn quốc ️ HƯỚNG DẪN BẢO QUẢN: - Giặt những sản phẩm cùng gam màu với nhau lần giặt đầu tiên - Giặt ở nhiệt độ bình thường, đồ có màu đậm như: đen, xanh đen, đỏ, tím… nên giặt riêng 1-2 nước đầu. - Hạn chế dùng chất tẩy đậm đặc. - Ủi và sấy ở nhiệt độ thích hợp. - Khuyến khích lộn mặt trái khi phơi để giữ sản phẩm bền màu hơn. #ÁoKhoácNữ #ÁoKhoácNhung #ThờiTrangNữ #ÁoNhungNữ #PhongCáchNữ #ÁoKhoácĐẹp #FashionNữ #NữThần_ÁoKhoác #ÁoKhoácMùaĐông #ÁoKhoácNữSangTrọng #NhungStyle #OOTDNữ #ÁoKhoácNữHot #TrendyNhung #MixAndMatchNữ #ÁoNhungXinh #ChấtLượngÁoKhoác #ÁoKhoácNữCaoCấp #NữThờiTrang #ÁoKhoácMềmMại\n\nNguồn: Tiki.vn",
+      "price": 169000,
+      "salePrice": null,
+      "costPrice": 118300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/44/6a/71/c0baa728b4f95c45a7faa468aa34203c.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/44/6a/71/c0baa728b4f95c45a7faa468aa34203c.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/78/1f/0e/c2e5a820e6c88ba1904b7800bb322c60.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/f5/50/a5/8c1f20d69139b0a3148c8c1926a72a55.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/ca/a2/39/87f3f8cd90eea1850426f20d362ae00a.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/e1/1a/56/031a260cc6274568cdfd50d93144e409.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277965199",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nude xám",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965187",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965189",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965177",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965175",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965213",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965207",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nude xám",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965203",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965205",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965201",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu đậm",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965179",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965181",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965183",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu đậm",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965217",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965221",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965193",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nude xám",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965185",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu đậm",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965191",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nude xám",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965195",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965215",
+          "price": 169000,
+          "salePrice": null,
+          "costPrice": 118300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/44/6a/71/c0baa728b4f95c45a7faa468aa34203c.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965209",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh lá",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965211",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu đậm",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965197",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh rêu",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965219",
+          "price": 309000,
+          "salePrice": 290460,
+          "costPrice": 203322,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/2a/e4/7a/9477bc6696b969f745917269cd0298be.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "L (50KG-60KG)"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "lz-ao-khoac-da-lon-nu-da-lon-2-lop-phoi-mau-dep-sieu-chat-a2156-tk277964999",
+      "name": "[LZ] Áo khoác da lộn nữ da lộn 2 lớp phối màu đẹp siêu chất-A2156",
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "brandSlug": null,
+      "description": "Áo khoác nữ da lộn chống nắng 2 lớp phối màu đẹp siêu chất là lựa chọn hoàn hảo cho các cô gái sành điệu. Chất liệu da lộn cao cấp cùng với thiết kế 2 lớp giúp bảo vệ da khỏi tác hại của tia UV và giữ ấm tốt. Phối màu tinh tế tạo nên vẻ ngoài thời trang và nổi bật. Áo có form dáng chuẩn, dễ dàng kết hợp với nhiều trang phục khác nhau. Đây là sản phẩm không thể thiếu để bạn luôn tự tin và phong cách trong mọi hoàn cảnh. ☆ THÔNG TIN SẢN PHẨM: Áo Khoác nữ với Chất liệu da lộn Ngoại cực mát; mang phong cách thời trang thời thượng các bạn trẻ; không những giúp bạn giữ ấm trong mùa lạnh mà còn có thể chống nắng, chống gió, chống bụi, chống rét, chống tia UV cực tốt, rất tiện lợi nhé!!! (Được sử dụng nhiều trong dịp Lễ hội, Đi chơi, Dã ngoại, Dạo phố, Du lịch...) Màu sắc: Y hình. Đường may kỹ, tinh tế, sắc xảo. Form chuẩn Unisex Nam Nữ Couple đều mặc được. Giao hàng tận nơi. Nhận hàng rồi thanh toán. ️ CAM KẾT TỪ SHOP: - Hàng thật 100% như hình. - Giao hàng đúng mẫu mã, size màu khách đặt. - Tất cả sản phẩm giao hang COD toàn quốc ️ HƯỚNG DẪN BẢO QUẢN: - Giặt những sản phẩm cùng gam màu với nhau lần giặt đầu tiên - Giặt ở nhiệt độ bình thường, đồ có màu đậm như: đen, xanh đen, đỏ, tím… nên giặt riêng 1-2 nước đầu. - Hạn chế dùng chất tẩy đậm đặc. - Ủi và sấy ở nhiệt độ thích hợp. - Khuyến khích lộn mặt trái khi phơi để giữ sản phẩm bền màu hơn. #ÁoKhoácDaLộnNữ #DaLộnFashion #ÁoKhoácDaLộn #NữThờiTrangDaLộn #ÁoDaLộnCaoCấp #DaLộnStyle #DaLộnChất #FashionDaLộnNữ #ÁoDaLộnĐẹp #DaLộnTrend #ÁoDaLộnSangTrọng #NữThờiTrangDaLộn #DaLộnChấtLượng #ÁoDaLộnMềmMại #ChicDaLộn #ÁoDaLộnMùaĐông #DaLộnNữXinh #ÁoKhoácDaLộnNữHot #TrendyDaLộn #DaLộnMixAndMatch\n\nNguồn: Tiki.vn",
+      "price": 169000,
+      "salePrice": null,
+      "costPrice": 118300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/6c/ec/4dd00d3b673804049d941460f3129dba.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/08/6c/ec/4dd00d3b673804049d941460f3129dba.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/ec/da/3f/38c9aefa3562194024f3cd009e11d7d8.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/2a/f2/79/f793d1bf165fd569d2510d17ba5f9246.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/46/35/56/f76dfee55fb9095790372da3a585602e.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277965007",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965021",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965001",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965019",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965011",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965023",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Rêu",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965027",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965015",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965013",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965005",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965029",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965003",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965035",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Rêu",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965031",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277965033",
+          "price": 169000,
+          "salePrice": null,
+          "costPrice": 118300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/08/6c/ec/4dd00d3b673804049d941460f3129dba.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965009",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Đỏ",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277965025",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Nâu",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965039",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Rêu",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277965037",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Rêu",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277965017",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/01/c6/77/df37e4bb69d469e3ac234f978cffb176.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "XL(60KG-65KG)"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "lz-ao-khoac-chong-nang-nu-lung-ni-det-xk-day-tui-khoa-phoi-mau-co-non-nhieu-mau-lua-chon-sieu-hot-a2171-tk277964749",
+      "name": "[LZ] Áo khoác chống nắng nữ lửng nỉ dệt xk dày túi khoá phối màu có nón nhiều màu lựa chọn siêu hot-A2171",
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "brandSlug": null,
+      "description": "Áo khoác nữ nỉ chống nắng lửng nỉ dệt xk dày túi khoá phối màu có nón nhiều màu lựa chọn siêu hot là lựa chọn tuyệt vời cho các cô gái năng động. Chất liệu nỉ dày cao cấp giúp bảo vệ da khỏi tia UV và mang lại cảm giác ấm áp, thoải mái. Thiết kế lửng kết hợp với túi khoá tiện dụng và phối màu thời trang tạo nên phong cách nổi bật. Áo có nón và nhiều màu sắc để bạn dễ dàng lựa chọn và phối đồ. Đây là sản phẩm không thể thiếu để bạn luôn tự tin và thu hút ánh nhìn trong mọi hoàn cảnh. ☆ THÔNG TIN SẢN PHẨM: - Áo khoác nữ với Chất liệu Nỉ Ngoại tốt, dày dặn, thoáng mát giúp bạn có thể chống nắng, chống bụi, chống gió, chống tia UV cực tốt, rất tiện lợi nhé!!! (Thích hợp: Đi chơi, dạo phố, du lịch, phượt ...) + Đường may tinh tế, sắc xảo. + Nam Nữ Couple đều dùng được. + Hàng lấy tận xưởng, không trung gian, nên giá rất sinh viên. + Giao hàng tận nơi. Nhận hàng thanh toán. + Cam kết: Chất lượng và Mẫu mã Sản phẩm giống với hình ảnh. ️ CAM KẾT TỪ SHOP: - Hàng thật 100% như hình. - Giao hàng đúng mẫu mã, size màu khách đặt. - Tất cả sản phẩm giao hang COD toàn quốc ️ HƯỚNG DẪN BẢO QUẢN: - Giặt những sản phẩm cùng gam màu với nhau lần giặt đầu tiên - Giặt ở nhiệt độ bình thường, đồ có màu đậm như: đen, xanh đen, đỏ, tím… nên giặt riêng 1-2 nước đầu. - Hạn chế dùng chất tẩy đậm đặc. - Ủi và sấy ở nhiệt độ thích hợp. - Khuyến khích lộn mặt trái khi phơi để giữ sản phẩm bền màu hơn. #ÁoKhoácNỉNữ #NỉNữ #ThờiTrangĐông #NỉCaoCấp #ÁoKhoácThờiTrang #NỉĐẹp #ÁoNỉDài #FashionNỉ #ÁoNỉMềmMại #ÁoKhoácNỉĐẹp #WinterFashion #NỉPhối #ÁoKhoácNỉDày #TrendyNỉ #ÁoNỉWarm #MixAndMatchNỉ #ÁoKhoácNỉMềm #ÁoNỉHànQuốc #StyleNỉ #ÁoKhoácNỉĐông\n\nNguồn: Tiki.vn",
+      "price": 169000,
+      "salePrice": null,
+      "costPrice": 118300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/26/28/4b/64d031421533b4e8f0c003fbe848a5be.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/26/28/4b/64d031421533b4e8f0c003fbe848a5be.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/6f/07/e0/ee2faeaf818eba2960119839009a44a1.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/e2/ba/4a/82bb7a51ab6df9f567f76c47c8f8e238.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/4a/97/8f/445ebf8784dfeff6ddcf5cc2144d026f.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277964769",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "xanh lá",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277964757",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "kem",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277964777",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277964799",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "hồng",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277964773",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277964779",
+          "price": 169000,
+          "salePrice": null,
+          "costPrice": 118300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/26/28/4b/64d031421533b4e8f0c003fbe848a5be.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277964771",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "nâu",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277964793",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "xanh lá",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277964761",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "xanh lá",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277964797",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "be",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277964795",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "nâu",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277964767",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "đen",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277964751",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "kem",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277964753",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "be",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277964791",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "hồng",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277964763",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "nâu",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277964805",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "be",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277964787",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "kem",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277964801",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "xanh lá",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277964765",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "be",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277964775",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "Áo thun ngẫu nhiên",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277964755",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "đen",
+            "size": "XL(60KG-65KG)"
+          }
+        },
+        {
+          "sku": "TK277964803",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "nâu",
+            "size": "M (40KG-50KG)"
+          }
+        },
+        {
+          "sku": "TK277964781",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "đen",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277964759",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "hồng",
+            "size": "L (50KG-60KG)"
+          }
+        },
+        {
+          "sku": "TK277964783",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "kem",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277964785",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "hồng",
+            "size": "S (30KG-40KG)"
+          }
+        },
+        {
+          "sku": "TK277964789",
+          "price": 279000,
+          "salePrice": 270630,
+          "costPrice": 189441,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/18/93/5a/1a963cf915c424b773fd3370178fbba0.jpg",
+          "active": true,
+          "options": {
+            "color": "đen",
+            "size": "M (40KG-50KG)"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "ao-khoat-cua-nu-desney-lung-ngo-nghinh-phoi-dep-a385-tk277964401",
+      "name": "Áo khoát của nữ Desney lửng ngộ nghĩnh phối đẹp-A385",
+      "categorySlug": "ao-vest-ao-khoac-nu",
+      "brandSlug": null,
+      "description": "Áo khoác nữ Desney là sự kết hợp hoàn hảo giữa phong cách và thoải mái. Chất liệu thun da cá chống nắng tản nhiệt không chỉ bảo vệ làn da của bạn mà còn mang đến cảm giác mềm mại. Kiểu dáng lửng vừa đủ giữ ấm, vừa tôn lên vẻ đáng yêu và thời trang. Với màu sắc trẻ trung, áo khoác Desney là lựa chọn hoàn hảo cho những ngày se lạnh. Đánh bại thời tiết khắc nghiệt mà vẫn giữ được phong cách, đó chính là ưu điểm nổi bật của sản phẩm này. ☆ THÔNG TIN SẢN PHẨM: - Áo khoác nữ thun da cá 1 lớp tốt, dày dặn, thoáng mát giúp bạn có thể chống nắng, chống bụi, chống gió, chống tia UV cực tốt, rất tiện lợi nhé!!! (Thích hợp: Đi chơi, dạo phố, du lịch, phượt ...) + Size dưới 60kg mặc vừa + Đường may tinh tế, sắc xảo. + Hàng lấy tận xưởng, không trung gian, nên giá rất sinh viên. + Giao hàng tận nơi. Nhận hàng thanh toán. + Cam kết: Chất lượng và Mẫu mã Sản phẩm giống với hình ảnh. ️ CAM KẾT TỪ SHOP: - Hàng thật 100% như hình. - Giao hàng đúng mẫu mã, size màu khách đặt. - Tất cả sản phẩm giao hang COD toàn quốc ️ HƯỚNG DẪN BẢO QUẢN: - Giặt những sản phẩm cùng gam màu với nhau lần giặt đầu tiên - Giặt ở nhiệt độ bình thường, đồ có màu đậm như: đen, xanh đen, đỏ, tím… nên giặt riêng 1-2 nước đầu. - Hạn chế dùng chất tẩy đậm đặc. - Ủi và sấy ở nhiệt độ thích hợp. - Khuyến khích lộn mặt trái khi phơi để giữ sản phẩm bền màu hơn. #aokhoac #aochongnang #aokhoacchongnang #aokhoacdaca #aokhoacdep #aokhoacchatluong #aokhoacdu #aokhoackaki #aokhoat #aokhoatchongnang #aokhoatdaca #aokhoacmuadong #aokhoatmuadong #aoam #aokhoacdep #aokhoatdep #aokhoatchatluong #aokhoactot\n\nNguồn: Tiki.vn",
+      "price": 199000,
+      "salePrice": null,
+      "costPrice": 139300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/6b/8b/37/0dee19d9fe90a66cd7121f0bf71da24a.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/6b/8b/37/0dee19d9fe90a66cd7121f0bf71da24a.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/06/51/86/3be917dc238ef39af44991593e392bf9.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/9d/99/fc/f4c569555fef0fc3116620514b0fb000.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/f3/9a/d9/27fbdb31ac17815374dead08884af606.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK277964407",
+          "price": 229000,
+          "salePrice": 222130,
+          "costPrice": 155491,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/06/51/86/3be917dc238ef39af44991593e392bf9.jpg",
+          "active": true,
+          "options": {
+            "color": "HỒNG"
+          }
+        },
+        {
+          "sku": "TK277964409",
+          "price": 229000,
+          "salePrice": 222130,
+          "costPrice": 155491,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/06/51/86/3be917dc238ef39af44991593e392bf9.jpg",
+          "active": true,
+          "options": {
+            "color": "XANH"
+          }
+        },
+        {
+          "sku": "TK277964405",
+          "price": 199000,
+          "salePrice": 193030,
+          "costPrice": 135121,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/6b/8b/37/0dee19d9fe90a66cd7121f0bf71da24a.jpg",
+          "active": true,
+          "options": {
+            "color": "KEM"
+          }
+        },
+        {
+          "sku": "TK277964403",
+          "price": 229000,
+          "salePrice": 222130,
+          "costPrice": 155491,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/06/51/86/3be917dc238ef39af44991593e392bf9.jpg",
+          "active": true,
+          "options": {
+            "color": "VÀNG"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -294,3 +294,138 @@ Mỗi phase = 1 commit riêng để dễ review.
 - Revoke session (`UserResource.logout()`) hiện chưa wire ở cả Java (`KeycloakAdminClient`) lẫn plan
   Python — chỉ có `setEnabled(false)`, không tự động invalidate access token đang có hiệu lực (tối đa
   15 phút theo cấu hình Keycloak hiện tại).
+
+---
+
+## 11. Rà soát plan so với code hiện tại — 2026-10-07 (trước Phase 0)
+
+Đối chiếu từng giả định của plan với code/cấu hình thật trên nhánh này (chỉ đọc, chưa sửa gì). Docker đang
+tắt (theo yêu cầu 2026-10-06, `.wslconfig` = 2GB) nên các mục cần Keycloak/Kafka chạy được ghi ở
+"Chưa xác minh được".
+
+### 11.1 Khớp với plan (đã xác minh)
+
+- Keycloak: `eventsEnabled/adminEventsEnabled/bruteForceProtected = false`
+  (`BE/keycloak-data/ecommerce-realm-realm.json:50,1285-1288`); `accessTokenLifespan=900` → khớp ghi chú
+  "token còn hiệu lực tối đa 15 phút" ở mục 10.
+- Mẫu producer Java có sẵn: `ProductViewEventProducer`, `CartEventProducer`, `UserEventProducer`.
+- `RequestRateLimiter` 20/50 là *default-filter* cho mọi route (`api-gateway/application.yml:23-29`).
+- `VoucherRedemptionServiceImpl.evaluate()` đúng vị trí hook, có cả nhánh `reserve=true` thành công
+  (`:83-153`); `request.getUserId()` là **Keycloak UUID** (được `resolveDbUserId` đổi ra id DB) → cùng không
+  gian ID với JWT `sub` ở gateway.
+- `KeycloakAdminClient.setEnabled(userId, enabled)` có sẵn (`:103-108`); `UserResource.logout()` chưa dùng.
+- Hạ tầng: Elasticsearch + Kibana 8.10.2 đã có (`docker-compose-infra.yml:194-207,314-323`); Kafka dùng
+  mặc định tự tạo topic; `contracts.py` đúng convention; port 8005 chưa bị chiếm (AI dùng 8001-8004);
+  `CampaignTriggerService` có dedupe `businessKey` + khoá Redis (`:104-115`); `BE/pom.xml` target Java 17
+  (README nói JRE 21 — không mâu thuẫn).
+- Chưa có: Logstash, `AI/security-service`, `IpBlocklistFilter`, entry security trong `contracts.py`.
+
+### 11.2 Điểm lệch / lỗ hổng của plan — CẦN SỬA TRƯỚC KHI CODE
+
+**Cao**
+
+1. **Route `/api/v1/security/**` sẽ mở cho mọi khách đã đăng nhập.** `SecurityConfig.java:41-45` chỉ yêu cầu
+   ADMIN/STAFF cho `/api/v1/admin/**`; mọi path khác chỉ `authenticated()`. → đặt API bảo mật dưới
+   `/api/v1/admin/security/**` (hoặc thêm `pathMatchers(...).hasRole("ADMIN")` trước `anyExchange()`).
+   Cùng mẫu lỗi đã có sẵn ở forecast-service: route `/api/v1/risk/**`, `/api/v1/models/**`
+   (`application.yml:146`) cũng chỉ `authenticated()` → khách đăng nhập gọi được `trigger-scan`/`train`
+   qua gateway. Ngoài phạm vi plan này nhưng nên sửa cùng lúc.
+2. **`AUTO_BLOCK_IP` ở gateway không chặn được tấn công đăng nhập.** FE đăng nhập thẳng Keycloak
+   `localhost:8083` bằng keycloak-js (`FE/.env.example:2`, `FE/src/services/keycloak.js:3-6`), không qua
+   gateway → chặn IP ở gateway không ngăn được brute-force/credential-stuffing/compromise. Verification #1
+   ("brute-force → block IP → 403 qua gateway") chỉ đúng cho nhóm API-abuse. → đổi tier hành động của các
+   alert Keycloak (khoá tài khoản có điều kiện / bật Keycloak native brute-force protection / đặt Keycloak
+   sau proxy có blocklist) và viết lại verification #1.
+3. **`adminEventsDetailsEnabled` đang `false`** (`realm.json:1289`). Plan chỉ bật 2 cờ, nhưng
+   `KeycloakAdminEvent.representation` (chứa tên role) chỉ có khi cờ này `true` → `PrivilegeEscalationDetected`
+   không thấy `ROLE_ADMIN`. → bật thêm `adminEventsDetailsEnabled=true`; đặt `eventsExpiration` (store
+   hiện không có hạn); liệt kê tường minh `enabledEventTypes` (LOGIN, LOGIN_ERROR, UPDATE_PASSWORD,
+   UPDATE_EMAIL, RESET_PASSWORD…) thay vì để `[]` (hành vi mặc định khi rỗng cần xác minh).
+4. **Áp cờ Keycloak bằng cách sửa JSON + restart có rủi ro mất dữ liệu.** Keycloak chạy `start-dev` với
+   `keycloak.migration.strategy=OVERWRITE_EXISTING` (`docker-compose-infra.yml:228,238`), JSON không có khối
+   `users` và không khai báo role-mapping của service account `ecommerce-backend` → mỗi lần restart
+   re-import đè realm; quyền `view-events`/`manage-users` của service account (cần cho poller + SOAR) nếu
+   đang gán tay ở runtime có thể mất, user tạo lúc chạy có thể mất. Phải kiểm chứng thực nghiệm trước (mục
+   11.4) — và đây là thay đổi cấu hình bảo mật nên cần duyệt trước khi thực hiện (CLAUDE.md).
+5. **IP nguồn không đáng tin → có thể tự khoá luôn admin.** `RateLimiterConfig.java:30-36` lấy
+   `getRemoteAddress()`, không đọc `X-Forwarded-For`; gateway chạy Docker/localhost nên rất có thể mọi client
+   cùng 1 IP (172.18.0.1 / 127.0.0.1). `AUTO_BLOCK_IP` trên IP đó chặn cả trang `/resolve`. → resolver IP có
+   trusted-proxy/XFF, allowlist loopback + dải private, và chặn theo `(IP, user)` hoặc dải ngắn.
+6. **SOAR tự động có thể bị biến thành công cụ DoS / khoá nhầm người thật.** `AccountCompromiseConfirmed`
+   = "LOGIN thành công sau chuỗi LOGIN_ERROR cùng identity" → user thật gõ sai vài lần rồi đúng sẽ bị
+   `disable + revoke`; kẻ tấn công cố tình sinh lỗi để khoá nạn nhân. → định nghĩa chặt hơn (≥N lỗi từ ≥2 IP
+   khác nhau + login thành công từ IP chưa từng thấy / `knownMalicious`), allowlist tài khoản quản trị, và
+   cân nhắc chạy `ALERT_ONLY`/dry-run trước khi bật tự động.
+
+**Trung bình**
+
+7. **`PaymentFailedEvent` đã có sẵn** qua Debezium outbox → topic `payment-events`
+   (`PaymentServiceImpl.java:377-383,677-682,938-962`; payload `userId, orderId, paymentId, email, amount,
+   message`). → bỏ producer mới ở payment-service; security-service consume `payment-events`, lọc
+   `eventType=PaymentFailedEvent`, **loại** `message="Payment session expired"` (không phải card-testing),
+   **không** chép `email` (PII) sang `security-events`/ES. Payload không có `sessionId` như plan ghi.
+8. **Gateway không có hook "deny" của rate limiter.** `RedisRateLimiter.isAllowed` chỉ nhận key
+   (`user:…`/`ip:…`), không có path/method. → dùng filter chạy TRƯỚC `RequestRateLimiter`, bọc
+   `chain.filter(exchange).then(...)` và kiểm tra status 429 (có đủ exchange: path, method, IP). Cùng filter
+   đó làm luôn bước kiểm tra blocklist (chạy trước `UserHeaderFilter`, vốn là WebFilter
+   `LOWEST_PRECEDENCE-1`).
+9. **`AccountChangedEvent` từ user-service chỉ thấy hành động của admin.** User tự đổi mật khẩu/email đi
+   thẳng Keycloak Account, BE không thấy; BE chỉ có `adminResetPassword`, `updateUser` (email),
+   `updateBlacklist` (`UserServiceImpl.java:242-251,374,420-424`). → nguồn đúng cho
+   `AccountTakeoverDetected` là Keycloak user events (`UPDATE_PASSWORD`, `UPDATE_EMAIL`) qua poller; hook BE
+   chỉ còn ý nghĩa audit hành động admin (`actorId`). Dùng `user.getKeycloakUserId()` chứ không phải
+   `Long userId`, để cùng không gian ID với các event khác.
+10. **Voucher chỉ có message tiếng Việt, không có reason code.** Nhiều nhánh `invalid()` là lỗi client
+    (mã rỗng, `orderTotal` sai) không liên quan enumeration. → thêm enum reason (`CODE_NOT_FOUND`,
+    `NOT_OWNER`, `EXPIRED`…) hoặc chỉ phát event ở 3-4 nhánh liên quan. Voucher do order-service gọi nội
+    bộ → không có IP (plan mục 10 đã nêu).
+11. **SOAR gọi thẳng Keycloak làm lệch cờ `blacklisted` trong DB user-service.** `updateBlacklist` hiện vừa
+    ghi DB vừa `setEnabled` (`UserServiceImpl.java:242-251`). → hoặc SOAR gọi endpoint nội bộ của
+    user-service (đã có cơ chế `X-Internal-Api-Key`), hoặc ghi rõ giới hạn trong báo cáo.
+12. **Tài nguyên.** `.wslconfig` đang 2GB (đã gây treo Docker ngày 06/10). Thêm Logstash (JVM mặc định ~1GB) +
+    `security-service` lên cạnh ES(512m)/Kibana/Keycloak/Debezium/Kafka là không đủ. → hoặc đặt
+    `LS_JAVA_OPTS=-Xms256m -Xmx256m` và tăng RAM VM, hoặc bản v1 bỏ Logstash để `security-service` ghi ES
+    trực tiếp (mất phần "enrich GeoIP bằng Logstash").
+13. **Pin dependency + restart policy** (bài học numpy 2.2.6 vs 2.4.6 ngày 06/10): `search-service` đang
+    `elasticsearch>=8.0.0` không chặn trên → cài mới sẽ ra bản 9.x lệch với server 8.10.2; forecast dùng
+    `aiokafka>=0.10.0`, `apscheduler>=3.10.0` (image thực tế ra aiokafka 0.14.0). → `security-service` pin
+    `elasticsearch>=8.10,<9` và pin chính xác các thư viện còn lại theo bản đã chạy; thêm `restart: always`
+    tường minh vào entry compose (các service AI hiện không có — quan sát forecast-service không tự lên lại
+    sau khi Docker restart; plan mục 6 đang giả định có).
+
+**Thấp**
+
+14. Phát hiện phụ (không thuộc plan): `KeycloakAdminClient.java:37` có client secret mặc định hardcode và
+    gateway có `INTERNAL_API_KEY` mặc định `dev-internal-api-key` → `security-service` phải đọc secret từ
+    env, không sao chép giá trị mặc định.
+15. `contracts.py` theo mẫu `*_KEY_FMT` + hàm helper → khai báo các Redis key mục 3.3 dưới dạng
+    `SEC_*_KEY_FMT` thay vì chuỗi rời.
+
+### 11.3 Điều chỉnh đề xuất cho các phase (chưa áp dụng vào mục 8)
+
+- **Phase 0**: thêm `adminEventsDetailsEnabled`, `eventsExpiration`, `enabledEventTypes` tường minh; kiểm
+  chứng restart Keycloak (11.4) TRƯỚC khi đổi realm JSON; chốt phương án Logstash/RAM (điểm 12).
+- **Phase 1**: consume thêm `payment-events` (thay cho producer Java mới); poller lấy cả user event
+  `UPDATE_PASSWORD/UPDATE_EMAIL`; pin dependency; `restart: always`.
+- **Phase 2**: bỏ payment-service khỏi danh sách Java phải sửa (còn gateway / promotion / user); gateway thêm
+  1 filter (observer 429 + blocklist + resolver IP có XFF); route bảo mật dưới `/api/v1/admin/security/**`;
+  thêm enum reason cho voucher.
+- **Verification**: #1 tách đôi — API-abuse → block IP 403 qua gateway; brute-force → hành động đã chọn ở
+  điểm 2 (khoá tài khoản có điều kiện / native lockout). Thêm ca âm: user thật gõ sai rồi đúng KHÔNG bị khoá.
+
+### 11.4 Chưa xác minh được (cần Docker + Keycloak chạy)
+
+- Service account `service-account-ecommerce-backend` thực tế có `view-events`, `manage-users`,
+  `view-users` không (file JSON không khai báo).
+- `OVERWRITE_EXISTING` có xoá user tạo lúc chạy khi restart Keycloak không; hành vi khi `enabledEventTypes`
+  rỗng.
+- Cách đo nhanh khi Docker lên: `docker restart infra-keycloak` rồi kiểm tra user đã đăng ký còn đăng nhập
+  được không; gọi `GET /admin/realms/ecommerce-realm/events` bằng token service account.
+
+### 11.5 Quyết định cần chủ dự án chọn trước khi vào Phase 0
+
+1. Tier cho nhóm tấn công đăng nhập (điểm 2): khoá tài khoản có điều kiện, bật native brute-force protection,
+   hay đặt Keycloak sau proxy?
+2. Logstash hay ghi ES trực tiếp ở v1 (điểm 12)? Có tăng `.wslconfig` vĩnh viễn không?
+3. SOAR mặc định tự động hay `ALERT_ONLY`/dry-run trong v1 (điểm 6)?
+4. Có đồng ý sửa luôn quyền `/api/v1/risk/**`, `/api/v1/models/**` (điểm 1, phần phụ) trong nhánh này không?

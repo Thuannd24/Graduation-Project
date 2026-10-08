@@ -1,0 +1,1696 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-01T02:35:20.922Z",
+  "note": "Catalog đa ngành từ API công khai Tiki.vn (root c1789: Điện Thoại - Máy Tính Bảng). Dùng phi thương mại cho đồ án. Nguồn: Tiki.vn",
+  "attributes": [
+    {
+      "code": "color",
+      "name": "Màu sắc",
+      "valueType": "select",
+      "isColor": true,
+      "allowedValues": null
+    },
+    {
+      "code": "opt_phan_loai",
+      "name": "Phân Loại",
+      "valueType": "select",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "cart_slot",
+      "name": "Hỗ trợ thẻ nhớ ngoài",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "chip_set",
+      "name": "Chip set",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "cpu_speed",
+      "name": "Tốc độ CPU",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "display_type",
+      "name": "Loại/ Công nghệ màn hình",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "khe_sim",
+      "name": "Số sim",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "loai_pin",
+      "name": "Loại pin",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "loai_sim",
+      "name": "Loại Sim",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "material",
+      "name": "Chất liệu",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "product_weight",
+      "name": "Trọng lượng sản phẩm",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "screen_size",
+      "name": "Kích thước màn hình",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "battery_capacity",
+      "name": "Dung lượng pin",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "bluetooth",
+      "name": "Bluetooth",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "chip_do_hoa",
+      "name": "Chip đồ họa (GPU)",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "origin",
+      "name": "Xuất xứ (Made in)",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "pin_co_the_thao_roi",
+      "name": "Pin có thể tháo rời",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "port_sac",
+      "name": "Cổng sạc",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "wifi",
+      "name": "Wifi",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "ho_tro_5g",
+      "name": "Hỗ trợ 5G",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "brand_country",
+      "name": "Xuất xứ thương hiệu",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "included_accessories",
+      "name": "Phụ kiện đi kèm",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "jack_headphone",
+      "name": "Jack tai nghe",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "camera_sau",
+      "name": "Camera sau",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "camera_truoc",
+      "name": "Camera trước",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "ho_tro_4g",
+      "name": "Hỗ trợ 4G",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "kha_dung",
+      "name": "Bộ nhớ khả dụng",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "manufacturer_electronics",
+      "name": "Nhà sản xuất",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "battery_life",
+      "name": "Thời gian pin",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "charge_time",
+      "name": "Thời gian sạc",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "content_formats_supported",
+      "name": "Hỗ trợ định dạng",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "dimensions",
+      "name": "Kích thước",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "dung_luong_dientu",
+      "name": "Dung lượng ổ cứng",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "resolution",
+      "name": "Độ phân giải",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "usb_port",
+      "name": "Cổng USB",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "storage",
+      "name": "Dung lượng",
+      "valueType": "select",
+      "isColor": false,
+      "allowedValues": null
+    },
+    {
+      "code": "display_color",
+      "name": "Hiển thị màu sắc",
+      "valueType": "text",
+      "isColor": false,
+      "allowedValues": null
+    }
+  ],
+  "categories": [
+    {
+      "slug": "dien-thoai-may-tinh-bang",
+      "name": "Điện Thoại - Máy Tính Bảng",
+      "parentSlug": null,
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "https://salt.tikicdn.com/ts/category/54/c0/ff/fe98a4afa2d3e5142dc8096addc4e40b.png",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai-smartphone",
+      "name": "Điện thoại Smartphone",
+      "parentSlug": "dien-thoai-may-tinh-bang",
+      "sortOrder": 1,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "dien-thoai-ban",
+      "name": "Điện thoại bàn",
+      "parentSlug": "dien-thoai-may-tinh-bang",
+      "sortOrder": 2,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "may-tinh-bang",
+      "name": "Máy tính bảng",
+      "parentSlug": "dien-thoai-may-tinh-bang",
+      "sortOrder": 3,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    },
+    {
+      "slug": "may-doc-sach",
+      "name": "Máy đọc sách",
+      "parentSlug": "dien-thoai-may-tinh-bang",
+      "sortOrder": 4,
+      "active": true,
+      "imageUrl": "",
+      "icon": "smartphone"
+    }
+  ],
+  "categoryAttributes": [
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "opt_phan_loai",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "chip_set",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "display_type",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "khe_sim",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "loai_pin",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "loai_sim",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "material",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "product_weight",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "screen_size",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "cpu_speed",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-smartphone",
+      "attributeCode": "battery_capacity",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-ban",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-ban",
+      "attributeCode": "brand_country",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-ban",
+      "attributeCode": "included_accessories",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-ban",
+      "attributeCode": "origin",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "dien-thoai-ban",
+      "attributeCode": "product_weight",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "brand_country",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "origin",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "battery_capacity",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "cpu_speed",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "chip_set",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "display_type",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "product_weight",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "jack_headphone",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "bluetooth",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-tinh-bang",
+      "attributeCode": "camera_sau",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "color",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "storage",
+      "isVariant": true,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "battery_life",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "brand_country",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "charge_time",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "content_formats_supported",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "dimensions",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "display_type",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "dung_luong_dientu",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "included_accessories",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "manufacturer_electronics",
+      "isVariant": false,
+      "isRequired": false
+    },
+    {
+      "categorySlug": "may-doc-sach",
+      "attributeCode": "origin",
+      "isVariant": false,
+      "isRequired": false
+    }
+  ],
+  "brands": [
+    {
+      "slug": "oppo",
+      "name": "OPPO",
+      "logoUrl": "",
+      "description": "OPPO — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "dien-thoai-may-tinh-bang",
+        "dien-thoai-smartphone"
+      ]
+    },
+    {
+      "slug": "xiaomi",
+      "name": "Xiaomi",
+      "logoUrl": "",
+      "description": "Xiaomi — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "dien-thoai-may-tinh-bang",
+        "dien-thoai-smartphone",
+        "may-tinh-bang"
+      ]
+    },
+    {
+      "slug": "panasonic",
+      "name": "Panasonic",
+      "logoUrl": "",
+      "description": "Panasonic — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "dien-thoai-may-tinh-bang",
+        "dien-thoai-ban"
+      ]
+    },
+    {
+      "slug": "grandstream",
+      "name": "Grandstream",
+      "logoUrl": "",
+      "description": "Grandstream — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "dien-thoai-may-tinh-bang",
+        "dien-thoai-ban"
+      ]
+    },
+    {
+      "slug": "samsung",
+      "name": "Samsung",
+      "logoUrl": "",
+      "description": "Samsung — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "dien-thoai-may-tinh-bang",
+        "may-tinh-bang"
+      ]
+    },
+    {
+      "slug": "kindle",
+      "name": "Kindle",
+      "logoUrl": "",
+      "description": "Kindle — Nguồn: Tiki.vn",
+      "active": true,
+      "categorySlugs": [
+        "dien-thoai-may-tinh-bang",
+        "may-doc-sach"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "slug": "dien-thoai-oppo-a6t-4gb-64gb-hang-chinh-hang-tk279692673",
+      "name": "Điện thoại OPPO A6t 4GB/64GB - Hàng Chính Hãng",
+      "categorySlug": "dien-thoai-smartphone",
+      "brandSlug": "oppo",
+      "description": "là mẫu smartphone phổ thông có mức giá hợp lý, hướng đến người dùng cần một thiết bị ổn định và hiện đại. Máy sở hữu màn hình 120 Hz mượt mà, pin dung lượng lớn 6100 mAh cho thời gian sử dụng dài, cùng kết nối NFC tiện lợi hỗ trợ xác thực VNeID và thanh toán một chạm, đáp ứng tốt nhu cầu học tập, làm việc và giải trí hằng ngày.\nMàn hình lớn 120 Hz, trải nghiệm mượt mà vượt tầm giá\nOPPO A6t được trang bị màn hình kích thước lớn 6.75 inch, mang lại không gian hiển thị rộng rãi cho việc xem phim, lướt web và giải trí. Độ sáng tối đa lên đến 1125 nits giúp bạn đọc nội dung trên màn hình dễ dàng ngay cả khi sử dụng ngoài trời nắng.\nĐiểm nổi bật đáng chú ý là tần số quét lên đến 120 Hz, giúp các thao tác vuốt chạm trở nên mượt mà rõ rệt, mang lại trải nghiệm thị giác tốt hơn so với các màn hình tiêu chuẩn trong cùng phân khúc. Độ phân giải HD+ (720 x 1570 Pixels) hiển thị hình ảnh rõ ràng, màu sắc dễ nhìn, phù hợp cho nhu cầu sử dụng hằng ngày và giúp tiết kiệm pin hiệu quả hơn khi kết hợp cùng màn hình tần số quét cao.\nPin siêu lớn 6100 mAh, hỗ trợ sạc ngược tiện lợi\nChiếc này gây ấn tượng mạnh với viên pin dung lượng lên đến 6100 mAh, cho thời gian sử dụng kéo dài nhiều giờ liên tục, đáp ứng tốt nhu cầu làm việc, học tập và giải trí trong suốt cả ngày dài mà không lo hết pin giữa chừng. Không chỉ dừng lại ở đó, thiết bị còn hỗ trợ tính năng sạc ngược, cho phép OPPO A6t trở thành nguồn pin dự phòng để sạc cho các thiết bị khác khi cần thiết.\nBên cạnh dung lượng pin lớn, máy còn được trang bị khả năng kháng nước, kháng bụi chuẩn IP64, giúp người dùng yên tâm hơn khi sử dụng trong những điều kiện môi trường ẩm ướt hoặc bụi bẩn nhẹ trong sinh hoạt hằng ngày.\nCamera 13 MP rõ nét, lưu giữ trọn vẹn khoảnh khắc\nOPPO A6t sở hữu hệ thống camera sau với cảm biến chính có độ phân giải 13 MP và camera phụ QVGA, cho khả năng ghi lại hình ảnh rõ nét, chi tiết tốt trong điều kiện ánh sáng thuận lợi. \nChế độ chân dung trên OPPO được nâng cấp để mang đến những bức ảnh giàu tính nghệ thuật, với hiệu ứng xóa phông mềm mại và chính xác, giúp chủ thể nổi bật rõ ràng trên nền ảnh. Độ sâu được tái tạo tự nhiên, kết hợp khả năng giữ chi tiết tốt, mang lại cảm giác như những khung hình được chụp trong studio chuyên nghiệp, lý tưởng để lưu giữ trọn vẹn các khoảnh khắc đáng nhớ.\nLàm đẹp chân dung AI cho phép tinh chỉnh màu da, ánh sáng và đường nét khuôn mặt một cách thông minh ngay trên điện thoại, không cần thông qua ứng dụng chỉnh sửa bên ngoài. Thuật toán AI tối ưu giúp gương mặt trông hài hòa, tươi tắn hơn nhưng vẫn giữ được nét tự nhiên, mang lại cảm giác chân thực trong từng bức ảnh.\nBên cạnh đó, OPPO còn tích hợp loạt tính năng AI thông minh như gương mặt hoàn hảo AI giúp nhận diện và tối ưu từng khuôn mặt trong khung hình. Bố cục AI tự động đề xuất bố cục chụp cân đối và hài hòa hơn, cùng xóa vật thể AI 2.0 cho phép loại bỏ các chi tiết thừa hoặc vật thể không mong muốn chỉ với vài thao tác đơn giản. Tất cả kết hợp lại tạo nên trải nghiệm nhiếp ảnh tiện lợi, thông minh và dễ dàng hơn cho người dùng.\nỞ mặt trước, camera selfie đáp ứng tốt nhu cầu chụp ảnh cá nhân, gọi video hay học tập trực tuyến. Các chế độ làm đẹp được tinh chỉnh nhẹ nhàng, giúp ảnh selfie trông tự nhiên hơn mà vẫn giữ được nét riêng của người dùng.\nChạm NFC 360°, xác thực VNeID nhanh chóng\nMột trong những điểm nâng cấp đáng giá trên OPPO A6t là kết nối NFC 360°, hỗ trợ xác thực CCCD gắn chip, đăng nhập VNeID nhanh chóng và thực hiện thanh toán một chạm tiện lợi. Tính năng này giúp người dùng tiết kiệm thời gian trong các thao tác hành chính số và giao dịch không tiền mặt, đồng thời nâng cao trải nghiệm sử dụng smartphone trong đời sống hiện đại.\nThiết kế cứng cáp với mặt lưng trendy, hỗ trợ bảo mật an toàn\nVề thiết kế, được hoàn thiện với mặt lưng mang phong cách trendy, hướng đến sự trẻ trung và hiện đại, phù hợp với nhiều đối tượng người dùng. Bề mặt lưng được xử lý tinh tế với hiệu ứng ánh sáng nhẹ, tạo chiều sâu thị giác và giúp máy trông nổi bật hơn khi thay đổi góc nhìn. \nĐư\n\nNguồn: Tiki.vn",
+      "price": 4990000,
+      "salePrice": null,
+      "costPrice": 3493000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/e6/f5/10/964bd5c4ea1f82d006aba3bcae2c2cba.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/e6/f5/10/964bd5c4ea1f82d006aba3bcae2c2cba.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {},
+      "specsRaw": {},
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279692972",
+          "price": 4990000,
+          "salePrice": null,
+          "costPrice": 3493000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/fc/2e/61/9cd1a2c5d00afe9676c339b9ff9b556c.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          }
+        },
+        {
+          "sku": "TK279692971",
+          "price": 4990000,
+          "salePrice": null,
+          "costPrice": 3493000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/e6/f5/10/964bd5c4ea1f82d006aba3bcae2c2cba.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-17-6gb-256gb-hang-chinh-hang-tk279645260",
+      "name": "Điện thoại Xiaomi Redmi 17 (6GB/256GB) - Hàng chính hãng",
+      "categorySlug": "dien-thoai-smartphone",
+      "brandSlug": "xiaomi",
+      "description": "Điện thoại Xiaomi Redmi 17 (6GB/256GB) sở hữu thiết kế hiện đại cùng hiệu năng ổn định, đáp ứng mượt mà các nhu cầu giải trí và làm việc hằng ngày. Với màn hình lớn, dung lượng lưu trữ rộng rãi và pin dung lượng cao, đây là sự lựa chọn hợp lý cho người dùng.\n Màn hình kích thước lớn hiển thị sắc nét, tần số quét cao cho thao tác vuốt chạm mượt mà.\n Bộ nhớ trong 256GB mang lại không gian lưu trữ rộng rãi cho hình ảnh, video và ứng dụng.\n Dung lượng RAM 6GB hỗ trợ xử lý đa nhiệm ổn định, hạn chế tối đa tình trạng giật lag.\n Vi xử lý thế hệ mới tối ưu hiệu năng, vận hành mượt mà các tác vụ hằng ngày và giải trí.\n Hệ thống camera tích hợp AI thông minh, hỗ trợ chụp ảnh sắc nét trong nhiều điều kiện ánh sáng.\n Dung lượng pin lớn đáp ứng trọn vẹn nhu cầu sử dụng cả ngày dài mà không lo gián đoạn.\n Hỗ trợ công nghệ sạc nhanh tiện lợi, giúp rút ngắn tối đa thời gian chờ nạp lại năng lượng.\n Thiết kế thời trang, kiểu dáng mỏng nhẹ cùng các góc bo tròn tạo cảm giác cầm nắm thoải mái.\n Cảm biến vân tay tích hợp thông minh, hỗ trợ mở khóa màn hình nhanh chóng và bảo mật cao.\n Hệ điều hành tối ưu giao diện trực quan, thân thiện và cung cấp nhiều tính năng tiện ích.\nLƯU Ý KHI MUA HÀNG\nCảm ơn quý khách đã quan tâm đến sản phẩm bên shop, quý khách vui lòng dành ít thời gian đọc kĩ các thông tin sau:\nShop nhận đổi trả trong trường hợp hàng sai mẫu, size, màu do shop gửi. Bên shop chỉ giải quyết khiếu nại khi quý khách có video clip khi mở/nhận hàng.\nSản phẩm cần bảo hành khách chịu phí vận chuyển đến shop hoặc trung tâm bảo hành\nKhách hàng có nhu cầu xuất hóa đơn VAT, vui lòng liên hệ với gian hàng trực tiếp qua tin nhắn khi đơn hàng được giao thành công trong 24h\nTrong một số trường hợp sản phẩm đã được kích hoạt bảo hành tham gia chương trình khuyến mãi có giá tốt nhất cho khách hàng, vì vậy sản phẩm được bảo hành thông qua nhà bán hàng. Vui lòng chat với shop để được hỗ trợ thêm thông tin.\nKhông nhận đổi trả khi sản phẩm bị hư hại do tác động ngoại lực từ người mua như móp, bể, trầy xước, nổ điện, rớt nước, rách tem bảo hành, không đầy đủ phụ kiện và hộp.\nVì lượng hàng hoá nhiều shop không nhận đổi trả trong trường hợp khách không thích, không ưng màu, chất liệu; quý khách vui lòng đọc kĩ mô tả và xem hình ảnh cụ thể; nếu cần hãy chat với shop để được tư vấn.\nLong Hưng - Hệ thống gian hàng chính hãng, nơi khởi nguồn cho trải nghiệm mua sắm đáng tin cậy\nLong Hưng không đơn thuần là một chuỗi cửa hàng, mà là một hệ sinh thái được phát triển theo định hướng chuyên biệt, phục vụ trọn vẹn nhu cầu sống hiện đại - từ công nghệ, làm đẹp đến tiện nghi gia đình và chăm sóc sức khỏe. Mỗi gian hàng trong hệ thống là một điểm đến đáng tin cậy, nơi khách hàng tìm thấy sự kết hợp hài hòa giữa chất lượng sản phẩm và trải nghiệm mua sắm dễ chịu.\n- Long Hưng TechZone - Không gian công nghệ với thiết bị điện tử và phụ kiện\n- Long Hưng Electronics - Tinh tuyển từ các thương hiệu gia dụng đáng tin cậy, nâng tầm không gian sống\n- Long Hưng Beauty - Thế giới mỹ phẩm và thiết bị làm đẹp, nơi tôn vinh vẻ đẹp và sự tự tin\n- Long Hưng Mobile Store - Điện thoại và phụ kiện chính hãng, cập nhật công nghệ nhanh như nhịp sống\n- Long Hưng Smart House - Bộ sưu tập thiết bị làm đẹp, tối ưu hóa trải nghiệm chăm sóc cá nhân\n- Long Hưng Health Beauty - Sản phẩm chăm sóc sức khỏe & sắc đẹp, nuôi dưỡng cơ thể từ bên trong\nCam kết từ Long Hưng: Sản phẩm chính hãng, giao hàng nhanh chóng, đổi trả linh hoạt, dịch vụ hậu mãi tận tâm.\n\nNguồn: Tiki.vn",
+      "price": 7490000,
+      "salePrice": null,
+      "costPrice": 5243000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/d3/83/900ab8436ce930e5c179c49847266363.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/00/d3/83/900ab8436ce930e5c179c49847266363.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/01/fb/0a/16707a14bfa452d678be3d1bcb8615e5.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/ff/33/a4/d34e2795cf6f09874485df4da649654e.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/44/44/40/6f9c50afa4d60ea0fccd394e411ce3b3.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/c4/5e/5a/7f3bbe69dcede5a2a20f621ff3c33577.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 18,
+      "warrantyPolicy": "Bảo hành 18 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {},
+      "specsRaw": {},
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279645262",
+          "price": 7490000,
+          "salePrice": null,
+          "costPrice": 5243000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/00/d3/83/900ab8436ce930e5c179c49847266363.jpg",
+          "active": true,
+          "options": {
+            "opt_phan_loai": "Đen Bán Dạ"
+          }
+        },
+        {
+          "sku": "TK279645266",
+          "price": 7490000,
+          "salePrice": null,
+          "costPrice": 5243000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/21/09/9f/c5d093f33ca7d7a84782bc2519374c6d.jpg",
+          "active": true,
+          "options": {
+            "opt_phan_loai": "Tím Liên Hoa"
+          }
+        },
+        {
+          "sku": "TK279645264",
+          "price": 7490000,
+          "salePrice": null,
+          "costPrice": 5243000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/19/93/a1/e16ad4b31024c77035917af5f2e45997.jpg",
+          "active": true,
+          "options": {
+            "opt_phan_loai": "Xanh Thẳm"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-oppo-a6t-pro-8gb-128gb-hang-chinh-hang-tk279638757",
+      "name": "Điện Thoại Oppo A6t Pro 8GB/128GB - Hàng Chính Hãng",
+      "categorySlug": "dien-thoai-smartphone",
+      "brandSlug": "oppo",
+      "description": "Điện Thoại Oppo A6t Pro 8GB/128GB - Hàng Chính Hãng\nBộ sản phẩm bao gồm: Thân máy, sạc, cáp USB, dụng cụ lấy sim, vỏ bảo vệ, sách hướng dẫn.\nMàn hình LCD 6.75 inch HD+ cho trải nghiệm hiển thị mượt\n- Trang bị màn hình LCD kích thước 6.75 inch, độ phân giải HD+ (1570 × 720 pixels) với mật độ điểm ảnh 256 PPI. Mặc dù không đạt độ sắc nét cao như các màn hình Full HD+, nhưng thiết bị lại bù đắp bằng tần số quét 120Hz, mang lại trải nghiệm vuốt chạm mượt mà và phản hồi nhanh.\n- Bên cạnh đó, tần số lấy mẫu cảm ứng tối đa 240Hz giúp tăng độ nhạy khi thao tác, đặc biệt hữu ích trong các ứng dụng yêu cầu phản hồi nhanh.\nCamera đáp ứng cho nhu cầu chụp cơ bản\n- Trang bị hệ thống camera bao gồm camera chính 50MP (khẩu độ f/1.8, hỗ trợ lấy nét tự động) và camera phụ 2MP (f/2.4) hỗ trợ đo độ sâu trường ảnh.\n- Camera trước có độ phân giải 8MP (f/2.0), phục vụ nhu cầu selfie và gọi video.\nHiệu năng đủ dùng với chip Snapdragon 685\n- Trang bị vi xử lý Snapdragon 685 (8 nhân), kết hợp GPU Adreno 610 @1.26GHz, mang lại khả năng xử lý ổn định trong phân khúc phổ thông.\n- Đi kèm Ram 8GB cùng bộ nhớ trong 128GB cho phép xử lý đa nhiệm khá tốt đáp ứng tốt các tác vụ cơ bản như lướt web, xem video, sử dụng mạng xã hội và chạy các ứng dụng phổ biến.\nPin 7000mAh lớn dùng thoải mái cả ngày\n- Trang bị dung lượng pin 7000mAh cho phép thiết bị hoạt động liên tục trong thời gian dài, thậm chí kéo dài đến hai ngày sử dụng với nhu cầu thông thường.\n- Máy hỗ trợ sạc nhanh 45W giúp rút ngắn thời gian sạc đáng kể và tăng tính linh hoạt khi sử dụng. Sự kết hợp giữa pin lớn và sạc nhanh giúp thiết bị trở thành lựa chọn lý tưởng cho những người dùng cần thời lượng sử dụng dài và ổn định.\nĐiện Thoại Oppo A6t Pro 8GB/128GB - Hàng Chính Hãng\nCảm ơn quý khách đã quan tâm đến sản phẩm bên shop, quý khách vui lòng dành ít thời gian đọc kĩ chính sách bảo hành đổi trả:\n- Sản phẩm được bao test 7 ngày kể từ ngày nhận được sản phẩm và sẽ được đổi máy mới cùng model hoặc giá trị tương đương sau khi được thẩm định lỗi kĩ thuật.\n- Sản phẩm lỗi kĩ thuật được xác nhận bởi trung tâm bảo hành ủy quyền chính hãng (bằng văn bản); khách hàng có thể gửi lại shop để xác nhận lỗi hoặc tới trạm bảo hành gần nhất để thẩm định lỗi.\n- Sản phẩm đổi trả phải còn nguyên hiện trạng máy không trầy xước, không bể vỡ, vô nước, gãy chân sim, khung thẻ nhớ… (tất cả các tác động ngoại lực từ phía khách hàng đều TỪ CHỐI BẢO HÀNH)\n- Sản phẩm đổi trả phải còn nguyên hộp trùng imei, phụ kiện kèm theo máy không trầy xước, cháy nổ, đứt dây (nếu trầy xước shop không đổi phụ kiện mới)\n- Sau 7 ngày bao test, sản phẩm vẫn nhận chính sách bảo hành 12 tháng kể từ ngày kích hoạt bảo hành (khách chịu phí vận chuyển tới shop bảo hành hộ hoặc tự đến trung tâm bảo hành gần nhất để được hỗ trợ)\n- Trong một số trường hợp sản phẩm đã được kích hoạt bảo hành điện tử để tham gia chương trình khuyến mãi có giá tốt cho khách hàng. Vui lòng chat với nhân viên tư vấn để được hỗ trợ thêm thông tin.\n- Sản phẩm bị TỪ CHỐI BẢO HÀNH khi cháy nổ, bể vỡ, tác động ngoại lực vào thân và bên trong máy, có thay đổi sửa chữa bên ngoài.\n- Các sản phẩm bị khóa tài khoản như Gmail, Samsung account…Khách tự chịu phí mở khóa nếu không nhớ mật khẩu.\nĐiện Thoại Oppo A6t Pro 8GB/128GB - Hàng Chính Hãng\n#honghanhmobile #honghanhmobilemall #hhm #dienthoaichinhhanghonghanh #oppo_a6t _ pro #a6t_ pro #điện_thoại #dienthoai #di_động #didong #điện_thoại_di_động #dien_thoai_di_dong #điện_thoại_chính_hãng #hàng_chính_hãng #điện_thoại_giá_rẻ #dien_thoai_gia_re #giá_rẻ #khuyen_mai #freeship #mobile #smartphone #điện_thoại_oppo #oppo\n\nNguồn: Tiki.vn",
+      "price": 8990000,
+      "salePrice": 8699000,
+      "costPrice": 6089300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/99/50/a8/cbb6bbaecce693d1691a05df3aa8a834.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/99/50/a8/cbb6bbaecce693d1691a05df3aa8a834.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "cart_slot": "MicroSD",
+        "chip_set": "Snapdragon 685 8 nhân",
+        "cpu_speed": "2.8 GHz",
+        "display_type": "LCD",
+        "khe_sim": "2",
+        "loai_pin": "Li-Po",
+        "loai_sim": "Nano",
+        "material": "Khung nhựa & Mặt lưng thủy tinh hữu cơ",
+        "product_weight": "Nặng 215g",
+        "screen_size": "6.75 inch"
+      },
+      "specsRaw": {
+        "Hỗ trợ thẻ nhớ ngoài": "MicroSD",
+        "Chip set": "Snapdragon 685 8 nhân",
+        "Tốc độ CPU": "2.8 GHz",
+        "Loại/ Công nghệ màn hình": "LCD",
+        "Số sim": "2",
+        "Loại pin": "Li-Po",
+        "Loại Sim": "Nano",
+        "Chất liệu": "Khung nhựa & Mặt lưng thủy tinh hữu cơ",
+        "Trọng lượng sản phẩm": "Nặng 215g",
+        "Kích thước màn hình": "6.75 inch"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279638759",
+          "price": 8990000,
+          "salePrice": 8699000,
+          "costPrice": 6089300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/99/50/a8/cbb6bbaecce693d1691a05df3aa8a834.jpg",
+          "active": true,
+          "options": {
+            "color": "Tím"
+          }
+        },
+        {
+          "sku": "TK279638761",
+          "price": 8990000,
+          "salePrice": 8699000,
+          "costPrice": 6089300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/70/7d/e9/887f3cc3a25ab5a22e002a4783ae52f9.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-note-15-pro-8gb-256gb-hang-chinh-hang-tk279419089",
+      "name": "Điện Thoại Xiaomi Redmi Note 15 Pro 8GB/256GB - Hàng Chính Hãng",
+      "categorySlug": "dien-thoai-smartphone",
+      "brandSlug": "xiaomi",
+      "description": "Điện Thoại Xiaomi Redmi Note 15 Pro 8GB/256GB - Hàng Chính Hãng\nBộ sản phẩm bao gồm: Bộ sạc, cáp USB Type-C, dụng cụ tháo sim, ốp bảo vệ, hướng dẫn sử dụng.\nMàn hình AMOLED 6.77 inch hiển thị rõ nét\n-Trang bị màn hình có kích thước 6.77 inch sử dụng tấm nền AMOLED. Với độ phân giải Full HD+ (1080 x 2392 pixels) và tần số quét 120 Hz thiết bị mang lại hình ảnh chuyển động mượt mà. Khả năng tái tạo màu sắc trung thực trên máy giúp trải nghiệm xem phim và lướt web trở nên sống động hơn cho mọi đối tượng người dùng.\nNgoài ra màn hình có độ sáng tối đa đạt mức 3200 nits giúp hiển thị rõ nét ngoài trời nắng.\nCamera 200 MP siêu nét và khả năng quay phim chất lượng\n- Máy trang bị camera chính có độ phân giải cao 200 MP. Cảm biến này cho phép máy chụp được những bức ảnh có độ chi tiết vượt trội ngay cả trong điều kiện ánh sáng phức tạp. Thuật toán AI Camera (trí tuệ nhân tạo) tích hợp sẵn trên thiết bị giúp tự động tối ưu hóa màu sắc và độ tương phản cho từng khung hình chụp.\n- Camera trước có độ phân giải lên đến 32 MP giúp người dùng tự tin hơn trong các cuộc gọi video hoặc khi chụp ảnh...\nHiệu năng ổn định từ vi xử lý MediaTek Helio G200-Ultra\n- Máy trang bị sức mạnh của con chip MediaTek Helio G200-Ultra. Chip có cấu tạo 8 nhân bao gồm 2 nhân hiệu suất 2.2 GHz và 6 nhân tiết kiệm điện 2.0 GHz. Cấu hình này giúp thiết bị xử lý tốt các tác vụ hằng ngày và hỗ trợ chạy mượt mà các ứng dụng phổ biến trên nền tảng di động hiện nay.\n- Bên cạnh đó, máy được trang bị bộ nhớ RAM 8GB cùng dung lượng lưu trữ 256GB. Người dùng có thể thoải mái lưu trữ dữ liệu cá nhân hoặc cài đặt nhiều ứng dụng mà không lo hết bộ nhớ.\nPin 6500mAh cùng sạc siêu tốc 45W\n- Sở hữu viên pin dung lượng 6500mAh khổng lồ, cho phép bạn sử dụng liên tục nhiều ngày mà không cần sạc. Khi cần sạc lại, công nghệ sạc nhanh 45W mạnh mẽ sẽ nhanh chóng nạp đầy năng lượng, giúp bạn quay lại cuộc vui chỉ trong chốc lát.\nĐiện Thoại Xiaomi Redmi Note 15 Pro 8GB/256GB - Hàng Chính Hãng\nCảm ơn quý khách đã quan tâm đến sản phẩm bên shop, quý khách vui lòng dành ít thời gian đọc kĩ chính sách bảo hành đổi trả:\n- Sản phẩm được bao test 7 ngày kể từ ngày nhận được sản phẩm và sẽ được đổi máy mới cùng model hoặc giá trị tương đương sau khi được thẩm định lỗi kĩ thuật.\n- Sản phẩm lỗi kĩ thuật được xác nhận bởi trung tâm bảo hành ủy quyền chính hãng (bằng văn bản); khách hàng có thể gửi lại shop để xác nhận lỗi hoặc tới trạm bảo hành gần nhất để thẩm định lỗi.\n- Sản phẩm đổi trả phải còn nguyên hiện trạng máy không trầy xước, không bể vỡ, vô nước, gãy chân sim, khung thẻ nhớ… (tất cả các tác động ngoại lực từ phía khách hàng đều TỪ CHỐI BẢO HÀNH)\n- Sản phẩm đổi trả phải còn nguyên hộp trùng imei, phụ kiện kèm theo máy không trầy xước, cháy nổ, đứt dây (nếu trầy xước shop không đổi phụ kiện mới)\n- Sau 7 ngày bao test, sản phẩm vẫn nhận chính sách bảo hành 12 tháng kể từ ngày kích hoạt bảo hành (khách chịu phí vận chuyển tới shop bảo hành hộ hoặc tự đến trung tâm bảo hành gần nhất để được hỗ trợ)\n- Trong một số trường hợp sản phẩm đã được kích hoạt bảo hành điện tử để tham gia chương trình khuyến mãi có giá tốt cho khách hàng. Vui lòng chat với nhân viên tư vấn để được hỗ trợ thêm thông tin.\n- Sản phẩm bị TỪ CHỐI BẢO HÀNH khi cháy nổ, bể vỡ, tác động ngoại lực vào thân và bên trong máy, có thay đổi sửa chữa bên ngoài.\n- Các sản phẩm bị khóa tài khoản như Gmail, Samsung account…Khách tự chịu phí mở khóa nếu không nhớ mật khẩu.\nĐiện Thoại Xiaomi Redmi Note 15 Pro 8GB/256GB - Hàng Chính Hãng\n#honghanhmobile #honghanhmobilemall #hhm #dienthoaichinhhanghonghanh #xiaomi_redmi_note_15 _pro#redmi_note_15_pro #note_15_pro #điện_thoại #dienthoai #di_động #didong #điện_thoại_di_động #dien_thoai_di_dong #điện_thoại_chính_hãng #hàng_chính_hãng #điện_thoại_giá_rẻ #dien_thoai_gia_re #giá_rẻ #khuyen_mai #freeship #mobile #smartphone #điện_thoại_xiaomi #xiaomi\n\nNguồn: Tiki.vn",
+      "price": 8990000,
+      "salePrice": 7649000,
+      "costPrice": 5354300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/11/5f/b4/0013e413b30d7e83cbd921bf558d1ce6.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/11/5f/b4/0013e413b30d7e83cbd921bf558d1ce6.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 18,
+      "warrantyPolicy": "Bảo hành 18 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_capacity": "6500mAh",
+        "bluetooth": "v5.3",
+        "chip_do_hoa": "Mali-G57 MC2",
+        "chip_set": "MediaTek Helio G200-Ultra 8 nhân",
+        "cpu_speed": "2 nhân 2.2 GHz & 6 nhân 2.0 GHz",
+        "display_type": "AMOLED",
+        "khe_sim": "2",
+        "loai_pin": "Silicon-Carbon",
+        "loai_sim": "Nano",
+        "material": "Khung & Mặt lưng nhựa Polycarbonate",
+        "origin": "Trung Quốc",
+        "pin_co_the_thao_roi": "Nguyên Khối",
+        "port_sac": "Type-C",
+        "product_weight": "Nặng 195 g",
+        "screen_size": "6.7 inch",
+        "wifi": "Wi-Fi MIMO / Wi-Fi Direct"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "6500mAh",
+        "Bluetooth": "v5.3",
+        "Chip đồ họa (GPU)": "Mali-G57 MC2",
+        "Chip set": "MediaTek Helio G200-Ultra 8 nhân",
+        "Tốc độ CPU": "2 nhân 2.2 GHz & 6 nhân 2.0 GHz",
+        "Loại/ Công nghệ màn hình": "AMOLED",
+        "Số sim": "2",
+        "Loại pin": "Silicon-Carbon",
+        "Loại Sim": "Nano",
+        "Chất liệu": "Khung & Mặt lưng nhựa Polycarbonate",
+        "Xuất xứ (Made in)": "Trung Quốc",
+        "Pin có thể tháo rời": "Nguyên Khối",
+        "Cổng sạc": "Type-C",
+        "Trọng lượng sản phẩm": "Nặng 195 g",
+        "Kích thước màn hình": "6.7 inch",
+        "Wifi": "Wi-Fi MIMO / Wi-Fi Direct"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279419093",
+          "price": 8990000,
+          "salePrice": 7649000,
+          "costPrice": 5354300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/11/5f/b4/0013e413b30d7e83cbd921bf558d1ce6.jpg",
+          "active": true,
+          "options": {
+            "color": "Xanh Dương"
+          }
+        },
+        {
+          "sku": "TK279419091",
+          "price": 8990000,
+          "salePrice": 7649000,
+          "costPrice": 5354300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/8a/88/61/05306e8cccf8b38b86146bed2f60d32f.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-xiaomi-redmi-15-5g-4gb-128gb-hang-chinh-hang-tk279418684",
+      "name": "Điện Thoại Xiaomi Redmi 15 5G 4GB/128GB - Hàng Chính Hãng",
+      "categorySlug": "dien-thoai-smartphone",
+      "brandSlug": "xiaomi",
+      "description": "Điện Thoại Xiaomi Redmi 15 5G 4GB/128GB - Hàng Chính Hãng\nBộ sản phẩm bao gồm: Pin, sạc, cáp USB kiểu C, ốp lưng, hướng dẫn, cây tháo sim.\nMàn hình 6.9 inch Full HD+ với tần số quét 144 Hz hiển thị mượt mà\n- Trang bị màn hình 6.9 inch Full HD+, hiển thị rộng rãi và chi tiết rõ nét. Với độ phân giải 1080 × 2340 pixels và mật độ 374 PPI, hình ảnh sắc sảo, sống động. Độ sáng 700 nits tiêu chuẩn và 850 nits (HBM) giúp nội dung luôn rõ ràng ngay cả dưới ánh nắng, mang lại trải nghiệm xem dễ chịu trong nhiều tình huống.\n- Màn hình của Redmi 15 5G nổi bật với tần số quét 144 Hz AdaptiveSync, tự điều chỉnh mượt mà theo từng thao tác, từ lướt web đến chơi game, đồng thời tiết kiệm pin hơn.\nCamera 50 MP cho ảnh sắc nét và\n- Trang bị camera kép AI 50 MP, cho ảnh sắc nét và chi tiết. Camera chính với ống kính 5P, khẩu độ f/1.8 thu sáng tốt, cho hình ảnh rõ ràng ngay cả trong điều kiện thiếu sáng. Kết hợp cùng ống kính phụ, máy mang đến nhiều lựa chọn chụp từ phong cảnh đến chân dung, giữ màu sắc tự nhiên và sống động.\n- Camera trước 8MP cho ảnh selfie rõ nét và gọi video ổn định. Máy hỗ trợ các chế độ chụp chân dung, HDR, filmCamera và vòng sáng mềm, giúp ảnh sáng và hài hòa hơn. Chế độ làm đẹp được tinh chỉnh nhẹ nhàng, giữ gương mặt tự nhiên, tươi tắn.\nHiệu năng mạnh mẽ với Snapdragon 6s Gen 3\n- Trang bị chip Snapdragon 6s Gen 3 5G, mang lại hiệu năng ổn định suốt cả ngày. CPU tám nhân và GPU Adreno giúp máy chạy mượt mọi tác vụ từ lướt web, xem phim đến chơi game phổ biến, đảm bảo thao tác phản hồi nhanh và trải nghiệm sử dụng nhẹ nhàng, thoải mái.\nPin 7000 mAh “khủng”, sạc nhanh 33W\n- Trang bị pin khủng 7000mAh dung lượng này cho phép máy dùng liên tục với các tác vụ nhẹ, giúp bạn thoải mái làm việc, giải trí cả ngày mà không lo hết pin hay phải sạc liên tục.\n- Redmi 15 5G còn hỗ trợ sạc nhanh 33W, giúp nạp pin nhanh và luôn sẵn sàng dùng cả ngày.\nĐiện Thoại Xiaomi Redmi 15 5G 4GB/128GB - Hàng Chính Hãng\nCảm ơn quý khách đã quan tâm đến sản phẩm bên shop, quý khách vui lòng dành ít thời gian đọc kĩ chính sách bảo hành đổi trả:\n- Sản phẩm được bao test 7 ngày kể từ ngày nhận được sản phẩm và sẽ được đổi máy mới cùng model hoặc giá trị tương đương sau khi được thẩm định lỗi kĩ thuật.\n- Sản phẩm lỗi kĩ thuật được xác nhận bởi trung tâm bảo hành ủy quyền chính hãng (bằng văn bản); khách hàng có thể gửi lại shop để xác nhận lỗi hoặc tới trạm bảo hành gần nhất để thẩm định lỗi.\n- Sản phẩm đổi trả phải còn nguyên hiện trạng máy không trầy xước, không bể vỡ, vô nước, gãy chân sim, khung thẻ nhớ… (tất cả các tác động ngoại lực từ phía khách hàng đều TỪ CHỐI BẢO HÀNH)\n- Sản phẩm đổi trả phải còn nguyên hộp trùng imei, phụ kiện kèm theo máy không trầy xước, cháy nổ, đứt dây (nếu trầy xước shop không đổi phụ kiện mới)\n- Sau 7 ngày bao test, sản phẩm vẫn nhận chính sách bảo hành 18 tháng kể từ ngày kích hoạt bảo hành (khách chịu phí vận chuyển tới shop bảo hành hộ hoặc tự đến trung tâm bảo hành gần nhất để được hỗ trợ)\n- Trong một số trường hợp sản phẩm đã được kích hoạt bảo hành điện tử để tham gia chương trình khuyến mãi có giá tốt cho khách hàng. Vui lòng chat với nhân viên tư vấn để được hỗ trợ thêm thông tin.\n- Sản phẩm bị TỪ CHỐI BẢO HÀNH khi cháy nổ, bể vỡ, tác động ngoại lực vào thân và bên trong máy, có thay đổi sửa chữa bên ngoài.\n- Các sản phẩm bị khóa tài khoản như Gmail, Samsung account… Khách tự chịu phí mở khóa nếu không nhớ mật khẩu.\nĐiện Thoại Xiaomi Redmi 15 5G 4GB/128GB - Hàng Chính Hãng\n#honghanhmobile #honghanhmobilemall #hhm #dienthoaichinhhanghonghanh #xiaomi_redmi_15_5g #redmi_15_5g #điện_thoại #dienthoai #di_động #didong #điện_thoại_di_động #dien_thoai_di_dong #điện_thoại_chính_hãng #hàng_chính_hãng #điện_thoại_giá_rẻ #dien_thoai_gia_re #giá_rẻ #khuyen_mai #freeship #mobile #smartphone #điện_thoại_xiaomi #xiaomi\n\nNguồn: Tiki.vn",
+      "price": 5690000,
+      "salePrice": 4699000,
+      "costPrice": 3289300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/3d/27/02/56129d4887d7fe2a2601d67a39c17dd9.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/3d/27/02/56129d4887d7fe2a2601d67a39c17dd9.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 18,
+      "warrantyPolicy": "Bảo hành 18 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_capacity": "7000mAh",
+        "bluetooth": "v5.1",
+        "chip_do_hoa": "Adreno 619",
+        "chip_set": "Snapdragon 6s Gen 3 8 nhân",
+        "display_type": "LCD",
+        "ho_tro_5g": "Có",
+        "khe_sim": "2",
+        "loai_pin": "Silicon-Carbon",
+        "loai_sim": "Nano",
+        "material": "Khung & Mặt lưng nhựa",
+        "origin": "Trung Quốc",
+        "pin_co_the_thao_roi": "Nguyên Khối",
+        "port_sac": "Type-C",
+        "product_weight": "Nặng 214 g",
+        "screen_size": "6.9 inch",
+        "wifi": "Dual-band (2.4 GHz/5 GHz)"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "7000mAh",
+        "Bluetooth": "v5.1",
+        "Chip đồ họa (GPU)": "Adreno 619",
+        "Chip set": "Snapdragon 6s Gen 3 8 nhân",
+        "Loại/ Công nghệ màn hình": "LCD",
+        "Hỗ trợ 5G": "Có",
+        "Số sim": "2",
+        "Loại pin": "Silicon-Carbon",
+        "Loại Sim": "Nano",
+        "Chất liệu": "Khung & Mặt lưng nhựa",
+        "Xuất xứ (Made in)": "Trung Quốc",
+        "Pin có thể tháo rời": "Nguyên Khối",
+        "Cổng sạc": "Type-C",
+        "Trọng lượng sản phẩm": "Nặng 214 g",
+        "Kích thước màn hình": "6.9 inch",
+        "Wifi": "Dual-band (2.4 GHz/5 GHz)"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279418688",
+          "price": 5690000,
+          "salePrice": 4699000,
+          "costPrice": 3289300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/3d/27/02/56129d4887d7fe2a2601d67a39c17dd9.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám Titan"
+          }
+        },
+        {
+          "sku": "TK279418686",
+          "price": 5690000,
+          "salePrice": 4699000,
+          "costPrice": 3289300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/14/4a/b8/810ead62a36c0031dee179b7466e35b6.jpg",
+          "active": true,
+          "options": {
+            "color": "Đen Bán Dạ"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-ban-panasonic-kx-tsc11-hang-chinh-hang-tk226552005",
+      "name": "Điện thoại bàn Panasonic KX-TSC11 hàng chính hãng",
+      "categorySlug": "dien-thoai-ban",
+      "brandSlug": "panasonic",
+      "description": "– Nhớ 50 số gọi đến 10 số gọi đi.\n– Khoá đường dài, di động bằng mã.\n_ Hiển thị số gọi đến, gọi đi \n• Bảo hành 12 tháng chính hãng\n• Giá bán đã bao gồm xuất hoá đơn 10% VAT\n• Lưu ý: Điện thoại không hỗ trợ tính năng dùng SIM.\n\nNguồn: Tiki.vn",
+      "price": 620000,
+      "salePrice": null,
+      "costPrice": 434000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/84/dd/92/037e2732903a03d0f5e081af2d2d917b.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/84/dd/92/037e2732903a03d0f5e081af2d2d917b.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "brand_country": "Nhật Bản",
+        "included_accessories": "dây xoắn\ndây line",
+        "origin": "Malaysia",
+        "product_weight": "0.7"
+      },
+      "specsRaw": {
+        "Xuất xứ thương hiệu": "Nhật Bản",
+        "Phụ kiện đi kèm": "dây xoắn\ndây line",
+        "Xuất xứ (Made in)": "Malaysia",
+        "Trọng lượng sản phẩm": "0.7"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK226552008",
+          "price": 620000,
+          "salePrice": null,
+          "costPrice": 434000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/69/87/36/4fcb01acaff62b17012a91181a37ad27.jpg",
+          "active": true,
+          "options": {
+            "color": "ĐEN"
+          }
+        },
+        {
+          "sku": "TK164318471",
+          "price": 620000,
+          "salePrice": null,
+          "costPrice": 434000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/84/dd/92/037e2732903a03d0f5e081af2d2d917b.jpg",
+          "active": true,
+          "options": {
+            "color": "Trắng"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "dien-thoai-ip-grandstream-grp-2601-hang-chinh-hang-tk198868735",
+      "name": "Điện thoại IP Grandstream GRP 2601 hàng chính hãng",
+      "categorySlug": "dien-thoai-ban",
+      "brandSlug": "grandstream",
+      "description": "- Điện thoại IP\n- 2 cổng LAN 10/100 (không PoE)\n- 1 tài khoản SIP\n- Màn hình LCD, Jack tai nghe RJ9, Contact 1000 số, Call log 200 số, OpenVPN, tích hợp quản lý Cloud.\n\nNguồn: Tiki.vn",
+      "price": 880000,
+      "salePrice": null,
+      "costPrice": 616000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/79/12/a4/e2a12a711e482a8b6a6f8b77bd3190b0.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/79/12/a4/e2a12a711e482a8b6a6f8b77bd3190b0.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "brand_country": "USA",
+        "included_accessories": "Adapter, dây soắn , cáp mạng , HDSD",
+        "origin": "Trung Quốc"
+      },
+      "specsRaw": {
+        "Xuất xứ thương hiệu": "USA",
+        "Phụ kiện đi kèm": "Adapter, dây soắn , cáp mạng , HDSD",
+        "Xuất xứ (Made in)": "Trung Quốc"
+      },
+      "tags": [],
+      "variants": []
+    },
+    {
+      "slug": "dien-thoai-ban-panasonic-kx-tgc310-hang-chinh-hang-tk181928208",
+      "name": "Điện thoại bàn Panasonic KX-TGC310 hàng chính hãng",
+      "categorySlug": "dien-thoai-ban",
+      "brandSlug": "panasonic",
+      "description": "- Màn hình LCD 1.6” hiển thị rõ nét.\n- Danh bạ lưu 50 tên và số\n- Hiển thị số gọi đến*\n- Nhớ 10 số gọi đi\n- 6 phím gọi nhanh\n- Đàm thoại 3 bên\n- Loa ngoài hai chiều\n- Khả năng kết nói với repeater mở rộng phạm vi phát sóng\n- Trả lời bằng phím bất kì\n- Nhiều ngôn ngữ để lựa chọn\n- Chức năng khóa máy\n- Thời gian thoại lên tới 16h, thời gian chờ 200h\n- Chức năng chuyển cuộc gọi, đàm thoại giữa các tay con.\n- Khả năng mở rộng lên tới 6 tay con\n• Bảo hành 12 tháng chính hãng\n• Giá bán đã bao gồm xuất hoá đơn 10% VAT\n• Lưu ý: Điện thoại không hỗ trợ tính năng dùng SIM.\n\nNguồn: Tiki.vn",
+      "price": 972000,
+      "salePrice": null,
+      "costPrice": 680400,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/5b/a5/c1/2bf1ed55c8919a261bf18c9e9d4380d2.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/5b/a5/c1/2bf1ed55c8919a261bf18c9e9d4380d2.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "brand_country": "Nhật Bản",
+        "included_accessories": "Adapter,Pin sạc Panasonic, dây line, HDSD",
+        "origin": "Việt Nam",
+        "product_weight": "0.8"
+      },
+      "specsRaw": {
+        "Xuất xứ thương hiệu": "Nhật Bản",
+        "Phụ kiện đi kèm": "Adapter,Pin sạc Panasonic, dây line, HDSD",
+        "Xuất xứ (Made in)": "Việt Nam",
+        "Trọng lượng sản phẩm": "0.8"
+      },
+      "tags": [],
+      "variants": []
+    },
+    {
+      "slug": "dien-thoai-ban-panasonic-kx-tgd310-hang-chinh-hang-tk181927774",
+      "name": "Điện thoại bàn Panasonic KX-TGD310 hàng chính hãng",
+      "categorySlug": "dien-thoai-ban",
+      "brandSlug": "panasonic",
+      "description": "• - Bộ nhớ: Danh bạ lưu 120 tên và số\n• Lưu 50 số gọi đến\n• Nhớ 10 số gọi đi - 9 số gọi nhanh\n• - Cấu hình chuẩn : 1 tay. Khả năng mở rộng tối đa tới 6 tay con\n• Khả năng kết nối với 4 thiết bị tìm kiếm KX-TGA30\n• Mất điện dùng được loa ngoài\n• • Bảo hành 12 tháng chính hãng\n• Giá bán đã bao gồm xuất hoá đơn 10% VAT\n• Lưu ý: Điện thoại không hỗ trợ tính năng dùng SIM.\n\nNguồn: Tiki.vn",
+      "price": 1190000,
+      "salePrice": null,
+      "costPrice": 833000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/98/d1/15/b90f8523563a566d553a97d5474dee78.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/98/d1/15/b90f8523563a566d553a97d5474dee78.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "brand_country": "Nhật Bản",
+        "included_accessories": "Adapter, Pin sạc Pasonic, dây line, HDSD",
+        "origin": "Malaysia",
+        "product_weight": "0.8"
+      },
+      "specsRaw": {
+        "Xuất xứ thương hiệu": "Nhật Bản",
+        "Phụ kiện đi kèm": "Adapter, Pin sạc Pasonic, dây line, HDSD",
+        "Xuất xứ (Made in)": "Malaysia",
+        "Trọng lượng sản phẩm": "0.8"
+      },
+      "tags": [],
+      "variants": []
+    },
+    {
+      "slug": "dien-thoai-ban-panasonix-kx-tgd312-hang-chinh-hang-tk181927736",
+      "name": "Điện thoại bàn Panasonix KX-TGD312 hàng chính hãng",
+      "categorySlug": "dien-thoai-ban",
+      "brandSlug": "panasonic",
+      "description": "• Bộ nhớ: Danh bạ lưu 120 tên và số, Lưu 50 số gọi đến* ,Nhớ 10 số gọi đi - 9 số gọi nhanh\n• - Màu sắc: đen\n• - Cấu hình: cấu hình chuẩn : 2 tay 1 mẹ +1 con. Khả năng mở rộng tối đa tới 6 tay con\n• - Mô tả khác: Khả năng kết nối với 4 thiết bị tìm kiếm KX-TGA20 (TGA20 là thiết bị kết nối thêm, không kèm theo máy),Khả năng kết nói với repeater mở rộng phạm vi phát sóng, Mất điện dùng được\n\nNguồn: Tiki.vn",
+      "price": 1850000,
+      "salePrice": null,
+      "costPrice": 1295000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/a9/d3/c3/e0db04f1b762462ca82d6f0aac15909d.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/a9/d3/c3/e0db04f1b762462ca82d6f0aac15909d.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "brand_country": "Nhật Bản",
+        "included_accessories": "Adapter,Pin sạc Panasonic, dây line, HDSD",
+        "origin": "Việt Nam",
+        "product_weight": "1"
+      },
+      "specsRaw": {
+        "Xuất xứ thương hiệu": "Nhật Bản",
+        "Phụ kiện đi kèm": "Adapter,Pin sạc Panasonic, dây line, HDSD",
+        "Xuất xứ (Made in)": "Việt Nam",
+        "Trọng lượng sản phẩm": "1"
+      },
+      "tags": [],
+      "variants": []
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-redmi-pad-2-wifi-4gb-128gb-hang-chinh-hang-tk279505495",
+      "name": "Máy Tính Bảng Xiaomi Redmi Pad 2 Wifi 4GB/128GB - Hàng Chính Hãng",
+      "categorySlug": "may-tinh-bang",
+      "brandSlug": "xiaomi",
+      "description": "Máy Tính Bảng Xiaomi Redmi Pad 2 Wifi 4GB/128GB - Hàng Chính Hãng\nBộ sản phẩm bao gồm: Thân máy, sạc, cáp USB Type-C, tài liệu hướng dẫn sử dụng.\nMàn hình 11 inch, độ phân giải 2.5K\n- Trang bị màn hình LCD với kích thước lớn lên đến 11inch Độ phân giải 2.5K (1600 x 2560 pixel) cung cấp chi tiết khá sắc nét, đọc chữ rõ ràng, xem phim hoặc học trực tuyến đều rất thoải mái.\n- Tần số quét 90Hz giúp những thao tác cuộn, vuốt mượt. Độ sáng tối đa 600 nits còn giúp nhìn tốt cả trong phòng có ánh sáng mạnh.\nHiệu năng Helio G100 Ultra đủ cho nhu cầu cơ bản\n- Trang bị bộ vi xử lý MediaTek Helio G100 Ultra giúp máy thao tác trơn tru với các tác vụ như lướt web, xem Youtube, mở đa nhiệm. Nếu không chơi game nặng, con chip này vẫn đủ phục vụ nhu cầu học tập và giải trí.\n- Máy còn hỗ trợ mở rộng thẻ nhớ microSD lên đến 2TB, thoải mái lưu trữ tài liệu, phim ảnh mà không phải lo thiếu dung lượng.\nPin khủng 9000 mAh\n- Trang bị viên pin dung lượng lên đến 9000mAh giúp xóa tan nỗi lo cạn pin. Bạn có thể thoải mái sử dụng tới 86 ngày ở chế độ chờ, nghe nhạc 234 giờ không ngừng nghỉ hoặc xem video liên tục 17 giờ. Khi cần nạp lại, công nghệ sạc nhanh 18W qua cổng Type-C sẽ giúp bạn rút ngắn thời gian chờ đợi, mang lại sự tiện lợi tối đa.\nMáy Tính Bảng Xiaomi Redmi Pad 2 Wifi 4GB/128GB - Hàng Chính Hãng\nCảm ơn quý khách đã quan tâm đến sản phẩm bên shop, quý khách vui lòng dành ít thời gian đọc kĩ chính sách bảo hành đổi trả:\n- Sản phẩm được bao test 7 ngày kể từ ngày nhận được sản phẩm và sẽ được đổi máy mới cùng model hoặc giá trị tương đương sau khi được thẩm định lỗi kĩ thuật.\n- Sản phẩm lỗi kĩ thuật được xác nhận bởi trung tâm bảo hành ủy quyền chính hãng (bằng văn bản); khách hàng có thể gửi lại shop để xác nhận lỗi hoặc tới trạm bảo hành gần nhất để thẩm định lỗi.\n- Sản phẩm đổi trả phải còn nguyên hiện trạng máy không trầy xước, không bể vỡ, vô nước, gãy chân sim, khung thẻ nhớ… (tất cả các tác động ngoại lực từ phía khách hàng đều TỪ CHỐI BẢO HÀNH)\n- Sản phẩm đổi trả phải còn nguyên hộp trùng imei, phụ kiện kèm theo máy không trầy xước, cháy nổ, đứt dây (nếu trầy xước shop không đổi phụ kiện mới)\n- Sau 7 ngày bao test, sản phẩm vẫn nhận chính sách bảo hành 12 tháng kể từ ngày kích hoạt bảo hành (khách chịu phí vận chuyển tới shop bảo hành hộ hoặc tự đến trung tâm bảo hành gần nhất để được hỗ trợ)\n- Trong một số trường hợp sản phẩm đã được kích hoạt bảo hành điện tử để tham gia chương trình khuyến mãi có giá tốt cho khách hàng. Vui lòng chat với nhân viên tư vấn để được hỗ trợ thêm thông tin.\n- Sản phẩm bị TỪ CHỐI BẢO HÀNH khi cháy nổ, bể vỡ, tác động ngoại lực vào thân và bên trong máy, có thay đổi sửa chữa bên ngoài.\n- Các sản phẩm bị khóa tài khoản như Gmail, Samsung account… Khách tự chịu phí mở khóa nếu không nhớ mật khẩu.\nMáy Tính Bảng Xiaomi Redmi Pad 2 Wifi 4GB/128GB - Hàng Chính Hãng\n#honghanhmobile #honghanhmobilemall #hhm #dienthoaichinhhanghonghanh #xiaomi_redmi_pad_2_wifi #xiaom_redmi_pab_2 #pab_2 #điện_thoại #dienthoai #di_động #didong #điện_thoại_di_động #dien_thoai_di_dong #điện_thoại_chính_hãng #hàng_chính_hãng #điện_thoại_giá_rẻ #dien_thoai_gia_re #giá_rẻ #khuyen_mai #freeship #mobile #smartphone #may_tinh_bang _xiaomi #xiaomi\n\nNguồn: Tiki.vn",
+      "price": 5290000,
+      "salePrice": 5149000,
+      "costPrice": 3604300,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/bd/94/8c/0406ce8d6e91b508fda7e66430da4599.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/bd/94/8c/0406ce8d6e91b508fda7e66430da4599.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 18,
+      "warrantyPolicy": "Bảo hành 18 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_capacity": "9000mAh",
+        "brand_country": "Trung Quốc",
+        "chip_do_hoa": "Mali-G57 MC2",
+        "chip_set": "MediaTek Helio G100-Ultra 8 nhân",
+        "cpu_speed": "2 nhân 2.2 GHz & 6 nhân 2 GHz",
+        "display_type": "IPS LCD",
+        "loai_pin": "Li-Po",
+        "loai_sim": "Không",
+        "origin": "Trung Quốc",
+        "product_weight": "Nặng 519 g"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "9000mAh",
+        "Xuất xứ thương hiệu": "Trung Quốc",
+        "Chip đồ họa (GPU)": "Mali-G57 MC2",
+        "Chip set": "MediaTek Helio G100-Ultra 8 nhân",
+        "Tốc độ CPU": "2 nhân 2.2 GHz & 6 nhân 2 GHz",
+        "Loại/ Công nghệ màn hình": "IPS LCD",
+        "Loại pin": "Li-Po",
+        "Loại Sim": "Không",
+        "Xuất xứ (Made in)": "Trung Quốc",
+        "Trọng lượng sản phẩm": "Nặng 519 g"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279505497",
+          "price": 5290000,
+          "salePrice": 5149000,
+          "costPrice": 3604300,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/bd/94/8c/0406ce8d6e91b508fda7e66430da4599.jpg",
+          "active": true,
+          "options": {
+            "color": "Xám Khoáng Thạch"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-xiaomi-redmi-pad-2-9-7-wifi-4gb-64gb-hang-chinh-hang-tk279504232",
+      "name": "Máy tính bảng Xiaomi Redmi Pad 2 9.7 Wifi (4GB/64GB) - Hàng chính hãng",
+      "categorySlug": "may-tinh-bang",
+      "brandSlug": "xiaomi",
+      "description": "Màn hình 9.7 inch 2K hiển thị sắc nét\n Tần số quét 120Hz cho thao tác mượt mà\n Chip Snapdragon 6s 4G Gen 2 ổn định\n RAM 4GB, bộ nhớ trong 64GB tiện dụng\n Pin dung lượng lớn 7600mAh bền bỉ\n Camera sau 8MP, camera trước 5MP\n Hỗ trợ WiFi 2.4GHz/5GHz và Bluetooth 5.0\n Thiết kế mỏng nhẹ, dễ mang theo hằng ngày\nChào mừng bạn đến với Long Hưng Mall!\n* Long Hưng TechZone - Không gian công nghệ với thiết bị điện tử và phụ kiện\n* Long Hưng Electronics - Tinh tuyển từ các thương hiệu gia dụng đáng tin cậy, nâng tầm không gian sống\n* Long Hưng Beauty - Thế giới mỹ phẩm và thiết bị làm đẹp, nơi tôn vinh vẻ đẹp và sự tự tin\n* Long Hưng Mobile Store - Điện thoại và phụ kiện chính hãng, cập nhật công nghệ nhanh như nhịp sống\n* Long Hưng Smart House - Bộ sưu tập thiết bị làm đẹp, tối ưu hóa trải nghiệm chăm sóc cá nhân\n* Long Hưng Health Beauty - Sản phẩm chăm sóc sức khỏe & sắc đẹp, nuôi dưỡng cơ thể từ bên trong\nCam kết từ Long Hưng: Sản phẩm chính hãng, giao hàng nhanh chóng, đổi trả linh hoạt, dịch vụ hậu mãi tận tâm.\nLƯU Ý KHI MUA HÀNG\nCảm ơn quý khách đã quan tâm đến sản phẩm bên shop, quý khách vui lòng dành ít thời gian đọc kĩ các thông tin sau:\n️ Sản phẩm được bao test 7 ngày kể từ ngày nhận được sản phẩm và sẽ được đổi máy mới cùng model hoặc giá trị tương đương sau khi được thẩm định lỗi kĩ thuật.\n️ Sản phẩm lỗi kĩ thuật được xác nhận bởi trung tâm bảo hành ủy quyền chính hãng (bằng văn bản); khách hàng có thể gửi lại shop để xác nhận lỗi hoặc tới trung tâm bảo hành ủy quyền để thẩm định lỗi.\n️ Shop hỗ trợ phí vận chuyển trong vòng 7 ngày (kể từ ngày mình nhận hàng), sau 7 ngày shop chỉ hỗ trợ khách bảo hành (phí vận chuyển khách trả)\n️ Sau 7 ngày bao test, sản phẩm vẫn nhận chính sách bảo hành theo quy định của nhà sản xuất (khách chịu phí vận chuyển tới shop bảo hành hộ hoặc tự đến trung tâm bảo hành).\n️ Sản phẩm đổi trả phải còn nguyên hộp trùng imei, phụ kiện kèm theo máy không trầy xước, cháy nổ, đứt dây (nếu trầy xước shop không đổi phụ kiện mới)\n️ Shop nhận đổi trả trong trường hợp hàng sai mẫu, size, màu do shop gửi. Bên shop chỉ giải quyết khiếu nại khi quý khách có video clip khi mở/nhận hàng.\n️ Trong một số trường hợp sản phẩm đã được kích hoạt bảo hành tham gia chương trình khuyến mãi có giá tốt nhất cho khách hàng. Vui lòng chat với shop để được hỗ trợ thêm thông tin.\n️ Khách hàng có nhu cầu xuất hóa đơn VAT, vui lòng liên hệ với gian hàng trực tiếp qua tin nhắn hoặc chat với Shop khi đơn hàng được giao thành công.\n Không nhận đổi trả khi sản phẩm bị hư hại do tác động ngoại lực từ người mua như móp, bể, trầy xước, nổ điện, rớt nước, rách tem bảo hành, không đầy đủ phụ kiện và hộp.\n Các sản phẩm bị khóa tài khoản như Gmail, account… Khách tự chịu phí mở khóa nếu không nhớ mật khẩu.\n Vì lượng hàng hoá nhiều shop không nhận đổi trả trong trường hợp khách không thích, không ưng màu, chất liệu; quý khách vui lòng đọc kĩ mô tả và xem hình ảnh cụ thể; nếu cần hãy chat với shop để được tư vấn.\n\nNguồn: Tiki.vn",
+      "price": 4990000,
+      "salePrice": null,
+      "costPrice": 3493000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1e/ea/da/f68892dfc98e0a3084af9fe120b4ec4d.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/1e/ea/da/f68892dfc98e0a3084af9fe120b4ec4d.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/29/fb/c0/4b859f849c53f06a886949c98714c4b3.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/37/c3/fd/57469dea5ca0f0b7c247cc8d7e54ad57.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/f6/16/0d/50fb0aed39008a7f9bff0f614a4c72e4.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/fe/e7/37/256a2467b6a6bb49c19c89e8e76465a8.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "brand_country": "Trung Quốc",
+        "origin": "Trung Quốc"
+      },
+      "specsRaw": {
+        "Xuất xứ thương hiệu": "Trung Quốc",
+        "Xuất xứ (Made in)": "Trung Quốc"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279504236",
+          "price": 4990000,
+          "salePrice": null,
+          "costPrice": 3493000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1e/ea/da/f68892dfc98e0a3084af9fe120b4ec4d.jpg",
+          "active": true,
+          "options": {
+            "color": "Graphite Gray"
+          }
+        },
+        {
+          "sku": "TK279504234",
+          "price": 4990000,
+          "salePrice": null,
+          "costPrice": 3493000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/45/54/7d/28a6201bd253ba5620e2af9cd5a77360.jpg",
+          "active": true,
+          "options": {
+            "color": "Silver"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-galaxy-tab-s10-lite-wifi-8gb-128gb-hang-chinh-hang-tk279447192",
+      "name": "Máy Tính Bảng Galaxy Tab S10 Lite Wifi (6GB/128GB) - Hàng Chính Hãng",
+      "categorySlug": "may-tinh-bang",
+      "brandSlug": "samsung",
+      "description": "Dễ dàng mang theo. Sẵn sàng tỏa sáng\nChỉ mỏng 6,6 mm, Galaxy Tab S10 Lite có thiết kế siêu mỏng, nhẹ, dễ dàng mang theo mọi lúc mọi nơi. Dù bạn bỏ vào túi xách, balo hay cầm tay, chiếc máy tính bảng này luôn sẵn sàng đồng hành. Hai lựa chọn màu sắc thời thượng, Xám, Bạc giúp bạn dễ dàng thể hiện phong cách riêng. Dù đang di chuyển hay thư giãn tại nhà, chiếc tablet màn hình lớn này luôn đồng hàng được với lối sống linh hoạt của bạn, mang đến sự tiện lợi và phong cách thời trang thật tự nhiên.\nGray\nSilver\nTầm nhìn rực rỡ. Ý tưởng rộng mở\nGalaxy Tab S10 Lite sở hữu màn hình lớn 10.9 inch cùng tần số quét 90 Hz, mang lại trải nghiệm cuộn mượt mà và chuyển động nhạy khi bạn xem, đọc hay sáng tạo. Màn hình còn tích hợp công nghệ giảm ánh sáng xanh được chứng nhận bởi SGS, giúp giảm mỏi mắt khi xem trong thời gian dài. Dù là xem nội dung yêu thích hay chỉnh sửa dự án công việc, mọi thứ đều hiển thị sống động và rõ nét.3\nLàm được nhiều hơn. Lưu trữ được hết\nHiệu suất luôn mượt mà khi bạn xem phim, lướt web hay làm nhiều việc cùng lúc nhờ bộ nhớ đệm 6GB of memory. Bạn có thể lưu trữ thoải mái với khả năng lưu trữ đến 128 GB, mở rộng tối đa 2 TB qua thẻ microSD. Chiếc máy tính bảng có kèm bút này giúp bạn dễ dàng ghi lại ý tưởng và làm việc hiệu quả, mang đến không gian và tốc độ cần thiết để sáng tạo liền mạch và giữ mọi thứ gọn gàng trong một thiết bị.4\nViết nhanh bằng S Pen. Giải toán tức thì\nGặp khó khăn với công thức toán học phức tạp? Chỉ cần viết ra bằng S Pen, tính năng Giải toán sẽ tự động giải giúp bạn. Chiếc máy tính bảng này giúp việc học dễ dàng hơn bằng cách cho phép bạn giải toán nhanh chóng mà không cần chuyển đổi ứng dụng, gây nên sự xao nhãng. Dù đang làm bài tập hay luyện nhớ công thức, thiết bị này sẽ hỗ trợ bạn học tập hiệu quả và tiến bộ mỗi ngày.5\nCó S Pen, thích là viết.\nTính năng Trợ giúp viết tay giúp bạn nhanh chóng chỉnh sửa nét chữ nguệch ngoạc để ghi chú trông gọn gàng, chuyên nghiệp hơn. Bạn có thể làm thẳng dòng, đều khoảng cách, căn chỉnh chữ và chỉnh sửa hình dạng chữ chỉ trong tích tắc. Cứ thỏa sức ghi chép, phác thảo hay viết ý tưởng, S Pen sẽ khiến mọi thao tác viết tay trở nên nhẹ nhàng.6\nMột nhấn, mở AI\nChỉ với một lần nhấn, bạn có thể truy cập ngay trợ lý AI yêu thích để nhận được trả lời nhanh, gợi ý hữu ích hoặc hỗ trợ theo thời gian thực mà không làm gián đoạn công việc. Với Galaxy Tab S10 Lite, AI luôn trong tầm tay, giúp bạn hoàn thành mọi việc đơn giản và nhanh chóng hơn.7\nChỉnh sửa tức thì với Xóa vật thể\nVới tính năng Xóa vật thể, bạn dễ dàng xóa người hoặc vật thể không mong muốn trong ảnh chỉ bằng vài thao tác. Dùng S Pen khoanh vùng phần cần xóa, và thế là biến mất. Không cần ứng dụng chỉnh sửa phức tạp, bạn vẫn có thể tạo ra những bức ảnh gọn gàng, chuyên nghiệp. Từ người lọt vào khung đến hậu cảnh rối mắt, Xóa vật thể giúp ảnh của bạn trở nên sạch sẽ, tập trung hơn.8\nMột lần Sạc Siêu Nhanh, đồng hành cả ngày dài\nChiếc tablet với pin 8.000 mAh giúp bạn làm việc, học tập và giải trí liền mạch mà không cần sạc lại giữa chừng. Khi cần nạp lại năng lượng, công nghệ Sạc Siêu Nhanh sẽ giúp bạn sẵn sàng chỉ trong chớp mắt. Dù là buổi sáng bận rộn, lịch trình dày đặc hay những giờ xem phim kéo dài, chiếc tablet này luôn theo kịp nhịp sống của bạn với nguồn pin bền bỉ, đáng tin cậy.9\nTương thích hoàn hảo với phụ kiện Galaxy bạn yêu thích\nGalaxy Tab S10 Lite hoạt động mượt mà với nhiều phụ kiện dành riêng cho tablet, bao gồm Book Cover Keyboard, Book Cover Keyboard Slim, Smart Book Cover và miếng dán màn hình chống chói. Những lựa chọn này giúp bạn gõ phím thoải mái hơn, xem nội dung rảnh tay và bảo vệ màn hình rõ nét, dễ dàng cá nhân hóa trải nghiệm theo cách bạn muốn.\n\nNguồn: Tiki.vn",
+      "price": 10990000,
+      "salePrice": null,
+      "costPrice": 7693000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/8a/bc/db/4939b24ea16959af7ae74054a823dc9f.png",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/8a/bc/db/4939b24ea16959af7ae74054a823dc9f.png"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_capacity": "8000",
+        "brand_country": "Hàn Quốc",
+        "cpu_speed": "2.4GHz, 2GHz",
+        "jack_headphone": "USB Type-C",
+        "origin": "Việt Nam"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "8000",
+        "Xuất xứ thương hiệu": "Hàn Quốc",
+        "Tốc độ CPU": "2.4GHz, 2GHz",
+        "Jack tai nghe": "USB Type-C",
+        "Xuất xứ (Made in)": "Việt Nam"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279447202",
+          "price": 10990000,
+          "salePrice": null,
+          "costPrice": 7693000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/8a/bc/db/4939b24ea16959af7ae74054a823dc9f.png",
+          "active": true,
+          "options": {
+            "color": "Bạc"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-samsung-galaxy-tab-a11-4g-4gb-64gb-tk279411794",
+      "name": "Máy tính bảng Samsung Galaxy Tab A11 4G ( 4GB/64GB) - Hàng chính hãng",
+      "categorySlug": "may-tinh-bang",
+      "brandSlug": "samsung",
+      "description": "Máy tính bảng Samsung Galaxy Tab A11 4G (4GB/64GB)\n\nNguồn: Tiki.vn",
+      "price": 6990000,
+      "salePrice": null,
+      "costPrice": 4893000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/d9/2d/f3/8b46e228d5d268972bc4e80ee11512db.png",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d9/2d/f3/8b46e228d5d268972bc4e80ee11512db.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/d8/cc/bb/90fc7607ba5d4ec386326c16cfc4e33c.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 0,
+      "warrantyPolicy": "",
+      "specs": {
+        "battery_capacity": "5100 | mAh",
+        "bluetooth": "Bluetooth v5.3",
+        "brand_country": "Hàn Quốc",
+        "camera_sau": "8.0 MP",
+        "camera_truoc": "5.0 MP",
+        "chip_set": "MediaTek | MT8781",
+        "cpu_speed": "2.2GHz,2GHz",
+        "display_type": "TFT",
+        "ho_tro_4g": "Có",
+        "jack_headphone": "3.5mm Stereo",
+        "kha_dung": "64 | GB",
+        "manufacturer_electronics": "Samsung",
+        "origin": "China",
+        "product_weight": "337 | g",
+        "wifi": "Wi-Fi 5"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "5100 | mAh",
+        "Bluetooth": "Bluetooth v5.3",
+        "Xuất xứ thương hiệu": "Hàn Quốc",
+        "Camera sau": "8.0 MP",
+        "Camera trước": "5.0 MP",
+        "Chip set": "MediaTek | MT8781",
+        "Tốc độ CPU": "2.2GHz,2GHz",
+        "Loại/ Công nghệ màn hình": "TFT",
+        "Hỗ trợ 4G": "Có",
+        "Jack tai nghe": "3.5mm Stereo",
+        "Bộ nhớ khả dụng": "64 | GB",
+        "Nhà sản xuất": "Samsung",
+        "Xuất xứ (Made in)": "China",
+        "Trọng lượng sản phẩm": "337 | g",
+        "Wifi": "Wi-Fi 5"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279412567",
+          "price": 6990000,
+          "salePrice": null,
+          "costPrice": 4893000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/d9/2d/f3/8b46e228d5d268972bc4e80ee11512db.png",
+          "active": true,
+          "options": {
+            "color": "Gray"
+          }
+        },
+        {
+          "sku": "TK279412568",
+          "price": 6990000,
+          "salePrice": null,
+          "costPrice": 4893000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/3b/2a/7a/a40afb90c517710b88ec981d3e4fdcc4.png",
+          "active": true,
+          "options": {
+            "color": "Silver"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-tinh-bang-samsung-galaxy-tab-a11-wifi-4gb-64gb-tk279411764",
+      "name": "Máy Tính Bảng Samsung Galaxy Tab A11 WiFi (4GB/64GB) - Hàng chính hãng",
+      "categorySlug": "may-tinh-bang",
+      "brandSlug": "samsung",
+      "description": "Máy Tính Bảng Samsung Galaxy Tab A11 WiFi (4GB/64GB)\n\nNguồn: Tiki.vn",
+      "price": 5990000,
+      "salePrice": null,
+      "costPrice": 4193000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/4b/c0/89/bf3e4e298ff728769eaf7c94b54c2587.png",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/4b/c0/89/bf3e4e298ff728769eaf7c94b54c2587.png",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/1e/63/7a/9e79dddc6a6202600ad7161f5f5eaed4.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_capacity": "5100mAh",
+        "bluetooth": "Bluetooth v5.3",
+        "brand_country": "Hàn Quốc",
+        "camera_sau": "8.0 MP",
+        "camera_truoc": "5.0 MP",
+        "chip_set": "MediaTek | MT8781",
+        "cpu_speed": "2.2GHz,2GHz",
+        "display_type": "TFT",
+        "jack_headphone": "3.5mm Stereo",
+        "kha_dung": "64 | GB",
+        "manufacturer_electronics": "Samsung",
+        "origin": "China",
+        "product_weight": "335g",
+        "wifi": "Wi-Fi 5"
+      },
+      "specsRaw": {
+        "Dung lượng pin": "5100mAh",
+        "Bluetooth": "Bluetooth v5.3",
+        "Xuất xứ thương hiệu": "Hàn Quốc",
+        "Camera sau": "8.0 MP",
+        "Camera trước": "5.0 MP",
+        "Chip set": "MediaTek | MT8781",
+        "Tốc độ CPU": "2.2GHz,2GHz",
+        "Loại/ Công nghệ màn hình": "TFT",
+        "Jack tai nghe": "3.5mm Stereo",
+        "Bộ nhớ khả dụng": "64 | GB",
+        "Nhà sản xuất": "Samsung",
+        "Xuất xứ (Made in)": "China",
+        "Trọng lượng sản phẩm": "335g",
+        "Wifi": "Wi-Fi 5"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK279411768",
+          "price": 5990000,
+          "salePrice": null,
+          "costPrice": 4193000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/4b/c0/89/bf3e4e298ff728769eaf7c94b54c2587.png",
+          "active": true,
+          "options": {
+            "color": "Silver"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-doc-sach-new-kindle-2024-16gb-moi-nguyen-seal-hang-chinh-hang-tk276539826",
+      "name": "Máy đọc sách New Kindle 2024, 16Gb Mới nguyên Seal - Hàng chính hãng",
+      "categorySlug": "may-doc-sach",
+      "brandSlug": "kindle",
+      "description": "• Kindle nhẹ và nhỏ gọn nhất - Có đèn nền sáng hơn ở mức tối đa, tỷ lệ tương phản cao hơn và tốc độ lật trang nhanh hơn, mang đến trải nghiệm đọc tốt hơn.\n• Đọc dễ dàng trong mọi điều kiện ánh sáng - Với màn hình chống chói 6 inch và đèn nền có thể điều chỉnh (sáng hơn 25% ở mức tối đa), bạn có thể thoải mái đọc sách, ngay cả trong bóng tối.\n• Đắm chìm vào những cuốn sách - Tắt hết tin nhắn, mạng xã hội để có một trải nghiệm đọc sách không bị phân tâm.\n• Đọc liền mạch hơn - Pin có thể sử dụng đến 6 tuần chỉ với một lần sạc.\n• Mang thư viện theo bạn – dung lượng lưu trữ 16 GB có thể chứa hàng nghìn cuốn sách.\n• Tìm truyện mới - Đăng ký Kindle Unlimited để truy cập hơn 4 triệu tựa sách, hàng nghìn sách nói và nhiều nội dung khác.\n• Thiết kế bền vững – Dòng máy Kindle này được làm từ 75% nhựa tái chế, 90% magie tái chế và bao bì có thể tái chế 100%\nCảm nhận sự khác biệt thật sự\nHãy trải nghiệm chiếc Kindle nhẹ và nhỏ gọn nhất với màn hình được cải tiến và tốc độ lật trang nhanh hơn. Đèn nền sáng hơn 25% ở mức tối đa, tương đương với Kindle Paperwhite. Bên cạnh đó, với đèn có thể điều chỉnh và chế độ nền tối, bạn có thể dễ dàng đọc sách bất cứ lúc nào trong ngày trên màn hình 6 inch chống lóa, độ phân giải 300 ppi.\nĐọc thoải mái, cả ngày lẫn đêm \nBạn có thể đọc sách mọi lúc, mọi nơi với chiếc Kindle nhẹ và nhỏ gọn nhất này. Điều chỉnh đèn nền theo ý thích hoặc bật chế độ nền tối để đổi màu chữ, giúp việc đọc trở nên dễ dàng hơn bất kể thời gian trong ngày.\nĐọc liền mạch, không gián đoạn\nKhông còn bị làm phiền bởi tin nhắn hay mạng xã hội, bạn có thể hoàn toàn đắm chìm vào câu chuyện.\nĐọc lâu hơn. Sạc ít hơn\nBạn sẽ có nhiều thời gian để đọc sách hơn giữa các lần sạc. Thời lượng pin có thể kéo dài đến 6 tuần chỉ với một lần sạc qua cổng USB-C. Thời lượng pin có thể thay đổi tùy theo cách bạn sử dụng.\nKho nội dung khổng lồ\nViệc tìm kiếm câu chuyện mới trở nên dễ dàng hơn bao giờ hết. Kindle Store cho bạn truy cập vào một thư viện khổng lồ với các cuốn sách bán chạy nhất, hơn 15 triệu tựa sách từ khắp nơi trên thế giới cùng nhiều đầu sách độc quyền mà bạn không thể tìm thấy ở đâu khác.\n\nNguồn: Tiki.vn",
+      "price": 3690000,
+      "salePrice": null,
+      "costPrice": 2583000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/81/97/07/ef850ab65d627136e37df90097857451.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/81/97/07/ef850ab65d627136e37df90097857451.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/a7/e0/8c/302827b134e43f8175a7c51632dcda1b.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/6c/db/b1/cd86e4ab31896caa5df18618652027ce.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/05/4d/45/8bd3c3ed76e6ab2de80628fd7fd13d8c.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/59/a1/af/1e134a8efa1f6f058973db362160b085.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_life": "Lên đến 6 tuần",
+        "brand_country": "Mỹ",
+        "charge_time": "Sạc đầy trong 2 giờ với củ sạc 9W",
+        "content_formats_supported": "Kindle Format 8 (AZW3), Kindle (AZW), TXT, PDF, unprotected MOBI, PRC natively; PDF, DOCX, DOC, HTML, EPUB, TXT, RTF, JPEG, GIF, PNG, BMP through conversion",
+        "dimensions": "157.8 x 108.6 x 8.0 mm",
+        "display_type": "Eink",
+        "dung_luong_dientu": "16Gb",
+        "included_accessories": "Máy + Cáp sạc + Sách",
+        "manufacturer_electronics": "Amazon",
+        "origin": "Mỹ / Trung Quốc",
+        "product_weight": "158 g",
+        "resolution": "300 PPI",
+        "screen_size": "6 inch",
+        "usb_port": "USB-C"
+      },
+      "specsRaw": {
+        "Thời gian pin": "Lên đến 6 tuần",
+        "Xuất xứ thương hiệu": "Mỹ",
+        "Thời gian sạc": "Sạc đầy trong 2 giờ với củ sạc 9W",
+        "Hỗ trợ định dạng": "Kindle Format 8 (AZW3), Kindle (AZW), TXT, PDF, unprotected MOBI, PRC natively; PDF, DOCX, DOC, HTML, EPUB, TXT, RTF, JPEG, GIF, PNG, BMP through conversion",
+        "Kích thước": "157.8 x 108.6 x 8.0 mm",
+        "Loại/ Công nghệ màn hình": "Eink",
+        "Dung lượng ổ cứng": "16Gb",
+        "Phụ kiện đi kèm": "Máy + Cáp sạc + Sách",
+        "Nhà sản xuất": "Amazon",
+        "Xuất xứ (Made in)": "Mỹ / Trung Quốc",
+        "Trọng lượng sản phẩm": "158 g",
+        "Độ phân giải": "300 PPI",
+        "Kích thước màn hình": "6 inch",
+        "Cổng USB": "USB-C"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK276540791",
+          "price": 3690000,
+          "salePrice": null,
+          "costPrice": 2583000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/05/4d/45/c45a749277a4ec6bba5e972eabf0c98f.jpg",
+          "active": true,
+          "options": {
+            "color": "Black"
+          }
+        },
+        {
+          "sku": "TK276540793",
+          "price": 3690000,
+          "salePrice": null,
+          "costPrice": 2583000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/81/97/07/ef850ab65d627136e37df90097857451.jpg",
+          "active": true,
+          "options": {
+            "color": "Matcha"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "may-doc-sach-amazon-kindle-paperwhite-6-gen-12th-hang-chinh-hang-tk276448920",
+      "name": "Máy đọc sách Amazon Kindle Paperwhite 6 (Gen 12th), Mới nguyên Seal - Hàng chính hãng",
+      "categorySlug": "may-doc-sach",
+      "brandSlug": "kindle",
+      "description": "Amazon vừa ra mắt Kindle Paperwhite thế hệ thứ 12 mới ( Kindle Paperwhite 6 12th ). \nKể từ khi ra mắt vào năm 2012, Kindle Paperwhite đã trở thành thiết bị Kindle bán chạy nhất của Amazon và Kindle Paperwhite 6 12th hoàn toàn mới là thiết bị nhanh nhất từ ​​trước đến nay.\nTruy cập vào Thư viện hoặc Cửa hàng Kindle rất nhanh và tốc độ lật trang nhanh hơn 25%. \nKindle Paperwhite 6 12th sử dụng công nghệ màn hình E INK Carta 1300 mới 7 inch với mật độ điểm ảnh 300PPI và độ sáng màn hình lên đến 94 nits.Màn hình sử dụng bóng bán dẫn màng mỏng oxit mang lại tỷ lệ tương phản cao nhất trong số các Kindle, do đó văn bản và hình ảnh nổi bật trên màn hình\nKindle Paperwhite 6 12th là thiết bị mỏng nhất, với thời lượng pin lên đến ba tháng. Đèn màn hình cũng được nâng cấp lên 10 Led Trắng và 9 Led vàng.\nƯu điểm:\n• Màn hình Paperwhite 7inch với độ phân giải cao 300PPi, giúp hiển thị rõ nét và thoải mái cho mắt khi đọc.\n• Chip mới nhanh hơn, giúp trang lật nhanh 25% so với Kindle Paperwhite 5 và trải nghiệm trơn tru.\n• Đèn phía sau tăng cường, cho phép đọc thoải mái hơn trong điều kiện ánh sáng yếu.\n• Tích hợp Bluetooth để kết nối với loa/tai nghe không dây, hỗ trợ nghe sách.\n• Dung lượng pin lên tới 12 tuần sử dụng, giúp đọc sách liên tục mà không cần sạc thường xuyên.\n• Chống nước giúp bạn thoải mái đi dưới trời mưa.\n• Ánh sáng vàng, trắng tùy chỉnh.\n• Kích thước chữ, font chữ thay đổi tùy ý.\nNếu bạn thực sự là người yêu thích đọc sách thì đây là chiếc máy Kindle dành cho bạn. Với chiếc máy này bạn sẽ có nhiều trải nghiệm trên một chiếc máy có màn hình lớn 7inch, thời lượng Pin lên đến hàng tuần, và thư viện sách lớn nhiều các thể loại mà bạn cần đọc. Kindle Paperwhite thực sự sẽ là món quà vô giá không gì sánh nối nếu bạn trải nghiệm máy hoặc có thể làm một món quà tặng ai đó sẽ vô cùng ý nghĩa.\n\nNguồn: Tiki.vn",
+      "price": 4890000,
+      "salePrice": null,
+      "costPrice": 3423000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/59/e7/74/68080c04130bb376a971ea54196b6f60.jpg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/59/e7/74/68080c04130bb376a971ea54196b6f60.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/00/8c/ed/f4c93425196a161c9827f1a1360c5a9e.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/b7/8c/75/3d69cf9e26ef52fba1676e882cc72874.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/27/ce/cc/0aea7313176275bc4e929e9316f3f907.jpg",
+        "https://salt.tikicdn.com/cache/w1200/ts/product/e7/70/57/65d2fd5044486700c56b728fa1bf49d5.jpg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_life": "Lên đến 12 tuần",
+        "brand_country": "Mỹ",
+        "charge_time": "Sạc đầy trong 2,5h với bộ sạc 9W",
+        "content_formats_supported": "Kindle Format 8 (AZW3), Kindle (AZW), TXT, PDF, unprotected MOBI, PRC natively; PDF, DOCX, DOC, HTML, EPUB, TXT, RTF, JPEG, GIF, PNG, BMP through conversion; Audible audio format (AAX)",
+        "dimensions": "5 x 7 x 0.3” (127.6 x 176.7 x 7.8 mm)",
+        "display_type": "Eink",
+        "dung_luong_dientu": "16Gb hoặc 32Gb",
+        "included_accessories": "Máy + Sách giới thiệu + Cáp sạc",
+        "manufacturer_electronics": "Amazon",
+        "origin": "Mỹ / Trung Quốc",
+        "resolution": "300 PPI",
+        "screen_size": "7 inch",
+        "usb_port": "USB-C"
+      },
+      "specsRaw": {
+        "Thời gian pin": "Lên đến 12 tuần",
+        "Xuất xứ thương hiệu": "Mỹ",
+        "Thời gian sạc": "Sạc đầy trong 2,5h với bộ sạc 9W",
+        "Hỗ trợ định dạng": "Kindle Format 8 (AZW3), Kindle (AZW), TXT, PDF, unprotected MOBI, PRC natively; PDF, DOCX, DOC, HTML, EPUB, TXT, RTF, JPEG, GIF, PNG, BMP through conversion; Audible audio format (AAX)",
+        "Kích thước": "5 x 7 x 0.3” (127.6 x 176.7 x 7.8 mm)",
+        "Loại/ Công nghệ màn hình": "Eink",
+        "Dung lượng ổ cứng": "16Gb hoặc 32Gb",
+        "Phụ kiện đi kèm": "Máy + Sách giới thiệu + Cáp sạc",
+        "Nhà sản xuất": "Amazon",
+        "Xuất xứ (Made in)": "Mỹ / Trung Quốc",
+        "Độ phân giải": "300 PPI",
+        "Kích thước màn hình": "7 inch",
+        "Cổng USB": "USB-C"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK276448930",
+          "price": 4890000,
+          "salePrice": null,
+          "costPrice": 3423000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/20/60/b5/41634377a822abcbdf70c7e4b2570dd9.jpg",
+          "active": true,
+          "options": {
+            "storage": "16GB",
+            "color": "Raspberry"
+          }
+        },
+        {
+          "sku": "TK276448928",
+          "price": 5990000,
+          "salePrice": null,
+          "costPrice": 4193000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/14/68/28/a2f51ea3d9acbf7a02be1b195b039ba7.jpg",
+          "active": true,
+          "options": {
+            "storage": "32GB",
+            "color": "Jade"
+          }
+        },
+        {
+          "sku": "TK276448922",
+          "price": 4890000,
+          "salePrice": null,
+          "costPrice": 3423000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/59/e7/74/68080c04130bb376a971ea54196b6f60.jpg",
+          "active": true,
+          "options": {
+            "storage": "16GB",
+            "color": "Black"
+          }
+        },
+        {
+          "sku": "TK276448924",
+          "price": 5990000,
+          "salePrice": null,
+          "costPrice": 4193000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/17/55/e8/07ad616e52315b23299fea1a36ec8c74.jpg",
+          "active": true,
+          "options": {
+            "storage": "32GB",
+            "color": "Black"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "combo-may-doc-sach-all-new-kindle-paperwhite-5-11th-gen-va-bao-da-for-kids-ban-kids-khong-quang-cao-hang-nhap-khau-tk271362153",
+      "name": "Combo Máy đọc sách All New Kindle Paperwhite 5 (11th Gen) và Bao da FOR KIDS (Bản KIDS, Không Quảng Cáo) - Hàng chính hãng",
+      "categorySlug": "may-doc-sach",
+      "brandSlug": "kindle",
+      "description": "Amazon vừa chính thức ra mắt thế hệ tiếp theo của dòng máy đọc sách Kindle Paperwhite.\nKindle Paperwhite 5 (hay Kindle Paperwhite 11th Gen) là phiên bản thay thế cho chiếc Kindle Paperwhite 4 đã ra mắt từ năm 2018. Thường thì sau mỗi 2-3 năm thì Amazon mới nâng cấp sản phẩm Kindle một lần và đợt nâng cấp này có thể nói là sự nâng cấp lớn nhất từ trước đến nay với dòng máy Kindle Paperwhite.\nKindle Paperwhite 5 có tất cả 3 phiên bản: bản Chuẩn (Paperwhite), bản Đặc Biệt (Paperwhite Signature Edition) và phiên bản Trẻ em (Papewhite Kids). Hiện tại máy chỉ có màu đen.\nCụ thể thì Kindle Paperwhite bản chuẩn sẽ có giá là 140 USD, sở hữu màn hình 6.8 inch, lớn hơn so với màn 6 inch của thế hệ trước và viền màn hình cũng được làm mỏng hơn. Máy có bộ nhớ 8GB và được giới thiệu là có tốc độ chuyển trang nhanh hơn 20% so với trước. Amazon nói rằng máy có thời lượng pin lên tới 10 tuần cho một lần sạc. Kindle Paperwhite 5 sẽ là chiếc Kindle đầu tiên được trang bị kết nối USB Type-C, một điểm mà rất nhiều người mong đợi. Cũng giống như phiên bản trước, Kindle Paperwhite 5 chống nước theo chuẩn IPX8.\nCuối cùng, tính năng nổi bật nhất, Paperwhite 5 đã được trang bị hệ thống đèn nền kép với 2 tông màu Ấm/Lạnh, tương tự như trên mẫu máy cao cấp Kindle Oasis 3. Tính năng này giúp bạn có thể chỉnh đèn từ màu trắng sang vàng để dịu mắt hơn khi đọc vào ban đêm.\nKindle Paperwhite Signature Edition là phiên bản Đặc biệt, được bán với giá 189.99 USD. Máy có các tính năng và ngoại hình giống như bản chuẩn nhưng bộ nhớ được nâng lên 32GB thay vì 8GB. Ngoài ra phiên bản Signature là thiết bị đầu tiên hỗ trợ sạc không dây (chuẩn Qi) giúp bạn sạc máy dễ dàng hơn nếu đã sở hữu một cục sạc không dây trong nhà. Phiên bản Đặc biệt này cũng có cảm biến ánh sáng để có thể điều chỉnh độ sáng đèn nền một cách tự động.\n\nNguồn: Tiki.vn",
+      "price": 3990000,
+      "salePrice": null,
+      "costPrice": 2793000,
+      "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/4d/65/eb/8cc241b558538e304ff89118215eb0f7.jpeg",
+      "images": [
+        "https://salt.tikicdn.com/cache/w1200/ts/product/4d/65/eb/8cc241b558538e304ff89118215eb0f7.jpeg"
+      ],
+      "status": "PUBLISHED",
+      "active": true,
+      "warrantyPeriod": 12,
+      "warrantyPolicy": "Bảo hành 12 tháng (theo thông tin trên Tiki.vn).",
+      "specs": {
+        "battery_life": "Một lần sạc kéo dài đến mười (10) tuần, dựa trên nửa giờ đọc mỗi ngày khi tắt không dây và cài đặt ánh sáng ở mức 13. Tuổi thọ pin có thể thay đổi tùy theo mục đích sử dụng. Phát trực tuyến sách nói có âm thanh qua Bluetooth sẽ làm giảm thời lượng pin.",
+        "brand_country": "Mỹ",
+        "charge_time": "Sạc đầy trong khoảng 5 giờ từ máy tính qua cáp USB; Sạc đầy trong vòng chưa đầy 2,5 giờ với bộ đổi nguồn USB 9W.",
+        "content_formats_supported": "Kindle Format 8 (AZW3), Kindle (AZW), TXT, PDF, unprotected MOBI, PRC natively; HTML DOC, DOCX, JPEG, GIF, PNG, PMP through conversion; Audible audio format (AAX).",
+        "dimensions": "6.8 Inch",
+        "display_color": "Đen Trắng",
+        "display_type": "Eink",
+        "dung_luong_dientu": "8Gb hoặc 16Gb",
+        "included_accessories": "Máy All New Kindle Paperwhite 5 + Cáp sạc + Giới thiệu",
+        "manufacturer_electronics": "Amazon",
+        "origin": "Mỹ",
+        "product_weight": "205g",
+        "resolution": "300 PPI",
+        "usb_port": "USB-C"
+      },
+      "specsRaw": {
+        "Thời gian pin": "Một lần sạc kéo dài đến mười (10) tuần, dựa trên nửa giờ đọc mỗi ngày khi tắt không dây và cài đặt ánh sáng ở mức 13. Tuổi thọ pin có thể thay đổi tùy theo mục đích sử dụng. Phát trực tuyến sách nói có âm thanh qua Bluetooth sẽ làm giảm thời lượng pin.",
+        "Xuất xứ thương hiệu": "Mỹ",
+        "Thời gian sạc": "Sạc đầy trong khoảng 5 giờ từ máy tính qua cáp USB; Sạc đầy trong vòng chưa đầy 2,5 giờ với bộ đổi nguồn USB 9W.",
+        "Hỗ trợ định dạng": "Kindle Format 8 (AZW3), Kindle (AZW), TXT, PDF, unprotected MOBI, PRC natively; HTML DOC, DOCX, JPEG, GIF, PNG, PMP through conversion; Audible audio format (AAX).",
+        "Kích thước": "6.8 Inch",
+        "Hiển thị màu sắc": "Đen Trắng",
+        "Loại/ Công nghệ màn hình": "Eink",
+        "Dung lượng ổ cứng": "8Gb hoặc 16Gb",
+        "Phụ kiện đi kèm": "Máy All New Kindle Paperwhite 5 + Cáp sạc + Giới thiệu",
+        "Nhà sản xuất": "Amazon",
+        "Xuất xứ (Made in)": "Mỹ",
+        "Trọng lượng sản phẩm": "205g",
+        "Độ phân giải": "300 PPI",
+        "Cổng USB": "USB-C"
+      },
+      "tags": [],
+      "variants": [
+        {
+          "sku": "TK271362155",
+          "price": 3990000,
+          "salePrice": null,
+          "costPrice": 2793000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/4d/65/eb/8cc241b558538e304ff89118215eb0f7.jpeg",
+          "active": true,
+          "options": {
+            "storage": "8gb",
+            "color": "Black Kids"
+          }
+        },
+        {
+          "sku": "TK271362159",
+          "price": 3990000,
+          "salePrice": null,
+          "costPrice": 2793000,
+          "imageUrl": "https://salt.tikicdn.com/cache/w1200/ts/product/1c/63/af/f68471297d741ba323b37fe5a2a12569.jpg",
+          "active": true,
+          "options": {
+            "storage": "8gb",
+            "color": "Emerald Forest (Xanh)"
+          }
+        }
+      ]
+    }
+  ]
+}
