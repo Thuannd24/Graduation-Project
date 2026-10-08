@@ -10,6 +10,7 @@ import pandas as pd
 from app.core.config import forecast_settings
 from shared_common.config import shared_settings
 from shared_common.features import build_feature_matrix
+from shared_common.features import feature_store
 from shared_common.features.assembler import FEATURE_COLUMNS
 from shared_common.logger import get_logger
 from shared_common.pool import get_engine
@@ -95,7 +96,21 @@ class RiskScoringService:
             )
 
         engine = get_engine(shared_settings.DB_NAME)
-        X = build_feature_matrix(engine, as_of=as_of)
+        if as_of is not None:
+            # as_of LỊCH SỬ (vd đối chiếu/backfill) -> feature store chỉ lưu MỘT lát cắt "hiện tại",
+            # không phục vụ được -> giữ nguyên đường SQL gốc cho trường hợp hiếm này.
+            X = build_feature_matrix(engine, as_of=as_of)
+        else:
+            # Đường PHỤC VỤ THẬT (admin endpoint + risk_scheduler, as_of luôn None trong production):
+            # đọc feature store đã tính sẵn (xem shared_common/features/feature_store.py) thay vì tự
+            # tính SQL tổng hợp — đo được 25-40+ phút trên dữ liệu thật, xem churn-risk-log.md 2026-10-06.
+            X = feature_store.load(engine)
+            if X.empty:
+                # Chưa từng refresh (lần đầu sau khi train/deploy) -> tính 1 lần rồi lưu lại, để lần
+                # gọi SAU nhanh ngay — vẫn nhanh hơn hẳn SQL gốc (fast_compute, không phải tự nó chậm).
+                logger.warning("Feature store rỗng — tính lại lần đầu (fast_compute, không phải SQL chậm).")
+                feature_store.refresh(engine)
+                X = feature_store.load(engine)
         if X.empty:
             return X.assign(segment=[], churn_probability=[], expected_loss=[])
 

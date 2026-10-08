@@ -12,11 +12,47 @@ trình có **tham số ẩn** (tần suất mua, độ nhạy giá, xu hướng 
 "rời bỏ" xuất hiện tự nhiên từ mô phỏng, không dán nhãn tay lên user nào (tránh suy luận vòng tròn
 khi đánh giá model ở Phase 5).
 
+## Hành vi được neo vào dữ liệu người dùng THẬT (từ 2026-09-22)
+
+Cấu trúc **bên trong mỗi phiên duyệt web** không đoán tay mà lấy mẫu theo đúng phân phối đo được
+từ 2 bộ dữ liệu người dùng thật, chỉ lấy thống kê **không phụ thuộc catalog cụ thể** (catalog của
+2 bộ đó là mỹ phẩm/sàn tổng hợp, khác catalog điện thoại/laptop của platform):
+
+| Nguồn | Quy mô | Vai trò |
+|---|---|---|
+| REES46 Cosmetics | 4,5 triệu phiên THẬT (có session_id) | nguồn chính cho cấu trúc phiên |
+| Taobao UserBehavior | 100 triệu sự kiện (phiên suy luận) | kiểm chứng chéo |
+
+Số đo + quy tắc đối chiếu 2 nguồn nằm ở **1 chỗ duy nhất**: `lib/behaviorTargets.mjs` (chi tiết:
+`docs/canvas/recsys-execution-plan.md` §5.9). Sinh đủ **19 loại hành vi** khớp tracker của hệ thống
+(`AI/shared-common/shared_common/contracts.py`), gắn đúng vị trí trong phễu mua hàng.
+
+Tần suất/tháng theo từng user (λ mua hàng, suy giảm khi rời bỏ, "phân vân" trước churn) vẫn là
+tiến trình tham số ẩn như ban đầu — phần neo vào dữ liệu thật là **nội dung mỗi phiên**.
+
+## Báo cáo độ trung thực (tự kiểm tra)
+
+Mọi lần chạy (kể cả `--dry-run`) in bảng so dữ liệu SINH RA với số đo thật, bằng **đúng định nghĩa**
+đã dùng khi đo REES46/Taobao (`lib/fidelity.mjs`) — cộng các ngưỡng chống tái phát lỗi cũ
+(bản trước ép cứng "xem X → thêm giỏ X" 100%, khiến 1 quy tắc tầm thường thắng mọi model).
+`--dry-run` trả exit code 2 nếu có mục không đạt → dùng làm cổng kiểm tra trước khi ghi DB thật.
+
+```bash
+npm test               # test tự động, KHÔNG cần DB (catalog giả cùng hình dạng catalog thật)
+npm run seed:dry-run   # báo cáo độ trung thực trên catalog THẬT, không ghi DB
+```
+
 ## ⚠️ Giới hạn quan trọng
 
 Dữ liệu là **tổng hợp**, không phải hành vi người dùng thật. Metric đo được từ model train trên
 dữ liệu này phản ánh *"model có phục hồi được cấu trúc sinh dữ liệu hay không"*, **không phải**
 *"model dự đoán đúng hành vi người thật"*. Nói rõ điều này khi báo cáo/bảo vệ đồ án.
+
+- Cấu trúc phiên khớp số đo thật, nhưng đó là **thống kê biên** (từng chỉ số riêng lẻ) — các tương
+  quan phức tạp hơn giữa nhiều chỉ số cùng lúc không được đảm bảo.
+- 14 vi hành vi (SEARCH, FILTER_APPLIED, IMPRESSION, SCROLL_DEPTH...) **không có số đo thật** — 2 bộ
+  dữ liệu công khai không ghi nhãn các hành vi này. Tần suất là ước lượng có lý do gắn với phễu mua
+  hàng (xem comment trong `lib/simulate.mjs`), không phải số đo.
 
 ## Yêu cầu trước khi chạy
 
@@ -39,17 +75,54 @@ npm run seed:force      # xoá seed cũ rồi sinh lại (idempotent)
 npm run cleanup         # chỉ xoá, không sinh lại
 ```
 
-Tham số tuỳ chỉnh: `node seed.mjs --users 500 --demo-users 10 --months 12 --seed 42`.
+Tham số tuỳ chỉnh: `node seed.mjs --users 500 --demo-users 10 --months 12 --seed 42 --chunk 250`.
+
+Sinh **theo lô user** (`--chunk`, mặc định 250): bộ nhớ tỉ lệ theo kích thước lô chứ không theo
+tổng số user (bản cũ dồn toàn bộ sự kiện vào 1 mảng — 5.000 user × 19 hành vi ≈ 6,6 triệu object,
+tiến trình node >2GB). Mỗi user ~1.500 sự kiện/12 tháng (IMPRESSION chiếm phần lớn).
+
+## DB cho app, FILE cho train (từ 2026-09-30)
+
+MariaDB dev (Docker, buffer pool mặc định 128MB, đĩa ảo chậm) ghi được chỉ ~7–8 nghìn dòng/phút
+khi bảng đã lớn: 5.000 user (7,4 triệu sự kiện) mất hàng giờ, xoá 3,1 triệu dòng trong 1 câu DELETE
+mất >1h rồi InnoDB còn purge nền thêm hàng giờ. Vì vậy tách vai trò:
+
+| Mục đích | Lệnh | Quy mô |
+|---|---|---|
+| Demo app + churn (đọc từ DB) | `node seed.mjs --force --users 1000` | ~1.000 user, ~1,5 triệu sự kiện |
+| Train recsys trên GPU thuê | `node seed.mjs --out ../../data/training-sets/v1_20000u --users 20000 --now 2026-09-30T00:00:00Z` | 20.000 user, 30,3 triệu sự kiện, 2,4GB CSV, ~4 phút |
+
+`--out` KHÔNG ghi DB (chỉ đọc catalog), xuất `user_events.csv`, `orders.csv`, `order_items.csv`,
+`reviews.csv`, `user_profiles_ground_truth.csv` (**nhãn sinh** — chỉ để đánh giá churn, không dùng làm
+feature) + `manifest.json` (tham số, commit git, kết quả fidelity, snapshot `behaviorTargets`).
+user_id tất định `seedu-000001…`; kèm `--now` cố định thì chạy lại ra **đúng từng byte** (đã kiểm md5).
+Từ chối ghi vào thư mục đã có tập dữ liệu. Voucher không xuất (tham chiếu id nội bộ bảng `users`).
+
+Kiểm tra toàn vẹn trước khi train (local và sau khi upload lên máy GPU), đọc theo chunk, RAM ~0,5GB:
+
+```bash
+python validate_training_set.py ../../data/training-sets/v1_20000u   # exit 1 nếu có lỗi
+```
+
+Script train đọc thẳng file: `EVENTS_CSV=<dir>/user_events.csv python recsys_platform_sasrec.py`
+(không cần DB/pymysql).
 
 ## Cấu trúc
 
 - `lib/random.mjs` — PRNG có seed (reproducible) + lấy mẫu phân phối (Poisson, log-normal, Pareto)
 - `lib/profiles.mjs` — sinh tham số ẩn từng user (λ mua hàng, có rời bỏ hay không, tháng rời bỏ...)
 - `lib/catalog.mjs` — nạp sản phẩm/category thật từ `ecommerce_product_db`
-- `lib/simulate.mjs` — mô phỏng đơn hàng + hành vi theo tháng, dựa trên tham số ẩn
+- `lib/simulate.mjs` — mô phỏng đơn hàng + hành vi theo tháng (tham số ẩn) + nội dung từng phiên
+  (neo vào số đo thật, 19 loại hành vi)
+- `lib/behaviorTargets.mjs` — số đo từ dữ liệu người dùng thật + dung sai (nguồn sự thật duy nhất)
+- `lib/fidelity.mjs` — đo dữ liệu sinh ra, so với `behaviorTargets.mjs`
+- `test/` — test tự động (`npm test`), không cần DB
 - `lib/users.mjs` — tạo user (10 qua Keycloak Admin API để login thật, còn lại chỉ trong DB)
 - `lib/writeData.mjs` — ghi `orders`/`order_items`/`user_events` vào `ecommerce_order_db`
-- `lib/cleanupData.mjs` — xoá dữ liệu seed (nhận diện qua email `*@seed.internal`/`demo_user_*@demo.local`)
+- `lib/cleanupData.mjs` — xoá dữ liệu seed (nhận diện qua email `*@seed.internal`/`demo_user_*@demo.local`),
+  xoá THEO LÔ (1 câu DELETE khổng lồ = 1 transaction InnoDB khổng lồ)
+- `lib/exportCsv.mjs` — chế độ `--out`: ghi nối tiếp CSV theo lô user
+- `validate_training_set.py` — kiểm tra toàn vẹn tập `--out`
 
 ## Xác minh sau khi seed
 

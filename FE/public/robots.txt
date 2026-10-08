@@ -1,0 +1,4 @@
+# Web demo đồ án tốt nghiệp — không cho máy tìm kiếm lập chỉ mục
+# (một phần dữ liệu sản phẩm minh hoạ lấy từ Tiki.vn, dùng phi thương mại)
+User-agent: *
+Disallow: /

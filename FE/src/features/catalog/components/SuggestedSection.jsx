@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ProductCarousel from "./ProductCarousel";
 import Icon from "../../../components/common/Icon";
+import { trackImpressions } from "../../../services/behaviorTracker.ts";
 
 const MAIN_TABS = [
   { id: "suggest", label: "GỢI Ý TỪ AURA AI" },
@@ -28,6 +29,12 @@ export default function SuggestedSection({ products: apiProducts, loading: apiLo
     }
     return list.slice(0, 10);
   }, [suggested, activeTab]);
+
+  // Ghi nhận sản phẩm AI THẬT SỰ hiển thị cho user ở tab đang mở — nền tảng để sau này đo được
+  // "gợi ý đưa ra mà bị bỏ qua" (impression) so với "được click", không chỉ đếm click một mình.
+  useEffect(() => {
+    if (filtered.length > 0) trackImpressions(filtered.map((p) => p.id));
+  }, [filtered]);
 
 
   return (

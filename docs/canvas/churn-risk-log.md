@@ -1809,3 +1809,719 @@ lượng **mức được/mất** nếu hành vi thật có dạng đó (~+0,10 
   model-vs-rule không còn vượt sàn nhiễu) — xem bảng đối chiếu đầy đủ ở mục 2026-08-03. Nguyên nhân
   là lượt lấy mẫu RNG mới (seeder đổi mã → chuỗi random dịch), KHÔNG phải seeder sinh dữ liệu sai;
   `churn-risk-feature-overview.md` mục 3.2 hiện chưa cập nhật theo số mới.
+
+---
+
+## 2026-09-24 — Re-mở việc "chưa làm" từ 2026-08-04: tracker 19 hành vi vẫn chưa test được với churn
+
+Trong lúc làm việc bên nhánh `ai/behavoir` (Bài toán 3 — recsys), quay lại đọc đúng mục "Việc CHƯA
+làm" đã ghi ở trên (2026-08-04, dòng ~1701) và xác nhận: **3 lý do chặn liệt kê khi đó vẫn còn nguyên
+2/3**, không phải đã tự giải quyết theo thời gian:
+
+1. ~~Chưa nối `PRODUCT_ZOOM`/`FILTER_APPLIED`/`SORT_APPLIED` vào UI~~ — **đã vá xong** (2026-09-22,
+   xem `recsys-execution-plan.md` §10) — cả 14/14 vi hành vi giờ có nơi bắn thật trong FE.
+2. **Chưa có traffic thật** — vẫn đúng, web chưa có user thật.
+3. **Bộ sinh dữ liệu tổng hợp chưa phát đủ 19 hành vi** — vẫn đúng, `simulate.mjs` chỉ sinh
+   `VIEW_PRODUCT`/`ADD_TO_CART` theo mẫu cứng (phát hiện thêm: mẫu này còn có 1 lỗi thiết kế khác —
+   luôn sinh `view(X) → cart(X)` cùng 1 item mọi đơn hàng, xem `recsys-execution-plan.md` §5.7 — lỗi
+   này ảnh hưởng CẢ recsys lẫn khả năng tái dùng seeder cho churn).
+
+**Quyết định** (đã lưu memory phiên, không chỉ ghi ở đây): việc sửa `simulate.mjs` để (a) sinh hành vi
+thật hơn (không hardcode view→cart cùng item) và (b) phát đủ 19 hành vi thay vì 2, sẽ **đồng thời** mở
+khoá cả 2 việc đang treo — retrain `platform_v1` (recsys) VÀ lần đầu tiên test được liệu 19 hành vi
+micro có thêm thông tin gì cho churn ngoài 11 feature production hay không. Thứ tự bắt buộc: sửa
+seeder xong → xong việc recsys đang làm → mới retrain churn. Không retrain churn trước khi seeder mới
+sẵn sàng — làm vậy sẽ lãng phí vì seeder cũ không phát được tín hiệu mới nào để model học thêm.
+
+## 2026-10-01 — Đối chiếu tư vấn "churn cho TMĐT", nhặt ý có giá trị vào roadmap
+
+Người dùng đưa một bài tư vấn chung về dự đoán churn cho TMĐT (churn động theo danh mục, feature RFM biến
+động/hành vi/trải nghiệm/nhạy giá, BG/NBD + Gamma-Gamma, Gradient Boosting, mô hình chuỗi, kích hoạt marketing
+tự động). Đối chiếu với hiện trạng: phần lớn **đã có** (RFM, bỏ giỏ, phiên, săn mã, rating dùng làm đối chứng
+âm, `recency_over_median_gap` ≈ ý "vượt 1,5–2× chu kỳ"); slope/xu hướng **cố ý loại** từ trước vì vòng tròn
+với cơ chế sinh. Nhặt vào `churn-risk-roadmap.md` (đúng thứ tự: làm SAU khi xong recsys):
+- 0.2: thêm nhãn churn ĐỘNG theo chu kỳ mua của chính khách (k × khoảng cách trung vị, k ∈ {1,5; 2}) vào lưới.
+- 1.2: chu kỳ mua lại THEO NGÀNH HÀNG trong bộ sinh (tiêu dùng nhanh vs lâu bền) — chỉ có nghĩa từ khi web là
+  sàn đa ngành; neo số thật bằng REES46 đa ngành; ghi chú KHÔNG làm lén lúc sinh dataset recsys vì đổi thời
+  điểm đặt đơn sẽ chạm tần suất mua đã hiệu chỉnh cho churn.
+- 2.3b: BG/NBD + Gamma-Gamma làm mốc xác suất kinh điển cho LR (+ CLV cho expected_loss ở 3.1).
+- 3.1b: nối điểm rủi ro vào module Campaigns có sẵn, kèm holdout.
+Loại: "gỡ app" (web không có app mobile), "giao trễ/hoàn trả" (không có dữ liệu nguồn → sinh ra là vòng tròn).
+
+## 2026-10-01 (tiếp) — Roadmap 1.2: chu kỳ mua lại THEO NGÀNH trong bộ sinh, neo bằng Amazon Reviews 2023
+
+**Nguyên tắc (người dùng duyệt):** cơ chế liên quan churn chỉ được đưa vào bộ sinh khi **đo được trên dữ liệu
+thật**; không đo được thì để ngoài, hoặc khai báo là giả định và dùng làm đối chứng âm.
+
+### Nguồn số đo — thử 2 nguồn, giữ 1
+1. **REES46 đa ngành** (`churn_measure_category_repurchase.py`): **KHÔNG neo được**. Cửa sổ chỉ 61 ngày nên mọi
+   khoảng cách bị cắt ở ≤ 60 ngày; ngành lâu bền chỉ hiện ra qua tỉ lệ mua lặp thấp, không đo được chu kỳ. Shop
+   này cũng không bán tạp hoá/sữa/tã. Giữ script để minh bạch, không dùng số.
+2. **Amazon Reviews 2023, bản 5-core** (`churn_measure_amazon_repurchase.py`, 11 ngành, 63 triệu khoảng cách):
+   khoảng cách trung vị giữa 2 ngày review liên tiếp cùng ngành của 1 user. **Review ≠ lần mua** (không phải ai
+   mua cũng review), nên khoảng cách tuyệt đối bị thổi phồng. Vì vậy **chỉ dùng tỉ lệ so với ngành Tạp hoá**,
+   giả định tỉ lệ review/mua gần nhau giữa các ngành (giả định này ghi rõ khi bảo vệ).
+
+| Ngành Amazon | Trung vị (ngày) | Tỉ lệ / Tạp hoá | → ngành gốc Tiki |
+|---|---:|---:|---|
+| Books | 65 | 0,586 | nha-sach-tiki |
+| Baby_Products / Toys (TB) | 87 / 118 | 0,924 | do-choi-me-be |
+| Grocery_and_Gourmet_Food | 111 | 1,000 | bach-hoa-online |
+| Beauty / Health (TB) | 109 / 130 | 1,077 | lam-dep-suc-khoe |
+| Clothing_Shoes_and_Jewelry | 125 | 1,126 | thoi-trang-nam, thoi-trang-nu |
+| Home_and_Kitchen | 130 | 1,171 | nha-cua-doi-song, dien-gia-dung (proxy) |
+| Sports_and_Outdoors | 137 | 1,234 | the-thao-da-ngoai |
+| Electronics | 167 | 1,505 | thiet-bi-kts, laptop-may-vi-tinh |
+| Cell_Phones_and_Accessories | 191 | 1,721 | dien-thoai-may-tinh-bang |
+
+Đích: `TARGETS.categoryRepurchase` trong `tools/data-seed/lib/behaviorTargets.mjs`. Fidelity có 2 mục mới:
+**Spearman (thứ hạng chu kỳ giữa các ngành) ≥ 0,5** và **trung bình |log(tỉ lệ sinh / tỉ lệ thật)| ≤ 0,25**.
+Ngưỡng đặt TRƯỚC khi hiệu chỉnh. Mỗi ngành cần ≥ 30 khoảng cách mới được tính.
+
+### Mô hình — lần thử 1 SAI, ghi lại để minh bạch
+- **Lần 1 ("độ tới hạn"):** số đơn mỗi user giữ nguyên; mỗi đơn chọn ngành theo độ "đến hạn" Weibull từ lần mua
+  trước của ngành đó. Kết quả **Spearman −0,3 đến −0,4 (ngược chiều)**. Lý do: khi tần suất đặt đơn của user không
+  phụ thuộc ngành, user thích ngành chu kỳ dài chỉ có ít ngành để luân phiên, nên khoảng cách cùng ngành lại ngắn
+  (thiên lệch chọn mẫu). Gán ý định theo từng SP thay vì từng đơn: không cứu được. Đã bỏ.
+- **Lần 2 (đang dùng, chuẩn trong lý thuyết):** mỗi danh mục ưa thích của user là một luồng mua riêng, tốc độ
+  ∝ (1 / tỉ_lệ_chu_kỳ_ngành)^`categoryRateExponent`. Tần suất đặt đơn của user nhân với trung bình tốc độ các ngành
+  họ thích, **chuẩn hoá để trung bình toàn bộ user = 1**. Mỗi SP trong đơn chọn ngành ưa thích theo tốc độ đó;
+  với xác suất `intentExploreProb` thì mua thử ngoài sở thích.
+
+### Hiệu chỉnh (catalog Tiki thật, 2000 user, 12 tháng)
+| intentExploreProb | Spearman | MALE | |
+|---|---:|---:|---|
+| 0,30 | 0,430 | 0,157 | trượt Spearman |
+| **0,15** | 0,554 | 0,149 | đạt |
+| 0,05 | 0,390 | 0,132 | trượt Spearman |
+
+Số mũ 1 (đúng lý thuyết) **không ổn định giữa các seed**: seed 7 cho Spearman 0,474 (trượt). Nguyên nhân là tín
+hiệu bị pha loãng vì mua thử ngoài sở thích và vì mỗi user trộn nhiều ngành. Quét số mũ trên 4 seed:
+
+| số mũ | Spearman (seed 42 / 7 / 123 / 2024) | MALE TB |
+|---|---|---:|
+| 1 | 0,554 / **0,474** / – / – | 0,168 |
+| 1,5 | 0,563 / 0,715 / 0,734 / 0,734 (TB 0,69) | 0,129 |
+| **2** | 0,931 / 0,711 / 0,798 / 0,826 (TB 0,82) | **0,117** |
+
+**Chốt `categoryRateExponent = 2`, `intentExploreProb = 0,15`** (khớp số thật tốt nhất ở cả 2 thước đo, đạt ở mọi
+seed). Đã gỡ tham số thừa `repurchaseBaseDays` / `repurchaseShape` của lần 1.
+
+### Kiểm tra không phá các số đã hiệu chỉnh cho churn
+- `node seed.mjs --dry-run --users 2000` trên catalog Tiki trong DB: **22/22 mục fidelity ĐẠT** (Spearman chu kỳ
+  0,74, MALE 0,11; recency 0,54; top 10% 0,62).
+- Tổng số đơn và tỉ lệ nhãn churn (3000 user, catalog test) **giữ nguyên**: 22.061 → 21.995 đơn; tỉ lệ "không đơn
+  trong 120 ngày" ở user ≥ 2 đơn 30,5% → 30,8%. Cơ chế chỉ **phân bổ lại** tần suất giữa user (người thích ngành
+  mua nhanh mua dày hơn), không đổi mặt bằng.
+
+### Phát hiện phụ: catalog giả của unit test lệch hình dạng catalog thật
+Unit test fidelity trượt recency (0,57 so với 0,508), dù catalog Tiki thật đạt. Tách lỗi: kể cả khi **tắt** cơ chế
+mới, catalog giả vẫn cao hơn catalog thật khoảng 5 điểm (seed 7 đã trượt từ trước). Nguyên nhân: catalog giả dùng
+trọng số log-normal dự phòng σ=2, dồn quá mức **trong danh mục** (top 10% trong danh mục 0,70 so với thật 0,565);
+phiên duyệt bám danh mục nên độ dồn này quyết định recency. Sửa `test/helpers.mjs` để mô phỏng số đã bán đúng
+phân phối đo trên manifests Tiki: tỉ lệ SP chưa bán theo danh mục TB 0,23 (lệch 0,25); log(số_bán+1) của SP đã bán
+TB 3,75, lệch giữa danh mục 1,41, lệch trong danh mục 1,74; cỡ danh mục 2–300. Test fidelity nâng 800 → 1500 user,
+vì top 10% méo thấp khi thưa: 800 user cho 0,605, sát ngưỡng 0,607. Sau sửa, catalog giả bám sát catalog thật
+(3 seed: top 10% 0,619–0,622, recency 0,51–0,53; Tiki: 0,625 / 0,504). **`npm test` 11/11.**
+
+### Còn lại của mục này
+- Import catalog Tiki đã đủ: **6.526 SP active** trong DB (2 file cuối client báo timeout 305 s, nhưng server vẫn
+  hoàn tất giao dịch).
+- Tiếp theo: đo dịch chuyển hành vi TRƯỚC churn trên REES46 (chỉ đưa vào bộ sinh nếu có tín hiệu thật), sau đó
+  seed 5000 user vào DB và re-baseline churn.
+
+## 2026-10-01 (tiếp) — Hành vi TRƯỚC/SAU churn trên REES46: gỡ "phân vân", thêm "hành trình mua"; lộ lệch ở lõi động lực mua
+
+Script: `churn_measure_prechurn_behavior.py` (REES46 Cosmetics 5 tháng; gộp về 2,8 triệu dòng user×ngày, 90 s).
+Kết quả: `data/experiment-results/behavior_patterns/prechurn_behavior.json`.
+
+### A. Kiểm chứng 3 cơ chế churn đặt tay trong bộ sinh
+Nghiên cứu sự kiện trên khách mua lặp. Nhóm churn (6.019) neo ở lần mua cuối, sau đó ≥ 60 ngày không mua; nhóm đối chứng
+(5.115) neo ở 1 lần mua có lần kế tiếp trong ≤ 60 ngày. Tiêu chí quyết định ghi trong docstring TRƯỚC khi chạy.
+- **Sửa lỗi giữa đường (minh bạch):** lượt đầu gộp hoạt động theo `user_id`, nhưng 1.027 user có cả mốc churn lẫn mốc đối
+  chứng nên hoạt động bị cộng chung. Đã sửa sang khoá (user, mốc) và chạy lại. Kết luận không đổi, chỉ độ lớn thay đổi.
+- **"Phân vân" (bỏ giỏ ×2,5 và xem ×1,3 trong 2 tháng trước churn): GỠ.** Theo tiêu chí gốc, chỉ số ngày bỏ giỏ MUỘN/SỚM của
+  churn ÷ đối chứng = 1,20 (CI [1,14; 1,27]) là "đạt". Nhưng mọi chỉ số đều tăng ~1,2 như nhau (xem 1,24, thêm giỏ 1,22), tức
+  là hoạt động chung tăng (nhóm churn có mức nền thấp hơn), không riêng bỏ giỏ. Tiêu chí gốc không kiểm soát mức hoạt động
+  chung, nên thêm kiểm tra **đặc hiệu** (ghi rõ là thêm SAU khi xem số): (bỏ giỏ / thêm giỏ) churn ÷ đối chứng = **0,983,
+  CI [0,925; 1,062]** → không có tăng riêng. Có điều kiện theo mức hoạt động (LR, 2 mốc cắt), hệ số của bỏ giỏ gần đây là
+  **−0,34**: bỏ giỏ đi kèm ÍT churn hơn (dấu hiệu còn quan tâm), NGƯỢC giả định của bộ sinh.
+- **Sau churn lượt xem tụt còn 5%: SAI.** Nhóm churn vẫn duyệt: lượt xem SAU/TRƯỚC 0,186, thêm giỏ 0,136; 41,2% im lặng hẳn
+  56 ngày.
+- **Suy giảm dần trước lần mua cuối: không thấy.** Hoạt động tăng ở CẢ hai nhóm trước lần mua (đường ramp mua hàng).
+- Dự đoán (2 mốc cắt): tín hiệu "thay đổi gần đây" thêm **ΔAUC +0,009 ± 0,001** so với RFM (0,701 → 0,710): có thật nhưng nhỏ.
+
+### B. Phát hiện cấu trúc: duyệt DỒN QUANH lần mua (bộ sinh rải đều, tách rời việc mua)
+Trên khách mua lặp: 35% lượt xem rơi vào ngày mua, 37% trong 14 ngày trước khi mua, **chỉ 16% là duyệt nền** (cách mọi lần mua
+> 14 ngày); 39% khách mua lặp không có lượt xem nền nào. Lượt xem/ngày trước 1 lần mua: −28 ngày 0,29 · −14 0,40 · −7 0,64 ·
+−3 1,06 · −1 3,16 · ngày mua 11,3. Thêm giỏ dồn tương tự (ngày mua 44%, 1–14 ngày trước 34%, nền 14%). Duyệt SAU lần mua chỉ
+~1 lượt xem vượt nền mỗi lần mua (so với ~8 trước) → không mô phỏng riêng.
+
+**Thay đổi bộ sinh:**
+- Gỡ `restlessnessMultiplierAt`. Thêm `browseDecayAt`: sau churn, duyệt không tụt về 5% như đơn hàng.
+- **Hành trình mua:** mỗi đơn kéo theo phiên cùng ngày, phiên xem trước d ngày (d ~ phân phối THỰC NGHIỆM 1–28 ngày, không
+  giả định dạng hàm) và phiên bỏ giỏ hành trình.
+- **Duyệt nền:** 45% user không duyệt ngoài lúc mua; cường độ nền tỉ lệ với tần suất mua (`backgroundConst` 0, bản cũ có
+  hằng số đặt tay 3).
+- Fidelity thêm 11 mục: 7 mục dồn quanh lần mua (xem + thêm giỏ), 3 mục sau lần mua cuối, 1 chống tái phát "phân vân".
+  Đo trong cửa sổ 152 ngày cho bằng độ dài dữ liệu thật.
+- Hiệu chỉnh 3 vòng lưới (96 + 48 + 32 tổ hợp). Vòng 2 sửa lỗi đếm ngày mua 2 lần: phân phối đo có khối ngày mua (57%) mà
+  phiên đặt đơn vốn đã nằm ở ngày mua → hành trình dùng phân phối 1–28 ngày, ngày mua do phiên đặt đơn + phiên cùng ngày.
+  **7/7 mục dồn quanh lần mua ĐẠT**; chống tái phát ĐẠT.
+
+### C. CÒN TRƯỢT — lệch ở LÕI động lực mua/churn (chưa sửa, cần quyết định)
+`npm test` trượt 3 mục: lượt xem SAU/TRƯỚC sau churn 0,34 (thật 0,186), thêm giỏ 0,24 (thật 0,136), lặp liên tiếp cấp user
+0,133 (thật 0,192; mục này cần hiệu chỉnh lại tham số xem lại sau khi đổi cơ cấu phiên). Chẩn đoán ở 6.000 user:
+
+| Khách mua lặp | Bộ sinh | REES46 |
+|---|---:|---:|
+| Tỉ lệ 60 ngày không mua lại | 0,24 | 0,54 |
+| Lượt xem/ngày của nhóm churn sau lần mua cuối | 0,60 | 0,18 |
+| % "churn theo hành vi" là churn ẩn | 22–35% | — |
+
+Ngoài đời, ngừng mua đi kèm ngừng duyệt (mất hứng thú thật). Trong bộ sinh, phần lớn khách "ngừng mua" chỉ là khoảng trống
+Poisson ngẫu nhiên của khách mua thưa, vẫn duyệt bình thường. Gốc: tần suất mua (log-normal λ), 35% churn, tụt còn 5% đều là
+**giả định đặt tay chưa từng đo**. Hướng đề xuất: neo lõi này bằng **BG/NBD** (mô hình sinh kinh điển: Poisson mua với λ
+dị biệt Gamma + rời bỏ hình học dị biệt Beta) ước lượng trên dữ liệu giao dịch thật dài hạn. Trùng với roadmap 2.3b.
+
+## 2026-10-01 (tiếp) — Neo LÕI động lực mua/churn bằng BG/NBD (người dùng chọn phương án này)
+
+### Ước lượng + kiểm định (`churn_fit_bgnbd.py`, kết quả `bgnbd_fit.json`)
+BG/NBD (Fader, Hardie & Lee 2005) tự cài bằng scipy (không cài package). Đơn vị: 1 giao dịch = 1 ngày có mua. Tiêu chí ĐẶT
+TRƯỚC: tổng giao dịch giai đoạn giữ lại dự báo lệch ≤ 15% và các nhóm tần suất x = 0..3 lệch ≤ 25%; chọn REES46 nếu đạt
+(B2C, cùng nguồn hành vi), nếu không thì dùng Online Retail II.
+
+| Nguồn | Khách | r | α | a | b | Dự báo / thực (giữ lại) | Kết luận |
+|---|---:|---:|---:|---:|---:|---:|---|
+| REES46 Cosmetics (học 3 tháng, giữ lại 60 ngày) | 72.225 | 0,275 | 41,1 | 0,467 | 1,517 | 1,171; nhóm x=0 ×1,46 | TRƯỢT |
+| Online Retail II, UCI CC BY 4.0 (học 18 tháng, giữ lại 192 ngày) | 4.935 | 0,679 | 66,0 | 0,157 | 3,322 | 0,978; mọi nhóm ±9% | **ĐẠT → dùng** |
+
+REES46 trượt đúng ở điểm yếu đã biết của BG/NBD (khách chưa mua lặp luôn được coi là "còn sống"), cộng thêm 82% khách chỉ
+mua 1 lần trong 3 tháng và dữ liệu bị cắt trái. Ngụ ý của Online Retail II: tốc độ TB 0,31 lần mua/30 ngày, hệ số biến thiên
+1,21, xác suất rời bỏ TB sau mỗi lần mua lặp 4,5%.
+
+**3 lỗi của chính mình, đã sửa (ghi để minh bạch):**
+1. Đặt điều kiện "cần a > 1" cho công thức kỳ vọng có điều kiện → sai; công thức (10) dùng được với mọi a.
+2. Mô phỏng Monte Carlo kiểm chéo ban đầu cho rời bỏ cả sau lần mua ĐẦU → sai ngữ nghĩa BG/NBD (chỉ rời bỏ sau lần mua lặp).
+3. Bản Monte Carlo vòng lặp quá ít mẫu khớp điều kiện nên nhiễu. Bản vector hoá (15.384 mẫu khớp) cho 0,434 ± 0,007, công
+   thức cho 0,436 → **công thức đúng**.
+
+### Thay vào bộ sinh
+- `PURCHASE_PROCESS` (behaviorTargets): λ/ngày ~ Gamma(0,679; 66,0) × hệ số ngành (TB 1); p ~ Beta(0,157; 3,322).
+- Ngày gia nhập đều trong 12 tháng; lần mua đầu ở ngày gia nhập; các lần sau là quá trình Poisson; sau MỖI lần mua LẶP rời bỏ
+  với xác suất p rồi không mua nữa. `willChurn`/`dropoutAt` không đặt trước, mà tự xảy ra trong mô phỏng rồi ghi ngược làm
+  ground truth (CSV: cột `churn_month` → `dropout_at`).
+- `Rng` thêm `exponential`, `gamma` (Marsaglia–Tsang), `beta`. Kiểm: TB/hệ số biến thiên khớp lý thuyết tới 3 chữ số.
+- Gỡ: 35% churn đặt tay, tháng churn 3–10, hằng 5%.
+- Hệ quả (5.000 user, catalog Tiki): 13,6 nghìn đơn; 4,9% user rời bỏ trong cửa sổ; nhãn "120 ngày không đơn" ở user ≥ 2 đơn
+  ~22%; **~87% khách "churn theo hành vi" vẫn còn sống, chỉ là mua chậm**. Đây là hệ quả trung thực của dữ liệu thật (rời bỏ
+  thấp, tốc độ mua rất dị biệt): bài toán churn thành "dự đoán khoảng nghỉ dài" — đúng tinh thần BG/NBD.
+- **Ghép 2 nguồn (nói rõ khi bảo vệ):** quá trình mua/rời bỏ lấy từ Online Retail II (nhà bán lẻ quà tặng UK); hành vi duyệt,
+  phiên, dồn quanh lần mua lấy từ REES46 Cosmetics. Không nguồn nào là sàn đa ngành VN.
+
+### Sửa thêm phát hiện trong lúc hiệu chỉnh: độ dài phiên tách theo loại (`churn_measure_session_split.py`)
+Phiên xem thuần của bộ sinh lấy độ dài từ phân phối CHUNG (vốn gồm cả phiên có giỏ, TB 10,3 sự kiện). REES46: phiên không giỏ
+P(dài 1) = 0,815 (TB 1,50); phiên có giỏ 0,072 (TB 10,3); tất cả 0,651; phiên có giỏ chiếm 22%. Sửa: phiên xem thuần lấy theo
+phân phối phiên KHÔNG giỏ. Thêm 2 mục fidelity: % phiên dài 1, % phiên có giỏ.
+
+### Hiệu chỉnh lại (lưới + tìm kiếm ngẫu nhiên 40 + 30 mẫu trên 2–3 seed) — tham số cuối
+`sameDaySessionsPerOrder` 2,47 · `journeySessionsPerOrder` 2,4 · `journeyAbandonPerOrder` 1,08 · `zeroBackgroundProb` 0,39 ·
+`backgroundScale` 1,16 · `backgroundAbandonScale` 3,07 · `backgroundConst` 0 · `churnViewDecay` 0,15 · `churnCartDecay` 0,05 ·
+`sessionResume` 0,75 (cũ 0,58) · `revisitHistory` 0,30 (cũ 0,25).
+
+### Kết quả cuối
+- `npm test` **11/11**. Test fidelity gộp 2 seed × 3.000 user: các chỉ số quanh lần mua cuối là tỉ số trên vài trăm mốc neo,
+  1 seed dao động ±0,03–0,1.
+- `seed.mjs --dry-run --users 5000` trên catalog Tiki thật, 5 mốc `--now` (28/09–02/10): **4/5 đạt cả 34 mục**; 1/5 trượt 1
+  mục ở mức nhiễu (lượt xem SAU/TRƯỚC 0,2365, ngưỡng 0,236).
+- **Quy tắc mới (minh bạch):** 4 chỉ số quanh lần mua cuối ĐẠT nếu trong dung sai HOẶC lệch ≤ 2·SE bootstrap của chính mẫu
+  sinh (mẫu không đủ để phân biệt lệch nhỏ hơn nhiễu của nó). Quy tắc in trong báo cáo.
+- **Giằng co còn lại (giới hạn cấu trúc):** lượt xem SAU/TRƯỚC của nhóm churn (bộ sinh 0,17–0,24, thật 0,186) và % im lặng
+  56 ngày (0,43–0,50, thật 0,412) kéo ngược nhau qua `zeroBackgroundProb`: hạ cái này thì cái kia vượt ngưỡng.
+- **LỆCH ĐÃ BIẾT (`KNOWN_GAPS`, in rõ trong mọi báo cáo, không chặn cổng):** % phiên có giỏ 0,35 so với 0,22. Bộ sinh tách mỗi
+  SP trong đơn thành 1 phiên 1 lượt thêm giỏ; sửa = viết lại bộ mô phỏng phiên + hiệu chỉnh lại recsys (đã bàn giao). Feature
+  churn đếm lượt thêm giỏ, không đếm phiên.
+- Đặc hiệu "phân vân" của bộ sinh TB ~1,07–1,12 (thật 0,98): phần dư nhỏ của cơ chế hành trình, xa mức ×2,5 đã gỡ.
+
+### Việc kéo theo (chưa làm)
+- Docstring bên AI mô tả cơ chế bộ sinh CŨ (`candidates.py`, `churn_product_block.py`, `label_diagnostics.py`: "λ tụt bậc từ
+  churnMonth", "bỏ giỏ ×2,5") → cập nhật cùng `churn-risk-feature-overview.md` ở bước re-baseline.
+- Seed 5.000 user vào DB → re-baseline churn (kỳ vọng AUC đổi vì động lực nhãn đổi hẳn).
+
+## 2026-10-02 — Đào lại cốt lõi: churn dự đoán dựa vào đâu? (phân rã nhãn + trần lý thuyết)
+
+Câu hỏi của người dùng: "dựa vào đâu để dự đoán user sẽ rời bỏ". Trả lời bằng đo, không bằng lập luận. Panel xuất từ mô phỏng
+(không cần DB; Docker đang treo): `tools/data-seed/export-churn-panel.mjs`, 5.000 user × **24 tháng**, đúng định nghĩa production
+(5 mốc cắt, ≥ 2 đơn DELIVERED, nhãn = không có đơn trong 120 ngày sau mốc) kèm ground truth ẩn. Phân tích:
+`AI/forecast-service/app/training/experiments/churn_signal_decomposition.py` → `behavior_patterns/churn_signal_decomposition.json`.
+Panel: 9.744 dòng / 2.236 user / churn 41,9% (ở 12 tháng chỉ ~3.600 dòng; 24 tháng gấp ~2,7 lần). Grouped CV 5 fold theo user.
+
+### 1. Nhãn "không mua trong 120 ngày" gồm gì
+| | Tỉ lệ trong các dòng bị gắn churn |
+|---|---:|
+| Đã rời bỏ thật (BG/NBD: đã rớt trước mốc cắt) | **24,6%** |
+| Còn sống nhưng mua chậm / xui thời điểm | **75,4%** |
+Ở nhóm còn sống, 35,2% vẫn bị gắn churn. → Model churn phần lớn dự đoán "ai mua ít/chậm", không phải "ai đã bỏ đi".
+
+### 2. Trần lý thuyết (biết ground truth)
+Oracle AUC **0,879**. Chỉ biết tốc độ mua thật: 0,756. Chỉ biết cờ đã chết: 0,623. (Phần còn lại là may rủi, không ai dự đoán nổi.)
+
+### 3. Từng loại tín hiệu (AUC theo nhãn 120 ngày)
+| Tín hiệu | AUC |
+|---|---:|
+| recency đơn lẻ / frequency đơn lẻ | 0,701 / 0,706 |
+| recency chia nhịp mua thô của chính khách | 0,589 (tệ hơn: nhịp ước từ 2–4 đơn rất nhiễu) |
+| LR production, 6 feature từ orders | 0,748 ± 0,012 |
+| LR production, **11 feature** (thêm 5 hành vi) | **0,766 ± 0,016** |
+| LR 11 feature + log1p | 0,771 ± 0,016 |
+| BG/NBD kỳ vọng số lần mua (không train) | 0,769 |
+| LR 11 log1p + BG/NBD kỳ vọng | **0,787 ± 0,012** |
+| Cây tăng cường 11 feature + t_x + T | 0,782 ± 0,016 |
+Feature hành vi đơn lẻ: days_since_last_activity 0,714 · category_diversity 0,696 · cart_abandon 0,675 · recent_view 0,660 · view_to_cart 0,654.
+
+### 4. Hai mục tiêu khác nhau (phát hiện quan trọng)
+Nhận diện **người đã chết thật** (tỉ lệ 10,3% panel): `1 − p_alive` của BG/NBD đạt AUC **0,798**; recency 0,759;
+days_since_last_activity 0,748; LR 11 feature *huấn luyện cho mục tiêu này* 0,792. Nhưng LR 11 feature huấn luyện theo **nhãn 120 ngày**
+chấm theo "đã chết" chỉ **0,719**. → Model production đang tối ưu mục tiêu "ngừng mua 120 ngày"; cho campaign "cứu khách sắp bỏ" thì
+75% người bị gắn cờ sẽ tự quay lại. Đây là quyết định thiết kế cần chốt (giữ nhãn 120 ngày, hay thêm điểm "đã rời bỏ" từ BG/NBD).
+
+### 5. Chỗ phải rút lại / sửa
+- Từng viết "feature hành vi không thể mang thêm thông tin vì rời bỏ độc lập với hành vi" → **SAI**. Hành vi thêm +0,017 AUC
+  (0,748 → 0,766) qua 2 đường: cường độ duyệt ∝ tốc độ mua (GIẢ ĐỊNH trong bộ sinh) và duyệt tụt sau khi rời bỏ (ĐÃ ĐO trên REES46:
+  SAU/TRƯỚC 0,186). Đã sửa docstring `churn_signal_decomposition.py`.
+- Đề xuất log1p cho `monetary`/`frequency`: **không đáng kể** (6 feature: 0,748 → 0,747; 11 feature: 0,766 → 0,771, trong sai số).
+
+### 6. Giới hạn
+Dữ liệu tổng hợp, mô phỏng trên catalog giả của test (không phải DB). BG/NBD dùng đúng tham số đã sinh dữ liệu nên **lạc quan hơn thực tế**
+(ngoài đời phải fit trên dữ liệu của chính mình). Số hành vi phụ thuộc giả định "duyệt ∝ tốc độ mua". Khoảng 0,79 → 0,88 là phần
+thông tin không đọc được từ dữ liệu quan sát; ngoài đời có thể nằm ở trải nghiệm xấu (giao trễ, hoàn tiền) nhưng không kiểm chứng được ở đây.
+Kỳ vọng AUC khi re-baseline trên DB: **~0,77 ± 0,02**, không phải 0,84.
+
+### Chưa commit
+`tools/data-seed/export-churn-panel.mjs`, `churn_signal_decomposition.py`, `churn_bgnbd_benchmark.py` (chưa chạy, cần DB),
+dòng `profile.rateMult` trong `simulate.mjs`, sửa cắt tên sản phẩm 200 ký tự trong `writeData.mjs`.
+
+### 2026-10-02 (tiếp) — Nhãn cố định 120 ngày LỆCH theo chu kỳ mua của ngành hàng (người dùng chỉ ra, đã đo)
+Người dùng: "mỗi mặt hàng có một tần suất mua khác nhau". Đúng — và nhãn cố định 120 ngày phạt khách mua ngành chu kỳ dài.
+Đo trên panel 24 tháng/5.000 user (`export-churn-panel.mjs`, cột `cycle_rel` = chu kỳ TB của các ngành khách ưa thích, so với Bách hoá = 1;
+khoảng 0,59–1,72; chia 3 nhóm theo tertile):
+
+| | Nhóm NHANH (cycle 0,92) | Nhóm CHẬM (cycle 1,38) |
+|---|---:|---:|
+| Tỉ lệ bị gắn churn @120 ngày cố định | **35,0%** | **49,5%** |
+| Đã rời bỏ thật | 10,6% | 11,1% |
+| % người bị gắn churn thật ra còn sống | 69,9% | 77,6% |
+| Cửa sổ nhãn động (120 × cycle / trung vị, kẹp 60–150): TB ngày | 98 | 142 |
+| Tỉ lệ churn @cửa sổ động | 39,1% | 45,3% |
+
+→ Chênh 14,4 điểm % ở nhãn cố định **hoàn toàn là hiện vật của cửa sổ** (tỉ lệ rời bỏ thật gần như bằng nhau); cửa sổ động thô thu còn 6,2 điểm.
+Phần còn lại do hệ số co giãn thô + khách khác nhau về tốc độ mua cá nhân. Giới hạn: "rời bỏ độc lập với ngành" là THIẾT KẾ của bộ sinh;
+tỉ lệ chu kỳ ngành lấy từ Amazon (đo thật), nhưng độ lớn tác động lên nhãn là kết quả mô phỏng.
+
+Phương án (chưa chọn): **A** cửa sổ nhãn theo chu kỳ ngành khách ưa thích (cần join `order_items` → danh mục ở product DB);
+**B** cửa sổ theo nhịp mua của CHÍNH khách (k × khoảng cách trung vị; chỉ cần `orders`, nhiễu khi ít đơn);
+**C** điểm không phụ thuộc cửa sổ: `p_alive`/kỳ vọng số lần mua của BG/NBD (λ riêng từng khách đã thấm cả hiệu ứng ngành; chỉ cần `orders`);
+**D** churn THEO NGÀNH (khách × ngành gốc) — trung thành nhất với ý "mỗi mặt hàng một tần suất", thiết kế lại lớn → hướng phát triển.
+
+### 2026-10-02 (tiếp) — "Chờ hết chu kỳ churn thì quá muộn": cửa sổ can thiệp sau khi thêm giỏ (REES46, đo thật)
+Người dùng chỉ ra 3 điều: (1) nhãn 120/180 ngày không đúng cho mọi khách vì tần suất mua khác nhau; (2) chờ đủ chu kỳ mới gắn nhãn thì **quá muộn**
+(thêm giỏ rồi không mua → hết chu kỳ → đã mua chỗ khác); (3) tín hiệu nằm ở **liên kết dữ liệu** (cart → xem SP khác → cart tiếp = đang phân vân;
+cart → thoát → vài ngày không vào lại = dấu hiệu) hơn là thông tin đơn lẻ. Điểm (1) đã đo ở mục trên. Điểm (2) đo ở đây:
+`churn_measure_cart_recovery.py`, REES46 Cosmetics, **3.570.193 episode giỏ** (lần thêm giỏ đầu của mỗi cặp user×sản phẩm, chỉ lấy episode ≥ 30 ngày trước cuối dữ liệu).
+
+| Mốc sau khi thêm giỏ | Đã mua cùng SP (tích luỹ) | Đã mua BẤT KỲ SP (tích luỹ) | Chưa mua tới mốc → % còn mua cùng SP trong 30 ngày | → % còn mua bất kỳ SP |
+|---|---:|---:|---:|---:|
+| 1 giờ | 13,3% | 18,0% | 13,9% | 37,0% |
+| 6 giờ | 16,9% | 24,5% | 10,2% | 31,6% |
+| 24 giờ | 19,3% | 29,3% | 7,4% | 27,0% |
+| 3 ngày | 21,5% | 34,5% | 4,8% | 21,1% |
+| 7 ngày | 23,1% | 39,2% | 2,9% | 15,0% |
+| 30 ngày | 25,3% | 48,3% | — | — |
+
+Đọc: 74,7% giỏ không bao giờ thành đơn (cùng SP, 30 ngày). Trong số giỏ CÓ mua lại: **52,5% trong 1 giờ, 76,3% trong 24 giờ, 91,3% trong 7 ngày**.
+Khả năng quay lại mua cùng SP rơi từ 13,9% (sau 1h) xuống 2,9% (sau 7 ngày) — giảm ~5 lần trong 1 tuần. Nhãn 120 ngày chỉ "thấy" khách khi cơ hội gần như đã mất.
+Giới hạn: 1 shop mỹ phẩm; "mua chỗ khác" không quan sát được (chỉ đo không mua lại ở chính shop này); giỏ có thể là ý định thấp (so giá, lưu tạm).
+
+**Tự đối chiếu với bằng chứng cũ (không được dùng để bác bỏ điểm 3):**
+- RetailRocket "thứ tự hành vi ΔAUC −0,0009": đo đặc trưng THỨ TỰ trên nhãn churn cấp user dài hạn (cùng loại nhãn muộn) với bảng chữ cái 3 ký hiệu → không phải phép thử giả thuyết của người dùng.
+- REES46 event study "bỏ giỏ không tăng riêng trước lần mua cuối (0,983)": đo SỐ LẦN bỏ giỏ gộp — chính là loại "thông tin đơn lẻ" bị phê bình.
+→ Giả thuyết "liên kết > đơn lẻ, neo vào sự kiện, đích ngắn hạn" **chưa được kiểm chứng**, chưa bị bác bỏ. 5 feature hành vi production đều là đếm/tỉ lệ cửa sổ 7/30 ngày, không có thứ tự và Δt.
+Dữ liệu tổng hợp KHÔNG kiểm chứng được điểm này (chính bộ sinh tạo ra hành vi → vòng tròn); chỉ dữ liệu thật có session (REES46) làm được.
+
+## 2026-10-02 (chiều) — Chốt kiến trúc dữ liệu "mỗi lớp một nguồn thật" + kiểm chứng feature huỷ đơn trên dữ liệu thật
+
+**Quyết định của chủ dự án** (sau khi chỉ ra bộ sinh phải là TRANSFORM dữ liệu thật, không phải mô phỏng tham số):
+catalog = Tiki · hành vi + giao dịch trong DB = **REES46 đa ngành 12/2019–4/2020 transform** (một sàn thật, không trộn nguồn
+thứ hai, kể cả mỹ phẩm) · tính năng nguồn không có (huỷ, review, voucher, vi hành vi) = dữ liệu phát sinh thật trên hệ thống ·
+câu hỏi nghiên cứu cho phần thiếu = thí nghiệm RIÊNG trên bộ thật có biến đó cùng khách. Bộ sinh mô phỏng chỉ còn cho unit test.
+Đối chiếu schema + 2 lỗi của nguồn REES46 (log giỏ 10–11/2019; mã ngành từ 12/2019): `docs/canvas/rees46-transform-mapping.md`.
+
+### Feature huỷ đơn — Online Retail II (`churn_cancel_feature_onlineretail.py`)
+Nguồn hành vi trong DB không ghi huỷ đơn → `cancel_rate` hằng số. Thay vì ghép huỷ đơn của người khác, kiểm chứng trên Online
+Retail II (hoá đơn 'C…' thật của cùng khách, 12/2009–12/2011). Nhãn kiểu production (≥ 2 ngày mua, không mua trong 120 ngày),
+15 mốc cắt mỗi 30 ngày, **39.224 dòng / 3.479 khách**, churn 42,3%, GroupKFold 5 theo khách. Tiêu chí đặt trước: ΔAUC > 2·std.
+
+| Model | RFM | RFM + huỷ đơn | ΔAUC | PR-AUC | Đạt? |
+|---|---:|---:|---:|---:|:-:|
+| Logistic | 0,7604 ± 0,0105 | 0,7615 ± 0,0104 | +0,0011 ± 0,0013 | 0,672 → 0,672 | ❌ |
+| Gradient Boosting | 0,7633 ± 0,0092 | 0,7634 ± 0,0099 | +0,0001 ± 0,0025 | 0,673 → 0,674 | ❌ |
+
+Đơn lẻ, feature huỷ có tín hiệu (AUC 0,56–0,63; tốt nhất `days_since_last_cancel` 0,629) nhưng **trùng thông tin với RFM**: khách
+có huỷ đơn churn ÍT hơn (34,1% so với 51,8%) vì mua nhiều thì huỷ nhiều. → Bỏ `cancel_rate` khỏi model production **không mất gì
+đo được**. Giới hạn: bán lẻ quà tặng UK (nhiều khách sỉ); 'C…' gộp huỷ và trả hàng.
+
+## 2026-10-05 — Re-baseline + ablation lại trên dữ liệu REES46 thật (trả lời roadmap "đừng tin 11 feature là đủ")
+
+Sau khi nạp 332.347 user / 102.004 đơn / 7.378.602 sự kiện REES46 thật vào DB (transform, không mô phỏng —
+xem `rees46-transform-mapping.md`), re-baseline lại model churn và chạy lại ablation TRÊN DỮ LIỆU THẬT thay vì
+bộ sinh giả lập 342 user cũ (nơi feature mở rộng bị sinh cố ý độc lập với nhãn → kết luận cũ có nguy cơ thiên lệch).
+
+**Thiết kế thời gian**: dữ liệu thật chỉ trải ~151 ngày (2026-05-03→2026-10-01, do nguồn REES46 giới hạn
+12/2019–4/2020) → không đủ cho lưới cutoff production (`[270,240,210,180,150]` ngày + nhãn 120 ngày, cần ≥390
+ngày). Dùng `label_window_days=60`, 5 mốc cắt 2026-05-18→2026-08-02 (cách đều, ≥15 ngày lịch sử tối thiểu),
+`label_version` đổi tên để kích hoạt bypass so sánh AUC của `_retrain_gate()` (nhãn khác nhãu cũ, không so được).
+Panel builder viết lại bằng pandas-trong-RAM (`fast_panel_builder.py`/`fast_candidates_builder.py`) vì SQL tổng
+hợp gốc (COUNT DISTINCT, correlated subquery) mất 25-35+ phút/truy vấn trên MariaDB qua Docker/WSL2 kể cả có
+index — đã xác minh khớp 100% công thức gốc (rfm.py/behavior.py/candidates.py nguyên văn) trên mẫu 8 user qua
+truy vấn SQL trực tiếp theo từng user.
+
+**Re-baseline (`retrain_on_real_rees46.py`)**: panel 31.458 dòng / 10.501 user (lọc ≥2 đơn DELIVERED từ 774.301).
+AUC = 0,7354 ± 0,0138, F1 = 0,7643, precision 0,7969 / recall 0,7344. Qua `_retrain_gate`, model mới đã lên
+production (`churn_classifier` version `20261005T152145239424`). KMeans silhouette 0,3484, chênh churn-rate
+46,95 điểm % (At Risk 84,26% vs VIP 37,31%) — phân khúc vẫn tách biệt rõ trên dữ liệu thật.
+
+**Ablation (`ablation_on_real_rees46.py`)**, cùng thiết kế thời gian, cùng panel size (xác nhận nhất quán nội bộ):
+
+| Block | ΔAUC | Sàn nhiễu | Kết luận |
+|---|---:|---:|:-:|
+| gap_dispersion | +0,0016 | 0,0138 | LOẠI (trong nhiễu) |
+| noise_control | +0,0032 | | LOẠI |
+| session | +0,0007 | | LOẠI |
+| abandon_shape | +0,0004 | | LOẠI |
+| review / voucher / temporal_rhythm | 0,0000 | | LOẠI |
+| **all_candidates** (gộp 7 block, 28 feature) | +0,0044 | | LOẠI |
+
+`gap_dispersion` — feature được yêu cầu ưu tiên thử lại — **vẫn LOẠI trên dữ liệu thật**, với biên độ còn nhỏ
+hơn ΔAUC của `noise_control` (chính là đối chứng âm cố ý vô nghĩa). Kết luận cũ "11 feature production là đủ"
+**được xác nhận lại trên dữ liệu thật**, không còn là nghi vấn do cách bộ sinh giả lập cũ cố tình làm feature
+mở rộng độc lập với nhãn.
+
+**Permutation importance** (11 feature baseline): `days_since_last_activity` áp đảo (auc_drop=0,1441 ± 0,011),
+`recency` (0,0134), `frequency` (0,0045), `category_diversity_viewed` (0,0032) — 7 feature còn lại auc_drop ≈ 0.
+**L1 path**: 3 feature (`category_diversity_viewed`, `days_since_last_activity`, `recency`) đã đạt AUC 0,7316 —
+sát baseline 11-feature (0,7354); tăng lên 6-9 feature chỉ lãi thêm ~0,003-0,005 AUC.
+
+**Đọc chung**: model churn hiện tại gần như hoàn toàn dựa vào ĐỘ MỚI hoạt động (ngày + sự kiện), không phải
+cường độ/đa dạng hành vi. Điều này củng cố thêm cho giả thuyết "liên kết dữ liệu > thông tin đơn lẻ" ghi ở
+2026-10-02: nếu tín hiệu sớm thật sự nằm trong THỨ TỰ sự kiện (cart→xem lại→cart lại = do dự; cart→im lặng =
+rời bỏ) chứ không phải đếm/tỉ lệ gộp, thì 11 feature RFM+behavior hiện tại — dù "đủ" theo nghĩa ablation — có
+thể đang bỏ lỡ đúng loại tín hiệu sớm mà nhãn 60-120 ngày không bắt được. Việc tiếp theo: thí nghiệm cảnh báo
+sớm theo chuỗi sự kiện giỏ hàng (xem roadmap, đích ngắn hạn ~7 ngày thay vì nhãn 60/120 ngày dài).
+
+File kết quả đầy đủ: `data/experiment-results/behavior_patterns/ablation_rees46_real.json` và
+`retrain_rees46_real.json`.
+
+## 2026-10-05 (tối) — Kiểm chứng "liên kết dữ liệu > thông tin đơn lẻ" ở đích ngắn hạn (24h→7 ngày)
+
+Ablation cùng ngày (mục trên) xác nhận 11 feature RFM/behavior đủ cho nhãn 60 ngày — nhưng đó không
+bác bỏ được giả thuyết của chủ dự án (2026-10-02: "đợi hết chu kỳ churn thì quá muộn, dấu hiệu rời bỏ
+diễn ra ngay trước đó, bài toán là sự LIÊN KẾT dữ liệu chứ không phải thông tin đơn lẻ"), vì nhãn 60
+ngày quá xa để đo tín hiệu sớm. Đổi hẳn đơn vị quan sát để kiểm đúng phạm vi giả thuyết:
+`cart_sequence_early_warning.py`.
+
+**Thiết kế**: đơn vị = "episode giỏ" (lần `ADD_TO_CART`/`UPDATE_CART_QTY` đầu tiên của 1 cặp user-item,
+trên dữ liệu REES46 thật trong DB — không dùng nguồn rời, giữ đúng "mỗi lớp một nguồn thật"). Điểm
+quyết định = cart_time + 24h (quan sát 1 ngày đầu). Nhãn = có mua lại ĐÚNG item đó trong (quyết định,
+cart+7 ngày] hay không (mốc 7 ngày lấy từ `cart_recovery.json`: 91,3% lượt quay lại xảy ra trong 7
+ngày). 133.404 episode (sau khi cắt bỏ phần sát cuối dữ liệu để tránh cụt), tỉ lệ dương 5,61% (thấp vì
+phần lớn chuyển đổi nhanh trong 24h đầu đã bị loại khỏi nhãn theo thiết kế — chỉ còn "chuyển đổi
+muộn" là mục tiêu). GroupKFold 5 theo user, MinMaxScaler + LogisticRegression(class_weight='balanced')
+— cùng pipeline `train.py`/`ablation.py`.
+
+| Bộ feature | AUC | Ghi chú |
+|---|---:|---|
+| Set A — đếm/gộp 24h (4 feature, không thứ tự) | 0,6321 ± 0,0091 | kiểu feature production hiện tại, đổi cửa sổ |
+| **Set A+B — thêm 7 feature liên kết/trình tự** | **0,6486 ± 0,0047** | |
+| Set A + đối chứng âm ngẫu nhiên (hash) | 0,6314 ± 0,0095 | không đổi — xác nhận sàn nhiễu đúng |
+
+ΔAUC(B) = **+0,0165**, vượt sàn nhiễu (std Set A = 0,0091) → **GIỮ (vượt sàn nhiễu)** — lần đầu tiên
+trong toàn bộ lịch sử ablation của đồ án một block mở rộng vượt tiêu chí này. Đối chứng âm không nhích
+(−0,0007), loại khả năng đây là nhiễu may mắn.
+
+**Permutation importance** (bộ A+B): `viewed_same_item_again` (quay lại xem CHÍNH sản phẩm đã thêm
+giỏ — do dự nhưng còn quan tâm) mạnh nhất, auc_drop=0,0422 — vượt mọi feature đếm/gộp trong Set A.
+Tiếp theo `last_event_is_other_view` (0,0255 — đang so sánh SP khác) và `gap_dispersion_hours` (0,0138
+— nhịp sự kiện bất thường). `last_event_is_recart` và `silence_full_window` gần như vô dụng riêng lẻ
+(trùng thông tin với feature khác trong block).
+
+**Đọc kết quả**: nhãn càng dài (60-120 ngày) thì cấu trúc trình tự càng bị "trung bình hoá" mất —
+nhưng ở đích ngắn hạn, bám sát đúng sự kiện (giỏ hàng), trình tự sự kiện cho tín hiệu thêm THẬT, đo
+được bằng số, không phải trực giác. Đây là bằng chứng ủng hộ hướng "cảnh báo sớm theo sự kiện" thay
+vì (hoặc bổ sung cho) model churn cấp-user dài hạn hiện tại — phù hợp để đưa vào báo cáo đồ án như một
+phát hiện có giá trị học thuật, không phụ thuộc vào việc model production 60 ngày có đổi hay không.
+
+**Giới hạn cần nói thẳng**: AUC 0,65 là tín hiệu thật nhưng còn yếu (so với AUC ~0,74 của model churn
+cấp-user) — phù hợp cho mục đích NGHIÊN CỨU/minh hoạ luận điểm, chưa đề xuất thay thế model production
+hiện tại trong phạm vi đồ án. Dùng cùng logistic regression đơn giản, chưa thử model phi tuyến (có thể
+bắt tương tác giữa các feature trình tự tốt hơn) — để ngỏ cho phần "hướng phát triển" của báo cáo.
+
+File kết quả: `data/experiment-results/behavior_patterns/cart_sequence_early_warning.json`.
+Script: `AI/forecast-service/app/training/experiments/cart_sequence_early_warning.py`.
+
+## 2026-10-05 (tối, tiếp) — Tầng 2.2: Benchmark Rule vs AI trên dữ liệu thật
+
+Tiếp theo thứ tự ưu tiên bảo vệ đồ án (0.1 hiệu chỉnh → 0.2 sửa nhãn → 2.1 re-baseline → **2.2 benchmark
+rule vs AI**): 3 bước đầu đã xong qua việc chuyển hẳn sang dữ liệu REES46 thật (xem 2 mục trên). Con số
+2.2 cũ ("L1 path ~2 feature đạt AUC 0,93") đo trên dữ liệu synthetic cũ, không còn giá trị tham chiếu —
+chạy lại bằng `rule_benchmark_on_real_rees46.py`, gọi NGUYÊN VĂN `rule_benchmark.py::run_rule_benchmark()`
+(không viết lại logic so sánh) trên cùng panel thật 31.458 dòng / 10.501 user, nhãn orders 60 ngày.
+
+| Phương pháp | F1 | AUC | Ghi chú |
+|---|---:|---:|---|
+| Rule viết tay `days_inactive>7 AND cart_abandon>=1` (ví dụ trong feature-overview.md) | 0,187 | — | rất yếu |
+| Rule viết tay `recency>30 AND cart_abandon>=2` | 0,066 | — | rất yếu |
+| Rule viết tay `recency>90` | 0,016 | — | rất yếu |
+| Rule 1 biến tối ưu (`recency >= 4`) | 0,8179 | 0,6889 | quét lưới, chọn trên train |
+| Rule 2 biến AND tối ưu (`recency>=2 AND frequency>=2`) | 0,8187 | — (nhị phân) | |
+| Cây quyết định depth 1 | 0,8152 | 0,667 | `days_since_last_activity<=12.5` |
+| Cây quyết định depth 2 | 0,8179 | 0,7203 | |
+| **Cây quyết định depth 3 (rule TỐT NHẤT tìm được)** | **0,8245** | 0,733 | |
+| **Model LogReg + hiệu chỉnh isotonic (production)** | **0,8244** | **0,7352** | |
+
+**Phán quyết**: `f1_gap = model − rule_tốt_nhất = −0,0001`, sàn nhiễu (std F1 model) = 0,0031 →
+**model KHÔNG thắng rule tốt nhất về F1, nằm trong nhiễu**. Nhưng model có **AUC cao nhất trong mọi
+phương pháp** (0,7352, nhỉnh hơn cây sâu 3 là 0,733, và rõ ràng hơn mọi rule nông hơn) — tức khả năng
+**xếp hạng** khách theo rủi ro tốt hơn bất kỳ rule nào. Rule tốt nhất (cây sâu 3, hoặc rule 2 biến)
+chỉ trả nhãn nhị phân — **không xếp hạng được**, nên về nguyên tắc không dùng được cho phân bổ ngân
+sách voucher theo tổn thất kỳ vọng (`expected_loss = P × monetary`, cần P liên tục) dù F1 cao ngang
+model. Rule viết tay đơn giản ("vài câu if/else") thua xa cả hai (F1 0,016–0,187) — câu trả lời trực
+tiếp cho phản biện "sao không viết rule cho xong".
+
+**Đọc kết quả, đúng tinh thần đã chuẩn bị trước (roadmap "Rủi ro lớn nhất")**: đây KHÔNG phải thất bại.
+Đây là câu trả lời trung thực: *ở hệ thống này, AI không thắng rule về độ chính xác phân loại (F1) —
+cả hai đều bị trần bởi cùng 2-3 chiều thông tin hữu dụng thật (`recency`, `frequency`,
+`days_since_last_activity`) — nhưng AI thắng về NĂNG LỰC: cho xác suất liên tục để xếp hạng và phân bổ
+ngân sách, việc một rule nhị phân về nguyên tắc không làm được.* Luận điểm này không phụ thuộc AUC có
+cao hơn rule hay không, và đã có số đo thật hậu thuẫn ở cả hai vế.
+
+File kết quả: `data/experiment-results/behavior_patterns/rule_benchmark_rees46_real.json`.
+Script: `AI/forecast-service/app/training/experiments/rule_benchmark_on_real_rees46.py` (wrapper mỏng,
+gọi lại `app/training/rule_benchmark.py` gốc không sửa).
+
+## 2026-10-05 (tối, tiếp) — Tầng 3.1: đo lại phân bổ ngân sách theo tổn thất kỳ vọng trên dữ liệu thật
+
+Số cũ "3,7–7,7× doanh thu rủi ro cứu được" đo trên dữ liệu synthetic — cần đo lại trên dữ liệu thật
+(phụ thuộc 0.1 hiệu chỉnh, đã xong: isotonic). Không cần script mới: `train_and_evaluate()` tự tính
+`_ranking_metrics()` trên out-of-fold prediction ĐÃ HIỆU CHỈNH mỗi lần train — số đã nằm sẵn trong
+`retrain_rees46_real.json` (`metrics.classifier.ranking`) từ lần re-baseline sáng nay, chỉ cần trích ra.
+
+So 2 cách xếp hạng khi ngân sách voucher chỉ đủ cứu K khách (pooled OOF, 10.501 user, tổng doanh thu
+đang rủi ro 283.950.553.000đ):
+
+| K | revenue_recall `by_probability` | revenue_recall `by_expected_loss` (P×monetary) | **Hệ số nhân** | precision@K (prob / exp_loss) |
+|---:|---:|---:|---:|---|
+| 25 | 0,15% | 9,04% | **60,27×** | 0,96 / 0,92 |
+| 50 | 0,34% | 11,40% | **33,53×** | 0,98 / 0,82 |
+| 100 | 0,84% | 15,44% | **18,38×** | 0,97 / 0,79 |
+| 200 | 1,84% | 23,46% | **12,75×** | 0,95 / 0,78 |
+
+**Hệ số nhân trên dữ liệu thật (12,75×–60,27×) CAO HƠN NHIỀU** so với số cũ đo trên synthetic
+(3,7–7,7×) — vì phân phối `monetary` thật (giá thật × fx từ REES46) lệch mạnh hơn nhiều so với bộ sinh
+cũ: xếp theo xác suất thuần vô tình chọn trúng rất nhiều khách churn nhưng giá trị đơn hàng nhỏ (vẫn
+đúng nhãn — precision@K 0,95-0,98 — nhưng gần như không cứu được doanh thu nào, 0,15%-1,84%), trong khi
+xếp theo `P × monetary` đánh đổi một ít precision (0,78-0,92) để cứu được 12-60 lần doanh thu hơn.
+
+**Đọc kết quả**: củng cố mạnh thêm luận điểm Tầng 3 — đây là năng lực CHỈ model-xác-suất-liên-tục làm
+được (rule nhị phân ở mục 2.2 không xếp hạng được nên không thể tối ưu theo `expected_loss`), và trên
+dữ liệu thật hoá ra giá trị này LỚN HƠN ước tính ban đầu, không phải nhỏ đi. Đây là số mạnh nhất để bảo
+vệ đồ án, không phụ thuộc việc model có AUC/F1 cao hơn rule hay không (đã xác nhận ở mục 2.2).
+
+**Giới hạn cần nói thẳng**: `monetary` ở đây = tổng giá trị đơn DELIVERED lịch sử của khách (giá thật ×
+fx=25000 từ transform REES46), không phải CLV thực; hệ số nhân cao một phần phản ánh đúng độ lệch giá
+trị khách hàng thật, nhưng cũng nhạy với tỉ giá fx giả định — nên trình bày hệ số nhân như một TỈ LỆ
+(bao nhiêu lần tốt hơn xếp theo xác suất thuần), không neo vào số VND tuyệt đối.
+
+Nguồn số: `data/experiment-results/behavior_patterns/retrain_rees46_real.json` → `metrics.classifier.ranking`.
+
+## 2026-10-05 (tối, tiếp) — Tầng 2.3: so sánh thuật toán khác trên dữ liệu thật
+
+Người dùng chủ động yêu cầu làm thêm mục này (ngoài danh sách bắt buộc cho bảo vệ đồ án). So Logistic
+Regression (production) với 2 họ model phi tuyến cây-tập hợp trên CÙNG fold grouped-CV
+(`_evaluate_grouped_cv` gốc, không tự chia fold riêng) — `algorithm_comparison_on_real_rees46.py`.
+
+**Lưu ý dependency**: venv chưa có `xgboost`/`lightgbm` (`ModuleNotFoundError`); không tự ý cài thêm
+thư viện mới (theo CLAUDE.md, cần hỏi trước). Dùng `RandomForestClassifier` và
+`HistGradientBoostingClassifier` (scikit-learn, cùng họ gradient boosting histogram) thay thế — cùng
+tinh thần so sánh "cây phi tuyến nhiều tham số" mà roadmap muốn.
+
+| Thuật toán | AUC | ΔAUC vs LR | F1 | Kết luận |
+|---|---:|---:|---:|---|
+| **Logistic Regression (production)** | 0,7354 ± 0,0138 | — | 0,7643 | — |
+| Random Forest (300 cây, depth=6) | 0,7436 ± 0,0161 | +0,0082 | 0,8281 | LOẠI (trong nhiễu) |
+| HistGradientBoosting (depth=4, 300 iter) | 0,7409 ± 0,0144 | +0,0055 | 0,8273 | LOẠI (trong nhiễu) |
+
+Cả 2 model phi tuyến đều nhỉnh hơn LR về AUC nhưng không vượt sàn nhiễu (std 0,0138 của chính LR) →
+**không đủ bằng chứng để nói model phức tạp hơn tốt hơn**. F1 của cả 2 cao hơn LR rõ (0,827-0,828 vs
+0,764) nhưng đi kèm recall rất cao (0,94-0,95) và precision thấp hơn (0,73-0,74) — khác điểm vận hành
+(ngưỡng được tune theo F1 trên train cho từng model riêng, không so cùng ngưỡng) nên không kết luận
+"model phi tuyến thắng" chỉ từ F1 một mình; vẫn phải nhìn AUC (đo xếp hạng, không phụ thuộc ngưỡng).
+
+**Đọc kết quả**: đúng cảnh báo đã ghi trước trong roadmap §2.3 — với quy mô panel/chiều hữu dụng thông
+tin hiện tại, model phi tuyến không mang lại lợi ích đo được so với Logistic Regression. Đây là kết
+luận HỢP LỆ và có giá trị: **bảo vệ được lựa chọn LR ban đầu** (đơn giản, dễ giải thích qua hệ số +
+permutation importance, không cần tune nhiều tham số) thay vì cần biện minh "sao không dùng model mạnh
+hơn". Không thử XGBoost/LightGBM thật do giới hạn dependency — nếu cần đúng 2 thư viện đó, phải cài
+thêm (chưa làm, cần duyệt trước).
+
+File kết quả: `data/experiment-results/behavior_patterns/algorithm_comparison_rees46_real.json`.
+Script: `AI/forecast-service/app/training/experiments/algorithm_comparison_on_real_rees46.py`.
+
+## 2026-10-05 (tối, tiếp) — Tầng 2.3 mở rộng: thử HẾT các thuật toán, mới nhất → cũ nhất
+
+Người dùng yêu cầu mở rộng thêm: "thử hết các model từ mới nhất đến cũ nhất, các vấn đề phát sinh chấp
+nhận hết" — đã cài thêm `xgboost`, `lightgbm`, `catboost` vào venv (chưa có trước đó, cài theo yêu cầu
+tường minh của người dùng, chấp nhận thêm dependency). `algorithm_comparison_full_on_real_rees46.py`
+chạy 9 thuật toán khác (ngoài Logistic Regression production) trên ĐÚNG cùng fold grouped-CV, panel
+REES46 thật — xếp theo năm công bố thuật toán gốc, mới nhất trước:
+
+| Thuật toán (năm) | AUC | ΔAUC vs LR | F1 | Thời gian | Kết luận |
+|---|---:|---:|---:|---:|---|
+| **Logistic Regression (1958, production)** | 0,7354 ± 0,0138 | — | 0,7643 | — | — |
+| CatBoost (2017) | 0,7430 | +0,0076 | 0,8299 | 23,2s | LOẠI (trong nhiễu) |
+| LightGBM (2017) | 0,7368 | +0,0014 | 0,8246 | 2,1s | LOẠI (trong nhiễu) |
+| XGBoost (2014) | 0,7381 | +0,0027 | 0,8250 | 4,2s | LOẠI (trong nhiễu) |
+| GradientBoosting sklearn (2001) | 0,7372 | +0,0018 | 0,8264 | 29,6s | LOẠI (trong nhiễu) |
+| Random Forest (2001) | 0,7436 | +0,0082 | 0,8281 | 4,6s | LOẠI (trong nhiễu) |
+| SVM RBF (1995) | 0,7099 | **−0,0255** | 0,8237 | 411,8s | LOẠI (**kém hơn** LR) |
+| Decision Tree đơn (1984) | 0,7232 | **−0,0122** | 0,8193 | 0,3s | LOẠI (**kém hơn** LR) |
+| KNN (1967) | 0,7194 | **−0,0160** | 0,8212 | 2,4s | LOẠI (**kém hơn** LR) |
+| Gaussian Naive Bayes (cổ điển) | 0,7155 | **−0,0199** | 0,8131 | 0,3s | LOẠI (**kém hơn** LR) |
+
+**Đọc kết quả — rõ ràng hơn cả lượt chạy RF/HistGB trước**: TOÀN BỘ 9 thuật toán khác, dù mới (gradient
+boosting hiện đại) hay cũ (KNN, Naive Bayes, cây đơn, SVM), đều **không vượt sàn nhiễu** (0,0138) so
+với Logistic Regression. Đáng chú ý: các model "cũ hơn, đơn giản hơn LR về mặt giả định" (SVM, cây đơn,
+KNN, Naive Bayes) thực ra **TỆ HƠN** LR rõ rệt (−0,012 đến −0,026 AUC) — không phải chỉ "không hơn",
+mà "kém hơn có ý nghĩa" dù vẫn trong biên độ 2×noise-floor. Nhóm gradient boosting hiện đại (CatBoost/
+LightGBM/XGBoost/RF) đều nhỉnh hơn LR (+0,0014 đến +0,0082) nhưng không đủ để vượt sàn nhiễu.
+
+**Kết luận cuối cùng cho Tầng 2.3**: đã thử đủ rộng (10 thuật toán, trải 70 năm phát triển ML, cả họ
+tuyến tính/cây/khoảng cách/xác suất/boosting hiện đại) — **Logistic Regression là lựa chọn tốt nhất
+trong nhóm "đơn giản, dễ giải thích"**, và nhóm boosting hiện đại nhỉnh hơn một chút nhưng không đáng
+để đánh đổi khả năng giải thích (hệ số + permutation importance) lấy một AUC không khác biệt có ý
+nghĩa thống kê. Đây là kết luận mạnh, đã thử hết khả năng hợp lý trước khi giữ nguyên lựa chọn ban đầu.
+
+File kết quả: `data/experiment-results/behavior_patterns/algorithm_comparison_full_rees46_real.json`.
+Script: `AI/forecast-service/app/training/experiments/algorithm_comparison_full_on_real_rees46.py`.
+Dependency mới: `xgboost`, `lightgbm`, `catboost` (cài vào `d:/ai_venv`, theo yêu cầu người dùng).
+
+## 2026-10-06 — Phát hiện + sửa: production serving không chịu được quy mô dữ liệu thật (feature store)
+
+Theo yêu cầu kiểm tra lại FE/BE/DB có thực sự chạy được trên dữ liệu REES46 thật hay không (không chỉ
+AI nội bộ): build lại + chạy thật container `forecast-service`, gọi `GET /admin/analytics/segmentation`
+qua HTTP thật (không gọi hàm Python trực tiếp như mọi lần trước).
+
+**Phát hiện**: `risk_scoring.predict()` → `build_feature_matrix()` vẫn dùng SQL tổng hợp GỐC
+(`fetch_order_features`/`fetch_behavior_features` trong `rfm.py`/`behavior.py`) — CHƯA được đổi sang
+bản pandas đã verify hôm 2026-10-05 (bản đó chỉ dùng cho script thực nghiệm). Trên 332.347 user /
+7,37 triệu sự kiện thật, câu `COUNT(DISTINCT category_id) GROUP BY user_id` treo **hơn 53 phút** (2
+bản chạy song song do RiskScheduler tự quét mỗi giờ + người dùng gọi thử endpoint, tranh chấp I/O làm
+nhau chậm hơn nữa) — đã phải `KILL` tay. Xác nhận: có index đúng cho phần lọc
+(`action_type,created_at,user_id`), nhưng `COUNT(DISTINCT category_id)` cần cột không nằm trong index
+đó nên vẫn phải dựng bảng tạm + sắp xếp ("Creating sort index") — bị khuếch đại bởi I/O ảo hoá chậm của
+MariaDB/Docker Desktop/WSL2 (đã xác nhận từ 2026-10-05: thêm index không cứu được).
+
+**Quyết định (bàn với chủ dự án 2026-10-06)**: chọn kiến trúc **feature store** thay vì chỉ đổi SQL→
+pandas tại chỗ — đánh đổi độ mới dữ liệu (cập nhật theo chu kỳ `RISK_SCAN_INTERVAL_HOURS`, hiện 1 giờ)
+lấy việc đọc tức thời không phụ thuộc quy mô dữ liệu, chịu tải tốt khi nhiều request cùng lúc.
+
+**Thực hiện** (code mới, KHÔNG đổi schema do Java/Flyway quản lý — bảng mới do chính forecast-service
+tự tạo/quản lý bằng `CREATE TABLE IF NOT EXISTS`, không cần migration Flyway bên order-service):
+- `shared_common/features/fast_compute.py` — port công thức pandas đã verify (`fast_panel_builder.py`
+  hôm qua) thành module PRODUCTION dùng chung.
+- `shared_common/features/feature_store.py` — bảng `user_feature_vectors` (user_id + 11 feature +
+  `computed_at`), `refresh()` (tính qua pandas, DELETE+INSERT trong 1 transaction — reader không thấy
+  trạng thái rỗng giữa chừng), `load()` (SELECT đơn giản), `last_computed_at()`.
+- `risk_scoring.predict(as_of=None)` (đường production thật): đọc `feature_store.load()` thay vì tự
+  tính SQL; `as_of` lịch sử tường minh (không dùng trong production) vẫn giữ đường SQL gốc.
+- `risk_scheduler.run_risk_scan()`: gọi `feature_store.refresh()` trước khi predict — đúng chu kỳ quét
+  là chu kỳ làm mới dữ liệu.
+- Endpoint segmentation trả thêm `computed_at` — admin biết dữ liệu mới tới lúc nào (minh bạch đánh đổi).
+
+**Kiểm chứng thật qua HTTP** (không phải gọi hàm Python): `GET /admin/analytics/segmentation` trả về
+**200 OK trong 25,4 giây** (so với 40+ phút KHÔNG BAO GIỜ xong của cách cũ) — At Risk 59,9% / Loyal
+Regulars 23,7% / VIP Champions 10,1% / Lapsed 6,2%, kèm `computed_at` đúng thời điểm vừa refresh.
+25s (không phải mili-giây như kỳ vọng lý thuyết) vì môi trường MariaDB/Docker/WSL2 đang xuống cấp sau
+cả ngày bị restart/kill liên tục (đo riêng: `load_raw` tự nó mất 133s thay vì "vài giây" hôm qua) —
+đây là vấn đề MÔI TRƯỜNG tạm thời, không phải lỗi kiến trúc; các lần gọi tiếp theo trong cùng chu kỳ
+(trước lần refresh kế) sẽ nhanh hơn nữa vì không cần tính lại, chỉ đọc bảng.
+
+**Bài học quan trọng rút ra từ việc "cứ đợi"**: pipeline TRAIN (dùng `fast_panel_builder.py` qua
+monkeypatch) đã được sửa từ 2026-10-05, nhưng pipeline SERVING thật (code production, không qua
+monkeypatch) vẫn dùng đường chậm — hai việc tưởng giống nhau nhưng là 2 đường code khác nhau. Nếu
+không kiểm tra bằng cách gọi HTTP thật (thay vì chỉ gọi hàm Python trực tiếp như các thí nghiệm trước
+đó), lỗ hổng này sẽ không bị phát hiện cho tới khi demo/bảo vệ thật.
+
+File mới: `shared_common/features/fast_compute.py`, `shared_common/features/feature_store.py`.
+File sửa: `risk_scoring.py`, `risk_scheduler.py`, `app/api/endpoints/forecast.py`.
+
+## 2026-10-06 (tiếp) — E2E thật: tìm & sửa 2 bug production, xác nhận risk-scan chạy trọn vòng
+
+Tiếp tục yêu cầu "làm hết cho hoàn thiện 100%" (trong phạm vi AI service, đã thống nhất không khởi
+động toàn bộ 13 service BE vì ngoài phạm vi). Kích hoạt thật `POST /api/v1/risk/trigger-scan` (không
+chỉ gọi hàm Python) — phát hiện liên tiếp nhiều vấn đề, tất cả đã xử lý xong:
+
+### Vấn đề 0 — Môi trường: VM WSL2 giới hạn chỉ 2GB RAM
+`.wslconfig` giới hạn `memory=2GB` cho TOÀN BỘ VM chạy MariaDB+Kafka+Elasticsearch+Keycloak+MongoDB+
+Redis+PostgreSQL+forecast-service — quá nhỏ, gây swap-thrashing (đo được `free -h` trong VM: còn
+<1GB free, swap 85%) khiến Docker Desktop tự treo (lỗi 500 trên chính API quản lý container), không
+liên quan gì tới SQL hay code. **Xử lý tạm thời** (theo yêu cầu "tăng tạm rồi cài lại cũ"): tăng lên
+7GB để chạy test, dừng tạm 4 container không liên quan churn AI (Elasticsearch/Keycloak/MongoDB/
+PostgreSQL) để giải phóng thêm RAM, test xong khôi phục `.wslconfig` về 2GB và bật lại 4 container.
+**Khuyến nghị lâu dài** (chưa áp dụng, để chủ dự án quyết định): tăng vĩnh viễn lên 6-8GB — máy có
+15.9GB, mức 2GB thấp hơn 4 lần so với mặc định của WSL2 (50% RAM máy).
+
+### Bug #1 — `run_risk_scan()` chặn event loop, làm Kafka consumer nền rớt heartbeat
+Hàm `async def run_risk_scan()` chạy thẳng code đồng bộ (DB/pandas, vài phút) bên trong, chặn asyncio
+event loop khiến `behavior_consumer` (coroutine nền cùng loop) bỏ lỡ heartbeat Kafka → mất coordinator.
+**Sửa**: tách toàn bộ phần tính toán đồng bộ thành `_compute_selection()`, gọi qua
+`starlette.concurrency.run_in_threadpool` — chỉ phần publish Kafka (thật sự async) chạy trên event
+loop chính. (Lưu ý: fix này chưa loại bỏ hẳn hiện tượng heartbeat rớt do GIL vẫn bị chiếm trong lúc
+tính toán CPU nặng ở thread khác — nhưng không còn gây lỗi sai kết quả, xem Bug #2.)
+
+### Bug #2 — lỗi THẬT, đã sửa: `np.searchsorted` lệch dtype tuỳ phiên bản numpy
+Lỗi `'<' not supported between instances of 'int' and 'Timestamp'` lặp lại ổn định qua HTTP thật
+nhưng KHÔNG xảy ra khi gọi cùng logic trực tiếp bằng script (môi trường dev dùng numpy 2.4.6/pandas
+3.0.6, trong khi container production dùng numpy 2.2.6/pandas 2.3.3 — cài theo `requirements.txt`
+pin cũ hơn). Traceback đầy đủ (lấy được sau khi thêm `exc_info=True` vào log lỗi) trỏ đúng
+`fast_compute.py::_cart_abandon_count`, tại `np.searchsorted`. Nguyên nhân: `t1 = t0 + grace` với
+`t0` là `numpy.datetime64` (từ `.to_numpy()`) và `grace = pd.Timedelta(...)` — phép cộng này có thể
+trả về `pd.Timestamp` thay vì giữ `numpy.datetime64` tuỳ phiên bản numpy/pandas xử lý interop; khi đó
+`np.searchsorted(mảng_datetime64, t1=Timestamp)` lỗi nội bộ numpy (so sánh int64 thô của mảng với đối
+tượng Timestamp). **Sửa**: đổi `grace` thành `np.timedelta64(ABANDON_GRACE_HOURS, "h")` (numpy thuần,
+không bao giờ tạo `pd.Timestamp`) — áp dụng cho cả 3 nơi có cùng pattern: `fast_compute.py` (production),
+`fast_panel_builder.py` và `fast_candidates_builder.py` (script thực nghiệm, phòng ngừa nếu sau này
+chạy trên môi trường numpy khác).
+
+**Bài học quan trọng**: bug này image/môi trường-cụ-thể — không bao giờ lộ ra khi test bằng script
+độc lập trên máy dev (numpy mới hơn), CHỈ lộ ra khi test đúng qua container production thật. Đây là lý
+do không được coi "đã test bằng Python trực tiếp" là tương đương "đã test qua production" khi có khác
+biệt phiên bản thư viện giữa 2 môi trường.
+
+### Kết quả cuối — verify E2E thật qua HTTP, không giả lập
+```
+Risk scan done: 332.349 user chấm điểm -> 17.737 trong dân số hợp lệ (>= 2 đơn DELIVERED) ->
+10.563 at-risk -> 0 đủ điều kiện (có bỏ giỏ hàng trong 24h) -> 0 published
+(ngân sách 50, bỏ qua 0 người xếp sau) [ngưỡng=0.38, model đã hiệu chỉnh=True]
+```
+0 published là **đúng theo dữ liệu**, không phải lỗi: dữ liệu REES46 đóng băng tới 2026-10-01, "giờ"
+thật đã là 2026-10-06 (5 ngày sau) — quy tắc thời điểm ("vừa bỏ giỏ trong 24h gần NOW() thật") không
+có gì để khớp trên dữ liệu lịch sử tĩnh. Đây là giới hạn đã biết của việc test bằng dữ liệu transform
+lịch sử, không phải bug — ghi vào known_limitations nếu cần.
+
+**Kết luận**: toàn bộ chuỗi tính feature (feature store) → chấm điểm → lọc dân số → lọc theo thời điểm
+→ xếp hạng ngân sách → gọi Kafka producer (code path, dù 0 item để publish lần này) đã chạy trọn vẹn,
+đúng, không lỗi, qua đúng con đường HTTP thật mà production/FE sẽ gọi — không phải suy luận gián tiếp
+nữa.
+
+File sửa: `shared_common/features/fast_compute.py`, `risk_scheduler.py`, `forecast.py` (thêm
+`exc_info=True`), `fast_panel_builder.py`, `fast_candidates_builder.py`.

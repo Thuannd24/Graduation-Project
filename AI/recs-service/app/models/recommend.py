@@ -13,5 +13,5 @@ class RecommendedItem(BaseModel):
     score: float
 
 class RecommendResponse(BaseModel):
-    strategy: str  # sasrec / popularity / content-based
+    strategy: str  # sasrec / recency / popularity
     items: List[RecommendedItem]

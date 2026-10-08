@@ -13,6 +13,8 @@ function toSqlDatetime(date) {
 /** Insert orders theo batch, dùng `result.insertId` (id của dòng ĐẦU trong batch multi-row
  * insert — đúng với InnoDB single-connection, không có ghi đồng thời nào khác trong lúc seed)
  * để suy ra order_id cho từng order_item tương ứng mà không cần query lại. */
+const ORDER_ITEM_NAME_MAX = 200;
+
 export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
   const pool = getPool();
   const orderColumns = [
@@ -68,10 +70,14 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
         itemRows.push([
           orderId,
           item.productId,
-          item.productName,
+          // order_items.product_name là varchar(200) — bản chụp tên lúc đặt; tên Tiki dài tới 250 ký tự (34 SP).
+          String(item.productName ?? "").slice(0, ORDER_ITEM_NAME_MAX),
           item.unitPrice,
           item.quantity,
           item.subtotal,
+          item.variantId ?? null,     // hệ thống thật luôn ghi biến thể khi SP có biến thể (dữ liệu transform điền)
+          item.variantAttr ?? null,
+          item.productImage ?? null,
         ]);
       }
     });
@@ -79,7 +85,7 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
     if (itemRows.length > 0) {
       await bulkInsert(
         `${DB.ORDER}.order_items`,
-        ["order_id", "product_id", "product_name", "unit_price", "quantity", "subtotal"],
+        ["order_id", "product_id", "product_name", "unit_price", "quantity", "subtotal", "variant_id", "variant_attr", "product_image"],
         itemRows
       );
       totalItemsWritten += itemRows.length;
@@ -89,18 +95,21 @@ export async function writeOrders(rng, orders, { batchSize = 200 } = {}) {
   return { ordersWritten: orders.length, itemsWritten: totalItemsWritten };
 }
 
-export async function writeEvents(events, { batchSize = 1000 } = {}) {
+// 4000 dòng × 7 cột = 28.000 tham số/câu (giới hạn prepared statement 65.535) — ít câu/commit hơn
+// hẳn lô 1000 cũ; với innodb_flush_log_at_trx_commit=1 mỗi commit là 1 lần fsync.
+export async function writeEvents(events, { batchSize = 4000 } = {}) {
   const rows = events.map((e) => [
     e.userId,
     e.sessionId || null,
-    e.itemId,
-    e.categoryId,
+    e.itemId ?? null,
+    e.categoryId ?? null,
     e.actionType,
     toSqlDatetime(e.createdAt),
+    e.weight ?? null, // % cuộn (SCROLL_DEPTH) / giây dừng (PAGE_DWELL) -- trước đây bị bỏ sót
   ]);
   await bulkInsert(
     `${DB.ORDER}.user_events`,
-    ["user_id", "session_id", "item_id", "category_id", "action_type", "created_at"],
+    ["user_id", "session_id", "item_id", "category_id", "action_type", "created_at", "weight"],
     rows,
     batchSize
   );

@@ -7,20 +7,7 @@ import keycloak from "../../services/keycloak.js";
 import CategorySidebar from "../../features/catalog/components/CategorySidebar.jsx";
 import VisualSearchModal from "../../features/catalog/components/VisualSearchModal.jsx";
 import { productApi } from "../../services/productApi";
-
-const getCategoryIconFallback = (name) => {
-  const normalized = (name || "").toLowerCase();
-  if (normalized.includes("điện thoại") || normalized.includes("phone")) return "phone_iphone";
-  if (normalized.includes("laptop") || normalized.includes("notebook")) return "laptop";
-  if (normalized.includes("tai nghe") || normalized.includes("earphone") || normalized.includes("headphone") || normalized.includes("headset")) return "headphones";
-  if (normalized.includes("đồng hồ") || normalized.includes("watch")) return "watch";
-  if (normalized.includes("tivi") || normalized.includes("ti vi") || normalized.includes("tv")) return "tv";
-  if (normalized.includes("pc") || normalized.includes("màn hình") || normalized.includes("monitor") || normalized.includes("desktop")) return "desktop_windows";
-  if (normalized.includes("bàn phím") || normalized.includes("chuột") || normalized.includes("keyboard") || normalized.includes("mouse")) return "keyboard";
-  if (normalized.includes("cáp") || normalized.includes("sạc") || normalized.includes("cable") || normalized.includes("charger")) return "cable";
-  if (normalized.includes("phụ kiện") || normalized.includes("accessory")) return "extension";
-  return "category";
-};
+import { getCategoryIconFallback } from "../../utils/categoryIcon.js";
 
 export default function Header() {
   const navigate = useNavigate();

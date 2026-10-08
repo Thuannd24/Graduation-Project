@@ -1,6 +1,21 @@
 import { query, getPool, DB } from "./db.mjs";
 import { SYNTHETIC_EMAIL_DOMAIN } from "./users.mjs";
 
+/** DELETE theo LÔ id, mỗi lô 1 transaction riêng. Bản cũ xoá 1 câu `WHERE user_id IN (<mọi user>)`
+ * — với 19 hành vi (~1.500 sự kiện/user), 2.000 user = ~3,1 triệu dòng trong 1 transaction duy nhất:
+ * đo được ~44K dòng/phút trên MariaDB dev (Docker), tức hơn 1 giờ chỉ để dọn, và kill giữa chừng thì
+ * rollback lâu tương đương. Lô nhỏ giữ mỗi transaction vài chục nghìn dòng. */
+async function deleteInBatches(pool, sqlWithInPlaceholder, ids, batchSize) {
+  let affected = 0;
+  for (let i = 0; i < ids.length; i += batchSize) {
+    const batch = ids.slice(i, i + batchSize);
+    const sql = sqlWithInPlaceholder.replace("(?)", `(${batch.map(() => "?").join(",")})`);
+    const [res] = await pool.query(sql, batch);
+    affected += res.affectedRows;
+  }
+  return affected;
+}
+
 /** Xoá toàn bộ dữ liệu do seed.mjs sinh ra trước đó (nhận diện qua email pattern), để hỗ trợ
  * chạy lại idempotent (`--force`). KHÔNG đụng tới user/order thật của hệ thống vì luôn lọc theo
  * đúng 2 email pattern seed dùng (`seed_user_*@seed.internal`, `demo_user_*@demo.local`). */
@@ -28,15 +43,13 @@ export async function cleanupSeedData() {
 
   let ordersDeleted = 0;
   if (orderIds.length > 0) {
-    const orderPlaceholders = orderIds.map(() => "?").join(",");
-    await pool.query(`DELETE FROM ${DB.ORDER}.order_items WHERE order_id IN (${orderPlaceholders})`, orderIds);
-    const [delResult] = await pool.query(`DELETE FROM ${DB.ORDER}.orders WHERE id IN (${orderPlaceholders})`, orderIds);
-    ordersDeleted = delResult.affectedRows;
+    await deleteInBatches(pool, `DELETE FROM ${DB.ORDER}.order_items WHERE order_id IN (?)`, orderIds, 1000);
+    ordersDeleted = await deleteInBatches(pool, `DELETE FROM ${DB.ORDER}.orders WHERE id IN (?)`, orderIds, 1000);
   }
 
-  const [eventsResult] = await pool.query(
-    `DELETE FROM ${DB.ORDER}.user_events WHERE user_id IN (${placeholders})`,
-    userIds
+  // ~1.500 sự kiện/user → lô 20 user ≈ 30K dòng/transaction
+  const eventsDeleted = await deleteInBatches(
+    pool, `DELETE FROM ${DB.ORDER}.user_events WHERE user_id IN (?)`, userIds, 20
   );
 
   const [reviewsResult] = await pool.query(
@@ -60,7 +73,7 @@ export async function cleanupSeedData() {
   return {
     usersDeleted: usersResult.affectedRows,
     ordersDeleted,
-    eventsDeleted: eventsResult.affectedRows,
+    eventsDeleted,
     reviewsDeleted: reviewsResult.affectedRows,
     vouchersDeleted: vouchersResult.affectedRows,
   };

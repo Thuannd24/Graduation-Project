@@ -3,21 +3,19 @@
 // với 1 nhóm user, để việc đánh giá model ở Phase 5 có ý nghĩa (không suy luận vòng tròn — xem
 // ghi chú "tránh suy luận vòng tròn" trong docs/canvas/churn-risk-implementation-plan.md Phase 3).
 
-const CHURN_PROBABILITY = 0.35; // tỉ lệ user có xu hướng rời bỏ trong 12 tháng mô phỏng
-const CHURN_MONTH_MIN = 3;
-const CHURN_MONTH_MAX = 10; // để lại >= 2 tháng "im lặng" sau churn_month cho temporal label ở Phase 5
-const CHURN_DECAY_FACTOR = 0.05; // lambda sau khi rời bỏ chỉ còn 5% so với trước
-const PRE_CHURN_RESTLESS_MONTHS = 2; // số tháng "phân vân" ngay trước khi rời bỏ hẳn
+import { GENERATION, PURCHASE_PROCESS } from "./behaviorTargets.mjs";
+
 
 export function generateUserProfiles(rng, count, categoryIds) {
   const profiles = [];
 
   for (let i = 0; i < count; i++) {
-    // lambda_base: đa số user mua thưa (~0.3-1 đơn/tháng), số ít là khách VIP mua thường xuyên.
-    const lambdaBase = rng.lognormal(Math.log(0.5), 0.9);
-
-    const willChurn = rng.bool(CHURN_PROBABILITY);
-    const churnMonth = willChurn ? rng.int(CHURN_MONTH_MIN, CHURN_MONTH_MAX) : null;
+    // Quá trình mua BG/NBD (PURCHASE_PROCESS, ước lượng trên giao dịch thật): tốc độ mua λ (đơn / 30 ngày) dị biệt
+    // Gamma; xác suất rời bỏ sau mỗi lần mua LẶP dị biệt Beta. Việc rời bỏ (willChurn/dropoutAt) KHÔNG đặt trước — nó tự
+    // xảy ra trong mô phỏng (simulate.mjs) rồi ghi ngược vào profile làm ground truth.
+    const lambdaBase = 30 * rng.gamma(PURCHASE_PROCESS.r, 1 / PURCHASE_PROCESS.alpha);
+    const dropoutP = rng.beta(PURCHASE_PROCESS.a, PURCHASE_PROCESS.b);
+    const birthFrac = rng.next(); // thời điểm gia nhập (lần mua đầu) ∈ cửa sổ mô phỏng, đều — platform có `months` tháng dữ liệu
 
     const priceSensitivity = rng.next(); // 0 = không quan tâm giá, 1 = rất nhạy cảm giá
     const cancelProb = rng.float(0.02, 0.1);
@@ -25,8 +23,9 @@ export function generateUserProfiles(rng, count, categoryIds) {
     const preferredCategoryCount = rng.int(1, 3);
     const preferredCategories = rng.pickN(categoryIds, Math.min(preferredCategoryCount, categoryIds.length));
 
-    // baseline browsing intensity tỉ lệ thuận với lambda (user mua nhiều cũng xem nhiều)
-    const baselineViewsPerMonth = 3 + lambdaBase * 8;
+    // cường độ duyệt nền tỉ lệ thuận với lambda (user mua nhiều cũng xem nhiều); phần hằng số = GENERATION.backgroundConst
+    // (dữ liệu thật: ngừng mua đi kèm ngừng duyệt — duyệt là hệ quả của ý định mua, xem TARGETS.preChurn)
+    const baselineViewsPerMonth = GENERATION.backgroundConst + lambdaBase * 8;
 
     // --- Nhịp giờ/ngày (Tầng 1.2) — tham số ẩn SINH ĐỘC LẬP với willChurn/churnMonth, chỉ chi
     // phối THỜI ĐIỂM trong ngày/tuần, không chi phối TẦN SUẤT hành vi -> không mang tín hiệu
@@ -54,8 +53,10 @@ export function generateUserProfiles(rng, count, categoryIds) {
     profiles.push({
       index: i,
       lambdaBase,
-      willChurn,
-      churnMonth,
+      dropoutP,
+      birthFrac,
+      willChurn: false,   // ghi bởi simulate.mjs: true nếu rời bỏ trong cửa sổ mô phỏng
+      dropoutAt: null,    // ghi bởi simulate.mjs: thời điểm lần mua lặp cuối mà sau đó rời bỏ
       priceSensitivity,
       cancelProb,
       preferredCategories,
@@ -69,26 +70,15 @@ export function generateUserProfiles(rng, count, categoryIds) {
       reviewRatingBias,
       voucherIssueRateBase,
       voucherRedeemProbability,
+      // Có duyệt NGOÀI các lần mua không (TARGETS.purchaseCoupling: 39% khách mua lặp không có lượt xem nền nào) —
+      // độc lập với willChurn; rút CUỐI vòng để không xê dịch các tham số rút trước.
+      backgroundBrowser: rng.bool(1 - GENERATION.zeroBackgroundProb),
     });
   }
 
   return profiles;
 }
 
-/** Hệ số nhân lambda tại 1 tháng cụ thể (1..totalMonths, totalMonths = tháng gần nhất/hiện tại). */
-export function lambdaDecayAt(profile, month) {
-  if (!profile.willChurn || month < profile.churnMonth) return 1.0;
-  return CHURN_DECAY_FACTOR;
-}
-
-/** Hệ số "phân vân" (bỏ giỏ hàng nhiều hơn bình thường) trong vài tháng ngay trước churn_month —
- * đây là tín hiệu hành vi mà feature `cart_abandon_count`/`days_since_last_activity` (thấp, vì
- * vẫn đang hoạt động) cần bắt được, khác với user đã rời bỏ hẳn từ lâu (days_since_last_activity cao). */
-export function restlessnessMultiplierAt(profile, month) {
-  if (!profile.willChurn) return 1.0;
-  const monthsBeforeChurn = profile.churnMonth - month;
-  if (monthsBeforeChurn >= 0 && monthsBeforeChurn < PRE_CHURN_RESTLESS_MONTHS) {
-    return 2.5; // tăng gấp 2.5x số lần bỏ giỏ hàng trong giai đoạn "phân vân"
-  }
-  return 1.0;
-}
+// Đã GỠ (2026-10-01): (1) churn đặt tay — 35% user, tháng 3–10, đơn/xem/bỏ giỏ tụt còn 5% → thay bằng BG/NBD;
+// (2) "phân vân" 2 tháng trước churn (bỏ giỏ ×2,5, xem ×1,3) — dữ liệu thật không ủng hộ: bỏ giỏ không tăng riêng trước lần
+// mua cuối, có điều kiện theo mức hoạt động bỏ giỏ còn đi kèm ÍT churn hơn (churn_measure_prechurn_behavior.py).

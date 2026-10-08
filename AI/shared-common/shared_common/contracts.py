@@ -79,8 +79,8 @@ CART_ADD_ACTIONS = {ACTION_ADD_TO_CART, ACTION_UPDATE_CART_QTY}
 # docs/canvas/churn-risk-log.md mục 2026-08-04) đo được rằng với chỉ 3 loại event
 # (view/addtocart/transaction) thì THỨ TỰ hành vi KHÔNG mang thêm thông tin nào (ΔAUC −0,0009) —
 # bigram gần như trùng với số đếm. Muốn kiểm chứng được giả thuyết "thứ tự là thứ rule bất lực"
-# thì bảng chữ cái hành vi phải đủ phong phú. 5 action cũ + 13 action dưới đây = 18 ký hiệu,
-# tức 324 bigram, khi đó thứ tự mới có gì để mang.
+# thì bảng chữ cái hành vi phải đủ phong phú. 5 action cũ + 14 action dưới đây (đã tính cả
+# IMPRESSION thêm 2026-09-22) = 19 ký hiệu, tức 361 bigram, khi đó thứ tự mới có gì để mang.
 #
 # Mọi action dưới đây CHỌN CÓ CHỦ ĐÍCH để chạy được trên MOBILE (thị trường TMĐT Việt Nam đa số
 # mobile): không dùng gia tốc chuột/hover thuần desktop như tài liệu tham khảo gợi ý, mà dùng
@@ -100,6 +100,12 @@ ACTION_PRODUCT_ZOOM = "PRODUCT_ZOOM"                # xem kỹ ảnh sản phẩ
 ACTION_SEARCH = "SEARCH"                            # tìm kiếm
 ACTION_FILTER_APPLIED = "FILTER_APPLIED"            # lọc — hành vi so sánh
 ACTION_SORT_APPLIED = "SORT_APPLIED"                # sắp xếp (thường là sắp theo giá)
+# ⚠️ 2026-09-22: lấp khoảng trống đã ghi trong docs/canvas/recsys-execution-plan.md §5.6 — tracker
+# trước đây không ghi "item nào đã được HIỂN THỊ" (chỉ ghi item được click/xem chi tiết), nên
+# không phân biệt được "gợi ý đưa ra mà bị bỏ qua" với "chưa từng đưa ra". Bắn 1 event/item hiển
+# thị trong danh sách (fan-out, tái dùng `itemId` số ít có sẵn — KHÔNG đổi schema `user_events`,
+# xem thảo luận tại sao chọn fan-out thay vì cột mảng mới trong commit thêm action này).
+ACTION_IMPRESSION = "IMPRESSION"                    # item xuất hiện trong 1 danh sách hiển thị
 
 # Tập action FE được phép bắn. Endpoint ingest CHỈ nhận các giá trị này — chặn client bịa
 # action_type lạ làm bẩn bảng `user_events` (và làm vỡ mọi feature đếm theo action).
@@ -117,4 +123,5 @@ FE_BEHAVIOR_ACTIONS = {
     ACTION_SEARCH,
     ACTION_FILTER_APPLIED,
     ACTION_SORT_APPLIED,
+    ACTION_IMPRESSION,
 }

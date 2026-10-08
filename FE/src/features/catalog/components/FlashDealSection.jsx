@@ -9,6 +9,7 @@ import { calculateDiscountPercent } from "../../../utils/format";
 import blackFridayBanner from "../../../assets/images/black_friday_banner.png";
 import bestSellerBadge from "../../../assets/images/best_seller_badge.png";
 import newArrivalBadge from "../../../assets/images/new_arrival_badge.png";
+import { getCategoryIconFallback } from "../../../utils/categoryIcon.js";
 
 const TAB_CONFIGS = {
   deal: {
@@ -60,22 +61,6 @@ const MAIN_TABS = [
   { id: "new" },
   { id: "hot" },
 ];
-
-// Helper to fallback resolve beautiful icons for database categories if cat.icon is not provided
-const getCategoryIconFallback = (name) => {
-  const normalized = (name || "").toLowerCase();
-  if (normalized.includes("điện thoại") || normalized.includes("phone")) return "phone_iphone";
-  if (normalized.includes("laptop") || normalized.includes("notebook")) return "laptop";
-  if (normalized.includes("tai nghe") || normalized.includes("earphone") || normalized.includes("headphone") || normalized.includes("headset")) return "headphones";
-  if (normalized.includes("đồng hồ") || normalized.includes("watch")) return "watch";
-  if (normalized.includes("tivi") || normalized.includes("ti vi") || normalized.includes("tv")) return "tv";
-  if (normalized.includes("pc") || normalized.includes("màn hình") || normalized.includes("monitor") || normalized.includes("desktop")) return "desktop_windows";
-  if (normalized.includes("bàn phím") || normalized.includes("chuột") || normalized.includes("keyboard") || normalized.includes("mouse")) return "keyboard";
-  if (normalized.includes("cáp") || normalized.includes("sạc") || normalized.includes("cable") || normalized.includes("charger")) return "cable";
-  if (normalized.includes("phụ kiện") || normalized.includes("accessory")) return "extension";
-  return "category"; // fallback
-};
-
 const VISIBLE_CARDS = 5;
 const CARD_GAP = 12;
 

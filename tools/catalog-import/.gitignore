@@ -2,3 +2,6 @@ node_modules/
 data/
 reports/
 .env
+
+# Catalog lấy từ Tiki.vn — KHÔNG commit (điều khoản Tiki, xem docs/canvas/multi-category-audit.md)
+manifests-tiki*/

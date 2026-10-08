@@ -5,9 +5,9 @@ import { productApi } from "../../../services/productApi";
 import Icon from "../../../components/common/Icon.jsx";
 import FlashDealSection from "../components/FlashDealSection.jsx";
 import SuggestedSection from "../components/SuggestedSection.jsx";
-import CategoryDualSection from "../components/CategoryDualSection.jsx";
-import AccessoriesSection from "../components/AccessoriesSection.jsx";
-import LaptopShowcaseSection from "../components/LaptopShowcaseSection.jsx";
+import CategoryGridSection from "../components/CategoryGridSection.jsx";
+import RootCategoryProductSection from "../components/RootCategoryProductSection.jsx";
+import { getRootCategories } from "../utils/categoryUtils.js";
 import BrandShowcaseSection from "../components/BrandShowcaseSection.jsx";
 import { SubBannersGrid, WidePromoBanner } from "../components/PromoBannersSection.jsx";
 import { aiApi } from "../../../services/aiApi.ts";
@@ -30,11 +30,11 @@ const SLIDES = [
 ];
 
 const SLIDE_TITLES = [
-  { main: "LÊN ĐỜI SIÊU PHẨM", sub: "iPhone 15 Pro Max giảm sâu" },
-  { main: "TIVI MÀN HÌNH LỚN", sub: "Giảm đến 40% - Mua ngay" },
-  { main: "LAPTOP GAMING", sub: "Tặng voucher 1 triệu đồng" },
-  { main: "PHỤ KIỆN GIÁ SỐC", sub: "Chỉ từ 9k - Deal cực ngon" },
-  { main: "LOA - TAI NGHE", sub: "Giảm sâu đến 50%" },
+  { main: "SIÊU SALE ĐA NGÀNH", sub: "Giảm đến 50% - Mua ngay" },
+  { main: "THỜI TRANG MỚI", sub: "Bộ sưu tập mùa mới" },
+  { main: "LÀM ĐẸP CHÍNH HÃNG", sub: "Tặng voucher đến 100 nghìn" },
+  { main: "NHÀ CỬA & ĐỜI SỐNG", sub: "Chỉ từ 9k - Deal cực ngon" },
+  { main: "ĐIỆN TỬ - CÔNG NGHỆ", sub: "Giảm sâu đến 40%" },
 ];
 
 export default function HomePage() {
@@ -69,7 +69,7 @@ export default function HomePage() {
 
   useEffect(() => {
     let active = true;
-    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://vnexpress.net/rss/so-hoa.rss")
+    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://vnexpress.net/rss/kinh-doanh.rss")
       .then((res) => res.json())
       .then((data) => {
         if (active && data.status === "ok" && data.items && data.items.length > 0) {
@@ -156,9 +156,9 @@ export default function HomePage() {
               <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-3 shadow-sm flex flex-col justify-between flex-1">
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1.5 mb-1.5">
                   <span className="text-[11px] font-extrabold text-red-600 tracking-wider uppercase flex items-center gap-1">
-                    <Icon name="newspaper" className="text-sm shrink-0 text-red-600" /> Tin công nghệ
+                    <Icon name="newspaper" className="text-sm shrink-0 text-red-600" /> Tin kinh doanh &amp; tiêu dùng
                   </span>
-                  <a href="https://vnexpress.net/so-hoa" target="_blank" rel="noopener noreferrer" className="text-[10px] text-slate-400 hover:text-red-500 transition-colors font-bold">Xem thêm</a>
+                  <a href="https://vnexpress.net/kinh-doanh" target="_blank" rel="noopener noreferrer" className="text-[10px] text-slate-400 hover:text-red-500 transition-colors font-bold">Xem thêm</a>
                 </div>
                 <div className="flex flex-col gap-2.5 flex-1 justify-center">
                   {loadingNews ? (
@@ -257,14 +257,13 @@ export default function HomePage() {
       {/* Ảnh 2: Gợi ý cho bạn */}
       <SuggestedSection products={personalizedProducts} loading={loading} />
 
-      {/* Ảnh 3: Điện thoại / Máy tính bảng */}
-      <CategoryDualSection categories={categories} />
+      {/* Danh mục nổi bật (mọi danh mục gốc) */}
+      <CategoryGridSection categories={categories} />
 
-      {/* Ảnh 4: Phụ kiện chất lượng */}
-      <AccessoriesSection categories={categories} />
-
-      {/* Ảnh 5: Laptop */}
-      <LaptopShowcaseSection categories={categories} />
+      {/* Mỗi danh mục gốc 1 khối sản phẩm (tối đa 6) — tự sinh theo cây danh mục từ API */}
+      {getRootCategories(categories).filter((c) => !c.parentId).slice(0, 6).map((cat) => (
+        <RootCategoryProductSection key={cat.id} category={cat} />
+      ))}
 
       {/* Brand Showcase Section */}
       <BrandShowcaseSection />
