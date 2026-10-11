@@ -135,6 +135,8 @@ def main() -> None:
     ap.add_argument("--ablation", action="store_true", help="chạy cả thang cấu hình SASRec (GĐ3)")
     ap.add_argument("--patience", type=int, help="ghi đè patience cho mọi cấu hình (mặc định 3)")
     ap.add_argument("--max-epochs", type=int, help="ghi đè max_epochs cho mọi cấu hình (mặc định 30)")
+    ap.add_argument("--only-steps", help="chỉ chạy các bậc ablation này, ngăn bằng dấu phẩy "
+                                         "(vd \"+action,+action(shuffled)\") — để chạy bù khi bị ngắt giữa chừng")
     ap.add_argument("--out", default="eval_result.json")
     args = ap.parse_args()
 
@@ -167,6 +169,12 @@ def main() -> None:
     if args.ablation and not split.n_actions:
         print("! Du lieu khong co cot action -> bo 2 bac '+action' cua thang ablation")
         ladder = [step for step in ladder if not step[1].use_action]
+    if args.only_steps:
+        wanted = [s.strip() for s in args.only_steps.split(",")]
+        unknown = set(wanted) - {label for label, _ in ABLATION_LADDER}
+        if unknown:
+            raise SystemExit(f"Bac khong ton tai: {sorted(unknown)}")
+        ladder = [step for step in ladder if step[0] in wanted]
     sasrec = [run_sasrec(split, cfg, label, args.seeds) for label, cfg in ladder]
 
     # ---------- So sánh ghép cặp (HR@10, SASRec gộp seed theo case) ----------
@@ -211,7 +219,10 @@ def main() -> None:
         "data": split.stats, "itemknn_tuned": {"name": knn.name, "val_ndcg10": knn.val_ndcg10},
         "results": {n: {t: strip(r[t]) for t in TRACKS} for n, r in results.items()},
         "sasrec": [{"label": run["label"],
-                    "runs": [{**r["model"].describe(), "results": {t: strip(r["results"][t]) for t in TRACKS}} for r in run["runs"]],
+                    # per_case_hr10: kết quả TỪNG case (cùng thứ tự case test) — để ghép/so ghép cặp các lần
+                    # chạy khác nhau sau này (vd chạy bù vài bậc), không phải chạy lại cả thang.
+                    "runs": [{**r["model"].describe(), "results": {t: strip(r["results"][t]) for t in TRACKS},
+                              "per_case_hr10": {t: r["results"][t]["_hr10"] for t in TRACKS}} for r in run["runs"]],
                     "summary": {t: strip(run["summary"][t]) for t in TRACKS}} for run in sasrec],
         "comparisons_hr10": comparisons, "runtime_s": round(time.time() - t0, 1),
     }
