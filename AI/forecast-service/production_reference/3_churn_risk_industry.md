@@ -1,5 +1,7 @@
 # Industry Reference: Churn Risk Prediction & Expected Loss in Production
 
+> **Ghi chú tham khảo do AI tổng hợp — không phải mô tả hệ thống, không dùng làm trích dẫn.**
+
 *Source: Compiled from Applied Machine Learning in E-Commerce (2025-2026).*
 
 ## 1. The Fallacy of Pure Classification in Churn

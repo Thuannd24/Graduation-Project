@@ -1,5 +1,9 @@
 # Plan thực thi — Tầng 0: Sửa nền đo lường (churn risk)
 
+> **🗄️ Tài liệu lịch sử / thiết kế ban đầu.** Plan thi hành Tầng 0 (07–08/2026), số đo trên bộ sinh
+> synthetic. Nhãn v2 (120 ngày) chốt ở đây vẫn là **mặc định trong code**; còn số liệu báo cáo hiện hành
+> (nhãn v3 60 ngày, thí nghiệm REES46 thật) ở [`churn-risk-feature-overview.md`](churn-risk-feature-overview.md).
+
 > Plan thi hành cho **Tầng 0** của [`churn-risk-roadmap.md`](churn-risk-roadmap.md). Tick checkbox khi
 > xong, ghi ghi-chú-lệch ngay dưới mục tương ứng. Mọi số đo đi vào
 > [`churn-risk-log.md`](churn-risk-log.md), không ghi ở đây.
@@ -20,7 +24,7 @@
   - **Rủi ro đã lo KHÔNG xảy ra:** hiệu chỉnh làm con số headline **TĂNG** — K=50: 2,94× → **4,04×**.
   - **Còn lại (việc riêng, cần quyết định):** có đưa calibrator + ngưỡng mới vào `risk_scoring.py`
     (đường phát voucher thật) hay không — xem "Đề xuất áp dụng" cuối mục 0.1.
-- [ ] 0.2 — Định nghĩa lại nhãn churn
+- [x] 0.2 — Định nghĩa lại nhãn churn
   - [x] **0.2.a Lưới chẩn đoán (không phá hoại)** — XONG, 12 biến thể, số đo ở
         [`churn-risk-log.md`](churn-risk-log.md) mục 2026-08-01. Đề xuất: **cửa sổ 120 ngày · nguồn
         `orders` · lọc ≥2 đơn DELIVERED** (base rate 0.2624 — biến thể DUY NHẤT vào khoảng mục tiêu

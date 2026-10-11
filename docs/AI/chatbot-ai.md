@@ -2,7 +2,7 @@
 
 > Tài liệu mô tả **đúng hệ thống đang chạy thật** trong `AI/chatbot-service` (không phải bản thiết kế ban đầu). Mọi số liệu, tên model, ngưỡng cấu hình trong file này đều lấy trực tiếp từ code — nếu code đổi mà quên cập nhật file này thì coi như file này sai, không phải ngược lại.
 >
-> Cập nhật lần gần nhất: sau đợt tái cấu trúc + vá lỗi độ chính xác toàn diện (xem mục 9 — lịch sử các lỗi đã sửa).
+> Cập nhật lần gần nhất: 2026-10-11 (đối chiếu lại code: nguồn index chính sách, cửa sổ lịch sử, chuyển nhân viên, giới hạn lọc giá). Báo cáo review phiên bản cũ (Gemini) ở `AI/chatbot-service/REVIEW_REPORT.md`.
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Hạng mục | Thiết kế ban đầu (tài liệu cũ) | Thực tế đang chạy |
 | :--- | :--- | :--- |
-| Phân loại Intent | Fine-tune PhoBERT Classifier | **1 lệnh gọi LLM (DeepSeek)**, PhoBERT chỉ còn là fallback từ khoá khi LLM lỗi |
+| Phân loại Intent | Fine-tune PhoBERT Classifier | **1 lệnh gọi LLM (DeepSeek)**; khi LLM lỗi rơi về heuristic từ khoá (`nlu/heuristics.py`) — **không có model PhoBERT nào được nạp** |
 | Sentiment | PhoBERT-sentiment (ONNX) | **Cùng 1 lệnh gọi LLM ở trên** trả luôn sentiment, fallback từ khoá khi LLM lỗi |
 | LLM sinh câu trả lời | Gemini 1.5 Flash / GPT-4o-mini | **DeepSeek (`deepseek-chat`) — nhà cung cấp DUY NHẤT** cho cả NLU lẫn sinh câu trả lời |
 | Giao thức trả về | SSE streaming (chữ hiện dần) | **JSON thường 1 cục**, không có streaming thật (FE gọi POST thường, không phải EventSource) |
@@ -32,8 +32,8 @@ Gateway :8080  (CircuitBreaker riêng "ai-chatbot-cb", timeout 60s)
   ▼
 chatbot-service :8002  →  handle_chat_message()
   │
-  ├─ 1. Lấy 10 lượt chat gần nhất từ Redis (trước khi phân loại, để NLU thấy ngữ cảnh)
-  ├─ 2. NLU: 1 lệnh gọi DeepSeek → {intent, sentiment, order_id, account_topic}
+  ├─ 1. Lấy tối đa 10 lượt (20 tin) gần nhất từ Redis (trước khi phân loại, để NLU thấy ngữ cảnh)
+  ├─ 2. NLU: 1 lệnh gọi DeepSeek (chỉ kèm 2 tin gần nhất) → {intent, sentiment, order_id, account_topic}
   ├─ 3. Lưu tin nhắn user vào Redis
   ├─ 4. Định tuyến theo intent (code quyết định, KHÔNG phải LLM tự chọn tool):
   │     ├─ order_tracking / order_action → gọi thẳng order/user/promotion-service (KHÔNG qua LLM)
@@ -42,7 +42,7 @@ chatbot-service :8002  →  handle_chat_message()
   │     ├─ policy_faq                    → FAISS retrieve + tính điểm tin cậy
   │     └─ complaint / general_chat      → không có context riêng
   ├─ 5. Ghép system prompt (nội quy + context vừa lấy + tên khách nếu đã đăng nhập)
-  ├─ 6. Gọi DeepSeek sinh câu trả lời cuối (dùng lại lịch sử đã lấy ở bước 1)
+  ├─ 6. Gọi DeepSeek sinh câu trả lời cuối (dùng lại TOÀN BỘ lịch sử đã lấy ở bước 1, tối đa 20 tin)
   └─ 7. Lưu câu trả lời vào Redis → trả JSON {message, intent, products, card}
 ```
 
@@ -54,7 +54,7 @@ File chính: [chatbot.py](../../AI/chatbot-service/app/api/endpoints/chatbot.py)
 
 File: [app/services/nlu/classifier.py](../../AI/chatbot-service/app/services/nlu/classifier.py)
 
-Không dùng model phân loại riêng (PhoBERT) như thiết kế ban đầu. Thay vào đó, **1 lệnh gọi DeepSeek duy nhất** với `response_format: json_object`, trả về đúng lúc: intent, sentiment, order_id, account_topic.
+Không dùng model phân loại riêng (PhoBERT) như thiết kế ban đầu — `INTENT_MODEL_NAME`/`SENTIMENT_MODEL_NAME` (`vinai/phobert-base`…) trong `config.py` chỉ là chuỗi còn sót, được in ra ở `GET /health` nhưng không model nào được nạp. Thay vào đó, **1 lệnh gọi DeepSeek duy nhất** với `response_format: json_object`, trả về đúng lúc: intent, sentiment, order_id, account_topic.
 
 **8 nhãn intent** (nhiều hơn 6 nhãn trong thiết kế cũ — tách `order_action` ra khỏi `order_tracking` vì luồng xử lý khác hẳn nhau):
 
@@ -92,13 +92,15 @@ Không có vector store cho sản phẩm (khác thiết kế ban đầu). Lý do
 
 **Hạn chế đã biết**: đây vẫn là so khớp chuỗi, không hiểu ngữ nghĩa. Câu hỏi như "sản phẩm nào bán chạy nhất" không thể trả lời đúng vì "độ bán chạy" không phải thuộc tính có thể tìm bằng từ khoá.
 
+**Ràng buộc giá trong câu hỏi KHÔNG được áp làm bộ lọc**: `_search_one()` chỉ gửi `q`, `page`, `size` tới `/api/v1/public/products/search`, không có tham số giá. Ví dụ đo ngày 2026-10-11: hỏi "tai nghe dưới 2 triệu" nhận về điện thoại giá 10–20 triệu.
+
 ---
 
 ## 4. RAG cho chính sách — FAISS thật
 
 File: [app/services/rag/policy_rag.py](../../AI/chatbot-service/app/services/rag/policy_rag.py)
 
-Đây là phần **đúng với thiết kế ban đầu**: dữ liệu chính sách (`data/policies/all-policies.json`) được băm nhỏ, encode bằng model embedding đa ngôn ngữ **`intfloat/multilingual-e5-base`** (build bằng [scripts/build_policy_index.py](../../AI/chatbot-service/scripts/build_policy_index.py)), lưu vào FAISS index tại `data/index/policy.index`.
+Đây là phần **đúng với thiết kế ban đầu**: dữ liệu chính sách là các file Markdown trong `FE/src/assets/policies_source/*.md` (11 file, đường dẫn cấu hình bởi `POLICY_DATA_DIR` trong `config.py`), được băm nhỏ theo heading `##`, encode bằng model embedding đa ngôn ngữ **`intfloat/multilingual-e5-base`** (build bằng [scripts/build_policy_index.py](../../AI/chatbot-service/scripts/build_policy_index.py)), lưu vào FAISS index tại `data/index/policy.index` (+ metadata `data/index/policy_meta.json`). File `data/policies/all-policies.json` là bản xuất JSON của cùng 11 chính sách nhưng **không được code nào đọc** — sửa file này không làm đổi index.
 
 **Ngưỡng độ tin cậy** (khác số trong thiết kế ban đầu — đã hiệu chỉnh lại theo đo đạc thực tế trên model này, xem [config.py](../../AI/chatbot-service/app/core/config.py)):
 
@@ -152,7 +154,7 @@ File: [app/services/memory.py](../../AI/chatbot-service/app/services/memory.py)
 - Lưu trong Redis, key `chat:{session_id}:history`, dạng list JSON.
 - **Sliding window**: giữ tối đa 10 lượt (20 tin nhắn) gần nhất — **không có tóm tắt (summarization)** khi vượt quá, chỉ cắt bớt tin cũ nhất.
 - TTL 24 giờ, tự xoá.
-- 2 tin gần nhất được đưa vào cả lệnh gọi NLU lẫn lệnh gọi sinh câu trả lời cuối (lấy 1 lần dùng chung, không gọi Redis 2 lần trong 1 request).
+- Lịch sử lấy 1 lần mỗi request (không gọi Redis 2 lần): lệnh gọi NLU chỉ nhận **2 tin gần nhất** (`classifier.py`, `[-2:]`, để giảm token); lệnh gọi sinh câu trả lời cuối nhận **toàn bộ lịch sử đã lấy, tối đa 20 tin** (`memory.get_history(max_turns=10)` → `llm_client.generate_text`).
 
 ---
 
@@ -163,5 +165,6 @@ File: [app/services/memory.py](../../AI/chatbot-service/app/services/memory.py)
 - **Chống bịa**: system prompt (`data/system-prompt.md`) yêu cầu chỉ trả lời dựa trên context, nói rõ "chưa có thông tin" nếu không có — không có bước "cross-check số liệu" tự động nào khác.
 - **Escalate cảm xúc tiêu cực**: hiện chỉ `logger.warning` khi sentiment_score > 0.80, **chưa** thực sự gửi thông báo Slack/Zalo nào (khác thiết kế cũ nói "Webhook Alert"). Cũng chưa có cơ chế đếm "2 lần tiêu cực liên tiếp" — mỗi lần vượt ngưỡng là 1 lần log độc lập.
 - **`intent: "escalate"`**: chỉ gắn khi intent là `complaint`, để FE bật flow chuyển nhân viên có sẵn.
+- **Chuyển nhân viên thật** không đi qua chatbot-service: `AIChatbotWidget.jsx` → `chatApi.handoverToStaff()` → `PUT /public/chat/rooms/{roomId}/handover` của **BE/chat-service** (`CustomerChatController` → `ChatRoomServiceImpl.handoverRoom`), chuyển phòng chat thật (tạo bằng `getOrCreateRoom`) sang nhân viên. Endpoint `POST /chatbot/escalate` (và `/chat/sessions/escalate`) của chatbot-service chỉ là **stub ghi log**, trả `SUCCESS` mà không làm gì.
 
 ---

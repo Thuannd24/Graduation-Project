@@ -1,5 +1,20 @@
 # Dashboard AI — Trợ Lý Phân Tích Chiến Lược Cho Admin
 
+> **🚧 THIẾT KẾ — chưa cài đặt như mô tả (kiểm tra code 2026-10-11).** Không có Streamlit, LightGBM,
+> Prophet, LSTM/LSTM Autoencoder hay LangChain nào trong hệ thống. Thực tế: tab admin
+> `FE/src/features/admin/components/AnalyticsAITab.jsx` (qua `FE/src/services/aiApi.ts`) gọi 3 endpoint
+> của forecast-service (`AI/forecast-service/app/api/endpoints/forecast.py`):
+>
+> | Endpoint | Thực tế trả về |
+> |---|---|
+> | `GET /admin/analytics/segmentation` | **Số thật**: phân bố 4 phân khúc (At Risk / Lapsed / Loyal Regulars / VIP Champions) từ model KMeans k=4 của churn, chấm qua `risk_scoring_service.predict()` trên bảng feature store, chỉ dân số ≥2 đơn DELIVERED; `is_demo_data: false` |
+> | `GET /admin/analytics/demand-forecasting` | **Dữ liệu minh họa**: 10 điểm sinh bằng đường tăng tuyến tính + nhiễu `np.random`, không có model; `is_demo_data: true` |
+> | `GET /admin/analytics/anomalies` | **Dữ liệu minh họa**: 3 dòng giao dịch hardcode; `is_demo_data: true` |
+>
+> FE đọc cờ `is_demo_data` để hiện banner "dữ liệu minh họa". Các chỉ số MAPE / F1 / Silhouette… ở dưới
+> là **mục tiêu thiết kế, chưa được đo**. Phân khúc khách hàng thật: xem
+> [`churn-risk-feature-overview.md`](churn-risk-feature-overview.md).
+
 > Tài liệu kỹ thuật chi tiết về hệ thống AI Dashboard phục vụ vận hành, quản lý kho hàng và phân tích khách hàng. Dashboard sử dụng Python/Streamlit để hiện thực hóa 3 mô hình học máy: Dự báo doanh thu (Demand Forecasting), Phát hiện bất thường (Anomaly Detection), và Phân cụm khách hàng (Customer Segmentation).
 
 ---
@@ -22,7 +37,7 @@ Mục tiêu là dự báo doanh thu và lượng tiêu thụ sản phẩm cho 30
 
 ### Đối sánh các mô hình dự báo
 
-| Mô hình | Ý tưởng cốt lõi | Ưu điểm | Hạn chế | Độ khó train | MAPE thực tế | Khuyến nghị |
+| Mô hình | Ý tưởng cốt lõi | Ưu điểm | Hạn chế | Độ khó train | MAPE kỳ vọng (tham khảo, chưa đo) | Khuyến nghị |
 | :--- | :--- | :--- | :--- | :---: | :---: | :---: |
 | **LightGBM + Features** | Chuyển chuỗi thời gian thành bài toán học máy dạng bảng (Tabular Regression). | Tối ưu hóa rất tốt trên dữ liệu dạng bảng. Dễ dàng thêm các biến ngoại vi (thời tiết, khuyến mãi). | Yêu cầu thiết kế đặc trưng (Feature Engineering) kỹ lưỡng. Không tự suy diễn tốt ngoài khoảng dữ liệu đã học. | Trung bình | **8% - 15%** | **Khuyến nghị** ⭐ |
 | **Prophet (Facebook)** | Mô hình cộng tính (Additive): Phân rã chuỗi thành trend + seasonality + holidays. | Tự động xử lý tính chu kỳ ngày/tuần/năm. Code cực kỳ ngắn (5 dòng). Trả về khoảng tin cậy (Confidence Interval) đẹp. | Kém hiệu quả nếu chuỗi thời gian có quá nhiều biến động ngắn hạn đột ngột hoặc phụ thuộc sâu vào thời tiết. | Dễ | **12% - 20%** | Baseline tốt |

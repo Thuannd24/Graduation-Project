@@ -1,12 +1,15 @@
 # Academic Defense: SASRec Math & Optimization (Sampled Softmax vs BCE)
 
+> **Ghi chú tham khảo do AI tổng hợp — không phải mô tả hệ thống, không dùng làm trích dẫn.**
+
 *Target: Defending the Loss Function and Negative Sampling strategies in the SASRec implementation.*
 *Context: The project explicitly uses "Sampled Softmax (không BCE) — tránh overconfidence đã ghi nhận ở gSASRec".*
+*Checked against code (`AI/recs-service/evaluation/sasrec_trainer.py`, which `evaluation/train_serving.py` uses to train the served model): sampled softmax IS implemented — `F.cross_entropy` over [1 positive + `n_negatives` negatives], default `n_negatives = 50`. Negatives are drawn **proportional to item popularity, with replacement** (`torch.multinomial`), not uniformly and without excluding items the user interacted with; logQ correction exists but is **off by default** (`logq=False`).*
 
 ## 1. The Bottleneck of Full Cross-Entropy (CE) Loss
 In standard classification tasks (like predicting the next word in NLP), models use **Full Cross-Entropy (CE) Loss**. This requires computing the probability of *every* possible class (using Softmax) and penalizing the model.
 - **The Problem in E-commerce:** NLP has a vocabulary of ~50,000 words. An e-commerce catalog can have millions of products. Computing $e^{x}$ for 1,000,000 items at every single sequence step, for every user, in every epoch, requires massive VRAM and computational power. It is mathematically intractable for standard hardware (especially CPU-only environments like Intel UHD).
-- **The Solution:** We must approximate this distribution. We do this by evaluating the true next item against a small subset of "Negative Samples" (items the user did *not* interact with).
+- **The Solution:** We must approximate this distribution. We do this by evaluating the true next item against a small subset of "Negative Samples" (in this project: items sampled by popularity, which may occasionally include items the user did interact with).
 
 ## 2. Binary Cross-Entropy (BCE) vs. Softmax
 The original SASRec paper (Kang & McAuley, 2018) proposed using **Binary Cross-Entropy (BCE) with 1 Negative Sample**. 
@@ -19,7 +22,7 @@ Recent academic papers (notably research around **gSASRec** and comparisons with
 3. **Loss of Ranking Nuance:** Because the model thinks it's already "perfect", the gradients vanish. It stops learning the subtle differences between a "good" recommendation and a "great" recommendation. This is why original SASRec often loses to BERT4Rec in Top-10 ranking metrics.
 
 ## 3. The Superiority of Sampled Softmax (The Project's Choice)
-To solve the overconfidence problem without blowing up RAM, the project implements **Sampled Softmax with $N$ negatives** (e.g., $N=50$ or $256$).
+To solve the overconfidence problem without blowing up RAM, the project implements **Sampled Softmax with $N$ negatives** ($N=50$ by default, configurable).
 
 **The Mathematical Mechanism:**
 Instead of treating the problem as $N$ independent Binary classifications, we treat it as a **Multi-class classification over a restricted set**.

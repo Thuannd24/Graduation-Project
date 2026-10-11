@@ -1,5 +1,11 @@
 # AI Churn Detection → Auto-trigger Campaign — Implementation Plan
 
+> **🗄️ Tài liệu lịch sử / thiết kế ban đầu.** Plan Phase 0–7 (hoàn tất 07/2026), viết khi dữ liệu còn là
+> bộ sinh synthetic và nhãn churn còn là v1/v2. Các con số, định nghĩa nhãn và mô tả dữ liệu ở đây đã bị
+> thay bởi đợt re-baseline trên REES46 thật (10/2026). Mô tả hiện hành:
+> [`churn-risk-feature-overview.md`](churn-risk-feature-overview.md); trạng thái việc tiếp theo:
+> [`churn-risk-roadmap.md`](churn-risk-roadmap.md).
+
 > Đây là plan triển khai thực thi, đi kèm [`recommendation-complete.md`](recommendation-complete.md)
 > (blueprint concept gốc). File này để làm dần từng phase — tick checkbox khi xong, ghi chú lệch
 > phát sinh ngay dưới mục tương ứng để không mất context giữa các buổi làm việc.

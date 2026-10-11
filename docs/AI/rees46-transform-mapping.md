@@ -98,6 +98,10 @@ không rải bừa. Hệ quả trung thực: nguồn này gần như **không c�
    đa ngành cho phần còn lại.
 
 ## 5. Trạng thái
+
+> **Ghi chú 2026-10-11:** mục này là trạng thái **sáng 2026-10-02**, đã bị mục 6–7 thay thế (chuyển sang bản đủ
+> 12/2019–4/2020). Theo [`churn-risk-log.md`](churn-risk-log.md) mục 2026-10-05, bản đủ đã được nạp vào DB
+> (332.347 user / 102.004 đơn / 7.378.602 sự kiện). Thư mục `data/` bị gitignore nên không kiểm được từ repo.
 - `data/transformed/rees46_multi_f0.03/`: 159.691 user, 3,24 triệu sự kiện, 41.690 đơn, 7.637 khách ≥ 2 đơn — **CHƯA nạp**
   (chờ sửa 3.1 + quyết định mục 4).
 - DB đang chứa bộ thử `_test` (28K user REES46) → sẽ bị `--force` dọn khi nạp bản chính.
@@ -135,6 +139,12 @@ mã; SP mới hoàn toàn → suy từ brand (bảng brand → mã đếm ở 10
 - 3–4/2020 trùng COVID (Nga) → ghi trong manifest.
 
 ## 7. Trạng thái cuối ngày 2026-10-02 + việc làm tiếp (2026-10-03)
+
+> **Ghi chú 2026-10-11:** danh sách dưới đây là trạng thái **tính đến 2026-10-02**, không được cập nhật tick
+> từng việc. Kiểm được từ tài liệu khác: việc 2 (transform bản đủ), 3 (nạp DB) và 4 (re-baseline) đã làm trước/trong ngày 2026-10-05 —
+> nhưng re-baseline dùng đủ **11** feature hiện có, không phải 9 như dự kiến ở việc 4 (xem
+> [`churn-risk-log.md`](churn-risk-log.md) mục 2026-10-05). Trạng thái các việc 1 (điều tra giỏ tháng 1),
+> 5 và 6 không xác minh lại trong lần rà soát này.
 
 **Đã có trên đĩa** (`data/external/rees46-multi-full/`, gitignore): 2019-Dec, 2020-Jan, 2020-Feb, 2020-Mar (đã `gzip -t`), 2020-Apr
 (đang ghép/kiểm tra lúc dừng — xem `data/experiment-results/download_feb_apr.log`; nếu báo HỎNG: chạy lại

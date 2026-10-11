@@ -1,5 +1,10 @@
 # Nhật ký làm việc — AI Churn Risk (nhánh `ai/behavoir`)
 
+> **⚠️ File bằng chứng KHÔNG có trong repo.** Các file JSON kết quả được trích dẫn trong nhật ký này
+> (vd `data/experiment-results/...json`, `cart_recovery.json`) nằm dưới thư mục `data/`, bị `.gitignore`
+> loại (`data/` và `**/data/`) — chỉ tồn tại trên máy đã chạy thí nghiệm. Muốn kiểm lại số liệu phải chạy
+> lại script tương ứng trong `AI/forecast-service/app/training/experiments/`.
+
 > Ghi theo **thứ tự thời gian**, chỉ ý chính: thảo luận → chốt plan → code → test → kết quả →
 > quyết định tiếp theo. Mục đích là không mất context giữa các buổi và trả lời được "đã làm gì,
 > vì sao làm vậy, đo được bao nhiêu" khi bảo vệ.
