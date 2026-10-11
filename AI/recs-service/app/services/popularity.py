@@ -1,21 +1,17 @@
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 from shared_common.logger import get_logger
+
+from app.services.catalog import get_top_products
 
 logger = get_logger(__name__)
 
+
 class PopularityRecService:
     def get_popular_items(self, top_k: int = 10) -> List[Dict[str, Any]]:
-        """
-        Retrieves generally trending items (most views / purchases).
-        """
+        """Sản phẩm ACTIVE bán chạy nhất (fallback cho cold-start và khi SASRec chưa sẵn sàng)."""
         logger.info(f"Retrieving top {top_k} trending items for cold-start fallback...")
-        
-        # Real implementation: query Redis sorted set or database aggregated counts.
-        # Mocking values for base structure
-        trending_items = [
-            {"id": f"prod_trend_{i}", "name": f"Mock Trending Product {i}", "price": 299000.0, "score": float(100 - i)}
-            for i in range(top_k)
-        ]
-        return trending_items
+        return get_top_products(top_k)
+
 
 popularity_rec_service = PopularityRecService()

@@ -12,6 +12,10 @@ export function parseExpression(nodeType, expr) {
     const m = expr.match(/totalSpending\s*(>=|<=|>|<|==)\s*(\d+)/);
     return { operator: m ? m[1] : ">=", amount: m ? Number(m[2]) : 5000000 };
   }
+  if (nodeType === "Condition_ChurnRiskTier") {
+    const m = expr.match(/churnProbability\s*(>=|<=|>|<|==)\s*([\d.]+)/);
+    return { operator: m ? m[1] : ">=", threshold: m ? Number(m[2]) : 0.5 };
+  }
   if (nodeType === "Condition_Location") {
     const m = expr.match(/targetProvince\s*==\s*['"]([^'"]+)['"]/);
     return { value: m ? m[1] : "Hanoi" };
@@ -51,6 +55,20 @@ export function buildBranchProps(nodeType, params) {
       timeRange: "LAST_30_DAYS"
     };
   }
+  if (nodeType === "Condition_ChurnRiskTier") {
+    const op = params.operator || ">=";
+    // Kẹp [0,1] — churnProbability là xác suất hiệu chỉnh, luôn trong khoảng này (xem
+    // forecast-service risk_scoring.py); giá trị ngoài khoảng chỉ tạo nhánh chết, không lỗi.
+    const threshold = Math.min(1, Math.max(0, Number(params.threshold) || 0));
+    let javaOp = "GREATER_THAN";
+    if (op === "<=" || op === "<") javaOp = "LESS_THAN";
+    else if (op === "==") javaOp = "EQUAL";
+    return {
+      expression: "${churnProbability " + op + " " + threshold + "}",
+      operator: javaOp,
+      value: threshold
+    };
+  }
   if (nodeType === "Condition_Location") {
     const v = params.value || "";
     return { expression: "${targetProvince == '" + v + "'}", operator: "EQUAL", value: [v] };
@@ -83,6 +101,8 @@ export function createDefaultBranchProps(nodeType, overrides = {}) {
       return buildBranchProps(nodeType, { rank: "VIP", ...overrides });
     case "Condition_TotalSpending":
       return buildBranchProps(nodeType, { operator: ">=", amount: 5000000, ...overrides });
+    case "Condition_ChurnRiskTier":
+      return buildBranchProps(nodeType, { operator: ">=", threshold: 0.5, ...overrides });
     case "Condition_Location":
       return buildBranchProps(nodeType, { value: "", ...overrides });
     case "Condition_ContainsCategory":

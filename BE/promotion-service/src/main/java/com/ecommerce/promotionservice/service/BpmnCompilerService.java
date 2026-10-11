@@ -42,6 +42,7 @@ public class BpmnCompilerService {
             "Trigger_Event_NewUser",
             "Trigger_Event_OrderSuccess",
             "Trigger_Event_ReviewProduct",
+            "Trigger_Event_ChurnRisk",
             "Trigger_Timer_Schedule"
     );
 
@@ -50,7 +51,8 @@ public class BpmnCompilerService {
             "Condition_TotalSpending",
             "Condition_Location",
             "Condition_ContainsCategory",
-            "Condition_ContainsProduct"
+            "Condition_ContainsProduct",
+            "Condition_ChurnRiskTier"
     );
 
     public String compile(WorkflowGraphDto graph, String processKey, String processName) {

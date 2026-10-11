@@ -70,6 +70,38 @@ function IfBranchForm({ node, edge, commit, lookup }) {
         </div>
       )}
 
+      {nt === "Condition_ChurnRiskTier" && (
+        <div style={ROW_STYLE}>
+          <div className="cb-fg" style={CELL_STYLE}>
+            <label style={{ fontSize: 9 }}>Phép toán</label>
+            <select
+              value={parsed.operator || ">="}
+              onChange={e => commit({ operator: e.target.value, threshold: parsed.threshold ?? 0.5 })}
+            >
+              <option value=">=">≥</option>
+              <option value=">">&gt;</option>
+              <option value="<=">≤</option>
+              <option value="<">&lt;</option>
+              <option value="==">=</option>
+            </select>
+          </div>
+          <div className="cb-fg" style={CELL_STYLE}>
+            <label style={{ fontSize: 9 }}>Xác suất rời bỏ (%)</label>
+            <input
+              type="number"
+              min={0}
+              max={100}
+              step={1}
+              value={Math.round((parsed.threshold ?? 0.5) * 100)}
+              onChange={e => commit({
+                operator: parsed.operator || ">=",
+                threshold: Math.min(100, Math.max(0, Number(e.target.value))) / 100
+              })}
+            />
+          </div>
+        </div>
+      )}
+
       {nt === "Condition_Location" && (
         <div className="cb-fg" style={{ marginBottom: 0 }}>
           <label style={{ fontSize: 9 }}>Khi tỉnh/thành là</label>

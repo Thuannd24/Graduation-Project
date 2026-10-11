@@ -7,6 +7,7 @@ import com.ecommerce.grpc.product.ProductVariantInfoGrpc;
 import com.ecommerce.orderservice.dto.request.CartItemRequest;
 import com.ecommerce.orderservice.dto.response.CartItemResponse;
 import com.ecommerce.orderservice.dto.response.CartResponse;
+import com.ecommerce.orderservice.event.producer.CartEventProducer;
 import com.ecommerce.orderservice.grpc.InventoryGrpcClient;
 import com.ecommerce.orderservice.grpc.ProductGrpcClient;
 import com.ecommerce.orderservice.service.CartService;
@@ -34,6 +35,7 @@ public class CartServiceImpl implements CartService {
     private final ProductGrpcClient productGrpcClient;
     private final InventoryGrpcClient inventoryGrpcClient;
     private final ObjectMapper objectMapper;
+    private final CartEventProducer cartEventProducer;
 
     private static final String CART_PREFIX = "cart:";
 
@@ -260,7 +262,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartResponse addItemToCart(String cartKey, CartItemRequest itemRequest) {
+    public CartResponse addItemToCart(String cartKey, String sessionId, CartItemRequest itemRequest) {
         String key = getRedisKey(cartKey);
         String fieldKey = getFieldKey(itemRequest.getProductId(), itemRequest.getVariantId());
 
@@ -287,11 +289,16 @@ public class CartServiceImpl implements CartService {
             throw new RuntimeException("Cart update failed: " + e.getMessage());
         }
 
+        // itemRequest.getQuantity() đã được set lại thành tổng số lượng mới bên trong try block
+        // ở trên (newQuantity không còn trong scope ở đây).
+        cartEventProducer.publishCartUpdated(cartKey, sessionId, itemRequest.getProductId(), itemRequest.getVariantId(),
+                itemRequest.getQuantity(), "ADD_ITEM");
+
         return getCart(cartKey);
     }
 
     @Override
-    public CartResponse updateItemQuantity(String cartKey, Long productId, Long variantId, Integer quantity) {
+    public CartResponse updateItemQuantity(String cartKey, String sessionId, Long productId, Long variantId, Integer quantity) {
         String key = getRedisKey(cartKey);
         String fieldKey = getFieldKey(productId, variantId);
 
@@ -302,12 +309,14 @@ public class CartServiceImpl implements CartService {
                 if (existingItem != null) {
                     if (quantity <= 0) {
                         redisTemplate.opsForHash().delete(key, fieldKey);
+                        cartEventProducer.publishCartUpdated(cartKey, sessionId, productId, variantId, 0, "REMOVE_ITEM");
                     } else {
                         // Validate stock before updating
                         validateStock(productId, variantId, quantity);
                         existingItem.setQuantity(quantity);
                         redisTemplate.opsForHash().put(key, fieldKey, existingItem);
                         redisTemplate.expire(key, Duration.ofDays(30));
+                        cartEventProducer.publishCartUpdated(cartKey, sessionId, productId, variantId, quantity, "UPDATE_QTY");
                     }
                 }
             }
@@ -322,16 +331,18 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartResponse removeItemFromCart(String cartKey, Long productId, Long variantId) {
+    public CartResponse removeItemFromCart(String cartKey, String sessionId, Long productId, Long variantId) {
         String key = getRedisKey(cartKey);
         String fieldKey = getFieldKey(productId, variantId);
         redisTemplate.opsForHash().delete(key, fieldKey);
+        cartEventProducer.publishCartUpdated(cartKey, sessionId, productId, variantId, 0, "REMOVE_ITEM");
         return getCart(cartKey);
     }
 
     @Override
-    public void clearCart(String cartKey) {
+    public void clearCart(String cartKey, String sessionId) {
         String key = getRedisKey(cartKey);
         redisTemplate.delete(key);
+        cartEventProducer.publishCartUpdated(cartKey, sessionId, null, null, 0, "CLEAR_CART");
     }
 }

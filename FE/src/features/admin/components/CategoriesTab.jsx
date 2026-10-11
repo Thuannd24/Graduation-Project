@@ -340,7 +340,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
     }
   };
 
-  // Danh mục cha gộp cả sản phẩm ở danh mục con (vd "Điện thoại, Tablet" gồm cả iPhone/Samsung/Xiaomi...)
+  // Danh mục cha gộp cả sản phẩm ở danh mục con (vd "Thời trang" gồm cả Thời trang nam/nữ/trẻ em...)
   const categoryDescendantIds = useMemo(() => {
     const map = new Map();
     function collect(node) {
@@ -997,7 +997,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                     const slug = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").replace(/([^a-z0-9\s-]|_)+/g, "").trim().replace(/\s+/g, "-");
                     setCategoryForm({ ...categoryForm, name, slug });
                   }}
-                  placeholder="Ví dụ: Thiết bị di động"
+                  placeholder="Ví dụ: Thời trang nam"
                   className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/10 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-800 transition-all outline-none"
                 />
               </div>

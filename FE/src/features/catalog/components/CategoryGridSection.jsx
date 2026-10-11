@@ -1,22 +1,13 @@
 import { Link } from "react-router-dom";
 import Icon from "../../../components/common/Icon";
+import { getRootCategories } from "../utils/categoryUtils.js";
 
 const FALLBACK_IMG = "https://placehold.co/56x56/f8f9fb/6b7280?text=SP";
 
-export default function AccessoriesSection({ categories }) {
-  const accessoryCategory = categories?.find(c => {
-    const name = (c.name || c.label || "").toLowerCase();
-    const slug = (c.slug || "").toLowerCase();
-    return slug.includes("phu-kien") || slug.includes("accessory") || name.includes("phụ kiện");
-  });
-
-  const cats = accessoryCategory?.children?.length 
-    ? accessoryCategory.children 
-    : categories?.filter(c => {
-        const name = (c.name || c.label || "").toLowerCase();
-        const slug = (c.slug || "").toLowerCase();
-        return !slug.includes("dien-thoai") && !slug.includes("phone") && !slug.includes("laptop");
-      }) || [];
+// Lưới "Danh mục nổi bật": mọi danh mục GỐC đang active, theo sortOrder — đúng với mọi catalog.
+// Thay cho AccessoriesSection cũ (chỉ tìm danh mục "phụ kiện" của shop điện tử, đã xoá).
+export default function CategoryGridSection({ categories }) {
+  const cats = getRootCategories(categories).filter((c) => !c.parentId);
 
   // Pad categories list to a multiple of 12 (divisible by 6, 4, 3, 2 for responsive layouts)
   const getPaddedCats = (items) => {
@@ -41,12 +32,13 @@ export default function AccessoriesSection({ categories }) {
   const limitTablet = Math.ceil(N / 4) * 4;
   const limitMobile = Math.ceil(N / 3) * 3;
   const limitSmallMobile = Math.ceil(N / 2) * 2;
+  if (paddedCats.length === 0) return null;
 
   return (
     <section style={{ marginTop: 24 }}>
       {/* CSS Styling Block */}
       <style>{`
-        .accessories-grid {
+        .catgrid-grid {
           display: grid;
           grid-template-columns: repeat(6, 1fr);
           background-color: #E5E7EB; /* Grid border line color */
@@ -56,7 +48,7 @@ export default function AccessoriesSection({ categories }) {
           overflow: hidden;
           box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-        .accessories-item {
+        .catgrid-item {
           display: flex;
           align-items: center;
           gap: 12px;
@@ -67,20 +59,20 @@ export default function AccessoriesSection({ categories }) {
           box-sizing: border-box;
           transition: background-color 0.2s ease, color 0.2s ease;
         }
-        .accessories-item-empty {
+        .catgrid-item-empty {
           cursor: default;
           pointer-events: none;
         }
-        .accessories-item:not(.accessories-item-empty):hover {
+        .catgrid-item:not(.catgrid-item-empty):hover {
           background-color: #F9FAFB;
         }
-        .accessories-item:not(.accessories-item-empty):hover .accessories-item-title {
+        .catgrid-item:not(.catgrid-item-empty):hover .catgrid-item-title {
           color: #D70018; /* Hover text color */
         }
-        .accessories-item:not(.accessories-item-empty):hover .accessories-item-img {
+        .catgrid-item:not(.catgrid-item-empty):hover .catgrid-item-img {
           transform: translateY(-3px);
         }
-        .accessories-img-container {
+        .catgrid-img-container {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -89,13 +81,13 @@ export default function AccessoriesSection({ categories }) {
           flex-shrink: 0;
           background-color: #ffffff;
         }
-        .accessories-item-img {
+        .catgrid-item-img {
           width: 56px;
           height: 56px;
           object-fit: contain;
           transition: transform 0.2s ease;
         }
-        .accessories-item-title {
+        .catgrid-item-title {
           font-size: 13.5px;
           font-weight: 700;
           color: #1F2937;
@@ -111,7 +103,7 @@ export default function AccessoriesSection({ categories }) {
         }
         
         @media (max-width: 1024px) {
-          .accessories-grid {
+          .catgrid-grid {
             grid-template-columns: repeat(4, 1fr);
           }
           .accessories-item:nth-child(n+${limitTablet + 1}) {
@@ -119,22 +111,22 @@ export default function AccessoriesSection({ categories }) {
           }
         }
         @media (max-width: 768px) {
-          .accessories-grid {
+          .catgrid-grid {
             grid-template-columns: repeat(3, 1fr);
           }
-          .accessories-item {
+          .catgrid-item {
             padding: 10px 12px;
             height: 76px;
             gap: 10px;
           }
-          .accessories-img-container, .accessories-item-img {
+          .catgrid-img-container, .catgrid-item-img {
             width: 46px;
             height: 46px;
           }
-          .accessories-item-title {
+          .catgrid-item-title {
             font-size: 12.5px;
           }
-          .accessories-title-row h2 {
+          .catgrid-title-row h2 {
             font-size: 14px !important;
           }
           .accessories-item:nth-child(n+${limitMobile + 1}) {
@@ -142,19 +134,19 @@ export default function AccessoriesSection({ categories }) {
           }
         }
         @media (max-width: 480px) {
-          .accessories-grid {
+          .catgrid-grid {
             grid-template-columns: repeat(2, 1fr);
           }
-          .accessories-item {
+          .catgrid-item {
             padding: 8px 10px;
             height: 70px;
             gap: 8px;
           }
-          .accessories-img-container, .accessories-item-img {
+          .catgrid-img-container, .catgrid-item-img {
             width: 40px;
             height: 40px;
           }
-          .accessories-item-title {
+          .catgrid-item-title {
             font-size: 11.5px;
           }
           .accessories-item:nth-child(n+${limitSmallMobile + 1}) {
@@ -165,7 +157,7 @@ export default function AccessoriesSection({ categories }) {
 
       {/* Header row */}
       <div 
-        className="accessories-title-row"
+        className="catgrid-title-row"
         style={{
           display: "flex",
           alignItems: "center",
@@ -181,11 +173,11 @@ export default function AccessoriesSection({ categories }) {
           letterSpacing: "0.01em",
           textTransform: "uppercase",
         }}>
-          SẮM THÊM PHỤ KIỆN CHẤT LƯỢNG
+          DANH MỤC NỔI BẬT
         </h2>
         <span style={{ color: "#D1D5DB", fontWeight: 300, fontSize: 18 }}>|</span>
         <Link
-          to="/category?activeCategory=phu-kien"
+          to="/category"
           style={{
             display: "flex",
             alignItems: "center",
@@ -202,28 +194,28 @@ export default function AccessoriesSection({ categories }) {
       </div>
 
       {/* Flat Grid structure */}
-      <div className="accessories-grid">
+      <div className="catgrid-grid">
         {paddedCats.map((cat, idx) => {
           if (cat.isEmpty) {
             return (
-              <div key={cat.id} className="accessories-item accessories-item-empty" />
+              <div key={cat.id} className="catgrid-item catgrid-item-empty" />
             );
           }
           return (
             <Link
               key={cat.id}
               to={`/category?activeCategory=${cat.slug || encodeURIComponent(cat.name || "")}`}
-              className="accessories-item"
+              className="catgrid-item"
             >
-              <div className="accessories-img-container">
+              <div className="catgrid-img-container">
                 <img
                   src={cat.imageUrl || FALLBACK_IMG}
                   alt={cat.name}
-                  className="accessories-item-img"
+                  className="catgrid-item-img"
                   onError={(e) => { e.target.onerror = null; e.target.src = FALLBACK_IMG; }}
                 />
               </div>
-              <span className="accessories-item-title">
+              <span className="catgrid-item-title">
                 {cat.name}
               </span>
             </Link>

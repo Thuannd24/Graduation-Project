@@ -10,6 +10,7 @@ import { authApi } from "../../../services/authApi";
 import { calculateDiscountPercent, formatVnd } from "../../../utils/format.js";
 import { resolveProductPrices } from "../../../utils/pricing.ts";
 import keycloak from "../../../services/keycloak.js";
+import { trackBehavior } from "../../../services/behaviorTracker.ts";
 
 /* ======================== Helper Functions ======================== */
 
@@ -612,7 +613,10 @@ export default function ProductDetailPage() {
                   alt={product.name}
                   src={activeImage || gallery[0] || product.image}
                   className="max-h-full max-w-full object-contain cursor-zoom-in transition-transform duration-500 group-hover:scale-110"
-                  onClick={() => setZoomModal(true)}
+                  onClick={() => {
+                    setZoomModal(true);
+                    trackBehavior("PRODUCT_ZOOM", { itemId: product.id });
+                  }}
                 />
               </div>
 

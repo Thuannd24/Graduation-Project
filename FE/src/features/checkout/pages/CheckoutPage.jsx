@@ -9,6 +9,7 @@ import { orderApi } from "../../../services/orderApi";
 import { authApi } from "../../../services/authApi";
 import { formatVnd } from "../../../utils/format.js";
 import keycloak from "../../../services/keycloak.js";
+import { trackBehavior } from "../../../services/behaviorTracker.ts";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -18,6 +19,15 @@ export default function CheckoutPage() {
   const [successOrder, setSuccessOrder] = useState(null);
   const idempotencyKeyRef = useRef(crypto.randomUUID());
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // Vào luồng thanh toán = bước sâu nhất của phễu trước khi mua. Bỏ giỏ SAU mốc này mang ý nghĩa
+  // khác hẳn bỏ giỏ ngay ở trang sản phẩm — đây là thông tin mà số đếm tổng hợp không diễn đạt được.
+  useEffect(() => {
+    trackBehavior("BEGIN_CHECKOUT", { weight: items.length });
+    // Trang checkout luôn hiển thị phí vận chuyển trong phần tổng kết đơn -> vào trang là đã thấy.
+    // Ghi riêng thành 1 action vì "nhìn thấy phí ship rồi mới rời đi" là tín hiệu ma sát kinh điển.
+    trackBehavior("VIEW_SHIPPING_FEE");
+  }, []);
 
   // Handle pending guest purchase after logging in
   useEffect(() => {
@@ -717,7 +727,12 @@ export default function CheckoutPage() {
           <VoucherPicker
             orderTotal={summary.subtotal}
             appliedVoucher={appliedVoucher}
-            onApplied={setAppliedVoucher}
+            onApplied={(v) => {
+              // Áp mã thành công vs thất bại là 2 tín hiệu RẤT khác nhau về khả năng bỏ giỏ
+              // (thất bại = đang tìm giảm giá mà không được -> rủi ro cao). Xem behaviorTracker.ts.
+              trackBehavior(v ? "COUPON_APPLIED" : "COUPON_FAILED");
+              setAppliedVoucher(v);
+            }}
             onClear={() => setAppliedVoucher(null)}
           />
 

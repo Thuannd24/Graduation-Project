@@ -58,7 +58,7 @@ export default function WarrantyTab() {
             Tra cứu thời hạn bảo hành
           </h3>
           <p className="text-xs text-secondary mt-1">
-            Kiểm tra thông tin chi tiết và thời gian bảo hành còn lại cho các thiết bị đã mua tại AuraTech.
+            Kiểm tra thông tin chi tiết và thời gian bảo hành còn lại cho các sản phẩm có bảo hành đã mua tại AuraTech.
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function WarrantyTab() {
               <div className="space-y-1">
                 <h5 className="text-sm font-bold text-on-surface">Không tìm thấy dữ liệu bảo hành</h5>
                 <p className="text-xs text-secondary max-w-sm mx-auto">
-                  Bạn chưa có sản phẩm nào được giao thành công trên hệ thống.
+                  Chưa có sản phẩm nào kèm bảo hành trong các đơn đã giao (sản phẩm không có bảo hành sẽ không hiện ở đây).
                 </p>
               </div>
             </div>

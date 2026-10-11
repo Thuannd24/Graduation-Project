@@ -100,9 +100,9 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
             </section>
             <section>
               <h3 className="text-[13px] font-bold text-slate-700 dark:text-slate-200 mb-2">Khoảng giá (VNĐ)</h3>
-              <input className="w-full accent-red-600" type="range" min="0" max="50000000" step="1000000" defaultValue="26000000" />
+              <input className="w-full accent-red-600" type="range" min="0" max="20000000" step="100000" defaultValue="5000000" />
               <div className="flex justify-between text-[11px] text-slate-400 font-medium mt-1">
-                <span>0đ</span><span>50.000.000đ</span>
+                <span>0đ</span><span>20.000.000đ+</span>
               </div>
             </section>
           </div>

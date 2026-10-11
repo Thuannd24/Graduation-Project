@@ -1,0 +1,16 @@
+preset: generic
+
+detect:
+  files: []
+  directories: []
+
+checks:
+  # Không đoán được test command. agent-check.ps1 sẽ báo cần cấu hình.
+  fast: []
+  default: []
+
+rules:
+  - "Make the smallest reviewable change."
+  - "Do not modify unrelated files."
+  - "Preserve public APIs unless explicitly requested."
+  - "Ask before commit, push, delete, or installing anything globally."

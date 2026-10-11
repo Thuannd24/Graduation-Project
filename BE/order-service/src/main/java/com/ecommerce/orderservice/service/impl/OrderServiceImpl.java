@@ -351,8 +351,8 @@ public class OrderServiceImpl implements OrderService {
                 throw ex;
             }
 
-            // Clear Cart
-            cartService.clearCart(cartKey);
+            // Clear Cart (không có session HTTP request ở bước checkout này, không cần cho hành vi)
+            cartService.clearCart(cartKey, null);
 
             OrderResponse response = convertToResponse(savedOrder, finalOrderItems);
 
@@ -1448,7 +1448,7 @@ public class OrderServiceImpl implements OrderService {
                             Integer period = (Integer) info.get("warrantyPeriod");
                             String img = (String) info.get("imageUrl");
 
-                            warrantyMap.put(id, period != null ? period : 12);
+                            warrantyMap.put(id, period != null ? period : 0);
                             imageMap.put(id, img);
                         }
                     }
@@ -1468,7 +1468,8 @@ public class OrderServiceImpl implements OrderService {
                     java.util.Collections.emptyList());
 
             for (OrderItem item : items) {
-                int months = warrantyMap.getOrDefault(item.getProductId(), 12);
+                int months = warrantyMap.getOrDefault(item.getProductId(), 0);
+                if (months <= 0) continue; // SP không có bảo hành (vd thời trang, thực phẩm)
                 java.time.LocalDate expiry = purchaseDate.plusMonths(months);
                 long daysRemaining = java.time.temporal.ChronoUnit.DAYS.between(today, expiry);
 

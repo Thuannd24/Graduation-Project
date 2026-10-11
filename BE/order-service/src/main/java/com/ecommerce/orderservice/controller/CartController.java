@@ -26,30 +26,35 @@ public class CartController {
     @PostMapping
     public ApiResponse<CartResponse> addItemToCart(
             @RequestHeader(value = "X-User-Id", defaultValue = "anonymous") String userId,
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId,
             @Valid @RequestBody CartItemRequest request) {
-        return ApiResponse.success(cartService.addItemToCart(userId, request));
+        return ApiResponse.success(cartService.addItemToCart(userId, sessionId, request));
     }
 
     @PutMapping("/items/{productId}")
     public ApiResponse<CartResponse> updateItemQuantity(
             @RequestHeader(value = "X-User-Id", defaultValue = "anonymous") String userId,
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId,
             @PathVariable Long productId,
             @RequestParam(value = "variantId", required = false) Long variantId,
             @RequestParam("quantity") @Min(value = 1, message = "Quantity must be at least 1") Integer quantity) {
-        return ApiResponse.success(cartService.updateItemQuantity(userId, productId, variantId, quantity));
+        return ApiResponse.success(cartService.updateItemQuantity(userId, sessionId, productId, variantId, quantity));
     }
 
     @DeleteMapping("/items/{productId}")
     public ApiResponse<CartResponse> removeItemFromCart(
             @RequestHeader(value = "X-User-Id", defaultValue = "anonymous") String userId,
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId,
             @PathVariable Long productId,
             @RequestParam(value = "variantId", required = false) Long variantId) {
-        return ApiResponse.success(cartService.removeItemFromCart(userId, productId, variantId));
+        return ApiResponse.success(cartService.removeItemFromCart(userId, sessionId, productId, variantId));
     }
 
     @DeleteMapping
-    public ApiResponse<Void> clearCart(@RequestHeader(value = "X-User-Id", defaultValue = "anonymous") String userId) {
-        cartService.clearCart(userId);
+    public ApiResponse<Void> clearCart(
+            @RequestHeader(value = "X-User-Id", defaultValue = "anonymous") String userId,
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId) {
+        cartService.clearCart(userId, sessionId);
         return ApiResponse.success(null);
     }
 }

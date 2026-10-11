@@ -1,7 +1,8 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
+import { PRICE_MAX } from "../utils/categoryUtils.js";
 
-const DEFAULT_MAX_PRICE = 50000000;
+const DEFAULT_MAX_PRICE = PRICE_MAX;
 
 export function useCategoryFilters() {
   const [searchParams, setSearchParams] = useSearchParams();

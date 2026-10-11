@@ -28,6 +28,7 @@ public class WorkflowValidatorService {
             "Trigger_Event_NewUser",
             "Trigger_Event_OrderSuccess",
             "Trigger_Event_ReviewProduct",
+            "Trigger_Event_ChurnRisk",
             "Trigger_Timer_Schedule"
     );
 
@@ -36,7 +37,8 @@ public class WorkflowValidatorService {
             "Condition_TotalSpending",
             "Condition_Location",
             "Condition_ContainsCategory",
-            "Condition_ContainsProduct"
+            "Condition_ContainsProduct",
+            "Condition_ChurnRiskTier"
     );
 
     private static final Set<String> ACTION_TYPES = Set.of(
@@ -265,6 +267,12 @@ public class WorkflowValidatorService {
                     requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("GREATER_THAN", "LESS_THAN", "EQUAL"), errors);
                     requireEdgeNumber(node, edge, edgeProps, "value", errors);
                     requireEdgeEnum(node, edge, edgeProps, "timeRange", Set.of("CURRENT_MONTH", "LAST_30_DAYS"), errors);
+                    break;
+                case "Condition_ChurnRiskTier":
+                    // Không có timeRange: churnProbability là điểm số tại thời điểm risk-scan chấm,
+                    // không phải tổng dồn theo khoảng thời gian như totalSpending.
+                    requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("GREATER_THAN", "LESS_THAN", "EQUAL"), errors);
+                    requireEdgeNumber(node, edge, edgeProps, "value", errors);
                     break;
                 case "Condition_Location":
                     requireEdgeEnum(node, edge, edgeProps, "operator", Set.of("EQUAL", "NOT_EQUAL"), errors);

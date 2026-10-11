@@ -29,8 +29,8 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
     imageUrl: "",
     images: [],
     active: true,
-    warrantyPeriod: "12",
-    warrantyPolicy: "Bảo hành chính hãng 12 tháng.",
+    warrantyPeriod: "0",
+    warrantyPolicy: "",
     tags: ""
   });
 
@@ -204,8 +204,8 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
         imageUrl: "",
         images: [],
         active: true,
-        warrantyPeriod: "12",
-        warrantyPolicy: "Bảo hành chính hãng 12 tháng.",
+        warrantyPeriod: "0",
+        warrantyPolicy: "",
         tags: ""
       });
       setUploadedImages([]);
@@ -280,8 +280,8 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
             imageUrl: detail.imageUrl || detail.image || "",
             images: detail.images || detail.gallery || [],
             active: detail.active !== false,
-            warrantyPeriod: detail.warrantyPeriod || "12",
-            warrantyPolicy: detail.warrantyPolicy || "Bảo hành chính hãng 12 tháng.",
+            warrantyPeriod: detail.warrantyPeriod ?? "0",
+            warrantyPolicy: detail.warrantyPolicy || "",
             tags: Array.isArray(detail.tags) ? detail.tags.join(", ") : (detail.tags || "")
           });
 
@@ -637,7 +637,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
         brandId: Number(basicInfo.brandId),
         imageUrl: basicInfo.imageUrl,
         images: basicInfo.images,
-        warrantyPeriod: Number(basicInfo.warrantyPeriod || 12),
+        warrantyPeriod: Number(basicInfo.warrantyPeriod || 0),
         warrantyPolicy: basicInfo.warrantyPolicy,
         active: basicInfo.active,
         tags: tagsArray,
@@ -1337,7 +1337,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
             </span>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Thời hạn bảo hành (tháng)</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wide block">Thời hạn bảo hành (tháng, 0 = không bảo hành)</label>
               <input
                 type="number"
                 value={basicInfo.warrantyPeriod}
@@ -1363,7 +1363,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
                 value={basicInfo.tags}
                 onChange={(e) => setBasicInfo({ ...basicInfo, tags: e.target.value })}
                 className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-600 focus:bg-white rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-800 outline-none"
-                placeholder="Ví dụ: smartphone, apple, ios"
+                placeholder="Ví dụ: áo thun, cotton, unisex"
               />
             </div>
           </div>

@@ -59,6 +59,14 @@ public class CampaignTriggerService {
             }
             return userId != null ? userId.toString() : null;
         }
+        if ("Trigger_Event_ChurnRisk".equals(triggerType)) {
+            // forecast-service tự sinh eventUniqueId dạng "{userId}:{yyyyMMdd}" (xem
+            // AI/forecast-service/app/kafka/risk_producer.py) để chống trigger trùng trong
+            // cùng ngày nếu risk-scan chạy nhiều lần/ngày — dùng lại nguyên giá trị đó, KHÔNG
+            // tự ghép lại từ userId ở đây (mất phần ngày sẽ làm mất luôn tác dụng chống trùng).
+            Object eventUniqueId = eventVariables.get("eventUniqueId");
+            return eventUniqueId != null ? eventUniqueId.toString() : null;
+        }
         return null;
     }
 

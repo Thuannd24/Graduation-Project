@@ -23,6 +23,7 @@ const TRIGGER_TYPES = new Set([
   "Trigger_Event_NewUser",
   "Trigger_Event_OrderSuccess",
   "Trigger_Event_ReviewProduct",
+  "Trigger_Event_ChurnRisk",
   "Trigger_Timer_Schedule"
 ]);
 
@@ -31,7 +32,8 @@ const CONDITION_TYPES = new Set([
   "Condition_TotalSpending",
   "Condition_Location",
   "Condition_ContainsCategory",
-  "Condition_ContainsProduct"
+  "Condition_ContainsProduct",
+  "Condition_ChurnRiskTier"
 ]);
 
 function isSmallNode(node) {

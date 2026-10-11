@@ -1,6 +1,5 @@
 import Icon from "../../../../components/common/Icon.jsx";
 import { formatVnd } from "../../../../utils/format.js";
-import { LAPTOP_SPEC_FILTERS } from "../../utils/categoryUtils.js";
 
 export default function ActiveFilterChips({
   brands,
@@ -8,6 +7,7 @@ export default function ActiveFilterChips({
   minPrice,
   maxPrice,
   specFilters,
+  specLabels = {}, // { [mã thuộc tính]: tên hiển thị } — lấy từ thuộc tính danh mục (API)
   defaultMaxPrice,
   onRemoveBrand,
   onRemoveSale,
@@ -22,13 +22,15 @@ export default function ActiveFilterChips({
   if (minPrice > 0 || maxPrice < defaultMaxPrice) {
     chips.push({
       key: "price",
-      label: `${formatVnd(minPrice)} – ${formatVnd(maxPrice)}`,
+      label: maxPrice >= defaultMaxPrice
+        ? `Từ ${formatVnd(minPrice)}`
+        : `${formatVnd(minPrice)} – ${formatVnd(maxPrice)}`,
       onRemove: onRemovePrice,
     });
   }
   Object.entries(specFilters).forEach(([group, values]) => {
     values.forEach((v) => {
-      const groupLabel = LAPTOP_SPEC_FILTERS[group]?.label || group;
+      const groupLabel = specLabels[group] || group;
       chips.push({
         key: `spec-${group}-${v}`,
         label: `${groupLabel}: ${v}`,

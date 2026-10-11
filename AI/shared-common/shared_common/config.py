@@ -27,4 +27,12 @@ class SharedSettings(BaseModel):
     DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "")
 
 
+    # Kafka (dùng bởi các service AI tham gia ingest hành vi / phát sự kiện risk)
+    KAFKA_BOOTSTRAP_SERVERS: str = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:29092")
+
+    # Nơi lưu model artifact đã train (KMeans/scaler/LogisticRegression...). Mặc định là path
+    # tương đối "data/models" — khi WORKDIR của service là /workspace/<service>, path này khớp
+    # đúng volume mount ./models:/workspace/<service>/data/models khai trong docker-compose.
+    MODELS_DIR: str = os.getenv("MODELS_DIR", "data/models")
+
 shared_settings = SharedSettings()

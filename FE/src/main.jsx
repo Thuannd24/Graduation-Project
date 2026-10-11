@@ -5,8 +5,15 @@ import App from "./App.jsx";
 import "./assets/styles.css";
 import keycloak from "./services/keycloak.js";
 import { setAuthToken, clearAuthToken } from "./services/apiClient.ts";
+import { initBehaviorTracker } from "./services/behaviorTracker.ts";
 
 import { authApi } from "./services/authApi.ts";
+
+// Gắn listener vi hành vi (rời tab, cuộn trang, thời gian dừng) — xem behaviorTracker.ts.
+// Gọi ở mức module, TRƯỚC cả Keycloak init: chỉ attach listener trên `window`, không phụ thuộc
+// React hay trạng thái đăng nhập (khách chưa đăng nhập cũng cần được ghi nhận hành vi), và nếu
+// Keycloak init thất bại thì việc ghi nhận vẫn phải hoạt động.
+initBehaviorTracker();
 
 keycloak
   .init({

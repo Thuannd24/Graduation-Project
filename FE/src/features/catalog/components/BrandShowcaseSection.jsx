@@ -91,7 +91,7 @@ export default function BrandShowcaseSection() {
            
           </div>
           <p className="text-[12px] text-slate-400 dark:text-slate-500 mt-1.5 font-medium">
-            Phân phối chính hãng các dòng sản phẩm công nghệ hàng đầu thế giới
+            Phân phối chính hãng sản phẩm từ các thương hiệu hàng đầu
           </p>
         </div>
         

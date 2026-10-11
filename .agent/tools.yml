@@ -1,0 +1,70 @@
+# tools.yml — registry để agent tự chọn tool nhỏ nhất phù hợp.
+# Quy tắc chung: chọn chi phí thấp nhất cho toàn bộ task, không chỉ bước đọc kế tiếp.
+
+decision_policy:
+  goal: "Tối ưu tổng token + độ chính xác. Một pack scoped nhỏ có thể rẻ hơn đọc rải rác nhiều lượt."
+  start_with:
+    - "Nếu vị trí chưa rõ: search_code để định vị entrypoint và file chính."
+    - "Nếu vị trí đã rõ và task tầm thường: direct_read."
+  escalate_to_pack_context_when:
+    - "Task đi qua controller/service/repository/cache hoặc từ endpoint xuống DB."
+    - "Task nhắc performance, high-load, optimization, DB read/write, cache, fallback, race condition."
+    - "Cần phân tích rủi ro trước khi sửa code."
+    - "Sau search thấy hơn 5 file liên quan."
+    - "Đã phải lần qua 3 lớp kiến trúc."
+    - "Bỏ sót 1 file liên quan có thể làm kết luận sai."
+  pack_scope_rule:
+    - "Pack scope nhỏ nhất đủ dùng, ví dụ 1 module/app/package, không pack cả repo nếu chưa cần."
+    - "Ưu tiên -Path trỏ tới module đang phân tích."
+
+tools:
+  direct_read:
+    purpose: "Đọc trực tiếp các file liên quan trực tiếp đến task."
+    cost: low
+    use_when:
+      - "Bug fix nhỏ, hành vi nằm trong 1-3 file rõ ràng"
+      - "Refactor hẹp, không cần hiểu flow nhiều lớp"
+      - "Đã biết rõ file cần đụng tới"
+    avoid_when:
+      - "Cần phân tích kiến trúc cả module"
+      - "Chưa biết code nằm ở đâu"
+      - "Task high-load/performance/cache/DB hoặc endpoint flow nhiều lớp"
+
+  search_code:
+    purpose: "Grep/glob để định vị code khi chưa biết nằm đâu."
+    cost: low
+    use_when:
+      - "Tìm nơi định nghĩa hàm/class/route"
+      - "Lần theo usage trước khi sửa"
+
+  pack_context:
+    purpose: "Sinh context nén (repomix) cho phân tích flow/module khi đọc rải rác dễ thiếu hoặc tốn hơn."
+    command: ".agent/scripts/pack-context.ps1"
+    cost: medium
+    use_when:
+      - "Cần phân tích cả một module"
+      - "Cần đưa context sang web AI"
+      - "Endpoint/service flow đi qua nhiều lớp"
+      - "Performance/high-load/optimization/DB read-write/cache/fallback"
+      - "Cần so sánh nhiều file để đánh giá rủi ro"
+    prefer_scope:
+      - "Path module/app/package nhỏ nhất đủ context"
+      - "Ví dụ: .agent/scripts/pack-context.ps1 -Path apps/dev_pcservice"
+    avoid_when:
+      - "Task thật sự chỉ đụng 1-3 file rõ ràng và không cần cross-layer reasoning"
+
+  agent_check:
+    purpose: "Chạy test/build/check sau khi sửa code."
+    command: ".agent/scripts/agent-check.ps1"
+    cost: medium
+    use_when:
+      - "Sau khi sửa code"
+      - "Trước khi báo hoàn thành"
+
+  review_diff:
+    purpose: "Xem file thay đổi + diff summary."
+    command: ".agent/scripts/review-diff.ps1"
+    cost: low
+    use_when:
+      - "Trước khi kết thúc"
+      - "Trước khi (xin phép) commit"

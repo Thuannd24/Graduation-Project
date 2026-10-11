@@ -42,7 +42,7 @@ export default function Footer() {
             <span className="font-light text-rose-600 text-lg border-l border-slate-300 pl-2 ml-2 tracking-widest">Tech</span>
           </Link>
           <p className="text-sm leading-relaxed text-slate-500">
-            Hệ thống bán lẻ điện thoại, laptop, thiết bị công nghệ chính hãng hàng đầu Việt Nam. Cam kết chất lượng, bảo hành uy tín.
+            Sàn thương mại điện tử đa ngành hàng: thời trang, làm đẹp, nhà cửa, mẹ & bé, điện tử và hơn thế nữa. Cam kết chất lượng, đổi trả dễ dàng.
           </p>
           <div className="flex items-center gap-3.5 bg-white border border-slate-200/80 rounded-2xl p-4 mt-2 shadow-sm">
             <div className="p-2.5 bg-red-500/10 rounded-xl text-red-600">
@@ -145,8 +145,8 @@ export default function Footer() {
 
       {/* Copyright footer bottom */}
       <div className="max-w-container-max mx-auto px-6 mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
-        <p>© 2026 AuraTech. All rights reserved.</p>
-        <p className="text-slate-400 tracking-wider uppercase font-semibold">High-performance retail environment.</p>
+        <p>© 2026 AuraTech — web demo đồ án tốt nghiệp.</p>
+        <p className="text-slate-400 text-center md:text-right">Một phần dữ liệu sản phẩm (tên, hình ảnh, mô tả) minh hoạ từ Tiki.vn, chỉ phục vụ học tập, không kinh doanh.</p>
       </div>
     </footer>
   );

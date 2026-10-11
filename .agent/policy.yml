@@ -1,0 +1,31 @@
+# policy.yml — quy định quyền cho agent.
+#
+# LƯU Ý: file này là "ý định". Nó hướng dẫn agent, KHÔNG tự cưỡng chế được.
+# Hàng rào cưỡng chế thật sự nằm ở .claude/settings.json (permissions + PreToolUse hooks).
+# Xem docs/safety-rules.md để map các mục always_block sang hook chặn lệnh.
+
+permissions:
+  auto_allow:
+    - read_files
+    - search_code
+    - run_git_status
+    - run_git_diff
+    - pack_context
+    - run_tests
+
+  ask_first:
+    - install_global_package
+    - edit_existing_agent_files   # AGENTS.md / CLAUDE.md / .agent/*
+    - delete_files
+    - git_commit
+    - git_push
+    - modify_ci
+    - modify_database_migration
+    - modify_security_config
+    - edit_files_outside_task_scope
+
+  always_block:
+    - git_reset_hard      # git reset --hard
+    - git_clean_force     # git clean -f / -fd
+    - push_force          # git push --force / -f
+    - rm_rf               # rm -rf / Remove-Item -Recurse -Force ở phạm vi rộng
