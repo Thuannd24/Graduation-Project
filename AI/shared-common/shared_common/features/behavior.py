@@ -4,6 +4,8 @@ Bảng sống trong DB của order-service (`ecommerce_order_db`) — xem lý do
 `docs/AI/churn-risk-implementation-plan.md` Phase 2 (cùng DB với `orders` để RFM/behavior
 join được bằng pandas mà không cần cross-service SQL JOIN).
 """
+# user_events (Hibernate tạo) và orders có thể khác collation (utf8mb4_general_ci vs unicode_ci) → MariaDB báo
+# "Illegal mix of collations" khi so user_id giữa 2 bảng. Mọi phép so đó đều kèm COLLATE utf8mb4_unicode_ci.
 from __future__ import annotations
 
 import numpy as np
@@ -71,7 +73,7 @@ def fetch_behavior_features(
           AND ue.created_at <= {as_of_clause}
           AND NOT EXISTS (
               SELECT 1 FROM orders o
-              WHERE o.user_id = ue.user_id
+              WHERE o.user_id = ue.user_id COLLATE utf8mb4_unicode_ci
                 AND o.created_at BETWEEN ue.created_at
                     AND DATE_ADD(ue.created_at, INTERVAL {int(abandon_grace_hours)} HOUR)
           )
@@ -161,7 +163,7 @@ def has_recent_abandoned_cart(
           AND ue.created_at >= NOW() - INTERVAL %(hours)s HOUR
           AND NOT EXISTS (
               SELECT 1 FROM orders o
-              WHERE o.user_id = ue.user_id
+              WHERE o.user_id = ue.user_id COLLATE utf8mb4_unicode_ci
                 AND o.created_at >= ue.created_at
           )
         LIMIT 1

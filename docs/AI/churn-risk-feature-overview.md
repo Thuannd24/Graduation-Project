@@ -5,12 +5,25 @@
 > theo phase, dành cho lúc code). File này để giải thích tính năng cho người đọc sau (báo cáo,
 > bảo vệ đồ án), tập trung vào **AI được dùng chính xác ở đâu**.
 >
-> **Cập nhật toàn bộ 2026-10-06.** Mọi số liệu trong bản này đo trên **dữ liệu hành vi THẬT**
+> **Cập nhật toàn bộ 2026-10-06.** Mọi số liệu mô hình trong bản này đo trên **dữ liệu hành vi THẬT**
 > (REES46 — một sàn TMĐT thật, 12/2019–4/2020, transform vào đúng schema hệ thống), không còn là
-> bộ sinh tổng hợp (synthetic) như các bản trước. Toàn bộ pipeline từ chấm điểm tới phát voucher đã
-> được xác minh chạy thật qua HTTP (không chỉ gọi hàm Python), tìm và sửa 2 lỗi production thật
-> trong quá trình đó. Số liệu cũ (bộ sinh) được giữ lại ở cuối mỗi mục dạng trích dẫn khi có giá trị
-> so sánh phương pháp.
+> bộ sinh tổng hợp (synthetic) như các bản trước. Chuỗi chấm điểm → lọc dân số → lọc thời điểm →
+> xếp hạng ngân sách đã chạy thật qua HTTP (không chỉ gọi hàm Python), tìm và sửa 2 lỗi production
+> thật trong quá trình đó. **Bước publish Kafka → promotion-service → phát voucher CHƯA được kích hoạt
+> trong các lần quét này** (0 user đủ điều kiện tầng 2 ⇒ 0 sự kiện publish — xem mục 3.7). Số liệu cũ
+> (bộ sinh) được giữ lại dạng trích dẫn khi có giá trị so sánh phương pháp.
+>
+> **⚠️ Phạm vi số liệu — đọc trước khi trích dẫn:**
+>
+> - Các số AUC **0,7354 ± 0,0138**, ngưỡng **0,38**, `LABEL_VERSION = churn_label_v3_orders_60d_min2_rees46real`,
+>   cửa sổ nhãn 60 ngày, panel 31.458 dòng / 10.501 user là kết quả của **thí nghiệm REES46**
+>   (`AI/forecast-service/app/training/experiments/retrain_on_real_rees46.py`) — script này ghi đè
+>   tham số thời gian của `train.py` ngay trong tiến trình rồi gọi `train_and_evaluate()` thật.
+> - **Mặc định trong code** (khi gọi `POST /api/v1/models/train`): `LABEL_VERSION = "churn_label_v2_orders_120d_min2"`
+>   (`app/training/labels.py`), `LABEL_WINDOW_DAYS = 120`, `CUTOFF_DAYS_AGO = [270, 240, 210, 180, 150]`
+>   (`app/training/train.py`).
+> - **Demo trực tiếp (2026-10-11)** train trên dữ liệu seed với grouped CV tách user; AUC từng fold
+>   dao động **0,65–0,85** — không phải con số 0,7354 ở trên.
 
 ---
 
@@ -22,53 +35,7 @@ cứu nhất trong ngân sách, (3) làm việc đó tự động.
 
 **Giải pháp.** Chấm xác suất rời bỏ cho từng khách bằng Logistic Regression đã hiệu chỉnh, xếp hạng theo
 *tổn thất kỳ vọng* (`xác suất × giá trị khách hàng`), cắt theo ngân sách, rồi phát sự kiện để engine
-campaign có sẵn (Camunda) tự phát voucher.
-
-```
-FE (xem SP / giỏ hàng)
-   │  HTTP request có header X-User-Id (Keycloak UUID)
-   ▼
-product-service / order-service  ──publish──▶  Kafka
-   (ProductViewedEvent /                        (product-viewed-events,
-    CartUpdatedEvent)                            cart-updated-events)
-                                                      │
-                                                      ▼
-                                        forecast-service (Python)
-                                        ┌─────────────────────────────┐
-                                        │ behavior_consumer.py        │  ghi bảng user_events
-                                        │ (ghi nhận hành vi thô)       │  (MySQL) + Redis (recs-service)
-                                        └─────────────────────────────┘
-                                                      │
-                                        (định kỳ, mỗi chu kỳ scan — KHÔNG mỗi request)
-                                                      ▼
-                                        ┌──────────────────────────────────────┐
-                                        │ risk_scheduler.py                     │
-                                        │  → feature_store.refresh()            │  tính trước 11 đặc
-                                        │    (pandas, vài giây–vài phút)        │  trưng, lưu bảng riêng
-                                        │  → risk_scoring.predict()             │ ★★ AI Ở ĐÂY (mục 3) ★★
-                                        │  tầng 0: dân số ≥2 đơn DELIVERED      │ (khớp dân số train)
-                                        │  tầng 1: segment "At Risk" + xác suất │ ← AI
-                                        │          đã hiệu chỉnh ≥ ngưỡng       │
-                                        │  tầng 2: có bỏ giỏ hàng gần đây       │ ← rule (thời điểm)
-                                        │  tầng 3: xếp hạng theo tổn thất kỳ    │ ← quyết định
-                                        │          vọng, cắt theo ngân sách     │   (mục 3.5)
-                                        └──────────────────────────────────────┘
-                                                      │  publish
-                                                      ▼
-                                        Kafka (user-risk-events)
-                                                      │
-                                                      ▼
-                                promotion-service (Java, Camunda 7)
-                                ┌─────────────────────────────────────┐
-                                │ PromotionKafkaConsumer                │
-                                │  → CampaignTriggerService             │  rule cứng, KHÔNG phải AI
-                                │  → tìm campaign khớp trigger           │  (if event đến → chạy workflow)
-                                │  → chạy Process Instance Camunda      │
-                                └─────────────────────────────────────┘
-                                                      │
-                                                      ▼
-                                  Voucher / Email cá nhân hóa cho user
-```
+campaign có sẵn (Camunda) tự phát voucher (sơ đồ ở mục 3).
 
 `feature_store.refresh()` là phần mới thêm 2026-10-06 (xem mục 3.7) — tính trước 11 đặc trưng bằng
 pandas rồi lưu vào bảng `user_feature_vectors`, thay vì để `risk_scoring.predict()` tự chạy SQL
@@ -105,23 +72,26 @@ FE (xem SP / giỏ hàng) ── X-User-Id (Keycloak UUID) ──▶ product-ser
 | Đưa hành vi vào DB | `AI/forecast-service/app/kafka/behavior_consumer.py` | ❌ Chỉ copy dữ liệu, không tính toán |
 | Tính trước 11 đặc trưng, lưu bảng | `AI/shared-common/shared_common/features/feature_store.py` | ❌ Tổng hợp/thống kê thuần, không học |
 | **Tính điểm rủi ro rời bỏ** | `AI/forecast-service/app/training/train.py` + `app/services/risk_scoring.py` | ✅ **CHỈ ĐÂY** |
-| Lọc điều kiện kích hoạt (có bỏ giỏ hàng gần đây) | `AI/forecast-service/app/services/risk_scheduler.py` | ❌ Rule tay (`if... then...`) |
+| Lọc điều kiện kích hoạt (vừa bỏ giỏ hàng trong 24 giờ) | `AI/forecast-service/app/services/risk_scheduler.py` | ❌ Rule tay (`if... then...`), **cố ý** — lý do ở mục 3.5 |
 | Publish sự kiện, tìm campaign, chạy Camunda | `risk_producer.py`, `PromotionKafkaConsumer.java`, `CampaignTriggerService.java` | ❌ Automation/workflow engine thuần |
 
-| Bước | Có phải AI? |
+### 3.1. Hai model và 11 đặc trưng đầu vào
+
+11 đặc trưng đầu vào (định nghĩa 1 lần duy nhất tại `FEATURE_COLUMNS` trong
+`AI/shared-common/shared_common/features/assembler.py`, dùng chung cho cả 2 model):
+
+| Nhóm | Đặc trưng |
 |---|---|
-| Ghi nhận hành vi (xem SP, thêm giỏ) → Kafka → bảng `user_events` | ❌ ETL thuần |
-| Tính 11 đặc trưng cho mọi khách (`feature_store`) | ❌ thống kê thuần, không học |
-| **Chấm xác suất rời bỏ + gán phân khúc** (`train.py`, `risk_scoring.py`) | ✅ **duy nhất bước này** |
-| Lọc "vừa bỏ giỏ trong 24 giờ" (`risk_scheduler.py`) | ❌ rule tay, **cố ý** (mục 6.1) |
-| Publish sự kiện, tìm campaign, chạy Camunda | ❌ workflow engine |
+| Đơn hàng (RFM + hành vi mua) | `recency`, `frequency`, `monetary`, `avg_order_value`, `cancel_rate`, `discount_dependency` |
+| Hành vi duyệt (`user_events`) | `recent_view_count`, `days_since_last_activity`, `cart_abandon_count`, `view_to_cart_conversion_rate`, `category_diversity_viewed` |
 
-**Mô hình 1 — KMeans clustering (không giám sát):** tự nhóm user thành 4 cụm hành vi dựa trên
-**11 đặc trưng** (không phải rule tay `if recency > 30 ngày`). Việc **gán nhãn** cho cụm dùng chính
-`churn_label` đo được: cụm có **tỉ lệ churn thực đo cao nhất** được gọi `At Risk`, 3 cụm còn lại đặt
-tên theo hạng giá trị. Đo thực trên dữ liệu REES46 thật (10.501 user):
+**Mô hình 1 — KMeans clustering (không giám sát):** tự nhóm user thành 4 cụm hành vi dựa trên cả
+11 đặc trưng (sau `QuantileTransformer`), không phải rule tay `if recency > 30 ngày`.
+Việc **gán nhãn** cho cụm dùng chính `churn_label` đo được: cụm có **tỉ lệ churn thực đo cao nhất**
+được gọi `At Risk`, 3 cụm còn lại đặt tên theo hạng giá trị. Đo trên panel REES46 thật (31.458 dòng
+= user × mốc cắt, từ 10.501 user; một user có thể xuất hiện ở nhiều mốc và nhiều cụm):
 
-| Phân khúc | Số user | **Tỉ lệ churn đo được** | monetary TB (VNĐ) | recency TB (ngày) |
+| Phân khúc | Số dòng panel | **Tỉ lệ churn đo được** | monetary TB (VNĐ) | recency TB (ngày) |
 |---|---|---|---|---|
 | **At Risk** | 8.570 | **0,8426** | 32.416.654 | **50,5** |
 | Loyal Regulars | 10.265 | 0,6711 | 40.570.520 | 19,5 |
@@ -137,7 +107,8 @@ churn (0,0–1,0), train trên nhãn sinh theo temporal split (xem mục 3.3) �
 precision/recall/AUC, thứ mà rule tay không có. Xác suất được **hiệu chỉnh** (isotonic) vì bản thô bị
 lệch hệ thống, và toàn bộ tầng quyết định (xếp hạng theo tổn thất kỳ vọng) dựa trên xác suất này.
 
-**Kết quả grouped CV (5 fold, tách user + nhân quả thời gian), model đang chạy production:**
+**Kết quả grouped CV (5 fold, tách user + nhân quả thời gian) — thí nghiệm REES46
+(`retrain_on_real_rees46.py`, nhãn v3 60 ngày), KHÔNG phải model train bằng tham số mặc định của code:**
 
 | Chỉ số | Giá trị |
 |---|---|
@@ -145,17 +116,6 @@ lệch hệ thống, và toàn bộ tầng quyết định (xếp hạng theo t�
 | F1 | 0,7643 |
 | Precision / Recall | 0,7969 / 0,7344 |
 | Ngưỡng cắt đề xuất (thang đã hiệu chỉnh) | 0,38 |
-
-11 đặc trưng đầu vào (định nghĩa 1 lần duy nhất tại
-`AI/shared-common/shared_common/features/`, dùng chung cho cả 2 model):
-
-| Phương án | Vì sao loại | Bằng chứng |
-|---|---|---|
-| Bộ sinh tham số đặt tay | Lệch lõi động lực (số trên); không kiểm chứng được gì độc lập | Log 2026-10-01 |
-| Bộ sinh neo BG/NBD (Online Retail II) | Đã làm và hiệu chỉnh xong, nhưng chủ dự án chọn transform dữ liệu thật thay vì mô phỏng | Log 2026-10-01, 2026-10-02 |
-| Olist (marketplace Brazil) | Chỉ ~3% khách mua lặp; churn 97,3% thoái hóa; không có clickstream | ✅ 2.801/93.897 user có ≥2 đơn; churn 0,9729 — Log 2026-08-03 |
-| RetailRocket | Chỉ 3 loại sự kiện (xem/thêm giỏ/mua) → không đủ để kiểm giả thuyết thứ tự hành vi | Log 2026-08-04 |
-| REES46 Cosmetics | Một ngành duy nhất; chỉ dùng cho các thí nghiệm nghiên cứu riêng | Log 2026-10-02 |
 
 **Đã thử mở rộng thêm 7 khối đặc trưng ứng viên** (hình dạng bỏ giỏ, độ phân tán khoảng cách mua,
 đối chứng âm, session, review, voucher, nhịp thời gian) qua `ablation.py` trên dữ liệu thật — **tất
@@ -200,8 +160,12 @@ Logistic Regression là lựa chọn tốt nhất trong nhóm dễ giải thích
 
 ### 3.3. Định nghĩa nhãn churn và cách đánh giá
 
-Nhãn churn **không** dán tay lên user nào. Định nghĩa hiện tại
-(`LABEL_VERSION = churn_label_v3_orders_60d_min2_rees46real`):
+Nhãn churn **không** dán tay lên user nào. Có 2 cấu hình cần phân biệt:
+
+- **Mặc định trong code** (`labels.py`/`train.py`): `LABEL_VERSION = churn_label_v2_orders_120d_min2`,
+  cửa sổ nhãn 120 ngày, 5 mốc cắt `CUTOFF_DAYS_AGO = [270, 240, 210, 180, 150]` ngày trước hiện tại.
+- **Thí nghiệm REES46** (`retrain_on_real_rees46.py`, nguồn của mọi số ở mục 3.1–3.5): ghi đè thành
+  `LABEL_VERSION = churn_label_v3_orders_60d_min2_rees46real`, mô tả dưới đây:
 
 - Sinh từ **5 mốc thời gian cắt** (61–137 ngày trước cuối dữ liệu, cách đều). Tại mỗi mốc, tính đặc
   trưng từ dữ liệu **đến mốc đó**.
@@ -229,12 +193,17 @@ và model được re-baseline hoàn toàn trên hành vi người dùng thật.
 đã phát hiện/sửa trong chính nguồn REES46 (log giỏ hàng thiếu trước 12/2019, mã danh mục sai từ
 12/2019, 4 ngày mất log đơn hàng): [`rees46-transform-mapping.md`](rees46-transform-mapping.md).
 
-Campaign Builder đã có sẵn node điều kiện `Condition_ChurnRiskTier` (rẽ nhánh theo % xác suất đã hiệu chỉnh) và
-nhiều loại action (voucher %, tiền, freeship, điểm thưởng, nâng hạng, email) — admin kéo-thả được luồng "rủi ro
-cao → voucher mạnh, vừa → freeship" mà không cần code. Đã kiểm chứng bằng harness Java `validate()` + `compile()`
-ra BPMN XML hợp lệ (7.311 ký tự, đủ `exclusiveGateway` + 2 `conditionExpression`). **Chưa có:** campaign mẫu dựng
-sẵn; chưa chạy process instance thật; nhánh rẽ theo **ngưỡng % người đặt**, chưa theo 4 phân khúc KMeans — tức
-vẫn là "rule trên con số AI", chưa phải chính sách học được từ hiệu quả thật. *(Log 2026-08-03 "Tầng 3")*
+Các nguồn dữ liệu khác đã cân nhắc và loại:
+
+| Phương án | Vì sao loại | Bằng chứng |
+|---|---|---|
+| Bộ sinh tham số đặt tay | Lệch lõi động lực; không kiểm chứng được gì độc lập | Log 2026-10-01 |
+| Bộ sinh neo BG/NBD (Online Retail II) | Đã làm và hiệu chỉnh xong, nhưng chủ dự án chọn transform dữ liệu thật thay vì mô phỏng | Log 2026-10-01, 2026-10-02 |
+| Olist (marketplace Brazil) | Chỉ ~3% khách mua lặp; churn 97,3% thoái hóa; không có clickstream | ✅ 2.801/93.897 user có ≥2 đơn; churn 0,9729 — Log 2026-08-03 |
+| RetailRocket | Chỉ 3 loại sự kiện (xem/thêm giỏ/mua) → không đủ để kiểm giả thuyết thứ tự hành vi | Log 2026-08-04 |
+| REES46 Cosmetics | Một ngành duy nhất; chỉ dùng cho các thí nghiệm nghiên cứu riêng | Log 2026-10-02 |
+
+### 3.4. Hiệu chỉnh xác suất (calibration)
 
 `LogisticRegression(class_weight="balanced")` khiến model ước lượng hậu nghiệm dưới **tiên nghiệm
 50/50** thay vì tỉ lệ thật. Hiệu chỉnh là biến đổi đơn điệu nhưng **phi tuyến**, nên AUC và xếp-hạng-
@@ -247,6 +216,12 @@ model re-baseline trên dữ liệu thật — model bundle mang cờ `calibrate
 ngưỡng từ **metadata của chính model đang chạy** thay vì hardcode, vì ngưỡng tối ưu đổi theo định
 nghĩa nhãn và theo mỗi lần train; gặp model chưa hiệu chỉnh thì tự lùi về ngưỡng an toàn 0,5 kèm
 cảnh báo.
+
+### 3.5. Tầng 2–3: rule thời điểm và xếp hạng theo tổn thất kỳ vọng
+
+**Vì sao tầng 2 cố ý là rule "vừa bỏ giỏ trong 24 giờ"** (`RISK_ABANDON_GRACE_HOURS`): AI trả lời
+*ai* có nguy cơ; *khi nào* gửi voucher là câu hỏi thời điểm, và dữ liệu cho thấy cơ hội cứu giỏ hàng
+tắt rất nhanh:
 
 ✅ **Đo độ muộn** (REES46 Cosmetics, **3.570.193** lượt thêm giỏ): 74,7% giỏ không bao giờ thành đơn (cùng SP, 30
 ngày). Trong số giỏ **có** mua lại: **52,5% trong 1 giờ, 76,3% trong 24 giờ, 91,3% trong 7 ngày**; khả năng
@@ -278,7 +253,9 @@ thắng rule về F1 hay không (mục 3.2).
 xác suất trong CÙNG 1 campaign (vd 0–20%: chỉ gửi email, 20–50%: voucher nhỏ, còn lại: voucher lớn)
 qua node điều kiện `Condition_ChurnRiskTier` trong Campaign Builder — hạ tầng này **đã có sẵn trong
 code** (nhiều loại action: voucher %/tiền mặt/freeship, nâng hạng, điểm thưởng, email), admin kéo-
-thả dùng ngay không cần code thêm. Hai điểm chưa có: (1) chưa dựng sẵn campaign mẫu nào để demo, (2)
+thả dùng ngay không cần code thêm. Đã kiểm chứng bằng harness Java `validate()` + `compile()` ra BPMN
+XML hợp lệ (7.311 ký tự, đủ `exclusiveGateway` + 2 `conditionExpression`) *(Log 2026-08-03 "Tầng 3")*.
+Hai điểm chưa có: (1) chưa dựng sẵn campaign mẫu nào để demo, (2)
 nhánh rẽ theo **ngưỡng % xác suất** người tự đặt, chưa rẽ theo đúng 4 phân khúc KMeans — tức đây vẫn
 là "rule trên con số AI", chưa phải "chính sách học được từ hiệu quả thật" (cần vòng phản hồi đo kết
 quả campaign — xem `churn-risk-roadmap.md` Tầng 4, hiện chỉ có thiết kế, không thực nghiệm được
@@ -319,18 +296,25 @@ trực tiếp):
    không, nên không lộ ra khi test bằng script thông thường. Sửa bằng cách ép kiểu dữ liệu tường
    minh, không phụ thuộc phiên bản.
 
-**Kết quả xác minh cuối — chạy thật qua HTTP, không giả lập:**
+**Kết quả xác minh — chạy thật qua HTTP, không giả lập:**
 
 ```
+2026-10-06 (dữ liệu REES46):
 332.349 user chấm điểm → 17.737 trong dân số hợp lệ → 10.563 at-risk →
 0 đủ điều kiện (có bỏ giỏ hàng trong 24h) → 0 published
+
+2026-10-11 (lần quét live gần nhất, dữ liệu demo):
+502 user chấm điểm → 198 at-risk → 0 đủ điều kiện (không ai bỏ giỏ trong 24h qua) → 0 published
 ```
 
 0 published là **kết quả đúng theo dữ liệu**, không phải lỗi: dữ liệu REES46 là lịch sử đóng băng
 tới 2026-10-01, trong khi đồng hồ hệ thống thật đã là ngày sau đó — quy tắc "vừa bỏ giỏ hàng trong
-24h gần nhất" tự nhiên không có gì để khớp trên một tập dữ liệu lịch sử tĩnh. Toàn bộ chuỗi logic
-(tính điểm → lọc dân số → lọc theo thời điểm → xếp hạng ngân sách → gọi Kafka) đã chạy đúng, không
-lỗi, qua đúng con đường mà production/FE thật sự đi qua.
+24h gần nhất" tự nhiên không có gì để khớp trên một tập dữ liệu lịch sử tĩnh; lần quét 2026-10-11
+cũng không có giỏ hàng nào bị bỏ trong 24 giờ trước đó. Phần đã chạy đúng, không lỗi, qua đúng con
+đường HTTP mà production/FE đi qua: tính điểm → lọc dân số → lọc theo thời điểm → xếp hạng ngân sách.
+**Phần CHƯA được kiểm chứng end-to-end trong các lần này:** vì danh sách được chọn rỗng nên vòng
+publish Kafka không chạy lần nào, kéo theo promotion-service/Camunda chưa nhận sự kiện và **chưa
+phát voucher nào**.
 
 ## 4. Các thành phần hệ thống liên quan
 
@@ -341,10 +325,11 @@ lỗi, qua đúng con đường mà production/FE thật sự đi qua.
 | `promotion-service` (Java/Camunda 7) | Nhận sự kiện, chạy campaign đã cấu hình sẵn (BPMN) |
 | FE Campaign Builder (tab **"Coupon Code"**, tên hiển thị không khớp tên chức năng thật) | Nơi admin dựng campaign với trigger "Nguy cơ rời bỏ (AI)" |
 
----
+## 5. Chạy và kiểm tra
 
 ```bash
-# 1. Train model (nơi DUY NHẤT model được fit)
+# 1. Train model (nơi DUY NHẤT model được fit; dùng tham số MẶC ĐỊNH của code — nhãn v2 120 ngày)
+#    (số liệu REES46 ở mục 3 đến từ experiments/retrain_on_real_rees46.py, không phải lệnh này)
 curl -X POST http://localhost:8004/api/v1/models/train
 
 # 2. Chạy risk-scan (bình thường chạy tự động theo lịch, gọi tay để test/demo)
@@ -360,10 +345,10 @@ curl http://localhost:8004/api/v1/models/card
 # Camunda Cockpit: http://localhost:8087/camunda/app/cockpit/
 ```
 
-**`published = 0` là đúng theo dữ liệu, không phải lỗi:** dữ liệu REES46 đóng băng đến 2026-10-01, trong khi quy
-tắc tầng 2 so với đồng hồ thật (`NOW()`); khi chạy ở ngày sau đó, không user nào "vừa bỏ giỏ trong 24 giờ". Toàn
-bộ chuỗi (chấm điểm → lọc dân số → lọc thời điểm → xếp hạng ngân sách → gọi Kafka producer) đã chạy không lỗi
-qua đường HTTP mà production/FE thật đi qua.
+**`published = 0` là đúng theo dữ liệu, không phải lỗi:** quy tắc tầng 2 so với đồng hồ thật (`NOW()`);
+nếu không user at-risk nào "vừa bỏ giỏ trong 24 giờ" thì không có gì để publish. Chuỗi chấm điểm → lọc dân số →
+lọc thời điểm → xếp hạng ngân sách đã chạy không lỗi qua đường HTTP; bước gọi Kafka producer và phát voucher
+chỉ chạy khi có ít nhất 1 user đủ điều kiện (xem mục 3.7).
 
 ```bash
 curl -X POST http://localhost:8004/api/v1/models/rule-benchmark   # Rule vs AI (mục 3.2)
@@ -381,11 +366,13 @@ Action = tặng voucher/gửi email → Activate.
   gần nhất) — không phải người dùng Tiki thật mua hàng Tiki thật.
 - **Dữ liệu là lịch sử đóng băng**, trong khi quy tắc thời điểm (`has_recent_abandoned_cart`) so với
   đồng hồ thật (`NOW()`) — nên demo trực tiếp trên dữ liệu này sẽ không bao giờ thấy voucher được
-  phát (xem mục 3.7), dù toàn bộ logic đã verify đúng. Muốn demo thấy voucher thật cần nạp thêm dữ
+  phát (xem mục 3.7); các tầng 0–3 đã chạy đúng, còn đoạn publish → Camunda → voucher chưa được
+  kích hoạt trong các lần quét đã ghi nhận. Muốn demo thấy voucher thật cần nạp thêm dữ
   liệu có mốc thời gian gần ngày chạy demo, hoặc đổi cách tính "gần đây" sang neo theo dữ liệu thay
   vì đồng hồ hệ thống — chưa làm, ngoài phạm vi đồ án.
 - **Chỉ áp dụng cho khách có ≥2 đơn `DELIVERED`.** Chấm điểm ngoài dân số đó là **ngoại suy**.
-- **Cửa sổ nhãn 60 ngày** (không phải 120 như thiết kế gốc) — do dữ liệu thật chỉ trải ~151 ngày.
+- **Cửa sổ nhãn 60 ngày** chỉ áp dụng trong thí nghiệm REES46 — do dữ liệu thật chỉ trải ~151 ngày;
+  code mặc định vẫn là 120 ngày (nhãn v2). Hai nhãn khác nhau nên không so AUC trực tiếp được.
 - **Mở rộng đặc trưng đã thử và KHÔNG thành công trên nhãn 60-120 ngày** (7 khối, kể cả
   `gap_dispersion`, đều không vượt sàn nhiễu — xem mục 3.1). Ở đích NGẮN HẠN khác (24h quan sát → dự
   đoán mua lại trong 7 ngày, cấp episode giỏ hàng chứ không phải nhãn churn cấp-user), feature trình

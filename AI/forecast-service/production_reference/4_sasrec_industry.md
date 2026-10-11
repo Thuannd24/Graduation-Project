@@ -1,5 +1,7 @@
 # Industry Reference: Sequential Recommendation & SASRec in Production
 
+> **Ghi chú tham khảo do AI tổng hợp — không phải mô tả hệ thống, không dùng làm trích dẫn.**
+
 *Source: Compiled from E-Commerce Recommender Systems Architecture (2025-2026).*
 
 ## 1. The Rise of Sequential Recommendation

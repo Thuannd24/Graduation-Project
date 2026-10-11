@@ -215,8 +215,9 @@ class BehaviorEventConsumer:
         - OrderConfirmedEvent không mang danh sách sản phẩm -> tra `order_items` (cùng DB consumer đang ghi).
         - Thời điểm = timestamp của MESSAGE KAFKA (epoch ms -> UTC), KHÔNG lấy `timestamp` trong payload:
           OrderServiceImpl ghi bằng LocalDateTime.now() (giờ máy chạy JVM), sẽ lệch 7h trên máy giờ VN.
-          Timestamp Kafka do Debezium đặt lúc publish (trễ vài giây sau commit), và vẫn đúng khi đọc lại
-          message cũ (backfill).
+          Timestamp Kafka do Debezium lấy từ cột `outbox_events.created_at` (cấu hình
+          `table.field.event.timestamp`), nên vẫn đúng khi đọc lại message cũ (backfill). Cột đó PHẢI ghi UTC
+          (OutboxEvent.onCreate dùng ZoneOffset.UTC); outbox cũ ghi giờ JVM thì PURCHASE lệch +7h.
         - PURCHASE KHÔNG vào Redis history: ngoài HISTORY_ACTIONS, giữ khớp tập dữ liệu SASRec đang train."""
         if isinstance(payload, str):
             payload = json.loads(payload)

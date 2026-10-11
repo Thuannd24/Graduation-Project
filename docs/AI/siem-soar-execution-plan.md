@@ -1,7 +1,17 @@
 # Kế hoạch thực thi — SIEM + SOAR mini (nhánh `feature/siem-soar-mini`)
 
+> **🚧 KẾ HOẠCH, CHƯA CÀI ĐẶT (kiểm tra code 2026-10-11).** Không có thành phần nào dưới đây tồn tại trong
+> repo: không có `AI/security-service`, không có Logstash (không service trong compose, không có
+> `BE/logstash-pipeline/`), không có `IpBlocklistFilter` ở gateway, không có topic `security-events`/
+> `security-alerts` trong code. Keycloak vẫn tắt sự kiện: `BE/keycloak-data/ecommerce-realm-realm.json`
+> có `eventsEnabled: false`, `adminEventsEnabled: false`, `bruteForceProtected: false`.
+> Kibana: trong `BE/docker-compose-infra.yml` service `kibana` **bị comment** (tắt để tiết kiệm RAM);
+> trong `BE/docker-compose.yml` có service `kibana` 8.10.2 (`local-kibana`, cổng 5601). Elasticsearch
+> 8.10.2 có ở cả hai file.
+
 > **Plan này làm gì, nói một câu:** tận dụng đúng hạ tầng event-driven đã có (Kafka + Redis +
-> Elasticsearch/Kibana, đang chạy cho product search) để dựng 1 bộ SIEM+SOAR application-level —
+> Elasticsearch đang dùng cho product search; Kibana chỉ có trong `docker-compose.yml`, bị comment trong
+> `docker-compose-infra.yml`) để dựng 1 bộ SIEM+SOAR application-level —
 > không dựng Security Onion đầy đủ (Suricata/Zeek/Wazuh/TheHive, cần VM riêng), chỉ nhắm log ứng
 > dụng + Keycloak.
 >
@@ -314,7 +324,8 @@ tắt (theo yêu cầu 2026-10-06, `.wslconfig` = 2GB) nên các mục cần Key
   (`:83-153`); `request.getUserId()` là **Keycloak UUID** (được `resolveDbUserId` đổi ra id DB) → cùng không
   gian ID với JWT `sub` ở gateway.
 - `KeycloakAdminClient.setEnabled(userId, enabled)` có sẵn (`:103-108`); `UserResource.logout()` chưa dùng.
-- Hạ tầng: Elasticsearch + Kibana 8.10.2 đã có (`docker-compose-infra.yml:194-207,314-323`); Kafka dùng
+- Hạ tầng: Elasticsearch 8.10.2 có trong `docker-compose-infra.yml`; Kibana 8.10.2 ở file này **bị
+  comment** (chỉ bật trong `BE/docker-compose.yml`); Kafka dùng
   mặc định tự tạo topic; `contracts.py` đúng convention; port 8005 chưa bị chiếm (AI dùng 8001-8004);
   `CampaignTriggerService` có dedupe `businessKey` + khoá Redis (`:104-115`); `BE/pom.xml` target Java 17
   (README nói JRE 21 — không mâu thuẫn).

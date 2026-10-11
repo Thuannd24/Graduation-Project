@@ -11,7 +11,7 @@ setup(
         "pymysql>=1.1.0",
         "python-dotenv>=1.0.0",
         "sqlalchemy>=2.0",
-        "pandas>=2.0.0",
+        "pandas>=2.0.0,<3",
         "numpy>=1.24.0",
         "joblib>=1.3.0",
         "scikit-learn>=1.3.0"

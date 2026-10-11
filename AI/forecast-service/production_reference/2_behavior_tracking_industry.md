@@ -1,5 +1,7 @@
 # Industry Reference: E-Commerce Micro-Behavior & Clickstream Tracking
 
+> **Ghi chú tham khảo do AI tổng hợp — không phải mô tả hệ thống, không dùng làm trích dẫn.**
+
 *Source: Compiled from Industry Machine Learning & E-Commerce Engineering Best Practices (2025-2026).*
 
 ## 1. The Shift from Macro to Micro-Behaviors

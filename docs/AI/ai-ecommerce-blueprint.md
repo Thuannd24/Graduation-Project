@@ -1,12 +1,18 @@
 # Blueprint AI — Bản Thiết Kế Kiến Trúc AI Hệ Thống Thương Mại Điện Tử
 
+> **🗄️ Tài liệu lịch sử / thiết kế ban đầu.** Danh sách mô hình *đề xuất* để so sánh, viết trước khi
+> làm; các con số "hiệu suất dự kiến" là kỳ vọng tham khảo, **không phải số đo của dự án**. Phần lớn
+> mô hình ở đây không được huấn luyện. Hệ thống thực tế: [`text-search.md`](text-search.md),
+> [`visual-search.md`](visual-search.md), các file `recsys-*.md`, [`chatbot-ai.md`](chatbot-ai.md),
+> [`dashboard-ai.md`](dashboard-ai.md), [`churn-risk-feature-overview.md`](churn-risk-feature-overview.md).
+
 > **Chiến lược cốt lõi:** Train nhiều mô hình cạnh tranh → Đánh giá trên cùng tập dữ liệu → So sánh bằng các chỉ số đo lường (Metrics) → Lựa chọn mô hình tối ưu nhất để triển khai (Deploy).
 
 ---
 
 ## 📌 Tổng Quan Hệ Thống
 
-Hệ thống đề xuất chia làm **5 module AI** chính với tổng cộng **13 mô hình** được đề xuất huấn luyện và đối sánh:
+Hệ thống đề xuất chia làm **6 module AI** chính với tổng cộng **18 mô hình** được đề xuất huấn luyện và đối sánh:
 
 | Module | Các mô hình đề xuất huấn luyện | Metric so sánh chính | Mô hình khuyến nghị (mạnh nhất) |
 | :--- | :--- | :--- | :--- |

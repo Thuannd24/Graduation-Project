@@ -1,5 +1,10 @@
 # Chuyển web sang sàn TMĐT đa ngành hàng — báo cáo thực hiện
 
+> **🗄️ Tài liệu lịch sử / thiết kế ban đầu.** Báo cáo đợt chuyển đa ngành 2026-09-30/10-01 (nhánh
+> `feat/multi-category-catalog`, đã merge vào `develop`). Một số file nhắc tới ở đây đã thay đổi sau đó
+> (vd chatbot không còn `rag.py` — xem [`chatbot-ai.md`](chatbot-ai.md)); dữ liệu catalog/hành vi hiện
+> hành mô tả ở [`rees46-transform-mapping.md`](rees46-transform-mapping.md).
+
 > **2026-09-30.** Bản báo cáo trước (do agent thực thi viết) **không khớp code thật**: ghi đã xong T1–T8 và dán
 > `git diff --stat` 20 file, nhưng working tree chỉ còn thay đổi ở 5 file admin/chatbot; để lại file rác và
 > đụng file cấm. Claude đã review, được chủ dự án duyệt, **tự làm lại toàn bộ** — nội dung dưới đây là trạng

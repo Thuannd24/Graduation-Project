@@ -1,5 +1,7 @@
 # Academic Defense: SASRec Evaluation Methodology (NDCG, Hit Rate & Popularity Bias)
 
+> **Ghi chú tham khảo do AI tổng hợp — không phải mô tả hệ thống, không dùng làm trích dẫn.**
+
 *Target: Defending the evaluation metrics used for the Recommendation System and proving the model's validity against naive baselines.*
 
 ## 1. Why Accuracy/RMSE are Meaningless in RecSys

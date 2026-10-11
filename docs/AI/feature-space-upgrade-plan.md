@@ -1,5 +1,14 @@
 # Plan nâng cấp Feature Space — thi hành ngay
 
+> **🗄️ Tài liệu lịch sử / thiết kế ban đầu.** Đợt thí nghiệm 2026-08-17 → 08-18 (RetailRocket + panel
+> churn synthetic), trước khi chuyển sang dữ liệu REES46 thật. Không có feature nào ở đây vào
+> `FEATURE_COLUMNS` production (vẫn 11 cột). Kết luận hiện hành về mở rộng feature:
+> [`churn-risk-feature-overview.md`](churn-risk-feature-overview.md) mục 3.1.
+>
+> **Lưu ý số mốc:** AUC baseline nhóm A ở §1/§4 (0,7462) và ở các mục kết quả §8–§11 (0,7428; có
+> chỗ 0,7457) **khác nhau vì là các lần chạy khác nhau**; mọi Δ trong một mục kết quả chỉ so với baseline của CHÍNH lần
+> chạy đó.
+
 > Phạm vi: **chỉ không gian feature.** Không đổi model, không đổi kiến trúc, không đụng production.
 > Chẩn đoán dẫn tới plan này: [`churn-risk-log.md`](churn-risk-log.md) ·
 > bối cảnh dài hạn: [`recsys-execution-plan.md`](recsys-execution-plan.md)

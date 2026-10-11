@@ -1,7 +1,9 @@
 # TÀI LIỆU THIẾT KẾ: PRODUCT & CATALOG SERVICE
 ## (Dịch vụ Sản phẩm & Danh mục)
 
-> **Port (REST):** `8089` | **Port (gRPC):** `9090` | **DB:** `ecommerce_product_db` (PostgreSQL) | **Version:** 1.1.0
+> **Port (REST):** `8089` | **Port (gRPC):** `9089` | **DB:** `ecommerce_product_db` (MariaDB 10.11) | **Version:** 1.1.0
+>
+> _Rà soát 2026-10-11: đã sửa port gRPC (`9089`), CSDL (MariaDB 10.11 thay vì PostgreSQL), định dạng phản hồi `ApiResponse` (`{code, message, data}`) và bổ sung các endpoint còn thiếu ở mục 7.3._
 
 ---
 
@@ -16,7 +18,7 @@
 | **Đặc tính động (EAV)** | Quản lý các thuộc tính động của sản phẩm và cấu hình biến thể thông qua cơ sở dữ liệu quan hệ chuẩn EAV (Entity-Attribute-Value). |
 | **Hình ảnh** | Upload/Xóa ảnh sản phẩm thông qua MinIO Object Storage tích hợp. |
 | **Đánh giá (Review)** | Khách hàng đánh giá sản phẩm (Rating, Comment, Upload ảnh) dựa trên xác thực lịch sử mua hàng từ Order Service. |
-| **Tìm kiếm nâng cao** | Tích hợp Elasticsearch phục vụ tìm kiếm từ khóa thông minh, hỗ trợ fallback tìm kiếm PostgreSQL khi ES ngoại tuyến. |
+| **Tìm kiếm nâng cao** | Tích hợp Elasticsearch phục vụ tìm kiếm từ khóa thông minh, hỗ trợ fallback tìm kiếm trên MariaDB khi ES ngoại tuyến. |
 | **Caching** | Sử dụng Redis Cache-Aside để giảm tải cho DB trong các tác vụ đọc thông tin sản phẩm và danh mục. |
 | **gRPC Server** | Giao tiếp nội bộ độ trễ thấp với các microservices khác (như Order Service) để xác thực giá, cân nặng, thông số biến thể mà không cần qua REST API. |
 
@@ -26,7 +28,7 @@
 > **Tỷ lệ Đọc/Ghi = 99:1**: Khách hàng thực hiện xem sản phẩm, duyệt danh mục liên tục, trong khi Admin rất ít khi thêm mới hoặc chỉnh sửa.
 
 *   **Không có cache**: 10.000 lượt GET/phút truy vấn trực tiếp DB $\rightarrow$ Quá tải kết nối DB (Connection Pool Exhaustion) $\rightarrow$ Hệ thống bị chậm/sập.
-*   **Có Redis Cache**: 95% request được đáp ứng trực tiếp từ bộ nhớ RAM trong thời gian $< 1\text{ms}$. Chỉ khoảng 5% request (Cache Miss / Cold Start) đi xuống PostgreSQL.
+*   **Có Redis Cache**: 95% request được đáp ứng trực tiếp từ bộ nhớ RAM trong thời gian $< 1\text{ms}$. Chỉ khoảng 5% request (Cache Miss / Cold Start) đi xuống MariaDB.
 
 ---
 
@@ -44,12 +46,12 @@
 │  2a. Cache HIT → Trả về dữ liệu Redis ngay (< 1ms) ✅      │
 │                                                             │
 │  2b. Cache MISS (Cold Start):                               │
-│      → Query dữ liệu từ PostgreSQL                          │
+│      → Query dữ liệu từ MariaDB                             │
 │      → Lưu vào Redis: SET "products::{id}" {json}           │
 │      → Trả về cho client                                    │
 │                                                             │
 │  3. Khi Admin cập nhật hoặc xóa sản phẩm:                   │
-│      → Cập nhật PostgreSQL                                  │
+│      → Cập nhật MariaDB                                     │
 │      → Xóa cache tương ứng sau khi DB transaction commit:   │
 │        DEL "products::{id}"                                 │
 │        DEL "products_slug::{slug}"                          │
@@ -69,7 +71,7 @@
 
 ## III. ELASTICSEARCH & CƠ CHẾ TÌM KIẾM
 
-### 3.1. Luồng đồng bộ PostgreSQL $\rightarrow$ Elasticsearch
+### 3.1. Luồng đồng bộ MariaDB $\rightarrow$ Elasticsearch
 
 Khi có sự thay đổi dữ liệu sản phẩm, việc đồng bộ sang Elasticsearch Index được thực hiện bất đồng bộ sau khi giao dịch cơ sở dữ liệu đã commit thành công:
 
@@ -78,11 +80,11 @@ sequenceDiagram
     autonumber
     participant Admin as Admin Client
     participant PS as Product Service
-    participant DB as PostgreSQL
+    participant DB as MariaDB
     participant Redis as Redis Cache
     participant ES as Elasticsearch
     
-    Admin->>PS: POST/PUT /api/admin/products (Tạo/Sửa)
+    Admin->>PS: POST/PUT /api/v1/admin/products (Tạo/Sửa)
     PS->>DB: Thực hiện lưu thông tin sản phẩm
     DB-->>PS: Lưu thành công (Giao dịch hoàn tất)
     
@@ -98,14 +100,14 @@ sequenceDiagram
 ### 3.2. Cơ chế Dự phòng Tìm kiếm (Resilience Fallback)
 Nếu Elasticsearch bị lỗi hoặc mất kết nối:
 1.  Hệ thống bắt ngoại lệ (`Exception`) và ghi log chi tiết.
-2.  Tự động kích hoạt **luồng dự phòng**: Tìm kiếm trực tiếp trên PostgreSQL bằng cách sử dụng các câu lệnh truy vấn mẫu `LIKE` thông qua `productRepository.findByNameContainingOrDescriptionContaining`.
+2.  Tự động kích hoạt **luồng dự phòng**: Tìm kiếm trực tiếp trên MariaDB bằng cách sử dụng các câu lệnh truy vấn mẫu `LIKE` thông qua `productRepository.findByNameContainingOrDescriptionContaining`.
 3.  Kết quả trả về vẫn được ánh xạ chuẩn sang DTO `ProductDocument` để Frontend tiếp tục hoạt động mà không bị gián đoạn.
 
 ---
 
 ## IV. GIAO TIẾP NỘI BỘ QUA gRPC (PRODUCT gRPC SERVER)
 
-Để tối ưu hóa giao tiếp dịch vụ và bảo mật dữ liệu nhạy cảm, **Order Service** giao tiếp trực tiếp với **Product Service** thông qua kết nối gRPC trên cổng `9090` (thay thế cho REST API truyền thống).
+Để tối ưu hóa giao tiếp dịch vụ và bảo mật dữ liệu nhạy cảm, **Order Service** giao tiếp trực tiếp với **Product Service** thông qua kết nối gRPC trên cổng `9089` (thay thế cho REST API truyền thống).
 
 ### 4.1. Protobuf Interface (ProductGrpcService)
 
@@ -164,7 +166,9 @@ Nhằm loại bỏ các cột dữ liệu JSON cồng kềnh khó index trong SQ
 > [!NOTE]
 > Cột `attributes` trong bảng `products` và cột `variant_attr` trong bảng `product_variants` đã được cấu hình **Deprecated** (luôn lưu giá trị `null`) và được thay thế hoàn toàn bởi các bảng quan hệ EAV nêu trên.
 
-### 5.2. Schema Database PostgreSQL
+### 5.2. Schema Database (MariaDB 10.11)
+
+> _Ghi chú: Bảng thực tế do Hibernate tự sinh (`ddl-auto: update`, dialect MariaDB). Khối SQL dưới đây giữ cú pháp minh họa ban đầu (`BIGSERIAL`, `NUMERIC`...) chỉ để mô tả cấu trúc._
 
 ```sql
 -- 1. Bảng danh mục
@@ -307,7 +311,7 @@ Hình ảnh sản phẩm được tải trực tiếp lên MinIO bucket `product
                                                     │
                                            (Trả về CDN/Public URL)
                                                     ▼
-                                          [Lưu URL vào PostgreSQL]
+                                          [Lưu URL vào MariaDB]
 ```
 
 ---
@@ -329,9 +333,8 @@ Hình ảnh sản phẩm được tải trực tiếp lên MinIO bucket `product
 #### Ví dụ phản hồi: `GET /api/v1/public/products/search?q=nike&page=0&size=1`
 ```json
 {
-  "code": 200,
-  "status": "SUCCESS",
-  "message": "Operation completed successfully",
+  "code": "SUCCESS",
+  "message": "Success",
   "data": {
     "content": [
       {
@@ -383,6 +386,7 @@ Hình ảnh sản phẩm được tải trực tiếp lên MinIO bucket `product
 *   **POST** `/api/v1/products/reviews`
     *   *Mục đích:* Tạo đánh giá mới cho sản phẩm.
     *   *Headers:* `X-User-Id` (được Gateway tự động điền từ Keycloak).
+    *   *Ràng buộc:* `orderId` là bắt buộc — chỉ khách đã mua hàng (verified purchase) mới được đánh giá.
     *   *Body:*
     ```json
     {
@@ -394,13 +398,29 @@ Hình ảnh sản phẩm được tải trực tiếp lên MinIO bucket `product
     }
     ```
 
-#### Admin / Staff (Yêu cầu ROLE_ADMIN)
+#### Admin / Staff (`ROLE_ADMIN` hoặc `ROLE_STAFF`; thao tác xóa chỉ `ROLE_ADMIN`)
 *   **POST** `/api/v1/admin/products` : Tạo sản phẩm mới kèm danh sách biến thể EAV và ảnh.
 *   **PUT** `/api/v1/admin/products/{id}` : Cập nhật thông số sản phẩm và biến thể.
 *   **DELETE** `/api/v1/admin/products/{id}` : Xóa sản phẩm.
 *   **POST** `/api/v1/admin/products/images/upload` : Upload ảnh lên MinIO.
 *   **POST** `/api/v1/admin/attributes` : Tạo định nghĩa thuộc tính mới.
 *   **POST** `/api/v1/admin/categories` : Tạo danh mục sản phẩm mới.
+
+### 7.3. Các endpoint khác có trong code (bổ sung khi rà soát 2026-10-11)
+
+| Nhóm | Endpoint |
+|---|---|
+| Thương hiệu (public) | `GET /api/v1/public/brands`, `/active`, `/{id}`, `/slug/{slug}`, `/category/{categoryId}` |
+| Danh mục (public) | `GET /api/v1/public/categories/{id}`, `GET /api/v1/public/categories/{id}/attributes` |
+| Đánh giá (khách) | `GET /api/v1/products/reviews/me`, `POST /api/v1/products/reviews/images/upload` |
+| Wishlist (khách) | `GET /api/v1/wishlist`, `POST/DELETE /api/v1/wishlist/{productId}`, `GET /api/v1/wishlist/check/{productId}` |
+| Admin danh mục/thương hiệu | `PUT/DELETE /api/v1/admin/categories/{id}`, `POST /api/v1/admin/brands`, `PUT/DELETE /api/v1/admin/brands/{id}` |
+| Admin thuộc tính (EAV) | `GET /api/v1/admin/attributes`, `GET/PUT/DELETE /api/v1/admin/attributes/{id}`, `POST /api/v1/admin/categories/{categoryId}/attributes`, `DELETE /api/v1/admin/categories/{categoryId}/attributes/{attributeId}` |
+| Admin đánh giá | `GET /api/v1/admin/reviews`, `POST /api/v1/admin/reviews/{id}/reply` (chỉ hỗ trợ trả lời đánh giá, không có duyệt/ẩn) |
+| Admin import | `POST /api/v1/admin/import/catalog` (`dryRun` mặc định `true`, chỉ `ROLE_ADMIN`) |
+| Nội bộ (service-to-service, Gateway chặn) | `GET /api/internal/products/price-info`, `GET /api/internal/products/bulk` |
+
+Mọi endpoint REST trả về wrapper `ApiResponse`: `{ "code": "SUCCESS", "message": "...", "data": ... }` (khi lỗi `code` là mã lỗi, `data = null`).
 
 ---
 
@@ -525,9 +545,9 @@ product-service:
   image: ecommerce/product-service:latest
   ports:
     - "8089:8089"
-    - "9090:9090"
+    - "9089:9089"
   environment:
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_product_db
+    DB_HOST: mariadb          # jdbc:mariadb://${DB_HOST}:${DB_PORT}/ecommerce_product_db
     SPRING_DATA_REDIS_HOST: redis
     SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
     MINIO_ENDPOINT: http://minio:9000
@@ -535,7 +555,7 @@ product-service:
     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
     SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
   depends_on:
-    - postgres
+    - mariadb
     - redis
     - kafka
     - elasticsearch
@@ -549,9 +569,9 @@ product-service:
 ## X. ĐIỂM TỐI ƯU HÓA HIỆU NĂNG ĐÃ THỰC HIỆN
 
 1.  **Batch Fetching trong DTO Conversion**: Loại bỏ hoàn toàn truy vấn N+1 khi gọi danh sách sản phẩm. Các bảng liên kết như `ProductVariant`, `ProductTag`, `ProductImage`, `ProductAttributeValue`, `VariantOptionValue` đều được gom ID sản phẩm truy vấn 1 lần bằng từ khóa `IN` trong JPA, sau đó dùng Java Stream Map để phân nhóm lại.
-2.  **Đồng bộ ES/Cache sau Giao dịch (Post-Commit)**: Chỉ kích hoạt đồng bộ Elasticsearch và xóa Cache Redis sau khi chắc chắn PostgreSQL đã Commit giao dịch thành công nhờ `TransactionSynchronizationManager`, phòng ngừa hoàn toàn lỗi không đồng bộ dữ liệu khi xảy ra Rollback.
+2.  **Đồng bộ ES/Cache sau Giao dịch (Post-Commit)**: Chỉ kích hoạt đồng bộ Elasticsearch và xóa Cache Redis sau khi chắc chắn MariaDB đã Commit giao dịch thành công nhờ `TransactionSynchronizationManager`, phòng ngừa hoàn toàn lỗi không đồng bộ dữ liệu khi xảy ra Rollback.
 3.  **Tách biệt gRPC và REST**: Các thao tác checkout/đơn hàng lấy thông số giá và cân nặng sản phẩm liên tục được chuyển qua kênh gRPC, giúp giảm tải serialize JSON và băng thông HTTP, cải thiện tốc độ xử lý đơn hàng đáng kể.
-4.  **Dự phòng Sự cố (Resilience)**: Cơ chế Fallback sang DB SQL khi Elasticsearch bị ngắt kết nối giúp hệ thống luôn hoạt động ổn định và có khả năng tự phục hồi.
+4.  **Dự phòng Sự cố (Resilience)**: Cơ chế Fallback sang MariaDB khi Elasticsearch bị ngắt kết nối giúp hệ thống luôn hoạt động ổn định và có khả năng tự phục hồi.
 
 ---
 *Tài liệu thuộc nhóm 2 — Kiến trúc & Kỹ thuật chuyên sâu.*

@@ -1,4 +1,11 @@
 # Kế hoạch Nghiên cứu & Thực thi (2 Tháng)
+
+> **🗄️ Tài liệu lịch sử / thiết kế ban đầu.** Kế hoạch phân công dự kiến, **không phải mô tả hệ thống**.
+> Ngày tháng ghi "2025" là lỗi — mốc thời gian dự án là **2026**. Nhiều hạng mục **không được xây**:
+> chatbot không có SSE/streaming và không dùng Gemini (dùng DeepSeek, xem [`chatbot-ai.md`](chatbot-ai.md));
+> forecast-service không có endpoint `/churn/score` (chấm điểm chạy qua `risk_scheduler`, xem
+> [`churn-risk-feature-overview.md`](churn-risk-feature-overview.md)); Mini SIEM/SOAR chưa cài đặt (xem
+> [`siem-soar-execution-plan.md`](siem-soar-execution-plan.md)). Recsys hiện hành: các file `recsys-*.md`.
 *Phân công: Hành vi (Behavior Tracking), AI Recommendation (SASRec) & Security (Mini SIEM/SOAR).*
 *Thời gian: 09/10/2025 - 08/12/2025*
 # Kế hoạch Nghiên cứu & Thực thi 3 Thành viên (2 Tháng)

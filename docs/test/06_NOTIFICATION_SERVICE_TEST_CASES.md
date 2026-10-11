@@ -9,7 +9,7 @@
 
 Bộ test case này đã được **rút gọn**, tập trung vào các luồng quan trọng nhất của `notification-service`, bỏ qua các test case validate field/lẻ tẻ không ảnh hưởng nghiệp vụ chính:
 
-1. **NotificationTemplateSeeder** — seed 7 template mặc định khi DB rỗng, không tạo trùng khi đã tồn tại.
+1. **NotificationTemplateSeeder** — seed 10 template mặc định khi DB rỗng, không tạo trùng khi đã tồn tại.
 2. **TemplateRenderer** — render placeholder `{{key}}` bằng giá trị động, và các edge case quan trọng (thiếu biến, HTML không escape).
 3. **NotificationServiceImpl** — chọn template, render nội dung, gửi email thật qua `JavaMailSender`, giả lập push FCM, lưu `Notification`.
 4. **NotificationKafkaConsumer** — 2 listener `order-events` và `payment-events`, map `eventType` → template tương ứng, và **đặc biệt là hành vi xử lý event trùng lặp (idempotency)**.
@@ -18,6 +18,8 @@ Bộ test case này đã được **rút gọn**, tập trung vào các luồng 
 ### ⚠️ Sai khác quan trọng giữa code thật và tài liệu thiết kế `06_NOTIFICATION_SERVICE.md`
 
 Các test case dưới đây được viết dựa trên **hành vi thực tế của code**. Những điểm lệch so với tài liệu/quy ước `BE/CLAUDE.md` được đánh dấu **[GAP]**:
+
+> **Cập nhật rà soát 2026-10-11:** G1 và G2 **đã được xử lý trong code** — `NotificationKafkaConsumer` hiện kiểm tra trùng bằng `notificationRepository.existsByOrderIdAndEventType(orderId, eventType)` trước khi gửi, và đã xử lý thêm `OrderShippedEvent`, `OrderDeliveredEvent` (order-events). Các event vẫn chưa được xử lý: `RefundCompletedEvent`, `UserRegisteredEvent`. Kỳ vọng của IT-NOTI-010/011 nay là: lần thứ 2 bị bỏ qua (chỉ 1 `Notification`, 1 email).
 
 | # | Tài liệu / Quy ước mong đợi | Code thật hiện tại | Ảnh hưởng |
 |---|---|---|---|
@@ -36,8 +38,8 @@ Các test case liên quan G1–G7 vẫn được viết đầy đủ theo đúng
 
 | Test ID | Module/Endpoint | Loại | Mô tả | Tiền điều kiện | Input/Steps | Kết quả mong đợi | Priority |
 |---|---|---|---|---|---|---|---|
-| UT-NOTI-001 | NotificationTemplateSeeder.run() | Unit | Seed đủ 7 template mặc định khi collection `notification_templates` rỗng | DB Mongo test rỗng | Khởi tạo seeder với repository mock rỗng → gọi `run(args)` | `templateRepository.save()` được gọi đúng 7 lần với 7 `code` mặc định (`welcome_template`, `sms_otp_template`, `promotion_voucher_template`, `order_confirmed_template`, `order_cancelled_template`, `payment_success_template`, `payment_failed_template`), mỗi template có `name`, `titleTemplate`, `bodyTemplate` non-blank và `channel` đúng | High |
-| UT-NOTI-002 | NotificationTemplateSeeder.run() | Unit | Không tạo document mới (không duplicate) nếu template đã tồn tại theo `code` | DB đã có sẵn 7 template | Gọi lại `run(args)` lần thứ 2 | `findByCode(code)` trả về Optional có giá trị cho cả 7 code → giữ nguyên `_id` → tổng số document vẫn là 7 (không tăng lên 14) | High |
+| UT-NOTI-001 | NotificationTemplateSeeder.run() | Unit | Seed đủ 10 template mặc định khi collection `notification_templates` rỗng | DB Mongo test rỗng | Khởi tạo seeder với repository mock rỗng → gọi `run(args)` | `templateRepository.save()` được gọi đúng 10 lần với 10 `code` mặc định (`welcome_template`, `sms_otp_template`, `promotion_voucher_template`, `order_confirmed_template`, `order_cancelled_template`, `payment_success_template`, `payment_failed_template`, `order_shipped_template`, `order_delivered_template`, `vip_membership_promo_template`), mỗi template có `name`, `titleTemplate`, `bodyTemplate` non-blank và `channel` đúng | High |
+| UT-NOTI-002 | NotificationTemplateSeeder.run() | Unit | Không tạo document mới (không duplicate) nếu template đã tồn tại theo `code` | DB đã có sẵn 10 template | Gọi lại `run(args)` lần thứ 2 | `findByCode(code)` trả về Optional có giá trị cho cả 7 code → giữ nguyên `_id` → tổng số document vẫn là 7 (không tăng lên 14) | High |
 | UT-NOTI-003 | NotificationTemplateSeeder.run() | Unit | **[GAP-G5]** Nội dung template bị ghi đè khi service restart, dù dữ liệu trong DB đã bị sửa tay | Template `order_confirmed_template` đã bị admin sửa tay `titleTemplate` (giả lập chỉnh trực tiếp Mongo) | Gọi lại `run(args)` | `titleTemplate` bị **ghi đè lại** thành giá trị hard-code trong `NotificationTemplateSeeder.java`, giá trị admin sửa tay bị mất — xác nhận hành vi "upsert luôn", không phải "seed nếu chưa có" | Medium |
 
 ---

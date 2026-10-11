@@ -92,7 +92,7 @@ python main.py
 ```
 
 Lặp lại cho các service còn lại:
-* **Chatbot Service:** Cổng `8002` (cần khai báo `DEEPSEEK_API_KEY` hoặc `GEMINI_API_KEY` trong biến môi trường)
+* **Chatbot Service:** Cổng `8002` (cần khai báo `DEEPSEEK_API_KEY` trong biến môi trường; chatbot chỉ dùng DeepSeek)
 * **Recommendations Service:** Cổng `8003`
 * **Forecast Service:** Cổng `8004`
 
@@ -100,7 +100,7 @@ Lặp lại cho các service còn lại:
 
 ## 4. Chạy Bằng Docker Compose (Production / Docker Deployment)
 
-Hệ thống AI microservices tích hợp trực tiếp chung với dải mạng mạng `be_ecommerce-network` của Java microservices.
+Hệ thống AI microservices tích hợp trực tiếp chung với dải mạng `ecommerce-network` của Java microservices.
 
 Để chạy tất cả các AI microservices:
 ```bash

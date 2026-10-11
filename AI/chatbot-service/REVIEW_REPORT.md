@@ -1,5 +1,10 @@
 # Báo cáo Review — Chatbot Service
 
+> **🗄️ Báo cáo 2026-08-06 về phiên bản CŨ** (Gemini, NLU heuristic từ khoá, `rag.py`, `sentiment.py`) — đã
+> được thay bằng phiên bản DeepSeek (NLU bằng 1 lệnh gọi LLM, `services/rag/`, `services/nlu/`). Mô tả hệ
+> thống hiện hành: [`docs/AI/chatbot-ai.md`](../../docs/AI/chatbot-ai.md). Các đường dẫn file, tên LLM và
+> luồng xử lý dưới đây chỉ đúng với phiên bản cũ. Riêng **§5.4 (escalate là stub) vẫn còn đúng**.
+
 > Ngày review: 2026-08-06
 > Phạm vi: toàn bộ `AI/chatbot-service/` — kiến trúc, luồng xử lý, nơi lưu dữ liệu, chất lượng code.
 > Đã test thật với BE đang chạy (order/user/promotion-service) và Gemini API thật, không phải chỉ đọc code.
@@ -95,6 +100,7 @@ Toàn bộ đã **build lại, restart service, gọi thử API thật** để x
 2. **Thẻ sản phẩm thiếu ảnh/brand/category.** `search-service` (service AI khác, ngoài phạm vi review này) hiện chỉ trả `id/name/price/score`. Cần sửa ở `search-service`, không phải chatbot-service.
 3. **Cơ chế "2 lần tiêu cực liên tiếp thì escalate"** trong tài liệu thiết kế chưa cài — hiện chỉ log warning khi negative > 0.80, chưa đếm số lần liên tiếp và chưa thực sự bắn thông báo Slack/Zalo (`ESCALATION_WEBHOOK_URL` có trong config nhưng chưa được gọi ở đâu).
 4. **`/chat/sessions/escalate`** endpoint chỉ log rồi trả `SUCCESS`, không thực sự gọi bất kỳ hệ thống thông báo nào — là stub từ trước, chưa nối vào notification-service thật.
+   *(Kiểm tra lại 2026-10-11: VẪN ĐÚNG — `/chat/sessions/escalate` và `/chatbot/escalate` trong `app/api/endpoints/chatbot.py` vẫn chỉ ghi log. Việc chuyển nhân viên thật trên FE đi qua BE/chat-service — `PUT /public/chat/rooms/{roomId}/handover` — không qua endpoint này.)*
 5. **RAGAS eval** (`scripts/run_ragas_eval.py`) cần cài thêm `ragas`/`datasets` (không nằm trong nhóm cài đặt tối thiểu) và có thể cần thêm cấu hình để dùng Gemini làm giám khảo thay vì OpenAI (mặc định của RAGAS).
 
 ---

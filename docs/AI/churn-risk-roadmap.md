@@ -14,9 +14,8 @@
 > **Cập nhật 2026-10-05 — đã chuyển hẳn từ bộ sinh synthetic sang transform REES46 THẬT** (nạp vào DB,
 > xem `rees46-transform-mapping.md` + `churn-risk-log.md` mục 2026-10-02/2026-10-05). Việc này giải
 > quyết nhiều mục bên dưới "miễn phí" (không phải vì đã làm đúng việc đó, mà vì tiền đề của nó đổi):
-> `session_id` giờ THẬT (§1.1 hết áp dụng — nguồn REES46 có session thật, không cần sửa write-path nữa,
-> nhưng bug write-path ở `behavior_consumer.py:45` SẼ vẫn ảnh hưởng dữ liệu MỚI ghi sau khi demo chạy
-> thật — chưa kiểm tra lại); nhãn đổi thành orders/60 ngày (§0.2, ép buộc bởi dữ liệu thật chỉ trải
+> `session_id` giờ THẬT (§1.1 — nguồn REES46 có session thật; write-path cho event MỚI cũng đã sửa:
+> `behavior_consumer.py` đọc `sessionId` từ payload, xem §1.1); nhãn đổi thành orders/60 ngày (§0.2, ép buộc bởi dữ liệu thật chỉ trải
 > ~151 ngày, không phải do lưới phương án đã quét như kế hoạch gốc); re-baseline + ablation + rule vs
 > AI + phân bổ ngân sách (§2.1/2.2/3.1) đã chạy lại trên dữ liệu thật. **Tầng 1 (làm giàu bộ sinh bằng
 > tham số ẩn) gần như không còn ý nghĩa** — không còn bộ sinh để làm giàu, trừ phần dùng cho unit test.
@@ -39,8 +38,10 @@ permutation importance; L1 path; đối chứng âm. Đây là tài sản dùng 
 | **B** | **Nhãn gần như tautology** | Nhãn = "không hoạt động (xem HOẶC mua) 30 ngày tới"; feature mạnh nhất = "số category **xem** 30 ngày qua", permutation importance **0.2253** so với 0.0285 của hạng nhì. Cùng nguồn `user_events`, hai cửa sổ kề nhau | Mọi việc mở rộng feature. Đã chứng minh: 3/3 block thất bại, đối chứng âm (+0.0033) ăn điểm cao hơn cả 2 block thật |
 | **C** | **Nguồn dữ liệu thiếu cấu trúc** | `product_reviews` 0 dòng · `issued_vouchers` 1 dòng · `session_id` NULL 61.694/61.694 · timestamp phân bố ĐỀU (không có nhịp ngày/tuần) · giảm giá luôn đúng 10% | ~60% mọi roadmap feature. Không sửa thì các feature đó *không thể đo*, chứ không phải "đo ra kém" |
 
-**Một kết quả đã vững, cần bảo vệ:** xếp hạng theo tổn thất kỳ vọng giữ được **3,7–7,7× doanh thu
-đang rủi ro** so với xếp theo xác suất thuần, cùng ngân sách voucher. Đây là năng lực rule-based
+**Một kết quả đã vững, cần bảo vệ:** xếp hạng theo tổn thất kỳ vọng giữ được **nhiều lần doanh thu
+đang rủi ro** so với xếp theo xác suất thuần, cùng ngân sách voucher. *(⚠️ Số 3,7–7,7× ở bản chẩn đoán
+này đo trên synthetic, ĐÃ LỖI THỜI — số hiện hành đo trên dữ liệu thật là 60,27× (K=25) → 12,75× (K=200),
+xem §3.1.)* Đây là năng lực rule-based
 **không có cách nào** làm (không có xác suất thì không nhân được với giá trị khách hàng). **Nhưng con
 số này phụ thuộc vấn đề A** — phải đo lại sau khi hiệu chỉnh.
 
@@ -85,7 +86,7 @@ odds, (c) `CalibratedClassifierCV` (Platt / isotonic) lồng trong grouped CV. R
 xếp hạng** ở cả 3.
 
 **Tiêu chí thành công:** ECE giảm rõ rệt; và trả lời được "3,7–7,7× có còn đúng sau hiệu chỉnh
-không". **Tiêu chí DỪNG:** nếu nguyên trạng đã calibrated tốt (ECE nhỏ), ghi lại và bỏ qua (b)/(c).
+không" *(đã trả lời: số hiện hành trên dữ liệu thật là 60,27×–12,75×, xem §3.1)*. **Tiêu chí DỪNG:** nếu nguyên trạng đã calibrated tốt (ECE nhỏ), ghi lại và bỏ qua (b)/(c).
 
 **Rủi ro cần nói thẳng:** kết quả có thể làm **giảm** con số 3,7–7,7×. Vẫn phải làm — một con số
 sai có lợi cho mình thì tệ hơn là không có số nào.
@@ -127,16 +128,18 @@ nghĩa.
 
 ## Tầng 1 — Sửa nguồn dữ liệu (mở khoá phần lớn roadmap feature) — phần lớn hết áp dụng, xem cập nhật đầu file
 
-### 1.1. Sửa write-path `session_id` (lỗi thật, không phải thiếu seed) — dữ liệu LỊCH SỬ hết áp dụng, write-path CHƯA kiểm tra lại
+### 1.1. Sửa write-path `session_id` (lỗi thật, không phải thiếu seed) — ✅ XONG
 
 REES46 transform đã nạp `session_id` thật (từ `user_session` gốc) cho toàn bộ dữ liệu hành vi hiện có
-trong DB — không còn NULL hàng loạt. Nhưng đây là dữ liệu NẠP SẴN (batch), không đi qua
-`behavior_consumer.py`; nếu hệ thống chạy thật và ghi event MỚI, bug dưới đây (hardcode `None`) vẫn còn
-nguyên, CHƯA kiểm tra lại trong phiên 2026-10-05. Giữ nguyên mô tả gốc:
+trong DB — không còn NULL hàng loạt. Write-path cho event MỚI cũng đã sửa: `_parse_message()` trong
+[`behavior_consumer.py`](../../AI/forecast-service/app/kafka/behavior_consumer.py) đọc
+`payload.get("sessionId")` cho cả 3 topic (xem SP, giỏ hàng, vi hành vi FE) — không còn hardcode `None`.
+Ngoại lệ còn lại: sự kiện `PURCHASE` sinh từ đơn hàng xác nhận vẫn ghi `session_id = None` (event đơn hàng
+không mang session). Tỉ lệ NULL trên event mới chưa được đo lại.
 
-[`behavior_consumer.py:45`](../../AI/forecast-service/app/kafka/behavior_consumer.py#L45) hardcode
-`"session_id": None` cho `ProductViewedEvent` kèm ghi chú *"chưa track session cho guest"*. Đường
-cart (dòng 58) có đọc `payload.get("sessionId")` nhưng DB vẫn NULL toàn bộ.
+*Mô tả gốc (lịch sử):* `behavior_consumer.py:45` từng hardcode `"session_id": None` cho
+`ProductViewedEvent` kèm ghi chú *"chưa track session cho guest"*; đường cart có đọc
+`payload.get("sessionId")` nhưng DB vẫn NULL toàn bộ.
 
 **Việc:** product-service phát kèm `sessionId`; FE gửi session id ổn định; bỏ hardcode None. Đây là
 tiền đề cho **mọi** feature theo session, và cũng sửa luôn chất lượng gợi ý của recs-service (dùng
@@ -147,7 +150,7 @@ chung `session:{sid}:history`).
 ### 1.2. Làm giàu bộ sinh dữ liệu — **bằng tham số ẩn, không bằng dán nhãn** — ❌ HẾT Ý NGHĨA (2026-10-05)
 
 Không còn bộ sinh synthetic để làm giàu cho production nữa — `seed.mjs`/`simulate.mjs` chỉ còn dùng cho
-unit test (xem `project_data_architecture_one_source_per_layer` trong memory). review/voucher/discount
+unit test (nguyên tắc "mỗi lớp dữ liệu một nguồn thật"). review/voucher/discount
 vẫn thiếu trong nguồn thật REES46 — xử lý theo nguyên tắc "mỗi lớp một nguồn thật": để trống thật (model
 không dùng được) hoặc kiểm chứng RIÊNG trên nguồn thật khác có đúng feature đó (đã làm cho huỷ đơn, xem
 `churn_cancel_feature_onlineretail.py`), không sinh tham số ẩn giả nữa. Giữ bảng gốc để tham khảo lịch sử:
@@ -180,7 +183,7 @@ AUC thật: **0,7354 ± 0,0138** (thấp hơn 0,9379 cũ đúng như dự đoán
 ### 2.2. Benchmark Rule vs AI — ✅ XONG (2026-10-05, trên dữ liệu THẬT) — không ưu tiên đào sâu thêm
 Model KHÔNG thắng rule tốt nhất (cây sâu 3) về F1 (0,8244 vs 0,8245, trong nhiễu) nhưng AUC cao nhất
 mọi phương pháp (0,7352). **User (2026-10-05): khoảng cách này là bình thường ở quy mô dữ liệu/độ phức
-tạp hiện tại, không cần đào sâu thêm** — xem feedback trong memory. Dùng Tầng 3.1 (dưới) làm luận điểm
+tạp hiện tại, không cần đào sâu thêm**. Dùng Tầng 3.1 (dưới) làm luận điểm
 chính thay vì phần này. Nội dung kế hoạch gốc giữ nguyên để tham khảo:
 **Cách làm đúng:** quét **lưới ngưỡng** để lấy **rule TỐT NHẤT** theo F1, rồi mới so với model. Tự
 chọn một rule yếu rồi đánh bại nó thì người phản biện sẽ nói baseline được dựng để thua.
@@ -244,8 +247,10 @@ là tham số campaign, không hardcode. Kèm nhóm đối chứng không gửi 
 không có dữ liệu nguồn, sinh ra thì thành tự bịa rồi tự đoán lại (suy luận vòng tròn).
 
 ### 3.2. Next Best Action từ 4 phân khúc đã học
-4 phân khúc giờ dùng được thật (VIP 1146 · New 759 · At Risk 727 · Hibernating 368, `match_distance`
-đều < 2.5). Ánh xạ **phân khúc → loại hành động**, và loại hành động đến từ cấu trúc *học được*
+4 phân khúc giờ dùng được thật. Tên phân khúc trong code hiện tại (`train.py`): **At Risk** (cụm có tỉ lệ
+churn đo được cao nhất) và 3 cụm còn lại theo hạng giá trị **VIP Champions / Loyal Regulars / Lapsed**.
+*(Bản cũ của mục này dùng tên archetype VIP / New / At Risk / Hibernating với số đếm từ run synthetic —
+cách gán nhãn đó đã bị thay, số đếm không còn áp dụng.)* Ánh xạ **phân khúc → loại hành động**, và loại hành động đến từ cấu trúc *học được*
 (unsupervised), không phải chuỗi `if/else` trên xác suất.
 
 **Đã có sẵn hạ tầng:** `segment`, `churnProbability`, `expectedLoss`, `riskRank`, `monetary` đều đã
@@ -265,7 +270,7 @@ Hai điểm CHƯA có (để không hiểu nhầm là đã xong hẳn):
 1. Chưa có campaign MẪU nào dựng sẵn — `DEFAULT_NODES` hiện chỉ là khung rỗng ("Bắt đầu → Kết thúc").
    Việc còn lại chỉ là thao tác UI/seed data (vài phút), không phải thiếu engineering.
 2. `Condition_ChurnRiskTier` rẽ nhánh theo **ngưỡng % người tự đặt** (vd ≥80%), KHÔNG rẽ theo đúng
-   4 phân khúc KMeans (VIP/New/At Risk/Hibernating) như mô tả gốc ở trên — vẫn là "rule trên con số
+   4 phân khúc KMeans (VIP Champions / Loyal Regulars / Lapsed / At Risk) như mô tả gốc ở trên — vẫn là "rule trên con số
    AI", khớp đúng tiêu chí DỪNG đã nêu: phân khúc học được, ngưỡng/chính sách vẫn do người chọn.
 
 ### 3.3. Cá nhân hoá mức ưu đãi
@@ -313,8 +318,7 @@ cáo dưới mục "hướng phát triển" **kèm thiết kế cụ thể**, kh
 3.1 phân bổ ngân sách (đo lại) → **4 kiến trúc feedback loop (thiết kế, không thực nghiệm) — CÒN LẠI,
 việc tiếp theo** → 5 model card + xoá endpoint giả.
 
-**Dài hạn thật (sau đồ án):** 1.1 (write-path session_id khi có event mới) + 1.2 (hết ý nghĩa, xem đầu
-file) → 2.3 so sánh thuật toán → 2.4 dọn feature → 3.2 NBA → 4 thực nghiệm feedback loop →
+**Dài hạn thật (sau đồ án):** (1.1 đã xong; 1.2 hết ý nghĩa, xem đầu file) → 2.3 so sánh thuật toán → 2.4 dọn feature → 3.2 NBA → 4 thực nghiệm feedback loop →
 3.3 cá nhân hoá mức ưu đãi → 5 drift + retrain gate tự động.
 
 **KHÔNG làm, và vì sao:**
@@ -336,6 +340,7 @@ ra, đó **không phải thất bại** — đó là câu trả lời trung th�
 chuyển sang: *AI ở hệ thống này không thắng rule về độ chính xác phân loại, mà thắng về **năng lực
 ra quyết định** — xác suất hiệu chỉnh cho phép xếp hạng theo tổn thất kỳ vọng và phân bổ ngân sách
 tối ưu, việc rule-based về nguyên tắc không làm được.* Luận điểm đó đã có **số đo** hậu thuẫn
-(3,7–7,7×, chờ xác nhận lại sau 0.1) và không phụ thuộc vào việc AUC cao hơn rule.
+(đo lại trên dữ liệu thật sau hiệu chỉnh: 60,27× ở K=25 → 12,75× ở K=200, xem §3.1; số 3,7–7,7× cũ
+đã lỗi thời) và không phụ thuộc vào việc AUC cao hơn rule.
 
 Chuẩn bị sẵn cả hai kết cục ngay từ đầu là cách duy nhất để không phải viết lại báo cáo giữa đường.

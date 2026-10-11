@@ -1,5 +1,8 @@
 # Setup tính năng Churn AI trên MÁY BẤT KỲ (từ con số 0)
 
+> **⚠️ Phụ thuộc dữ liệu riêng tư:** bước 2 cần thư mục Google Drive `churn-ai-export/` của chủ dự án
+> (không công khai, không nằm trong repo). Không có quyền xem thư mục đó thì không làm theo được hướng dẫn này.
+>
 > Hướng dẫn này giả định máy đang setup **chưa có gì liên quan tới dự án** — chỉ cần Internet. Nếu
 > máy đó CHÍNH LÀ máy đã làm việc này (đã có sẵn Docker/dữ liệu), bỏ qua bước 1–2, vào thẳng bước 5.
 >
@@ -32,8 +35,10 @@ swap=2GB
 ```bash
 git clone https://github.com/Thuannd24/Graduation-Project.git
 cd Graduation-Project
-git checkout feat/multi-category-catalog
+git checkout develop
 ```
+
+(Nhánh `feat/multi-category-catalog` mà bản trước của hướng dẫn này dùng đã được merge vào `develop`.)
 
 ## 2. Lấy dữ liệu + model đã train (Google Drive)
 
@@ -60,9 +65,11 @@ cd Graduation-Project/BE
 docker compose -f docker-compose-infra.yml up -d mariadb kafka redis
 ```
 
-Đợi ~30 giây cho MariaDB khởi động xong (lần đầu sẽ tự tạo 4 database rỗng qua Flyway nếu các
-service Java từng chạy qua — nếu MariaDB hoàn toàn mới chưa có schema, chạy nhanh 1 lần
-`docker compose up -d` toàn bộ BE rồi tắt lại để Flyway tạo bảng trước khi qua bước 4).
+Đợi ~30 giây cho MariaDB khởi động xong. Dự án **không dùng Flyway**: database được tạo nhờ
+`createDatabaseIfNotExist=true` trong JDBC URL, còn bảng do Hibernate `ddl-auto: update` tự tạo khi
+service Java khởi động (vd `BE/order-service/src/main/resources/application.yml`). Nếu MariaDB hoàn toàn
+mới chưa có schema, chạy 1 lần các service Java liên quan (`docker compose up -d` BE) rồi tắt lại để
+Hibernate tạo bảng trước khi qua bước 4.
 
 ## 4. Nạp Docker image đã export (KHÔNG rebuild)
 

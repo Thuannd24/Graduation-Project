@@ -17,7 +17,7 @@ Bộ test case bao trùm các module nghiệp vụ của `product-service` (REST
 | Product (CRUD + variants + EAV + tags + images) | `AdminProductController`, `ProductController`, `ProductServiceImpl` | Không validate trùng slug ở tầng service — dựa vào DB unique constraint → lỗi rơi xuống `500 INTERNAL_ERROR` (generic handler), là điểm cần lưu ý khi test |
 | Category Product Aggregation | `ProductServiceImpl.getProductsByCategory` / `resolveCategoryIdsWithDescendants` | Danh mục cha trả về cả sản phẩm của toàn bộ category con (BFS đệ quy nhiều cấp) |
 | Catalog Import (bulk) | `AdminCatalogImportController`, `CatalogImportServiceImpl` | `dryRun=true` (default) chỉ validate, `dryRun=false` mới ghi DB; brand-category merge (union, không overwrite) |
-| Search | `ProductController#searchProducts`, `SearchServiceImpl` | Elasticsearch trước, fallback PostgreSQL `LIKE` khi ES lỗi |
+| Search | `ProductController#searchProducts`, `SearchServiceImpl` | Elasticsearch trước, fallback MariaDB 10.11 `LIKE` khi ES lỗi |
 | Ảnh sản phẩm | `AdminProductController#uploadProductImage`, `MinioStorageServiceImpl` | Chỉ nhận JPEG/PNG/GIF/WEBP, file rỗng → lỗi 400 |
 | Internal API | `InternalProductController` | `/api/internal/products/price-info`, `/bulk` — dùng bởi Order Service |
 
@@ -78,8 +78,8 @@ Bộ test case bao trùm các module nghiệp vụ của `product-service` (REST
 | IT-PRODUCT-007 | `POST /api/v1/admin/products` | Integration | Validate field số/enum không hợp lệ: thiếu `price`, `price<=0`, `salePrice>=price`, `salePrice=0`, `status` không thuộc enum | ROLE_ADMIN | `POST /products` với từng trường hợp trên | HTTP 400 `VALIDATION_FAILED`/`BAD_REQUEST` với message tương ứng cho mỗi trường hợp | High |
 | IT-PRODUCT-008 | `POST /api/v1/admin/products` | Integration | **[DEFECT]** Tạo sản phẩm trùng `slug` với sản phẩm đã tồn tại, hoặc 2 variant trùng `sku` trong cùng request | Sản phẩm `slug=iphone-15` đã tồn tại | `POST /products` với slug trùng, hoặc 2 variant cùng `sku="SKU-001"` | **Không có validate trùng ở tầng service** → vi phạm unique constraint DB → HTTP 500 `INTERNAL_ERROR` (không phải lỗi nghiệp vụ 400 rõ nghĩa) — defect cần dev xử lý | High |
 | IT-PRODUCT-009 | `PUT /api/v1/admin/products/{id}` | Integration | Cập nhật sản phẩm: gửi `tags`/`images` mới sẽ xóa toàn bộ dữ liệu cũ (kể cả khi gửi rỗng) | Sản phẩm có 3 tag cũ, ảnh gallery cũ | `PUT /products/{id}` body `{"tags":["new-tag"],"images":[]}` | 3 tag cũ bị xóa chỉ còn `["new-tag"]`; toàn bộ ảnh gallery cũ bị xóa vì `images=[]` (không giữ ảnh cũ khi không gửi lại) | High |
-| IT-PRODUCT-010 | `POST /api/v1/admin/products`, `DELETE /admin/products/{id}` | Integration | Kiểm tra RBAC: tạo sản phẩm bằng `ROLE_USER` thường; xóa sản phẩm bằng `ROLE_STAFF` (chỉ ADMIN được xóa) | Token tương ứng | `POST`/`DELETE /products` | HTTP 403 Forbidden ở cả 2 trường hợp | High |
-| IT-PRODUCT-011 | `GET /api/v1/internal/products/price-info` | Integration | Internal API lấy nhiều sản phẩm theo danh sách id (dùng bởi Order Service), trộn id tồn tại và không tồn tại | 3 sản phẩm id=1,2,3 tồn tại | `GET .../price-info?ids=1,2,3` và `?ids=1,99999` | Trả đủ 3 `ProductDto` khi tất cả id hợp lệ; id không tồn tại bị bỏ qua thầm lặng (chỉ trả record có thật) khi trộn lẫn | High |
+| IT-PRODUCT-010 | `POST /api/v1/admin/products`, `DELETE /admin/products/{id}` | Integration | Kiểm tra RBAC: tạo sản phẩm bằng `ROLE_CUSTOMER`; xóa sản phẩm bằng `ROLE_STAFF` (chỉ ADMIN được xóa) | Token tương ứng | `POST`/`DELETE /products` | HTTP 403 Forbidden ở cả 2 trường hợp | High |
+| IT-PRODUCT-011 | `GET /api/internal/products/price-info` | Integration | Internal API lấy nhiều sản phẩm theo danh sách id (dùng bởi Order Service), trộn id tồn tại và không tồn tại | 3 sản phẩm id=1,2,3 tồn tại | `GET .../price-info?ids=1,2,3` và `?ids=1,99999` | Trả đủ 3 `ProductDto` khi tất cả id hợp lệ; id không tồn tại bị bỏ qua thầm lặng (chỉ trả record có thật) khi trộn lẫn | High |
 
 ---
 
@@ -119,7 +119,7 @@ Bộ test case bao trùm các module nghiệp vụ của `product-service` (REST
 
 ---
 
-## 7. Search (Elasticsearch + Fallback PostgreSQL)
+## 7. Search (Elasticsearch + Fallback MariaDB)
 
 | Test ID | Module/Endpoint | Loại | Mô tả | Tiền điều kiện | Input/Steps | Kết quả mong đợi | Priority |
 |---|---|---|---|---|---|---|---|
@@ -127,7 +127,7 @@ Bộ test case bao trùm các module nghiệp vụ của `product-service` (REST
 | UT-PRODUCT-030 | `SearchServiceImpl.searchProducts` | Unit | Elasticsearch ném exception (mất kết nối) → fallback DB, cả khi keyword có giá trị và khi keyword rỗng | Mock ES throw exception | `searchProducts("nike"/"" , pageable)` khi ES lỗi | Catch exception, log lỗi, gọi `productRepository.findByNameContainingOrDescriptionContaining` (có keyword) hoặc `findByActive(true, ...)` (keyword rỗng), map `Product` → `ProductDocument` đúng field | High |
 | UT-PRODUCT-031 | `SearchServiceImpl.indexProduct` / `removeProductIndex` | Unit | Index/remove sản phẩm khi ES lỗi hoặc sản phẩm không tồn tại | ES throw exception / `findById` empty | `indexProduct(id)`, `removeProductIndex(id)` | Không throw ra ngoài (silent fail, chỉ log warning), không ảnh hưởng transaction chính; sản phẩm không tồn tại → không gọi `save` | Medium |
 | IT-PRODUCT-021 | `GET /api/v1/public/products/search?q=...` | Integration | Tìm kiếm full-text theo tên (kể cả tiếng Việt có dấu) và trường hợp không khớp kết quả nào | ES đã index sản phẩm mẫu | `GET /products/search?q=nike`; `q=màu đỏ`; `q=xyzkhongtontai123` | HTTP 200; trả đúng sản phẩm khớp (kể cả unicode có dấu, không lỗi encoding); không khớp → `data.content=[]` | High |
-| IT-PRODUCT-022 | `GET /api/v1/public/products/search?q=...` | Integration | Elasticsearch container down (giả lập ngắt kết nối ES) | ES service bị stop/network partition | `GET /products/search?q=nike` | HTTP 200 (không lỗi 5xx), kết quả trả về từ fallback PostgreSQL `LIKE`, cấu trúc `ProductDocument` giữ nguyên format | High |
+| IT-PRODUCT-022 | `GET /api/v1/public/products/search?q=...` | Integration | Elasticsearch container down (giả lập ngắt kết nối ES) | ES service bị stop/network partition | `GET /products/search?q=nike` | HTTP 200 (không lỗi 5xx), kết quả trả về từ fallback MariaDB `LIKE`, cấu trúc `ProductDocument` giữ nguyên format | High |
 
 ---
 

@@ -30,7 +30,7 @@ public class OutboxCleanupScheduler {
 
         log.info("Starting daily cleanup of outbox events...");
         try {
-            LocalDateTime threshold = LocalDateTime.now().minusDays(2);
+            LocalDateTime threshold = LocalDateTime.now(java.time.ZoneOffset.UTC).minusDays(2);
             outboxEventRepository.deleteByCreatedAtBefore(threshold);
             log.info("Finished cleanup of outbox events older than {}", threshold);
         } catch (Exception e) {

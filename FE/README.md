@@ -1,6 +1,6 @@
 # HƯỚNG DẪN CÀI ĐẶT & CHẠY FRONTEND (TECHSTORE)
 
-Ứng dụng Frontend của TechStore được xây dựng bằng ReactJS, Vite và Vanilla CSS, kết nối với API Gateway của Backend thông qua cấu hình môi trường linh hoạt.
+Ứng dụng Frontend của TechStore được xây dựng bằng ReactJS, Vite và Tailwind CSS, kết nối với API Gateway của Backend thông qua cấu hình môi trường linh hoạt.
 
 ---
 

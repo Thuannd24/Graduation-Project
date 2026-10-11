@@ -45,6 +45,8 @@ public class OutboxEvent {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        // UTC: Debezium lấy cột này làm timestamp message Kafka và coi DATETIME là UTC; ghi giờ JVM
+        // (Asia/Ho_Chi_Minh trong docker-compose) làm mọi consumer dùng timestamp (vd PURCHASE) lệch +7h.
+        this.createdAt = LocalDateTime.now(java.time.ZoneOffset.UTC);
     }
 }

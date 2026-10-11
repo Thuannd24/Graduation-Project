@@ -106,11 +106,11 @@ Java, nên server phát event luôn. Còn "cuộn trang" hay "rời tab" **khôn
 mới biết và phải tự gửi lên.
 
 Các producer hành vi ghi thời gian theo **UTC** (Java dùng `LocalDateTime.now(ZoneOffset.UTC)`, FE dùng `toISOString()`),
-để thứ tự giữa các nguồn không bị lệch. Riêng `PURCHASE` lấy thời gian từ **timestamp của message Kafka**. ⚠️ Timestamp
-này do Debezium lấy từ cột `outbox_events.created_at`, mà cột đó được ghi bằng `LocalDateTime.now()` theo **múi giờ của
-JVM** order-service, và docker-compose đặt `-Duser.timezone=Asia/Ho_Chi_Minh`. Vì vậy `PURCHASE` **có thể lệch +7 giờ**
-so với các event khác. Lần kiểm E2E ngày 2026-10-01 đo được lệch 0 giây, nên cần kiểm lại với order-service chạy đúng cấu
-hình compose trước khi dùng thời điểm mua cho phân tích (mục 4.4).
+để thứ tự giữa các nguồn không bị lệch. Riêng `PURCHASE` lấy thời gian từ **timestamp của message Kafka**: Debezium lấy
+giá trị này từ cột `outbox_events.created_at`. Trước 2026-10-11, cột đó ghi bằng `LocalDateTime.now()` theo múi giờ JVM
+(`Asia/Ho_Chi_Minh` trong docker-compose), nên `PURCHASE` **lệch +7 giờ** (đã đo được trên E2E ngày 2026-10-11). Bản sửa ngày
+2026-10-11 đổi `OutboxEvent` của order/payment-service sang `LocalDateTime.now(ZoneOffset.UTC)`; đo lại: lệch 0 giây.
+⚠️ Các dòng `PURCHASE` ghi **trước** bản sửa vẫn lệch +7 giờ (không có migration; dữ liệu seed có thể seed lại).
 
 ### 3.2 Bảng chữ cái hành vi (20 ký hiệu)
 
@@ -279,8 +279,8 @@ Dữ liệu hành vi là đầu vào của cả gợi ý lẫn churn, nên cần
 | **Không chống trùng** | Trường `eventId` bị bỏ qua; không có khoá duy nhất | Message bị gửi lại sinh dòng trùng, kể cả `PURCHASE`; bản dev còn nhân đôi do StrictMode (mục 3.3) | Khoá duy nhất theo `eventId` / `(order_id, item_id)` cho PURCHASE |
 | **Redis ghi trước MariaDB** | Ghi Redis xong mới ghi DB, không có giao dịch chung | DB lỗi thì Redis có event mà `user_events` không có | Ghi DB trước, hoặc chạy lại backfill định kỳ |
 | **`timestamp` không được kiểm ở cổng nhận** | Sai định dạng vẫn nhận 200, consumer `fromisoformat` lỗi rồi bỏ | Mất event mà FE không biết | Kiểm định dạng bằng Pydantic `datetime` |
-| **Thứ tự giữa các nguồn** | Mỗi topic một key Kafka; thứ tự toàn cục chỉ dựa vào `created_at` | Đồng hồ lệch giữa các máy làm đảo thứ tự | Đã chuẩn hoá UTC; cần kiểm riêng `PURCHASE` (mục 3.1) |
-| **Thời điểm `PURCHASE`** | Lấy từ outbox `created_at` ghi theo múi giờ JVM (`Asia/Ho_Chi_Minh` trong compose) | Có thể lệch +7 giờ so với event khác | Ghi outbox bằng UTC, hoặc đổi múi giờ khi đọc |
+| **Thứ tự giữa các nguồn** | Mỗi topic một key Kafka; thứ tự toàn cục chỉ dựa vào `created_at` | Đồng hồ lệch giữa các máy làm đảo thứ tự | Đã chuẩn hoá UTC cho mọi nguồn, kể cả `PURCHASE` (mục 3.1) |
+| **Thời điểm `PURCHASE`** (đã sửa 2026-10-11) | Outbox `created_at` từng ghi theo múi giờ JVM; nay ghi UTC | Dòng `PURCHASE` cũ (trước bản sửa) lệch +7 giờ | Seed lại, hoặc trừ 7 giờ cho dòng cũ khi phân tích |
 | **Đọc lại `order-events` từ đầu** | `auto_offset_reset="earliest"` khi consumer group mới | Lần chạy đầu tự nạp lại PURCHASE lịch sử (có ích), nhưng đổi group id sẽ nạp lại và sinh trùng | Kết hợp với chống trùng ở trên |
 | **Vi hành vi chưa vào model** | SASRec đang phục vụ chỉ đọc xem/thêm giỏ | 14 loại vi hành vi hiện chỉ phục vụ churn và phân tích | Thí nghiệm `+action` (mục 8.6) |
 
@@ -1119,5 +1119,4 @@ trung tâm của GĐ3. Kết quả dương hay âm đều có giá trị cho bá
 | Rà soát lại phần Behavior Tracking (mục 1–4, 7, 9–12, 15) | Đối chiếu thủ công từng khẳng định với code (2026-10-11) | Khoảng 90 khẳng định khớp. Đã sửa: `weight` của `VIEW_CART`/`BEGIN_CHECKOUT`; `COUPON_FAILED` không được bắn; giải thích thời điểm `PURCHASE`; giỏ hàng của khách vãng lai; `pagehide`; giới hạn 10 impression ở trang chủ; "50 lượt" thay cho "50 món"; phạm vi của `backfill_history.py`; CORS ở forecast-service; lệnh ở mục 12. Thêm mục 4.4 và 4.5 |
 
 **Chưa kiểm** (ghi rõ để không ai hiểu nhầm): reset `PAGE_DWELL`/scroll khi bấm link trong SPA; số event trên bản build
-production (mới kiểm trên bản dev, vốn bị StrictMode nhân đôi); thời điểm `PURCHASE` khi order-service chạy với múi giờ
-`Asia/Ho_Chi_Minh` như trong docker-compose (mục 3.1).
+production (mới kiểm trên bản dev, vốn bị StrictMode nhân đôi).

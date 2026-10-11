@@ -1,5 +1,9 @@
 # PROMPT — Chuyển web từ "cửa hàng điện tử" sang "sàn TMĐT đa ngành hàng"
 
+> **🗄️ Tài liệu lịch sử / thiết kế ban đầu.** Prompt giao việc (2026-09-30) — **đừng chạy lại**. Kết quả
+> thực hiện ở [`multi-category-audit.md`](multi-category-audit.md); đường dẫn repo `D:\JAVA\...` bên dưới
+> là máy cũ.
+
 > Dán TOÀN BỘ file này cho agent thực thi. Viết cho agent làm theo từng bước, không cần tự suy luận
 > phạm vi. Người soạn đã khảo sát trước (2026-09-30); danh sách dưới đây là KẾT QUẢ khảo sát, agent
 > chỉ cần xác minh lại và làm đúng.
