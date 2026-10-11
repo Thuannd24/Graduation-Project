@@ -14,7 +14,7 @@ Tài liệu này hướng dẫn chi tiết cách cấu hình môi trường và 
 ---
 
 ## II. PHƯƠNG PHÁP 1: CHẠY FULL DOCKER COMPOSE
-Phương pháp này đóng gói toàn bộ Backend bao gồm Eureka, Gateway, các databases, middlewares, và toàn bộ 7 microservices nghiệp vụ chạy bên trong Docker container. Để tối ưu hóa tốc độ build (giảm từ 10-15 phút xuống chỉ còn 1-2 giây), Dockerfile được thiết kế để copy trực tiếp file JAR đã được biên dịch từ máy Host thay vì biên dịch lại trong container.
+Phương pháp này đóng gói toàn bộ Backend bao gồm Eureka, Gateway, các databases, middlewares, và toàn bộ 8 microservices nghiệp vụ chạy bên trong Docker container. Để tối ưu hóa tốc độ build (giảm từ 10-15 phút xuống chỉ còn 1-2 giây), Dockerfile được thiết kế để copy trực tiếp file JAR đã được biên dịch từ máy Host thay vì biên dịch lại trong container.
 
 ### Bước 1: Khởi tạo tệp tin `.env` và cài đặt JAR
 Copy tệp cấu hình môi trường mẫu và build/cài đặt code Java trên máy Host:
@@ -63,6 +63,7 @@ Mở dự án bằng IntelliJ IDEA và khởi chạy trực tiếp các class ma
 5.  **`payment-service`** (`com.ecommerce.paymentservice.PaymentServiceApplication`)
 6.  **`notification-service`** (`com.ecommerce.notificationservice.NotificationServiceApplication`)
 7.  **`promotion-service`** (`com.ecommerce.promotionservice.PromotionServiceApplication`)
+8.  **`chat-service`** (`com.ecommerce.chatservice.ChatServiceApplication`, cổng 8095)
 
 *(Các service này sẽ tự động kết nối và đăng ký thành công với Eureka Server đang chạy trong Docker).*
 

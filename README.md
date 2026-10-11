@@ -21,14 +21,16 @@ cp FE/.env.example FE/.env
 ```bash
 cd BE
 mvn clean package -DskipTests      # build JAR trên host
-cd ..
-docker-compose up -d --build        # khởi động toàn bộ hệ thống
+docker-compose up -d --build        # khởi động toàn bộ hệ thống (file compose nằm trong BE/)
 ```
+
+> `BE/.env` phải có `INTERNAL_API_KEY` và `SHIPPING_WEBHOOK_SECRET` (có sẵn trong `.env.example`). Thiếu thì compose
+> truyền chuỗi rỗng và các lời gọi `/api/internal/**` giữa các service bị từ chối 401.
 
 ### Hướng 2 — Hybrid: Infra Docker + Service trên IntelliJ *(phát triển / debug)*
 
 ```bash
-# 1. Build JAR cho Eureka + Gateway
+# 1. Build JAR (Eureka + Gateway chạy trong Docker ở bước 2, các service còn lại chạy trên IntelliJ)
 cd BE && mvn clean package -DskipTests
 
 # 2. Khởi động hạ tầng lõi (DB, Kafka, Redis, MinIO, Keycloak...)
@@ -42,10 +44,13 @@ Sau đó chạy từng service trong IntelliJ (Run Spring Boot Application):
 | `user-service` | 8085 |
 | `product-service` | 8089 |
 | `order-service` | 8082 |
-| `inventory-service` | 8093 |
+| `inventory-service` | 8094 |
 | `payment-service` | 8084 |
 | `notification-service` | 8086 |
 | `promotion-service` | 8087 |
+| `chat-service` | 8095 |
+
+> Chạy service bằng terminal thay cho IntelliJ: dùng **JDK 17** (`java -jar <service>/target/<service>-1.0.0.jar`), nạp biến từ `BE/.env` trước.
 
 
 ## 🌐 FRONTEND (FE)
@@ -83,6 +88,10 @@ python scripts/build_policy_index.py   # bắt buộc, chỉ cần chạy lần 
 python main.py                          # cổng 8002
 ```
 Lặp lại `pip install -r requirements.txt` + `python main.py` trong thư mục từng service còn lại (`search-service`, `recs-service`, `forecast-service`).
+
+> **search-service cần dựng chỉ mục một lần** (tải ảnh sản phẩm, encode CLIP/e5, ghi FAISS): chưa có chỉ mục thì tìm bằng ảnh
+> trả 503. Docker: `docker exec -it ai-search-service python scripts/build_index.py`; chạy trực tiếp:
+> `cd search-service && python scripts/build_index.py`. Chi tiết: [`docs/AI/visual-search.md`](docs/AI/visual-search.md) mục 2.
 
 > Cần Redis chạy sẵn (từ `docker-compose-infra.yml` ở BE) để lưu lịch sử chat. Thiếu `order-service`/`user-service`/`promotion-service` vẫn khởi động được, chỉ các câu hỏi tra cứu đơn hàng/điểm thưởng/voucher sẽ báo "chưa tra cứu được".
 
