@@ -63,6 +63,10 @@ ACTION_ADD_TO_CART = "ADD_TO_CART"
 ACTION_UPDATE_CART_QTY = "UPDATE_CART_QTY"
 ACTION_REMOVE_FROM_CART = "REMOVE_FROM_CART"
 ACTION_CLEAR_CART = "CLEAR_CART"
+# Mua thật: ghi khi đơn được XÁC NHẬN (đã thanh toán / xác nhận COD), 1 dòng mỗi sản phẩm, weight = số lượng.
+# Không dùng OrderCreatedEvent vì gồm cả đơn sau đó bị huỷ / thanh toán lỗi.
+ACTION_PURCHASE = "PURCHASE"
+ORDER_PURCHASE_EVENT_TYPES = {"OrderConfirmedEvent"}
 
 CART_ACTION_MAP = {
     "ADD_ITEM": ACTION_ADD_TO_CART,
@@ -73,6 +77,12 @@ CART_ACTION_MAP = {
 
 # Action nào tính là "đã thêm vào giỏ" khi tính feature has_abandoned_cart / conversion rate.
 CART_ADD_ACTIONS = {ACTION_ADD_TO_CART, ACTION_UPDATE_CART_QTY}
+
+# Action được đẩy vào Redis `*:history` — chuỗi recs-service dùng để GỢI Ý. Phải khớp đúng tập mà
+# `recsys_platform_sasrec.py` train (VIEW_PRODUCT/ADD_TO_CART): REMOVE_FROM_CART là tín hiệu "KHÔNG
+# muốn" và UPDATE_CART_QTY là lặp lại 1 item đã có trong giỏ — đẩy vào sẽ biến item vừa bị xoá khỏi
+# giỏ thành "quan tâm gần nhất" (đo được 2026-09-26, xem docs/canvas/recsys-behavior-flow-review.md).
+HISTORY_ACTIONS = {ACTION_VIEW_PRODUCT, ACTION_ADD_TO_CART}
 
 # --- Vi hành vi (micro-behavior) do FE bắn trực tiếp ---
 # Vì sao cần: thí nghiệm trên clickstream thật (RetailRocket, xem
@@ -105,7 +115,12 @@ ACTION_SORT_APPLIED = "SORT_APPLIED"                # sắp xếp (thường là
 # không phân biệt được "gợi ý đưa ra mà bị bỏ qua" với "chưa từng đưa ra". Bắn 1 event/item hiển
 # thị trong danh sách (fan-out, tái dùng `itemId` số ít có sẵn — KHÔNG đổi schema `user_events`,
 # xem thảo luận tại sao chọn fan-out thay vì cột mảng mới trong commit thêm action này).
-ACTION_IMPRESSION = "IMPRESSION"                    # item xuất hiện trong 1 danh sách hiển thị
+ACTION_IMPRESSION = "IMPRESSION"                    # item xuất hiện trong 1 danh sách hiển thị; weight = vị trí (1 = đầu)
+
+# Cột `user_events.source` (VARCHAR(30), nullable) — nơi IMPRESSION xảy ra. 3 giá trị đầu khớp tham số
+# `source` của recs-service (3 tab khối gợi ý trang chủ); search/category là trang danh sách thường.
+# Endpoint ingest chỉ nhận các giá trị này, cùng lý do với FE_BEHAVIOR_ACTIONS.
+IMPRESSION_SOURCES = {"for_you", "recent", "trending", "search", "category"}
 
 # Tập action FE được phép bắn. Endpoint ingest CHỈ nhận các giá trị này — chặn client bịa
 # action_type lạ làm bẩn bảng `user_events` (và làm vỡ mọi feature đếm theo action).

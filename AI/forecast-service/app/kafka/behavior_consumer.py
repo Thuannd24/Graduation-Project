@@ -6,7 +6,8 @@ HTTP nào. Lỗi xử lý 1 message không được làm chết cả consumer lo
 """
 import asyncio
 import json
-from datetime import datetime
+import time
+from datetime import datetime, timezone
 
 from aiokafka import AIOKafkaConsumer
 from sqlalchemy import text
@@ -16,9 +17,14 @@ from shared_common.contracts import (
     TOPIC_PRODUCT_VIEWED,
     TOPIC_CART_UPDATED,
     TOPIC_USER_BEHAVIOR,
+    TOPIC_ORDER_EVENTS,
+    ACTION_PURCHASE,
+    ORDER_PURCHASE_EVENT_TYPES,
     ACTION_VIEW_PRODUCT,
     CART_ACTION_MAP,
     FE_BEHAVIOR_ACTIONS,
+    HISTORY_ACTIONS,
+    IMPRESSION_SOURCES,
     history_key_for,
     HISTORY_MAX_LEN,
     HISTORY_TTL_SECONDS,
@@ -33,6 +39,23 @@ INSERT_USER_EVENT_SQL = text(
     INSERT INTO user_events (user_id, session_id, item_id, category_id, action_type, weight, created_at)
     VALUES (:user_id, :session_id, :item_id, :category_id, :action_type, :weight, :created_at)
     """
+)
+INSERT_USER_EVENT_WITH_SOURCE_SQL = text(
+    """
+    INSERT INTO user_events (user_id, session_id, item_id, category_id, action_type, weight, source, created_at)
+    VALUES (:user_id, :session_id, :item_id, :category_id, :action_type, :weight, :source, :created_at)
+    """
+)
+# Cột `source` do Hibernate của order-service tự thêm (ddl-auto: update, xem UserEvent.java) khi nó
+# khởi động lại. Consumer KHÔNG giả định cột đã có: nếu forecast-service được deploy trước, INSERT có
+# `source` sẽ lỗi và làm mất MỌI event. Kiểm 1 lần, thiếu thì ghi như cũ (bỏ qua source).
+ORDER_ITEMS_SQL = text("SELECT product_id, quantity FROM order_items WHERE order_id = :order_id")
+ORDER_USER_SQL = text("SELECT user_id FROM orders WHERE id = :order_id")
+
+SOURCE_RECHECK_SECONDS = 300
+HAS_SOURCE_COLUMN_SQL = text(
+    "SELECT COUNT(*) FROM information_schema.columns "
+    "WHERE table_schema = DATABASE() AND table_name = 'user_events' AND column_name = 'source'"
 )
 
 
@@ -49,6 +72,7 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "category_id": payload.get("categoryId"),
                 "action_type": ACTION_VIEW_PRODUCT,
                 "weight": None,
+                "source": None,
                 "created_at": payload["timestamp"],
             }
         if topic == TOPIC_CART_UPDATED:
@@ -63,6 +87,7 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "category_id": None,  # CartUpdatedEvent không mang category
                 "action_type": action_type,
                 "weight": None,
+                "source": None,
                 "created_at": payload["timestamp"],
             }
         if topic == TOPIC_USER_BEHAVIOR:
@@ -79,7 +104,9 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
                 "item_id": payload.get("itemId"),
                 "category_id": payload.get("categoryId"),
                 "action_type": action_type,
-                "weight": payload.get("weight"),  # % scroll / giây dwell, None với action không có số
+                "weight": payload.get("weight"),  # % scroll / giây dwell / vị trí impression
+                # Giá trị lạ bị bỏ (NULL) thay vì bỏ cả event — source là ngữ cảnh phụ, không bắt buộc
+                "source": payload.get("source") if payload.get("source") in IMPRESSION_SOURCES else None,
                 "created_at": payload["timestamp"],
             }
     except KeyError as e:
@@ -91,7 +118,8 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
 
 
 def _parse_timestamp(raw: str) -> datetime:
-    """BE Java ghi timestamp bằng LocalDateTime.now().toString() (ISO, không timezone)."""
+    """ISO không timezone, quy ước là UTC cho MỌI nguồn: FE `toISOString()`, BE Java
+    `LocalDateTime.now(ZoneOffset.UTC)` — cùng múi giờ với NOW() của DB."""
     return datetime.fromisoformat(raw)
 
 
@@ -99,12 +127,15 @@ class BehaviorEventConsumer:
     def __init__(self):
         self._consumer: AIOKafkaConsumer | None = None
         self._task: asyncio.Task | None = None
+        self._has_source = False
+        self._source_checked_at = float("-inf")
 
     async def start(self):
+        # TOPIC_ORDER_EVENTS: lần đầu subscribe, group chưa có offset cho topic này nên đọc lại TỪ ĐẦU
+        # (auto_offset_reset="earliest") -> tự backfill PURCHASE cho các đơn đã xác nhận còn trong retention.
+        topics = [TOPIC_PRODUCT_VIEWED, TOPIC_CART_UPDATED, TOPIC_USER_BEHAVIOR, TOPIC_ORDER_EVENTS]
         self._consumer = AIOKafkaConsumer(
-            TOPIC_PRODUCT_VIEWED,
-            TOPIC_CART_UPDATED,
-            TOPIC_USER_BEHAVIOR,
+            *topics,
             bootstrap_servers=shared_settings.KAFKA_BOOTSTRAP_SERVERS,
             group_id="forecast-service-behavior-group",
             enable_auto_commit=False,
@@ -112,10 +143,7 @@ class BehaviorEventConsumer:
         )
         await self._consumer.start()
         self._task = asyncio.create_task(self._consume_loop())
-        logger.info(
-            f"BehaviorEventConsumer started, subscribed to "
-            f"[{TOPIC_PRODUCT_VIEWED}, {TOPIC_CART_UPDATED}, {TOPIC_USER_BEHAVIOR}]"
-        )
+        logger.info(f"BehaviorEventConsumer started, subscribed to {topics}")
 
     async def stop(self):
         if self._task:
@@ -128,7 +156,7 @@ class BehaviorEventConsumer:
         try:
             async for msg in self._consumer:
                 try:
-                    await self._handle_message(msg.topic, msg.value)
+                    await self._handle_message(msg.topic, msg.value, msg.timestamp)
                 except Exception as e:
                     # 1 message lỗi không được làm chết consumer loop.
                     logger.error(f"Failed to process message from {msg.topic}: {e}")
@@ -137,8 +165,10 @@ class BehaviorEventConsumer:
         except asyncio.CancelledError:
             pass
 
-    async def _handle_message(self, topic: str, raw_value: bytes):
+    async def _handle_message(self, topic: str, raw_value: bytes, kafka_timestamp_ms: int | None = None):
         payload = json.loads(raw_value.decode("utf-8"))
+        if topic == TOPIC_ORDER_EVENTS:
+            return self._handle_order_event(payload, kafka_timestamp_ms)
         event = _parse_message(topic, payload)
         if event is None:
             return
@@ -164,7 +194,9 @@ class BehaviorEventConsumer:
         # tương tác thật với sản phẩm (xem/thêm giỏ). Vi hành vi từ FE (mở giỏ, cuộn trang, rời
         # tab...) tuy có thể mang `itemId` bối cảnh nhưng KHÔNG phải hành vi chọn sản phẩm — đẩy
         # vào đây sẽ làm nhiễu gợi ý (vd rời tab 5 lần ở 1 sản phẩm biến nó thành "quan tâm nhất").
-        if event["action_type"] in FE_BEHAVIOR_ACTIONS:
+        # Whitelist thay vì blacklist FE action: REMOVE_FROM_CART/UPDATE_CART_QTY trước đây lọt vào
+        # đây (xem HISTORY_ACTIONS). Bảng `user_events` vẫn ghi MỌI action như cũ.
+        if event["action_type"] not in HISTORY_ACTIONS:
             return
 
         key = history_key_for(user_id=event["user_id"], session_id=event["session_id"])
@@ -176,18 +208,62 @@ class BehaviorEventConsumer:
         redis_client.ltrim(key, 0, HISTORY_MAX_LEN - 1)
         redis_client.expire(key, HISTORY_TTL_SECONDS)
 
+    def _handle_order_event(self, payload, kafka_timestamp_ms: int | None) -> int:
+        """Đơn được xác nhận -> 1 dòng PURCHASE cho mỗi sản phẩm (weight = số lượng). Trả số dòng đã ghi.
+
+        - Payload từ outbox qua Debezium có thể bị mã hoá JSON 2 lần (chuỗi JSON bên trong) — giải lần 2.
+        - OrderConfirmedEvent không mang danh sách sản phẩm -> tra `order_items` (cùng DB consumer đang ghi).
+        - Thời điểm = timestamp của MESSAGE KAFKA (epoch ms -> UTC), KHÔNG lấy `timestamp` trong payload:
+          OrderServiceImpl ghi bằng LocalDateTime.now() (giờ máy chạy JVM), sẽ lệch 7h trên máy giờ VN.
+          Timestamp Kafka do Debezium đặt lúc publish (trễ vài giây sau commit), và vẫn đúng khi đọc lại
+          message cũ (backfill).
+        - PURCHASE KHÔNG vào Redis history: ngoài HISTORY_ACTIONS, giữ khớp tập dữ liệu SASRec đang train."""
+        if isinstance(payload, str):
+            payload = json.loads(payload)
+        if payload.get("eventType") not in ORDER_PURCHASE_EVENT_TYPES or payload.get("orderId") is None:
+            return 0
+        order_id = int(payload["orderId"])
+        created_at = (datetime.fromtimestamp(kafka_timestamp_ms / 1000, tz=timezone.utc).replace(tzinfo=None)
+                      if kafka_timestamp_ms else datetime.now(timezone.utc).replace(tzinfo=None))
+
+        engine = get_engine(shared_settings.DB_NAME)
+        with engine.connect() as conn:
+            items = conn.execute(ORDER_ITEMS_SQL, {"order_id": order_id}).all()
+            user_id = payload.get("userId") or conn.execute(ORDER_USER_SQL, {"order_id": order_id}).scalar()
+        if not user_id:
+            logger.warning(f"Don {order_id} xac nhan nhung khong tim thay user_id — bo qua PURCHASE")
+            return 0
+        for product_id, quantity in items:
+            self._write_to_db({
+                "user_id": str(user_id), "session_id": None, "item_id": int(product_id), "category_id": None,
+                "action_type": ACTION_PURCHASE, "weight": float(quantity or 1), "source": None,
+            }, created_at)
+        return len(items)
+
+    def _has_source_column(self, conn) -> bool:
+        # Đã thấy cột thì nhớ luôn; chưa thấy thì kiểm lại mỗi SOURCE_RECHECK_SECONDS để tự dùng cột
+        # ngay khi order-service khởi động lại và Hibernate thêm nó, không cần restart consumer.
+        now = time.monotonic()
+        if not self._has_source and now - self._source_checked_at >= SOURCE_RECHECK_SECONDS:
+            self._source_checked_at = now
+            self._has_source = bool(conn.execute(HAS_SOURCE_COLUMN_SQL).scalar())
+            if not self._has_source:
+                logger.warning("user_events chua co cot `source` (order-service chua khoi dong lai?) — ghi khong kem source")
+        return self._has_source
+
     def _write_to_db(self, event: dict, created_at: datetime):
         engine = get_engine(shared_settings.DB_NAME)
+        params = {
+            "user_id": event["user_id"],
+            "session_id": event["session_id"],
+            "item_id": event["item_id"],
+            "category_id": event["category_id"],
+            "action_type": event["action_type"],
+            "weight": event.get("weight"),
+            "created_at": created_at,
+        }
         with engine.begin() as conn:
-            conn.execute(
-                INSERT_USER_EVENT_SQL,
-                {
-                    "user_id": event["user_id"],
-                    "session_id": event["session_id"],
-                    "item_id": event["item_id"],
-                    "category_id": event["category_id"],
-                    "action_type": event["action_type"],
-                    "weight": event.get("weight"),
-                    "created_at": created_at,
-                },
-            )
+            if self._has_source_column(conn):
+                conn.execute(INSERT_USER_EVENT_WITH_SOURCE_SQL, {**params, "source": event.get("source")})
+            else:
+                conn.execute(INSERT_USER_EVENT_SQL, params)

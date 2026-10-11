@@ -145,12 +145,18 @@ export const productApi = {
     return all;
   },
 
-  async getProduct(productId: string): Promise<Product> {
-    return this.getProductDetail(productId);
+  async getProduct(productId: string, options: { trackView?: boolean } = {}): Promise<Product> {
+    return this.getProductDetail(productId, options);
   },
 
-  async getProductDetail(productId: string | number): Promise<Product> {
-    const raw = await apiClient.get<Record<string, unknown>>(`/public/products/${productId}`);
+  // `trackView: true` CHỈ dùng khi người dùng thật sự mở trang chi tiết: product-service chỉ ghi
+  // VIEW_PRODUCT khi có header X-Track-View (opt-in) — admin/đơn hàng/hồ sơ gọi hàm này để lấy dữ
+  // liệu không được tính là "xem" (xem ProductController.java).
+  async getProductDetail(productId: string | number, options: { trackView?: boolean } = {}): Promise<Product> {
+    const raw = await apiClient.get<Record<string, unknown>>(
+      `/public/products/${productId}`,
+      options.trackView ? { headers: { "X-Track-View": "1" } } : undefined
+    );
     return {
       ...normalizeProduct(raw as Partial<Product>),
       attributes: raw.attributes,

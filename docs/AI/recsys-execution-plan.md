@@ -6,6 +6,18 @@
 >
 > Nền lý thuyết: [`recsys-research-and-plan.md`](recsys-research-and-plan.md).
 > Bối cảnh & số đo cũ: [`churn-risk-log.md`](churn-risk-log.md).
+>
+> 🗄️ **Ghi chú cập nhật 2026-10-11.** Đây là **nhật ký nghiên cứu có ghi ngày** (2026-09-17 → 09-25); các con số và quyết
+> định đúng tại thời điểm từng mục được viết. Đọc kèm các lưu ý sau:
+> - **Số loại hành vi** thay đổi theo thời gian: 18 → **19** khi thêm `IMPRESSION` (2026-09-22, §10) → **20** khi thêm
+>   `PURCHASE` từ `order-events` (2026-10-01). Hiện tại: 14 vi hành vi (`FE_BEHAVIOR_ACTIONS`) + 6 hành vi nghiệp vụ.
+> - **Lịch §6** (CUDA/HSTU, đầu Risk…) không được thực hiện như viết; dự án chuyển sang kế hoạch GĐ0–GĐ5 trong
+>   [`recsys-p1-assessment-and-plan.md`](recsys-p1-assessment-and-plan.md).
+> - **Quyết định "không deploy SASRec" ở §5.7** đã được thay bằng **cổng deploy** (GĐ4): checkpoint chỉ được phục vụ khi
+>   không thua baseline tốt nhất.
+> - **"Không tự viết khung so sánh" (§9)** không được theo: dự án tự viết `AI/recs-service/evaluation/` để dùng đúng class
+>   model đang phục vụ.
+> - Hiện trạng hệ thống: xem [`recsys-behavior-knowledge-transfer.md`](recsys-behavior-knowledge-transfer.md).
 
 ---
 
@@ -283,9 +295,9 @@ Phải nêu thẳng ở mục giới hạn của báo cáo:
 Vẫn giàu nhất, nhưng khoảng cách với REES46 Cosmetics đã hẹp lại đáng kể so với lúc so với
 RetailRocket (3 loại, không loại nào mang ý nghĩa ma sát).
 
-➕ **Việc bổ sung, làm ở tuần 5: log IMPRESSION.** Tracker hiện **chưa** ghi *"những item nào đã
+➕ **Việc bổ sung, làm ở tuần 5: log IMPRESSION** (✅ đã làm 2026-09-22, xem §10; từ 2026-10-01 kèm vị trí và `source`). Lúc viết, tracker **chưa** ghi *"những item nào đã
 được hiển thị"*. Thêm vào rẻ (một action type mới + danh sách item id), và nó lấp đúng khoảng cách
-số 1 ở mục 5.3. Sau bước đó, dữ liệu của dự án **về chất** gần production hơn mọi bộ công khai trừ
+số 1 ở mục 5.5. Sau bước đó, dữ liệu của dự án **về chất** gần production hơn mọi bộ công khai trừ
 TAOBAO-MM — dù về lượng thì nhỏ hơn nhiều. Đây là điểm đáng nêu khi bảo vệ.
 
 ### 5.7 ⚠️ KẾT QUẢ ÂM — SASRec platform_v1 thua cả recency baseline tầm thường (2026-09-21)
@@ -317,6 +329,9 @@ lặp lại trên chính dữ liệu tổng hợp của đồ án.
 trị cho báo cáo: xác nhận lần thứ 2 (RetailRocket, rồi platform seed) rằng quy mô/chất lượng dữ
 liệu — không phải kiến trúc model — là yếu tố quyết định chuỗi hành vi có thông tin hơn heuristic
 tầm thường hay không.
+
+> ⏩ **Cập nhật:** quyết định này đã được thay bằng cổng deploy GĐ4 (2026-10-02). Checkpoint `platform_v1` hiện
+> đang phục vụ vì không thua baseline tốt nhất trên track explore (chênh lệch chưa có ý nghĩa thống kê).
 
 ### 5.8 ✅ SỬA GỐC RỄ — đo quy luật hành vi thật, viết lại bộ mô phỏng, train lại (2026-09-22)
 
@@ -712,7 +727,7 @@ là SP của phiên cũ 16,7% · stickiness mọi cặp 0,619 / cặp KHÁC SP 0
 | **2** | **Behavior encoder v1** + đầu Next-item. Thang ablation: BCE→Sampled Softmax → +sliding window → +LiGR → **+action-type embedding** | eSASRec > ItemKNN-tuned quá sàn nhiễu. **Và**: action-type embedding có thêm gì không (đo riêng) |
 | **3** | Feature tầng 2 (nội dung item) + tầng 3 (dân số, out-of-fold). Đo phân tầng theo độ phổ biến item | Recall **tầng item lạnh** tăng vượt sàn nhiễu |
 | **4** | **Đầu Risk** trên encoder đã học — cả 2 chế độ đóng băng / fine-tune. So thẳng với 0,7462 | Vượt **0,7462 ± 0,0111**. Không vượt ⇒ kết quả âm có giá trị, báo cáo đúng vậy |
-| **5** | **Thêm log impression vào tracker** (mục 5.4) · mở rộng seeder phát 18 action · train kiến trúc đó trên catalog tiếng Việt · nối `recs-service` + FE · nối đầu Risk vào Kafka → Camunda | E2E thật: gợi ý hiện trên FE **và** voucher phát qua Camunda, chuẩn bằng chứng như 27-07 |
+| **5** | **Thêm log impression vào tracker** (mục 5.6) · mở rộng seeder phát 18 action · train kiến trúc đó trên catalog tiếng Việt · nối `recs-service` + FE · nối đầu Risk vào Kafka → Camunda | E2E thật: gợi ý hiện trên FE **và** voucher phát qua Camunda, chuẩn bằng chứng như 27-07 |
 | **6** | Viết | 3 chương |
 
 ---
@@ -750,7 +765,7 @@ lẫn dương.
 - Không dùng **sampled metric**; luôn xếp hạng full catalog
 - Không so số giữa hai giao thức chia dữ liệu khác nhau
 - Không sửa hợp đồng Kafka / node BPMN đã chạy — chỉ thay nguồn sinh `churnProbability`
-- Không tự viết lại khung so sánh khi `transformer_benchmark` đã có
+- Không tự viết lại khung so sánh khi `transformer_benchmark` đã có *(không được theo, xem ghi chú đầu file)*
 - Không báo cáo cải thiện **dưới sàn nhiễu**
 
 ---

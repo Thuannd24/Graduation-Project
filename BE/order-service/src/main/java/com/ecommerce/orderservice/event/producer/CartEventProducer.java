@@ -8,6 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 /**
@@ -41,7 +42,8 @@ public class CartEventProducer {
             CartUpdatedEvent event = CartUpdatedEvent.builder()
                     .eventId(UUID.randomUUID().toString())
                     .eventType("CartUpdatedEvent")
-                    .timestamp(LocalDateTime.now().toString())
+                    // UTC tường minh — cùng lý do với ProductViewEventProducer (khớp FE + NOW() của DB)
+                    .timestamp(LocalDateTime.now(ZoneOffset.UTC).toString())
                     .userId(userId)
                     .sessionId(sessionId)
                     .productId(productId)

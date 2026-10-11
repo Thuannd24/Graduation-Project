@@ -436,7 +436,7 @@ export default function ProductDetailPage() {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      productApi.getProduct(productId),
+      productApi.getProduct(productId, { trackView: true }),
       productApi.getReviews(productId)
     ])
       .then(async ([detail, reviewList]) => {

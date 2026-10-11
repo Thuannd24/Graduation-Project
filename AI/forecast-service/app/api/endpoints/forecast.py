@@ -306,6 +306,7 @@ async def ingest_behavior_events(request: BehaviorBatchRequest, x_user_id: str |
                 "actionType": e.actionType,
                 "weight": e.weight,
                 "timestamp": e.timestamp,
+                "source": e.source,
             }
         )
 

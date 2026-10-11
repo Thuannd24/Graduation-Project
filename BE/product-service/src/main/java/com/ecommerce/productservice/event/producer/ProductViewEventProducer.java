@@ -8,6 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 /**
@@ -30,7 +31,10 @@ public class ProductViewEventProducer {
             ProductViewedEvent event = ProductViewedEvent.builder()
                     .eventId(UUID.randomUUID().toString())
                     .eventType("ProductViewedEvent")
-                    .timestamp(LocalDateTime.now().toString())
+                    // UTC tường minh, khớp FE (toISOString) và NOW() của DB. `now()` không tham số lấy
+                    // giờ của MÁY chạy JVM: chạy IntelliJ trên máy VN thì lệch 7h so với vi hành vi FE,
+                    // làm đảo thứ tự chuỗi hành vi (docs/canvas/recsys-behavior-flow-review.md lỗi #6).
+                    .timestamp(LocalDateTime.now(ZoneOffset.UTC).toString())
                     .userId(userId)
                     .sessionId(sessionId)
                     .productId(productId)

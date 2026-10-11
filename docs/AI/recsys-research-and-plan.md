@@ -1,5 +1,10 @@
 # Nghiên cứu chuẩn làm hệ gợi ý (2019→2026) + kế hoạch triển khai
 
+> 🗄️ **Tài liệu nền (2026-09-18).** Mục 1–3 (tổng quan nghiên cứu và giao thức đánh giá) vẫn dùng được làm tài liệu
+> tham khảo. Mục 4 (phần cứng RTX 5090, danh sách dataset chưa có REES46/Taobao) và mục 6 (lịch 6 tuần) **đã được thay
+> thế** bởi kế hoạch GĐ0–GĐ5. Khuyến nghị "không tự viết harness" ở mục 7.1 không được theo: dự án tự viết
+> `AI/recs-service/evaluation/` để dùng đúng class model đang phục vụ. Hiện trạng: xem [`recsys-behavior-knowledge-transfer.md`](recsys-behavior-knowledge-transfer.md).
+
 > Tài liệu này trả lời: **cách làm AI cho bài toán gợi ý sao cho đúng chuẩn và hiệu quả**, dựa
 > trên tài liệu học thuật tới 2026, và quy về một kế hoạch khả thi với **phần cứng và dữ liệu
 > thật của dự án này**.

@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy } from "react";
+import React, { useEffect, useRef, Suspense, lazy } from "react";
 import { Route, Routes, Outlet, useLocation, Navigate } from "react-router-dom";
 import { CartProvider } from "./context/CartContext.jsx";
 import { WishlistProvider } from "./context/WishlistContext.jsx";
@@ -8,6 +8,7 @@ import Toast from "./components/common/Toast.jsx";
 import RequireAuth from "./components/common/RequireAuth.jsx";
 import RequireAdmin from "./components/common/RequireAdmin.jsx";
 import AIChatbotWidget from "./features/chatbot/components/AIChatbotWidget.jsx";
+import { notifyRouteChange } from "./services/behaviorTracker.ts";
 
 const HomePage = lazy(() => import("./features/catalog/pages/HomePage.jsx"));
 const CategoryPage = lazy(() => import("./features/catalog/pages/CategoryPage.jsx"));
@@ -58,11 +59,29 @@ function ScrollToTop() {
   return null;
 }
 
+// Báo tracker mỗi lần đổi trang (kể cả link thường — `popstate` chỉ bắn khi bấm Back), bỏ qua lần
+// render đầu vì chưa có "trang trước" nào để tính thời gian dừng. Xem behaviorTracker.ts.
+function BehaviorRouteTracker() {
+  const { pathname } = useLocation();
+  const isFirst = useRef(true);
+
+  useEffect(() => {
+    if (isFirst.current) {
+      isFirst.current = false;
+      return;
+    }
+    notifyRouteChange();
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <CartProvider>
       <WishlistProvider>
         <ScrollToTop />
+        <BehaviorRouteTracker />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             {/* Admin routes */}
