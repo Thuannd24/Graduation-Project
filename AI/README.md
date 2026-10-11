@@ -32,15 +32,21 @@ AI/
 │
 ├── recs-service/           # Microservice gợi ý cá nhân hóa và Cold-start (:8003)
 │   ├── app/
-│   │   ├── api/            # API Endpoints (/recommend)
+│   │   ├── api/            # /public/recommendations/personal?source=auto|for_you|recent|trending (FE dùng),
+│   │   │                   # /recommendations/personal, /recommendations/cross-sell, /recommend (nội bộ)
 │   │   ├── models/         # Recommendation request/response models
-│   │   └── services/       # Mô hình SASRec (PyTorch), Trending Popularity (Cold-start)
+│   │   └── services/       # Thang 3 tầng: SASRec (PyTorch) → Recency → Popularity; tra thông tin sản phẩm
+│   ├── evaluation/         # Harness đánh giá (chia theo thời gian, baseline, ablation) + train_serving (cổng deploy)
+│   ├── scripts/            # backfill_history.py: dựng lại lịch sử Redis từ user_events
+│   ├── tests/              # pytest
 │   ├── Dockerfile
 │   └── requirements.txt
 │
 └── forecast-service/       # Microservice phân tích nghiệp vụ, dự báo doanh thu & định giá (:8004)
     ├── app/
-    │   ├── api/            # API Endpoints (/forecast, /anomaly, /pricing/predict, /rfm/trigger)
+    │   ├── api/            # API Endpoints (/forecast, /anomaly, /pricing/predict, /rfm/trigger,
+    │   │                   # /public/behavior/events: nhận vi hành vi từ FE)
+    │   ├── kafka/          # Consumer hành vi: Kafka → user_events (MariaDB) + lịch sử Redis
     │   ├── models/         # Pydantic models cho forecasting và dynamic pricing
     │   └── services/       # Demand Forecast (LightGBM), K-Means RFM, Anomaly detection, Pricing
     ├── Dockerfile
@@ -53,7 +59,7 @@ AI/
 
 1. **Visual Search:** Trích xuất đặc trưng hình ảnh sử dụng mô hình **CLIP (ViT-B/32)**.
 2. **Semantic Text Search:** Trích xuất vector ngữ nghĩa sử dụng mô hình **multilingual-e5-large** kết hợp với từ khóa **BM25** thông qua **Reciprocal Rank Fusion (RRF)**.
-3. **Personalized Recommendations:** Mô hình **SASRec (Self-Attention Sequential Recommendation)** chạy trên PyTorch giúp gợi ý sản phẩm dựa trên lịch sử tương tác phiên (session history).
+3. **Personalized Recommendations:** Mô hình **SASRec (Self-Attentive Sequential Recommendation)** chạy trên PyTorch, gợi ý dựa trên lịch sử xem/thêm giỏ của user (hoặc của phiên nếu chưa đăng nhập). Phục vụ theo thang 3 tầng SASRec → Recency → Popularity; checkpoint chỉ được nạp khi qua cổng đánh giá. Chi tiết: [`docs/canvas/recsys-behavior-knowledge-transfer.md`](../docs/canvas/recsys-behavior-knowledge-transfer.md).
 4. **Demand Forecasting:** Dự báo nhu cầu tồn kho kho hàng dựa trên dữ liệu lịch sử bằng **LightGBM Regressor** hoặc **Meta Prophet**.
 5. **Customer Segmentation:** Định kỳ chạy phân cụm **K-Means (RFM)** chia nhóm người dùng để cấu hình chính sách khuyến mãi.
 6. **Dynamic Pricing:** Thuật toán đánh giá độ nhạy cảm giá người dùng để xuất hành động cho Camunda Workflow engine.

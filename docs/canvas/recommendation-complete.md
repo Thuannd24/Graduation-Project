@@ -1,5 +1,19 @@
 # 📑 Recommendation System — Hệ Thống Gợi Ý Hành Vi Toàn Diện (A+ Grade Blueprint)
 
+> 🗄️ **Bản đề xuất thiết kế ban đầu — phần lớn KHÔNG được cài đặt như mô tả.** Không dùng tài liệu này để mô tả hệ thống
+> trong báo cáo. Khác biệt chính so với code (2026-10-11):
+>
+> | Đề xuất ở đây | Thực tế đã cài đặt |
+> |---|---|
+> | FAISS cho "sản phẩm tương tự", FP-Growth + bảng `cross_sell_rules` cho mua kèm | Không có; cross-sell hiện trả Popularity |
+> | Trending có time-decay + Wilson | Popularity 30 ngày: lượt xem + 3 × thêm giỏ, cache 5 phút |
+> | Spring Boot điều phối, `@Async`, cache kết quả Redis 5 phút, `GET /api/v1/recs` | FE → gateway → FastAPI trực tiếp; route `/public/recommendations/personal?source=…` |
+> | Chuỗi theo session, `maxlen` 50, Leave-One-Out | Chuỗi theo user, `maxlen` 15, chia theo thời gian (80/10/10) |
+> | Action viết thường, trọng số 1/4/10; `user_id BIGINT` | 20 action viết hoa, `weight` mang nghĩa riêng từng loại; `user_id VARCHAR(100)` (UUID Keycloak) |
+> | Mục tiêu HR@10 ≥ 0,65 | Đo được khoảng 0,05 ở track explore (dữ liệu seed) |
+>
+> Mô tả đúng hệ thống đang chạy: xem [`recsys-behavior-knowledge-transfer.md`](recsys-behavior-knowledge-transfer.md).
+
 Tài liệu này phác thảo ý tưởng, luồng hoạt động và hướng triển khai hệ thống gợi ý cho dự án thương mại điện tử, tập trung vào các thuật toán tối ưu nhất hiện nay. Tài liệu không chứa code lập trình mô hình phức tạp, giúp bạn dễ dàng nắm bắt tư duy hệ thống để viết báo cáo và thuyết trình.
 
 ---

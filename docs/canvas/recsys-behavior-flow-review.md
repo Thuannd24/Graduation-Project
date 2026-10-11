@@ -1,5 +1,13 @@
 # Recommendation (SASRec) + Behavior Tracking — Preview luồng chi tiết & Kết quả chạy thật
 
+> 🗄️ **Tài liệu lịch sử — ảnh chụp trạng thái TRƯỚC khi sửa** (2026-09-26, `ai/behavoir` @ `20fd2a4`). Giữ lại làm bằng
+> chứng "trước/sau" cho báo cáo; **không** dùng để tra cứu hiện trạng.
+> - Phần lớn lỗi liệt kê ở đây (#1–#9, #11–#13) đã được sửa ở GĐ0–GĐ1 (2026-10-01/02). Còn tồn tại: #14 (cross-sell vẫn
+>   là Popularity) và timestamp không có hậu tố `Z`.
+> - Các link dạng `file#Lxx` trỏ tới số dòng **tại commit `20fd2a4`**, nên có thể lệch với code hiện tại.
+> - Số loại hành vi ở đây là 19; hiện là **20** (thêm `PURCHASE`). Độ trễ p95 26 ms là số đo trước khi sửa.
+> - Hiện trạng, số đo mới và hướng dẫn chạy: xem [`recsys-behavior-knowledge-transfer.md`](recsys-behavior-knowledge-transfer.md).
+
 > **Phạm vi:** phần việc P1 trong [`recsys_security_2_month_plan.md`](recsys_security_2_month_plan.md).
 > **Ngày chạy:** 2026-09-26, trên máy local (Docker infra + service Python chạy trực tiếp), branch `ai/behavoir` @ `20fd2a4`.
 > **Nguyên tắc:** mọi số ở đây là số **đo được khi chạy**, không lấy lại từ tài liệu cũ. Dữ liệu là **seed tổng hợp**

@@ -10,6 +10,14 @@
 > ✅ **Đã chạy tự động ngày 2026-10-01**, qua gateway, Keycloak, product/order/inventory/user-service thật (script mô phỏng
 > đúng request trình duyệt gửi). **5/5 ca đạt**, xem [kết quả ở cuối file](#kết-quả-chạy-tự-động-2026-10-01). Phần duy
 > nhất script không thay được là **nhìn giao diện**: làm Bước 3–4 trên trình duyệt để xem tận mắt.
+>
+> ⚠️ **Bổ sung 2026-10-02:** kết quả 5/5 ở trên là chạy bằng **script**, mà script không bị CORS chặn. Khi mở trình duyệt
+> thật mới phát hiện recs-service thêm header CORS lần hai (gateway đã thêm), nên trình duyệt từ chối mọi response và
+> **khối gợi ý không hiện**. Đã sửa ở commit `434e6bd` (bỏ `CORSMiddleware` khỏi recs-service) và kiểm lại bằng Chromium
+> tự động (Playwright): 3 tab hiện đủ, card có ảnh, trang giỏ có khối "mua kèm". GĐ0 đóng từ ngày này.
+>
+> Tài liệu này giữ làm hồ sơ kiểm thử GĐ0. Hướng dẫn chạy cập nhật: xem
+> [`recsys-behavior-knowledge-transfer.md`](recsys-behavior-knowledge-transfer.md) mục 12.
 
 ---
 
@@ -80,7 +88,8 @@ cd AI/recs-service && python scripts/backfill_history.py
 > PowerShell: dùng `$env:DB_NAME="ecommerce_order_db"; ...; uvicorn ...` thay cho cú pháp `VAR=x cmd`.
 
 Kiểm tra:
-- `curl http://localhost:8003/health` → `"status":"UP"`.
+- `curl http://localhost:8003/health` → `"status":"UP"`, và trường `sasrec` cho biết tầng SASRec đang bật hay tắt, kèm
+  kết quả cổng đánh giá của checkpoint (từ GĐ4).
 - Log recs-service có dòng `Da nap SASRec platform_v1 ... 1,123 item` ngay ở request đầu tiên.
 
 ---
@@ -160,7 +169,7 @@ báo mình, vì khi đó cần sửa phía gateway/FE theo hướng khác.
 | Kỳ vọng |
 |---|
 | Redis: product id đó xuất hiện **đúng 1 lần** (do ADD_TO_CART), **không** được đẩy thêm lần nữa khi REMOVE |
-| MySQL: có đủ cả `ADD_TO_CART` **và** `REMOVE_FROM_CART` (bảng vẫn ghi mọi action) |
+| MariaDB: có đủ cả `ADD_TO_CART` **và** `REMOVE_FROM_CART` (bảng vẫn ghi mọi action) |
 
 ### Ca 5 — Trang giỏ hàng không crash
 
@@ -179,19 +188,14 @@ báo mình, vì khi đó cần sửa phía gateway/FE theo hướng khác.
 | Request recs trả **503** / fallback | Gateway gọi `host.docker.internal:8003`. Nếu gateway chạy **ngoài Docker**, set `AI_RECS_URL=http://localhost:8003` và `AI_FORECAST_URL=http://localhost:8004` cho gateway |
 | Ca 2/3 vẫn là `popularity` | (a) Log forecast-service có ghi message không? (b) `docker exec infra-mariadb mariadb -uroot -proot -e "SELECT COUNT(*) FROM ecommerce_order_db.user_events WHERE created_at > NOW() - INTERVAL 10 MINUTE"` phải > 0. (c) product-service có đang publish Kafka không (log `Published ProductViewedEvent`, cần bật debug) |
 | Ra `recency` thay vì `sasrec` | Checkpoint chưa nạp: kiểm tra `MODEL_WEIGHTS_PATH` và log `Da nap SASRec` |
+| Tab "Gợi ý cho bạn" luôn là `popularity` dù có lịch sử | Checkpoint **không qua cổng đánh giá** nên bị từ chối (từ GĐ4). Xem trường `sasrec` của `/health` |
+| curl ra kết quả nhưng khối gợi ý trên trình duyệt trống, console báo lỗi CORS | Header CORS bị lặp: service phía sau gateway không được có `CORSMiddleware` |
 | Đăng nhập xong bị đá về `/login` | Token hết hạn hoặc Keycloak chưa sẵn sàng. Xem lại Bước 0 |
 
 ## Ghi kết quả
 
-Điền bảng này rồi gửi lại cho mình. Nếu cả 5 ca đạt thì đóng GĐ0.
-
-| Ca | Đạt? | Ghi chú (strategy, ảnh chụp Network) |
-|---|---|---|
-| 1 | | |
-| 2 | | |
-| 3 | | |
-| 4 | | |
-| 5 | | |
+Bảng ghi kết quả thủ công đã được thay bằng kết quả chạy tự động bên dưới (2026-10-01) và lần kiểm giao diện bằng
+Chromium (2026-10-02, xem đầu file).
 
 ---
 
@@ -206,7 +210,7 @@ lấy từ Keycloak bằng client `ecommerce-frontend`, và `X-Session-Id`). Use
 | 1 — Khách mới | ✅ | `for_you` và `trending`: 200, `popularity`, 10 SP đều có ảnh. `recent`: 200, rỗng |
 | 2 — Khách xem 3 SP | ✅ | Consumer ghi sau 0,5 s. `for_you`: `sasrec`, không chứa SP đã xem. `recent`: `[23, 22, 21]`, đúng thứ tự mới nhất trước |
 | 3 — Người dùng đăng nhập | ✅ | `user_events.user_id` **= Keycloak `sub`**, key `user:<sub>:history` được tạo (499 → 500), key session **rỗng**. ⇒ **Gateway có inject `X-User-Id` trên route `/public/**` khi có JWT** (giả định cuối cùng đã được xác nhận). `for_you`: `sasrec`, 10 SP có ảnh |
-| 4 — Thêm rồi xoá khỏi giỏ | ✅ | Cart API 200/200. Redis: SP xuất hiện **đúng 1 lần** (do ADD). MySQL: có cả `ADD_TO_CART` và `REMOVE_FROM_CART` |
+| 4 — Thêm rồi xoá khỏi giỏ | ✅ | Cart API 200/200. Redis: SP xuất hiện **đúng 1 lần** (do ADD). MariaDB: có cả `ADD_TO_CART` và `REMOVE_FROM_CART` |
 | 5 — Dữ liệu trang giỏ | ✅ | `cross-sell` qua gateway: 200, trả **mảng** 5 SP (FE đã đọc đúng dạng này, build thành công) |
 
 Độ trễ **qua gateway** (tầng SASRec): p50 12 ms, p95 22 ms.
@@ -214,5 +218,5 @@ lấy từ Keycloak bằng client `ecommerce-frontend`, và `X-Session-Id`). Use
 Ghi chú:
 - Lần chạy đầu, ca 4 nhận **429** do rate limiter của gateway (20 req/s) ngay sau vòng đo độ trễ 50 request. Đây là
   hành vi đúng của gateway, không phải lỗi. Chạy lại sau 5 giây thì đạt.
-- Chưa kiểm bằng mắt phần **giao diện** (3 tab, card, trang giỏ không trắng). Đây là phần duy nhất cần làm thủ công
-  theo Bước 3–4.
+- Phần **giao diện** (3 tab, card, trang giỏ không trắng) được kiểm ngày 2026-10-02 bằng Chromium tự động, sau khi sửa
+  lỗi CORS (xem đầu file).

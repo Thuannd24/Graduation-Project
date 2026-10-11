@@ -1,5 +1,21 @@
 # P1 — Recommendation (SASRec) + Behavior Tracking: Đánh giá & Kế hoạch hướng đi
 
+> 🗄️ **Tài liệu lịch sử — kế hoạch lập ngày 2026-09-26.** Giữ lại vì các nguyên tắc (§6), quyết định D1–D4 và rủi ro
+> (§9) vẫn còn giá trị. Phần đánh giá hiện trạng (§2, §5) và lịch (§8) **đã lỗi thời**.
+>
+> **Tình trạng thực hiện (cập nhật 2026-10-11):**
+>
+> | Giai đoạn | Tình trạng | Ghi chú |
+> |---|---|---|
+> | GĐ0 — Sửa serving | ✅ Xong 2026-10-01 | 3 tab = 3 nguồn thật, đọc đúng thứ tự lịch sử, route public |
+> | GĐ1 — Làm sạch dữ liệu hành vi | ✅ Xong phần lõi | UTC, token cho tracker, `X-Track-View`, impression có vị trí + `source`, PURCHASE. **Không làm:** `rec_request_id`, IntersectionObserver, `received_at`, `SESSION_LINKED`, `flagged_sessions`. Seeder vi hành vi đã có trên `origin/ai/behavoir` (chưa merge) |
+> | GĐ2 — Harness đánh giá | ✅ Xong | Chia theo thời gian, 2 track explore/repeat, 5 baseline, CI95 |
+> | GĐ3 — Cải tiến SASRec | 🟡 Đang chạy | Thang ablation; REES46 đã có kết quả tới `+maxlen50`, còn `+action` |
+> | GĐ4 — Cổng deploy | ✅ Xong 2026-10-02 | Luật thực tế là **"không thua"** baseline tốt nhất (`mean_not_worse`), không phải "thắng". **Không làm:** dashboard CTR, train lại định kỳ, cross-sell đồng xuất hiện, Locust, E2E chống bot |
+> | GĐ5 — Báo cáo & bảo vệ | ⏳ Chưa tới | Theo lịch nhóm 30/11 → 08/12 |
+>
+> Hiện trạng chi tiết: xem [`recsys-behavior-knowledge-transfer.md`](recsys-behavior-knowledge-transfer.md) (mục 9).
+
 > **Đầu vào:** lần chạy thật ngày 2026-09-26 (chi tiết luồng + số đo:
 > [`recsys-behavior-flow-review.md`](recsys-behavior-flow-review.md)), kế hoạch nhóm
 > [`recsys_security_2_month_plan.md`](recsys_security_2_month_plan.md), nền nghiên cứu
