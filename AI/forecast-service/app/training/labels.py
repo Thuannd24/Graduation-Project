@@ -12,7 +12,7 @@ from sqlalchemy import text
 from sqlalchemy.engine import Engine
 
 # `activity` = định nghĩa gốc: hoạt động BẤT KỲ (xem HOẶC mua).
-# `orders` = chỉ tính việc ĐẶT ĐƠN, dùng cho Tầng 0.2 — xem docs/canvas/churn-risk-tier0-plan.md.
+# `orders` = chỉ tính việc ĐẶT ĐƠN, dùng cho Tầng 0.2 — xem docs/AI/churn-risk-tier0-plan.md.
 #
 # Vì sao cần lựa chọn này: nhãn `activity` lấy từ `orders` ∪ `user_events`, mà feature mạnh nhất
 # (`category_diversity_viewed`, permutation importance 0.2253 so với 0.0285 của hạng nhì) cũng lấy từ

@@ -82,7 +82,7 @@ Tạo trong `AI/shared-common/shared_common/`:
 - **`contracts.py`** — nguồn sự thật duy nhất cho tên Redis key + Kafka topic. Giải quyết xung
   đột 3 quy ước: chọn **một** tên chuẩn (đề xuất giữ `user:{uid}:history` / `session:{sid}:history`
   vì recs-service đã đọc sẵn → ít sửa code nhất), rồi **migrate các chỗ lệch** (`recommend.py`
-  dùng hằng số từ contracts thay vì hardcode; cập nhật `docs/canvas/recommendation-complete.md`
+  dùng hằng số từ contracts thay vì hardcode; cập nhật `docs/AI/recommendation-complete.md`
   cho khớp code thay vì để doc và code nói khác nhau).
 - **`pool.py`** — `redis.ConnectionPool` dùng chung + SQLAlchemy engine có pool; hàm
   `get_readonly_engine(db_name)` để tính năng AI sau chỉ gọi lại, không tự viết connection logic.
@@ -109,7 +109,7 @@ Tạo trong `AI/shared-common/shared_common/`:
   trùng nếu 2 lần train cách nhau dưới 1 giây → ghi đè mất bản cũ âm thầm. Đã thêm `%f`
   (microsecond) vào format, test lại xác nhận đúng.
 - Đã migrate `recs-service/recommend.py` sang dùng `shared_common.contracts` thay vì hardcode
-  key string, và cập nhật `docs/canvas/recommendation-complete.md` (mục Redis key) cho khớp
+  key string, và cập nhật `docs/AI/recommendation-complete.md` (mục Redis key) cho khớp
   thực tế `user:{uid}:history`/`session:{sid}:history` thay vì `sess:{sid}:seq` cũ.
 
 ---

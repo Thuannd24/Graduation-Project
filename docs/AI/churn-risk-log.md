@@ -2154,7 +2154,7 @@ Dữ liệu tổng hợp KHÔNG kiểm chứng được điểm này (chính b�
 catalog = Tiki · hành vi + giao dịch trong DB = **REES46 đa ngành 12/2019–4/2020 transform** (một sàn thật, không trộn nguồn
 thứ hai, kể cả mỹ phẩm) · tính năng nguồn không có (huỷ, review, voucher, vi hành vi) = dữ liệu phát sinh thật trên hệ thống ·
 câu hỏi nghiên cứu cho phần thiếu = thí nghiệm RIÊNG trên bộ thật có biến đó cùng khách. Bộ sinh mô phỏng chỉ còn cho unit test.
-Đối chiếu schema + 2 lỗi của nguồn REES46 (log giỏ 10–11/2019; mã ngành từ 12/2019): `docs/canvas/rees46-transform-mapping.md`.
+Đối chiếu schema + 2 lỗi của nguồn REES46 (log giỏ 10–11/2019; mã ngành từ 12/2019): `docs/AI/rees46-transform-mapping.md`.
 
 ### Feature huỷ đơn — Online Retail II (`churn_cancel_feature_onlineretail.py`)
 Nguồn hành vi trong DB không ghi huỷ đơn → `cancel_rate` hằng số. Thay vì ghép huỷ đơn của người khác, kiểm chứng trên Online

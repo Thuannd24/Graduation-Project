@@ -66,7 +66,7 @@ grep -rniE "laptop|điện thoại|iphone|bảo hành chính hãng|công nghệ"
 user/địa chỉ), `Serializer`/`serialization`, `sessionStorage`/`localStorage` (khớp chữ "storage"),
 `cpu` trong `torch.load(map_location="cpu")`, icon Material `phone_iphone` dùng cho liên hệ/hotline.
 
-### 3.2 Ghi kết quả vào `docs/canvas/multi-category-audit.md`
+### 3.2 Ghi kết quả vào `docs/AI/multi-category-audit.md`
 
 Bảng gồm cột: `File:dòng` | `Nội dung hiện tại (ngắn)` | `Loại` | `Cách xử lý` | `Task`.
 - Loại **A** = bắt buộc sửa (ghi cứng ngành điện tử làm sai hành vi/giao diện với catalog đa ngành).
@@ -313,7 +313,7 @@ riêng điện tử, thay bằng ví dụ đa ngành), ghi vào nhật ký.
 6. KHÔNG chạy `npm run dev`/docker (không có backend đang chạy — không kiểm thử giao diện thật được);
    ghi rõ trong báo cáo "chưa kiểm thử trên trình duyệt".
 
-## 6. Báo cáo cuối (`docs/canvas/multi-category-audit.md`)
+## 6. Báo cáo cuối (`docs/AI/multi-category-audit.md`)
 
 Cấu trúc bắt buộc:
 1. **Bước 0 — build nền** (kết quả nguyên văn).

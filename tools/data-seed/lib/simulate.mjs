@@ -45,7 +45,7 @@ const PREFERRED_CATEGORY_WEIGHT = 0.7; // 70% hành vi rơi vào category ưa th
 // Trước đây: mỗi lượt "xem" LUÔN dẫn thẳng tới "thêm giỏ" ĐÚNG sản phẩm vừa xem (ghép cứng
 // 100%, xem simulate.mjs bản cũ dòng 108-109/138-139). Kết quả: model SASRec train trên dữ liệu
 // này thua một quy tắc không cần học gì cả ("gợi ý lại item vừa xem" — recall@10=0,2754 so với
-// SASRec 0,1976, xem docs/canvas/recsys-execution-plan.md §5.7) — vì bản thân dữ liệu ĐÃ mã hoá
+// SASRec 0,1976, xem docs/AI/recsys-execution-plan.md §5.7) — vì bản thân dữ liệu ĐÃ mã hoá
 // sẵn quy tắc đó, không phải hành vi có cấu trúc thật để học.
 //
 // Sửa lại bằng cách ĐO trực tiếp cấu trúc phiên duyệt web trên REES46 Cosmetics (dữ liệu người

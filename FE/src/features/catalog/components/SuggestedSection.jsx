@@ -5,7 +5,7 @@ import { trackImpressions } from "../../../services/behaviorTracker.ts";
 
 // Mỗi tab = MỘT nguồn gợi ý thật từ recs-service (`source`), không còn là 3 cách sắp xếp lại cùng một
 // danh sách như trước (tab "xu hướng" sắp theo rating vốn = 0 cho mọi SP nên vô nghĩa). Tách "khám phá"
-// khỏi "xem lại" để đo riêng từng khối — xem docs/canvas/recsys-p1-assessment-and-plan.md, quyết định D1.
+// khỏi "xem lại" để đo riêng từng khối — xem docs/AI/recsys-p1-assessment-and-plan.md, quyết định D1.
 const MAIN_TABS = [
   { id: "for_you", label: "GỢI Ý CHO BẠN", empty: "Chưa có gợi ý dành cho bạn lúc này" },
   { id: "recent", label: "XEM GẦN ĐÂY", empty: "Bạn chưa xem sản phẩm nào gần đây" },

@@ -1,6 +1,6 @@
 """SASRec — model chuỗi ĐẦU TIÊN của cả đồ án, huấn luyện thật trên dữ liệu thật.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §4.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §4.
 
 ## Vị trí trong pipeline
 

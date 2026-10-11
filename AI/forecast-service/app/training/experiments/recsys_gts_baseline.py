@@ -1,7 +1,7 @@
 """Tuần 1 — Global Temporal Split (GTS) + baseline Popularity/ItemKNN cho bài toán gợi ý.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §6
-và [`recsys-research-and-plan.md`](../../../../docs/canvas/recsys-research-and-plan.md) §3.1 cho
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §6
+và [`recsys-research-and-plan.md`](../../../../docs/AI/recsys-research-and-plan.md) §3.1 cho
 lý do chọn GTS thay vì leave-one-out (giao thức cũ RÒ RỈ THỜI GIAN, đã đo tụt 21,7-73,4% khi sửa).
 
 ## Giao thức (đúng công thức đã chốt trong plan)

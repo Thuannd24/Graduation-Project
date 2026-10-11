@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Sinh dữ liệu user/order/behavior tổng hợp (synthetic) để mở khóa phần ML của churn-risk detection. Xem docs/canvas/churn-risk-implementation-plan.md Phase 3.",
+  "description": "Sinh dữ liệu user/order/behavior tổng hợp (synthetic) để mở khóa phần ML của churn-risk detection. Xem docs/AI/churn-risk-implementation-plan.md Phase 3.",
   "scripts": {
     "seed": "node seed.mjs",
     "seed:dry-run": "node seed.mjs --dry-run",

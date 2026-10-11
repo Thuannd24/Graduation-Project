@@ -1,7 +1,7 @@
 """Dùng model đã train (app/training/train.py, lưu qua shared_common.registry) để CHỈ dự đoán
 — không bao giờ tự fit lại. Đây là điểm khác biệt cốt lõi so với `rfm.py` cũ (fit lại mỗi lần
 gọi, gây tâm cụm dịch chuyển liên tục giữa các lần scan — xem Context trong
-docs/canvas/churn-risk-implementation-plan.md).
+docs/AI/churn-risk-implementation-plan.md).
 """
 from __future__ import annotations
 

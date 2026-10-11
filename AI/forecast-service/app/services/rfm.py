@@ -15,7 +15,7 @@ class RfmSegmentationService:
     chạy trên dữ liệu thật hay giả.
 
     BÂY GIỜ: chỉ PREDICT bằng model đã train và lưu qua `app/training/train.py` (endpoint
-    `POST /api/v1/models/train`, xem Phase 5 trong docs/canvas/churn-risk-implementation-plan.md).
+    `POST /api/v1/models/train`, xem Phase 5 trong docs/AI/churn-risk-implementation-plan.md).
     Nếu chưa train lần nào, hoặc query dữ liệu lỗi, sẽ RAISE lỗi rõ ràng (endpoint trả 500 kèm
     thông báo cụ thể) thay vì âm thầm trả kết quả giả.
     """

@@ -1,7 +1,7 @@
 """SASRec train trên dữ liệu THẬT của platform (`ecommerce_order_db.user_events`) — sinh checkpoint
 `item_space="platform_v1"` mà `AI/recs-service/app/services/sasrec.py` chấp nhận nạp.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md).
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md).
 
 ## Khác gì với `recsys_sasrec.py` (bản nghiên cứu trên REES46 Cosmetics)
 

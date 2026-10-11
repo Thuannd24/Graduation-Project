@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # Cả 2 chạy nền song song với FastAPI, không chặn request HTTP nào (xem
-    # docs/canvas/churn-risk-implementation-plan.md Phase 4 & 6).
+    # docs/AI/churn-risk-implementation-plan.md Phase 4 & 6).
     await behavior_consumer.start()
     await behavior_producer.start()
     await risk_producer.start()

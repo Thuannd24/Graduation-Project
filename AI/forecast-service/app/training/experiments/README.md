@@ -2,7 +2,7 @@
 
 Script ở đây **không được service nào import**, không lưu model, không đổi hành vi production. Chúng
 là các phép đo một lần dùng để **quyết định có nên đầu tư vào một hướng ML hay không** — chạy tay,
-đọc số, rồi ghi kết luận vào `docs/canvas/churn-risk-log.md`.
+đọc số, rồi ghi kết luận vào `docs/AI/churn-risk-log.md`.
 
 Lý do tách riêng: mọi thứ trong `app/training/` còn lại đều nằm trên đường đi của
 `POST /api/v1/models/train` (production). Trộn code thí nghiệm vào đó sẽ khiến người sau không biết

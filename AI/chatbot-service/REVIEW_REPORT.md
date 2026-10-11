@@ -91,7 +91,7 @@ Toàn bộ đã **build lại, restart service, gọi thử API thật** để x
 
 Đây là những điểm **chưa đạt "chuẩn dự án lớn"** nhưng đòi hỏi công việc lớn hơn (huấn luyện model, chờ team khác), không phải sửa code nhanh được:
 
-1. **Intent Classifier & Sentiment Analyzer đều là heuristic từ khoá, không phải model ML thật.** Tài liệu thiết kế (`docs/canvas/chatbot-ai.md`) yêu cầu fine-tune PhoBERT — hiện `self.model = None` ở cả 2 file, chỉ chạy if/else. Đủ dùng để demo nhưng dễ đoán sai câu diễn đạt lạ. Cần: tạo tập dữ liệu 1.500–3.000 câu gán nhãn rồi train (khuyến nghị dùng Google Colab, đã trao đổi trước đó).
+1. **Intent Classifier & Sentiment Analyzer đều là heuristic từ khoá, không phải model ML thật.** Tài liệu thiết kế (`docs/AI/chatbot-ai.md`) yêu cầu fine-tune PhoBERT — hiện `self.model = None` ở cả 2 file, chỉ chạy if/else. Đủ dùng để demo nhưng dễ đoán sai câu diễn đạt lạ. Cần: tạo tập dữ liệu 1.500–3.000 câu gán nhãn rồi train (khuyến nghị dùng Google Colab, đã trao đổi trước đó).
 2. **Thẻ sản phẩm thiếu ảnh/brand/category.** `search-service` (service AI khác, ngoài phạm vi review này) hiện chỉ trả `id/name/price/score`. Cần sửa ở `search-service`, không phải chatbot-service.
 3. **Cơ chế "2 lần tiêu cực liên tiếp thì escalate"** trong tài liệu thiết kế chưa cài — hiện chỉ log warning khi negative > 0.80, chưa đếm số lần liên tiếp và chưa thực sự bắn thông báo Slack/Zalo (`ESCALATION_WEBHOOK_URL` có trong config nhưng chưa được gọi ở đâu).
 4. **`/chat/sessions/escalate`** endpoint chỉ log rồi trả `SUCCESS`, không thực sự gọi bất kỳ hệ thống thông báo nào — là stub từ trước, chưa nối vào notification-service thật.

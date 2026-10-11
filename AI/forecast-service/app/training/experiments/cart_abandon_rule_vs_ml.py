@@ -14,7 +14,7 @@
    ("đoán tất cả đều bỏ giỏ") để không bao giờ đọc nhầm nữa.
 
 3. **Số trong báo cáo không tái lập được.** Bảng cây depth-1/2/3/6/10 từng ghi trong
-   `docs/canvas/churn-risk-log.md` KHÔNG do file này sinh ra (grep toàn `experiments/`:
+   `docs/AI/churn-risk-log.md` KHÔNG do file này sinh ra (grep toàn `experiments/`:
    `DecisionTree` chỉ có trong `synthetic_sequence_dgp.py`). Script đã chạy nằm ở `/tmp` với
    tên khác. Nay mọi con số trong bảng đều do CHÍNH file này sinh ra.
 

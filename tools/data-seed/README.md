@@ -1,7 +1,7 @@
 # data-seed
 
 Sinh dữ liệu user/order/hành vi **tổng hợp** (synthetic) để mở khóa phần ML của tính năng churn-risk
-detection. Xem thiết kế đầy đủ ở [`docs/canvas/churn-risk-implementation-plan.md`](../../docs/canvas/churn-risk-implementation-plan.md) Phase 3.
+detection. Xem thiết kế đầy đủ ở [`docs/AI/churn-risk-implementation-plan.md`](../../docs/AI/churn-risk-implementation-plan.md) Phase 3.
 
 ## Vì sao cần tool này
 
@@ -24,7 +24,7 @@ từ 2 bộ dữ liệu người dùng thật, chỉ lấy thống kê **không 
 | Taobao UserBehavior | 100 triệu sự kiện (phiên suy luận) | kiểm chứng chéo |
 
 Số đo + quy tắc đối chiếu 2 nguồn nằm ở **1 chỗ duy nhất**: `lib/behaviorTargets.mjs` (chi tiết:
-`docs/canvas/recsys-execution-plan.md` §5.9). Sinh đủ **19 loại hành vi** khớp tracker của hệ thống
+`docs/AI/recsys-execution-plan.md` §5.9). Sinh đủ **19 loại hành vi** khớp tracker của hệ thống
 (`AI/shared-common/shared_common/contracts.py`), gắn đúng vị trí trong phễu mua hàng.
 
 Tần suất/tháng theo từng user (λ mua hàng, suy giảm khi rời bỏ, "phân vân" trước churn) vẫn là

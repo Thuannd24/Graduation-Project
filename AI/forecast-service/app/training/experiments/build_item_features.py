@@ -1,6 +1,6 @@
 """Ngày 1 của plan nâng cấp feature space — NHÓM C: thực thể SẢN PHẨM.
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 ## Vì sao nhóm này tồn tại
 

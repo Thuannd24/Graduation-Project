@@ -1,6 +1,6 @@
 """Nâng sức mạnh phép re-test churn: 5 fold cố định -> 5 LƯỢT x 5 fold = 25, đúng chuẩn RetailRocket.
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 ## Vì sao cần bản này
 

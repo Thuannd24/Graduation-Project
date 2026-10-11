@@ -138,7 +138,7 @@ class SasRecService:
 
         # Model train trên chuỗi CŨ -> MỚI (item mới nhất ở vị trí cuối, nơi lấy `h[:, -1]`). Trước
         # đây đưa thẳng list newest-first vào nên `[-maxlen:]` lấy nhầm các item CŨ NHẤT và đảo
-        # ngược thứ tự — đo được HR@10 0,094 -> 0,066 (docs/canvas/recsys-behavior-flow-review.md).
+        # ngược thứ tự — đo được HR@10 0,094 -> 0,066 (docs/AI/recsys-behavior-flow-review.md).
         chronological = list(reversed(item_history))
         # +1 vi index 0 danh cho pad token trong embedding
         idx_seq = [self.item_to_idx[i] + 1 for i in chronological if i in self.item_to_idx]

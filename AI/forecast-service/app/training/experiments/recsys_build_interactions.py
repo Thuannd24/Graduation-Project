@@ -1,6 +1,6 @@
 """Tuần 1 — dựng tập tương tác (user, item, ts) từ REES46 Cosmetics cho bài toán gợi ý.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §6.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §6.
 
 Khác với `cosmetics_build_dataset.py` (dựng feature bỏ-giỏ, nhãn nhị phân): script này chỉ cần
 CẶP (user, item, thời điểm) làm tín hiệu ngầm định (implicit feedback) cho bài toán xếp hạng.

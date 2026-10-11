@@ -13,7 +13,7 @@ import java.util.UUID;
 
 /**
  * Wire DTO {@link CartUpdatedEvent} (đã tồn tại từ trước, chưa từng được publish) lên Kafka cho
- * pipeline churn-risk detection (xem docs/canvas/churn-risk-implementation-plan.md Phase 2).
+ * pipeline churn-risk detection (xem docs/AI/churn-risk-implementation-plan.md Phase 2).
  * Consumer là forecast-service/app/kafka/behavior_consumer.py (Phase 4).
  */
 @Component

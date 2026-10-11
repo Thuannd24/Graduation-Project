@@ -1,6 +1,6 @@
 """Lọc `interactions.csv` xuống chỉ còn `cart` + `purchase` — tín hiệu ngầm định MẠNH.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §6.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §6.
 
 ## Vì sao lọc, không chỉ để sửa lỗi bộ nhớ
 

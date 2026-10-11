@@ -1,6 +1,6 @@
 """Kiểm tra trực tiếp cơ chế "vì sao thêm feature có thể không tăng (thậm chí có vẻ giảm)".
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 Trực giác "đã là thông tin thì không thể làm giảm" đúng trong GIỚI HẠN dữ liệu vô hạn, KHÔNG đúng
 với ước lượng trên mẫu hữu hạn — đây là hiện tượng kinh điển (variance inflation do đa cộng tuyến,

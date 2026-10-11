@@ -1,7 +1,7 @@
 """Giai đoạn 1 — CHẤM ĐIỂM ĐỘ GIÀU của các bộ dữ liệu ứng viên.
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md)
-và [`recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md)
+và [`recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md).
 
 ## Vì sao script này tồn tại
 

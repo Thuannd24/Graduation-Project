@@ -1,5 +1,5 @@
 """Publish sự kiện "phát hiện nguy cơ rời bỏ" lên Kafka để promotion-service tự kích hoạt
-campaign (xem docs/canvas/churn-risk-implementation-plan.md Phase 6-7). Consumer:
+campaign (xem docs/AI/churn-risk-implementation-plan.md Phase 6-7). Consumer:
 BE/promotion-service/.../event/consumer/PromotionKafkaConsumer.java.
 """
 import json

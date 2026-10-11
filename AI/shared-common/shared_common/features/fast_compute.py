@@ -1,7 +1,7 @@
 """Bản pandas-trong-RAM của `rfm.py` + `behavior.py`, dùng cho PHỤC VỤ THẬT (live scoring) thay vì
 chỉ cho thực nghiệm. Lý do: `build_feature_matrix()` gốc (SQL tổng hợp `GROUP BY user_id`,
 `COUNT(DISTINCT category_id)`...) đo được mất 25-40+ phút trên MariaDB/Docker/WSL2 với dữ liệu thật
-(7,3 triệu `user_events`) — xem docs/canvas/churn-risk-log.md mục 2026-10-06. Thêm index không cứu
+(7,3 triệu `user_events`) — xem docs/AI/churn-risk-log.md mục 2026-10-06. Thêm index không cứu
 được (đã thử) vì nút thắt là bảng tạm/sắp xếp (`Creating sort index`), không phải thiếu index lọc.
 
 CÔNG THỨC NGUYÊN VĂN, chỉ đổi NƠI TÍNH (pandas thay SQL) — đã xác minh khớp 100% với SQL gốc trên

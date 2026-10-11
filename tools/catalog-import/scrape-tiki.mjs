@@ -3,7 +3,7 @@
  * Lấy catalog ĐA NGÀNH từ API công khai của Tiki → manifest cùng định dạng `manifests/*.json`
  * (attributes, categories, categoryAttributes, brands, products) để `setup.mjs --dir manifests-tiki` import.
  *
- * Điều khoản (đã rà 2026-10-01, xem docs/canvas/multi-category-audit.md): robots.txt của Tiki KHÔNG cấm
+ * Điều khoản (đã rà 2026-10-01, xem docs/AI/multi-category-audit.md): robots.txt của Tiki KHÔNG cấm
  * các API dùng ở đây; Điều khoản sử dụng mục 5 cấm phân phối/khai thác thương mại hình ảnh, văn bản khi
  * chưa có văn bản cho phép — chủ dự án chấp nhận rủi ro, dùng phi thương mại cho đồ án, ghi nguồn
  * "Nguồn: Tiki.vn" ở mọi mô tả. Vì vậy:

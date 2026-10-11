@@ -1,6 +1,6 @@
 """Re-test 7 block ứng viên churn bằng PHÉP KIỂM GHÉP CẶP — sửa lỗi thống kê đã xác nhận.
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md) §11.
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md) §11.
 
 ## Vì sao cần re-test
 

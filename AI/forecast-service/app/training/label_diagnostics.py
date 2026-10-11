@@ -1,4 +1,4 @@
-"""Chẩn đoán định nghĩa nhãn churn (Tầng 0.2 — xem docs/canvas/churn-risk-tier0-plan.md).
+"""Chẩn đoán định nghĩa nhãn churn (Tầng 0.2 — xem docs/AI/churn-risk-tier0-plan.md).
 
 ## Vấn đề đang chẩn đoán
 

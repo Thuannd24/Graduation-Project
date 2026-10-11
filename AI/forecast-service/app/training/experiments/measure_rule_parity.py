@@ -1,6 +1,6 @@
 """Ngày 3 — QUY GÁN phần tăng của nhóm C: cho model, hay cho cả rule?
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 ## Phần 1 — Rule phải được nhận CÙNG bộ feature
 

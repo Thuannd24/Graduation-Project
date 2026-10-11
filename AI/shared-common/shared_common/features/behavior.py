@@ -1,7 +1,7 @@
 """Feature tính từ bảng `user_events` (ghi bởi forecast-service/behavior_consumer.py, Phase 4).
 
 Bảng sống trong DB của order-service (`ecommerce_order_db`) — xem lý do ở
-`docs/canvas/churn-risk-implementation-plan.md` Phase 2 (cùng DB với `orders` để RFM/behavior
+`docs/AI/churn-risk-implementation-plan.md` Phase 2 (cùng DB với `orders` để RFM/behavior
 join được bằng pandas mà không cần cross-service SQL JOIN).
 """
 from __future__ import annotations

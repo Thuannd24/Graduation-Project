@@ -609,8 +609,8 @@ phụ thuộc ngành hàng.
 
 **QUYẾT ĐỊNH (chủ dự án, 2026-09-30): web là sàn TMĐT ĐA NGÀNH HÀNG.** Commit `75d00f1` trên `ai/behavoir`,
 tạo nhánh `feat/multi-category-catalog`. Khảo sát chi tiết FE/BE/AI → viết prompt thực thi cho agent khác
-(rẻ hơn) tại `docs/canvas/multi-category-refactor-prompt.md` (8 task T1–T8, luật cấm commit/xoá file/
-đụng DB, kiểm tra build sau mỗi task, báo cáo ra `docs/canvas/multi-category-audit.md`). Phát hiện thêm
+(rẻ hơn) tại `docs/AI/multi-category-refactor-prompt.md` (8 task T1–T8, luật cấm commit/xoá file/
+đụng DB, kiểm tra build sau mỗi task, báo cáo ra `docs/AI/multi-category-audit.md`). Phát hiện thêm
 khi khảo sát: bảo hành mặc định 12 tháng cho MỌI SP (order-service); trang danh mục lọc phía client, cắt
 ở 1.000 SP/danh mục (BE chưa có API lọc) — ghi là giới hạn, chưa sửa đợt này. Catalog đa ngành thật (tên,
 ảnh, thuộc tính tiếng Việt) vẫn là việc riêng, chưa có nguồn — chặn bước sinh lại dataset + GPU.

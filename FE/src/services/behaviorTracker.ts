@@ -2,7 +2,7 @@
  * Ghi nhận VI HÀNH VI (micro-behavior) để phục vụ bài toán dự đoán bỏ giỏ hàng.
  *
  * Vì sao cần: thí nghiệm trên clickstream thật (RetailRocket — xem
- * docs/canvas/churn-risk-log.md mục 2026-08-04) đo được rằng với chỉ 3 loại event
+ * docs/AI/churn-risk-log.md mục 2026-08-04) đo được rằng với chỉ 3 loại event
  * (xem/thêm giỏ/mua) thì THỨ TỰ hành vi không mang thêm thông tin nào (ΔAUC −0,0009), vì bigram
  * gần như trùng với số đếm. Bảng chữ cái hành vi phải phong phú hơn thì thứ tự mới có gì để mang —
  * module này bắn thêm 14 loại event, gồm cả IMPRESSION (xem shared_common/contracts.py::FE_BEHAVIOR_ACTIONS).
@@ -101,7 +101,7 @@ function sendBatch(events: QueuedEvent[], useBeacon: boolean): void {
 
   try {
     // Gửi kèm token để gateway inject X-User-Id — trước đây không gửi nên MỌI vi hành vi lưu với
-    // user_id = NULL, không ghép được với VIEW/CART của cùng người dùng (docs/canvas/
+    // user_id = NULL, không ghép được với VIEW/CART của cùng người dùng (docs/AI/
     // recsys-behavior-flow-review.md lỗi #7).
     const token = getAuthToken();
     if (!token && useBeacon && typeof navigator !== "undefined" && navigator.sendBeacon) {

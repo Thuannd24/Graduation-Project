@@ -1,6 +1,6 @@
 """Repeated CV + so sánh GHÉP CẶP cho các nhóm feature.
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 ## Vì sao ghép cặp
 

@@ -1,7 +1,7 @@
 // Sinh tham số ẩn cho từng user — KHÔNG dán nhãn "at-risk"/"churn" trực tiếp lên user nào cả.
 // Trạng thái rời bỏ phải TỰ XUẤT HIỆN từ việc lambda (tần suất mua) suy giảm theo thời gian đối
 // với 1 nhóm user, để việc đánh giá model ở Phase 5 có ý nghĩa (không suy luận vòng tròn — xem
-// ghi chú "tránh suy luận vòng tròn" trong docs/canvas/churn-risk-implementation-plan.md Phase 3).
+// ghi chú "tránh suy luận vòng tròn" trong docs/AI/churn-risk-implementation-plan.md Phase 3).
 
 import { GENERATION, PURCHASE_PROCESS } from "./behaviorTargets.mjs";
 

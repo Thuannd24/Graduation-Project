@@ -142,7 +142,7 @@ export const aiApi = {
   },
 
   // Mỗi khối UI lấy đúng 1 nguồn (tách "xem lại" khỏi "khám phá" — quyết định D1 trong
-  // docs/canvas/recsys-p1-assessment-and-plan.md): for_you = SASRec (món mới), recent = món vừa xem,
+  // docs/AI/recsys-p1-assessment-and-plan.md): for_you = SASRec (món mới), recent = món vừa xem,
   // trending = phổ biến 30 ngày. "auto" = thang sasrec → recency → popularity như trước.
   getRecommendations: async (source: RecommendationSource, topK = 10): Promise<AIProduct[]> => {
     try {

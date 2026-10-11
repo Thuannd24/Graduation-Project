@@ -1,4 +1,4 @@
-"""Kiểm định & hiệu chỉnh xác suất churn (Tầng 0.1 — xem docs/canvas/churn-risk-tier0-plan.md).
+"""Kiểm định & hiệu chỉnh xác suất churn (Tầng 0.1 — xem docs/AI/churn-risk-tier0-plan.md).
 
 ## Vấn đề
 

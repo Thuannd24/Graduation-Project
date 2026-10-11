@@ -377,35 +377,35 @@ Hành vi người dùng (FE tracker + Kafka) ──▶ user_events / lịch sử
 | 1.1 | Bài toán TMĐT đồ công nghệ: mở rộng, nhất quán dữ liệu, tìm kiếm, cá nhân hóa, hỗ trợ khách hàng, giữ chân khách hàng | [README.md](../../README.md) |
 | 1.2.1 | So sánh Shopee, Tiki, CellphoneS, Amazon… (bảng chức năng) | Tự khảo sát |
 | 1.2.2 | Monolith vs microservices | Tự khảo sát |
-| 1.2.3 | AI trong TMĐT: tìm kiếm ngữ nghĩa/ảnh, gợi ý, chatbot, phân tích khách hàng, marketing tự động | [ai-ecommerce-blueprint.md](../canvas/ai-ecommerce-blueprint.md), [recsys-research-and-plan.md](../canvas/recsys-research-and-plan.md), [churn-risk-feature-overview.md](../canvas/churn-risk-feature-overview.md) |
+| 1.2.3 | AI trong TMĐT: tìm kiếm ngữ nghĩa/ảnh, gợi ý, chatbot, phân tích khách hàng, marketing tự động | [ai-ecommerce-blueprint.md](../AI/ai-ecommerce-blueprint.md), [recsys-research-and-plan.md](../AI/recsys-research-and-plan.md), [churn-risk-feature-overview.md](../AI/churn-risk-feature-overview.md) |
 | 1.3 | Microservices + Kafka/CDC + Camunda + các dịch vụ AI (cầu nối sang Chương 2) | Mục 5 của file này, [AI/README.md](../../AI/README.md) |
 | 2.1–2.3 | Gateway, Eureka, gRPC, Kafka, Outbox, Debezium, circuit breaker, Keycloak | [services/00_INDEX.md](../services/00_INDEX.md), [keycloak_setup_guide.md](../keycloak_setup_guide.md) |
 | 2.4 | BPMN 2.0 (sự kiện, gateway, service task, timer), Camunda engine, delegate | [07_PROMOTION_SERVICE.md](../services/07_PROMOTION_SERVICE.md) |
-| 2.5 | Chỉ mục ngược + BM25; dense retrieval (multilingual-e5); Reciprocal Rank Fusion; CLIP | [text-search.md](../canvas/text-search.md), [visual-search.md](../canvas/visual-search.md) |
-| 2.6 | SASRec: nguồn gốc, kiến trúc, độ phức tạp O(n²d), ví dụ | [recommendation-complete.md](../canvas/recommendation-complete.md) |
-| 2.7 | LLM, Retrieval-Augmented Generation, PhoBERT cho phân loại ý định và cảm xúc, streaming SSE | [chatbot-ai.md](../canvas/chatbot-ai.md) |
-| 2.8 | RFM + KMeans; Logistic Regression + hiệu chỉnh xác suất (isotonic/Platt); LightGBM cho dự báo chuỗi thời gian; Isolation Forest | [churn-risk-implementation-plan.md](../canvas/churn-risk-implementation-plan.md), [dashboard-ai.md](../canvas/dashboard-ai.md), [ai-ecommerce-blueprint.md](../canvas/ai-ecommerce-blueprint.md) |
+| 2.5 | Chỉ mục ngược + BM25; dense retrieval (multilingual-e5); Reciprocal Rank Fusion; CLIP | [text-search.md](../AI/text-search.md), [visual-search.md](../AI/visual-search.md) |
+| 2.6 | SASRec: nguồn gốc, kiến trúc, độ phức tạp O(n²d), ví dụ | [recommendation-complete.md](../AI/recommendation-complete.md) |
+| 2.7 | LLM, Retrieval-Augmented Generation, PhoBERT cho phân loại ý định và cảm xúc, streaming SSE | [chatbot-ai.md](../AI/chatbot-ai.md) |
+| 2.8 | RFM + KMeans; Logistic Regression + hiệu chỉnh xác suất (isotonic/Platt); LightGBM cho dự báo chuỗi thời gian; Isolation Forest | [churn-risk-implementation-plan.md](../AI/churn-risk-implementation-plan.md), [dashboard-ai.md](../AI/dashboard-ai.md), [ai-ecommerce-blueprint.md](../AI/ai-ecommerce-blueprint.md) |
 | 2.9 | Spring Boot/Cloud, FastAPI, React, MariaDB, MongoDB, Redis, Elasticsearch, MinIO, Caddy | docker-compose trong `BE/`, `AI/` |
 | 3.1 | 9 quy trình nghiệp vụ vẽ bằng BPMN (mục 2.4 của file này) | [DETAILED_ORDER_FLOW.md](../DETAILED_ORDER_FLOW.md) |
 | 3.2 | Tác nhân, use case theo 10 phân hệ (mục 2 và 3 của file này) | [system_roles_permissions.md](../system_roles_permissions.md) |
 | 3.3 | Theo mục 2.3 của file này | `BE/api-gateway`, `BE/order-service`, `BE/payment-service`, `BE/promotion-service`, `AI/shared-common`, docker-compose (Debezium) |
 | 3.4.1–3.4.7 | Theo mục 2.2 của file này | [services/01…08](../services/), mã nguồn từng service |
-| 3.4.2 (tìm kiếm) | Tìm kiếm toàn văn, lai, bằng ảnh | `BE/product-service`, `AI/search-service`, [text-search.md](../canvas/text-search.md), [visual-search.md](../canvas/visual-search.md) |
+| 3.4.2 (tìm kiếm) | Tìm kiếm toàn văn, lai, bằng ảnh | `BE/product-service`, `AI/search-service`, [text-search.md](../AI/text-search.md), [visual-search.md](../AI/visual-search.md) |
 | 3.4.6 | Dữ liệu chiến dịch/voucher/ngân sách, luật kiểm tra workflow, trigger/điều kiện/hành động, trạng thái voucher, điểm thưởng | `BE/promotion-service`, `FE/src/features/admin/components/campaigns/` |
-| 3.4.8 | Luồng hành vi FE/BE → Kafka → forecast-service → MariaDB/Redis → recs | [recsys-behavior-flow-review.md](../canvas/recsys-behavior-flow-review.md), `AI/recs-service` |
-| 3.4.9 | Phân khúc, rời bỏ, quét rủi ro, dự báo, bất thường, định giá | [churn-risk-log.md](../canvas/churn-risk-log.md), [dashboard-ai.md](../canvas/dashboard-ai.md), `AI/forecast-service` |
-| 3.4.10 | Chatbot, chuyển sang nhân viên | [chatbot-ai.md](../canvas/chatbot-ai.md), `AI/chatbot-service`, `SupportChatTab.jsx` |
+| 3.4.8 | Luồng hành vi FE/BE → Kafka → forecast-service → MariaDB/Redis → recs | [recsys-behavior-flow-review.md](../AI/recsys-behavior-flow-review.md), `AI/recs-service` |
+| 3.4.9 | Phân khúc, rời bỏ, quét rủi ro, dự báo, bất thường, định giá | [churn-risk-log.md](../AI/churn-risk-log.md), [dashboard-ai.md](../AI/dashboard-ai.md), `AI/forecast-service` |
+| 3.4.10 | Chatbot, chuyển sang nhân viên | [chatbot-ai.md](../AI/chatbot-ai.md), `AI/chatbot-service`, `SupportChatTab.jsx` |
 | 3.5 | Wireframe/ảnh các màn hình chính | `FE/src/features/` |
 | 3.6.2 | Ảnh chụp màn hình theo phân hệ, đoạn code tiêu biểu | `FE/`, `BE/`, `AI/` |
 | 3.6.3 | Crawl/import sản phẩm, dữ liệu tổng hợp, dữ liệu Olist | [tools/](../../tools/) |
-| 3.7 | Chiến lược và kết quả kiểm thử; test của recs-service và forecast-service | [docs/test/](../test/), Postman collection trong `docs/`, `AI/recs-service/tests/`, `AI/forecast-service/tests/` |
+| 3.7 | Chiến lược và kết quả kiểm thử; test của recs-service và forecast-service | [docs/test/](../test/), Postman collection (đã xoá khỏi `docs/` ở commit `0454831`; lấy lại: `git show 0454831^:docs/order_service_test_collection.json`), `AI/recs-service/tests/`, `AI/forecast-service/tests/` |
 | 3.8 | Docker Compose, Caddy, AWS EC2 | [BE/DEPLOY.md](../../BE/DEPLOY.md) |
 | 4.1 | Mô tả bộ dữ liệu (tổng hợp và Olist), tỉ lệ chia, phần cứng | `tools/data-seed`, `tools/real-data-seed` |
-| 4.2 | Temporal split, 2 track explore/repeat, 5 baseline, HR/NDCG/MRR, coverage, Gini, khoảng tin cậy bootstrap, ablation, cổng đánh giá | `AI/recs-service/evaluation/`, [recsys-behavior-knowledge-transfer.md](../canvas/recsys-behavior-knowledge-transfer.md) |
+| 4.2 | Temporal split, 2 track explore/repeat, 5 baseline, HR/NDCG/MRR, coverage, Gini, khoảng tin cậy bootstrap, ablation, cổng đánh giá | `AI/recs-service/evaluation/`, [recsys-behavior-knowledge-transfer.md](../AI/recsys-behavior-knowledge-transfer.md) |
 | 4.3 | Ablation, calibration, chẩn đoán nhãn, so sánh với luật, model card | `AI/forecast-service/app/training/`, `/models/*` |
-| 4.4 | Văn bản: MRR@10, NDCG@10 (so BM25, dense, lai); ảnh: Recall@10, mAP | [text-search.md](../canvas/text-search.md), [visual-search.md](../canvas/visual-search.md) |
+| 4.4 | Văn bản: MRR@10, NDCG@10 (so BM25, dense, lai); ảnh: Recall@10, mAP | [text-search.md](../AI/text-search.md), [visual-search.md](../AI/visual-search.md) |
 | Kết luận / Hạn chế | Các mục "Không đưa vào báo cáo" ở cuối mục 3.4 | — |
-| Phụ lục A | Danh sách API | [FRONTEND_API_CONTRACT.md](../prompt_Fe/FRONTEND_API_CONTRACT.md), controller từng service |
+| Phụ lục A | Danh sách API | Controller từng service; bản hợp đồng API cũ `FRONTEND_API_CONTRACT.md` đã xoá ở commit `0454831` (lấy lại: `git show 0454831^:docs/prompt_Fe/FRONTEND_API_CONTRACT.md`) |
 | Phụ lục B | Hướng dẫn cài đặt, cấu hình Keycloak | [README.md](../../README.md), [keycloak_setup_guide.md](../keycloak_setup_guide.md) |
 
 ---

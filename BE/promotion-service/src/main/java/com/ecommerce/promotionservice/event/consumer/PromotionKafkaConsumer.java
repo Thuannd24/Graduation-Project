@@ -146,7 +146,7 @@ public class PromotionKafkaConsumer {
 
     /**
      * Sự kiện AI phát hiện nguy cơ rời bỏ (forecast-service/app/kafka/risk_producer.py, xem
-     * docs/canvas/churn-risk-implementation-plan.md Phase 6-7). `eventUniqueId` do phía AI tự
+     * docs/AI/churn-risk-implementation-plan.md Phase 6-7). `eventUniqueId` do phía AI tự
      * sinh dạng "{userId}:{yyyyMMdd}" để chống trigger trùng trong ngày — bắt buộc phải truyền
      * xuống variables để CampaignTriggerService.resolveEventUniqueId() đọc lại được.
      */

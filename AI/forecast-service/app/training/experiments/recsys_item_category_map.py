@@ -1,6 +1,6 @@
 """Dựng bảng ánh xạ item → category — cần cho bước RE-RANKING (đa dạng hoá theo category).
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §6.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §6.
 
 Nhẹ hơn nhiều so với `recsys_build_interactions.py`: chỉ cần CẶP (product_id, category_id)
 DUY NHẤT mỗi item, không cần giữ toàn bộ luồng sự kiện. Với 1 item đổi category theo thời gian

@@ -1,4 +1,4 @@
-"""Harness đánh giá gợi ý DUY NHẤT của dự án (plan GĐ2, docs/canvas/recsys-p1-assessment-and-plan.md).
+"""Harness đánh giá gợi ý DUY NHẤT của dự án (plan GĐ2, docs/AI/recsys-p1-assessment-and-plan.md).
 
 Mọi con số đưa vào báo cáo phải ra từ đây — cùng protocol, cùng metric, cùng class model với serving
 (`app.services.sasrec.SASRecModel`), để không còn cảnh script train đo một kiểu, service phục vụ một kiểu.

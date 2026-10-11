@@ -52,7 +52,7 @@ def _recommend_for_history(item_history: list[int], top_k: int, source: Source =
        báo trong `services/sasrec.py`) VÀ ánh xạ được item thật. Tầng này LOẠI item đã xem.
     2. **recency** — "gợi ý lại item vừa xem gần nhất" (chỉ gồm item đã xem). Trên seed 2026-09-26:
        Recency HR@10=0,212 vs SASRec-loại-item-đã-xem 0,094 — hai tầng phục vụ hai bài toán khác
-       nhau (xem lại vs khám phá), xem docs/canvas/recsys-p1-assessment-and-plan.md §4.1.
+       nhau (xem lại vs khám phá), xem docs/AI/recsys-p1-assessment-and-plan.md §4.1.
     3. **popularity** — cold-start (chưa có lịch sử) hoặc khi 2 tầng trên không trả được gì.
 
     `source` khác "auto" chọn thẳng MỘT nguồn cho từng khối UI (quyết định D1 trong plan: tách

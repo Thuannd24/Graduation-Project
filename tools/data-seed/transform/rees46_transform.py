@@ -3,7 +3,7 @@
 Khác `seed.mjs` (mô phỏng từ phân bố đo được): mỗi user, phiên, lượt xem / thêm giỏ / mua ở đây là của người dùng THẬT
 REES46. Chỉ đổi "nhãn" để khớp schema + catalog hệ thống; thứ tự, khoảng cách thời gian, phiên, việc bỏ giỏ… giữ NGUYÊN.
 Chủ dự án chốt 2026-10-02: transform thay mô phỏng; nguồn đa ngành; giá đơn = giá thật USD × tỉ giá.
-Đối chiếu schema từng cột: docs/canvas/rees46-transform-mapping.md.
+Đối chiếu schema từng cột: docs/AI/rees46-transform-mapping.md.
 
 NGUỒN: 12/2019 → 4/2020 (data.rees46.com/datasets/marketplace). KHÔNG dùng 10–11/2019: đo được ghi log giỏ bị lỗi
 (61,5% phiên có mua không có lượt thêm giỏ nào; từ 12/2019 chỉ còn 1,0% — check_cart_logging.py). Lưu ý: 3–4/2020 trùng
@@ -282,7 +282,7 @@ def main() -> None:
         "kind": "transformed-real-behavior",
         "source": "REES46 eCommerce behavior data, multi-category store (data.rees46.com/datasets/marketplace) — "
                   + ", ".join(f.split(".")[0] for f in args.files),
-        "note": "Hành vi THẬT, chỉ ánh xạ sang schema/catalog hệ thống. Đối chiếu: docs/canvas/rees46-transform-mapping.md",
+        "note": "Hành vi THẬT, chỉ ánh xạ sang schema/catalog hệ thống. Đối chiếu: docs/AI/rees46-transform-mapping.md",
         "params": {"frac": args.frac, "fx_usd_vnd": args.fx, "now": args.now, "week_shift": weeks},
         "excluded": "10–11/2019: ghi log giỏ lỗi (61,5% phiên có mua không có lượt thêm giỏ; 12/2019: 1,0%); "
                    "01-02/01/2020 và 20-21/04/2020: lượt mua gần như mất (view/cart vẫn bình thường) -> loại khỏi orders",

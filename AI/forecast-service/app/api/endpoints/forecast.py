@@ -73,7 +73,7 @@ def trigger_rfm_clustering():
 def train_churn_models():
     """Train (fit) lại KMeans segmentation + Logistic Regression churn classifier, lưu artifact
     qua shared_common.registry. Đây là nơi DUY NHẤT model được fit — mọi endpoint/scan định kỳ
-    khác chỉ predict bằng model đã lưu (xem docs/canvas/churn-risk-implementation-plan.md Phase 5).
+    khác chỉ predict bằng model đã lưu (xem docs/AI/churn-risk-implementation-plan.md Phase 5).
     Chạy tay khi demo/cần cập nhật model; có thể lên lịch chạy định kỳ (vd hàng ngày) sau này."""
     try:
         metrics = train_and_evaluate()
