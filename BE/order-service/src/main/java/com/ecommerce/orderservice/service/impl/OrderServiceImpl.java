@@ -82,6 +82,11 @@ public class OrderServiceImpl implements OrderService {
     private final DefaultRedisScript<Long> stockDecrementScript;
     private final DefaultRedisScript<Long> stockIncrementScript;
 
+    // Khóa cho /api/internal/** của service khác (cùng giá trị Feign interceptor dùng). Thiếu header này
+    // thì InternalApiKeyFilter của product-service trả 401 và tra cứu bảo hành luôn rỗng.
+    @org.springframework.beans.factory.annotation.Value("${app.internal.api-key:}")
+    private String internalApiKey;
+
     @Override
     public OrderResponse createOrder(String userId, CheckoutRequest checkoutRequest, String idempotencyKey,
             String email) {
@@ -1437,7 +1442,12 @@ public class OrderServiceImpl implements OrderService {
                 String baseUrl = instances.get(0).getUri().toString();
                 String idsParam = productIds.stream().map(String::valueOf).collect(Collectors.joining(","));
                 String url = baseUrl + "/api/internal/products/price-info?ids=" + idsParam;
-                var response = restTemplate.getForObject(url, java.util.Map.class);
+                var headers = new org.springframework.http.HttpHeaders();
+                if (internalApiKey != null && !internalApiKey.isBlank()) {
+                    headers.set("X-Internal-Api-Key", internalApiKey);
+                }
+                var response = restTemplate.exchange(url, org.springframework.http.HttpMethod.GET,
+                        new org.springframework.http.HttpEntity<>(headers), java.util.Map.class).getBody();
                 if (response != null && "SUCCESS".equals(response.get("code"))) {
                     @SuppressWarnings("unchecked")
                     List<java.util.Map<String, Object>> data = (List<java.util.Map<String, Object>>) response
