@@ -1,7 +1,9 @@
 # TÀI LIỆU THIẾT KẾ: CHAT SERVICE
 ## (Dịch vụ Chat Hỗ trợ Khách hàng - Nhân viên)
 
-> **Port:** `8088` | **DB:** `chat_db` (MongoDB) & Redis (Online tracking) | **Version:** 1.0.0
+> **Port:** `8095` | **DB:** `chat_db` (MongoDB) & Redis (Online tracking) + MinIO (ảnh đính kèm) | **Version:** 1.0.0
+>
+> ⚠️ _Rà soát 2026-10-11: Luồng **thông báo offline** (chat-service publish `SupportChatOfflineEvent` lên topic `notification-events` → gửi email cho bộ phận hỗ trợ) **hiện KHÔNG hoạt động**: chat-service có publish sự kiện, nhưng **không service nào consume topic `notification-events`** (notification-service chỉ nghe `order-events` và `payment-events`). Khi không có nhân viên online, phòng chỉ chuyển sang `WAITING` và chờ nhân viên vào nhận._
 
 ---
 
@@ -16,7 +18,7 @@ Dịch vụ Chat Hỗ trợ (Chat Service) đảm nhận vai trò kết nối tr
 | **Room Management** | Tạo phiên hỗ trợ của Khách hàng, cập nhật trạng thái (`AI_CHAT`, `WAITING`, `ACTIVE`, `CLOSED`), ghi nhận thông tin tin nhắn cuối cùng (`lastMessage`, `lastMessageAt`). |
 | **Real-time Messaging** | Truyền và nhận tin nhắn thời gian thực qua giao thức WebSocket STOMP, hỗ trợ định dạng tin nhắn text, hình ảnh hoặc đính kèm file. |
 | **Auto Distribution** | Tự động phân phối phòng chat (hội thoại) đều cho các nhân viên đang trực tuyến (Online) dựa trên thuật toán tải tối thiểu (Least Connections). |
-| **Offline Notifications** | Phát hiện trạng thái không có nhân viên trực tuyến để tự động kích hoạt sự kiện Kafka gửi email thông báo khách hàng cần hỗ trợ về hòm thư support trung tâm. |
+| **Offline Notifications** | Phát hiện trạng thái không có nhân viên trực tuyến để publish sự kiện Kafka `SupportChatOfflineEvent` (topic `notification-events`). ⚠️ Phần gửi email **chưa hoạt động** vì chưa có consumer cho topic này. |
 
 ### 1.2. Trạng thái phòng chat (Lifecycle) và Tích Hợp AI Chatbot tương lai
 
@@ -30,7 +32,7 @@ Hội thoại chat của khách hàng với hệ thống chuyển dịch trạng
                  │
                  ├─── (Nếu có nhân viên online) ──> Tự động phân phối (Least Connections) ──> ACTIVE (Chat với Staff)
                  │                                                                                │
-                 └─── (Không có nhân viên online) ──> WAITING ──> Bắn Kafka báo offline            ▼
+                 └─── (Không có nhân viên online) ──> WAITING ──> Bắn Kafka báo offline (chưa có consumer) ▼
                                                                                                CLOSED (Đóng chat)
 ```
 > **Đặc điểm lưu trữ**: Vì cả tin nhắn của Khách hàng, AI Chatbot (senderRole = `AI`) và Nhân viên hỗ trợ (senderRole = `STAFF`) đều lưu chung trong collection `chatMessages` của một `roomId`, nên khi bàn giao sang cho Nhân viên, Nhân viên sẽ gọi API lịch sử để **đọc lại toàn bộ nội dung mà AI đã đối thoại với khách trước đó** một cách liền mạch.
@@ -48,7 +50,7 @@ sequenceDiagram
     autonumber
     participant Client as Web/Mobile Client (SockJS/STOMP)
     participant Gateway as API Gateway (:8080)
-    participant ChatService as Chat Service (:8088)
+    participant ChatService as Chat Service (:8095)
     participant Keycloak as Keycloak IAM
 
     Note over Client,ChatService: Bước 1: WebSocket Handshake (Public)
@@ -57,7 +59,7 @@ sequenceDiagram
     ChatService-->>Client: Handshake thành công (WebSocket TCP socket mở)
 
     Note over Client,ChatService: Bước 2: STOMP Connection & Authentication
-    Client->>Gateway: STOMP CONNECT Frame (Kèm Authorization: Bearer <JWT>)
+    Client->>Gateway: STOMP CONNECT Frame (Kèm Authorization: Bearer <JWT>, hoặc header Guest-Id cho khách vãng lai)
     Gateway->>ChatService: Chuyển tiếp TCP Frame
     ChatService->>Keycloak: Validate JWT (Sử dụng JwtDecoder / JWK Set)
     Keycloak-->>ChatService: Token hợp lệ + Trích xuất Roles/Id
@@ -66,6 +68,8 @@ sequenceDiagram
 ```
 
 ### 2.2. Luồng tự động phân phối và xử lý Offline (Kafka Event)
+
+> ⚠️ Nhánh "Không có nhân viên online" bên dưới chỉ đúng tới bước publish lên Kafka. Các bước `Kafka->>NotifService` và gửi email là **thiết kế, chưa được hiện thực** (không có consumer cho `notification-events`).
 
 ```mermaid
 sequenceDiagram
@@ -95,9 +99,8 @@ sequenceDiagram
         ChatService->>DB: Lưu phòng chat trạng thái WAITING
         Note over ChatService: Đóng gói sự kiện Offline
         ChatService->>Kafka: Publish SupportChatOfflineEvent { customerEmail, content }
-        Kafka->>NotifService: Consume Event
-        Note over NotifService: Gửi email hỗ trợ khách hàng về hòm thư hotro@auratech.vn
-        NotifService-->>Staff: Gửi Email / Notification "Khách hàng cần hỗ trợ khẩn cấp"
+        Kafka-->>NotifService: (CHƯA HOẠT ĐỘNG) Không có consumer cho notification-events
+        Note over NotifService: Thiết kế: gửi email về hòm thư hỗ trợ — chưa được hiện thực
     end
 ```
 
@@ -155,12 +158,13 @@ sequenceDiagram
 
 ### 4.1. REST API Endpoints
 
-#### Dành cho Khách hàng (`/api/v1/chat/**`)
-*   `POST /api/v1/chat/rooms`: Yêu cầu mở phòng hỗ trợ. (Mặc định tạo ở trạng thái `AI_CHAT` để AI xử lý trước, hoặc trả về phòng hiện tại nếu chưa đóng).
-*   `GET /api/v1/chat/rooms/my`: Xem thông tin phòng hỗ trợ hiện tại của mình.
-*   `GET /api/v1/chat/rooms/{roomId}/messages?page=0&size=20`: Xem lịch sử tin nhắn trong phòng (bao gồm cả tin nhắn của AI và khách hàng trước đó).
-*   `PUT /api/v1/chat/rooms/{roomId}/close`: Khách hàng chủ động đóng phòng hỗ trợ.
-*   `PUT /api/v1/chat/rooms/{roomId}/handover`: Yêu cầu chuyển giao phiên hỗ trợ sang Nhân viên (do khách nhấn nút yêu cầu, gõ lệnh đặc biệt, hoặc khi bot AI tự động nhận diện cảm xúc tiêu cực).
+#### Dành cho Khách hàng (`/api/v1/public/chat/**` — public tại Gateway; khách đã đăng nhập được nhận diện qua `X-User-Id`, khách vãng lai qua header `X-Guest-Id`)
+*   `POST /api/v1/public/chat/rooms`: Yêu cầu mở phòng hỗ trợ. (Mặc định tạo ở trạng thái `AI_CHAT` để AI xử lý trước, hoặc trả về phòng hiện tại nếu chưa đóng).
+*   `GET /api/v1/public/chat/rooms/my`: Xem thông tin phòng hỗ trợ hiện tại của mình.
+*   `GET /api/v1/public/chat/rooms/{roomId}/messages?page=0&size=20`: Xem lịch sử tin nhắn trong phòng (bao gồm cả tin nhắn của AI và khách hàng trước đó).
+*   `PUT /api/v1/public/chat/rooms/{roomId}/close`: Khách hàng chủ động đóng phòng hỗ trợ.
+*   `POST /api/v1/public/chat/rooms/{roomId}/upload-image` (multipart `file`): Upload ảnh đính kèm lên MinIO, trả về `{ "url": ... }` để gửi tin nhắn `IMAGE` qua WebSocket (dùng cho cả khách và nhân viên).
+*   `PUT /api/v1/public/chat/rooms/{roomId}/handover`: Yêu cầu chuyển giao phiên hỗ trợ sang Nhân viên — chỉ hợp lệ khi phòng đang `AI_CHAT`; hệ thống gán nhân viên online (Least Connections) hoặc chuyển `WAITING`.
 
 #### Dành cho Nhân viên (`/api/v1/admin/chat/**` - Yêu cầu quyền `ROLE_STAFF`/`ROLE_ADMIN`)
 *   `GET /api/v1/admin/chat/rooms?status=WAITING&page=0&size=20`: Xem các phòng chat theo trạng thái.
@@ -184,8 +188,10 @@ sequenceDiagram
 
 Dưới đây là chi tiết mã nguồn triển khai các logic cốt lõi.
 
+> _Ghi chú: Các đoạn code dưới đây là bản rút gọn tại thời điểm thiết kế, có thể lệch so với code hiện tại (vd: `WebSocketConfig` thật còn chấp nhận khách vãng lai qua header `Guest-Id`; phòng mới thật được tạo ở trạng thái `AI_CHAT`, phân phối nhân viên khi `handover` hoặc khi có tin nhắn mới lúc phòng đang `WAITING`). Xem file nguồn qua link để có bản chính xác._
+
 ### 5.1. WebSocket Interceptor Xác thực JWT
-[WebSocketConfig.java](file:///e:/CloneGithub/Graduation-Project/BE/chat-service/src/main/java/com/ecommerce/chatservice/config/WebSocketConfig.java)
+[WebSocketConfig.java](../../BE/chat-service/src/main/java/com/ecommerce/chatservice/config/WebSocketConfig.java)
 ```java
 package com.ecommerce.chatservice.config;
 
@@ -288,7 +294,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 ```
 
 ### 5.2. Quản lý trạng thái Online của Nhân viên qua Redis
-[WebSocketEventListener.java](file:///e:/CloneGithub/Graduation-Project/BE/chat-service/src/main/java/com/ecommerce/chatservice/event/WebSocketEventListener.java)
+[WebSocketEventListener.java](../../BE/chat-service/src/main/java/com/ecommerce/chatservice/event/WebSocketEventListener.java)
 ```java
 package com.ecommerce.chatservice.event;
 
@@ -355,7 +361,7 @@ public class WebSocketEventListener {
 ```
 
 ### 5.3. Thuật toán phân phối tải tối thiểu (Least Connections)
-[ChatRoomServiceImpl.java](file:///e:/CloneGithub/Graduation-Project/BE/chat-service/src/main/java/com/ecommerce/chatservice/service/impl/ChatRoomServiceImpl.java)
+[ChatRoomServiceImpl.java](../../BE/chat-service/src/main/java/com/ecommerce/chatservice/service/impl/ChatRoomServiceImpl.java)
 ```java
 package com.ecommerce.chatservice.service.impl;
 
@@ -438,7 +444,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 ```
 
 ### 5.4. Gửi sự kiện Offline lên Kafka khi không có nhân viên trực
-[ChatMessageServiceImpl.java](file:///e:/CloneGithub/Graduation-Project/BE/chat-service/src/main/java/com/ecommerce/chatservice/service/impl/ChatMessageServiceImpl.java)
+[ChatMessageServiceImpl.java](../../BE/chat-service/src/main/java/com/ecommerce/chatservice/service/impl/ChatMessageServiceImpl.java)
+
+> ⚠️ Sự kiện được publish lên topic `notification-events` nhưng **chưa có service nào consume** topic này, nên email báo offline hiện không được gửi.
 ```java
 package com.ecommerce.chatservice.service.impl;
 

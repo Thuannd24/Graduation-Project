@@ -1,7 +1,14 @@
 # 🔑 Hướng Dẫn Setup Keycloak Đầy Đủ Qua Admin UI
+
+> 🗄️ **Thiết kế ban đầu — một số phần KHÔNG khớp với code hiện tại (rà soát 2026-10-11).** Khác biệt chính:
+> - **Không cần setup tay**: realm `ecommerce-realm` (roles, clients `ecommerce-backend`/`ecommerce-frontend`, Google IdP, default role, user mẫu) được **tự import** khi container khởi động từ `BE/keycloak-data` (`ecommerce-realm-realm.json`, `ecommerce-realm-users-0.json`, chiến lược `OVERWRITE_EXISTING`). Các bước dưới đây chỉ để tham khảo/kiểm tra.
+> - Keycloak `24.0.0` chạy `start-dev` tại host port **`8083`** (container `8080`), đăng nhập realm `master` bằng **`admin / admin`** (không phải `localhost:8080`, `adminpassword`). Cổng `8080` là API Gateway (có proxy `/realms/**`, `/resources/**` sang Keycloak).
+> - Realm roles: **`ROLE_ADMIN`, `ROLE_STAFF`, `ROLE_CUSTOMER`**; `ROLE_CUSTOMER` nằm trong `default-roles-ecommerce-realm` nên user mới tự có role này.
+> - API Gateway đọc role từ claim chuẩn **`realm_access.roles`** (tự thêm tiền tố `ROLE_` nếu thiếu), **không** đọc claim `roles` tùy biến ở Bước 5 (mapper `realm-roles-mapper` có trong realm import của `ecommerce-backend` nhưng Gateway không phụ thuộc vào nó).
+> - Issuer mà các service cấu hình: `KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm`. Hồ sơ user trong `user-service` được Gateway auto-provision qua `POST /api/internal/users/provision` (không có Keycloak SPI).
 ## Hệ thống E-Commerce — Realm: `ecommerce-realm`
 
-> **Truy cập Admin Console:** `http://localhost:8080` → Đăng nhập bằng `admin / adminpassword`
+> **Truy cập Admin Console:** `http://localhost:8083` → Đăng nhập (realm `master`) bằng `admin / admin`
 
 ---
 
@@ -112,7 +119,7 @@ Sau khi Save → Vào tab **"Credentials"** → Copy giá trị **Client secret*
 > [!IMPORTANT]
 > Copy `Client secret` này và điền vào `application.yml` của `api-gateway`:
 > ```yaml
-> spring.security.oauth2.resourceserver.jwt.issuer-uri: http://keycloak:8080/realms/ecommerce-realm
+> spring.security.oauth2.resourceserver.jwt.issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8083/realms/ecommerce-realm}
 > ```
 
 ---
@@ -156,7 +163,7 @@ Client này dùng để **Frontend/App đăng nhập và nhận JWT**.
 ## BƯỚC 5: Cấu Hình Protocol Mappers — Inject Roles vào JWT
 
 > [!IMPORTANT]
-> Đây là bước **quan trọng nhất**. API Gateway cần đọc `roles` từ JWT token. Mặc định Keycloak không đặt roles ở vị trí chuẩn.
+> ⚠️ _Rà soát 2026-10-11: API Gateway thực tế đọc `realm_access.roles` (Keycloak luôn đưa vào access token qua client scope `roles`), nên mapper `roles` dưới đây **không bắt buộc**._
 
 ### 5.1. Tạo Mapper trong Client `ecommerce-backend`
 
@@ -210,10 +217,10 @@ Nhấn **"Add mapper" → "By configuration"** → Chọn **"Full name"**
 >   "sub": "e143d2c8-8fc2-4017-8051-fb05cf781a5c",
 >   "email": "admin@ecommerce.com",
 >   "name": "Nguyễn Văn A",
->   "roles": ["ROLE_ADMIN"]
+>   "realm_access": { "roles": ["ROLE_ADMIN", "..."] }
 > }
 > ```
-> → API Gateway đọc `sub` → inject `X-User-Id`, đọc `roles` → inject `X-User-Roles`
+> → API Gateway đọc `sub` → inject `X-User-Id`, đọc `realm_access.roles` → inject `X-User-Roles`
 
 ---
 
@@ -418,7 +425,7 @@ Vào **Configure → Authentication** → Tab **"Required actions"**
 Mở Terminal hoặc Postman, chạy:
 
 ```bash
-curl -X POST http://localhost:8080/realms/ecommerce-realm/protocol/openid-connect/token \
+curl -X POST http://localhost:8083/realms/ecommerce-realm/protocol/openid-connect/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=password" \
   -d "client_id=ecommerce-frontend" \
@@ -446,15 +453,15 @@ Copy `access_token` → Paste vào `https://jwt.io` → Kiểm tra payload phả
   "sub": "uuid-của-user",
   "email": "admin@ecommerce.vn",
   "name": "Admin System",
-  "roles": ["ROLE_ADMIN"],
-  "iss": "http://localhost:8080/realms/ecommerce-realm"
+  "realm_access": { "roles": ["ROLE_ADMIN", "..."] },
+  "iss": "http://localhost:8083/realms/ecommerce-realm"
 }
 ```
 
 ### 12.3. Kiểm tra JWKS Endpoint (API Gateway dùng cái này)
 
 ```bash
-curl http://localhost:8080/realms/ecommerce-realm/protocol/openid-connect/certs
+curl http://localhost:8083/realms/ecommerce-realm/protocol/openid-connect/certs
 ```
 
 → Phải trả về JSON chứa public keys. Đây là endpoint API Gateway tự động fetch để verify JWT.
@@ -481,12 +488,12 @@ curl http://localhost:8080/realms/ecommerce-realm/protocol/openid-connect/certs
 
 | Mục đích | URL |
 |---|---|
-| Admin Console | `http://localhost:8080/admin` |
-| Login Page | `http://localhost:8080/realms/ecommerce-realm/account` |
-| OIDC Discovery Endpoint | `http://localhost:8080/realms/ecommerce-realm/.well-known/openid-configuration` |
-| JWKS (Public Keys) | `http://localhost:8080/realms/ecommerce-realm/protocol/openid-connect/certs` |
-| Token Endpoint | `http://localhost:8080/realms/ecommerce-realm/protocol/openid-connect/token` |
-| Logout Endpoint | `http://localhost:8080/realms/ecommerce-realm/protocol/openid-connect/logout` |
+| Admin Console | `http://localhost:8083/admin` |
+| Login Page | `http://localhost:8083/realms/ecommerce-realm/account` |
+| OIDC Discovery Endpoint | `http://localhost:8083/realms/ecommerce-realm/.well-known/openid-configuration` |
+| JWKS (Public Keys) | `http://localhost:8083/realms/ecommerce-realm/protocol/openid-connect/certs` |
+| Token Endpoint | `http://localhost:8083/realms/ecommerce-realm/protocol/openid-connect/token` |
+| Logout Endpoint | `http://localhost:8083/realms/ecommerce-realm/protocol/openid-connect/logout` |
 
 > [!TIP]
 > Dán URL OIDC Discovery vào trình duyệt sẽ thấy toàn bộ endpoints Keycloak — rất hữu ích khi debug.

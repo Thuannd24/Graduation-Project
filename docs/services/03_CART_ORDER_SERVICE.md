@@ -1,7 +1,18 @@
  # TÀI LIỆU THIẾT KẾ: CART & ORDER SERVICE
+
+> 🗄️ **Thiết kế ban đầu — một số phần KHÔNG khớp với code hiện tại (rà soát 2026-10-11).** Khác biệt chính:
+> - CSDL là **MariaDB 10.11** (`ecommerce_order_db`, host port `3308`), không phải PostgreSQL.
+> - Trạng thái đơn thực tế: `PENDING → AWAITING_PAYMENT → CONFIRMED → SHIPPED → DELIVERED`, hoặc `CANCELLED`; chỉ đi tiến (chặn bằng `getStatusRank()`), không dùng enum `OrderStatus`. `AWAITING_PAYMENT` khi Inventory trừ kho OK; `CONFIRMED` khi nhận `PaymentSuccessEvent`/`PaymentCODConfirmedEvent`.
+> - Outbox được phát bằng **Debezium CDC** (`MySqlConnector` + `EventRouter` → topic `order-events`), **không có Outbox Scheduler** 5 giây (mục 7.2). `OutboxCleanupScheduler` xóa outbox cũ hơn 2 ngày lúc 02:00. Event trong outbox: `OrderCreatedEvent`, `OrderConfirmedEvent`, `OrderCancelledEvent`, `OrderShippedEvent`, `OrderDeliveredEvent`.
+> - Checkout: giảm kho ảo bằng Lua script trên key `product:stock:{productId}:{variantId}` (không phải `product:stock:{productId}`); lưu đơn (Transaction 1) → áp voucher/điểm qua Feign → lưu outbox (Transaction 2), lỗi thì chạy compensation. Trả **200** với `ApiResponse {code, message, data}` (không có trường `success`).
+> - **Không gọi Camunda `engine-rest`** khi checkout (mục 4.4 không tồn tại): voucher được áp qua `POST /api/internal/vouchers/apply` của promotion-service. Không có bảng `coupons`, `cart_items`, Redis key `coupon:{code}`.
+> - Vận chuyển là **mock**: `PUT /api/v1/orders/{id}/ship` sinh mã `MOCK-GHTK-XXXXXXXX`, phí ship cố định **30.000đ** (`ShippingFeeCalculator`), không gọi API GHTK/GHN. Webhook là `POST /api/v1/public/orders/shipping-webhook` (header `X-Shipping-Signature` HMAC-SHA256).
+> - Đơn `PENDING`/`AWAITING_PAYMENT` quá **30 phút** bị hủy tự động (`OrderExpiryScheduler`, mỗi 5 phút) — đã có, không còn là "cải tiến tương lai". Thanh toán chỉ VNPay + COD (không MoMo).
+> - Giỏ hàng Redis Hash `cart:{userId}` có TTL **30 ngày**; topic sự kiện giỏ hàng là **`cart-updated-events`** (không phải `cart-events`), consumer là AI forecast-service.
+> - Bảng thật: `orders` (thêm `email`, `points_redeemed`, `point_discount_amount`, `shipping_fee`, `shipping_discount_amount`, `vat_amount`), `order_items`, `outbox_events`, `compensation_tasks`, `user_events`.
 ## (Dịch vụ Giỏ hàng & Đơn hàng)
 
-> **Port:** `8082` | **DB:** `ecommerce_order_db` (PostgreSQL) | **Version:** 1.0.0
+> **Port:** `8082` | **DB:** `ecommerce_order_db` (MariaDB 10.11) | **Version:** 1.0.0
 
 ---
 
@@ -14,7 +25,7 @@
 | **Giỏ hàng (Cart)** | Thêm/Sửa/Xóa sản phẩm, tính tổng tiền, áp mã giảm giá |
 | **Thanh toán (Checkout)** | Chuyển đổi giỏ hàng thành đơn hàng, kiểm tra tồn kho |
 | **Đơn hàng (Order)** | Tạo, xem, hủy đơn hàng, lịch sử mua hàng |
-| **Trạng thái đơn** | Quản lý vòng đời: PENDING → CONFIRMED → SHIPPED → DELIVERED |
+| **Trạng thái đơn** | Quản lý vòng đời: PENDING → AWAITING_PAYMENT → CONFIRMED → SHIPPED → DELIVERED (hoặc CANCELLED) |
 | **Chống trùng lặp** | Idempotency Key ngăn tạo đơn 2 lần khi double-click |
 
 ### 1.2. Lý do gộp Cart & Order vào 1 Service
@@ -45,12 +56,12 @@ Key:   "cart:{userId}"
 Type:  Redis Hash
 Field: "{productId}:{variantId}"
 Value: JSON { quantity, price, productName, imageUrl }
-TTL:   7 ngày (kể từ lần thao tác cuối)
+TTL:   30 ngày (kể từ lần thao tác cuối)
 
 Ví dụ:
 HSET cart:1  "101:5"  '{"quantity":2,"price":299000,"productName":"Giày Nike","imageUrl":"..."}'
 HSET cart:1  "202:0"  '{"quantity":1,"price":150000,"productName":"Áo Polo","imageUrl":"..."}'
-EXPIRE cart:1 604800
+EXPIRE cart:1 2592000
 ```
 
 **Lý do dùng Redis Hash:**
@@ -85,20 +96,22 @@ sequenceDiagram
 
     User->>FE: Click "Đặt hàng"
     Note over FE: Sinh UUID làm Idempotency-Key
-    FE->>OS: POST /api/orders (Header: Idempotency-Key: uuid-abc)
+    FE->>OS: POST /api/v1/orders/checkout (Header: Idempotency-Key: uuid-abc)
     OS->>Redis: SET checkout:lock:{userId}:{key} "PROCESSING" NX EX 900
     Redis-->>OS: OK (Lần đầu → set thành công)
     OS->>OS: Xử lý đơn hàng...
     OS->>Redis: SET checkout:lock:{userId}:{key} {responseJson} EX 900
 
     Note over User: Mạng lag → FE retry với cùng Idempotency-Key
-    FE->>OS: POST /api/orders (Header: Idempotency-Key: uuid-abc)
+    FE->>OS: POST /api/v1/orders/checkout (Header: Idempotency-Key: uuid-abc)
     OS->>Redis: GET checkout:lock:{userId}:{key}
     Redis-->>OS: {responseJson} (đã có kết quả)
     OS-->>FE: 200 OK (Trả về kết quả cũ, không tạo đơn mới)
 ```
 
 ### 3.2. State Machine — Vòng đời đơn hàng
+
+> ⚠️ _Sơ đồ dưới đây thiếu trạng thái `AWAITING_PAYMENT` (Inventory OK → `AWAITING_PAYMENT` → thanh toán/xác nhận COD → `CONFIRMED`). Code không dùng enum `OrderStatus` mà lưu String + `getStatusRank()`; hủy được khi đơn ở `PENDING`/`AWAITING_PAYMENT`/`CONFIRMED`._
 
 ```
                     ┌─────────────────────────────────┐
@@ -188,10 +201,10 @@ sequenceDiagram
     actor User as Khách hàng
     participant OS as Order Service
     participant Redis as Redis
-    participant DB as PostgreSQL
+    participant DB as MariaDB
     participant Kafka as Kafka
 
-    User->>OS: POST /api/orders (Idempotency-Key)
+    User->>OS: POST /api/v1/orders/checkout (Idempotency-Key)
 
     rect rgb(255,245,238)
         Note over OS, Redis: Bước 1: Kiểm tra Idempotency
@@ -207,10 +220,10 @@ sequenceDiagram
         OS->>Redis: HGETALL cart:{userId}
         Redis-->>OS: Danh sách items
         loop Mỗi item trong giỏ
-            OS->>Redis: DECRBY product:stock:{productId} {quantity}
+            OS->>Redis: Lua giảm product:stock:{productId}:{variantId} {quantity}
             Redis-->>OS: Số tồn kho còn lại
             alt Tồn kho < 0
-                OS->>Redis: INCRBY product:stock:{productId} {quantity}  (Rollback)
+                OS->>Redis: INCRBY product:stock:{productId}:{variantId} {quantity}  (Rollback)
                 OS->>Redis: DEL checkout:lock:{userId}:{key}
                 OS-->>User: 400 Bad Request (Hết hàng: {productName})
             end
@@ -226,16 +239,12 @@ sequenceDiagram
         OS->>DB: COMMIT
         OS->>Redis: DEL cart:{userId}  (Xóa giỏ hàng)
         OS->>Redis: SET checkout:lock:{userId}:{key} {responseJson} EX 900
-        OS-->>User: 201 Created { orderId, status: PENDING }
+        OS-->>User: 200 OK { code: SUCCESS, data: { id, status: PENDING, ... } }
     end
 
     rect rgb(240,255,240)
-        Note over OS, Kafka: Bước 4: Outbox Scheduler gửi Kafka (Async)
-        loop Mỗi 5 giây
-            OS->>DB: SELECT * FROM outbox_events WHERE status=PENDING
-            OS->>Kafka: Publish OrderCreatedEvent
-            OS->>DB: UPDATE outbox_events SET status=PROCESSED
-        end
+        Note over DB, Kafka: Bước 4: Debezium CDC đọc binlog outbox_events → publish OrderCreatedEvent lên order-events (Async)
+        DB-->>Kafka: Debezium (MySqlConnector + EventRouter)
     end
 ```
 
@@ -246,10 +255,10 @@ sequenceDiagram
     autonumber
     participant User as Khách hàng
     participant OS as Order Service
-    participant DB as PostgreSQL
+    participant DB as MariaDB
     participant Kafka as Kafka
 
-    User->>OS: PUT /api/orders/{id}/cancel
+    User->>OS: POST /api/v1/orders/{id}/cancel
     OS->>DB: SELECT * FROM orders WHERE id=? AND userId=?
     DB-->>OS: Order entity
     OS->>OS: Validate: order.status.canTransitionTo(CANCELLED)?
@@ -268,6 +277,8 @@ sequenceDiagram
 ### 4.3. Luồng Giao hàng (Shipping & Logistics Integration)
 
 > **❓ Câu hỏi:** Hệ thống xử lý vận chuyển (Shipping) như thế nào? Cập nhật trạng thái SHIPPED, DELIVERED ra sao?
+
+> ⚠️ _Thực tế: không gọi API GHTK/GHN. Admin/Staff gọi `PUT /api/v1/orders/{id}/ship` (đơn phải `CONFIRMED`) → `SHIPPED` + mã `MOCK-GHTK-XXXXXXXX`; cập nhật tiếp qua `POST /api/v1/public/orders/shipping-webhook` (chữ ký HMAC) hoặc `PUT /api/v1/orders/{id}/delivery-status`. Phí ship cố định 30.000đ._
 
 **Giải pháp:** Trong kiến trúc này, ta không xây dựng một "Shipping Service" riêng (tránh over-engineering). Toàn bộ logic giao tiếp với đơn vị vận chuyển (ĐVVC) như Giao Hàng Nhanh (GHN), Giao Hàng Tiết Kiệm (GHTK) hoặc Viettel Post được nhúng vào **Order Service**.
 
@@ -306,6 +317,8 @@ sequenceDiagram
 
 ### 4.4. Tích Hợp Camunda 7 Cho Checkout & Khuyến Mãi Động
 
+> ⚠️ _Toàn bộ mục 4.4 là thiết kế ban đầu, **không tồn tại trong code**: order-service không gọi `engine-rest` của Camunda khi checkout và không có fallback 3 giây. Voucher được áp qua Feign `POST /api/internal/vouchers/apply` (promotion-service)._
+
 Trong luồng checkout thông thường, hệ thống tính toán giá và lưu đơn trực tiếp. Để áp dụng **Khuyến Mãi Động Phân Tích Bởi AI**, luồng checkout tại `Order Service` được tích hợp chặt chẽ với Camunda 7 Engine như sau:
 
 ```mermaid
@@ -315,7 +328,7 @@ sequenceDiagram
     participant OS as Order Service
     participant Redis as Redis (Stock & Lock)
     participant C7 as Camunda 7 Engine (Promo Service)
-    participant DB as PostgreSQL (order_db)
+    participant DB as MariaDB (order_db)
 
     Client->>OS: POST /api/orders (Checkout)
     OS->>Redis: SET checkout:lock:... NX (Chặn double-submit)
@@ -386,7 +399,7 @@ CREATE TABLE orders (
     id                  BIGSERIAL          PRIMARY KEY,
     user_id             BIGINT          NOT NULL COMMENT 'Logical FK → user_db.users.id',
     status              VARCHAR(20)     NOT NULL DEFAULT 'PENDING'
-                        COMMENT 'PENDING,CONFIRMED,SHIPPED,DELIVERED,CANCELLED',
+                        COMMENT 'PENDING,AWAITING_PAYMENT,CONFIRMED,SHIPPED,DELIVERED,CANCELLED',
     total_amount        DECIMAL(15,2)   NOT NULL COMMENT 'Tổng tiền đã chốt tại lúc mua',
     discount_amount     DECIMAL(15,2)   NOT NULL DEFAULT 0 COMMENT 'Tổng giảm giá',
     final_amount        DECIMAL(15,2)   NOT NULL COMMENT 'Số tiền thực thanh toán',
@@ -423,7 +436,7 @@ CREATE TABLE order_items (
 );
 ```
 
-#### Bảng `cart_items` (Dự phòng DB — Chính là Redis)
+#### Bảng `cart_items` (Dự phòng DB — Chính là Redis) — ⚠️ không tồn tại trong code
 ```sql
 CREATE TABLE cart_items (
     id          BIGSERIAL          PRIMARY KEY,
@@ -455,7 +468,7 @@ CREATE TABLE outbox_events (
 );
 ```
 
-#### Bảng `coupons` (Mã giảm giá)
+#### Bảng `coupons` (Mã giảm giá) — ⚠️ không tồn tại trong code (voucher do promotion-service quản lý)
 ```sql
 CREATE TABLE coupons (
     id              BIGSERIAL          PRIMARY KEY,
@@ -476,16 +489,15 @@ CREATE TABLE coupons (
 
 | Key Pattern | Type | TTL | Mô tả |
 |---|---|---|---|
-| `cart:{userId}` | Hash | 7 ngày | Giỏ hàng của người dùng |
+| `cart:{userId}` | Hash | 30 ngày | Giỏ hàng của người dùng |
 | `checkout:lock:{userId}:{key}` | String | 15 phút | Idempotency key chống đơn trùng |
-| `product:stock:{productId}` | String | - | Tồn kho giữ chỗ trên RAM |
-| `coupon:{code}` | Hash | 1 giờ | Cache thông tin mã giảm giá |
+| `product:stock:{productId}:{variantId}` | String | - | Tồn kho giữ chỗ trên RAM |
 
 ---
 
 ## VI. ĐẶC TẢ API
 
-Toàn bộ các API đều trả về định dạng bọc chung là `ApiResponse<T>`.
+Toàn bộ các API đều trả về định dạng bọc chung là `ApiResponse<T>` = `{ "code": "SUCCESS", "message", "data" }` (các ví dụ JSON bên dưới còn dùng trường `success` theo bản thiết kế cũ).
 
 ### 6.1. Cart Endpoints (Giỏ hàng - `/api/v1/cart`)
 Tất cả các API này yêu cầu Header định danh người dùng:
@@ -585,7 +597,7 @@ Tất cả các API này yêu cầu Header định danh người dùng:
 | **POST** | `/api/v1/orders/{id}/cancel` | User/Admin/Staff | Thực hiện hủy đơn hàng |
 | **PUT** | `/api/v1/orders/{id}/ship` | Admin/Staff | Chuyển đơn sang trạng thái đang giao hàng và sinh mã vận đơn |
 | **PUT** | `/api/v1/orders/{id}/delivery-status` | Admin/Staff | Cập nhật trạng thái giao hàng thủ công |
-| **POST** | `/api/v1/orders/public/webhook/shipping` | Public | Webhook từ đối tác vận chuyển cập nhật trạng thái đơn hàng |
+| **POST** | `/api/v1/public/orders/shipping-webhook` | Public (HMAC `X-Shipping-Signature`) | Webhook từ đối tác vận chuyển cập nhật trạng thái đơn hàng |
 
 #### 1. Tạo đơn hàng (Checkout) (`POST /api/v1/orders/checkout`)
 *   **Headers:**
@@ -605,7 +617,7 @@ Tất cả các API này yêu cầu Header định danh người dùng:
       "note": "Xin giao hàng ngoài giờ hành chính."
     }
     ```
-*   **Response (201 Created):**
+*   **Response (200 OK):**
     ```json
     {
       "success": true,
@@ -646,7 +658,7 @@ Tất cả các API này yêu cầu Header định danh người dùng:
 *   **Headers:**
     ```http
     X-User-Id: user_123456
-    X-User-Roles: ROLE_USER
+    X-User-Roles: ROLE_CUSTOMER
     ```
 *   **Response (200 OK):** Trả về cấu trúc `OrderResponse` chi tiết tương tự như lúc tạo đơn thành công.
 
@@ -654,7 +666,7 @@ Tất cả các API này yêu cầu Header định danh người dùng:
 *   **Headers:**
     ```http
     X-User-Id: user_123456
-    X-User-Roles: ROLE_USER
+    X-User-Roles: ROLE_CUSTOMER
     ```
 *   **Response (200 OK):** Trả về danh sách `List<OrderResponse>`.
 
@@ -663,7 +675,7 @@ Tất cả các API này yêu cầu Header định danh người dùng:
     ```http
     X-User-Id: user_123456
     X-User-Email: customer@gmail.com
-    X-User-Roles: ROLE_USER
+    X-User-Roles: ROLE_CUSTOMER
     ```
 *   **Response (200 OK):**
     ```json
@@ -702,7 +714,8 @@ Tất cả các API này yêu cầu Header định danh người dùng:
     *   `status` (String, Required): Trạng thái muốn đổi (Ví dụ: `DELIVERED`, `CANCELLED`).
 *   **Response (200 OK):** Trả về `OrderResponse` chứa trạng thái mới.
 
-#### 7. Webhook Giao hàng từ đối tác (`POST /api/v1/orders/public/webhook/shipping`)
+#### 7. Webhook Giao hàng từ đối tác (`POST /api/v1/public/orders/shipping-webhook`)
+*   **Header:** `X-Shipping-Signature` = HMAC-SHA256(secret, `trackingCode|status`)
 *   **Request Body:**
     ```json
     {
@@ -803,6 +816,8 @@ outboxRepository.save(outboxEvent);  // Lưu event vào cùng DB
 
 ### 7.2. Outbox Scheduler Implementation
 
+> ⚠️ _Không tồn tại trong code. Outbox được Debezium CDC (`MySqlConnector` + `EventRouter`, connector `order-outbox-connector`) đọc từ binlog MariaDB và publish lên `order-events`; đoạn code dưới đây chỉ là thiết kế ban đầu._
+
 ```java
 @Scheduled(fixedDelay = 5000) // Chạy mỗi 5 giây
 @Transactional
@@ -842,12 +857,13 @@ public void processOutboxEvents() {
 
 | Topic | Event Type | Producer / Consumer | Mô tả |
 |---|---|---|---|
-| `order-events` | `OrderCreatedEvent`, `OrderCancelledEvent` | Producer (via Outbox) | Báo trạng thái đơn hàng để trừ kho hoặc hoàn trả |
-| `cart-events` | `CartUpdatedEvent` | Producer (Async Direct) | Bắn event ngay khi user thêm/sửa/xóa sản phẩm trong giỏ hàng để AI tính toán tỷ lệ bỏ giỏ (Cart Abandonment) |
-| `inventory-events` | `InventoryDeductedEvent`, `InventoryFailedEvent` | Consumer | Nhận kết quả trừ kho từ Inventory Service để cập nhật trạng thái đơn |
+| `order-events` | `OrderCreatedEvent`, `OrderConfirmedEvent`, `OrderCancelledEvent`, `OrderShippedEvent`, `OrderDeliveredEvent` | Producer (via Outbox + Debezium) | Báo trạng thái đơn hàng để trừ kho hoặc hoàn trả |
+| `cart-updated-events` | `CartUpdatedEvent` | Producer (Async Direct) | Bắn event ngay khi user thêm/sửa/xóa sản phẩm trong giỏ hàng để AI tính toán tỷ lệ bỏ giỏ (Cart Abandonment) |
+| `inventory-events` | `InventoryDeductedEvent` (`status` CONFIRMED / FAILED) | Consumer |
+| `payment-events` | `PaymentSuccessEvent`, `PaymentCODConfirmedEvent`, `PaymentFailedEvent` | Consumer | Nhận kết quả trừ kho từ Inventory Service để cập nhật trạng thái đơn |
 
 ### 8.2. Schema Event: `CartUpdatedEvent`
-*   **Topic:** `cart-events`
+*   **Topic:** `cart-updated-events`
 *   **Payload:**
 ```json
 {
@@ -924,13 +940,13 @@ order-service:
   ports:
     - "8082:8082"
   environment:
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_order_db
+    DB_HOST: mariadb   # jdbc:mariadb://mariadb:3306/ecommerce_order_db
     SPRING_DATA_REDIS_HOST: redis
     SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     KAFKA_TOPIC_ORDER_EVENTS: order-events
     KAFKA_TOPIC_INVENTORY_EVENTS: inventory-events
   depends_on:
-    - postgres
+    - mariadb
     - redis
     - kafka
   networks:
@@ -944,7 +960,7 @@ order-service:
 | Tính năng | Ưu tiên | Mô tả |
 |---|---|---|
 | **Payment Integration** | Cao | Tích hợp VNPAY/Momo sau khi tạo đơn |
-| **Order Timeout** | Cao | Tự động hủy đơn PENDING sau 30 phút không thanh toán |
+| **Order Timeout** | ✅ Đã có | `OrderExpiryScheduler` hủy đơn PENDING/AWAITING_PAYMENT sau 30 phút |
 | **Flash Sale** | Cao | Hỗ trợ mua hàng số lượng giới hạn với countdown timer |
 | **Multi-seller Cart** | Trung bình | Tách giỏ hàng thành nhiều đơn khi mua từ nhiều shop |
 | **Return/Refund** | Trung bình | Quy trình hoàn trả hàng và hoàn tiền |

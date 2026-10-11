@@ -14,11 +14,13 @@
 | **Campaign Builder (Low-code)** | Admin/Staff thiết kế luồng khuyến mãi trên FE dưới dạng đồ thị (`nodes` + `edges`), backend validate rồi biên dịch (compile) sang BPMN 2.0 XML và deploy lên Camunda Engine |
 | **Nhúng Camunda 7 Engine** | `RuntimeService`, `RepositoryService`, `HistoryService` chạy embedded trong service để deploy process definition, start process instance, đọc lịch sử/biến quá trình |
 | **Xử lý Java Delegates** | 6 `JavaDelegate` thật xử lý các Service Task: phát voucher (percent/fixed/freeship), nâng hạng thành viên, tặng điểm loyalty, gửi email |
-| **Kích hoạt Campaign (Trigger)** | Theo **sự kiện nghiệp vụ** nhận qua Kafka (đăng ký mới, đơn hàng thành công, đánh giá sản phẩm) hoặc theo **lịch trình định kỳ** (Camunda `timerEventDefinition` sinh từ `cronExpression`/`startDate`+`endDate`) |
+| **Kích hoạt Campaign (Trigger)** | Theo **sự kiện nghiệp vụ** nhận qua Kafka (đăng ký mới, đơn hàng thành công, đánh giá sản phẩm, AI phát hiện khách có nguy cơ rời bỏ — `ChurnRiskDetectedEvent` trên topic `user-risk-events`) hoặc theo **lịch trình định kỳ** (Camunda `timerEventDefinition` sinh từ `cronExpression`/`startDate`+`endDate`) |
 | **Quản lý ngân sách chiến dịch** | Trừ/hoàn ngân sách (`remainingBudget`) trực tiếp trên bảng `campaigns` (MariaDB) bằng pessimistic lock, không dùng Redis atomic counter cho ngân sách |
 | **Quản lý Voucher** | Phát hành, tra cứu, áp dụng (reserve khi checkout), redeem/hoàn khi thanh toán thành công/thất bại, tự động hết hạn (scheduled job) |
 
-> Các mô-đun **KHÔNG tồn tại** trong code hiện tại (đã bị loại bỏ hoàn toàn khỏi hệ thống, không đưa vào tài liệu này): chống gian lận đa tài khoản/thiết bị/IP (`FraudCheckDelegate`, bảng `fraud_logs`, `user_devices`, `is_blacklisted`), AI Price Sensitivity Scoring (`GetAIScoreDelegate`, Python AI Service), chốt chặn giá vốn/trần giảm giá theo biên lợi nhuận (`CostPriceGuardDelegate`, `cost_price`), khấu trừ ngân sách qua Redis (`BudgetDeductDelegate`).
+> Các mô-đun **KHÔNG tồn tại** trong code hiện tại (đã bị loại bỏ hoàn toàn khỏi hệ thống, không đưa vào tài liệu này): chống gian lận đa tài khoản/thiết bị/IP (`FraudCheckDelegate`, bảng `fraud_logs`, `user_devices`), AI Price Sensitivity Scoring (`GetAIScoreDelegate`, Python AI Service), chốt chặn giá vốn/trần giảm giá theo biên lợi nhuận (`CostPriceGuardDelegate`, `cost_price`), khấu trừ ngân sách qua Redis (`BudgetDeductDelegate`).
+>
+> _Lưu ý (rà soát 2026-10-11): cột `is_blacklisted` **vẫn tồn tại** trong `User.java` của user-service (Admin khóa/mở khóa qua `PUT /api/v1/admin/users/{userId}/blacklist`); chỉ là Promotion Service không đọc cột này._
 
 ### 1.2. Vị trí trong kiến trúc và Luồng đi
 
@@ -49,8 +51,8 @@
 **Luồng kích hoạt chiến dịch theo sự kiện (runtime):**
 
 ```
-[user-service/order-service/payment-service] ──Kafka──► [PromotionKafkaConsumer]
-   topics: user-created-events, payment-events, order-events, product-reviewed-events
+[user-service/order-service/payment-service/product-service/AI forecast-service] ──Kafka──► [PromotionKafkaConsumer]
+   topics: user-created-events, payment-events, order-events, product-reviewed-events, user-risk-events
                     │
                     ▼
       CampaignTriggerService.triggerByEventType(triggerType, eventVariables)
@@ -134,6 +136,7 @@ POST /api/internal/vouchers/redeem                POST /api/internal/vouchers/re
 | `Trigger_Event_NewUser` | `bpmn:startEvent` | (không có) | Kafka topic `user-created-events` (event `UserRegisteredEvent`) |
 | `Trigger_Event_OrderSuccess` | `bpmn:startEvent` | `minOrderValue` (Number) | Kafka topic `payment-events` (`PaymentSuccessEvent`) hoặc `order-events` (`OrderConfirmedEvent`) |
 | `Trigger_Event_ReviewProduct` | `bpmn:startEvent` | `minRating` (1–5) | Kafka topic `product-reviewed-events` (`ProductReviewedEvent`) |
+| `Trigger_Event_ChurnRisk` | `bpmn:startEvent` | (không có) | Kafka topic `user-risk-events` (`ChurnRiskDetectedEvent`, do AI forecast-service phát). Biến process: `userId`, `segment`, `churnProbability`, `daysSinceLastActivity`, `cartAbandonCount`, `monetary`, `expectedLoss`, `riskRank`; chống trùng theo `eventUniqueId` (`{userId}:{yyyyMMdd}`) |
 | `Trigger_Timer_Schedule` | `bpmn:startEvent` + `timerEventDefinition` | `cronExpression` **hoặc** cặp `startDate`+`endDate` | Camunda tự kích hoạt theo `timeCycle`/`timeDate` — **không** có poller tuỳ biến ở tầng ứng dụng |
 
 **Condition (Exclusive Gateway, in-degree ≥ 1, out-degree ≥ 2, đúng 1 nhánh `isDefault = true`):**
@@ -142,6 +145,7 @@ POST /api/internal/vouchers/redeem                POST /api/internal/vouchers/re
 |---|---|---|
 | `Condition_MemberRank` | `allowedRanks` (string/array) | `operator` ∈ {IN, NOT_IN}, `value` ⊆ {MEMBER, SILVER, GOLD, VIP} |
 | `Condition_TotalSpending` | `minSpendingAmount`, `daysLookback` (Number) | `operator` ∈ {GREATER_THAN, LESS_THAN, EQUAL}, `value` (Number), `timeRange` ∈ {CURRENT_MONTH, LAST_30_DAYS} |
+| `Condition_ChurnRiskTier` | (không bắt buộc) | `operator` ∈ {GREATER_THAN, LESS_THAN, EQUAL}, `value` (Number) — so sánh theo `churnProbability`, không có `timeRange` |
 | `Condition_Location` | `targetProvinces` (array) | `operator` ∈ {EQUAL, NOT_EQUAL}, `value` (array không rỗng) |
 | `Condition_ContainsCategory` | `targetIds` (array) | `operator` ∈ {EQUAL, NOT_EQUAL}, `value` (array không rỗng) |
 | `Condition_ContainsProduct` | `targetIds` (array) | `operator` ∈ {EQUAL, NOT_EQUAL}, `value` (array không rỗng) |
@@ -203,7 +207,7 @@ Voucher do các delegate phát ra sẽ được gắn kèm `restrictedCategoryId
 | **Camunda 7 Engine** | Embedded (`RuntimeService`/`RepositoryService`/`HistoryService`), `history-level: full`, `schema-update: false` | Không dùng DMN; không bật webapp/Cockpit trong cấu hình hiện tại |
 | **Database** | **MariaDB** (`org.mariadb.jdbc.Driver`, dialect `MariaDBDialect`) qua JDBC `jdbc:mariadb://<host>:3308/ecommerce_promotion_db` | KHÔNG phải PostgreSQL |
 | **Cache/Lock** | Redis (`StringRedisTemplate`) | Dùng làm **distributed lock** (chống trigger trùng / chống 2 instance cùng chạy scheduler dọn voucher hết hạn), **không** dùng làm atomic counter ngân sách |
-| **Message Broker** | Kafka (`spring-kafka`, `ack-mode: manual_immediate`, `enable-auto-commit: false`) | Consumer nhận event từ user/order/payment/review |
+| **Message Broker** | Kafka (`spring-kafka`, `ack-mode: manual_immediate`, `enable-auto-commit: false`) | Consumer nhận event từ user/order/payment/review và AI risk (`user-risk-events`) |
 | **Service discovery** | Eureka Client | |
 | **Giao tiếp nội bộ** | OpenFeign (`UserClient`, `OrderClient`, `ProductClient`, `NotificationClient`) qua header API key (`FeignInternalApiConfig`) | |
 
@@ -227,7 +231,7 @@ CREATE TABLE campaigns (
     bpmn_process_definition_key   VARCHAR(100)    NOT NULL,
     workflow_json                 TEXT            COMMENT 'Graph JSON (nodes+edges+meta) từ Campaign Builder',
     bpmn_xml                      TEXT            COMMENT 'BPMN 2.0 XML do server tự compile, không nhận trực tiếp từ client',
-    trigger_type                  VARCHAR(80)     COMMENT 'Trigger_Event_NewUser | Trigger_Event_OrderSuccess | Trigger_Event_ReviewProduct | Trigger_Timer_Schedule',
+    trigger_type                  VARCHAR(80)     COMMENT 'Trigger_Event_NewUser | Trigger_Event_OrderSuccess | Trigger_Event_ReviewProduct | Trigger_Event_ChurnRisk | Trigger_Timer_Schedule',
     active                        BOOLEAN         NOT NULL DEFAULT TRUE,
     created_at                    DATETIME,
     updated_at                    DATETIME
@@ -290,7 +294,8 @@ Tất cả response bọc trong `ApiResponse<T> { code, message, data }`.
 | GET | `/api/v1/public/campaigns/active` | Public | Danh sách chiến dịch đang hoạt động — chỉ trả `id/name/startDate/endDate/active`, không lộ budget/BPMN |
 | DELETE | `/api/v1/admin/campaigns/{id}` | ADMIN | Xoá chiến dịch |
 | PUT | `/api/v1/admin/campaigns/{id}/toggle-active?active=true|false` | ADMIN, STAFF | Bật/tắt chiến dịch, đồng bộ suspend/activate process definition trên Camunda |
-| POST | `/api/v1/admin/campaigns/evaluate?processKey=...` | ADMIN, STAFF | Trigger thủ công 1 process theo `processKey` với `variables` tuỳ ý (mục đích test) |
+
+> ⚠️ _Rà soát 2026-10-11: endpoint `POST /api/v1/admin/campaigns/evaluate` từng được mô tả ở đây **không tồn tại** trong `CampaignController` — không có API trigger thủ công process; chiến dịch chỉ được kích hoạt qua Kafka event hoặc Timer._
 
 #### `POST /api/v1/admin/campaigns` — Request/Response mẫu
 ```json
@@ -437,7 +442,7 @@ Không có biến `PYTHON_AI_SERVICE_URL`; không có cấu hình `ecommerce/pro
 
 ## VII. YÊU CẦU TÍCH HỢP VỚI CÁC SERVICE KHÁC (INTEGRATION REQUIREMENTS)
 
-Đây là các API/Feign client **thật đang được gọi** trong code (`UserClient`, `OrderClient`, `ProductClient`, `NotificationClient`), không còn phần chống fraud (`user_devices`, `is_blacklisted`) hay giá vốn (`cost_price`, price-info) vì các luồng đó đã bị xoá khỏi Promotion Service.
+Đây là các API/Feign client **thật đang được gọi** trong code (`UserClient`, `OrderClient`, `ProductClient`, `NotificationClient`), không còn phần chống fraud (`user_devices`; Promotion cũng không đọc cột `is_blacklisted` — cột này vẫn còn trong user-service) hay giá vốn (`cost_price`, price-info) vì các luồng đó đã bị xoá khỏi Promotion Service.
 
 ### 7.1. Identity & User Service
 
@@ -450,7 +455,7 @@ Promotion Service gọi các API internal sau (qua Feign, `FeignInternalApiConfi
 | PUT | `/api/internal/users/{userId}/tier` | `UpgradeMemberRankDelegate` cập nhật hạng | Body `{ "tier": "GOLD" }` |
 | PUT | `/api/internal/users/{userId}/points` | `LoyaltyPointDelegate` cộng điểm loyalty | Body `{ calculationMode, pointAmount, sourceType, campaignId?, orderId?, orderAmount? }`, trả `{ "data": { "newPointBalance", "pointsApplied", "calculationDetail" } }` |
 
-Không yêu cầu cột `is_blacklisted`/bảng `user_devices` trên `user_db` — module chống gian lận đã bị loại bỏ.
+Promotion Service không dùng cột `is_blacklisted` và không cần bảng `user_devices` — module chống gian lận đã bị loại bỏ khỏi Promotion. (Cột `is_blacklisted` vẫn tồn tại trong `User.java` của user-service, phục vụ chức năng khóa tài khoản của Admin.)
 
 ### 7.2. Cart & Order Service
 

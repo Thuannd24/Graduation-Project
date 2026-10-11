@@ -1,7 +1,17 @@
 # TÀI LIỆU THIẾT KẾ: PAYMENT SERVICE
+
+> 🗄️ **Thiết kế ban đầu — một số phần KHÔNG khớp với code hiện tại (rà soát 2026-10-11).** Khác biệt chính:
+> - CSDL là **MariaDB 10.11** (`ecommerce_payment_db`, host port `3308`), không phải PostgreSQL.
+> - Chỉ hỗ trợ **VNPay** và **COD**. **Không có MoMo, Stripe, ZaloPay** và không có `PaymentGateway`/Strategy Pattern (mục 3.1–3.2 chỉ là thiết kế).
+> - Trạng thái payment thực tế: `PENDING`, `SUCCESS`, `FAILED`, `EXPIRED`, `REFUND_PENDING`, `REFUNDED`, `PARTIALLY_REFUNDED` — **không có `COMPLETED`**. Trạng thái refund: `PENDING`, `PENDING_MANUAL`, `SUCCESS`.
+> - Callback VNPay là **`GET /api/v1/public/payments/vnpay-callback`** (dùng chung cho IPN và redirect trình duyệt; chữ ký sai trả `RspCode 97`), không phải `POST /api/payments/webhook/vnpay`. Xử lý tuần tự bằng `SELECT ... FOR UPDATE` (`findByTxnRefWithLock`).
+> - Event (`PaymentSuccessEvent`, `PaymentFailedEvent`, `PaymentCODConfirmedEvent`, `RefundCompletedEvent`) được ghi vào bảng **`outbox_events`** rồi **Debezium CDC** (`payment-outbox-connector`, `MySqlConnector` + `EventRouter`) publish lên `payment-events` — không gọi `kafkaTemplate` trực tiếp.
+> - **COD đã có**: khởi tạo COD lưu payment `PENDING` và phát `PaymentCODConfirmedEvent` (order → `CONFIRMED`); payment COD chuyển `SUCCESS` khi nhận `OrderDeliveredEvent`.
+> - Khi nhận `OrderCancelledEvent`: payment `SUCCESS` → `REFUND_PENDING` + tạo bản ghi Refund (scheduler mỗi 1 phút xử lý hoàn tiền); payment `PENDING` → `FAILED`. Hoàn tiền thủ công `POST /api/v1/admin/payments/refund` chỉ `ROLE_ADMIN`.
+> - `PaymentScheduler` chạy mỗi 5 phút: payment VNPay `PENDING` quá `PAYMENT_EXPIRY_MINUTES` (mặc định 15) được đối soát **VNPay QueryDR** trước khi đánh dấu `EXPIRED`.
 ## (Dịch vụ Thanh toán)
 
-> **Port:** `8084` | **DB:** `ecommerce_payment_db` (PostgreSQL) | **Version:** 1.0.0
+> **Port:** `8084` | **DB:** `ecommerce_payment_db` (MariaDB 10.11) | **Version:** 1.0.0
 
 ---
 
@@ -11,7 +21,7 @@
 
 | Nhóm chức năng | Chi tiết |
 |---|---|
-| **Khởi tạo thanh toán** | Tạo URL thanh toán chuyển hướng sang cổng (VNPAY, Momo, Stripe) |
+| **Khởi tạo thanh toán** | Tạo URL thanh toán chuyển hướng sang VNPAY, hoặc ghi nhận COD (thiết kế cũ có Momo, Stripe — không có trong code) |
 | **Xử lý Webhook** | Nhận kết quả thanh toán bất đồng bộ từ cổng thanh toán |
 | **Idempotency** | Chống xử lý cùng một giao dịch 2 lần (đặc biệt quan trọng với Webhook) |
 | **Lịch sử giao dịch** | Ghi nhận và truy vấn lịch sử thanh toán của đơn hàng |
@@ -51,7 +61,7 @@ sequenceDiagram
     actor User as Khách hàng
     participant FE as Frontend
     participant PS as Payment Service
-    participant DB as PostgreSQL
+    participant DB as MariaDB
     participant GW as Cổng Thanh toán (VNPAY/Momo)
 
     User->>FE: Chọn phương thức thanh toán & bấm "Thanh toán"
@@ -85,12 +95,12 @@ sequenceDiagram
     autonumber
     participant GW as Cổng TT (VNPAY/Momo)
     participant PS as Payment Service
-    participant DB as PostgreSQL
+    participant DB as MariaDB
     participant Kafka as Apache Kafka
     participant OS as Order Service
     participant NS as Notification Service
 
-    GW->>PS: POST /api/payments/webhook/vnpay { txnRef, responseCode, secureHash, ... }
+    GW->>PS: GET /api/v1/public/payments/vnpay-callback?vnp_TxnRef=...&vnp_ResponseCode=...&vnp_SecureHash=...
 
     rect rgb(255, 245, 238)
         Note over PS: Bước 1: Xác thực chữ ký Webhook (QUAN TRỌNG)
@@ -104,8 +114,8 @@ sequenceDiagram
     rect rgb(240, 248, 255)
         Note over PS, DB: Bước 2: Idempotency Check (Chống xử lý 2 lần)
         PS->>DB: SELECT * FROM payments WHERE txn_ref = ?
-        alt Giao dịch đã COMPLETED
-            DB-->>PS: payment.status = COMPLETED
+        alt Giao dịch đã SUCCESS
+            DB-->>PS: payment.status = SUCCESS
             PS-->>GW: 200 OK (Đã xử lý rồi, bỏ qua)
         end
     end
@@ -114,13 +124,15 @@ sequenceDiagram
         Note over PS, DB: Bước 3: Cập nhật trạng thái thanh toán
         PS->>DB: BEGIN TRANSACTION
         alt responseCode == "00" (Thành công)
-            PS->>DB: UPDATE payments SET status=COMPLETED, paidAt=now(), gatewayTxnId=...
+            PS->>DB: UPDATE payments SET status=SUCCESS, paidAt=now(), gatewayTxnId=...
+            PS->>DB: INSERT INTO outbox_events (PaymentSuccessEvent)
             PS->>DB: COMMIT
-            PS->>Kafka: Publish PaymentSuccessEvent { orderId, paymentId, amount }
+            DB-->>Kafka: Debezium CDC publish PaymentSuccessEvent { orderId, paymentId, amount }
         else responseCode != "00" (Thất bại)
             PS->>DB: UPDATE payments SET status=FAILED, failureCode=responseCode
+            PS->>DB: INSERT INTO outbox_events (PaymentFailedEvent)
             PS->>DB: COMMIT
-            PS->>Kafka: Publish PaymentFailedEvent { orderId, failureCode }
+            DB-->>Kafka: Debezium CDC publish PaymentFailedEvent { orderId, failureCode }
         end
         PS-->>GW: 200 OK { RspCode: "00", Message: "Confirm Success" }
     end
@@ -142,7 +154,7 @@ sequenceDiagram
     participant Sch as Scheduler (Cleanup Job)
     participant PS as Payment Service
     participant GW as Cổng Thanh toán VNPAY
-    participant DB as PostgreSQL
+    participant DB as MariaDB
     participant Kafka as Apache Kafka
     
     Sch->>PS: Kích hoạt dọn dẹp định kỳ (5 phút/lần)
@@ -172,6 +184,8 @@ sequenceDiagram
 ## III. TÍCH HỢP ĐA CỔNG THANH TOÁN
 
 ### 3.1. Payment Gateway Abstraction (Strategy Pattern)
+
+> ⚠️ _Thiết kế ban đầu, không có trong code: chỉ có VNPay (xử lý trực tiếp trong `PaymentServiceImpl`) và COD; không có `MomoGateway`/`StripeGateway`._
 
 ```java
 // Interface chung cho mọi cổng thanh toán
@@ -218,14 +232,14 @@ public class PaymentGatewayFactory {
 
 **Cấu hình:**
 ```yaml
-payment:
-  vnpay:
-    tmn-code: ${VNPAY_TMN_CODE}
-    hash-secret: ${VNPAY_HASH_SECRET}
-    payment-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-    return-url: https://myapp.com/payment/vnpay-return
-    webhook-url: https://myapp.com/api/payments/webhook/vnpay
-    api-url: https://sandbox.vnpayment.vn/merchant_webapi/api/transaction
+# Theo application.yml thực tế (rà soát 2026-10-11)
+vnpay:
+  pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
+  tmn-code: ${VNPAY_TMN_CODE}
+  hash-secret: ${VNPAY_HASH_SECRET}
+  return-url: ${VNPAY_RETURN_URL:http://localhost:8080/api/v1/public/payments/vnpay-callback}
+  expiry-hours: ${VNPAY_EXPIRY_HOURS:1}
+  query-url: ${VNPAY_QUERY_URL:https://sandbox.vnpayment.vn/merchant_webapi/api/transaction}
 ```
 
 **Tạo URL thanh toán:**
@@ -258,7 +272,7 @@ return paymentUrl + "?" + queryString + "&vnp_SecureHash=" + secureHash;
 
 ```
 Nếu không verify chữ ký:
-  Hacker gửi POST /api/payments/webhook/vnpay với responseCode="00"
+  Hacker gửi GET /api/v1/public/payments/vnpay-callback với responseCode="00"
   → Payment Service nghĩ giao dịch thành công
   → Order được CONFIRMED
   → Hàng bị giao mà không có tiền thật!
@@ -294,7 +308,7 @@ public boolean verifyVNPaySignature(Map<String, String> params, String receivedH
 Vấn đề: VNPAY có thể gửi cùng 1 webhook nhiều lần (retry) nếu server trả về lỗi.
 Giải pháp:
   1. Trước khi xử lý: SELECT status FROM payments WHERE txn_ref = ?
-  2. Nếu status đã là COMPLETED → Trả về 200 OK ngay, KHÔNG xử lý lại
+  2. Nếu status đã khác PENDING (vd `SUCCESS`) → trả `RspCode "02"` (đã thanh toán), KHÔNG xử lý lại
   3. Nếu PENDING → Cập nhật và publish event
 ```
 
@@ -311,11 +325,11 @@ CREATE TABLE payments (
     order_id            BIGINT          NOT NULL COMMENT 'Logical FK → order_db.orders.id',
     txn_ref             VARCHAR(100)    NOT NULL UNIQUE COMMENT 'Mã giao dịch nội bộ (PAY-orderId-timestamp)',
     gateway_txn_id      VARCHAR(200)    COMMENT 'Mã giao dịch từ cổng TT (VNPAY/Momo)',
-    payment_method      VARCHAR(30)     NOT NULL COMMENT 'VNPAY, MOMO, STRIPE, COD',
+    payment_method      VARCHAR(30)     NOT NULL COMMENT 'VNPAY, COD',
     amount              DECIMAL(15,2)   NOT NULL COMMENT 'Số tiền thanh toán',
     currency            VARCHAR(10)     NOT NULL DEFAULT 'VND',
     status              VARCHAR(20)     NOT NULL DEFAULT 'PENDING'
-                        COMMENT 'PENDING, COMPLETED, FAILED, REFUNDED',
+                        COMMENT 'PENDING, SUCCESS, FAILED, EXPIRED, REFUND_PENDING, REFUNDED, PARTIALLY_REFUNDED',
     failure_code        VARCHAR(10)     COMMENT 'Mã lỗi từ cổng TT khi thất bại',
     failure_message     VARCHAR(200),
     gateway_response    TEXT            COMMENT 'Raw JSON response từ cổng TT',
@@ -337,7 +351,7 @@ CREATE TABLE refunds (
     refund_amount   DECIMAL(15,2)   NOT NULL,
     reason          TEXT,
     status          VARCHAR(20)     NOT NULL DEFAULT 'PENDING'
-                    COMMENT 'PENDING, COMPLETED, FAILED',
+                    COMMENT 'PENDING, PENDING_MANUAL, SUCCESS',
     gateway_refund_id VARCHAR(200)  COMMENT 'Mã hoàn tiền từ cổng TT',
     requested_by    BIGINT          NOT NULL COMMENT 'User/Admin ID',
     created_at      TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -404,7 +418,7 @@ CREATE TABLE webhook_logs (
     "orderId": 100,
     "amount": 3582000.00,
     "paymentMethod": "VNPAY",
-    "status": "COMPLETED",
+    "status": "SUCCESS",
     "transactionNo": "PAY-100-1688137350000",
     "gatewayResponse": "{...}",
     "paidAt": "2026-06-01T10:02:35",
@@ -462,7 +476,7 @@ vnp_SecureHash=abc123...
         "orderId": 100,
         "amount": 3582000.00,
         "paymentMethod": "VNPAY",
-        "status": "COMPLETED",
+        "status": "SUCCESS",
         "transactionNo": "PAY-100-1688137350000",
         "gatewayResponse": "{...}",
         "paidAt": "2026-06-01T10:02:35",
@@ -499,10 +513,13 @@ vnp_SecureHash=abc123...
 
 ### 7.1. Events Produce
 
+> Tất cả event được ghi vào bảng `outbox_events` trong cùng transaction và **Debezium CDC** publish lên topic `payment-events`.
+
 | Topic | Event | Khi nào |
 |---|---|---|
 | `payment-events` | `PaymentSuccessEvent` | Webhook xác nhận thanh toán thành công |
-| `payment-events` | `PaymentFailedEvent` | Webhook báo thanh toán thất bại |
+| `payment-events` | `PaymentFailedEvent` | Webhook báo thất bại hoặc payment hết hạn (`EXPIRED`) |
+| `payment-events` | `PaymentCODConfirmedEvent` | Khởi tạo thanh toán COD (order chuyển `CONFIRMED`) |
 | `payment-events` | `RefundCompletedEvent` | Hoàn tiền thành công |
 
 ### 7.2. PaymentSuccessEvent Schema
@@ -571,15 +588,12 @@ payment-service:
   ports:
     - "8084:8084"
   environment:
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_payment_db
+    DB_HOST: mariadb   # jdbc:mariadb://mariadb:3306/ecommerce_payment_db
     SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     VNPAY_TMN_CODE: ${VNPAY_TMN_CODE}
     VNPAY_HASH_SECRET: ${VNPAY_HASH_SECRET}
-    MOMO_PARTNER_CODE: ${MOMO_PARTNER_CODE}
-    MOMO_ACCESS_KEY: ${MOMO_ACCESS_KEY}
-    STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
   depends_on:
-    - postgres
+    - mariadb
     - kafka
   networks:
     - ecommerce-network
@@ -591,7 +605,7 @@ payment-service:
 
 | Tính năng | Ưu tiên | Mô tả |
 |---|---|---|
-| **COD (Cash on Delivery)** | Cao | Thanh toán khi nhận hàng |
+| **COD (Cash on Delivery)** | ✅ Đã có | Thanh toán khi nhận hàng (payment `SUCCESS` khi đơn `DELIVERED`) |
 | **Saved Cards** | Trung bình | Lưu thẻ để thanh toán nhanh lần sau |
 | **Payment Analytics** | Thấp | Báo cáo doanh thu theo ngày/tháng/cổng TT |
 | **Fraud Detection** | Cao | Phát hiện giao dịch đáng ngờ (nhiều lần thất bại) |
