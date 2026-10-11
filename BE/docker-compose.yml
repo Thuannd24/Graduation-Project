@@ -514,8 +514,12 @@ services:
       dockerfile: chat-service/Dockerfile
     container_name: chat-service
     ports:
-      - "8088:8088"
+      - "8095:8095"   # app nghe 8095 (application.yml); 8088 đã do debezium-connect dùng
     environment:
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_PUBLIC_ENDPOINT=http://localhost:9000
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=12345678a@
       - EUREKA_HOST=eureka-server
       - MONGO_HOST=mongodb
       - MONGO_PORT=27017
