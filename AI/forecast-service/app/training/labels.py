@@ -42,7 +42,8 @@ _ACTIVE_USERS_SQL = {
             SELECT user_id, created_at FROM orders
             WHERE user_id IS NOT NULL AND created_at > :window_start AND created_at <= :window_end
             UNION
-            SELECT user_id, created_at FROM user_events
+            -- user_events có thể khác collation với orders (Hibernate tạo) → ép cùng collation cho UNION
+            SELECT user_id COLLATE utf8mb4_unicode_ci, created_at FROM user_events
             WHERE user_id IS NOT NULL AND created_at > :window_start AND created_at <= :window_end
         ) t
         """

@@ -33,6 +33,8 @@ session ΔAUC −0.0126, review −0.0039, voucher +0.0021. Đây là kết qu�
 số ẩn mới cố ý sinh độc lập với `willChurn` nên không mang tín hiệu churn — nếu ablation báo "có
 tín hiệu" thì mới là dấu hiệu đáng ngờ. Không đưa vào `assembler.py`/`FEATURE_COLUMNS`.
 """
+# user_events (Hibernate tạo) và orders có thể khác collation (utf8mb4_general_ci vs unicode_ci) → MariaDB báo
+# "Illegal mix of collations" khi so user_id giữa 2 bảng. Mọi phép so đó đều kèm COLLATE utf8mb4_unicode_ci.
 from __future__ import annotations
 
 import numpy as np
@@ -166,7 +168,7 @@ def _abandon_shape(engine: Engine, as_of_clause: str, params: dict) -> pd.DataFr
                SUM(CASE WHEN ue.created_at >= {as_of_clause} - INTERVAL {ABANDON_WINDOW_DAYS} DAY
                          AND NOT EXISTS (
                              SELECT 1 FROM orders o
-                             WHERE o.user_id = ue.user_id
+                             WHERE o.user_id = ue.user_id COLLATE utf8mb4_unicode_ci
                                AND o.created_at BETWEEN ue.created_at
                                    AND DATE_ADD(ue.created_at, INTERVAL {ABANDON_GRACE_HOURS} HOUR)
                          )
@@ -174,7 +176,7 @@ def _abandon_shape(engine: Engine, as_of_clause: str, params: dict) -> pd.DataFr
                SUM(CASE WHEN ue.created_at < {as_of_clause} - INTERVAL {ABANDON_WINDOW_DAYS} DAY
                          AND NOT EXISTS (
                              SELECT 1 FROM orders o
-                             WHERE o.user_id = ue.user_id
+                             WHERE o.user_id = ue.user_id COLLATE utf8mb4_unicode_ci
                                AND o.created_at BETWEEN ue.created_at
                                    AND DATE_ADD(ue.created_at, INTERVAL {ABANDON_GRACE_HOURS} HOUR)
                          )
