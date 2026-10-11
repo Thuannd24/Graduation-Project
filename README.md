@@ -60,7 +60,7 @@ npm run dev     # http://localhost:5173
 
 ## 🤖 AI SERVICES (Python/FastAPI — độc lập với BE, KHÔNG chạy trong IntelliJ)
 
-> 4 service Python nằm trong `AI/`: `chatbot-service` (8002), `search-service` (8001), `recs-service` (8003), `forecast-service` (8004). Chi tiết kiến trúc: [`AI/README.md`](AI/README.md); riêng chatbot xem thêm [`docs/canvas/chatbot-ai.md`](docs/canvas/chatbot-ai.md).
+> 4 service Python nằm trong `AI/`: `chatbot-service` (8002), `search-service` (8001), `recs-service` (8003), `forecast-service` (8004). Chi tiết kiến trúc: [`AI/README.md`](AI/README.md); riêng chatbot xem thêm [`docs/AI/chatbot-ai.md`](docs/AI/chatbot-ai.md); search xem [`docs/AI/visual-search.md`](docs/AI/visual-search.md), [`docs/AI/text-search.md`](docs/AI/text-search.md), [`docs/AI/search-evaluation.md`](docs/AI/search-evaluation.md).
 
 ```bash
 cd AI
