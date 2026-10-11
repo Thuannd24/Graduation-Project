@@ -6,6 +6,7 @@ import com.ecommerce.userservice.dto.request.RedeemPreviewRequest;
 import com.ecommerce.userservice.dto.request.UpdateProfileRequest;
 import com.ecommerce.userservice.dto.response.AddressResponse;
 import com.ecommerce.userservice.dto.response.LoyaltyTransactionDto;
+import com.ecommerce.userservice.dto.response.PublicUserProfileResponse;
 import com.ecommerce.userservice.dto.response.RedeemPreviewResponse;
 import com.ecommerce.userservice.dto.response.UserProfileResponse;
 import com.ecommerce.userservice.entity.User;
@@ -136,16 +137,33 @@ public class UserController {
     }
 
     @GetMapping("/public/{keycloakUserId}")
-    public ResponseEntity<ApiResponse<UserProfileResponse>> getPublicUserProfile(@PathVariable String keycloakUserId) {
+    public ResponseEntity<ApiResponse<PublicUserProfileResponse>> getPublicUserProfile(@PathVariable String keycloakUserId) {
         log.info("GET /api/v1/users/public/{}", keycloakUserId);
         User user = userService.getUserByKeycloakId(keycloakUserId);
-        UserProfileResponse profile = UserProfileResponse.builder()
-                .id(user.getId())
+        // Route này công khai (khách chưa đăng nhập xem tên người đánh giá) → DTO riêng chỉ có tên hiển thị + ảnh.
+        // username có thể là số điện thoại/email của khách nên luôn che.
+        PublicUserProfileResponse profile = PublicUserProfileResponse.builder()
                 .keycloakUserId(user.getKeycloakUserId())
-                .username(user.getUsername())
+                .username(maskForPublic(user.getUsername()))
                 .fullName(user.getFullName())
                 .avatarUrl(user.getAvatarUrl())
                 .build();
         return ResponseEntity.ok(ApiResponse.success(profile));
+    }
+
+    /**
+     * Che chuỗi định danh để hiển thị công khai: giữ 2 ký tự đầu + 2 ký tự cuối, giữa luôn là "***" (không lộ độ dài).
+     * "0912345678" → "09***78"; "an@mail.com" → "an***om"; chuỗi ≤ 6 ký tự → "***". Đếm theo code point nên không
+     * cắt đôi emoji/ký tự ngoài BMP.
+     */
+    static String maskForPublic(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        int[] cps = value.trim().codePoints().toArray();
+        if (cps.length <= 6) {
+            return "***";
+        }
+        return new String(cps, 0, 2) + "***" + new String(cps, cps.length - 2, 2);
     }
 }

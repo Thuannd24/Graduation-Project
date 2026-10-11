@@ -27,6 +27,9 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Hồ sơ công khai (tên + ảnh người đánh giá) hiện trên trang chi tiết sản phẩm cho cả khách
+                        // chưa đăng nhập; user-service đã permitAll route này và chỉ trả trường không nhạy cảm.
+                        .pathMatchers(HttpMethod.GET, "/api/v1/users/public/**").permitAll()
                         // Whitelist: public endpoints không cần token
                         .pathMatchers(
                                 "/api/v1/public/**", // Tất cả /public/** là public thật sự
