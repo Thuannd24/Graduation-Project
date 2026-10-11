@@ -48,6 +48,7 @@ function stringifyErrorValue(value: unknown): string[] {
     if (typeof record.defaultMessage === "string") return [record.defaultMessage];
     if (typeof record.reason === "string") return [record.reason];
     if (typeof record.error === "string") return [record.error];
+    if (typeof record.msg === "string") return [record.msg]; // FastAPI validation item
 
     return Object.entries(record).flatMap(([key, item]) => {
       const messages = stringifyErrorValue(item);
@@ -69,7 +70,8 @@ function getApiErrorMessage(payload: unknown, status: number): string {
     ...(hasGenericValidationMessage ? [] : stringifyErrorValue(record?.message)),
     ...stringifyErrorValue(record?.data),
     ...stringifyErrorValue(record?.errors),
-    ...stringifyErrorValue(record?.error)
+    ...stringifyErrorValue(record?.error),
+    ...stringifyErrorValue(record?.detail) // FastAPI (AI services) trả lỗi ở "detail"
   ].filter(Boolean);
 
   const uniqueMessages = Array.from(new Set(messages));
@@ -116,10 +118,13 @@ async function request<T>(path: string, options: RequestInit & { requireAuth?: b
   const token = getAuthToken();
   const { requireAuth: _requireAuth, headers: customHeaders, ...requestOptions } = options;
   const url = `${API_BASE_URL}${path}`;
+  // FormData (upload ảnh) phải để trình duyệt tự set Content-Type kèm boundary multipart —
+  // KHÔNG ép application/json, nếu không server không parse được file.
+  const isFormData = typeof FormData !== "undefined" && requestOptions.body instanceof FormData;
 
   const response = await fetch(url, {
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(customHeaders as Record<string, string> || {})
     },
@@ -168,6 +173,12 @@ export const apiClient = {
     request<T>(path, {
       method: "POST",
       body: body === undefined ? undefined : JSON.stringify(body)
+    }),
+  postForm: <T>(path: string, formData: FormData, options?: { requireAuth?: boolean }) =>
+    request<T>(path, {
+      method: "POST",
+      body: formData,
+      requireAuth: options?.requireAuth
     }),
   postAuth: <T, B = unknown>(path: string, body?: B) =>
     request<T>(path, {

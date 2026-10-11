@@ -1,117 +1,122 @@
 # Text Search — Tìm Kiếm Ngữ Nghĩa Bằng Văn Bản Tiếng Việt
 
-> Hướng dẫn thiết kế và tài liệu kỹ thuật chi tiết của hệ thống tìm kiếm sản phẩm bằng văn bản ngữ nghĩa (Semantic Search). Hệ thống sử dụng kiến trúc tìm kiếm lai (Hybrid Search) kết hợp giữa tìm kiếm từ khóa (Sparse Retrieval - BM25) và tìm kiếm ngữ nghĩa sâu (Dense Retrieval - Vector Embeddings), kết hợp xếp hạng lại (Re-ranking).
+> Cập nhật 2026-10-11 theo code nhánh `feat/image-search-ai` (commit `ea338a1`).
+
+> Tài liệu kỹ thuật của chức năng tìm kiếm văn bản trong `AI/search-service` (FastAPI, cổng 8001). Hệ thống dùng kiến trúc **tìm kiếm lai (Hybrid Search)**: tìm theo từ khoá (Sparse — BM25 trên Elasticsearch) và tìm theo ngữ nghĩa (Dense — `multilingual-e5-large` + FAISS), gộp bằng **Reciprocal Rank Fusion (RRF)**. Không có bước xếp hạng lại (re-ranking). Số liệu đo chi tiết: [search-evaluation.md](search-evaluation.md).
+
+> **Lưu ý quan trọng:** trang tìm kiếm của website **chưa gọi** endpoint này. `SearchPage.jsx` dùng `productApi.searchProducts` → `GET /api/v1/public/products/search` của **product-service**; chatbot cũng gọi thẳng product-service. `GET /search` và `GET /search/suggest` của search-service hiện chưa có FE nào gọi.
 
 ---
 
-## 📌 Tổng Quan Hệ Thống
+## 📌 Trạng Thái Cài Đặt
 
-Hệ thống giải quyết triệt để hạn chế của truy vấn SQL `LIKE` truyền thống bằng cách hiểu ngôn ngữ tự nhiên tiếng Việt, từ đồng nghĩa và ngữ cảnh tìm kiếm.
-
-| Phương thức tìm kiếm | Công nghệ sử dụng | Điểm mạnh | Điểm yếu |
-| :--- | :--- | :--- | :--- |
-| **Sparse Retrieval (Keyword)** | BM25 (Elasticsearch / rank_bm25) | Khớp chính xác tên thương hiệu, mã sản phẩm, kích thước | Không hiểu từ đồng nghĩa, lỗi chính tả |
-| **Dense Retrieval (Semantic)**| multilingual-e5-large / PhoBERT | Hiểu ý định người dùng, từ đồng nghĩa, ngữ cảnh | Có thể bỏ sót từ khóa viết tắt hoặc mã sản phẩm cụ thể |
-| **Hybrid Fusion** | Reciprocal Rank Fusion (RRF) | Kết hợp ưu điểm của cả hai phương pháp trên | Cần kết hợp và chuẩn hóa xếp hạng |
+| Thành phần | Trạng thái | Ghi chú |
+| :--- | :--- | :--- |
+| Dense retrieval `multilingual-e5-large` (1024-d) + FAISS | Đã cài đặt & đã đo | [search-evaluation.md](search-evaluation.md) §3.2 |
+| BM25 trên Elasticsearch (fallback MariaDB `LIKE`) | Đã cài đặt & đã đo | Đo khi ES chạy bình thường; fallback chưa đo |
+| Hybrid RRF (k = 60, không trọng số) — `GET /search` | Đã cài đặt & đã đo (in-process) | Chưa tích hợp vào FE |
+| Autocomplete `GET /search/suggest` | Đã cài đặt, chưa đo | Không có FE gọi |
+| Sản phẩm tương tự `GET /search/similar/{product_id}` | Đã cài đặt, chưa đo | Dùng chung với visual search |
+| Cross-encoder re-ranking, fine-tune e5, PhoBERT, analyzer tiếng Việt | Thiết kế, chưa cài đặt | Xem §7 |
 
 ---
 
 ## 1. Kiến Trúc Tìm Kiếm Lai (Hybrid Search)
 
-Quy trình xử lý một câu truy vấn văn bản của người dùng trải qua 5 bước chính:
+| Phương thức | Công nghệ trong code | Điểm mạnh | Điểm yếu |
+| :--- | :--- | :--- | :--- |
+| **Sparse (Keyword)** | BM25 trên Elasticsearch index `products` | Khớp chính xác tên, mã máy, dung lượng; rất nhanh | Không hiểu từ đồng nghĩa / nhu cầu |
+| **Dense (Semantic)** | `intfloat/multilingual-e5-large` + FAISS `IndexFlatIP` | Hiểu ý định, từ đồng nghĩa | Chậm hơn trên CPU; có thể lệch ở mã sản phẩm cụ thể |
+| **Hybrid Fusion** | Reciprocal Rank Fusion | Không cần chuẩn hoá thang điểm của hai nguồn | Nguồn yếu có thể kéo kết quả xuống (§6) |
+
 ```
-[ User Query ]
+[ Query q, top_k (mặc định 10) ]
        │
-       ├───────────────────────────────┐
-       ▼                               ▼
-[ Dense Retrieval ]             [ Sparse Retrieval ]
-(multilingual-e5-large)         (BM25 / Elasticsearch)
-       │                               │
-       ▼ (Top-100 vector)              ▼ (Top-100 keywords)
-[ FAISS Vector Store ]                 │
-       │                               │
-       └───────────────┬───────────────┘
+       ├────────────────────────────────┐
+       ▼                                ▼
+[ Dense: e5-large ]              [ Sparse: BM25 / Elasticsearch ]
+"query: " + q → FAISS            multi_match, fuzziness AUTO
+       │ top_k×3 ứng viên               │ top_k×3 ứng viên
+       └───────────────┬────────────────┘
                        ▼
-         [ Reciprocal Rank Fusion (RRF) ]
-                       ▼ (Top-20 candidates)
-        [ Cross-encoder Re-ranking ]
+        [ Reciprocal Rank Fusion, k = 60 ]
                        ▼
-             [ Top-10 Final Results ]
+     [ Metadata MariaDB + lọc min_price / max_price ]
+                       ▼
+     [ Tối đa top_k kết quả (có thể ít hơn sau khi lọc giá) ]
 ```
 
----
-
-## 2. Dense Retrieval (Truy Xuất Ngữ Nghĩa Dày Đặc)
-
-Dense Retrieval chuyển đổi văn bản sang không gian vector nhiều chiều nhằm tìm kiếm sự tương đồng về mặt ngữ nghĩa (Semantic Similarity).
-
-### So sánh các mô hình Embedding
-
-| Mô hình | Base Architecture | Chiều Vector (Dim) | Hỗ trợ Tiếng Việt | Đánh giá / Khuyến nghị |
-| :--- | :--- | :---: | :---: | :--- |
-| **multilingual-e5-large** | XLM-RoBERTa-large | 1024 | **Rất tốt** | **Khuyến nghị** ⭐ (Độ chính xác cao nhất) |
-| **PhoBERT + SimCSE** | RoBERTa (Vi) | 768 | **Xuất sắc** | Phù hợp khi chỉ chạy duy nhất ngôn ngữ tiếng Việt |
-| **paraphrase-MiniLM-L12** | MiniLM | 384 | Khá | Nhẹ (120MB), tốc độ nhanh, phù hợp cho thiết bị CPU |
-
-### Tinh chỉnh mô hình (Fine-tuning) với MultipleNegativesRankingLoss
-Để tối ưu hóa mô hình E5 cho bài toán tìm kiếm sản phẩm thương mại điện tử, tiến hành fine-tune trên dữ liệu dự án:
-1. **Chuẩn bị dữ liệu:** Cần tối thiểu **300 – 1.000 cặp** `(query, positive_document)` lấy từ lịch sử nhấp chọn sản phẩm của khách hàng trong log tìm kiếm (`search_logs`). Hoặc sử dụng LLM để sinh 5 câu tìm kiếm tự nhiên tương ứng với mỗi sản phẩm trong kho.
-2. **Cấu hình Loss:** Sử dụng `MultipleNegativesRankingLoss`. Kỹ thuật này tự động coi các sản phẩm khác trong cùng một batch là Negative Samples (In-batch negatives), giúp giảm chi phí gán nhãn thủ công.
-3. **Tham số huấn luyện:** `batch_size = 16-32` (kích thước batch lớn giúp tăng số lượng in-batch negatives), `epochs = 3-5`, `learning_rate = 2e-5`.
+Mã nguồn: `app/services/{hybrid_search, text_search, catalog, faiss_store}.py`.
 
 ---
 
-## 3. Sparse Retrieval (Khớp Từ Khóa BM25)
+## 2. Dense Retrieval (Truy Xuất Ngữ Nghĩa)
 
-BM25 là thuật toán nâng cấp từ TF-IDF, đánh giá tầm quan trọng của từ khóa dựa trên tần suất xuất hiện của từ trong tài liệu (Term Frequency) và mức độ phổ biến của từ trên toàn bộ kho hàng (Document Frequency).
-
-### Tối ưu hóa phân tích tiếng Việt trong Elasticsearch
-* **Analyzer:** Cấu hình Index sử dụng Analyzer tiếng Việt (`vi_analyzer`) với tokenizer là `icu_tokenizer` để xử lý Unicode tốt hơn, kết hợp bộ lọc lowercase và danh sách từ dừng tiếng Việt (stop words).
-* **Trọng số tìm kiếm (Field Boosting):** Thiết lập độ ưu tiên khi tìm kiếm: tên sản phẩm (`name` - boost: 3), danh mục (`category` - boost: 2), mô tả chi tiết (`description` - boost: 1).
-* **Xử lý từ ghép:** Sử dụng thư viện `underthesea.word_tokenize()` để phân tách từ ghép tiếng Việt trước khi index (ví dụ: *"áo khoác"* được giữ thành cụm từ ghép thay vì hai từ đơn lẻ *"áo"* và *"khoác"*).
-
----
-
-## 4. Gộp Kết Quả (Reciprocal Rank Fusion - RRF)
-
-RRF gộp hai danh sách kết quả xếp hạng từ BM25 và Dense Retrieval thành một danh sách duy nhất bằng cách tính điểm dựa trên thứ hạng (Rank) của sản phẩm trong từng nguồn:
-$$\text{RRF Score}(d) = \sum_{m \in M} \frac{1}{k + \text{rank}_m(d)}$$
-*(Với hằng số mặc định $k = 60$. $\text{rank}_m(d)$ là thứ hạng của sản phẩm $d$ trong danh sách nguồn $m$)*
-
-Sản phẩm xuất hiện ở vị trí cao trong cả hai danh sách sẽ có điểm RRF cao nhất. Phương pháp này rất mạnh mẽ vì không phụ thuộc vào thang điểm (scores) thô khác nhau của BM25 và Vector cosine similarity.
-
-### Re-ranking với Cross-encoder (Tùy chọn nâng cao)
-Sau khi thu được Top-20 sản phẩm tốt nhất từ thuật toán RRF, hệ thống sử dụng một mô hình **Cross-encoder** (`cross-encoder/mmarco-mMiniLMv2-L12-H384-v1` hỗ trợ tiếng Việt) để đánh giá độ tương quan ngữ nghĩa sâu sắc giữa câu truy vấn và tiêu đề sản phẩm. 
-* **Ưu điểm:** Độ chính xác vượt trội hơn do Cross-encoder phân tích đồng thời câu query và văn bản (Bi-encoder chỉ phân tích độc lập rồi tính tích vô hướng).
-* **Trade-off:** Thời gian xử lý tăng thêm khoảng `80ms` trên CPU. Chỉ khuyến nghị chạy Cross-encoder trên tối đa 20 sản phẩm sau bộ lọc thô RRF.
+* **Model:** `intfloat/multilingual-e5-large`, vector **1024 chiều**, dùng nguyên bản (không fine-tune).
+* **Prefix bắt buộc của e5:** câu tìm kiếm mã hoá dạng `"query: " + q`, tài liệu dạng `"passage: " + …`.
+* **Passage của mỗi sản phẩm** (`build_index.py`): `tên. Thương hiệu {brand}. Danh mục {category}. {mô tả}` — mô tả được bỏ thẻ HTML và cắt 800 ký tự. Mỗi sản phẩm 1 vector (1.123 vector ở lần đo, [search-evaluation.md](search-evaluation.md) §1).
+* **Index:** FAISS `IndexFlatIP` trên vector đã L2-normalize ⇒ cosine, tìm chính xác. Index được build tay bằng `scripts/build_index.py` và service tự nạp lại trong ≤ 30 giây.
+* **Khi chưa có text index:** dense trả rỗng (không nạp e5) và hybrid **âm thầm chỉ còn BM25**, response không báo điều này.
 
 ---
 
-## 5. Quy Trình Đánh Giá & Các Endpoints
+## 3. Sparse Retrieval (BM25 Trên Elasticsearch)
 
-### Các chỉ số đánh giá chất lượng tìm kiếm
+* **Index:** `products`, do product-service đồng bộ (`ProductDocument.java`), dùng **mapping mặc định** — không có analyzer tiếng Việt, không tách từ ghép.
+* **Truy vấn thật** (`catalog.bm25_search`):
+  * `multi_match` trên `name^3, brand^2, categoryName^2, description`, `fuzziness: AUTO`, lọc `active = true`.
+  * `name`, `description` là trường `Text` (analyzer chuẩn của ES). `brand`, `categoryName` là trường **`Keyword`** ⇒ boost của hai trường này chỉ có tác dụng khi câu truy vấn trùng (gần đúng) **toàn bộ** giá trị, ví dụ cả câu là "Samsung".
+* **Fallback khi ES lỗi:** đánh dấu ES "down" trong 30 giây và chuyển sang MariaDB: đếm số từ (tối đa 8) của câu truy vấn xuất hiện trong `products.name` bằng `LIKE`, sắp theo số từ khớp rồi `sales_count`. Đây không phải BM25.
 
-| Metric | Ý nghĩa | Ngưỡng tốt |
-| :--- | :--- | :---: |
-| **MRR@10** | Thứ hạng của sản phẩm đúng đầu tiên trong Top-10. MRR càng cao chứng tỏ sản phẩm khách cần xếp ở vị trí đầu. | **> 0.70** |
-| **NDCG@10** | Đo lường mức độ liên quan tổng thể của danh sách kết quả, có phạt nếu sản phẩm liên quan cao bị xếp ở cuối. | **> 0.75** |
-| **Recall@20** | Tỷ lệ phần trăm sản phẩm liên quan thực tế lọt vào Top-20 kết quả hiển thị. | **> 0.85** |
-| **Latency P95** | Thời gian phản hồi của API ở mức phân vị 95%. | **< 200ms** |
+---
 
-### So sánh hiệu năng thực tế (Benchmark)
+## 4. Gộp Kết Quả (Reciprocal Rank Fusion — RRF)
 
-| Phương pháp tìm kiếm | MRR@10 | NDCG@10 | Recall@20 | Thời gian phản hồi (Latency) |
-| :--- | :---: | :---: | :---: | :---: |
-| **BM25 Only** | 0.51 | 0.56 | 0.71 | ~20ms |
-| **Dense Only (e5 zero-shot)** | 0.67 | 0.72 | 0.82 | ~70ms |
-| **Dense Only (e5 fine-tuned)**| 0.74 | 0.79 | 0.88 | ~70ms |
-| **Hybrid RRF (BM25 + Dense ft)** | **0.81** | **0.85** | **0.93** | **~90ms** (Khuyên dùng) ⭐ |
-| **Hybrid + Cross-encoder** | **0.84** | **0.88** | **0.93** | **~170ms** |
+$$\text{RRF}(d) = \sum_{m \in \{\text{dense},\ \text{bm25}\}} \frac{1}{k + \text{rank}_m(d)}, \quad k = 60$$
 
-### API Endpoints thiết kế
-* `GET /search?q=áo khoác&min_price=100000&max_price=500000`
-  * Trả về danh sách sản phẩm khớp ngữ nghĩa + bộ lọc giá. Latency: `< 150ms`.
-* `GET /search/suggest?q=áo kho`
-  * Trả về danh sách từ khóa gợi ý Autocomplete sử dụng cấu trúc cây **Trie** hoặc Completion Suggester trong Elasticsearch. Latency: `< 10ms`.
-* `GET /search/similar/{item_id}`
-  * Trả về danh sách sản phẩm có mô tả tương đồng với sản phẩm hiện tại bằng cosine similarity. Latency: `< 50ms`.
+* `rank` tính từ 1; hai nguồn có **trọng số bằng nhau** (`RRF_K` cấu hình được qua biến môi trường).
+* Mỗi nguồn lấy `top_k × 3` ứng viên (30 khi `top_k = 10`).
+* Sau khi gộp: lấy metadata từ MariaDB (bỏ sản phẩm đã ẩn), lọc giá, dừng khi đủ `top_k`. Nếu bộ lọc giá loại nhiều, kết quả có thể **ít hơn** `top_k`.
+* `match_reason` cho biết sản phẩm đến từ `bm25`, `dense` hay `bm25+dense`.
+
+---
+
+## 5. Các Endpoint
+
+Router được mount ở cả `/api/v1/...` (gateway yêu cầu đăng nhập) và `/api/v1/public/...` (công khai); gateway giới hạn thời gian **30 giây**.
+
+| Endpoint | Mô tả |
+| :--- | :--- |
+| `GET /search?q=…&top_k=10&min_price=…&max_price=…` | Hybrid search như §1. Response `{query_understood, total, items[{id, name, price, image, score, match_reason}]}` trong envelope `{code, message, data}`. `query_understood` hiện chỉ là danh sách từ tách theo khoảng trắng, không có NLU |
+| `GET /search/suggest?q=…` | Gợi ý tên sản phẩm: cần ≥ 2 ký tự, `match_phrase_prefix` trên `name` (sắp theo điểm rồi `salesCount`), fallback `LIKE` trên MariaDB, trả tối đa **5** tên |
+| `GET /search/similar/{product_id}?top_k=10` | Đọc `product_similarities` (MongoDB) đã tính sẵn: 0.6 × cosine ảnh + 0.4 × cosine text, top-20/sản phẩm — chi tiết ở [visual-search.md](visual-search.md) §7 |
+
+`PRELOAD_MODELS=false` nên request đầu tiên phải nạp e5-large; request này có thể vượt giới hạn 30 giây của gateway.
+
+---
+
+## 6. Kết Quả Đo (Tóm Tắt)
+
+Đo in-process (không qua HTTP), CPU-only, 200 sản phẩm, seed 42. Chi tiết: [search-evaluation.md](search-evaluation.md) §3.2, §4.3.
+
+| Loại truy vấn | BM25 | Dense | Hybrid |
+| :--- | :---: | :---: | :---: |
+| *name* (tên đầy đủ) — MRR | **0.995** | 0.953 | 0.968 |
+| *short* (4 từ đầu) — Hit@10 | 97.5% | 97.5% | **99.5%** |
+| *intent* (27 câu nhu cầu) — CatP@10 | 63.7% | **90.7%** | 84.4% |
+| Độ trễ p50 | 15–38 ms | 327–381 ms | 353–406 ms |
+
+* Truy vấn *name* là **tra cứu sản phẩm đã biết** (câu truy vấn chính là tên sản phẩm), nên BM25 gần như tuyệt đối là điều dễ hiểu — không đại diện cho truy vấn thực tế.
+* Hybrid **không phải lúc nào cũng tốt nhất**: với truy vấn nhu cầu, Dense tốt hơn Hybrid vì BM25 kéo xuống; Hybrid chỉ nhỉnh ở recall sâu.
+* e5-large trên CPU tốn ~350 ms/truy vấn — gần như toàn bộ độ trễ của Hybrid.
+
+---
+
+## 7. Hướng Phát Triển (Chưa Cài Đặt)
+
+* **RRF có trọng số** (dense > bm25) hoặc chọn chế độ theo loại truy vấn — cần bộ truy vấn lớn hơn 27 câu để tránh overfit.
+* **Tích hợp vào FE:** cho `SearchPage` gọi `GET /search` và ô tìm kiếm gọi `/search/suggest`.
+* **Cross-encoder re-ranking** (vd `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`) trên top ứng viên sau RRF — đánh đổi thêm độ trễ trên CPU.
+* **Fine-tune e5** bằng `MultipleNegativesRankingLoss` (in-batch negatives) trên cặp (truy vấn, sản phẩm) lấy từ log tìm kiếm hoặc sinh bằng LLM.
+* **Model nhẹ hơn:** `multilingual-e5-base` (768-d) để giảm độ trễ — cần đo lại chất lượng ([search-evaluation.md](search-evaluation.md) §4.4); PhoBERT nếu chỉ phục vụ tiếng Việt.
+* **Analyzer tiếng Việt cho Elasticsearch** (vd `icu_tokenizer`, tách từ ghép bằng `underthesea`) và đổi `brand` / `categoryName` sang trường `Text` (hoặc multi-field) để boost có tác dụng với từng từ.

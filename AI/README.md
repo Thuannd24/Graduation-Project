@@ -14,14 +14,15 @@ AI/
 │
 ├── search-service/         # Microservice xử lý Visual & Text Hybrid Search (:8001)
 │   ├── app/
-│   │   ├── api/            # Router & API Endpoints (/search, /search/suggest, /search/similar-image)
+│   │   ├── api/            # Endpoints: /search, /search/suggest, /search/image, /search/multimodal, /search/similar/{id}
 │   │   ├── core/           # Cấu hình riêng cho Search Service
 │   │   ├── models/         # Pydantic schemas xác thực request/response
-│   │   └── services/       # Dense Retrieval (e5-large), Visual Search (CLIP), Hybrid Fusion (RRF)
+│   │   └── services/       # Dense (e5-large) + BM25 (Elasticsearch) + RRF, Visual (CLIP + FAISS), YOLO crop (mặc định tắt)
+│   ├── scripts/            # build_index.py (build FAISS index, chạy tay), evaluate.py, experiment_visual.py
 │   ├── Dockerfile
 │   └── requirements.txt
 │
-├── chatbot-service/        # Microservice RAG Chatbot "Aura" (:8002) — xem docs/canvas/chatbot-ai.md
+├── chatbot-service/        # Microservice RAG Chatbot "Aura" (:8002) — xem docs/AI/chatbot-ai.md
 │   ├── app/
 │   │   ├── api/            # API Endpoints (/chat, /chat/sessions/history — JSON thường, không SSE)
 │   │   ├── core/           # Cấu hình Chatbot
@@ -51,13 +52,13 @@ AI/
 
 ## 2. Các Công Nghệ Và Mô Hình AI Sử Dụng
 
-1. **Visual Search:** Trích xuất đặc trưng hình ảnh sử dụng mô hình **CLIP (ViT-B/32)**.
-2. **Semantic Text Search:** Trích xuất vector ngữ nghĩa sử dụng mô hình **multilingual-e5-large** kết hợp với từ khóa **BM25** thông qua **Reciprocal Rank Fusion (RRF)**.
+1. **Visual Search:** Trích xuất đặc trưng hình ảnh bằng **CLIP (ViT-B/32, 512 chiều)**, tìm chính xác trên FAISS `IndexFlatIP` (index tất cả ảnh sản phẩm, build tay bằng `scripts/build_index.py`). YOLOv8 crop có code nhưng mặc định tắt. Chi tiết: `docs/AI/visual-search.md`.
+2. **Semantic Text Search:** Vector ngữ nghĩa **multilingual-e5-large** (1024 chiều) + **BM25** trên Elasticsearch, gộp bằng **Reciprocal Rank Fusion (RRF, k = 60)**. Trang tìm kiếm của website hiện vẫn dùng search của product-service. Chi tiết: `docs/AI/text-search.md`; số liệu đo: `docs/AI/search-evaluation.md`.
 3. **Personalized Recommendations:** Mô hình **SASRec (Self-Attention Sequential Recommendation)** chạy trên PyTorch giúp gợi ý sản phẩm dựa trên lịch sử tương tác phiên (session history).
 4. **Demand Forecasting:** Dự báo nhu cầu tồn kho kho hàng dựa trên dữ liệu lịch sử bằng **LightGBM Regressor** hoặc **Meta Prophet**.
 5. **Customer Segmentation:** Định kỳ chạy phân cụm **K-Means (RFM)** chia nhóm người dùng để cấu hình chính sách khuyến mãi.
 6. **Dynamic Pricing:** Thuật toán đánh giá độ nhạy cảm giá người dùng để xuất hành động cho Camunda Workflow engine.
-7. **RAG Chatbot:** Kiến trúc RAG với **DeepSeek-Chat** (nhà cung cấp LLM duy nhất, không có Gemini/GPT dự phòng) cho cả phân loại ý định lẫn sinh câu trả lời; RAG chính sách dùng FAISS + `multilingual-e5-base` thật, RAG sản phẩm là keyword-search gọi thẳng product-service (không có vector store riêng). Chi tiết: `docs/canvas/chatbot-ai.md`.
+7. **RAG Chatbot:** Kiến trúc RAG với **DeepSeek-Chat** (nhà cung cấp LLM duy nhất, không có Gemini/GPT dự phòng) cho cả phân loại ý định lẫn sinh câu trả lời; RAG chính sách dùng FAISS + `multilingual-e5-base` thật, RAG sản phẩm là keyword-search gọi thẳng product-service (không có vector store riêng). Chi tiết: `docs/AI/chatbot-ai.md`.
 
 ---
 

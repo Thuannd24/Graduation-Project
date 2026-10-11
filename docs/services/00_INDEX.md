@@ -18,7 +18,7 @@
 | 6 | **Notification Service** | [06_NOTIFICATION_SERVICE.md](./06_NOTIFICATION_SERVICE.md) | 8086 | MongoDB (notif_db) |
 | 7 | **Promotion Service** | [07_PROMOTION_SERVICE.md](./07_PROMOTION_SERVICE.md) | 8087 | PostgreSQL (ecommerce_promotion_db) + Redis + Camunda |
 | 8 | **API Gateway & Discovery** | [08_API_GATEWAY_DISCOVERY.md](./08_API_GATEWAY_DISCOVERY.md) | 8080 / 8761 | Redis (Rate limiting) |
-| 9 | **AI Engine Service** | [09_AI_ENGINE_SERVICE.md](./09_AI_ENGINE_SERVICE.md) | 8000 | Python FastAPI + PyTorch |
+| 9 | **AI Services** (4 service: search, chatbot, recs, forecast) | [09_AI_ENGINE_SERVICE.md](./09_AI_ENGINE_SERVICE.md) (thiết kế ban đầu, đã lỗi thời) · [`AI/README.md`](../../AI/README.md) | 8001–8004 | Python FastAPI + PyTorch |
 
 ---
 
@@ -37,7 +37,7 @@ graph TD
     GW --> PAY[Payment Service :8084]
     GW --> NS[Notification Service :8086]
     GW --> PRO[Promotion Service :8087]
-    GW --> AI[AI Engine FastAPI :8000]
+    GW --> AI[AI Services FastAPI :8001–8004]
 
     subgraph Databases
         US --> DB_U[(PostgreSQL: user_db)]

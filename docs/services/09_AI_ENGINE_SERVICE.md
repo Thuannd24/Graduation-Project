@@ -1,7 +1,9 @@
 # TÀI LIỆU THIẾT KẾ: AI ENGINE SERVICE
 ## (Dịch Vụ Trí Tuệ Nhân Tạo & Dự Báo)
 
-> **Port:** `8000` | **Technology:** Python FastAPI, PyTorch, Transformers, LangChain/LlamaIndex, Scikit-learn (K-Means), LightGBM/Prophet | **Version:** 1.0.0
+> **Lưu ý (cập nhật 2026-10-11):** Tài liệu này mô tả **thiết kế ban đầu** với một dịch vụ duy nhất "AI Engine :8000" và **đã lỗi thời**. Hệ thống thực tế gồm **4 service FastAPI** trong thư mục `AI/`: **search-service :8001**, **chatbot-service :8002**, **recs-service :8003**, **forecast-service :8004** (xem [`AI/README.md`](../../AI/README.md)). Về tìm kiếm, tài liệu đúng với code là [`docs/AI/visual-search.md`](../AI/visual-search.md), [`docs/AI/text-search.md`](../AI/text-search.md) và [`docs/AI/search-evaluation.md`](../AI/search-evaluation.md). Bên dưới chỉ sửa các mô tả liên quan đến tìm kiếm; phần còn lại giữ nguyên như thiết kế ban đầu.
+
+> **Port (thiết kế ban đầu):** `8000` | **Technology:** Python FastAPI, PyTorch, Transformers, LangChain/LlamaIndex, Scikit-learn (K-Means), LightGBM/Prophet | **Version:** 1.0.0
 
 ---
 
@@ -11,7 +13,7 @@ AI Engine Service là trung tâm xử lý dữ liệu thông minh của hệ th�
 
 ### 1.1. Các nhiệm vụ cốt lõi
 1. **RAG Chatbot & NLP Engine:** Xử lý hội thoại tự động thông qua kiến trúc RAG (Retrieval-Augmented Generation), tích hợp tìm kiếm sản phẩm từ Elasticsearch để trả lời câu hỏi của khách hàng.
-2. **Visual & Semantic Search Helper:** Trích xuất vector nhúng (embeddings) 768 chiều từ hình ảnh sản phẩm (CLIP) và câu truy vấn văn bản (e5-large) để thực hiện tìm kiếm thông minh.
+2. **Visual & Semantic Search** (nay là **search-service :8001**): vector ảnh **CLIP ViT-B/32 (512 chiều)** và vector văn bản **multilingual-e5-large (1024 chiều)**, tìm trên **FAISS `IndexFlatIP`**; tìm văn bản kết hợp BM25 (Elasticsearch) bằng RRF.
 3. **Weekly K-Means RFM Worker:** Định kỳ chạy offline hàng tuần để tính toán điểm RFM (Recency, Frequency, Monetary) của khách hàng từ dữ liệu đơn hàng và thực hiện phân cụm (Clustering), sau đó cập nhật nhãn phân khúc về User Service.
 4. **Dynamic Pricing Model (Định giá Động):** Cung cấp API tính toán điểm nhạy cảm giá của người dùng phục vụ cho Camunda Promotion Workflow.
 5. **Demand Forecasting (Dự báo nhu cầu tồn kho):** Huấn luyện mô hình time-series (LightGBM/Prophet) dựa trên lịch sử tồn kho để đưa ra dự báo số lượng cần restock.
@@ -38,7 +40,7 @@ AI Engine Service là trung tâm xử lý dữ liệu thông minh của hệ th�
   ┌──────────────────────────────┼───────────────────┼──────────────────────────────┐
   ▼                              ▼                   ▼                              ▼
 [Redis Cache]               [MongoDB]         [Elasticsearch]                [PostgreSQL]
-(Hot similar items)    (Backup similarities)  (k-NN Vector Search)       (Orders & Snapshots)
+(Hot similar items)    (Backup similarities)  (BM25 — vector: FAISS)       (Orders & Snapshots)
 ```
 
 ---
@@ -46,6 +48,8 @@ AI Engine Service là trung tâm xử lý dữ liệu thông minh của hệ th�
 ## III. ĐẶC TẢ CHI TIẾT CÁC TÍNH NĂNG AI
 
 ### 3.1. RAG Chatbot & SSE Streaming API
+
+> *Thiết kế ban đầu.* Chatbot thực tế là chatbot-service :8002 — xem `docs/AI/chatbot-ai.md`. Hai bước 1–2 bên dưới không được cài đặt như mô tả: e5-large cho vector **1024** chiều (không phải 768) và hệ thống **không** dùng Elasticsearch k-NN.
 *   **Endpoint:** `POST /api/ai/chat/stream`
 *   **Request Payload:**
 ```json
@@ -66,13 +70,12 @@ AI Engine Service là trung tâm xử lý dữ liệu thông minh của hệ th�
     4. Gọi OpenAI/Gemini hoặc Local LLM để sinh phản hồi dưới dạng Stream (Server-Sent Events) để trả về cho Client gõ chữ thời gian thực.
     5. Đẩy tin nhắn của khách và phản hồi của bot vào hàng đợi lưu trữ MongoDB.
 
-### 3.2. Vector Extraction (Tìm kiếm bằng ảnh và ngữ nghĩa)
-*   **Tìm kiếm bằng Ảnh (`POST /api/ai/embed/image`):**
-    *   **Payload:** Multipart Form-data (chứa file ảnh tải lên).
-    *   **Logic:** Đưa qua model **CLIP (ViT-B/32)** trích xuất đặc trưng ảnh thành vector 768 chiều. Trả về mảng float.
-*   **Tìm kiếm bằng Ngữ nghĩa (`POST /api/ai/embed/text`):**
-    *   **Payload:** `{ "text": "váy hoa cúc dáng dài màu vàng" }`
-    *   **Logic:** Đưa qua model **e5-large** sinh vector nhúng. Trả về mảng float.
+### 3.2. Tìm kiếm bằng ảnh và ngữ nghĩa (search-service :8001)
+Thiết kế ban đầu có `POST /api/ai/embed/image` và `POST /api/ai/embed/text` trả mảng float; các endpoint này **không tồn tại**. Search-service trả thẳng danh sách sản phẩm (mount ở cả `/api/v1/...` và `/api/v1/public/...`):
+*   **Tìm bằng ảnh — `POST /api/v1/search/image`:** multipart field `image`; CLIP ViT-B/32 → vector 512 chiều → FAISS `IndexFlatIP` (tìm chính xác, cosine) → top_k sản phẩm kèm `score`, `matchScore`, `cropBox`.
+*   **Tìm văn bản — `GET /api/v1/search?q=…`:** BM25 (Elasticsearch) + multilingual-e5-large 1024 chiều (FAISS), gộp bằng RRF k = 60.
+*   **Khác:** `POST /api/v1/search/multimodal`, `GET /api/v1/search/similar/{product_id}`, `GET /api/v1/search/suggest`.
+*   Chi tiết và số liệu đo: `docs/AI/visual-search.md`, `docs/AI/text-search.md`, `docs/AI/search-evaluation.md`.
 
 ### 3.3. Weekly K-Means RFM Segmenter (Chạy ngầm - Celery Scheduler)
 *   **Tần suất:** 01:00 Chủ nhật hàng tuần.

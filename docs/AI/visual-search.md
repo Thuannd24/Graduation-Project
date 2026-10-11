@@ -1,119 +1,198 @@
 # Visual Search — Tìm Kiếm Sản Phẩm Bằng Hình Ảnh
 
-> Hướng dẫn thiết kế và tài liệu kỹ thuật chi tiết của hệ thống tìm kiếm sản phẩm bằng hình ảnh (Visual Search). Hệ thống sử dụng mô hình nhận diện vật thể YOLOv8 để định vị và cắt (crop) sản phẩm chính từ ảnh đầu vào, kết hợp mô hình mã hóa ảnh (Image Encoder) để trích xuất đặc trưng vector và tìm kiếm láng giềng gần nhất bằng thư viện FAISS.
+> Cập nhật 2026-10-11 theo code nhánh `feat/image-search-ai` (commit `ea338a1`).
+
+> Tài liệu kỹ thuật của chức năng tìm kiếm sản phẩm bằng hình ảnh trong `AI/search-service` (FastAPI, cổng 8001). Pipeline đang chạy: ảnh upload → chuẩn hoá → mã hoá bằng **CLIP ViT-B/32 (512 chiều)** → tìm kiếm **chính xác** trên FAISS `IndexFlatIP` → gộp kết quả theo sản phẩm → lấy metadata từ MariaDB. YOLOv8 đã có code nhưng **mặc định tắt và chưa được đánh giá**. Số liệu đo chi tiết: [search-evaluation.md](search-evaluation.md).
 
 ---
 
-## 📌 Tổng Quan Hệ Thống
+## 📌 Trạng Thái Cài Đặt
 
-Hệ thống cho phép người dùng tải lên hình ảnh sản phẩm thực tế và ngay lập tức tìm kiếm các mặt hàng tương đồng trong kho mà không cần gõ từ khóa.
+| Thành phần | Trạng thái | Ghi chú |
+| :--- | :--- | :--- |
+| CLIP ViT-B/32 + FAISS `IndexFlatIP`, index **tất cả** ảnh của sản phẩm | Đã cài đặt & đã đo | [search-evaluation.md](search-evaluation.md) §3.1, §5 |
+| `POST /search/image` + modal upload trên FE (cắt vùng phía trình duyệt) | Đã cài đặt & đã đo (qua HTTP) | FE gửi `top_k=50` |
+| YOLOv8 detect & crop | Đã cài đặt, chưa đo | `YOLO_ENABLED=false` mặc định; mọi số đo đều chạy khi YOLO **tắt** |
+| Tìm kiếm đa phương thức ảnh + text (`POST /search/multimodal`) | Đã cài đặt, chưa đo | Không có FE gọi |
+| Sản phẩm tương tự (`GET /search/similar/{product_id}`) | Đã cài đặt, chưa đo | Không có FE gọi |
+| DINOv2 / EfficientNet, fine-tune Triplet loss, FAISS IVF/HNSW | Thiết kế, chưa cài đặt | Xem §11 |
+
+---
+
+## 1. Tổng Quan Pipeline
 
 ```
-[ Ảnh đầu vào của user ]
+[ Ảnh người dùng — VisualSearchModal (FE) ]
+           │  (tuỳ chọn) cắt ngay trên trình duyệt: "Toàn ảnh" hoặc "Vùng giữa" (60% giữa ảnh)
+           ▼
+POST /api/v1/public/search/image?top_k=50   (qua API Gateway :8080)
            │
            ▼
-[ YOLOv8 - Nhận diện ] ──► (Xác định Bounding Box lớn nhất)
+[ Đọc & chuẩn hoá ] ──► ≤ 10MB, xoay theo EXIF, PNG nền trong suốt → ghép nền trắng, đưa về RGB
            │
            ▼
-[ Crop & Tiền xử lý ] ──► (Cắt sản phẩm + Thêm 10% padding + Resize 224x224)
+[ YOLOv8 crop ] ──► chỉ chạy khi YOLO_ENABLED=true (mặc định: bỏ qua, cropBox = null)
            │
            ▼
-[ Image Encoder ] ──► (Trích xuất vector đặc trưng 512-dim / 768-dim)
+[ CLIP ViT-B/32 ] ──► vector 512 chiều, L2-normalize
            │
            ▼
-[ FAISS Vector Store ] ──► (Tìm kiếm Top-K láng giềng gần nhất - Cosine Similarity)
+[ FAISS IndexFlatIP ] ──► inner product = cosine; tìm chính xác, lấy max(top_k×20, 200) vector gần nhất
            │
            ▼
-[ Kết quả trả về ] ──► (Top sản phẩm khớp kèm theo bounding box gốc để vẽ khung)
+[ Gộp theo sản phẩm ] ──► mỗi sản phẩm giữ điểm cao nhất trong các ảnh của nó → top_k sản phẩm
+           │
+           ▼
+[ Metadata MariaDB ] ──► tên, giá hiệu lực, ảnh đại diện; bỏ sản phẩm đã ẩn (active = 0)
+```
+
+Mã nguồn chính: `app/api/endpoints/search.py`, `app/services/{visual_search, faiss_store, image_loader, yolo_crop, catalog}.py`.
+
+---
+
+## 2. Xây Dựng Chỉ Mục Ảnh (`scripts/build_index.py`)
+
+Chỉ mục được build **offline, chạy tay**; service không tự build.
+
+| Bước | Chi tiết trong code |
+| :--- | :--- |
+| Nguồn ảnh | `products.image_url` + bảng `product_images` (sắp `is_primary DESC, sort_order ASC`, bỏ URL trùng) của sản phẩm active trong MariaDB |
+| Số ảnh / sản phẩm | `--max-images 0` (mặc định) = **tất cả ảnh**. Lần đo gần nhất: 10.287 vector cho 1.123 sản phẩm ([search-evaluation.md](search-evaluation.md) §1) |
+| Tải ảnh | Cache trên đĩa (`DATA_DIR/img_cache`), retry 3 lần cho lỗi mạng/5xx, bỏ qua 4xx; ảnh lỗi bị bỏ qua thay vì dừng build |
+| Tiền xử lý | Như ảnh upload (EXIF, nền trắng cho PNG trong suốt), thu nhỏ cạnh dài ≤ 448 px |
+| Encode | Tải + encode theo lô 128 ảnh để RAM ổn định |
+| Ghi file | `item_index.faiss` + `idx2product_image.json` (ghi file tạm rồi rename) |
+| Nạp lại | Service so `mtime` tối đa 1 lần / 30 giây và tự nạp index mới, không cần restart |
+
+Cùng lần chạy, script còn build text index (e5) và ghi `product_similarities` (§7), trừ khi truyền `--skip-text` / `--skip-similar`.
+
+```bash
+docker exec -it ai-search-service python scripts/build_index.py              # đầy đủ
+docker exec -it ai-search-service python scripts/build_index.py --skip-text  # chỉ ảnh (+ similar)
 ```
 
 ---
 
-## 1. YOLOv8 — Định Vị & Cắt Sản Phẩm (Detect & Crop)
+## 3. Image Encoder — CLIP ViT-B/32
 
-Khi người dùng chụp ảnh thực tế, ảnh thường chứa nhiều chi tiết nhiễu (nền nhà, đồ vật xung quanh). Nếu đưa trực tiếp ảnh này vào mô hình mã hóa đặc trưng, độ chính xác sẽ giảm mạnh do mô hình học cả những đặc trưng nhiễu của môi trường.
-
-### So sánh các phiên bản YOLOv8 (Pretrained COCO)
-Với hầu hết danh mục sản phẩm e-commerce phổ biến (quần áo, giày dép, điện thoại, túi xách), mô hình YOLOv8 sẵn có đã nhận diện rất tốt mà không cần huấn luyện lại.
-
-| Phiên bản | Kích thước file | Độ chính xác (mAP) | Tốc độ xử lý | Khuyến nghị sử dụng |
-| :--- | :---: | :---: | :---: | :--- |
-| **YOLOv8n** (Nano) | 3.2MB | 37.3 | < 1ms / ảnh | Phù hợp thiết bị cấu hình yếu, mobile client |
-| **YOLOv8s** (Small) | 11.2MB | 44.9 | ~2ms / ảnh | Cân bằng tốt giữa tốc độ và độ chính xác |
-| **YOLOv8m** (Medium)| 25.9MB | 50.2 | ~5ms / ảnh | **Khuyến nghị sử dụng trên server** ⭐ |
-| **YOLOv8l** (Large) | 43.7MB | 52.9 | ~10ms / ảnh | Ưu tiên độ chính xác tuyệt đối |
-
-### Logic Cắt Ảnh Tự Động (Crop Pipeline)
-1. **Chạy nhận diện:** Đặt ngưỡng `confidence >= 0.25` và ngưỡng loại bỏ hộp trùng lặp `IoU = 0.45`.
-2. **Chọn vật thể chính:** Nếu phát hiện nhiều vật thể, tính toán diện tích (Area) của từng Bounding Box và lựa chọn box có diện tích lớn nhất làm sản phẩm chính cần tìm kiếm.
-3. **Thêm biên an toàn (Padding):** Cộng thêm `10%` kích thước biên vào mỗi cạnh để tránh cắt mất viền ngoài sản phẩm.
-4. **Xử lý dự phòng (Fallback):** Nếu YOLOv8 không nhận diện được vật thể nào, hệ thống tự động sử dụng toàn bộ ảnh gốc và thực hiện cắt tâm (Center Crop 90%).
+* Model `clip-ViT-B-32` (sentence-transformers), vector **512 chiều**, dùng **zero-shot** — không fine-tune trên dữ liệu dự án.
+* Vector được L2-normalize khi encode, nên inner product trên FAISS chính là cosine similarity.
+* CLIP mã hoá được cả ảnh và text trong cùng không gian, làm nền cho tìm kiếm đa phương thức (§8).
+* `PRELOAD_MODELS=false` (mặc định, cả trong `docker-compose.yml`): model chỉ được nạp ở request đầu tiên (xem §10).
 
 ---
 
-## 2. Image Encoder (Mã Hóa Đặc Trưng Hình Ảnh)
+## 4. Tìm Kiếm Vector Với FAISS
 
-Image Encoder biến đổi bức ảnh sản phẩm đã crop sang một vector số thực đại diện cho các thông tin về kiểu dáng, màu sắc, họa tiết của sản phẩm đó.
-
-### So sánh các mô hình mã hóa ảnh
-
-| Mô hình | Kiến trúc chính | Chiều Vector (Dim) | Điểm mạnh | Điểm yếu | Khuyến nghị |
-| :--- | :--- | :---: | :--- | :--- | :--- |
-| **CLIP (ViT-B/32)** | Vision-Language | 512 | Hỗ trợ tìm kiếm đa phương thức (ảnh + text), pretrained mạnh. | Kích thước file lớn hơn CNN thông thường. | **Khuyến nghị cho tìm kiếm đa phương thức** ⭐ |
-| **DINOv2 (ViT-S/14)**| Self-supervised ViT | 384 | Trích xuất đặc trưng chi tiết vượt trội, không cần gán nhãn khi train. | Chỉ hỗ trợ ảnh, không mã hóa chung với văn bản. | **Khuyến nghị cho tìm kiếm thuần ảnh** ⭐ |
-| **EfficientNet-B3** | CNN Encoder | 1536 | Dung lượng rất nhẹ, tốc độ suy luận nhanh nhất, dễ chạy trên CPU. | Khả năng nắm bắt đặc trưng hình học yếu hơn ViT. | Phù hợp khi thiết bị không có GPU |
-
-### Huấn luyện Triplet Loss với DINOv2
-Để tối ưu hóa sâu mô hình cho một danh mục sản phẩm cụ thể:
-* **Triplet Mining:** Xây dựng tập dữ liệu huấn luyện gồm các bộ ba:
-  * **Anchor (A):** Ảnh gốc của sản phẩm A.
-  * **Positive (P):** Ảnh chụp ở góc khác hoặc trong điều kiện ánh sáng khác của chính sản phẩm A.
-  * **Negative (N):** Ảnh của sản phẩm khác thuộc danh mục khác.
-* **Loss Function:** Áp dụng `TripletMarginLoss` với margin `0.3` để kéo gần khoảng cách vector giữa Anchor và Positive, đồng thời đẩy xa khoảng cách với Negative.
+* Index là **`IndexFlatIP`** — brute-force, **tìm chính xác** (không phải Approximate NN) trên vector đã chuẩn hoá. Với catalog cỡ vài nghìn sản phẩm, Flat index đủ nhanh nên chưa cần IVF/HNSW.
+* Một sản phẩm có nhiều vector (nhiều ảnh). Khi tìm, service lấy dư `max(top_k×20, 200)` vector, gộp theo `productId` và **giữ điểm cao nhất** (max) của mỗi sản phẩm, rồi trả top_k sản phẩm.
+* Các cách gộp khác (top-2, log-sum-exp) và TTA đã thử nhưng không cải thiện trên tập TEST nên không áp dụng ([search-evaluation.md](search-evaluation.md) §5.3).
+* Index chưa được build ⇒ endpoint trả **503** thay vì nạp CLIP vô ích.
 
 ---
 
-## 3. Tìm Kiếm Vectơ Với FAISS (Facebook AI Similarity Search)
+## 5. YOLOv8 — Detect & Crop (Đã Cài Đặt, Mặc Định Tắt)
 
-FAISS thực hiện tìm kiếm láng giềng gần nhất (Approximate Nearest Neighbors - ANN) cực nhanh bằng cách so sánh tích vô hướng (Inner Product) của query vector đã chuẩn hóa với toàn bộ vector kho hàng.
+Code ở `app/services/yolo_crop.py`; chỉ chạy khi đặt `YOLO_ENABLED=true`.
 
-### Chọn loại FAISS Index phù hợp theo quy mô
+| Tham số | Giá trị mặc định (`core/config.py`) |
+| :--- | :--- |
+| Weights | `yolov8m.pt` (pretrained COCO) — **không có sẵn trong repo/image**; nếu nạp lỗi, service ghi log và tắt crop, không thử lại |
+| Ngưỡng | `confidence = 0.25`, `IoU = 0.45` |
+| Chọn vật thể chính | Box có **diện tích × confidence** lớn nhất |
+| Padding | +10% kích thước box mỗi phía, kẹp trong biên ảnh |
+| Fallback | Không có box, YOLO lỗi, hoặc vùng cắt < 8 px ⇒ dùng **nguyên ảnh**, `cropBox = null` |
+| Đầu ra | `cropBox = {x, y, width, height}` theo % ảnh đã upload; FE quy đổi về ảnh gốc để vẽ khung |
 
-| Loại Index | Độ chính xác | Tốc độ tìm kiếm | Dung lượng RAM | Phù hợp khi |
-| :--- | :---: | :---: | :---: | :--- |
-| **IndexFlatIP** | **100% (Exact match)**| **$O(N)$** | Thấp | Catalog `< 50.000` sản phẩm (Đồ án nên dùng) ⭐ |
-| **IndexIVFFlat** | ~95% | $O(\sqrt{N})$ | Thấp | Catalog từ `50.000` đến `500.000` sản phẩm |
-| **IndexHNSW32** | ~96% | $O(\log N)$ | Cao | Catalog `> 500.000` sản phẩm, yêu cầu tốc độ tối đa |
+YOLO **chưa được bật trong bất kỳ lần đo nào** và chưa được kiểm chứng trên catalog (chủ yếu điện thoại, laptop, phụ kiện). Container chạy CPU-only. Hiện người dùng tự khoanh vùng bằng preset "Vùng giữa" trên FE thay cho YOLO.
 
 ---
 
-## 4. Quy Trình Đánh Giá & API Serving
+## 6. API Serving (FastAPI)
 
-### Các chỉ số đánh giá chất lượng tìm kiếm ảnh
+Router được mount ở cả `/api/v1/...` (gateway yêu cầu đăng nhập) và `/api/v1/public/...` (công khai). Gateway route `ai-search` dùng circuit breaker `ai-engine-cb`, giới hạn thời gian **30 giây**.
 
-| Metric | Phương pháp tính toán | Ngưỡng đạt |
-| :--- | :--- | :---: |
-| **Recall@10** | Tỷ lệ ảnh chính xác của cùng một sản phẩm xuất hiện trong Top-10 kết quả trả về. | **> 0.70** |
-| **mAP@10** | Mean Average Precision tại Top-10. Đánh giá tính chính xác của thứ tự sắp xếp kết quả. | **> 0.60** |
-| **Latency** | Thời gian phản hồi API từ khi nhận ảnh đến khi trả kết quả (bao gồm cả YOLO detect + Crop + Encode + FAISS). | **< 300ms** |
+| Endpoint | Mô tả | FE gọi? |
+| :--- | :--- | :--- |
+| `POST /api/v1/public/search/image` (alias `/search/similar-image`) | Multipart, field `image` (hoặc `file`); query `top_k` mặc định 10 | Có — `aiApi.searchByImage` gửi `top_k=50` |
+| `POST /api/v1/public/search/multimodal` | Form `q` + ảnh; xem §8 | Không |
+| `GET /api/v1/public/search/similar/{product_id}?top_k=10` | Đọc sản phẩm tương tự đã tính sẵn; xem §7 | Không |
 
-### So sánh hiệu năng thực tế (Benchmark)
+**Response** (envelope chung `{code, message, data}`; FE tự bóc `data`; giá trị trong ví dụ là minh hoạ):
 
-| Mô hình mã hóa | Recall@5 | Recall@10 | mAP@10 | Tốc độ suy luận (Inference) |
-| :--- | :---: | :---: | :---: | :---: |
-| **CLIP ViT-B/32** | **0.71** | **0.83** | **0.67** | ~50ms |
-| **DINOv2 ViT-S/14**| 0.68 | 0.80 | 0.64 | ~45ms |
-| **EfficientNet-B3** | 0.52 | 0.67 | 0.51 | ~20ms |
+```json
+{
+  "code": "SUCCESS",
+  "message": "Success",
+  "data": {
+    "total": 1,
+    "items": [
+      { "id": "101", "name": "…", "price": 23990000, "image": "https://…", "score": 0.9412, "matchScore": 97 }
+    ],
+    "cropBox": null
+  }
+}
+```
 
-### Thiết kế API Serving (FastAPI)
-* `POST /search/image`
-  * Nhận file ảnh từ client tải lên.
-  * Trả về danh sách Top-10 sản phẩm tương đồng kèm tọa độ Bounding Box của sản phẩm chính phát hiện được trên ảnh gốc.
-  * Latency: `< 250ms` (với model load sẵn trong RAM khi khởi động server).
-* `GET /items/{item_id}/similar`
-  * Trả về danh sách sản phẩm tương đồng về mặt hình ảnh với sản phẩm đang xem. Kết quả được tính toán offline hàng ngày và lưu cache để đạt thời gian phản hồi cực nhanh `< 20ms`.
+* `score` = cosine CLIP; `price` = giá hiệu lực (giá sale nếu có). `/search/similar/{id}` trả cùng dạng item nhưng không có `cropBox`.
+* `matchScore = round((score + 1) / 2 × 100)`. Đây **không** phải xác suất đã hiệu chỉnh: top-1 **sai** có cosine trung vị 0.939 ⇒ ≈ 97%, gần bằng top-1 **đúng** (0.965 ⇒ ≈ 98%) ([search-evaluation.md](search-evaluation.md) §4.5). Vấn đề này **chưa sửa** trong code.
+* Lỗi: `422` thiếu file, `400` ảnh rỗng / > 10MB / không phải ảnh, `503` chưa có index, `500` lỗi khác (body dạng `{"detail": …}`).
+* Độ trễ đo qua HTTP trên CPU, sau khi model đã nạp: p50 ≈ 150 ms, p95 ≈ 350 ms (index 3 ảnh/SP, [search-evaluation.md](search-evaluation.md) §3.1); p50 = 111 ms với index tất cả ảnh (§5.2).
 
-> [!TIP]
-> **Điểm cộng tối đa (Tìm kiếm đa phương thức - Multi-modal Search):** Sử dụng sức mạnh kết hợp của mô hình **CLIP**: Mã hóa ảnh query bằng Image Encoder thành $v_{\text{img}}$, mã hóa đoạn mô tả đi kèm (ví dụ: *"màu đen"*) bằng Text Encoder thành $v_{\text{txt}}$. Tính toán vector truy vấn tổng hợp:
-> $$v_{\text{query}} = 0.7 \times v_{\text{img}} + 0.3 \times v_{\text{txt}}$$
-> Thực hiện tìm kiếm trên FAISS bằng $v_{\text{query}}$. Người dùng có thể tìm kiếm thông minh dạng: Tải lên ảnh chiếc túi xách + gõ thêm *"màu hồng"* để tìm các sản phẩm tương tự có màu hồng.
+---
+
+## 7. Sản Phẩm Tương Tự (Item-to-Item)
+
+* `build_index.py` tính cho mỗi sản phẩm: vector ảnh = trung bình các ảnh (đã chuẩn hoá), vector text = e5. Độ tương tự = **0.6 × cosine ảnh + 0.4 × cosine text** (thiếu một trong hai thì dùng cái còn lại), lấy **top-20**.
+* Kết quả ghi đè toàn bộ collection MongoDB `product_similarities`; `GET /search/similar/{product_id}` chỉ đọc lại (top_k mặc định 10).
+* Chỉ được làm mới khi chạy lại `build_index.py` (không có lịch tự động). Hiện chưa có FE hay service nào khác đọc dữ liệu này (`ProductSimilarityRepository` của product-service chưa được dùng).
+
+---
+
+## 8. Tìm Kiếm Đa Phương Thức (Ảnh + Text)
+
+`POST /search/multimodal` encode ảnh và câu `q` bằng CLIP, rồi tìm bằng:
+
+$$v_{\text{query}} = \text{normalize}(0.7 \times v_{\text{img}} + 0.3 \times v_{\text{txt}})$$
+
+(trọng số đọc từ `MM_IMAGE_WEIGHT` / `MM_TEXT_WEIGHT`). Lưu ý: text encoder của `clip-ViT-B-32` được huấn luyện trên chú thích **tiếng Anh**, nên mô tả tiếng Việt như *"màu hồng"* **không đáng tin cậy**. Endpoint chưa có FE gọi và chưa được đánh giá.
+
+---
+
+## 9. Kết Quả Đo (Tóm Tắt)
+
+Tất cả đo khi **YOLO tắt**, CPU-only. Chi tiết, giao thức và giới hạn: [search-evaluation.md](search-evaluation.md).
+
+| Giao thức | Index | Kết quả | Nguồn |
+| :--- | :--- | :--- | :--- |
+| Ảnh đã có trong index (kiểm tra pipeline) | 3 ảnh/SP | Tie@1 97.0% | §3.1 |
+| Ảnh chưa thấy (ảnh #4) | 3 ảnh/SP | Hit@10 71.5%, Tie@1 48.5%, CatP@5 82.0% | §3.1 |
+| Ảnh chưa thấy + augment (mô phỏng ảnh tự chụp) | 3 ảnh/SP | Hit@10 49.5%, Tie@1 26.5% | §3.1 |
+| Ảnh cuối, tập TEST 431 SP (offline) | **Tất cả ảnh (cấu hình production)** | Tie@1 37.8%, Tie@5 52.7%, CatP@5 69.5% | §5.2 |
+| Ảnh cuối, qua HTTP, 300 mẫu | Tất cả ảnh | Tie@1 36.7%, p50 111 ms | §5.2 |
+
+Hai giao thức (ảnh #4 và ảnh cuối) **không so trực tiếp được** với nhau. Kết luận chính: hệ thống tìm đúng **danh mục** khá tốt nhưng đúng **sản phẩm** ở mức trung bình; lỗi chủ yếu là nhầm giữa các đời máy gần giống nhau — giới hạn của CLIP zero-shot.
+
+---
+
+## 10. Vấn Đề Đã Biết
+
+| Vấn đề | Ảnh hưởng |
+| :--- | :--- |
+| Không có lịch build lại index | Sản phẩm/ảnh mới **không tìm được** cho tới khi chạy tay `build_index.py`; `product_similarities` cũng cũ theo |
+| `PRELOAD_MODELS=false` | Request đầu tiên phải nạp CLIP (và tải model nếu chưa có cache); có thể vượt giới hạn 30 giây của gateway ⇒ trả fallback |
+| `SearchPage.jsx` luôn hiện nhãn "YOLO v8 detected" khi có ảnh upload | Gây hiểu nhầm vì YOLO đang tắt (`cropBox` từ server luôn `null`) |
+| `SearchPage.jsx` mặc định lọc giá `≤ 50.000.000` (`DEFAULT_MAX_PRICE`) | Sản phẩm giá cao hơn bị ẩn khỏi kết quả ảnh dù server đã trả về |
+| Badge "Độ khớp: x%" dùng `matchScore` | Không phản ánh độ tin cậy (§6) |
+| Nhiều sản phẩm dùng chung ảnh giống hệt | Không mô hình ảnh nào phân biệt được ([search-evaluation.md](search-evaluation.md) §4.1) |
+
+---
+
+## 11. Hướng Phát Triển (Phương Án Đã Cân Nhắc, Chưa Cài Đặt)
+
+* **Bật và đánh giá YOLO** với cùng giao thức trong search-evaluation.md, so sánh với preset "Vùng giữa".
+* **Encoder khác:** CLIP lớn hơn (ViT-L/14), **DINOv2** (đặc trưng thuần ảnh, tự giám sát) hoặc **EfficientNet** (nhẹ, hợp CPU) — chưa có thí nghiệm nào trong dự án.
+* **Fine-tune / metric learning** (Triplet loss, adapter) trên các ảnh của cùng một sản phẩm: Anchor = một ảnh, Positive = ảnh khác góc của cùng sản phẩm, Negative = ảnh sản phẩm khác — nhắm vào lỗi nhầm đời máy.
+* **FAISS IVF/HNSW** khi catalog tăng đủ lớn để Flat index chậm.
+* **Build lại index tự động** (theo lịch hoặc theo sự kiện thay đổi sản phẩm).
+* **CLIP đa ngôn ngữ** (vd `clip-ViT-B-32-multilingual-v1`) nếu muốn hỗ trợ mô tả tiếng Việt cho multimodal.
