@@ -1,0 +1,92 @@
+@startuml 02-product-catalog
+' Module Product & Catalog (product-service :8089)
+' Nguồn: ProductController, CategoryController, BrandController, WishlistController,
+'        Admin{Product,Brand,Attribute,Review,CatalogImport}Controller, InternalProductController, ReviewServiceImpl
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Khách vãng lai" as Guest
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Customer -up-|> Guest
+Admin -up-|> Staff
+
+actor "order-service" as Order <<nội bộ>>
+actor "promotion-service" as Promo <<nội bộ>>
+
+rectangle "Product & Catalog" {
+
+  package "Duyệt & tra cứu (public)" {
+    usecase "Xem cây danh mục" as P1
+    usecase "Xem thương hiệu\n(theo danh mục / slug)" as P2
+    usecase "Xem danh sách sản phẩm\n(theo danh mục)" as P3
+    usecase "Xem chi tiết sản phẩm\n(id / slug, biến thể)" as P4
+    usecase "Tìm kiếm sản phẩm" as P5
+    usecase "Xem đánh giá sản phẩm" as P6
+  }
+
+  package "Khách hàng" {
+    usecase "Quản lý wishlist\n(thêm, xóa, xem, kiểm tra)" as P7
+    usecase "Viết đánh giá\n(kèm ảnh)" as P8
+    usecase "Kiểm tra đã mua hàng" as P8a
+    usecase "Xem đánh giá của tôi" as P9
+  }
+
+  package "Back-office" {
+    usecase "Thêm / sửa sản phẩm\n(kèm upload ảnh)" as P10
+    usecase "Tạo / sửa danh mục" as P11
+    usecase "Tạo / sửa thương hiệu" as P12
+    usecase "Xem thuộc tính" as P13
+    usecase "Xem & trả lời đánh giá" as P14
+    usecase "Xóa sản phẩm, danh mục,\nthương hiệu" as P15
+    usecase "Quản lý thuộc tính\n& gán vào danh mục" as P16
+    usecase "Import catalog hàng loạt" as P17
+  }
+
+  package "API nội bộ" {
+    usecase "Cấp giá & thông tin sản phẩm\n(đơn lẻ / hàng loạt)" as P18
+    usecase "Phát sự kiện đã đánh giá\n(product-reviewed-events)" as P19
+  }
+}
+
+Guest --> P1
+Guest --> P2
+Guest --> P3
+Guest --> P4
+Guest --> P5
+Guest --> P6
+
+Customer --> P7
+Customer --> P8
+Customer --> P9
+
+Staff --> P10
+Staff --> P11
+Staff --> P12
+Staff --> P13
+Staff --> P14
+
+Admin --> P15
+Admin --> P16
+Admin --> P17
+
+P8 ..> P8a : <<include>>
+P8 ..> P19 : <<include>>
+P4 ..> P6 : <<extend>>
+
+Order --> P18
+Promo --> P19
+
+note right of P8a
+  Gọi order-service
+  /api/internal/orders/check-eligible
+end note
+
+note right of P19
+  promotion-service nhận sự kiện này
+  để chạy campaign "đánh giá sản phẩm"
+end note
+
+@enduml

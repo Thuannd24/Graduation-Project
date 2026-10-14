@@ -1,0 +1,121 @@
+@startuml usecase-tong-the
+' Use case tổng thể — AuraTech E-commerce (một khung hệ thống, các chức năng chính)
+' Màu: xanh dương = khách hàng · xanh lá = nhân viên · cam = quản trị viên
+left to right direction
+skinparam shadowing false
+skinparam actorStyle awesome
+skinparam usecase {
+  BorderColor #444444
+}
+
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+actor "Cổng thanh toán\nVNPay" as VNP
+Admin -up-|> Staff
+
+rectangle "Hệ thống thương mại điện tử AuraTech" {
+
+  ' ===== Khách hàng =====
+  usecase "Đăng ký tài khoản" as C1 #DCEBFA
+  usecase "Đăng nhập\n(kể cả bằng Google)" as C2 #DCEBFA
+  usecase "Quản lý hồ sơ\n& địa chỉ giao hàng" as C3 #DCEBFA
+  usecase "Duyệt danh mục\n& thương hiệu" as C4 #DCEBFA
+  usecase "Xem chi tiết sản phẩm" as C5 #DCEBFA
+  usecase "Tìm sản phẩm bằng chữ" as C6 #DCEBFA
+  usecase "Tìm sản phẩm bằng hình ảnh" as C7 #DCEBFA
+  usecase "Nhận gợi ý sản phẩm\n(cá nhân hóa, mua kèm)" as C8 #DCEBFA
+  usecase "Lưu sản phẩm yêu thích" as C9 #DCEBFA
+  usecase "Chat với trợ lý AI" as C10 #DCEBFA
+  usecase "Yêu cầu gặp nhân viên tư vấn" as C11 #DCEBFA
+  usecase "Quản lý giỏ hàng" as C12 #DCEBFA
+  usecase "Xem trước đơn hàng\n(phí ship, giảm giá)" as C13 #DCEBFA
+  usecase "Áp mã giảm giá\n/ dùng điểm thành viên" as C14 #DCEBFA
+  usecase "Đặt hàng" as C15 #DCEBFA
+  usecase "Thanh toán online (VNPay)" as C16 #DCEBFA
+  usecase "Thanh toán khi nhận hàng (COD)" as C17 #DCEBFA
+  usecase "Theo dõi đơn hàng" as C18 #DCEBFA
+  usecase "Hủy đơn hàng" as C19 #DCEBFA
+  usecase "Xem bảo hành" as C20 #DCEBFA
+  usecase "Đánh giá sản phẩm\n(kèm ảnh)" as C21 #DCEBFA
+  usecase "Xem điểm thành viên\n& voucher của tôi" as C22 #DCEBFA
+  usecase "Nhận thông báo" as C23 #DCEBFA
+
+  ' ===== Nhân viên =====
+  usecase "Thêm / sửa sản phẩm" as S1 #DDF2DD
+  usecase "Quản lý danh mục\n& thương hiệu" as S2 #DDF2DD
+  usecase "Nhập kho\n& chỉnh số lượng tồn" as S3 #DDF2DD
+  usecase "Xem sản phẩm sắp hết hàng" as S4 #DDF2DD
+  usecase "Giao hàng\n(xuất đơn, mã vận đơn)" as S5 #DDF2DD
+  usecase "Cập nhật trạng thái giao hàng" as S6 #DDF2DD
+  usecase "Tra cứu giao dịch thanh toán" as S7 #DDF2DD
+  usecase "Trả lời đánh giá khách hàng" as S8 #DDF2DD
+  usecase "Hỗ trợ khách qua chat" as S9 #DDF2DD
+  usecase "Xem danh sách\n& thống kê khách hàng" as S10 #DDF2DD
+  usecase "Thiết kế chiến dịch\nkhuyến mãi tự động" as S11 #DDF2DD
+  usecase "Xem thống kê khuyến mãi" as S12 #DDF2DD
+  usecase "Xem báo cáo AI\n(dự báo nhu cầu, phân khúc khách)" as S13 #DDF2DD
+
+  ' ===== Quản trị viên =====
+  usecase "Quản lý người dùng\n(tạo, sửa, xóa, khóa tài khoản)" as A1 #FCE5CC
+  usecase "Phân quyền\n& đổi hạng thành viên" as A2 #FCE5CC
+  usecase "Hoàn tiền" as A3 #FCE5CC
+  usecase "Xóa sản phẩm, danh mục,\nthương hiệu, chiến dịch" as A4 #FCE5CC
+  usecase "Quản lý thuộc tính sản phẩm" as A5 #FCE5CC
+  usecase "Nhập catalog hàng loạt" as A6 #FCE5CC
+}
+
+' ---------- Khách hàng ----------
+Customer --> C1
+Customer --> C2
+Customer --> C3
+Customer --> C4
+Customer --> C5
+Customer --> C6
+Customer --> C7
+Customer --> C8
+Customer --> C9
+Customer --> C10
+Customer --> C11
+Customer --> C12
+Customer --> C13
+Customer --> C15
+Customer --> C18
+Customer --> C19
+Customer --> C20
+Customer --> C21
+Customer --> C22
+Customer --> C23
+
+' ---------- Nhân viên ----------
+S1 <-- Staff
+S2 <-- Staff
+S3 <-- Staff
+S4 <-- Staff
+S5 <-- Staff
+S6 <-- Staff
+S7 <-- Staff
+S8 <-- Staff
+S9 <-- Staff
+S10 <-- Staff
+S11 <-- Staff
+S12 <-- Staff
+S13 <-- Staff
+
+' ---------- Quản trị viên ----------
+A1 <-- Admin
+A2 <-- Admin
+A3 <-- Admin
+A4 <-- Admin
+A5 <-- Admin
+A6 <-- Admin
+
+' ---------- Quan hệ ----------
+C11 .up.> C10 : <<extend>>
+C14 .up.> C15 : <<extend>>
+C16 .up.> C15 : <<extend>>
+C17 .up.> C15 : <<extend>>
+C15 ..> C12 : <<include>>
+C16 -- VNP
+
+@enduml

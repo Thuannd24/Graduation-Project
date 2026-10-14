@@ -1,0 +1,72 @@
+@startuml 04-inventory
+' Module Inventory (inventory-service :8093)
+' Nguồn: InventoryController, AdminInventoryController, InventoryService, InventoryDeductService,
+'        InventoryKafkaConsumer, InventoryGrpcServerService, InventorySyncScheduler
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Khách vãng lai /\nKhách hàng" as User
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Admin -up-|> Staff
+
+actor "order-service" as Order <<nội bộ>>
+actor "Hệ thống tự động\n(Kafka · Scheduler)" as Sys <<nội bộ>>
+
+rectangle "Inventory" {
+
+  package "Xem tồn kho" {
+    usecase "Xem tồn kho sản phẩm / biến thể\n(công khai)" as I1
+    usecase "Xem tồn kho hàng loạt" as I2
+  }
+
+  package "Back-office" {
+    usecase "Cập nhật số lượng tồn" as I3
+    usecase "Nhập kho (restock)" as I4
+    usecase "Xem lịch sử giao dịch kho" as I5
+    usecase "Xem sản phẩm sắp hết hàng" as I6
+    usecase "Đồng bộ Redis ↔ DB thủ công" as I7
+    usecase "Kiểm tra sản phẩm / biến thể\ntồn tại (gọi product-service)" as I8
+  }
+
+  package "Tiến trình tự động" {
+    usecase "Trừ kho khi đơn tạo\n(Redisson lock + SELECT FOR UPDATE)" as S1
+    usecase "Phát InventoryDeducted / Failed" as S2
+    usecase "Hoàn kho khi đơn hủy" as S3
+    usecase "Đồng bộ Redis ↔ DB\n(02:00 hằng ngày)" as S4
+    usecase "Chụp snapshot tồn kho\n(23:00 hằng ngày)" as S5
+    usecase "Cấp tồn kho cho order-service\nqua gRPC" as S6
+  }
+}
+
+User --> I1
+User --> I2
+Staff --> I3
+Staff --> I4
+Staff --> I5
+Staff --> I6
+Staff --> I7
+
+I3 ..> I8 : <<include>>
+I4 ..> I8 : <<include>>
+S1 ..> S2 : <<include>>
+
+Sys --> S1
+Sys --> S3
+Sys --> S4
+Sys --> S5
+Order --> S6
+
+note right of S1
+  Nghe topic order-events (OrderCreatedEvent).
+  Thành công → order-service chuyển đơn
+  sang AWAITING_PAYMENT; thất bại → CANCELLED
+end note
+
+note right of S5
+  Snapshot hằng ngày là nguồn dữ liệu lịch sử
+  cho dự báo nhu cầu (nhóm AI)
+end note
+
+@enduml

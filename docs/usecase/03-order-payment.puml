@@ -1,0 +1,122 @@
+@startuml 03-order-payment
+' Module Cart, Order & Payment (order-service :8082, payment-service :8084)
+' Nguồn: CartController, OrderController, OrderServiceImpl, PaymentController, PaymentServiceImpl,
+'        PaymentKafkaConsumer, InventoryKafkaConsumer, *Scheduler
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Admin -up-|> Staff
+
+actor "VNPay" as VNP <<hệ thống ngoài>>
+actor "Đơn vị vận chuyển" as Carrier <<hệ thống ngoài>>
+actor "Hệ thống tự động\n(Kafka · Scheduler)" as Sys <<nội bộ>>
+
+rectangle "Cart, Order & Payment" {
+
+  package "Giỏ hàng (Redis)" {
+    usecase "Xem giỏ hàng" as O1
+    usecase "Thêm / sửa số lượng /\nxóa sản phẩm, xóa giỏ" as O2
+  }
+
+  package "Đặt hàng" {
+    usecase "Xem trước checkout\n(tạm tính, phí ship, giảm giá)" as O3
+    usecase "Đặt hàng (checkout)" as O4
+    usecase "Giữ chỗ tồn kho (Redis)" as O4a
+    usecase "Áp voucher" as O4b
+    usecase "Dùng điểm thành viên" as O4c
+    usecase "Chống đặt trùng\n(Idempotency-Key)" as O4d
+  }
+
+  package "Thanh toán" {
+    usecase "Khởi tạo thanh toán\n(VNPay / COD)" as O5
+    usecase "Thanh toán qua cổng VNPay" as O6
+    usecase "Xem thanh toán của đơn" as O7
+  }
+
+  package "Theo dõi đơn" {
+    usecase "Xem danh sách / chi tiết đơn" as O8
+    usecase "Hủy đơn" as O9
+    usecase "Xem bảo hành" as O10
+  }
+
+  package "Vận hành" {
+    usecase "Giao hàng\n(CONFIRMED → SHIPPED, sinh mã vận đơn)" as O11
+    usecase "Cập nhật trạng thái giao hàng" as O12
+    usecase "Tra cứu thanh toán toàn hệ thống" as O13
+    usecase "Hoàn tiền" as O14
+  }
+
+  package "Tiến trình tự động" {
+    usecase "Xử lý callback VNPay\n(xác thực chữ ký, idempotent)" as S1
+    usecase "Chuyển trạng thái đơn\ntheo sự kiện kho / thanh toán" as S2
+    usecase "Hết hạn đơn chưa thanh toán\n(sau 30 phút, quét mỗi 5')" as S3
+    usecase "Hết hạn thanh toán PENDING\n(quét mỗi 5')" as S4
+    usecase "Tự hoàn tiền khi hủy đơn đã trả\n& xử lý hoàn tiền chờ (mỗi 1')" as S5
+    usecase "Thử lại tác vụ bù trừ\n(voucher, điểm; mỗi 5')" as S6
+    usecase "Xác nhận COD khi đã giao" as S7
+    usecase "Nhận webhook vận chuyển" as S8
+    usecase "Phát sự kiện qua Outbox → Kafka" as S9
+  }
+}
+
+Customer --> O1
+Customer --> O2
+Customer --> O3
+Customer --> O4
+Customer --> O5
+Customer --> O7
+Customer --> O8
+Customer --> O9
+Customer --> O10
+
+Staff --> O8
+Staff --> O9
+Staff --> O11
+Staff --> O12
+Staff --> O13
+Admin --> O14
+
+O4 ..> O4d : <<include>>
+O4 ..> O4a : <<include>>
+O4b .up.> O4 : <<extend>>
+O4c .up.> O4 : <<extend>>
+O3 .up.> O4 : <<extend>>
+O6 .up.> O5 : <<extend>>
+O14 ..> O13 : <<include>>
+
+O6 -- VNP
+S1 -- VNP
+S8 -- Carrier
+O11 ..> S8 : khi vận chuyển báo lại
+
+Sys --> S1
+Sys --> S2
+Sys --> S3
+Sys --> S4
+Sys --> S5
+Sys --> S6
+Sys --> S7
+Sys --> S8
+Sys --> S9
+
+O4 ..> S9 : ghi Outbox cùng giao dịch
+O9 ..> S5 : đơn đã thanh toán
+
+note bottom of O8
+  Vòng đời đơn (rank trạng thái, chỉ tiến, không lùi):
+  PENDING → AWAITING_PAYMENT (kho đã trừ)
+  → CONFIRMED (thanh toán thành công hoặc COD)
+  → SHIPPED → DELIVERED          ·  CANCELLED
+  Hủy được khi: PENDING, AWAITING_PAYMENT, CONFIRMED
+end note
+
+note right of O11
+  Mã vận đơn là mock: "MOCK-GHTK-xxxxxxxx"
+  (chưa tích hợp hãng vận chuyển thật)
+end note
+
+@enduml

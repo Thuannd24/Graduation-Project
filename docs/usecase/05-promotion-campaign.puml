@@ -1,0 +1,108 @@
+@startuml 05-promotion-campaign
+' Module Promotion & Campaign (promotion-service :8087, Camunda)
+' Nguồn: CampaignController, VoucherController, InternalVoucherController, PromotionKafkaConsumer,
+'        CampaignTriggerService, WorkflowValidatorService, BpmnCompilerService, delegate/*,
+'        FE campaigns/* (Campaign builder)
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Admin -up-|> Staff
+
+actor "order-service" as Order <<nội bộ>>
+actor "Sự kiện Kafka /\nBộ hẹn giờ" as Sys <<nội bộ>>
+actor "Email" as Mail <<hệ thống ngoài>>
+
+rectangle "Promotion & Campaign" {
+
+  package "Khách hàng" {
+    usecase "Xem chiến dịch đang chạy" as V1
+    usecase "Xem voucher của tôi" as V2
+    usecase "Xem trước voucher cho giỏ hàng" as V3
+  }
+
+  package "Thiết kế chiến dịch (Campaign builder)" {
+    usecase "Dựng workflow trên canvas\n(trigger → điều kiện → hành động → kết thúc)" as C1
+    usecase "Kiểm tra hợp lệ workflow\n(kết nối, chu trình, ngân sách)" as C2
+    usecase "Triển khai chiến dịch\n(biên dịch BPMN → Camunda)" as C3
+    usecase "Sửa chiến dịch" as C4
+    usecase "Bật / tắt chiến dịch" as C5
+    usecase "Xem dashboard & thống kê\ntừng chiến dịch" as C6
+    usecase "Xem voucher đã phát" as C7
+    usecase "Xóa chiến dịch" as C8
+  }
+
+  package "Chạy chiến dịch (tự động)" {
+    usecase "Kích hoạt theo sự kiện\n(user mới, đơn thành công,\nđánh giá SP, rủi ro rời bỏ)" as T1
+    usecase "Kích hoạt theo lịch" as T2
+    usecase "Chống kích hoạt trùng\n(idempotency)" as T3
+    usecase "Đánh giá điều kiện & rẽ nhánh" as T4
+    usecase "Phát voucher\n(cố định / % / freeship)" as T5
+    usecase "Giữ ngân sách chiến dịch (Redis)" as T5a
+    usecase "Cộng điểm / nâng hạng" as T6
+    usecase "Gửi email" as T7
+    usecase "Hết hạn voucher định kỳ" as T8
+  }
+
+  package "Dùng voucher cho đơn (API nội bộ)" {
+    usecase "Xác thực / áp voucher" as R1
+    usecase "Ghi nhận đã dùng\nkhi đơn thành công" as R2
+    usecase "Trả voucher & ngân sách\nkhi đơn hủy" as R3
+  }
+}
+
+Customer --> V1
+Customer --> V2
+Customer --> V3
+
+Staff --> C1
+Staff --> C2
+Staff --> C3
+Staff --> C4
+Staff --> C5
+Staff --> C6
+Staff --> C7
+Admin --> C8
+
+C3 ..> C2 : <<include>>
+C1 ..> C2 : <<extend>>
+
+Sys --> T1
+Sys --> T2
+T1 ..> T3 : <<include>>
+T2 ..> T3 : <<include>>
+T1 ..> T4 : <<include>>
+T4 ..> T5 : <<extend>>
+T4 ..> T6 : <<extend>>
+T4 ..> T7 : <<extend>>
+T5 ..> T5a : <<include>>
+Sys --> T8
+
+T7 -- Mail
+
+Order --> R1
+Order --> R2
+Order --> R3
+R3 ..> T5a : hoàn ngân sách
+
+note right of C1
+  Bộ khối của builder:
+  Trigger: NewUser · OrderSuccess · ReviewProduct · ChurnRisk · Timer
+  Điều kiện: ChurnRiskTier · ContainsCategory · ContainsProduct
+             · Location · MemberRank · TotalSpending
+  Hành động: Voucher Fixed / Percent / Freeship · Loyalty Point
+             · Send Email · Upgrade MemberRank
+end note
+
+note right of T1
+  Kafka → trigger:
+  user-created-events → NewUser
+  payment-events (PaymentSuccess), order-events (OrderConfirmed) → OrderSuccess
+  product-reviewed-events → ReviewProduct
+  user-risk-events (ChurnRiskDetected) → ChurnRisk
+end note
+
+@enduml

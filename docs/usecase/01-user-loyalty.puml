@@ -1,0 +1,91 @@
+@startuml 01-user-loyalty
+' Module User & Loyalty (user-service :8085 + Keycloak)
+' Nguồn: UserController, AdminUserController, InternalUserController, LocationController, LoyaltyPointServiceImpl
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Khách vãng lai" as Guest
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Customer -up-|> Guest
+Admin -up-|> Staff
+
+actor "Keycloak" as KC <<hệ thống ngoài>>
+actor "Service nội bộ\n(order, promotion, forecast)" as Svc <<nội bộ>>
+
+rectangle "User & Loyalty" {
+
+  package "Tài khoản" {
+    usecase "Đăng ký tài khoản" as U1
+    usecase "Đăng nhập\n(Keycloak / Google)" as U2
+    usecase "Xem & sửa hồ sơ" as U3
+    usecase "Đổi ảnh đại diện (MinIO)" as U4
+    usecase "Quản lý địa chỉ\n(xem, thêm, xóa)" as U5
+    usecase "Tra cứu tỉnh/thành,\nphường/xã" as U6
+  }
+
+  package "Điểm thành viên" {
+    usecase "Xem số dư & lịch sử điểm" as U7
+    usecase "Xem trước quy đổi điểm" as U8
+  }
+
+  package "Quản trị người dùng" {
+    usecase "Xem danh sách, chi tiết,\nvai trò, thống kê khách hàng" as U9
+    usecase "Tạo / sửa / xóa người dùng" as U10
+    usecase "Khóa / mở khóa tài khoản" as U11
+    usecase "Đổi hạng thành viên" as U12
+    usecase "Reset mật khẩu" as U13
+    usecase "Phân quyền (gán vai trò)" as U14
+  }
+
+  package "API nội bộ  (/api/internal, bị Gateway chặn từ ngoài)" {
+    usecase "Cấp hồ sơ & hạng người dùng\ncho service khác" as U15
+    usecase "Cộng / trừ / hoàn điểm" as U16
+    usecase "Cập nhật hạng & phân khúc AI" as U17
+    usecase "Provision user\n(đồng bộ từ Keycloak)" as U18
+  }
+}
+
+Guest --> U1
+Guest --> U2
+Guest --> U6
+Customer --> U3
+Customer --> U4
+Customer --> U5
+Customer --> U7
+Customer --> U8
+Staff --> U9
+Admin --> U10
+Admin --> U11
+Admin --> U12
+Admin --> U13
+Admin --> U14
+
+U1 -- KC
+U2 -- KC
+U3 ..> U2 : <<include>>
+U5 ..> U2 : <<include>>
+U7 ..> U2 : <<include>>
+U13 -- KC
+U14 -- KC
+
+Svc --> U15
+Svc --> U16
+Svc --> U17
+Svc --> U18
+
+note right of U1
+  Đăng ký xong phát UserRegisteredEvent
+  (topic user-created-events) →
+  promotion-service chạy campaign "user mới"
+end note
+
+note right of U16
+  Hệ số tích điểm theo hạng:
+  MEMBER 1.0 · SILVER 1.2 · GOLD 1.5 · VIP 2.0
+  Điểm bị trừ khi đặt đơn, hoàn lại khi hủy đơn
+end note
+
+@enduml

@@ -1,0 +1,119 @@
+@startuml 06-ai-services
+' Nhóm AI (FastAPI): search :8001, chatbot :8002, recs :8003, forecast :8004
+' Nguồn: AI/*/app/api/endpoints/*.py, FE services/aiApi.ts, behaviorTracker.ts, AnalyticsAITab, SupportChatTab
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Khách vãng lai" as Guest
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Customer -up-|> Guest
+Admin -up-|> Staff
+
+actor "Bộ hẹn giờ\n(APScheduler)" as Sched <<nội bộ>>
+actor "promotion-service" as Promo <<nội bộ>>
+
+rectangle "AI services" {
+
+  package "Search service" {
+    usecase "Tìm kiếm văn bản hybrid\n(e5 + BM25 + RRF, lọc giá)" as A1
+    usecase "Gợi ý từ khóa tự động" as A2
+    usecase "Tìm kiếm bằng hình ảnh (CLIP)" as A3
+  }
+
+  package "Chatbot service" {
+    usecase "Chat với trợ lý AI\n(SSE, phân loại ý định, cảm xúc)" as A4
+    usecase "Truy xuất sản phẩm (RAG)\nkhi hỏi tìm / giá" as A4a
+    usecase "Xem lịch sử phiên chat" as A5
+    usecase "Yêu cầu gặp nhân viên" as A6
+    usecase "Nhận & trả lời chat hỗ trợ" as A7
+  }
+
+  package "Recs service" {
+    usecase "Gợi ý cá nhân hóa\n(SASRec; chưa có lịch sử → phổ biến)" as A8
+    usecase "Gợi ý bán kèm trong giỏ" as A9
+  }
+
+  package "Forecast service — phân tích" {
+    usecase "Xem dự báo nhu cầu tồn kho" as A10
+    usecase "Xem cảnh báo bất thường" as A11
+    usecase "Xem phân khúc khách hàng\n(KMeans RFM)" as A12
+    usecase "Chạy phân cụm RFM thủ công" as A13
+  }
+
+  package "Forecast service — churn (API, chưa có UI)" {
+    usecase "Huấn luyện lại model churn" as A14
+    usecase "Xem model card & báo cáo\n(ablation, calibration, rule-benchmark)" as A15
+    usecase "Quét rủi ro rời bỏ\n(định kỳ / chạy tay)" as A16
+    usecase "Phát ChurnRiskDetectedEvent\n(user-risk-events)" as A17
+  }
+
+  package "Thu thập hành vi" {
+    usecase "Ghi sự kiện hành vi từ FE\n(xem trang, dwell, cuộn, giỏ hàng)" as A18
+    usecase "Cập nhật lịch sử tương tác\n(Redis) cho SASRec" as A19
+  }
+}
+
+Guest --> A1
+Guest --> A2
+Guest --> A3
+Guest --> A4
+Guest --> A5
+Guest --> A18
+Customer --> A6
+Customer --> A8
+Customer --> A9
+
+Staff --> A7
+Staff --> A10
+Staff --> A11
+Staff --> A12
+Admin --> A13
+Admin --> A14
+Admin --> A15
+Admin --> A16
+
+A4 ..> A4a : <<include>>
+A6 .up.> A4 : <<extend>>
+A18 ..> A19 : <<include>>
+A8 ..> A19 : <<include>>
+A16 ..> A17 : <<include>>
+
+Sched --> A16
+A17 --> Promo
+
+note right of A2
+  Hiện là gợi ý mẫu theo mẫu câu cố định
+  (chưa dùng dữ liệu thật)
+end note
+
+note right of A6
+  Backend /chatbot/escalate mới chỉ ghi log
+  và trả SUCCESS; FE chuyển phiên qua localStorage
+end note
+
+note right of A7
+  Màn "Customer Chat" của nhân viên đang đọc
+  localStorage + 3 phiên mẫu, chưa nối backend
+end note
+
+note right of A11
+  Cảnh báo bất thường & dự báo nhu cầu trả cờ
+  is_demo_data = true (dữ liệu minh họa);
+  phân khúc khách hàng là dữ liệu thật
+end note
+
+note right of A14
+  Các endpoint /models, /risk, /rfm không nằm dưới /admin;
+  Gateway chỉ yêu cầu đã đăng nhập, service không kiểm vai trò
+  (sơ đồ gán cho Admin theo ý đồ nghiệp vụ)
+end note
+
+note right of A17
+  Promotion-service nhận sự kiện → chạy
+  campaign trigger ChurnRisk (xem 05-promotion)
+end note
+
+@enduml
