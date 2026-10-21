@@ -2,6 +2,7 @@ package com.ecommerce.productservice.service.impl;
 
 import com.ecommerce.productservice.dto.CategoryDto;
 import com.ecommerce.productservice.entity.Category;
+import com.ecommerce.productservice.exception.ResourceNotFoundException;
 import com.ecommerce.productservice.repository.CategoryRepository;
 import com.ecommerce.productservice.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", id));
         return convertToDto(category);
     }
 
@@ -65,6 +66,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto createCategory(CategoryDto categoryDto) {
         if (categoryRepository.findBySlug(categoryDto.getSlug()).isPresent()) {
             throw new IllegalArgumentException("Slug danh mục đã tồn tại: " + categoryDto.getSlug());
+        }
+        if (categoryDto.getParentId() != null && categoryRepository.findById(categoryDto.getParentId()).isEmpty()) {
+            throw new IllegalArgumentException("Danh mục cha không tồn tại: " + categoryDto.getParentId());
         }
         Category category = Category.builder()
                 .name(categoryDto.getName())
@@ -83,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", id));
 
         if (!category.getSlug().equals(categoryDto.getSlug())
                 && categoryRepository.findBySlug(categoryDto.getSlug()).isPresent()) {
@@ -93,6 +97,9 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryDto.getParentId() != null) {
             if (categoryDto.getParentId().equals(id)) {
                 throw new IllegalArgumentException("Danh mục không thể là cha của chính nó.");
+            }
+            if (categoryRepository.findById(categoryDto.getParentId()).isEmpty()) {
+                throw new IllegalArgumentException("Danh mục cha không tồn tại: " + categoryDto.getParentId());
             }
             if (createsCycle(id, categoryDto.getParentId())) {
                 throw new IllegalArgumentException("Danh mục cha tạo thành chu trình (cycle) không hợp lệ.");

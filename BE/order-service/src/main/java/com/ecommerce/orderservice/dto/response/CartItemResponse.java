@@ -24,4 +24,6 @@ public class CartItemResponse {
     private Integer quantity;
     private BigDecimal subtotal;
     private BigDecimal weight;
+    /** false = sản phẩm đã ngừng kinh doanh (không đặt hàng được, cần xóa khỏi giỏ). */
+    private Boolean active;
 }

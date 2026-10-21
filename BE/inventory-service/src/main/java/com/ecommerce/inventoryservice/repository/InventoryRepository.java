@@ -24,6 +24,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query("SELECT i FROM Inventory i WHERE i.productId = :productId AND i.variantId = :variantId")
     Optional<Inventory> findByProductIdAndVariantIdForUpdate(@Param("productId") Long productId, @Param("variantId") Long variantId);
 
-    @Query("SELECT i FROM Inventory i WHERE i.quantity < :threshold")
+    // Giao diện ghi "≤ ngưỡng" nên backend cũng lọc <= (UI_PH4_FR01_002): tồn kho đúng bằng ngưỡng vẫn là sắp hết.
+    @Query("SELECT i FROM Inventory i WHERE i.quantity <= :threshold")
     List<Inventory> findLowStock(@Param("threshold") int threshold);
 }

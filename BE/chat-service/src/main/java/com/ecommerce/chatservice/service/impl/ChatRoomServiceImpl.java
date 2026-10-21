@@ -100,15 +100,31 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    public void assertRoomAccess(String roomId, String userRoles, String userId) {
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy phòng chat"));
+        boolean isStaff = userRoles != null && (userRoles.contains("STAFF") || userRoles.contains("ADMIN"));
+        boolean isOwner = userId != null && userId.equals(room.getCustomerId());
+        if (!isStaff && !isOwner) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Không có quyền thực hiện thao tác này");
+        }
+    }
+
+    @Override
     public ChatRoomResponse closeRoom(String roomId, String userRoles, String userId) {
         ChatRoom room = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy phòng chat"));
         
         boolean isStaff = userRoles.contains("STAFF") || userRoles.contains("ADMIN");
-        boolean isOwner = room.getCustomerId().equals(userId);
-        
+        boolean isOwner = userId != null && userId.equals(room.getCustomerId());
+
         if (!isStaff && !isOwner) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Không có quyền thực hiện thao tác này");
+        }
+
+        // TC_PH10_CLOSE_04: closing twice must not rewrite the room or re-broadcast "ended".
+        if ("CLOSED".equals(room.getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Phòng chat đã đóng.");
         }
 
         room.setStatus("CLOSED");

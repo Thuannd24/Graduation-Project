@@ -2,6 +2,7 @@ package com.ecommerce.promotionservice.delegate;
 
 import com.ecommerce.promotionservice.client.UserClient;
 import com.ecommerce.promotionservice.delegate.support.CampaignUserContextResolver;
+import com.ecommerce.promotionservice.delegate.support.DelegateFailurePolicy;
 import com.ecommerce.promotionservice.delegate.support.DelegateVariableHelper;
 import com.ecommerce.promotionservice.service.IdempotencyGuardService;
 import lombok.RequiredArgsConstructor;
@@ -87,9 +88,15 @@ public class LoyaltyPointDelegate implements JavaDelegate {
         try {
             Map<String, Object> response = userClient.updatePoints(userDbId.get(), request);
             if (isFallbackResponse(response)) {
+                if (isRetryableFallback(response)) {
+                    // user-service down/timeout: throw so Camunda retries this async job (and
+                    // raises an incident when retries run out) instead of losing the points.
+                    throw new LoyaltyPointTransientException(
+                            "user-service unavailable (fallback) - points not applied for user " + userDbId.get());
+                }
                 execution.setVariable("loyaltyPointApplied", false);
-                execution.setVariable("loyaltyPointError", "user-service unavailable (fallback)");
-                log.warn("[LoyaltyPoint] user-service fallback — points not applied for user {}", userDbId.get());
+                execution.setVariable("loyaltyPointError", "user-service rejected the request (fallback)");
+                log.warn("[LoyaltyPoint] user-service rejected points update for user {}", userDbId.get());
                 return;
             }
             idempotencyGuard.markExecuted(idempotencyKey, "LOYALTY_POINT");
@@ -109,6 +116,11 @@ public class LoyaltyPointDelegate implements JavaDelegate {
             log.info("[LoyaltyPoint] Success userId={} newBalance={}",
                     userDbId.get(), execution.getVariable("newPointBalance"));
         } catch (Exception ex) {
+            if (!DelegateFailurePolicy.isBusinessFailure(ex)) {
+                log.error("[LoyaltyPoint] Transient failure for user {}, leaving it to Camunda retry: {}",
+                        userDbId.get(), ex.getMessage());
+                throw ex;
+            }
             log.error("[LoyaltyPoint] Failed to update points for user {}: {}", userDbId.get(), ex.getMessage());
             execution.setVariable("loyaltyPointApplied", false);
             execution.setVariable("loyaltyPointError", ex.getMessage());
@@ -133,6 +145,19 @@ public class LoyaltyPointDelegate implements JavaDelegate {
         }
         Object code = response.get("code");
         return code != null && "FALLBACK".equalsIgnoreCase(code.toString());
+    }
+
+    /** Fallbacks built from a 5xx/timeout/connection error are retryable; a 4xx rejection is not. */
+    private boolean isRetryableFallback(Map<String, Object> response) {
+        Object retryable = response != null ? response.get("retryable") : null;
+        return retryable == null || Boolean.parseBoolean(retryable.toString());
+    }
+
+    /** Technical failure that Camunda should retry. */
+    static class LoyaltyPointTransientException extends RuntimeException {
+        LoyaltyPointTransientException(String message) {
+            super(message);
+        }
     }
 
     private Long toLong(Object value) {

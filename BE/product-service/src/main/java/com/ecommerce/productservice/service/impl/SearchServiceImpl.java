@@ -26,19 +26,38 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Page<ProductDocument> searchProducts(String keyword, Pageable pageable) {
+        return search(keyword, pageable, true);
+    }
+
+    @Override
+    public Page<ProductDocument> searchAllProducts(String keyword, Pageable pageable) {
+        return search(keyword, pageable, false);
+    }
+
+    // activeOnly = true: kết quả công khai, sản phẩm đã ẩn / ngừng bán không được xuất hiện
+    private Page<ProductDocument> search(String keyword, Pageable pageable, boolean activeOnly) {
+        boolean blank = keyword == null || keyword.trim().isEmpty();
         try {
-            if (keyword == null || keyword.trim().isEmpty()) {
-                return productSearchRepository.findAll(pageable);
+            if (blank) {
+                return activeOnly
+                        ? productSearchRepository.findByActiveTrue(pageable)
+                        : productSearchRepository.findAll(pageable);
             }
-            return productSearchRepository.findByNameContainingOrDescriptionContaining(keyword, keyword, pageable);
+            return activeOnly
+                    ? productSearchRepository.findByActiveTrueAndNameContainingOrActiveTrueAndDescriptionContaining(keyword, keyword, pageable)
+                    : productSearchRepository.findByNameContainingOrDescriptionContaining(keyword, keyword, pageable);
         } catch (Exception e) {
             log.error("Elasticsearch search failed: {}. Falling back to DB search.", e.getMessage());
             // Fallback: search in DB
             Slice<Product> dbProductsSlice;
-            if (keyword == null || keyword.trim().isEmpty()) {
-                dbProductsSlice = productRepository.findByActive(true, pageable);
+            if (blank) {
+                dbProductsSlice = activeOnly
+                        ? productRepository.findByActive(true, pageable)
+                        : productRepository.findBy(pageable);
             } else {
-                dbProductsSlice = productRepository.findByNameContainingOrDescriptionContaining(keyword, keyword, pageable);
+                dbProductsSlice = activeOnly
+                        ? productRepository.findByActiveTrueAndNameContainingOrActiveTrueAndDescriptionContaining(keyword, keyword, pageable)
+                        : productRepository.findByNameContainingOrDescriptionContaining(keyword, keyword, pageable);
             }
             long total = dbProductsSlice.hasNext() 
                     ? pageable.getOffset() + dbProductsSlice.getNumberOfElements() + 1 

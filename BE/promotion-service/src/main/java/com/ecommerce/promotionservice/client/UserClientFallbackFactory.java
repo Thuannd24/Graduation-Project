@@ -51,6 +51,9 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
                 log.error("User service unavailable, fallback points update for userId={}: {}", userId, cause.getMessage());
                 Map<String, Object> fallback = new HashMap<>();
                 fallback.put("code", "FALLBACK");
+                // 4xx = user-service rejected the request (retrying won't help); anything else
+                // (5xx, timeout, connection refused, circuit open) is transient.
+                fallback.put("retryable", !isClientError(cause));
                 Map<String, Object> data = new HashMap<>();
                 data.put("newPointBalance", 0);
                 data.put("pointsApplied", 0);
@@ -58,5 +61,13 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
                 return fallback;
             }
         };
+    }
+
+    private static boolean isClientError(Throwable cause) {
+        if (cause instanceof feign.FeignException fe) {
+            int status = fe.status();
+            return status >= 400 && status < 500 && status != 408 && status != 429;
+        }
+        return false;
     }
 }

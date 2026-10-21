@@ -26,7 +26,7 @@ public class Order {
 
     @Column(name = "status", nullable = false)
     @Builder.Default
-    private String status = "PENDING"; // PENDING, AWAITING_PAYMENT, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
+    private String status = "PENDING"; // PENDING, AWAITING_PAYMENT, CONFIRMED, SHIPPED, DELIVERED, CANCELLED, RETURNING, RETURNED (xem OrderStatusMachine)
 
     @Column(name = "total_amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal totalAmount;
@@ -79,6 +79,29 @@ public class Order {
 
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
+
+    /** Tên người nhận hàng của riêng đơn này (mua tặng / nhờ nhận hộ). Null với đơn cũ. */
+    @Column(name = "recipient_name", length = 150)
+    private String recipientName;
+
+    /** SĐT người nhận đã chuẩn hóa (0xxxxxxxxx). Null với đơn cũ (khi đó dùng phoneNumber). */
+    @Column(name = "recipient_phone", length = 15)
+    private String recipientPhone;
+
+    /** Mã lý do hủy (CHANGED_MIND, WRONG_ORDER, CHANGE_ADDRESS, BETTER_PRICE, PAYMENT_ISSUE, OTHER, SYSTEM...). */
+    @Column(name = "cancel_reason_code", length = 50)
+    private String cancelReasonCode;
+
+    /** Lý do hủy (văn bản) - để thống kê nguyên nhân hủy. */
+    @Column(name = "cancel_reason", columnDefinition = "TEXT")
+    private String cancelReason;
+
+    /** Ai hủy: CUSTOMER, ADMIN, SYSTEM, CARRIER. */
+    @Column(name = "cancelled_by", length = 20)
+    private String cancelledBy;
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

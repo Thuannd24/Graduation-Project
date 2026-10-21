@@ -30,7 +30,8 @@ public class AdminInventoryController {
             @Valid @RequestBody InventoryUpdateRequest request) {
         
         log.info("PUT /api/v1/admin/inventories/{}?variantId={} - quantity: {}", productId, variantId, request.getQuantity());
-        InventoryResponse response = inventoryService.updateInventory(productId, variantId, request.getQuantity());
+        InventoryResponse response = inventoryService.updateInventory(productId, variantId, request.getQuantity(),
+                request.getReason());
         return ResponseEntity.ok(ApiResponse.success("Inventory updated successfully", response));
     }
 

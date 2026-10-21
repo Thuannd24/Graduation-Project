@@ -19,6 +19,9 @@ import java.util.List;
 @Slf4j
 public class OrderExpiryScheduler {
 
+    /** Thời gian giữ hàng chờ thanh toán của một đơn (phút). Hết hạn mà chưa thanh toán thì đơn bị hủy. */
+    public static final int PAYMENT_WINDOW_MINUTES = 30;
+
     private final OrderRepository orderRepository;
     private final OrderService orderService;
     private final StringRedisTemplate stringRedisTemplate;
@@ -36,7 +39,7 @@ public class OrderExpiryScheduler {
         log.info("Starting cleanup of expired pending/awaiting payment orders...");
         try {
             // Cutoff is 30 minutes ago (allows ample time for checkout & redirection)
-            LocalDateTime threshold = LocalDateTime.now().minusMinutes(30);
+            LocalDateTime threshold = LocalDateTime.now().minusMinutes(PAYMENT_WINDOW_MINUTES);
             List<Order> expiredOrders = orderRepository.findAllByStatusInAndCreatedAtBefore(
                     Arrays.asList("PENDING", "AWAITING_PAYMENT"), threshold);
 

@@ -3,6 +3,7 @@ package com.ecommerce.paymentservice.controller;
 import com.ecommerce.paymentservice.dto.ApiResponse;
 import com.ecommerce.paymentservice.dto.PaymentResponse;
 import com.ecommerce.paymentservice.dto.RefundRequest;
+import com.ecommerce.paymentservice.dto.RefundResponse;
 import com.ecommerce.paymentservice.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,14 @@ public class AdminPaymentController {
 
     @PostMapping("/refund")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ApiResponse<Void> processRefund(@Valid @RequestBody RefundRequest request) {
-        paymentService.processRefund(request);
-        return ApiResponse.success(null);
+    public ApiResponse<RefundResponse> processRefund(@Valid @RequestBody RefundRequest request) {
+        // Phản ánh đúng kết quả cổng: chỉ báo "thành công" khi VNPay xác nhận ngay; còn lại là
+        // "đã gửi yêu cầu hoàn tiền" (REFUND_PENDING) hoặc "cần xử lý thủ công" (PENDING_MANUAL).
+        RefundResponse result = paymentService.processRefund(request);
+        return ApiResponse.<RefundResponse>builder()
+                .code("SUCCESS")
+                .message(result.getMessage())
+                .data(result)
+                .build();
     }
 }

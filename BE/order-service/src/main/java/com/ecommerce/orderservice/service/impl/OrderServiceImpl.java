@@ -21,6 +21,7 @@ import com.ecommerce.orderservice.event.OrderCreatedEvent;
 import com.ecommerce.orderservice.event.OrderConfirmedEvent;
 import com.ecommerce.orderservice.client.PromotionClient;
 import com.ecommerce.orderservice.client.UserClient;
+import com.ecommerce.orderservice.exception.BusinessRuleException;
 import com.ecommerce.orderservice.exception.DuplicateRequestException;
 import com.ecommerce.orderservice.exception.InvalidCouponException;
 import com.ecommerce.orderservice.exception.InvalidOrderStateException;
@@ -33,7 +34,9 @@ import com.ecommerce.orderservice.repository.OrderRepository;
 import com.ecommerce.orderservice.repository.OutboxEventRepository;
 import com.ecommerce.orderservice.service.CartService;
 import com.ecommerce.orderservice.service.OrderService;
+import com.ecommerce.orderservice.support.OrderPolicy;
 import com.ecommerce.orderservice.support.OrderPricingHelper;
+import com.ecommerce.orderservice.support.OrderStatusMachine;
 import com.ecommerce.orderservice.support.ShippingFeeCalculator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -121,6 +124,10 @@ public class OrderServiceImpl implements OrderService {
             if (cart.getItems() == null || cart.getItems().isEmpty()) {
                 throw new InvalidOrderStateException("Cart is empty");
             }
+
+            // Quy tắc nghiệp vụ trước khi giữ hàng: SĐT người nhận, giới hạn số lượng/sản phẩm, giới hạn số đơn
+            // chưa thanh toán (một tài khoản không được "giữ" hết hàng hot).
+            final String normalizedPhone = validateCheckoutRules(userId, checkoutRequest, cart);
 
             // Early stock check/reservation via Redis DECRBY
             for (CartItemResponse item : cart.getItems()) {
@@ -247,7 +254,9 @@ public class OrderServiceImpl implements OrderService {
                     .couponCode(couponCode)
                     .appliedCampaignId(appliedCampaignId)
                     .shippingAddress(checkoutRequest.getShippingAddress())
-                    .phoneNumber(checkoutRequest.getPhoneNumber())
+                    .phoneNumber(normalizedPhone)
+                    .recipientPhone(normalizedPhone)
+                    .recipientName(trimToNull(checkoutRequest.getRecipientName()))
                     .note(checkoutRequest.getNote())
                     .build();
 
@@ -429,7 +438,7 @@ public class OrderServiceImpl implements OrderService {
                             }
                         });
                     });
-                    releaseVoucherForOrder(orderIdToCancel);
+                    returnVoucherForOrder(orderIdToCancel);
                     refundPointsForOrder(finalSavedOrder);
                 } catch (Exception ex) {
                     log.error("Failed to run compensation logic for Order ID {}", savedOrder.getId(), ex);
@@ -472,6 +481,35 @@ public class OrderServiceImpl implements OrderService {
 
             throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    private String validateCheckoutRules(String userId, CheckoutRequest checkoutRequest, CartResponse cart) {
+        String phone = OrderPolicy.normalizeVietnamesePhone(checkoutRequest.getPhoneNumber());
+        for (CartItemResponse item : cart.getItems()) {
+            if (item.getQuantity() != null && item.getQuantity() > OrderPolicy.MAX_QUANTITY_PER_ITEM) {
+                throw new BusinessRuleException("QUANTITY_LIMIT_EXCEEDED", "Sản phẩm " + item.getProductName()
+                        + " chỉ được mua tối đa " + OrderPolicy.MAX_QUANTITY_PER_ITEM
+                        + " chiếc trong một đơn hàng. Vui lòng giảm số lượng trong giỏ.");
+            }
+            if (Boolean.FALSE.equals(item.getActive())) {
+                throw new BusinessRuleException("PRODUCT_INACTIVE", "Sản phẩm " + item.getProductName()
+                        + " đã ngừng kinh doanh. Vui lòng xóa khỏi giỏ hàng.");
+            }
+        }
+        long pendingUnpaid = orderRepository.countByUserIdAndStatusIn(userId, OrderStatusMachine.UNPAID);
+        if (pendingUnpaid >= OrderPolicy.MAX_PENDING_UNPAID_ORDERS) {
+            throw new BusinessRuleException("PENDING_ORDER_LIMIT", "Bạn đang có " + pendingUnpaid
+                    + " đơn hàng chưa thanh toán. Vui lòng thanh toán hoặc hủy bớt trước khi đặt đơn mới (tối đa "
+                    + OrderPolicy.MAX_PENDING_UNPAID_ORDERS + " đơn).");
+        }
+        return phone;
+    }
+
+    private static String trimToNull(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        return value.trim();
     }
 
     @Override
@@ -529,6 +567,10 @@ public class OrderServiceImpl implements OrderService {
                 .couponCode(couponCode)
                 .voucherApplied(voucherApplied)
                 .voucherMessage(voucherMessage)
+                .freeShippingThreshold(ShippingFeeCalculator.FREE_SHIPPING_THRESHOLD)
+                .codAvailable(pricing.getFinalAmount().compareTo(OrderPricingHelper.COD_MAX_AMOUNT) <= 0)
+                .codMaxAmount(OrderPricingHelper.COD_MAX_AMOUNT)
+                .maxQuantityPerItem(OrderPolicy.MAX_QUANTITY_PER_ITEM)
                 .build();
     }
 
@@ -575,45 +617,109 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void cancelOrder(Long orderId, String userId, String email) {
+        // Hủy do hệ thống (vd. sự kiện thanh toán thất bại cũ không có failureType).
+        cancelBeforeShipping(orderId, userId, email, "SYSTEM", "Thanh toán thất bại hoặc hết hạn thanh toán",
+                CANCELLED_BY_SYSTEM);
+    }
+
+    @Override
+    public void cancelOrder(Long orderId, String userId, String email, String rolesHeader) {
+        cancelOrderInternal(orderId, userId, email, rolesHeader, null, null);
+    }
+
+    @Override
+    public OrderResponse cancelOrder(Long orderId, String userId, String email, String rolesHeader,
+            String reasonCode, String reason) {
+        String code = reasonCode == null ? null : reasonCode.trim().toUpperCase(Locale.ROOT);
+        String text = reason == null ? null : reason.trim();
+        if ((code == null || code.isEmpty()) && (text == null || text.isEmpty())) {
+            throw new BusinessRuleException("CANCEL_REASON_REQUIRED", "Vui lòng chọn lý do hủy đơn hàng.");
+        }
+        if (code == null || code.isEmpty()) {
+            code = "OTHER";
+        }
+        if (!OrderPolicy.CANCEL_REASONS.containsKey(code)) {
+            throw new BusinessRuleException("INVALID_CANCEL_REASON", "Lý do hủy không hợp lệ: " + reasonCode);
+        }
+        if ("OTHER".equals(code) && (text == null || text.isEmpty())) {
+            throw new BusinessRuleException("CANCEL_REASON_REQUIRED", "Vui lòng nhập lý do hủy đơn hàng.");
+        }
+        if (text != null && text.length() > 500) {
+            throw new BusinessRuleException("INVALID_CANCEL_REASON", "Lý do hủy tối đa 500 ký tự.");
+        }
+        String finalText = (text == null || text.isEmpty()) ? OrderPolicy.CANCEL_REASONS.get(code) : text;
+        cancelOrderInternal(orderId, userId, email, rolesHeader, code, finalText);
+        Order updated = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+        return convertToResponse(updated, orderItemRepository.findByOrderId(orderId));
+    }
+
+    private void cancelOrderInternal(Long orderId, String userId, String email, String rolesHeader,
+            String reasonCode, String reason) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+
+        // Verify owner or Admin/Staff role
+        boolean isOwner = order.getUserId().equals(userId);
+        boolean isStaff = isAdminOrStaff(rolesHeader);
+        if (!isOwner && !isStaff) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You are not authorized to cancel this order");
+        }
+
+        // Admin/staff hủy đơn ĐANG GIAO: không hoàn kho ngay, chuyển sang chờ hoàn hàng.
+        if (isStaff && OrderStatusMachine.SHIPPED.equalsIgnoreCase(order.getStatus())) {
+            transactionTemplate.executeWithoutResult(status -> {
+                Order locked = orderRepository.findByIdForUpdate(orderId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+                startReturn(locked, reasonCode, reason, CANCELLED_BY_ADMIN);
+            });
+            return;
+        }
+
+        // Quy tắc hủy kiểm tra ở backend theo TRẠNG THÁI (không theo mốc 2 giờ ở giao diện): chỉ hủy được khi
+        // chưa bàn giao vận chuyển (PENDING / AWAITING_PAYMENT / CONFIRMED).
+        // BUG FIX: When an admin/staff cancels an order on behalf of a customer, the
+        // OrderCancelledEvent (and any downstream notification) must carry the order
+        // OWNER's identity, not the acting admin's.
+        String by = isOwner ? CANCELLED_BY_CUSTOMER : CANCELLED_BY_ADMIN;
+        if (isOwner) {
+            cancelBeforeShipping(orderId, userId, email, reasonCode, reason, by);
+        } else {
+            cancelBeforeShipping(orderId, order.getUserId(), order.getEmail(), reasonCode, reason, by);
+        }
+    }
+
+    /**
+     * Hủy đơn chưa giao vận: CANCELLED + outbox OrderCancelledEvent (inventory hoàn kho, payment hoàn tiền nếu
+     * đã trả) + trả voucher (kể cả đơn COD đã CONFIRMED - voucher chỉ bị "dùng hẳn" khi đơn được giao vận) +
+     * hoàn điểm.
+     */
+    private void cancelBeforeShipping(Long orderId, String userId, String email, String reasonCode, String reason,
+            String cancelledBy) {
         // ── Phase 1: DB writes only (short transaction, releases connection fast) ──
-        final String[] originalStatus = new String[1];
         final Order order = transactionTemplate.execute(status -> {
             // Use pessimistic write lock to prevent concurrent status updates
             Order o = orderRepository.findByIdForUpdate(orderId)
                     .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
-            if (!"PENDING".equalsIgnoreCase(o.getStatus())
-                    && !"AWAITING_PAYMENT".equalsIgnoreCase(o.getStatus())
-                    && !"CONFIRMED".equalsIgnoreCase(o.getStatus())) {
-                throw new InvalidOrderStateException("Cannot cancel order in status: " + o.getStatus());
+            String current = OrderStatusMachine.normalize(o.getStatus());
+            if (!OrderStatusMachine.CUSTOMER_CANCELLABLE.contains(current)) {
+                String hint = OrderStatusMachine.SHIPPED.equals(current)
+                        ? " Đơn đã được bàn giao cho đơn vị vận chuyển, vui lòng liên hệ CSKH."
+                        : "";
+                throw new InvalidOrderStateException("Không thể hủy đơn ở trạng thái "
+                        + OrderStatusMachine.label(current) + "." + hint
+                        + " (Cannot cancel order in status: " + o.getStatus() + ")");
             }
 
-            originalStatus[0] = o.getStatus();
-            o.setStatus("CANCELLED");
+            o.setStatus(OrderStatusMachine.CANCELLED);
+            applyCancelInfo(o, reasonCode, reason, cancelledBy);
             orderRepository.save(o);
 
             // Save Cancel Outbox Event inside the same transaction
             try {
-                List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
-                List<OrderCancelledEvent.OrderItemInfo> itemInfos = items.stream()
-                        .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
-                                .productId(item.getProductId())
-                                .variantId(item.getVariantId())
-                                .quantity(item.getQuantity())
-                                .build())
-                        .collect(Collectors.toList());
-
-                OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
-                        .eventId(UUID.randomUUID().toString())
-                        .eventType("OrderCancelledEvent")
-                        .timestamp(LocalDateTime.now().toString())
-                        .orderId(orderId)
-                        .userId(userId)
-                        .email(email)
-                        .items(itemInfos)
-                        .build();
-                saveOutboxEvent(String.valueOf(orderId), "OrderCancelledEvent",
-                        objectMapper.writeValueAsString(cancelledEvent));
+                saveOrderCancelledEvent(o, userId, email);
             } catch (Exception e) {
                 log.error("Failed to construct and save outbox event for OrderCancelledEvent: {}", e.getMessage());
                 throw new RuntimeException(
@@ -623,37 +729,126 @@ public class OrderServiceImpl implements OrderService {
         });
 
         // ── Phase 2: External Feign calls — AFTER DB transaction committed ──
-        // DB connection is already released here, so these slow calls are safe
         // NOTE: Redis stock rollback is handled asynchronously by inventory-service via
         // OrderCancelledEvent.
         if (order != null) {
-            releaseVoucherForOrder(orderId);
+            returnVoucherForOrder(orderId);
             refundPointsForOrder(order);
         }
     }
 
-    @Override
-    public void cancelOrder(Long orderId, String userId, String email, String rolesHeader) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
-
-        // Verify owner or Admin/Staff role
-        boolean isOwner = order.getUserId().equals(userId);
-        if (!isOwner && !isAdminOrStaff(rolesHeader)) {
-            throw new org.springframework.security.access.AccessDeniedException(
-                    "You are not authorized to cancel this order");
+    /**
+     * Đơn đang giao bị hủy (admin hoặc hãng vận chuyển báo giao thất bại): chuyển RETURNING - chờ hàng hoàn về.
+     * KHÔNG phát OrderCancelledEvent nên kho chưa được cộng lại; voucher đã dùng không được trả.
+     */
+    private void startReturn(Order order, String reasonCode, String reason, String cancelledBy) {
+        if (!OrderStatusMachine.canTransition(order.getStatus(), OrderStatusMachine.RETURNING)) {
+            throw new InvalidOrderStateException("Không thể chuyển đơn sang chờ hoàn hàng từ trạng thái "
+                    + order.getStatus());
         }
+        order.setStatus(OrderStatusMachine.RETURNING);
+        applyCancelInfo(order, reasonCode != null ? reasonCode : "ADMIN_CANCEL",
+                reason != null ? reason : "Hủy đơn đang giao - chờ hàng hoàn về kho", cancelledBy);
+        orderRepository.save(order);
+        try {
+            Map<String, Object> payload = new java.util.HashMap<>();
+            payload.put("eventId", UUID.randomUUID().toString());
+            payload.put("eventType", "OrderReturningEvent");
+            payload.put("timestamp", LocalDateTime.now().toString());
+            payload.put("orderId", order.getId());
+            payload.put("userId", order.getUserId());
+            payload.put("email", order.getEmail());
+            payload.put("trackingCode", order.getTrackingCode());
+            payload.put("reason", order.getCancelReason());
+            saveOutboxEvent(String.valueOf(order.getId()), "OrderReturningEvent", objectMapper.writeValueAsString(payload));
+        } catch (Exception e) {
+            log.error("Failed to save OrderReturningEvent for order {}", order.getId(), e);
+            throw new RuntimeException("Không thể lưu sự kiện hoàn hàng vào Outbox.", e);
+        }
+        log.info("Order ID {} moved to RETURNING (waiting for returned goods). Inventory NOT restocked yet.",
+                order.getId());
+    }
 
-        // BUG FIX: When an admin/staff cancels an order on behalf of a customer, the
-        // OrderCancelledEvent (and any downstream notification) must carry the order
-        // OWNER's
-        // identity, not the acting admin's - otherwise cancellation emails/business
-        // logic keyed
-        // on userId end up pointed at the staff member instead of the customer.
-        if (isOwner) {
-            cancelOrder(orderId, userId, email);
+    @Override
+    @Transactional
+    public OrderResponse confirmReturnReceived(Long orderId, String note) {
+        Order order = orderRepository.findByIdForUpdate(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+        if (!OrderStatusMachine.RETURNING.equalsIgnoreCase(order.getStatus())) {
+            throw new InvalidOrderStateException("Chỉ xác nhận nhận hàng hoàn cho đơn đang ở trạng thái Chờ hoàn hàng"
+                    + " (hiện tại: " + OrderStatusMachine.label(order.getStatus()) + ").");
+        }
+        order.setStatus(OrderStatusMachine.RETURNED);
+        if (note != null && !note.isBlank()) {
+            String base = order.getCancelReason() == null ? "" : order.getCancelReason() + " | ";
+            order.setCancelReason(base + "Nhận hàng hoàn: " + note.trim());
+        }
+        orderRepository.save(order);
+
+        // Hàng đã về kho: phát OrderCancelledEvent (đường hoàn kho/hoàn tiền sẵn có) -> inventory-service cộng lại
+        // tồn kho theo các giao dịch DEDUCT của đơn, payment-service hoàn tiền nếu đã thanh toán.
+        try {
+            saveOrderCancelledEvent(order, order.getUserId(), order.getEmail());
+        } catch (Exception e) {
+            log.error("Failed to save OrderCancelledEvent for returned order {}", orderId, e);
+            throw new RuntimeException("Không thể lưu sự kiện hoàn kho vào Outbox.", e);
+        }
+        final Order finalOrder = order;
+        runAfterCommit(() -> refundPointsForOrder(finalOrder));
+        log.info("Order ID {} RETURNED: restock + refund triggered via OrderCancelledEvent", orderId);
+        return convertToResponse(order, orderItemRepository.findByOrderId(orderId));
+    }
+
+    private void applyCancelInfo(Order order, String reasonCode, String reason, String cancelledBy) {
+        order.setCancelReasonCode(reasonCode);
+        order.setCancelReason(reason);
+        order.setCancelledBy(cancelledBy);
+        order.setCancelledAt(LocalDateTime.now());
+    }
+
+    private void saveOrderCancelledEvent(Order order, String userId, String email) throws Exception {
+        List<OrderItem> items = orderItemRepository.findByOrderId(order.getId());
+        List<OrderCancelledEvent.OrderItemInfo> itemInfos = items.stream()
+                .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
+                        .productId(item.getProductId())
+                        .variantId(item.getVariantId())
+                        .quantity(item.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+
+        OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
+                .eventId(UUID.randomUUID().toString())
+                .eventType("OrderCancelledEvent")
+                .timestamp(LocalDateTime.now().toString())
+                .orderId(order.getId())
+                .userId(userId)
+                .email(email)
+                .items(itemInfos)
+                .reason(order.getCancelReason())
+                .finalStatus(order.getStatus())
+                .build();
+        saveOutboxEvent(String.valueOf(order.getId()), "OrderCancelledEvent",
+                objectMapper.writeValueAsString(cancelledEvent));
+    }
+
+    /** Chạy sau khi transaction commit (hoặc ngay nếu không có transaction), lỗi chỉ ghi log. */
+    private void runAfterCommit(Runnable action) {
+        Runnable safe = () -> {
+            try {
+                action.run();
+            } catch (Exception ex) {
+                log.error("After-commit action failed: {}", ex.getMessage());
+            }
+        };
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    CompletableFuture.runAsync(safe);
+                }
+            });
         } else {
-            cancelOrder(orderId, order.getUserId(), order.getEmail());
+            CompletableFuture.runAsync(safe);
         }
     }
 
@@ -668,27 +863,6 @@ public class OrderServiceImpl implements OrderService {
                         || "ROLE_STAFF".equals(r) || "STAFF".equals(r));
     }
 
-    private int getStatusRank(String status) {
-        if (status == null)
-            return 0;
-        switch (status.toUpperCase()) {
-            case "PENDING":
-                return 1;
-            case "AWAITING_PAYMENT":
-                return 2;
-            case "CONFIRMED":
-                return 3;
-            case "SHIPPED":
-                return 4;
-            case "DELIVERED":
-                return 5;
-            case "CANCELLED":
-                return 6;
-            default:
-                return 0;
-        }
-    }
-
     @Override
     @Transactional
     public void expireOrder(Long orderId) {
@@ -697,70 +871,22 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
         String status = order.getStatus();
-        if (!"PENDING".equalsIgnoreCase(status) && !"AWAITING_PAYMENT".equalsIgnoreCase(status)) {
+        if (!OrderStatusMachine.UNPAID.contains(OrderStatusMachine.normalize(status))) {
             log.info("Order {} is already in status {}. Skipping expiration.", orderId, status);
             return;
         }
 
-        order.setStatus("CANCELLED");
+        order.setStatus(OrderStatusMachine.CANCELLED);
+        applyCancelInfo(order, "PAYMENT_TIMEOUT", "Quá hạn thanh toán, hệ thống tự hủy đơn", CANCELLED_BY_SYSTEM);
         orderRepository.save(order);
 
-        // Release Voucher & Points asynchronously AFTER transaction commits
-        // successfully
-        if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                @Override
-                public void afterCommit() {
-                    CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
-                            .exceptionally(ex -> {
-                                log.error("Async releaseVoucher failed for expired order {}: {}", orderId,
-                                        ex.getMessage());
-                                return null;
-                            });
-                    CompletableFuture.runAsync(() -> refundPointsForOrder(order))
-                            .exceptionally(ex -> {
-                                log.error("Async refundPoints failed for expired order {}: {}", order.getId(),
-                                        ex.getMessage());
-                                return null;
-                            });
-                }
-            });
-        } else {
-            CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
-                    .exceptionally(ex -> {
-                        log.error("Async releaseVoucher failed for expired order {}: {}", orderId, ex.getMessage());
-                        return null;
-                    });
-            CompletableFuture.runAsync(() -> refundPointsForOrder(order))
-                    .exceptionally(ex -> {
-                        log.error("Async refundPoints failed for expired order {}: {}", order.getId(), ex.getMessage());
-                        return null;
-                    });
-        }
+        // Release Voucher & Points asynchronously AFTER transaction commits successfully
+        runAfterCommit(() -> releaseVoucherForOrder(orderId));
+        runAfterCommit(() -> refundPointsForOrder(order));
 
         // Publish OrderCancelledEvent
         try {
-            List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
-            List<OrderCancelledEvent.OrderItemInfo> itemInfos = items.stream()
-                    .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
-                            .productId(item.getProductId())
-                            .variantId(item.getVariantId())
-                            .quantity(item.getQuantity())
-                            .build())
-                    .collect(Collectors.toList());
-
-            OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
-                    .eventId(UUID.randomUUID().toString())
-                    .eventType("OrderCancelledEvent")
-                    .timestamp(LocalDateTime.now().toString())
-                    .orderId(orderId)
-                    .userId(order.getUserId())
-                    .email(order.getEmail())
-                    .items(itemInfos)
-                    .build();
-
-            saveOutboxEvent(String.valueOf(orderId), "OrderCancelledEvent",
-                    objectMapper.writeValueAsString(cancelledEvent));
+            saveOrderCancelledEvent(order, order.getUserId(), order.getEmail());
             log.info("Successfully registered OrderCancelledEvent in outbox for expired Order ID {}", orderId);
         } catch (Exception e) {
             log.error("Failed to publish OrderCancelledEvent for expired Order ID {}", orderId, e);
@@ -782,117 +908,40 @@ public class OrderServiceImpl implements OrderService {
             return;
         }
 
-        // Prevent transition downgrades
-        if (getStatusRank(status) <= getStatusRank(order.getStatus())) {
+        // Máy trạng thái: sự kiện đến trễ / không hợp lệ (vd. inventory CONFIRMED tới sau khi đơn đã CONFIRMED
+        // do thanh toán) bị bỏ qua thay vì làm lùi trạng thái.
+        if (!OrderStatusMachine.canTransition(order.getStatus(), status)) {
             log.warn("Invalid status transition: cannot update Order ID {} from {} to {}", orderId, order.getStatus(),
                     status);
             return;
         }
 
-        // Guard check: if order is already in a final state, we should block all
-        // modifications
-        if ("DELIVERED".equalsIgnoreCase(order.getStatus()) || "CANCELLED".equalsIgnoreCase(order.getStatus())) {
-            log.warn("Order ID {} is in final state {}. Cannot update status to {}.", orderId, order.getStatus(),
-                    status);
-            return;
+        String target = OrderStatusMachine.normalize(status);
+        order.setStatus(target);
+        if (OrderStatusMachine.CANCELLED.equals(target)) {
+            applyCancelInfo(order, "SYSTEM", "Không đủ tồn kho để xử lý đơn hàng", CANCELLED_BY_SYSTEM);
         }
-
-        order.setStatus(status);
         orderRepository.save(order);
-        log.info("Order ID {} status updated to {}", orderId, status);
+        log.info("Order ID {} status updated to {}", orderId, target);
 
-        // Register side-effects to run AFTER transaction commits successfully
-        if ("CONFIRMED".equalsIgnoreCase(status)) {
-            if (TransactionSynchronizationManager.isSynchronizationActive()) {
-                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                    @Override
-                    public void afterCommit() {
-                        CompletableFuture.runAsync(() -> redeemVoucherForOrder(orderId))
-                                .exceptionally(ex -> {
-                                    log.error("Async redeemVoucher failed for order {}: {}", orderId, ex.getMessage());
-                                    return null;
-                                });
-                    }
-                });
-            } else {
-                // Fallback if no active transaction (shouldn't happen with @Transactional)
-                CompletableFuture.runAsync(() -> redeemVoucherForOrder(orderId))
-                        .exceptionally(ex -> {
-                            log.error("Async redeemVoucher failed for order {}: {}", orderId, ex.getMessage());
-                            return null;
-                        });
-            }
+        // Voucher được redeem (USED) khi đơn CONFIRMED như cũ; nếu sau đó hủy trước khi giao vận (kể cả đơn COD)
+        // thì returnVoucherForOrder gọi promotion-service /restore để trả voucher (còn hạn) cho khách.
+        if (OrderStatusMachine.CONFIRMED.equals(target) && order.getCouponCode() != null) {
+            runAfterCommit(() -> redeemVoucherForOrder(orderId));
         }
 
-        if ("CANCELLED".equalsIgnoreCase(status)) {
-            if (TransactionSynchronizationManager.isSynchronizationActive()) {
-                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                    @Override
-                    public void afterCommit() {
-                        CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
-                                .exceptionally(ex -> {
-                                    log.error("Async releaseVoucher failed for order {}: {}", orderId, ex.getMessage());
-                                    return null;
-                                });
-                        CompletableFuture
-                                .runAsync(
-                                        () -> orderRepository.findById(orderId).ifPresent(o -> refundPointsForOrder(o)))
-                                .exceptionally(ex -> {
-                                    log.error("Async refundPoints failed for order {}: {}", orderId, ex.getMessage());
-                                    return null;
-                                });
-                    }
-                });
-            } else {
-                CompletableFuture.runAsync(() -> releaseVoucherForOrder(orderId))
-                        .exceptionally(ex -> {
-                            log.error("Async releaseVoucher failed for order {}: {}", orderId, ex.getMessage());
-                            return null;
-                        });
-                CompletableFuture
-                        .runAsync(() -> orderRepository.findById(orderId).ifPresent(o -> refundPointsForOrder(o)))
-                        .exceptionally(ex -> {
-                            log.error("Async refundPoints failed for order {}: {}", orderId, ex.getMessage());
-                            return null;
-                        });
-            }
-        }
-
-        // When order is CANCELLED: publish OrderCancelledEvent via Outbox pattern.
-        // NOTE: Redis stock rollback is handled asynchronously by inventory-service via
-        // OrderCancelledEvent.
-        if ("CANCELLED".equalsIgnoreCase(status)) {
+        if (OrderStatusMachine.CANCELLED.equals(target)) {
+            runAfterCommit(() -> returnVoucherForOrder(orderId));
+            runAfterCommit(() -> orderRepository.findById(orderId).ifPresent(this::refundPointsForOrder));
+            // NOTE: Redis stock rollback is handled asynchronously by inventory-service via OrderCancelledEvent.
             try {
-                List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
-                List<OrderCancelledEvent.OrderItemInfo> itemInfos = items.stream()
-                        .map(item -> OrderCancelledEvent.OrderItemInfo.builder()
-                                .productId(item.getProductId())
-                                .variantId(item.getVariantId())
-                                .quantity(item.getQuantity())
-                                .build())
-                        .collect(Collectors.toList());
-
-                OrderCancelledEvent cancelledEvent = OrderCancelledEvent.builder()
-                        .eventId(UUID.randomUUID().toString())
-                        .eventType("OrderCancelledEvent")
-                        .timestamp(LocalDateTime.now().toString())
-                        .orderId(orderId)
-                        .userId(order.getUserId())
-                        // BUG FIX: was hardcoded to "" ("fallback handled by notification-service") - that
-                        // fallback fabricates a fake <userId>@ecommerce.com address instead of a real
-                        // lookup. The order itself already has the customer's real email from checkout.
-                        .email(order.getEmail())
-                        .items(itemInfos)
-                        .build();
-
-                saveOutboxEvent(String.valueOf(orderId), "OrderCancelledEvent",
-                        objectMapper.writeValueAsString(cancelledEvent));
+                saveOrderCancelledEvent(order, order.getUserId(), order.getEmail());
             } catch (Exception e) {
                 log.error("Failed to construct and save outbox event for OrderCancelledEvent in updateOrderStatus: {}",
                         e.getMessage());
                 throw new RuntimeException("Lỗi lưu outbox event cho trạng thái CANCELLED", e);
             }
-        } else if ("CONFIRMED".equalsIgnoreCase(status)) {
+        } else if (OrderStatusMachine.CONFIRMED.equals(target)) {
             try {
                 OrderConfirmedEvent confirmedEvent = OrderConfirmedEvent
                         .builder()
@@ -901,9 +950,26 @@ public class OrderServiceImpl implements OrderService {
                         .timestamp(LocalDateTime.now().toString())
                         .orderId(orderId)
                         .userId(order.getUserId())
-                        // BUG FIX: same as OrderCancelledEvent below - use the order's real email
-                        // instead of the fake-address fallback in notification-service.
+                        // BUG FIX: use the order's real email instead of the fake-address fallback in
+                        // notification-service.
                         .email(order.getEmail())
+                        .items(orderItemRepository.findByOrderId(orderId).stream()
+                                .map(i -> OrderConfirmedEvent.Item.builder()
+                                        .productId(i.getProductId())
+                                        .productName(i.getProductName())
+                                        .variantName(i.getVariantAttr())
+                                        .quantity(i.getQuantity())
+                                        .unitPrice(i.getUnitPrice())
+                                        .subtotal(i.getSubtotal())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .totalAmount(order.getTotalAmount())
+                        .shippingFee(order.getShippingFee())
+                        .discountAmount(order.getDiscountAmount())
+                        .vatAmount(order.getVatAmount())
+                        .finalAmount(order.getFinalAmount())
+                        .recipientName(order.getRecipientName())
+                        .shippingAddress(order.getShippingAddress())
                         .build();
 
                 saveOutboxEvent(String.valueOf(orderId), "OrderConfirmedEvent",
@@ -919,23 +985,27 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse shipOrder(Long orderId) {
-        // Pessimistic write lock: prevents a concurrent cancelOrder/updateOrderStatus
-        // call from
-        // racing with this transition (e.g. shipping an order the customer just
-        // cancelled).
+        // Pessimistic write lock: prevents a concurrent cancelOrder/updateOrderStatus call from racing with
+        // this transition (e.g. shipping an order the customer just cancelled).
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
 
-        if (!"CONFIRMED".equalsIgnoreCase(order.getStatus())) {
-            throw new InvalidOrderStateException("Cannot ship order in current status: " + order.getStatus());
+        if (!OrderStatusMachine.CONFIRMED.equalsIgnoreCase(order.getStatus())) {
+            throw new InvalidOrderStateException("Chỉ giao vận được đơn đã xác nhận (đã thanh toán hoặc COD)."
+                    + " Cannot ship order in current status: " + order.getStatus());
         }
+        markShipped(order);
+        List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
+        return convertToResponse(order, items);
+    }
 
+    /** CONFIRMED -> SHIPPED: sinh mã vận đơn giả lập, outbox OrderShippedEvent, voucher được redeem (dùng hẳn). */
+    private void markShipped(Order order) {
+        Long orderId = order.getId();
         String trackingCode = "MOCK-GHTK-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        order.setStatus("SHIPPED");
+        order.setStatus(OrderStatusMachine.SHIPPED);
         order.setTrackingCode(trackingCode);
         orderRepository.save(order);
-
-        List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
 
         try {
             java.util.Map<String, Object> payload = new java.util.HashMap<>();
@@ -944,34 +1014,29 @@ public class OrderServiceImpl implements OrderService {
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", orderId);
             payload.put("userId", order.getUserId());
+            payload.put("email", order.getEmail());
             payload.put("trackingCode", trackingCode);
 
             saveOutboxEvent(String.valueOf(orderId), "OrderShippedEvent",
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
-            // BUG FIX: previously this only logged and let the SHIPPED transition commit
-            // anyway,
-            // so a transient outbox-insert failure would silently drop OrderShippedEvent
-            // forever
-            // (no consumer, no notification, no retry). Rethrow so the whole transaction
-            // rolls
-            // back and the caller can retry shipping the order.
+            // BUG FIX: rethrow so the whole transaction rolls back and the caller can retry shipping the order.
             log.error("Failed to construct and save outbox event for OrderShippedEvent", e);
             throw new RuntimeException(
                     "Không thể lưu sự kiện giao vận vào Outbox. Chuyển trạng thái giao hàng thất bại.", e);
         }
 
+        if (order.getCouponCode() != null) {
+            runAfterCommit(() -> redeemVoucherForOrder(orderId));
+        }
         log.info("Order ID {} successfully sent to mock shipping provider. Tracking: {}", orderId, trackingCode);
-        return convertToResponse(order, items);
     }
 
     @Override
     @Transactional
     public void handleShippingWebhook(String trackingCode, String status) {
-        // Pessimistic write lock: prevents this carrier-initiated transition from
-        // racing with a
-        // concurrent cancelOrder/shipOrder/updateDeliveryStatusByAdmin call on the same
-        // order.
+        // Pessimistic write lock: prevents this carrier-initiated transition from racing with a concurrent
+        // cancelOrder/shipOrder/updateDeliveryStatusByAdmin call on the same order.
         Order order = orderRepository.findByTrackingCodeForUpdate(trackingCode)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Order not found with tracking code: " + trackingCode));
@@ -980,94 +1045,92 @@ public class OrderServiceImpl implements OrderService {
         if (!"DELIVERED".equals(targetStatus) && !"SHIPPED".equals(targetStatus) && !"CANCELLED".equals(targetStatus)) {
             throw new IllegalArgumentException("Unsupported shipping status update: " + status);
         }
+        // Hãng vận chuyển báo hủy/giao thất bại khi hàng đang trên đường -> chờ hoàn hàng, chưa hoàn kho.
+        if ("CANCELLED".equals(targetStatus) && OrderStatusMachine.SHIPPED.equalsIgnoreCase(order.getStatus())) {
+            startReturn(order, "CARRIER_FAILED", "Đơn vị vận chuyển báo giao hàng thất bại / hủy vận đơn",
+                    CANCELLED_BY_CARRIER);
+            return;
+        }
 
         if (targetStatus.equalsIgnoreCase(order.getStatus())) {
             log.info("Order ID {} is already in status {}. Skipping update.", order.getId(), targetStatus);
             return;
         }
 
-        // Guard check: cannot transition from final state DELIVERED or CANCELLED
-        if ("DELIVERED".equalsIgnoreCase(order.getStatus()) || "CANCELLED".equalsIgnoreCase(order.getStatus())) {
-            log.warn(
-                    "Invalid shipping webhook status transition: Order ID {} is in final state {}. Cannot update to {}.",
-                    order.getId(), order.getStatus(), targetStatus);
-            return;
-        }
-
-        if (getStatusRank(targetStatus) <= getStatusRank(order.getStatus())) {
+        if (!OrderStatusMachine.canTransition(order.getStatus(), targetStatus)) {
             log.warn("Invalid shipping webhook status transition: cannot update Order ID {} from {} to {}",
                     order.getId(), order.getStatus(), targetStatus);
             return;
         }
 
-        order.setStatus(targetStatus);
-        orderRepository.save(order);
-
-        // Register side-effects to run AFTER transaction commits
-        if ("CANCELLED".equals(targetStatus)) {
+        if (OrderStatusMachine.SHIPPED.equals(targetStatus)) {
+            markShipped(order);
+            return;
+        }
+        if (OrderStatusMachine.CANCELLED.equals(targetStatus)) {
+            // Đơn chưa giao vận (không thực tế với webhook có mã vận đơn, giữ cho đủ trường hợp).
+            order.setStatus(OrderStatusMachine.CANCELLED);
+            applyCancelInfo(order, "CARRIER_FAILED", "Đơn vị vận chuyển hủy vận đơn", CANCELLED_BY_CARRIER);
+            orderRepository.save(order);
             final Long orderId = order.getId();
             final Order finalOrder = order;
-            if (TransactionSynchronizationManager.isSynchronizationActive()) {
-                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                    @Override
-                    public void afterCommit() {
-                        // Release voucher and refund points for carrier-initiated cancellations
-                        releaseVoucherForOrder(orderId);
-                        refundPointsForOrder(finalOrder);
-                    }
-                });
-            } else {
-                releaseVoucherForOrder(orderId);
-                refundPointsForOrder(finalOrder);
+            runAfterCommit(() -> returnVoucherForOrder(orderId));
+            runAfterCommit(() -> refundPointsForOrder(finalOrder));
+            try {
+                saveOrderCancelledEvent(order, order.getUserId(), order.getEmail());
+            } catch (Exception e) {
+                throw new RuntimeException("Không thể lưu sự kiện hủy đơn vào Outbox.", e);
             }
+            return;
         }
 
+        order.setStatus(targetStatus);
+        orderRepository.save(order);
+        saveDeliveredEvent(order);
+        log.info("Processed mock shipping webhook for tracking code {}: status updated to {}", trackingCode,
+                targetStatus);
+    }
+
+    private void saveDeliveredEvent(Order order) {
         try {
             java.util.Map<String, Object> payload = new java.util.HashMap<>();
             payload.put("eventId", UUID.randomUUID().toString());
-            payload.put("eventType", resolveShippingEventType(targetStatus));
+            payload.put("eventType", "OrderDeliveredEvent");
             payload.put("timestamp", LocalDateTime.now().toString());
             payload.put("orderId", order.getId());
             payload.put("userId", order.getUserId());
             payload.put("email", order.getEmail());
-            payload.put("trackingCode", trackingCode);
+            payload.put("trackingCode", order.getTrackingCode());
 
-            saveOutboxEvent(String.valueOf(order.getId()),
-                    resolveShippingEventType(targetStatus),
+            saveOutboxEvent(String.valueOf(order.getId()), "OrderDeliveredEvent",
                     objectMapper.writeValueAsString(payload));
         } catch (Exception e) {
-            // BUG FIX: previously this only logged and let the status transition commit
-            // anyway.
-            // For CANCELLED that meant the order was marked cancelled in DB but the
-            // OrderCancelledEvent was never persisted to outbox, so inventory-service never
-            // got
-            // notified to restore stock - a permanent, silent inventory leak. Rethrow so
-            // the
-            // whole transaction (status change + outbox write) rolls back together and the
-            // carrier webhook can be retried/redelivered.
-            log.error("Failed to construct and save outbox event for shipping status change: {}", targetStatus, e);
+            // BUG FIX: rethrow to roll back the whole transaction (status change + outbox write) together.
+            log.error("Failed to construct and save outbox event for OrderDeliveredEvent", e);
             throw new RuntimeException(
                     "Không thể lưu sự kiện outbox cho thay đổi trạng thái giao hàng. Cập nhật thất bại để đảm bảo tính nhất quán.",
                     e);
         }
-
-        log.info("Processed mock shipping webhook for tracking code {}: status updated to {}", trackingCode,
-                targetStatus);
     }
 
     @Override
     @Transactional
     public OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status) {
-        // Pessimistic write lock: prevents this admin-initiated transition from racing
-        // with a
-        // concurrent cancelOrder/shipOrder/handleShippingWebhook call on the same
-        // order.
+        return updateDeliveryStatusByAdmin(orderId, status, null);
+    }
+
+    @Override
+    @Transactional
+    public OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status, String reason) {
+        // Pessimistic write lock: prevents this admin-initiated transition from racing with a concurrent
+        // cancelOrder/shipOrder/handleShippingWebhook call on the same order.
         Order order = orderRepository.findByIdForUpdate(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + orderId));
 
         String targetStatus = status.toUpperCase();
         if (!"DELIVERED".equals(targetStatus) && !"SHIPPED".equals(targetStatus) && !"CANCELLED".equals(targetStatus)) {
-            throw new IllegalArgumentException("Unsupported shipping status update: " + status);
+            throw new IllegalArgumentException("Unsupported shipping status update: " + status
+                    + ". Dùng PUT /api/v1/orders/{id}/return-received để xác nhận nhận hàng hoàn.");
         }
 
         if (targetStatus.equalsIgnoreCase(order.getStatus())) {
@@ -1075,66 +1138,46 @@ public class OrderServiceImpl implements OrderService {
             return convertToResponse(order, orderItemRepository.findByOrderId(orderId));
         }
 
-        // Guard check: cannot transition from final state DELIVERED or CANCELLED
-        if ("DELIVERED".equalsIgnoreCase(order.getStatus()) || "CANCELLED".equalsIgnoreCase(order.getStatus())) {
-            throw new InvalidOrderStateException("Order ID " + orderId + " is in final state " + order.getStatus()
-                    + ". Cannot update status to " + targetStatus);
+        // Hủy đơn đang giao: chờ hoàn hàng (RETURNING), chưa hoàn kho.
+        if ("CANCELLED".equals(targetStatus) && OrderStatusMachine.SHIPPED.equalsIgnoreCase(order.getStatus())) {
+            startReturn(order, "ADMIN_CANCEL", reason, CANCELLED_BY_ADMIN);
+            return convertToResponse(order, orderItemRepository.findByOrderId(orderId));
         }
 
-        if (getStatusRank(targetStatus) <= getStatusRank(order.getStatus())) {
-            throw new InvalidOrderStateException("Invalid status transition: cannot update Order ID " + orderId
-                    + " from " + order.getStatus() + " to " + targetStatus);
+        // Máy trạng thái chặt (TC_PH3_DELIV_03): không nhảy PENDING/chưa thanh toán -> DELIVERED, không bỏ qua
+        // SHIPPED, không đổi trạng thái cuối.
+        if (!OrderStatusMachine.canTransition(order.getStatus(), targetStatus)) {
+            throw new InvalidOrderStateException("Không thể chuyển đơn #" + orderId + " từ trạng thái "
+                    + OrderStatusMachine.label(order.getStatus()) + " sang " + OrderStatusMachine.label(targetStatus)
+                    + " (Invalid status transition: " + order.getStatus() + " -> " + targetStatus + ")");
         }
 
-        order.setStatus(targetStatus);
-        orderRepository.save(order);
-
-        // Register side-effects to run AFTER transaction commits
-        if ("CANCELLED".equals(targetStatus)) {
+        if ("SHIPPED".equals(targetStatus)) {
+            markShipped(order);
+        } else if ("CANCELLED".equals(targetStatus)) {
+            order.setStatus(OrderStatusMachine.CANCELLED);
+            applyCancelInfo(order, "ADMIN_CANCEL", reason != null && !reason.isBlank() ? reason.trim()
+                    : "Quản trị viên hủy đơn", CANCELLED_BY_ADMIN);
+            orderRepository.save(order);
             final Long finalOrderId = orderId;
             final Order finalOrder = order;
-            if (TransactionSynchronizationManager.isSynchronizationActive()) {
-                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                    @Override
-                    public void afterCommit() {
-                        // Release voucher and refund points for admin-initiated cancellations
-                        releaseVoucherForOrder(finalOrderId);
-                        refundPointsForOrder(finalOrder);
-                    }
-                });
-            } else {
-                releaseVoucherForOrder(finalOrderId);
-                refundPointsForOrder(finalOrder);
+            // Release voucher and refund points for admin-initiated cancellations (after commit)
+            runAfterCommit(() -> returnVoucherForOrder(finalOrderId));
+            runAfterCommit(() -> refundPointsForOrder(finalOrder));
+            try {
+                saveOrderCancelledEvent(order, order.getUserId(), order.getEmail());
+            } catch (Exception e) {
+                log.error("Failed to save OrderCancelledEvent for admin cancel of order {}", orderId, e);
+                throw new RuntimeException("Không thể lưu sự kiện hủy đơn vào Outbox.", e);
             }
-        }
-
-        try {
-            java.util.Map<String, Object> payload = new java.util.HashMap<>();
-            payload.put("eventId", UUID.randomUUID().toString());
-            payload.put("eventType", resolveShippingEventType(targetStatus));
-            payload.put("timestamp", LocalDateTime.now().toString());
-            payload.put("orderId", order.getId());
-            payload.put("userId", order.getUserId());
-            payload.put("email", order.getEmail());
-            payload.put("trackingCode", order.getTrackingCode());
-
-            saveOutboxEvent(String.valueOf(order.getId()),
-                    resolveShippingEventType(targetStatus),
-                    objectMapper.writeValueAsString(payload));
-        } catch (Exception e) {
-            // BUG FIX: see handleShippingWebhook - silently swallowing this exception let
-            // CANCELLED commit without ever persisting OrderCancelledEvent, permanently
-            // leaking
-            // inventory. Rethrow to roll back the whole transaction.
-            log.error("Failed to construct and save outbox event for admin shipping status change: {}", targetStatus,
-                    e);
-            throw new RuntimeException(
-                    "Không thể lưu sự kiện outbox cho thay đổi trạng thái giao hàng. Cập nhật thất bại để đảm bảo tính nhất quán.",
-                    e);
+        } else {
+            order.setStatus(targetStatus);
+            orderRepository.save(order);
+            saveDeliveredEvent(order);
         }
 
         log.info("Processed admin shipping status update for order ID {}: status updated to {}", order.getId(),
-                targetStatus);
+                order.getStatus());
 
         List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
         return convertToResponse(order, items);
@@ -1242,8 +1285,14 @@ public class OrderServiceImpl implements OrderService {
                 pointDiscount);
     }
 
+    private static final String CANCELLED_BY_CUSTOMER = "CUSTOMER";
+    private static final String CANCELLED_BY_ADMIN = "ADMIN";
+    private static final String CANCELLED_BY_SYSTEM = "SYSTEM";
+    private static final String CANCELLED_BY_CARRIER = "CARRIER";
+
     private static final String COMPENSATION_TASK_RELEASE_VOUCHER = "RELEASE_VOUCHER";
     private static final String COMPENSATION_TASK_REFUND_POINTS = "REFUND_POINTS";
+    private static final String COMPENSATION_TASK_RESTORE_VOUCHER = "RESTORE_VOUCHER";
     private static final String COMPENSATION_STATUS_PENDING = "PENDING";
     private static final String COMPENSATION_STATUS_COMPLETED = "COMPLETED";
     private static final String COMPENSATION_STATUS_FAILED_PERMANENT = "FAILED_PERMANENT";
@@ -1285,6 +1334,30 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.save(order);
         });
         releaseVoucherForOrder(orderId);
+    }
+
+    /**
+     * Trả voucher khi hủy đơn TRƯỚC khi giao vận: release (RESERVED -> UNUSED) rồi restore (USED -> UNUSED, còn
+     * hạn) ở promotion-service. Cả hai idempotent; lỗi không chặn việc hủy mà được ghi CompensationTask để thử lại.
+     */
+    private void returnVoucherForOrder(Long orderId) {
+        releaseVoucherForOrder(orderId);
+        restoreVoucherForOrder(orderId);
+    }
+
+    private void restoreVoucherForOrder(Long orderId) {
+        try {
+            var response = promotionClient.restoreVoucher(
+                    PromotionClient.VoucherOrderActionRequest.builder().orderId(orderId).build());
+            if (response != null && !"SUCCESS".equalsIgnoreCase(response.getCode())) {
+                throw new IllegalStateException(response.getMessage());
+            }
+            log.info("Voucher restore for cancelled order {}: {}", orderId,
+                    response != null ? response.getData() : null);
+        } catch (Exception ex) {
+            log.warn("Failed to restore voucher for order {}: {}. Scheduling for retry.", orderId, ex.getMessage());
+            scheduleCompensationRetry(orderId, COMPENSATION_TASK_RESTORE_VOUCHER, ex.getMessage());
+        }
     }
 
     private void releaseVoucherForOrder(Long orderId) {
@@ -1336,6 +1409,12 @@ public class OrderServiceImpl implements OrderService {
             if (COMPENSATION_TASK_RELEASE_VOUCHER.equals(task.getTaskType())) {
                 promotionClient.releaseVoucher(
                         PromotionClient.VoucherOrderActionRequest.builder().orderId(task.getOrderId()).build());
+            } else if (COMPENSATION_TASK_RESTORE_VOUCHER.equals(task.getTaskType())) {
+                var response = promotionClient.restoreVoucher(
+                        PromotionClient.VoucherOrderActionRequest.builder().orderId(task.getOrderId()).build());
+                if (response != null && !"SUCCESS".equalsIgnoreCase(response.getCode())) {
+                    throw new IllegalStateException(response.getMessage());
+                }
             } else if (COMPENSATION_TASK_REFUND_POINTS.equals(task.getTaskType())) {
                 Order order = orderRepository.findById(task.getOrderId())
                         .orElseThrow(() -> new ResourceNotFoundException(
@@ -1534,23 +1613,16 @@ public class OrderServiceImpl implements OrderService {
                 .shippingAddress(order.getShippingAddress())
                 .phoneNumber(order.getPhoneNumber())
                 .note(order.getNote())
+                .recipientName(order.getRecipientName())
+                .recipientPhone(order.getRecipientPhone() != null ? order.getRecipientPhone() : order.getPhoneNumber())
+                .cancelReasonCode(order.getCancelReasonCode())
+                .cancelReason(order.getCancelReason())
+                .cancelledBy(order.getCancelledBy())
+                .cancelledAt(order.getCancelledAt())
                 .items(itemResponses)
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .build();
-    }
-
-    // BUG FIX: handleShippingWebhook/updateDeliveryStatusByAdmin used a binary
-    // ternary
-    // ("DELIVERED".equals(targetStatus) ? OrderDeliveredEvent :
-    // OrderCancelledEvent) that mislabeled
-    // every SHIPPED transition as OrderCancelledEvent in the outbox/Kafka payload.
-    private String resolveShippingEventType(String targetStatus) {
-        if ("DELIVERED".equals(targetStatus))
-            return "OrderDeliveredEvent";
-        if ("SHIPPED".equals(targetStatus))
-            return "OrderShippedEvent";
-        return "OrderCancelledEvent";
     }
 
     private void saveOutboxEvent(String aggregateId, String eventType, String payload) {

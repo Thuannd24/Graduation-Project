@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Slice<ProductDto> getAllProducts(Boolean active, Pageable pageable) {
-        ProductListCacheEntry cached = self.getAllProductsCacheable(active, pageable);
+        ProductListCacheEntry cached = proxy().getAllProductsCacheable(active, pageable);
         return new SliceImpl<>(cached.getContent(), pageable, cached.isHasNext());
     }
 
@@ -77,16 +77,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Slice<ProductDto> getProductsByCategory(Long categoryId, Pageable pageable) {
-        ProductListCacheEntry cached = self.getProductsByCategoryCacheable(categoryId, pageable);
+        ProductListCacheEntry cached = proxy().getProductsByCategoryCacheable(categoryId, pageable);
         return new SliceImpl<>(cached.getContent(), pageable, cached.isHasNext());
     }
 
-    @Cacheable(value = "products_list", key = "'cat_' + #categoryId + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    // Danh sách theo danh mục là danh sách công khai -> chỉ lấy sản phẩm đang bán (active = true).
+    // Key có tiền tố "cat_active_" để không đọc nhầm entry cũ (chưa lọc active) còn trong Redis.
+    @Cacheable(value = "products_list", key = "'cat_active_' + #categoryId + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public ProductListCacheEntry getProductsByCategoryCacheable(Long categoryId, Pageable pageable) {
         List<Long> categoryIds = resolveCategoryIdsWithDescendants(categoryId);
         Slice<Product> products = categoryIds.size() == 1
-                ? productRepository.findByCategoryId(categoryId, pageable)
-                : productRepository.findByCategoryIdIn(categoryIds, pageable);
+                ? productRepository.findByCategoryIdAndActive(categoryId, true, pageable)
+                : productRepository.findByCategoryIdInAndActive(categoryIds, true, pageable);
         List<ProductDto> dtos = convertToDtoList(products.getContent());
         return new ProductListCacheEntry(dtos, products.hasNext());
     }
@@ -124,11 +126,138 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Slice<ProductDto> getAdminProducts(Long categoryId, Boolean active, Pageable pageable) {
+        Slice<Product> products;
+        if (categoryId != null) {
+            List<Long> categoryIds = resolveCategoryIdsWithDescendants(categoryId);
+            products = active != null
+                    ? productRepository.findByCategoryIdInAndActive(categoryIds, active, pageable)
+                    : productRepository.findByCategoryIdIn(categoryIds, pageable);
+        } else {
+            products = active != null
+                    ? productRepository.findByActive(active, pageable)
+                    : productRepository.findBy(pageable);
+        }
+        return new SliceImpl<>(convertToDtoList(products.getContent()), pageable, products.hasNext());
+    }
+
+    @Override
+    public Slice<ProductDto> getPublicProducts(Pageable pageable) {
+        return proxy().getAllProducts(true, pageable).map(ProductServiceImpl::toPublicView);
+    }
+
+    @Override
+    public Slice<ProductDto> getPublicProductsByCategory(Long categoryId, Pageable pageable) {
+        return proxy().getProductsByCategory(categoryId, pageable).map(ProductServiceImpl::toPublicView);
+    }
+
+    @Override
+    public ProductDto getPublicProductById(Long id) {
+        ProductDto product = proxy().getProductById(id);
+        if (product == null) {
+            throw new ResourceNotFoundException("Product", "id", id);
+        }
+        return toPublicView(product);
+    }
+
+    @Override
+    public ProductDto getPublicProductBySlug(String slug) {
+        ProductDto product = proxy().getProductBySlug(slug);
+        if (product == null) {
+            throw new ResourceNotFoundException("Product", "slug", slug);
+        }
+        return toPublicView(product);
+    }
+
+    @Override
+    public List<ProductDto> getRelatedProducts(Long productId, int limit) {
+        Product source = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+        int max = Math.max(1, Math.min(limit, 24));
+        BigDecimal sourcePrice = ProductPricingUtils.getEffectivePrice(source.getPrice(), source.getSalePrice());
+        Comparator<Product> byPriceDistance = Comparator.comparing(p -> priceDistance(p, sourcePrice));
+
+        // Giữ thứ tự ưu tiên và loại trùng: 1) cùng danh mục, 2) cùng thương hiệu, 3) cùng nhánh danh mục cha
+        Map<Long, Product> picked = new LinkedHashMap<>();
+
+        if (source.getCategoryId() != null) {
+            List<Product> sameCategory = new ArrayList<>(productRepository
+                    .findTop50ByCategoryIdInAndActiveTrueAndIdNot(List.of(source.getCategoryId()), productId));
+            // Trong cùng danh mục: ưu tiên cùng thương hiệu, sau đó gần giá nhất
+            sameCategory.sort(Comparator.comparing((Product p) -> !isSameBrand(source, p)).thenComparing(byPriceDistance));
+            addUpTo(picked, sameCategory, max);
+        }
+
+        if (picked.size() < max && source.getBrandId() != null) {
+            List<Product> sameBrand = new ArrayList<>(productRepository
+                    .findTop50ByBrandIdAndActiveTrueAndIdNot(source.getBrandId(), productId));
+            sameBrand.sort(byPriceDistance);
+            addUpTo(picked, sameBrand, max);
+        }
+
+        if (picked.size() < max && source.getCategoryId() != null) {
+            Long parentId = categoryRepository.findById(source.getCategoryId())
+                    .map(Category::getParentId)
+                    .orElse(null);
+            if (parentId != null) {
+                List<Product> sameBranch = new ArrayList<>(productRepository
+                        .findTop50ByCategoryIdInAndActiveTrueAndIdNot(resolveCategoryIdsWithDescendants(parentId), productId));
+                sameBranch.sort(byPriceDistance);
+                addUpTo(picked, sameBranch, max);
+            }
+        }
+
+        return convertToDtoList(new ArrayList<>(picked.values())).stream()
+                .map(ProductServiceImpl::toPublicView)
+                .collect(Collectors.toList());
+    }
+
+    private static void addUpTo(Map<Long, Product> picked, List<Product> candidates, int max) {
+        for (Product p : candidates) {
+            if (picked.size() >= max) {
+                return;
+            }
+            picked.putIfAbsent(p.getId(), p);
+        }
+    }
+
+    private static boolean isSameBrand(Product a, Product b) {
+        if (a.getBrandId() != null && b.getBrandId() != null) {
+            return a.getBrandId().equals(b.getBrandId());
+        }
+        return a.getBrand() != null && a.getBrand().equalsIgnoreCase(b.getBrand());
+    }
+
+    private static BigDecimal priceDistance(Product p, BigDecimal reference) {
+        return ProductPricingUtils.getEffectivePrice(p.getPrice(), p.getSalePrice()).subtract(reference).abs();
+    }
+
+    /**
+     * Bản công khai của sản phẩm: bỏ giá vốn (costPrice) ở cả sản phẩm và biến thể.
+     * Tạo bản sao để không sửa object đang nằm trong cache.
+     */
+    public static ProductDto toPublicView(ProductDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        List<ProductVariantDto> variants = dto.getVariants() == null ? null : dto.getVariants().stream()
+                .map(v -> v.toBuilder().costPrice(null).build())
+                .collect(Collectors.toList());
+        return dto.toBuilder().costPrice(null).variants(variants).build();
+    }
+
+    // Gọi qua proxy Spring để @Cacheable có hiệu lực; trong unit test (không có Spring) self == null.
+    private ProductServiceImpl proxy() {
+        return self != null ? self : this;
+    }
+
+    @Override
     @Transactional
     public ProductDto createProduct(ProductDto productDto) {
         if (productRepository.findBySlug(productDto.getSlug()).isPresent()) {
             throw new IllegalArgumentException("Slug sản phẩm đã tồn tại: " + productDto.getSlug());
         }
+        validateCategoryExists(productDto.getCategoryId());
         normalizeProductPricing(productDto);
         String resolvedBrandName = productDto.getBrand();
         if (productDto.getBrandId() != null) {
@@ -283,6 +412,9 @@ public class ProductServiceImpl implements ProductService {
         if (!oldSlug.equals(productDto.getSlug())
                 && productRepository.findBySlug(productDto.getSlug()).isPresent()) {
             throw new IllegalArgumentException("Slug sản phẩm đã tồn tại: " + productDto.getSlug());
+        }
+        if (!Objects.equals(product.getCategoryId(), productDto.getCategoryId())) {
+            validateCategoryExists(productDto.getCategoryId());
         }
 
         String resolvedBrandName = productDto.getBrand();
@@ -679,6 +811,7 @@ public class ProductServiceImpl implements ProductService {
                 .images(imageUrls)
                 .salesCount(product.getSalesCount())
                 .ratingAvg(product.getRatingAvg())
+                .reviewCount(product.getReviewCount() != null ? product.getReviewCount() : 0)
                 .warrantyPeriod(product.getWarrantyPeriod())
                 .warrantyPolicy(product.getWarrantyPolicy())
                 .active(product.getActive())
@@ -863,6 +996,12 @@ public class ProductServiceImpl implements ProductService {
     private Map<Long, Attribute> getAttributesMap() {
         return attributeRepository.findAll().stream()
                 .collect(Collectors.toMap(Attribute::getId, a -> a));
+    }
+
+    private void validateCategoryExists(Long categoryId) {
+        if (categoryId == null || !categoryRepository.existsById(categoryId)) {
+            throw new IllegalArgumentException("Danh mục sản phẩm không tồn tại: " + categoryId);
+        }
     }
 
     private void normalizeProductPricing(ProductDto productDto) {

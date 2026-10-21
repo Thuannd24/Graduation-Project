@@ -3,6 +3,7 @@ package com.ecommerce.promotionservice.service;
 import com.ecommerce.promotionservice.client.OrderClient;
 import com.ecommerce.promotionservice.client.ProductClient;
 import com.ecommerce.promotionservice.client.UserClient;
+import com.ecommerce.promotionservice.service.support.ProvinceNormalizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -228,6 +229,7 @@ public class CampaignVariableEnricher {
     }
 
     private void deriveProvinceFromShippingAddress(Map<String, Object> variables) {
+        deriveProvinceKey(variables);
         if (variables.containsKey("targetProvince")) {
             return;
         }
@@ -248,6 +250,26 @@ public class CampaignVariableEnricher {
         } else if (addr.contains("Da Nang") || addr.contains("Đà Nẵng") || addr.contains("DN")) {
             variables.put("targetProvince", "Da Nang");
         }
+    }
+
+    /**
+     * Stamps {@code targetProvinceKey}, the accent/prefix-insensitive province key that compiled
+     * Condition_Location branches compare against (see BpmnCompilerService / ProvinceNormalizer),
+     * so "Thành phố Hà Nội" picked in the builder matches an address ending in "Hà Nội".
+     */
+    private void deriveProvinceKey(Map<String, Object> variables) {
+        if (variables.get("targetProvinceKey") != null) {
+            return;
+        }
+        String key = "";
+        Object explicit = variables.get("targetProvince") != null ? variables.get("targetProvince") : variables.get("location");
+        if (explicit != null && !explicit.toString().isBlank()) {
+            key = ProvinceNormalizer.normalize(explicit.toString());
+        }
+        if (key.isEmpty() && variables.get("shippingAddress") != null) {
+            key = ProvinceNormalizer.fromAddress(variables.get("shippingAddress").toString());
+        }
+        variables.put("targetProvinceKey", key);
     }
 
     @SuppressWarnings("unchecked")

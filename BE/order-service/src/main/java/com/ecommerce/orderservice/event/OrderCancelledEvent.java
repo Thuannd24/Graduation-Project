@@ -19,6 +19,10 @@ public class OrderCancelledEvent {
     private String userId;
     private String email;
     private List<OrderItemInfo> items;
+    /** Lý do hủy (để thông báo / thống kê). */
+    private String reason;
+    /** Trạng thái cuối của đơn: CANCELLED (hủy trước giao) hoặc RETURNED (hàng hoàn đã về kho). */
+    private String finalStatus;
 
     @Data
     @Builder

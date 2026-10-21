@@ -87,7 +87,22 @@ public class InventoryService {
 
     @Transactional
     public InventoryResponse updateInventory(Long productId, Long variantId, Integer quantity) {
+        return updateInventory(productId, variantId, quantity, null);
+    }
+
+    /**
+     * Đặt tồn kho tuyệt đối kèm lý do điều chỉnh. Lý do được ghi vào note của giao dịch kho để truy vết
+     * chênh lệch (kiểm kê, hư hỏng, mất mát...). Số lượng null/âm bị từ chối - không bao giờ hiểu "để trống" là 0.
+     */
+    @Transactional
+    public InventoryResponse updateInventory(Long productId, Long variantId, Integer quantity, String reason) {
         log.info("Updating inventory for product {}, variant {} to quantity {}", productId, variantId, quantity);
+        if (quantity == null) {
+            throw new IllegalArgumentException("Vui lòng nhập số lượng tồn kho.");
+        }
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Số lượng tồn kho không được âm.");
+        }
         Long vId = variantId != null ? variantId : 0L;
 
         validateProductAndVariant(productId, vId);
@@ -104,9 +119,12 @@ public class InventoryService {
         inventory = inventoryRepository.save(inventory);
 
         // Create transaction log
+        String note = (reason == null || reason.isBlank())
+                ? "Admin manual update"
+                : "Admin manual update - Lý do: " + reason.trim();
         saveTransaction(productId, vId, null, "RESTOCK",
                 Math.abs(quantity - oldQuantity), oldQuantity, quantity,
-                "Admin manual update", null);
+                note, null);
 
         // BUG FIX: sync to Redis only AFTER the DB transaction actually commits. Previously this
         // ran synchronously mid-transaction, so if the commit itself failed afterwards (deadlock
@@ -136,6 +154,9 @@ public class InventoryService {
     @Transactional
     public RestockResponse restock(Long productId, Long variantId, RestockRequestDto request, String adminId) {
         log.info("Restocking product {}, variant {} with quantity {}", productId, variantId, request.getQuantity());
+        if (request.getQuantity() == null || request.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Số lượng nhập kho phải là số nguyên dương.");
+        }
         Long vId = variantId != null ? variantId : 0L;
 
         validateProductAndVariant(productId, vId);

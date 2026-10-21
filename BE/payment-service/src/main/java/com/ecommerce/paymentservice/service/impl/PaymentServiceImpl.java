@@ -4,7 +4,10 @@ import com.ecommerce.paymentservice.dto.ApiResponse;
 import com.ecommerce.paymentservice.dto.PaymentInitiateRequest;
 import com.ecommerce.paymentservice.dto.PaymentInitiateResponse;
 import com.ecommerce.paymentservice.dto.PaymentResponse;
+import com.ecommerce.paymentservice.dto.PaymentConfigResponse;
+import com.ecommerce.paymentservice.dto.PaymentStatusResponse;
 import com.ecommerce.paymentservice.dto.RefundRequest;
+import com.ecommerce.paymentservice.dto.RefundResponse;
 import com.ecommerce.paymentservice.entity.Payment;
 import com.ecommerce.paymentservice.entity.Refund;
 import com.ecommerce.paymentservice.entity.WebhookLog;
@@ -83,8 +86,19 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${app.kafka.payment-topic:payment-events}")
     private String paymentTopic;
 
+    // Khởi tạo sẵn giá trị mặc định để unit test dựng service bằng constructor vẫn có hạn mức.
+    @Value("${app.payment.cod-max-amount:20000000}")
+    private BigDecimal codMaxAmount = DEFAULT_COD_MAX_AMOUNT;
+
     private static final String GATEWAY_VNPAY = "VNPAY";
     private static final String METHOD_COD = "COD";
+    /** Phương thức thanh toán được hỗ trợ. Phương thức khác (vd. MOMO) bị từ chối ngay khi khởi tạo. */
+    public static final List<String> SUPPORTED_METHODS = List.of(GATEWAY_VNPAY, METHOD_COD);
+    /** Hạn mức COD mặc định: đơn có thành tiền trên mức này phải thanh toán trực tuyến. */
+    public static final BigDecimal DEFAULT_COD_MAX_AMOUNT = new BigDecimal("20000000");
+    /** Loại thất bại gắn vào PaymentFailedEvent để order-service biết có nên hủy đơn hay không. */
+    public static final String FAILURE_TYPE_GATEWAY_DECLINED = "GATEWAY_DECLINED";
+    public static final String FAILURE_TYPE_ATTEMPT_EXPIRED = "ATTEMPT_EXPIRED";
     private static final String DEFAULT_IP_FALLBACK = "127.0.0.1";
 
     private static final String STATUS_PENDING = "PENDING";
@@ -100,6 +114,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentInitiateResponse initiatePayment(PaymentInitiateRequest request) {
+        // Chỉ chấp nhận phương thức được hỗ trợ (TC_PH5_INIT_08). Trước đây "MOMO" vẫn đi qua VNPay, và khi
+        // hoàn tiền bị coi như COD -> đánh dấu đã hoàn mà không chuyển tiền.
+        String method = normalizePaymentMethod(request.getPaymentMethod());
+        request.setPaymentMethod(method);
+
         // BUG-03 FIX: Use Redis distributed lock instead of JVM-local
         // ConcurrentHashMap.
         // ConcurrentHashMap only works within a single JVM; with multiple
@@ -121,18 +140,9 @@ public class PaymentServiceImpl implements PaymentService {
             // correct payment amount (prevent price tampering). This is a network call and must
             // run OUTSIDE any DB transaction (V-01/V-11 pattern) so a slow/stalled order-service
             // never holds a payment-service DB connection open.
-            String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + request.getOrderId()
-                    + "/summary";
+            LocalDateTime paymentDeadline;
             try {
-                ApiResponse<?> orderApiResponse = restTemplate
-                        .getForObject(orderServiceUrl, ApiResponse.class);
-
-                if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
-                        || orderApiResponse.getData() == null) {
-                    throw new RuntimeException("Failed to retrieve order details from order-service");
-                }
-
-                Map<?, ?> orderData = (Map<?, ?>) orderApiResponse.getData();
+                Map<?, ?> orderData = fetchOrderSummary(request.getOrderId());
                 String orderStatus = (String) orderData.get("status");
                 String orderUserId = (String) orderData.get("userId");
 
@@ -143,9 +153,17 @@ public class PaymentServiceImpl implements PaymentService {
                             "Access Denied: This order does not belong to the authenticated user.");
                 }
 
-                // Only allow payment for PENDING or AWAITING_PAYMENT orders
+                // Only allow payment for PENDING or AWAITING_PAYMENT orders. Lỗi nghiệp vụ -> 409, không bọc
+                // thành RuntimeException chung (-> 500) như trước (TC_PH5_INIT_07).
                 if (!"PENDING".equalsIgnoreCase(orderStatus) && !"AWAITING_PAYMENT".equalsIgnoreCase(orderStatus)) {
-                    throw new RuntimeException("Cannot pay for order in status: " + orderStatus);
+                    throw new IllegalStateException("Không thể thanh toán đơn hàng ở trạng thái " + orderStatus
+                            + " (Cannot pay for order in status: " + orderStatus + ")");
+                }
+
+                paymentDeadline = parseDateTime(orderData.get("paymentDeadline"));
+                if (paymentDeadline != null && LocalDateTime.now().isAfter(paymentDeadline)) {
+                    throw new IllegalStateException(
+                            "Đơn hàng đã quá hạn thanh toán và sẽ được hủy tự động. Vui lòng đặt lại đơn mới.");
                 }
 
                 Object finalAmountObj = orderData.get("finalAmount");
@@ -165,35 +183,42 @@ public class PaymentServiceImpl implements PaymentService {
                 log.error("Security violation for Order ID: {} by User ID: {}", request.getOrderId(),
                         request.getUserId());
                 throw e;
+            } catch (IllegalStateException e) {
+                throw e;
             } catch (Exception e) {
                 log.error("Failed to verify order with order-service. Order ID: {}", request.getOrderId(), e);
                 throw new RuntimeException("Order verification failed: " + e.getMessage());
             }
 
+            // Hạn mức COD: đơn giá trị lớn phải trả trước qua VNPay (rủi ro "bom hàng").
+            if (METHOD_COD.equals(method) && request.getAmount().compareTo(codMaxAmount) > 0) {
+                throw new IllegalArgumentException(codLimitMessage());
+            }
+
+            // STEP 1.5: Nếu lượt VNPay trước vẫn đang PENDING (khách chưa quay về từ cổng), hỏi lại VNPay trước
+            // khi tạo lượt mới / đổi sang COD - không để giao dịch đã trừ tiền bị "mồ côi" vì txnRef bị thay.
+            guardInFlightVnPayAttempt(request.getOrderId());
+
             // STEP 2: Short DB transaction - idempotency check, persist Payment, build the VNPAY
             // redirect URL (no network calls inside).
+            final LocalDateTime deadline = paymentDeadline;
             TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
             return transactionTemplate.execute(status -> {
                 String txnRef = UUID.randomUUID().toString();
 
                 // IDEMPOTENCY / REUSE CHECK: Check if a payment record already exists for this
                 // order
+                // Khóa bản ghi: IPN có thể vừa ghi SUCCESS sau bước kiểm tra ở trên -> kiểm tra lại trên
+                // bản ghi đã khóa, tránh ghi đè SUCCESS thành PENDING (khách bị trừ tiền 2 lần).
                 Payment payment;
-                Optional<Payment> existingPaymentOpt = paymentRepository.findByOrderId(request.getOrderId());
+                Optional<Payment> existingPaymentOpt = paymentRepository.findByOrderIdWithLock(request.getOrderId());
                 if (existingPaymentOpt.isPresent()) {
                     Payment existingPayment = existingPaymentOpt.get();
-                    String currentStatus = existingPayment.getStatus();
+                    rejectIfAlreadySettled(existingPayment);
+                    rememberSupersededVnPayTxn(existingPayment);
 
-                    if (STATUS_SUCCESS.equalsIgnoreCase(currentStatus)) {
-                        throw new IllegalStateException(
-                                "Payment has already been successfully completed for this order.");
-                    }
-                    if (STATUS_REFUNDED.equalsIgnoreCase(currentStatus)) {
-                        throw new IllegalStateException("Payment has already been refunded for this order.");
-                    }
-
-                    // If the payment is PENDING or FAILED, reuse the existing record instead of
-                    // creating duplicates
+                    // If the payment is PENDING, FAILED or EXPIRED (thanh toán lại / đổi phương thức),
+                    // reuse the existing record instead of creating duplicates
                     payment = existingPayment;
                     payment.setPaymentMethod(request.getPaymentMethod());
                     payment.setAmount(request.getAmount());
@@ -202,6 +227,7 @@ public class PaymentServiceImpl implements PaymentService {
                     payment.setFailureCode(null);
                     payment.setGatewayResponse(null);
                     payment.setGatewayTxnId(null);
+                    payment.setAttemptAt(LocalDateTime.now());
                 } else {
                     payment = Payment.builder()
                             .orderId(request.getOrderId())
@@ -211,6 +237,7 @@ public class PaymentServiceImpl implements PaymentService {
                             .paymentMethod(request.getPaymentMethod())
                             .amount(request.getAmount())
                             .status(STATUS_PENDING)
+                            .attemptAt(LocalDateTime.now())
                             .build();
                 }
 
@@ -232,7 +259,7 @@ public class PaymentServiceImpl implements PaymentService {
                 }
 
                 // VNPAY Link Construction
-                String redirectUrl = buildVnPayUrl(payment, txnRef, request.getIpAddress());
+                String redirectUrl = buildVnPayUrl(payment, txnRef, request.getIpAddress(), deadline);
 
                 return PaymentInitiateResponse.builder()
                         .paymentId(payment.getId())
@@ -247,6 +274,184 @@ public class PaymentServiceImpl implements PaymentService {
             if (lockValue.equals(currentVal)) {
                 stringRedisTemplate.delete(payLockKey);
             }
+        }
+    }
+
+    private Map<?, ?> fetchOrderSummary(Long orderId) {
+        String orderServiceUrl = orderServiceUrlBase + "/api/internal/orders/" + orderId + "/summary";
+        ApiResponse<?> orderApiResponse = restTemplate.getForObject(orderServiceUrl, ApiResponse.class);
+        if (orderApiResponse == null || !"SUCCESS".equalsIgnoreCase(orderApiResponse.getCode())
+                || orderApiResponse.getData() == null) {
+            throw new RuntimeException("Failed to retrieve order details from order-service");
+        }
+        return (Map<?, ?>) orderApiResponse.getData();
+    }
+
+    /** Lượt VNPay cũ bị thay: lưu lại mã để IPN muộn của trang VNPay cũ vẫn tìm được đơn. */
+    private void rememberSupersededVnPayTxn(Payment payment) {
+        if (!GATEWAY_VNPAY.equalsIgnoreCase(payment.getPaymentMethod()) || payment.getTxnRef() == null) {
+            return;
+        }
+        String previous = payment.getPreviousTxnRefs();
+        payment.setPreviousTxnRefs(previous == null || previous.isBlank()
+                ? payment.getTxnRef()
+                : previous + "," + payment.getTxnRef());
+    }
+
+    /**
+     * IPN thành công cho một lượt VNPay đã bị thay (khách vẫn trả ở tab cũ sau khi bấm thanh toán lại /
+     * đổi sang COD). Tiền đã bị trừ nên không được bỏ qua:
+     * - Đơn chưa được thanh toán (lượt hiện tại PENDING, kể cả COD): nhận lượt cũ là giao dịch thành công.
+     * - Đã thanh toán bằng lượt khác / đã hủy: tạo yêu cầu hoàn tiền thủ công cho mã giao dịch cũ.
+     */
+    private String handleSupersededVnPayCallback(Payment payment, String txnRef, Map<String, String> queryParams,
+            String rawParamsJson) {
+        String responseCode = queryParams.get("vnp_ResponseCode");
+        if (!"00".equals(responseCode)) {
+            log.info("Ignoring non-success IPN ({}) for superseded VNPay attempt {} of order {}",
+                    responseCode, txnRef, payment.getOrderId());
+            saveWebhookLog(rawParamsJson, true, true);
+            return "00";
+        }
+        String amountStr = queryParams.get("vnp_Amount");
+        long expectedCents = payment.getAmount().multiply(BigDecimal.valueOf(100)).longValue();
+        if (amountStr == null || !amountStr.equals(String.valueOf(expectedCents))) {
+            saveWebhookLog(rawParamsJson, true, false);
+            return "04";
+        }
+
+        String others = java.util.Arrays.stream(payment.getPreviousTxnRefs().split(","))
+                .map(String::trim)
+                .filter(ref -> !ref.isEmpty() && !ref.equals(txnRef))
+                .collect(java.util.stream.Collectors.joining(","));
+
+        if (STATUS_PENDING.equalsIgnoreCase(payment.getStatus())) {
+            log.warn("Superseded VNPay attempt {} of order {} was paid; adopting it as the successful payment"
+                    + " (current attempt {} {} is replaced).", txnRef, payment.getOrderId(),
+                    payment.getPaymentMethod(), payment.getTxnRef());
+            String replaced = GATEWAY_VNPAY.equalsIgnoreCase(payment.getPaymentMethod()) ? payment.getTxnRef() : null;
+            payment.setPreviousTxnRefs(replaced == null ? others : (others.isEmpty() ? replaced : others + "," + replaced));
+            payment.setTxnRef(txnRef);
+            payment.setPaymentMethod(GATEWAY_VNPAY);
+            payment.setStatus(STATUS_SUCCESS);
+            payment.setFailureCode(null);
+            payment.setPaidAt(LocalDateTime.now());
+            payment.setGatewayTxnId(queryParams.get("vnp_TransactionNo"));
+            payment.setGatewayResponse(rawParamsJson);
+            paymentRepository.save(payment);
+            saveWebhookLog(rawParamsJson, true, true);
+            publishPaymentEvent("PaymentSuccessEvent", payment, payment.getAmount(),
+                    "VNPAY callback successful (earlier attempt)");
+            return "00";
+        }
+
+        log.error("Duplicate/late VNPay payment for superseded attempt {} of order {} (payment status {})."
+                + " Creating a manual refund request.", txnRef, payment.getOrderId(), payment.getStatus());
+        payment.setPreviousTxnRefs(others);
+        paymentRepository.save(payment);
+        refundRepository.save(Refund.builder()
+                .paymentId(payment.getId())
+                .refundAmount(payment.getAmount())
+                .reason("Hoàn tiền thủ công: khách đã thanh toán trùng qua lượt VNPay cũ, mã giao dịch " + txnRef
+                        + " (VNPay TransactionNo " + queryParams.get("vnp_TransactionNo") + ")")
+                .status(REFUND_STATUS_PENDING_MANUAL)
+                .build());
+        saveWebhookLog(rawParamsJson, true, true);
+        return "00";
+    }
+
+    private void rejectIfAlreadySettled(Payment existingPayment) {
+        String currentStatus = existingPayment.getStatus();
+        if (STATUS_SUCCESS.equalsIgnoreCase(currentStatus)) {
+            throw new IllegalStateException(
+                    "Payment has already been successfully completed for this order.");
+        }
+        if (STATUS_REFUNDED.equalsIgnoreCase(currentStatus)
+                || STATUS_PARTIALLY_REFUNDED.equalsIgnoreCase(currentStatus)
+                || STATUS_REFUND_PENDING.equalsIgnoreCase(currentStatus)) {
+            throw new IllegalStateException("Payment has already been refunded for this order.");
+        }
+    }
+
+    /**
+     * Lượt VNPay trước còn PENDING và URL thanh toán chưa hết hạn: hỏi VNPay (querydr, ngoài transaction).
+     * Đã trả tiền -> ghi nhận SUCCESS và từ chối tạo lượt mới; chưa rõ kết quả -> yêu cầu đợi.
+     */
+    private void guardInFlightVnPayAttempt(Long orderId) {
+        Optional<Payment> existingOpt = paymentRepository.findByOrderId(orderId);
+        if (existingOpt.isEmpty()) {
+            return;
+        }
+        Payment existing = existingOpt.get();
+        rejectIfAlreadySettled(existing);
+        if (!STATUS_PENDING.equalsIgnoreCase(existing.getStatus())
+                || !GATEWAY_VNPAY.equalsIgnoreCase(existing.getPaymentMethod())) {
+            return;
+        }
+        LocalDateTime attemptAt = attemptTime(existing);
+        if (attemptAt == null || attemptAt.isBefore(LocalDateTime.now().minusMinutes(paymentExpiryMinutes))) {
+            return; // URL VNPay cũ đã hết hạn, không thể còn giao dịch thành công mới
+        }
+        String vnpStatus = checkVnPayTransactionStatus(existing);
+        if ("00".equals(vnpStatus)) {
+            TransactionTemplate tx = new TransactionTemplate(transactionManager);
+            tx.executeWithoutResult(st -> paymentRepository.findByTxnRefWithLock(existing.getTxnRef()).ifPresent(p -> {
+                if (STATUS_PENDING.equalsIgnoreCase(p.getStatus())) {
+                    p.setStatus(STATUS_SUCCESS);
+                    p.setPaidAt(LocalDateTime.now());
+                    paymentRepository.save(p);
+                    publishPaymentEvent("PaymentSuccessEvent", p, p.getAmount(), "VNPAY QueryDR sync success");
+                }
+            }));
+            throw new IllegalStateException("Đơn hàng đã được thanh toán thành công qua VNPay.");
+        }
+        if (vnpStatus == null) {
+            throw new IllegalStateException(
+                    "Giao dịch VNPay trước đó của đơn hàng đang được xử lý. Vui lòng thử lại sau ít phút.");
+        }
+        // "01" (chưa hoàn tất), "02" (thất bại), NOT_FOUND: an toàn để tạo lượt mới.
+    }
+
+    private String normalizePaymentMethod(String method) {
+        String normalized = method == null ? "" : method.trim().toUpperCase(Locale.ROOT);
+        if (!SUPPORTED_METHODS.contains(normalized)) {
+            throw new IllegalArgumentException("Phương thức thanh toán không được hỗ trợ: " + method
+                    + ". Chỉ hỗ trợ " + String.join(", ", SUPPORTED_METHODS) + ".");
+        }
+        return normalized;
+    }
+
+    private String codLimitMessage() {
+        return "Đơn hàng có giá trị trên " + formatVnd(codMaxAmount)
+                + " không hỗ trợ thanh toán khi nhận hàng (COD). Vui lòng thanh toán trực tuyến qua VNPay.";
+    }
+
+    private static String formatVnd(BigDecimal amount) {
+        java.text.DecimalFormatSymbols symbols = new java.text.DecimalFormatSymbols(Locale.ROOT);
+        symbols.setGroupingSeparator('.');
+        return new java.text.DecimalFormat("#,##0", symbols).format(amount) + "đ";
+    }
+
+    private static LocalDateTime attemptTime(Payment payment) {
+        return payment.getAttemptAt() != null ? payment.getAttemptAt() : payment.getCreatedAt();
+    }
+
+    private static LocalDateTime parseDateTime(Object value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            if (value instanceof List<?> parts && parts.size() >= 5) {
+                // Jackson WRITE_DATES_AS_TIMESTAMPS: [yyyy, MM, dd, HH, mm, (ss)]
+                int sec = parts.size() > 5 ? ((Number) parts.get(5)).intValue() : 0;
+                return LocalDateTime.of(((Number) parts.get(0)).intValue(), ((Number) parts.get(1)).intValue(),
+                        ((Number) parts.get(2)).intValue(), ((Number) parts.get(3)).intValue(),
+                        ((Number) parts.get(4)).intValue(), sec);
+            }
+            return LocalDateTime.parse(value.toString());
+        } catch (Exception e) {
+            log.warn("Could not parse paymentDeadline value '{}': {}", value, e.getMessage());
+            return null;
         }
     }
 
@@ -304,6 +509,13 @@ public class PaymentServiceImpl implements PaymentService {
         String txnRef = queryParams.get("vnp_TxnRef");
         Payment payment = paymentRepository.findByTxnRefWithLock(txnRef)
                 .orElse(null);
+
+        if (payment == null && txnRef != null && !txnRef.isBlank()) {
+            Payment superseded = paymentRepository.findBySupersededTxnRefWithLock(txnRef).orElse(null);
+            if (superseded != null) {
+                return handleSupersededVnPayCallback(superseded, txnRef, queryParams, rawParamsJson);
+            }
+        }
 
         if (payment == null) {
             saveWebhookLog(rawParamsJson, true, false);
@@ -379,23 +591,27 @@ public class PaymentServiceImpl implements PaymentService {
             paymentRepository.save(payment);
             saveWebhookLog(rawParamsJson, true, true);
 
+            // Thanh toán thất bại / khách hủy ở cổng VNPay: KHÔNG hủy đơn. Đơn vẫn chờ thanh toán (giữ hàng tới
+            // hết hạn), khách được thanh toán lại hoặc đổi sang COD. failureType báo cho order-service biết.
             publishPaymentEvent("PaymentFailedEvent", payment, payment.getAmount(),
-                    "VNPAY failed with code: " + responseCode);
+                    "VNPAY failed with code: " + responseCode,
+                    Map.of("failureType", FAILURE_TYPE_GATEWAY_DECLINED, "retryable", true,
+                            "failureCode", responseCode == null ? "" : responseCode));
             return "00"; // Confirm webhook processed successfully (even though payment itself failed)
         }
     }
 
     @Override
-    public void processRefund(RefundRequest request) {
+    public RefundResponse processRefund(RefundRequest request) {
         // STEP 1: Read-only snapshot (no lock, no transaction) - just enough to validate the
         // request and build the gateway call.
         Payment snapshot = paymentRepository.findById(request.getPaymentId())
-                .orElseThrow(() -> new RuntimeException("Payment record not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Payment record not found"));
 
         // Allow refunding a payment that was already partially refunded (to top it up further)
         if (!STATUS_SUCCESS.equalsIgnoreCase(snapshot.getStatus())
                 && !STATUS_PARTIALLY_REFUNDED.equalsIgnoreCase(snapshot.getStatus())) {
-            throw new RuntimeException("Cannot refund payment in status: " + snapshot.getStatus());
+            throw new IllegalStateException("Cannot refund payment in status: " + snapshot.getStatus());
         }
 
         // SECURITY CHECK: Validate refund amount
@@ -416,21 +632,44 @@ public class PaymentServiceImpl implements PaymentService {
         VnPayRefundResult gatewayResult = GATEWAY_VNPAY.equalsIgnoreCase(snapshot.getPaymentMethod())
                 ? callVnPayRefundApi(snapshot, request.getAmount(), isFullRefundSnapshot, "admin")
                 : null; // COD has no gateway call - handled as an offline confirmation
+        final boolean moneyMoved = gatewayResult != null && gatewayResult.success();
 
         // STEP 3: Short, fine-grained transaction - re-validate under lock and persist the outcome.
         TransactionTemplate tx = new TransactionTemplate(transactionManager);
-        tx.executeWithoutResult(status -> {
+        return tx.execute(status -> {
             Payment payment = paymentRepository.findByIdWithLock(request.getPaymentId())
-                    .orElseThrow(() -> new RuntimeException("Payment record not found"));
-
-            if (!STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())
-                    && !STATUS_PARTIALLY_REFUNDED.equalsIgnoreCase(payment.getStatus())) {
-                throw new RuntimeException("Cannot refund payment in status: " + payment.getStatus());
-            }
+                    .orElseThrow(() -> new IllegalArgumentException("Payment record not found"));
 
             BigDecimal alreadyRefunded = sumSuccessfulRefunds(payment.getId(), null);
             BigDecimal remaining = payment.getAmount().subtract(alreadyRefunded);
-            if (request.getAmount().compareTo(remaining) > 0) {
+            boolean statusStillRefundable = STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())
+                    || STATUS_PARTIALLY_REFUNDED.equalsIgnoreCase(payment.getStatus());
+            boolean amountStillValid = request.getAmount().compareTo(remaining) <= 0;
+
+            if (!statusStillRefundable || !amountStillValid) {
+                if (moneyMoved) {
+                    // TC_PH5_REFUND_05: VNPay ĐÃ chuyển tiền nhưng kiểm tra lại dưới khóa thất bại (vd. admin khác
+                    // vừa hoàn xong). Không được ném lỗi làm mất dấu kết quả cổng: vẫn ghi Refund (kèm mã GD hoàn)
+                    // và đánh dấu cần đối soát, không đổi trạng thái Payment.
+                    Refund orphan = Refund.builder()
+                            .paymentId(payment.getId())
+                            .refundAmount(request.getAmount())
+                            .reason(request.getReason() + " | Cần đối soát: VNPay đã hoàn tiền nhưng Payment đang ở"
+                                    + " trạng thái " + payment.getStatus() + " (còn hoàn được " + remaining + ")")
+                            .status(STATUS_SUCCESS)
+                            .gatewayRefundId(gatewayResult.gatewayTransactionNo())
+                            .completedAt(LocalDateTime.now())
+                            .build();
+                    refundRepository.save(orphan);
+                    log.error("Refund for payment {} succeeded at VNPay (txn {}) but local re-check failed "
+                            + "(status={}, remaining={}). Recorded for reconciliation.", payment.getId(),
+                            gatewayResult.gatewayTransactionNo(), payment.getStatus(), remaining);
+                    return toRefundResponse(payment, orphan,
+                            "VNPay đã hoàn tiền nhưng đơn này vừa được hoàn bởi yêu cầu khác. Đã ghi nhận để đối soát.");
+                }
+                if (!statusStillRefundable) {
+                    throw new IllegalStateException("Cannot refund payment in status: " + payment.getStatus());
+                }
                 throw new IllegalArgumentException("Security Violation: Refund amount (" + request.getAmount()
                         + ") exceeds remaining refundable amount (" + remaining + ").");
             }
@@ -444,7 +683,37 @@ public class PaymentServiceImpl implements PaymentService {
                     .build();
 
             applyGatewayResult(payment, refund, isFullRefund, gatewayResult);
+            return toRefundResponse(payment, refund, refundResultMessage(refund, gatewayResult));
         });
+    }
+
+    private RefundResponse toRefundResponse(Payment payment, Refund refund, String message) {
+        String status = refund.getStatus();
+        if (STATUS_PENDING.equalsIgnoreCase(status)) {
+            status = STATUS_REFUND_PENDING;
+        }
+        return RefundResponse.builder()
+                .refundId(refund.getId())
+                .paymentId(payment.getId())
+                .orderId(payment.getOrderId())
+                .amount(refund.getRefundAmount())
+                .status(status)
+                .paymentStatus(payment.getStatus())
+                .gatewayRefundId(refund.getGatewayRefundId())
+                .message(message)
+                .build();
+    }
+
+    private static String refundResultMessage(Refund refund, VnPayRefundResult gatewayResult) {
+        if (STATUS_SUCCESS.equalsIgnoreCase(refund.getStatus())) {
+            return gatewayResult == null
+                    ? "Đã ghi nhận hoàn tiền thủ công cho đơn COD (chuyển khoản/tiền mặt)."
+                    : "VNPay đã xác nhận hoàn tiền thành công.";
+        }
+        if (REFUND_STATUS_PENDING_MANUAL.equalsIgnoreCase(refund.getStatus())) {
+            return "VNPay từ chối yêu cầu hoàn tiền (" + gatewayResult.message() + "). Cần xử lý thủ công.";
+        }
+        return "Đã gửi yêu cầu hoàn tiền, đang chờ VNPay xác nhận. Hệ thống sẽ tự động thử lại.";
     }
 
     private BigDecimal sumSuccessfulRefunds(Long paymentId, Long excludingRefundId) {
@@ -609,9 +878,133 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public PaymentStatusResponse getPaymentStatus(Long orderId, String callerUserId, boolean isAdminOrStaff) {
+        // Trạng thái đơn bên order-service (best-effort, ngoài transaction): dùng để kiểm tra chủ đơn khi
+        // chưa có Payment và để biết khách còn được thanh toán lại hay không.
+        String orderStatus = null;
+        String orderUserId = null;
+        try {
+            Map<?, ?> orderData = fetchOrderSummary(orderId);
+            orderStatus = (String) orderData.get("status");
+            orderUserId = (String) orderData.get("userId");
+        } catch (Exception e) {
+            log.warn("Could not load order summary for payment status of order {}: {}", orderId, e.getMessage());
+        }
+
+        Optional<Payment> paymentOpt = paymentRepository.findByOrderId(orderId);
+        String ownerId = paymentOpt.map(Payment::getUserId).orElse(orderUserId);
+        if (ownerId == null && paymentOpt.isEmpty()) {
+            throw new IllegalArgumentException("Không tìm thấy đơn hàng/thanh toán cho đơn #" + orderId);
+        }
+        // SECURITY: chống IDOR - chỉ chủ đơn hoặc admin/staff được xem.
+        if (!isAdminOrStaff && (callerUserId == null || ownerId == null || !callerUserId.equalsIgnoreCase(ownerId))) {
+            throw new AccessDeniedException("You do not have permission to view this payment.");
+        }
+
+        boolean orderAwaitingPayment = "PENDING".equalsIgnoreCase(orderStatus)
+                || "AWAITING_PAYMENT".equalsIgnoreCase(orderStatus);
+
+        if (paymentOpt.isEmpty()) {
+            return PaymentStatusResponse.builder()
+                    .orderId(orderId)
+                    .orderStatus(orderStatus)
+                    .paymentStatus("NOT_INITIATED")
+                    .result("NOT_INITIATED")
+                    .message("Đơn hàng chưa được khởi tạo thanh toán.")
+                    .canRetry(orderAwaitingPayment)
+                    .canSwitchToCod(orderAwaitingPayment)
+                    .codMaxAmount(codMaxAmount)
+                    .build();
+        }
+
+        Payment p = paymentOpt.get();
+        String st = p.getStatus() == null ? STATUS_PENDING : p.getStatus().toUpperCase(Locale.ROOT);
+        String result;
+        String message;
+        switch (st) {
+            case STATUS_SUCCESS -> {
+                result = "SUCCESS";
+                message = "Thanh toán thành công.";
+            }
+            case STATUS_FAILED -> {
+                result = "FAILED";
+                message = "ORDER_CANCELLED".equalsIgnoreCase(p.getFailureCode())
+                        ? "Đơn hàng đã bị hủy, giao dịch thanh toán không còn hiệu lực."
+                        // Các lựa chọn tiếp theo (thanh toán lại / đổi COD) do canRetry, canSwitchToCod quyết định.
+                        : "Thanh toán không thành công" + vnPayFailureReason(p.getFailureCode()) + ".";
+            }
+            case STATUS_EXPIRED -> {
+                result = "FAILED";
+                message = "Phiên thanh toán đã hết hạn. Quý khách có thể thanh toán lại.";
+            }
+            case STATUS_REFUND_PENDING -> {
+                result = "REFUNDED";
+                message = "Đang hoàn tiền cho giao dịch này.";
+            }
+            case STATUS_REFUNDED, STATUS_PARTIALLY_REFUNDED -> {
+                result = "REFUNDED";
+                message = STATUS_REFUNDED.equals(st) ? "Giao dịch đã được hoàn tiền." : "Giao dịch đã được hoàn một phần.";
+            }
+            default -> {
+                result = "PENDING";
+                message = METHOD_COD.equalsIgnoreCase(p.getPaymentMethod())
+                        ? "Thanh toán khi nhận hàng (COD)."
+                        : "Đang chờ kết quả thanh toán từ VNPay.";
+            }
+        }
+
+        boolean paymentRetryable = STATUS_FAILED.equals(st) || STATUS_EXPIRED.equals(st)
+                || (STATUS_PENDING.equals(st) && GATEWAY_VNPAY.equalsIgnoreCase(p.getPaymentMethod()));
+        boolean canRetry = orderAwaitingPayment && paymentRetryable;
+        boolean canSwitchToCod = canRetry && p.getAmount() != null && p.getAmount().compareTo(codMaxAmount) <= 0;
+
+        return PaymentStatusResponse.builder()
+                .orderId(orderId)
+                .orderStatus(orderStatus)
+                .paymentId(p.getId())
+                .paymentMethod(p.getPaymentMethod())
+                .paymentStatus(st)
+                .result(result)
+                .failureCode(p.getFailureCode())
+                .message(message)
+                .amount(p.getAmount())
+                .paidAt(p.getPaidAt())
+                .canRetry(canRetry)
+                .canSwitchToCod(canSwitchToCod)
+                .codMaxAmount(codMaxAmount)
+                .build();
+    }
+
+    @Override
+    public PaymentConfigResponse getPaymentConfig() {
+        return PaymentConfigResponse.builder()
+                .supportedMethods(SUPPORTED_METHODS)
+                .codMaxAmount(codMaxAmount)
+                .build();
+    }
+
+    private static String vnPayFailureReason(String code) {
+        if (code == null || code.isBlank()) {
+            return "";
+        }
+        return switch (code) {
+            case "24" -> " (khách hàng đã hủy giao dịch)";
+            case "11" -> " (hết thời gian chờ thanh toán)";
+            case "12" -> " (thẻ/tài khoản bị khóa)";
+            case "13" -> " (sai mật khẩu xác thực OTP)";
+            case "51" -> " (tài khoản không đủ số dư)";
+            case "65" -> " (vượt hạn mức giao dịch trong ngày)";
+            case "75" -> " (ngân hàng đang bảo trì)";
+            case "79" -> " (nhập sai mật khẩu thanh toán quá số lần quy định)";
+            default -> " (mã lỗi VNPay " + code + ")";
+        };
+    }
+
+    @Override
     public void cancelExpiredPayments() {
         LocalDateTime cutoff = LocalDateTime.now().minusMinutes(paymentExpiryMinutes);
-        List<Payment> expiredPayments = paymentRepository.findAllByStatusAndCreatedAtBefore(STATUS_PENDING, cutoff);
+        // Hạn tính theo lượt khởi tạo gần nhất (bản ghi được dùng lại khi thanh toán lại).
+        List<Payment> expiredPayments = paymentRepository.findExpiredAttempts(STATUS_PENDING, cutoff);
 
         TransactionTemplate tx = new TransactionTemplate(transactionManager);
 
@@ -679,7 +1072,10 @@ public class PaymentServiceImpl implements PaymentService {
                 paymentRepository.save(payment);
 
                 try {
-                    publishPaymentEvent("PaymentFailedEvent", payment, payment.getAmount(), "Payment session expired");
+                    // Lượt thanh toán hết hạn không tự hủy đơn: đơn chỉ bị hủy khi hết hạn giữ hàng của đơn
+                    // (OrderExpiryScheduler bên order-service). Khách vẫn có thể thanh toán lại trước hạn đó.
+                    publishPaymentEvent("PaymentFailedEvent", payment, payment.getAmount(), "Payment session expired",
+                            Map.of("failureType", FAILURE_TYPE_ATTEMPT_EXPIRED, "retryable", true));
                 } catch (Exception e) {
                     log.error("Failed to publish PaymentFailedEvent for expired payment {}", payment.getTxnRef(), e);
                     throw new RuntimeException("Failed to publish payment event", e);
@@ -700,7 +1096,7 @@ public class PaymentServiceImpl implements PaymentService {
             String orderInfo = "Query transaction status for txnRef " + txnRef;
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-            String transDate = payment.getCreatedAt().format(formatter);
+            String transDate = attemptTime(payment).format(formatter);
             String createDate = LocalDateTime.now().format(formatter);
             String ipAddr = "127.0.0.1";
 
@@ -752,7 +1148,7 @@ public class PaymentServiceImpl implements PaymentService {
         webhookLogRepository.save(log);
     }
 
-    private String buildVnPayUrl(Payment payment, String txnRef, String ipAddress) {
+    private String buildVnPayUrl(Payment payment, String txnRef, String ipAddress, LocalDateTime orderDeadline) {
         Map<String, String> vnpParams = new TreeMap<>();
         vnpParams.put("vnp_Version", "2.1.0");
         vnpParams.put("vnp_Command", "pay");
@@ -779,7 +1175,12 @@ public class PaymentServiceImpl implements PaymentService {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         vnpParams.put("vnp_CreateDate", now.format(formatter));
-        vnpParams.put("vnp_ExpireDate", now.plusMinutes(paymentExpiryMinutes).format(formatter));
+        LocalDateTime expireAt = now.plusMinutes(paymentExpiryMinutes);
+        if (orderDeadline != null && orderDeadline.isBefore(expireAt)) {
+            // Không cho URL VNPay sống lâu hơn hạn giữ hàng của đơn (đơn hết hạn sẽ bị hủy).
+            expireAt = orderDeadline;
+        }
+        vnpParams.put("vnp_ExpireDate", expireAt.format(formatter));
 
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
@@ -836,25 +1237,30 @@ public class PaymentServiceImpl implements PaymentService {
         Optional<Payment> paymentOpt = paymentRepository.findByOrderIdWithLock(orderId);
         if (paymentOpt.isPresent()) {
             Payment payment = paymentOpt.get();
-            if (STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())) {
-                // IDEMPOTENCY: Check if a refund record already exists to prevent duplicates
-                // Now safe because we have write lock on payment
-                boolean alreadyRefunding = refundRepository.existsByPaymentId(payment.getId());
-                if (alreadyRefunding) {
-                    log.warn("Refund already exists for Payment ID {}. Skipping duplicate initiateAutoRefund.",
+            if (STATUS_SUCCESS.equalsIgnoreCase(payment.getStatus())
+                    || STATUS_PARTIALLY_REFUNDED.equalsIgnoreCase(payment.getStatus())) {
+                // IDEMPOTENCY (đang giữ khóa ghi trên payment): chỉ hoàn phần CÒN LẠI, trừ cả các yêu cầu
+                // hoàn đang chờ. Đơn đã hoàn một phần lúc đang giao rồi bị hoàn hàng vẫn được hoàn nốt.
+                BigDecimal alreadyCovered = refundRepository.findByPaymentId(payment.getId()).stream()
+                        .filter(r -> STATUS_SUCCESS.equalsIgnoreCase(r.getStatus())
+                                || STATUS_PENDING.equalsIgnoreCase(r.getStatus()))
+                        .map(Refund::getRefundAmount)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                BigDecimal remaining = payment.getAmount().subtract(alreadyCovered);
+                if (remaining.compareTo(BigDecimal.ZERO) <= 0) {
+                    log.warn("Payment ID {} already fully refunded/refunding. Skipping duplicate initiateAutoRefund.",
                             payment.getId());
                     return;
                 }
-                log.info(
-                        "Payment for Order ID {} was SUCCESS. Marking payment as REFUND_PENDING and creating Refund record...",
-                        orderId);
+                log.info("Order ID {} cancelled/returned: refunding remaining {} of payment {} (status {}).",
+                        orderId, remaining, payment.getId(), payment.getStatus());
                 payment.setStatus(STATUS_REFUND_PENDING);
                 paymentRepository.save(payment);
 
                 Refund refund = Refund.builder()
                         .paymentId(payment.getId())
-                        .refundAmount(payment.getAmount())
-                        .reason("Auto-refund: Order cancelled by user")
+                        .refundAmount(remaining)
+                        .reason("Auto-refund: Order cancelled/returned")
                         .status(STATUS_PENDING)
                         .build();
                 refundRepository.save(refund);
@@ -936,8 +1342,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void publishPaymentEvent(String eventType, Payment payment, BigDecimal amount, String info) {
+        publishPaymentEvent(eventType, payment, amount, info, Map.of());
+    }
+
+    private void publishPaymentEvent(String eventType, Payment payment, BigDecimal amount, String info,
+            Map<String, Object> extraFields) {
         try {
-            Map<String, Object> event = new HashMap<>();
+            Map<String, Object> event = new HashMap<>(extraFields);
             event.put("eventId", UUID.randomUUID().toString());
             event.put("eventType", eventType);
             event.put("timestamp", LocalDateTime.now().toString());
