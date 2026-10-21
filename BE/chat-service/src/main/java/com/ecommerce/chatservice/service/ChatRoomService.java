@@ -11,6 +11,8 @@ public interface ChatRoomService {
     ChatRoomResponse assignStaff(String roomId, String staffId, String staffName);
     ChatRoomResponse closeRoom(String roomId, String userRoles, String userId);
     ChatRoomResponse handoverRoom(String roomId);
+    /** Chặn khách thao tác trên phòng chat của người khác (STAFF/ADMIN được phép). */
+    void assertRoomAccess(String roomId, String userRoles, String userId);
     Page<ChatRoomResponse> getRoomsByStatus(String status, Pageable pageable);
     Page<ChatRoomResponse> getRoomsByStaff(String staffId, Pageable pageable);
     void autoAssignStaffIfPossible(ChatRoom room);

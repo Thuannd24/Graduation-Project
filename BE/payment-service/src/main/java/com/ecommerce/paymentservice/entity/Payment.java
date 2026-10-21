@@ -59,6 +59,22 @@ public class Payment {
     @Column(name = "paid_at")
     private LocalDateTime paidAt;
 
+    /**
+     * Thời điểm của lần khởi tạo thanh toán gần nhất. Bản ghi Payment được dùng lại khi khách thanh toán
+     * lại / đổi sang COD, nên hạn của một lượt VNPay phải tính từ đây chứ không phải {@code createdAt}.
+     * Null với dữ liệu cũ (khi đó dùng createdAt).
+     */
+    @Column(name = "attempt_at")
+    private LocalDateTime attemptAt;
+
+    /**
+     * Mã giao dịch VNPay của các lượt trước đã bị thay khi khách thanh toán lại / đổi sang COD
+     * (phân tách bằng dấu phẩy). Khách vẫn có thể hoàn tất trang VNPay cũ -> IPN của mã cũ phải
+     * được ghi nhận (hoặc hoàn tiền nếu trả trùng), không được bỏ qua.
+     */
+    @Column(name = "previous_txn_refs", columnDefinition = "TEXT")
+    private String previousTxnRefs;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

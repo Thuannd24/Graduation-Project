@@ -70,9 +70,12 @@ public class UserServiceImpl implements UserService {
             changed = true;
         }
 
-        // Sync fullName: cập nhật nếu JWT khác DB (ví dụ: Google trả về tên có dấu "Thuân Nguyễn")
-        if (fullName != null && !fullName.isEmpty() && !fullName.equals(user.getFullName())) {
-            log.info("Auto-syncing fullName for user {}: {} → {}", keycloakUserId, user.getFullName(), fullName);
+        // Sync fullName: CHỈ điền từ JWT khi DB còn trống / placeholder ("Keycloak User").
+        // Họ tên là dữ liệu khách tự quản lý: nếu luôn ghi đè bằng claim của token thì tên khách vừa
+        // sửa ở trang hồ sơ sẽ bị trả về tên cũ ở lần tải hồ sơ sau (UI_PH1_FR02_002).
+        if (fullName != null && !fullName.isEmpty() && isPlaceholderFullName(user.getFullName())
+                && !fullName.equals(user.getFullName())) {
+            log.info("Auto-filling fullName for user {}: {} → {}", keycloakUserId, user.getFullName(), fullName);
             user.setFullName(fullName);
             changed = true;
         }
@@ -84,9 +87,10 @@ public class UserServiceImpl implements UserService {
             changed = true;
         }
 
-        // Sync avatar: cập nhật nếu DB chưa có avatar hoặc khác với avatar từ JWT
-        if (avatarUrl != null && !avatarUrl.isEmpty() && !avatarUrl.equals(user.getAvatarUrl())) {
-            log.info("Auto-syncing avatar for user {}: {} → {}", keycloakUserId, user.getAvatarUrl(), avatarUrl);
+        // Sync avatar: chỉ điền từ JWT (VD: ảnh Google) khi DB chưa có avatar — không ghi đè ảnh khách tự tải lên
+        if (avatarUrl != null && !avatarUrl.isEmpty()
+                && (user.getAvatarUrl() == null || user.getAvatarUrl().isBlank())) {
+            log.info("Auto-filling avatar for user {}: {}", keycloakUserId, avatarUrl);
             user.setAvatarUrl(avatarUrl);
             changed = true;
         }
@@ -114,8 +118,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByKeycloakUserId(keycloakUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "keycloakUserId", keycloakUserId));
 
+        String newFullName = null;
         if (request.getFullName() != null) {
-            user.setFullName(request.getFullName());
+            newFullName = request.getFullName().trim();
+            if (newFullName.isEmpty()) {
+                throw new IllegalArgumentException("Họ tên không được để trống.");
+            }
+            user.setFullName(newFullName);
         }
         if (request.getPhoneNumber() != null) {
             user.setPhoneNumber(request.getPhoneNumber());
@@ -125,6 +134,17 @@ public class UserServiceImpl implements UserService {
         }
 
         user = userRepository.save(user);
+
+        // Đồng bộ tên lên Keycloak (best-effort) để trang tài khoản Keycloak hiển thị khớp.
+        // DB là nguồn dữ liệu chính: getCurrentUser không còn ghi đè tên bằng claim của token,
+        // nên dù Keycloak lỗi thì tên khách vừa sửa vẫn được giữ.
+        if (newFullName != null) {
+            try {
+                keycloakAdminClient.updateUser(keycloakUserId, null, newFullName);
+            } catch (Exception e) {
+                log.warn("Cannot sync fullName to Keycloak for user {}: {}", keycloakUserId, e.getMessage());
+            }
+        }
         return mapToProfileResponse(user);
     }
 
@@ -246,11 +266,15 @@ public class UserServiceImpl implements UserService {
         user.setIsBlacklisted(blacklisted);
         userRepository.save(user);
 
-        // Đồng bộ lên Keycloak: khóa = vô hiệu hóa đăng nhập thật sự
+        // Đồng bộ lên Keycloak: khóa = vô hiệu hóa đăng nhập thật sự. Nếu Keycloak lỗi thì báo lỗi
+        // (transaction rollback cờ trong DB), không được báo "đã khóa" khi khách vẫn đăng nhập được.
         try {
             keycloakAdminClient.setEnabled(user.getKeycloakUserId(), !Boolean.TRUE.equals(blacklisted));
         } catch (Exception e) {
-            log.warn("Cannot sync enabled status to Keycloak for user {}: {}", userId, e.getMessage());
+            log.error("Cannot sync enabled status to Keycloak for user {}: {}", userId, e.getMessage());
+            throw new KeycloakSyncException((Boolean.TRUE.equals(blacklisted)
+                    ? "Không thể khóa tài khoản trên Keycloak: "
+                    : "Không thể mở khóa tài khoản trên Keycloak: ") + e.getMessage());
         }
     }
 
@@ -281,7 +305,8 @@ public class UserServiceImpl implements UserService {
                 request.getPassword()
         );
 
-        // 2. Tạo user trong DB
+        // 2. Tạo user trong DB — nếu lỗi (VD: trùng email) thì xóa user vừa tạo trên Keycloak (bù trừ),
+        //    tránh tài khoản Keycloak mồ côi đăng nhập được nhưng không có hồ sơ.
         User user = User.builder()
                 .keycloakUserId(keycloakUserId)
                 .username(request.getUsername())
@@ -293,14 +318,32 @@ public class UserServiceImpl implements UserService {
                 .isBlacklisted(false)
                 .active(true)
                 .build();
-        user = userRepository.save(user);
+        try {
+            user = userRepository.save(user);
+        } catch (RuntimeException e) {
+            log.error("Saving user {} to DB failed, rolling back Keycloak user {}: {}",
+                    request.getUsername(), keycloakUserId, e.getMessage());
+            try {
+                keycloakAdminClient.deleteUser(keycloakUserId);
+            } catch (Exception compensationError) {
+                log.error("Compensation failed: cannot delete Keycloak user {}: {}",
+                        keycloakUserId, compensationError.getMessage());
+            }
+            throw e;
+        }
 
         // 3. Publish event
         userEventProducer.publishUserRegistered(user);
 
-        // 4. Lấy roles mặc định
-        List<String> roles = keycloakAdminClient.getUserRealmRoles(keycloakUserId)
-                .stream().map(r -> r.getName()).collect(Collectors.toList());
+        // 4. Lấy roles mặc định (lỗi đọc roles không được làm hỏng việc tạo user đã thành công)
+        List<String> roles;
+        try {
+            roles = keycloakAdminClient.getUserRealmRoles(keycloakUserId)
+                    .stream().map(r -> r.getName()).collect(Collectors.toList());
+        } catch (Exception e) {
+            log.warn("Cannot fetch roles for new user {}: {}", keycloakUserId, e.getMessage());
+            roles = List.of();
+        }
 
         return mapToAdminDetail(user, roles, true);
     }
@@ -518,6 +561,10 @@ public class UserServiceImpl implements UserService {
         User saved = userRepository.save(newUser);
         userEventProducer.publishUserRegistered(saved);
         return saved;
+    }
+
+    private static boolean isPlaceholderFullName(String fullName) {
+        return fullName == null || fullName.isBlank() || "Keycloak User".equals(fullName);
     }
 
     private UserProfileResponse mapToProfileResponse(User user) {

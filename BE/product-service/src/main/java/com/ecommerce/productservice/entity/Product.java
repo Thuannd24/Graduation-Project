@@ -90,6 +90,10 @@ public class Product {
     @Builder.Default
     private BigDecimal ratingAvg = BigDecimal.ZERO;
 
+    // Số lượt đánh giá, cập nhật cùng ratingAvg mỗi khi có đánh giá mới (cột mới, nullable cho dữ liệu cũ)
+    @Column(name = "review_count")
+    private Integer reviewCount;
+
     @Builder.Default
     private Boolean active = true;
 

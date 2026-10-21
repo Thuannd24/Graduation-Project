@@ -23,4 +23,11 @@ public class CheckoutPreviewResponse {
     private String couponCode;
     private String voucherMessage;
     private boolean voucherApplied;
+    /** Ngưỡng miễn phí ship (giá trị hàng sau giảm giá sản phẩm). */
+    private BigDecimal freeShippingThreshold;
+    /** COD được phép khi finalAmount <= codMaxAmount. */
+    private boolean codAvailable;
+    private BigDecimal codMaxAmount;
+    /** Số lượng tối đa mỗi sản phẩm/biến thể trong một đơn. */
+    private Integer maxQuantityPerItem;
 }

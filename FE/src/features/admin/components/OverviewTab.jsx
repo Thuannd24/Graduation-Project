@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Icon from "../../../components/common/Icon.jsx";
+import { orderStatusLabel } from "../../../utils/orderStatus.js";
 import {
   AreaChart,
   Area,
@@ -15,11 +16,12 @@ import {
   Cell,
   Legend
 } from "recharts";
+import { PRODUCT_PLACEHOLDER, applyProductPlaceholder } from "../../../utils/imageFallback.js";
 
 const ORDER_STATUS_FILTERS = [
   { value: "all", label: "Tất cả" },
   { value: "pending", label: "Đang chờ" },
-  { value: "paid", label: "Đã thanh toán" },
+  { value: "paid", label: "Đã xác nhận" },
   { value: "cancelled", label: "Đã hủy" }
 ];
 
@@ -220,8 +222,8 @@ export default function OverviewTab({
   const filteredOrdersForTable = orders.filter(o => {
     if (transactionFilter === "all") return true;
     if (transactionFilter === "paid") return isPaidStatus(o.status);
-    if (transactionFilter === "cancelled") return o.status === "CANCELLED";
-    if (transactionFilter === "pending") return !isPaidStatus(o.status) && o.status !== "CANCELLED";
+    if (transactionFilter === "cancelled") return ["CANCELLED", "RETURNING", "RETURNED"].includes(o.status);
+    if (transactionFilter === "pending") return !isPaidStatus(o.status) && !["CANCELLED", "RETURNING", "RETURNED"].includes(o.status);
     return true;
   }).slice(0, 5);
 
@@ -538,18 +540,18 @@ export default function OverviewTab({
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                           o.status === "DELIVERED" || o.status === "CONFIRMED" || o.status === "SHIPPED"
                             ? "bg-emerald-50 text-emerald-700"
-                            : o.status === "CANCELLED"
+                            : ["CANCELLED", "RETURNING", "RETURNED"].includes(o.status)
                             ? "bg-rose-50 text-rose-650"
                             : "bg-amber-50 text-amber-600"
                         }`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${
                             o.status === "DELIVERED" || o.status === "CONFIRMED" || o.status === "SHIPPED"
                               ? "bg-emerald-500"
-                              : o.status === "CANCELLED"
+                              : ["CANCELLED", "RETURNING", "RETURNED"].includes(o.status)
                               ? "bg-rose-500"
                               : "bg-amber-500"
                           }`}></span>
-                          {o.status === "DELIVERED" || o.status === "CONFIRMED" || o.status === "SHIPPED" ? "Đã thanh toán" : o.status === "CANCELLED" ? "Đã hủy" : "Đang chờ"}
+                          {orderStatusLabel(o.status)}
                         </span>
                       </td>
                       <td className="p-4 font-extrabold text-slate-800 text-right">
@@ -591,7 +593,7 @@ export default function OverviewTab({
                 <div key={p.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100 p-1 flex items-center justify-center">
-                      <img src={p.image} alt={p.name} className="w-full h-full object-contain rounded" />
+                      <img src={p.image || PRODUCT_PLACEHOLDER} alt={p.name} onError={applyProductPlaceholder} className="w-full h-full object-contain rounded" />
                     </div>
                     <div>
                       <span className="font-extrabold text-slate-700 text-xs block max-w-[150px] truncate">{p.name}</span>

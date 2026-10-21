@@ -17,9 +17,53 @@ import {
 import Icon from "../../../components/common/Icon.jsx";
 import { aiApi } from "../../../services/aiApi.ts";
 import { productApi } from "../../../services/productApi";
+import { inventoryApi } from "../../../services/inventoryApi.ts";
 import { formatVnd } from "../../../utils/format.js";
 
-export default function AnalyticsAITab() {
+// Ngưỡng tồn thấp dùng cho khuyến nghị nhập hàng (khớp backend: quantity <= threshold).
+const RESTOCK_THRESHOLD = 10;
+const NOT_SUPPORTED = "Chưa hỗ trợ";
+
+// Nhãn hiển thị rõ ràng cho mọi khối đang dùng số minh họa (không phải dữ liệu/model thật).
+function DemoBadge() {
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50"
+      title="Số liệu minh họa, không phải kết quả từ dữ liệu thật"
+    >
+      <Icon name="science" className="text-[11px]" /> Dữ liệu minh họa
+    </span>
+  );
+}
+
+/** Khuyến nghị nhập hàng tính từ tồn kho THẬT: các SKU có tồn <= RESTOCK_THRESHOLD, thấp nhất lên đầu. */
+async function loadRestockRecommendations() {
+  const lowStock = await inventoryApi.getLowStock(RESTOCK_THRESHOLD);
+  const top = [...lowStock].sort((a, b) => (a.quantity ?? 0) - (b.quantity ?? 0)).slice(0, 10);
+  const productIds = Array.from(new Set(top.map((r) => r.productId)));
+  const details = await Promise.all(
+    productIds.map((id) => productApi.adminGetProductDetail(id).catch(() => null))
+  );
+  const byId = new Map(details.filter(Boolean).map((d) => [String(d.id), d]));
+  return top.map((r) => {
+    const product = byId.get(String(r.productId));
+    const variant = Array.isArray(product?.variants)
+      ? product.variants.find((v) => Number(v?.id) === Number(r.variantId))
+      : null;
+    const variantLabel = variant?.variantAttr && typeof variant.variantAttr === "object"
+      ? Object.values(variant.variantAttr).join(" / ")
+      : "";
+    return {
+      key: `${r.productId}:${r.variantId ?? 0}`,
+      productName: product?.name || `Sản phẩm #${r.productId}`,
+      variantLabel,
+      currentStock: Number(r.quantity ?? 0),
+      status: Number(r.quantity ?? 0) <= 0 ? "out" : "low"
+    };
+  });
+}
+
+export default function AnalyticsAITab({ onNavigate }) {
   const [activeSubTab, setActiveSubTab] = useState("forecasting");
   
   // States for data
@@ -30,6 +74,7 @@ export default function AnalyticsAITab() {
   const [segments, setSegments] = useState([]);
   const [segmentsMeta, setSegmentsMeta] = useState({ is_demo_data: false, note: null });
   const [stockRecommendations, setStockRecommendations] = useState([]);
+  const [stockRecError, setStockRecError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,44 +83,20 @@ export default function AnalyticsAITab() {
       aiApi.getDemandForecasting(),
       aiApi.getAnomalyLogs(),
       aiApi.getCustomerSegmentation(),
-      productApi.listProducts({ size: "10" }).catch((err) => {
-        console.warn("Could not load products for inventory forecasting, using defaults", err);
+      loadRestockRecommendations().catch((err) => {
+        console.warn("Không tải được tồn kho cho khuyến nghị nhập hàng", err);
+        setStockRecError("Không tải được dữ liệu tồn kho (cần đăng nhập ADMIN/STAFF).");
         return [];
       })
     ])
-      .then(([forecast, logs, segs, prods]) => {
+      .then(([forecast, logs, segs, restock]) => {
         setForecastData(forecast.data);
         setForecastMeta({ is_demo_data: forecast.is_demo_data, note: forecast.note });
         setAnomalies(logs.data);
         setAnomaliesMeta({ is_demo_data: logs.is_demo_data, note: logs.note });
         setSegments(segs.data);
         setSegmentsMeta({ is_demo_data: segs.is_demo_data, note: segs.note });
-
-        // Build dynamic stock planning recommendations from actual database products
-        const planning = [
-          {
-            productName: prods[0]?.name || "Sản phẩm mẫu",
-            currentStock: 12,
-            forecastDemand: 45,
-            status: "critical",
-            action: "restock_urgent"
-          },
-          {
-            productName: prods[1]?.name || "Sony WH-1000XM5 Wireless Headphones",
-            currentStock: 5,
-            forecastDemand: 22,
-            status: "low",
-            action: "restock_soon"
-          },
-          {
-            productName: prods[2]?.name || "Bàn phím cơ ASUS ROG Strix Scope II",
-            currentStock: 42,
-            forecastDemand: 18,
-            status: "excess",
-            action: "campaign_discount"
-          }
-        ];
-        setStockRecommendations(planning);
+        setStockRecommendations(restock);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -91,15 +112,8 @@ export default function AnalyticsAITab() {
     }));
   }, [forecastData]);
 
-  // Handle actions
-  const handleMarkClear = (id) => {
-    setAnomalies(prev => prev.filter(item => item.id !== id));
-    alert(`Đã gỡ cờ đỏ và đánh dấu giao dịch ${id} là An toàn.`);
-  };
-
-  const handleFreezeUser = (username) => {
-    alert(`Đã tạm khóa tài khoản của khách hàng: ${username}. Yêu cầu xác thực bảo mật đã được gửi.`);
-  };
+  // Các nút "Đánh dấu sạch", "Tạm khóa user", "Kích hoạt chiến dịch" trước đây chỉ hiện thông báo
+  // giả (không gọi API nào) -> nay bị vô hiệu hóa kèm tooltip "Chưa hỗ trợ".
 
   // Banner minh bạch: 2/3 tab (demand-forecasting, anomalies) chưa có model thật đứng sau — dựng
   // bản thật là hướng phát triển riêng ngoài phạm vi tính năng churn-risk. Không ẩn đi để tránh
@@ -182,8 +196,9 @@ export default function AnalyticsAITab() {
               <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
                 <div className="flex justify-between items-center mb-6">
                   <div>
-                    <h3 className="text-base font-extrabold text-slate-800 dark:text-white">
+                    <h3 className="text-base font-extrabold text-slate-800 dark:text-white flex items-center gap-2 flex-wrap">
                       Biểu đồ Dự Báo Doanh Số & Nhu Cầu Tồn Kho (30 ngày)
+                      {forecastMeta.is_demo_data !== false && <DemoBadge />}
                     </h3>
                   </div>
                 </div>
@@ -216,16 +231,20 @@ export default function AnalyticsAITab() {
                 </div>
               </div>
 
-              {/* Warning stock recommendations table */}
+              {/* Khuyến nghị nhập hàng: tính từ tồn kho thật (không phải dự báo) */}
               <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
-                <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
                   <div>
                     <h3 className="text-sm font-extrabold text-slate-800 dark:text-white">
-                      Khuyến Nghị Tối Ưu Hóa Tồn Kho (Inventory Planning AI)
+                      Khuyến Nghị Nhập Hàng (theo tồn kho thực tế)
                     </h3>
-                    <p className="text-[10.5px] text-slate-400 font-medium">Các mặt hàng dự báo sẽ thiếu hụt trong chu kỳ bán hàng tiếp theo.</p>
+                    <p className="text-[10.5px] text-slate-400 font-medium">
+                      Các SKU có tồn kho ≤ {RESTOCK_THRESHOLD}, sắp xếp từ thấp nhất. Chưa tính tốc độ bán / dự báo nhu cầu.
+                    </p>
                   </div>
-                  <Icon name="warning" className="text-amber-500 animate-bounce" />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/50 shrink-0">
+                    <Icon name="database" className="text-[11px]" /> Dữ liệu thật
+                  </span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs border-collapse">
@@ -233,59 +252,52 @@ export default function AnalyticsAITab() {
                       <tr className="bg-slate-50/70 dark:bg-slate-900/60 text-slate-400 border-b border-slate-100 dark:border-slate-800">
                         <th className="p-4 font-bold text-[10px] uppercase">Sản phẩm</th>
                         <th className="p-4 font-bold text-[10px] uppercase text-center">Tồn Kho Hiện Tại</th>
-                        <th className="p-4 font-bold text-[10px] uppercase text-center">Nhu Cầu Dự Báo (30 ngày)</th>
                         <th className="p-4 font-bold text-[10px] uppercase">Trạng Thái</th>
-                        <th className="p-4 font-bold text-[10px] uppercase">Hành Động Khuyến Nghị</th>
+                        <th className="p-4 font-bold text-[10px] uppercase">Hành Động</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                      {stockRecommendations.map((rec, index) => (
-                        <tr key={index}>
+                      {stockRecommendations.map((rec) => (
+                        <tr key={rec.key}>
                           <td className="p-4 font-extrabold text-slate-700 dark:text-slate-300">
-                            {rec.productName}
+                            <span className="line-clamp-2">{rec.productName}</span>
+                            {rec.variantLabel && (
+                              <span className="block text-[10px] font-semibold text-slate-400 mt-0.5">{rec.variantLabel}</span>
+                            )}
                           </td>
                           <td className="p-4 text-center font-extrabold text-slate-600 dark:text-slate-400">
-                            {rec.currentStock} chiếc
-                          </td>
-                          <td className="p-4 text-center font-extrabold text-rose-500">
-                            {rec.forecastDemand} chiếc
+                            {rec.currentStock}
                           </td>
                           <td className="p-4">
-                            {rec.status === "critical" && (
+                            {rec.status === "out" ? (
                               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-rose-50 dark:bg-rose-950/20 text-rose-600">
-                                Cực kỳ thiếu hụt (Rủi ro Out-of-Stock)
+                                Hết hàng
                               </span>
-                            )}
-                            {rec.status === "low" && (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-rose-50 dark:bg-rose-950/20 text-rose-600">
-                                Cần bổ sung kho
-                              </span>
-                            )}
-                            {rec.status === "excess" && (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600">
-                                Dư thừa tồn kho
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black bg-amber-50 dark:bg-amber-950/20 text-amber-600">
+                                Sắp hết (≤ {RESTOCK_THRESHOLD})
                               </span>
                             )}
                           </td>
                           <td className="p-4 font-bold text-slate-500">
-                            {rec.action === "restock_urgent" && (
-                              <button className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm">
-                                Tạo Đơn Nhập Kho Khẩn Cấp
-                              </button>
-                            )}
-                            {rec.action === "restock_soon" && (
-                              <button className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm">
-                                Tạo Đơn Nhập Kho Khẩn Cấp
-                              </button>
-                            )}
-                            {rec.action === "campaign_discount" && (
-                              <span className="text-[10px] text-slate-400 font-semibold">
-                                Khuyến nghị tạo Campaign Xả hàng/Khuyến mãi
-                              </span>
-                            )}
+                            <button
+                              type="button"
+                              onClick={() => onNavigate && onNavigate("inventory")}
+                              disabled={!onNavigate}
+                              className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Nhập kho
+                            </button>
                           </td>
                         </tr>
                       ))}
+                      {stockRecommendations.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="p-8 text-center text-slate-400 font-bold">
+                            {stockRecError || `Không có SKU nào tồn kho ≤ ${RESTOCK_THRESHOLD}.`}
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -300,8 +312,9 @@ export default function AnalyticsAITab() {
               <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
                 <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-extrabold text-slate-800 dark:text-white">
+                    <h3 className="text-sm font-extrabold text-slate-800 dark:text-white flex items-center gap-2 flex-wrap">
                       Danh Sách Cảnh Báo Giao Dịch Bất Thường
+                      {anomaliesMeta.is_demo_data !== false && <DemoBadge />}
                     </h3>
                     <p className="text-[10.5px] text-slate-400 font-medium">
                       Các giao dịch mua sắm có dấu hiệu bất thường về mặt hành vi, số lượng hoặc thanh toán được AI gắn cờ đỏ rủi ro.
@@ -341,14 +354,18 @@ export default function AnalyticsAITab() {
                           <td className="p-4 text-center">
                             <div className="flex gap-2 justify-center">
                               <button
-                                onClick={() => handleMarkClear(item.id)}
-                                className="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 rounded-lg text-[9px] font-bold cursor-pointer transition-all"
+                                type="button"
+                                disabled
+                                title={NOT_SUPPORTED}
+                                className="px-2.5 py-1 bg-white text-slate-600 border border-slate-200 rounded-lg text-[9px] font-bold opacity-50 cursor-not-allowed"
                               >
                                 Đánh Dấu Sạch
                               </button>
                               <button
-                                onClick={() => handleFreezeUser(item.user)}
-                                className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[9px] font-bold border-none cursor-pointer transition-all shadow-sm"
+                                type="button"
+                                disabled
+                                title={NOT_SUPPORTED}
+                                className="px-2.5 py-1 bg-rose-600 text-white rounded-lg text-[9px] font-bold border-none opacity-50 cursor-not-allowed shadow-sm"
                               >
                                 Tạm Khóa User
                               </button>
@@ -377,8 +394,9 @@ export default function AnalyticsAITab() {
                 {/* Segmentation breakdown chart */}
                 <div className="lg:col-span-8 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                   <div>
-                    <h3 className="text-base font-extrabold text-slate-800 dark:text-white">
+                    <h3 className="text-base font-extrabold text-slate-800 dark:text-white flex items-center gap-2 flex-wrap">
                       Mô hình Phân Cụm Khách Hàng (K-Means & RFM)
+                      {segmentsMeta.is_demo_data && <DemoBadge />}
                     </h3>
                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">
                       Phân chia khách hàng dựa trên tần suất mua (Frequency), mức chi tiêu (Monetary) và thời gian tương tác gần nhất (Recency).
@@ -454,18 +472,32 @@ export default function AnalyticsAITab() {
               <div className="bg-gradient-to-r from-rose-500 to-red-600 text-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="space-y-1 text-center md:text-left">
                   <h4 className="text-sm font-extrabold tracking-tight flex items-center gap-1.5 justify-center md:justify-start">
-                    <Icon name="campaign" /> Kích hoạt Chiến Dịch Khuyến Mãi Nhắm Mục Tiêu (Targeted AI Campaign)
+                    <Icon name="campaign" /> Đề xuất chiến dịch khuyến mãi nhắm mục tiêu
+                    <span className="ml-1 px-2 py-0.5 rounded-full bg-white/20 text-[9px] font-black uppercase tracking-wider">Chưa hỗ trợ tự động</span>
                   </h4>
                   <p className="text-[11px] text-white/80 font-medium max-w-2xl leading-relaxed">
-                    Hệ thống AI đề xuất gửi mã giảm giá <strong>Giảm 10% đơn tiếp theo</strong> cho nhóm <strong>Khách hàng nguy cơ rời bỏ</strong> để tăng tỉ lệ giữ chân (Retention rate) và kích thích tái mua sắm.
+                    Gợi ý: gửi mã <strong>Giảm 10% đơn tiếp theo</strong> cho nhóm <strong>Khách hàng nguy cơ rời bỏ</strong> để tăng tỉ lệ giữ chân. Nút kích hoạt tự động chưa được nối với hệ thống chiến dịch.
                   </p>
                 </div>
-                <button
-                  onClick={() => alert("Chiến dịch AI Targeted Campaign đã được khởi tạo! 220 Khách hàng đã được gửi email thông báo.")}
-                  className="px-6 py-3 bg-white hover:bg-rose-50 text-rose-600 font-extrabold text-xs rounded-xl shadow-md cursor-pointer border-none transition-all active:scale-[0.98] shrink-0"
-                >
-                  Kích Hoạt Chiến Dịch Ngay
-                </button>
+                <div className="flex flex-col items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    disabled
+                    title={`${NOT_SUPPORTED} — tạo chiến dịch tại mục Quy trình khuyến mãi`}
+                    className="px-6 py-3 bg-white text-rose-600 font-extrabold text-xs rounded-xl shadow-md border-none opacity-60 cursor-not-allowed"
+                  >
+                    Kích Hoạt Chiến Dịch Ngay
+                  </button>
+                  {onNavigate && (
+                    <button
+                      type="button"
+                      onClick={() => onNavigate("campaigns")}
+                      className="text-[10px] font-bold text-white/90 underline bg-transparent border-none cursor-pointer"
+                    >
+                      Tạo chiến dịch thủ công
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           )}

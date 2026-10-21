@@ -1,6 +1,8 @@
 package com.ecommerce.orderservice.event.consumer;
 
+import com.ecommerce.orderservice.repository.OrderRepository;
 import com.ecommerce.orderservice.service.OrderService;
+import com.ecommerce.orderservice.support.OrderStatusMachine;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class PaymentKafkaConsumer {
 
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
     private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "payment-events", groupId = "order-service-group")
@@ -47,7 +50,23 @@ public class PaymentKafkaConsumer {
 
         log.info("Processing payment event '{}' for Order ID: {}", eventType, orderId);
 
-        if ("PaymentFailedEvent".equalsIgnoreCase(eventType)) {
+        String failureType = rootNode.hasNonNull("failureType") ? rootNode.get("failureType").asText() : null;
+        if ("PaymentFailedEvent".equalsIgnoreCase(eventType)
+                && ("GATEWAY_DECLINED".equalsIgnoreCase(failureType) || "ATTEMPT_EXPIRED".equalsIgnoreCase(failureType))) {
+            // Một lượt thanh toán VNPay thất bại / khách hủy ở cổng / lượt hết hạn: KHÔNG hủy đơn. Đơn vẫn chờ
+            // thanh toán (giữ hàng) để khách thanh toán lại hoặc đổi sang COD; OrderExpiryScheduler hủy đơn khi
+            // hết hạn giữ hàng mà vẫn chưa thanh toán.
+            log.info("Payment attempt for Order ID {} failed ({}). Order kept awaiting payment for retry.",
+                    orderId, failureType);
+        } else if ("PaymentFailedEvent".equalsIgnoreCase(eventType)) {
+            // Sự kiện kiểu cũ (không có failureType) chỉ được hủy đơn CHƯA thanh toán; đơn đã xác nhận (đã trả
+            // tiền hoặc COD) không được hủy bởi một sự kiện thất bại đến muộn / bị phát lại.
+            String currentStatus = orderRepository.findById(orderId).map(o -> o.getStatus()).orElse(null);
+            if (currentStatus == null || !OrderStatusMachine.UNPAID.contains(currentStatus)) {
+                log.warn("Ignoring legacy PaymentFailedEvent for Order ID {} in status {}", orderId, currentStatus);
+                ack.acknowledge();
+                return;
+            }
             try {
                 orderService.cancelOrder(orderId, userId, email);
                 log.info("Order ID {} successfully cancelled due to payment failure or expiration", orderId);
@@ -60,7 +79,7 @@ public class PaymentKafkaConsumer {
         } else if ("PaymentSuccessEvent".equalsIgnoreCase(eventType) || "PaymentCODConfirmedEvent".equalsIgnoreCase(eventType)) {
             try {
                 orderService.updateOrderStatus(orderId, "CONFIRMED");
-                log.info("Payment event '{}' for Order ID {} processed. Order status updated to CONFIRMED. Proceeding to shipping phase.", eventType, orderId);
+                log.info("Payment event '{}' for Order ID {} processed (CONFIRMED if the state machine allows it).", eventType, orderId);
             } catch (Exception e) {
                 log.error("Error updating order ID {} status to CONFIRMED for payment event", orderId, e);
                 throw new RuntimeException("Error processing payment event", e);

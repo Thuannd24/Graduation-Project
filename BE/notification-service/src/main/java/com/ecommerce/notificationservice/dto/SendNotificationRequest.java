@@ -1,5 +1,6 @@
 package com.ecommerce.notificationservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +24,11 @@ public class SendNotificationRequest {
     private String templateId;
     /** Placeholder values for {{key}} substitution in template or raw content. */
     private Map<String, String> templateVariables;
+    /**
+     * HTML fragments built by notification-service itself (order item table, tracking box),
+     * inserted into the e-mail body without escaping. Never read from JSON, so callers of the
+     * internal API cannot inject markup through it.
+     */
+    @JsonIgnore
+    private Map<String, String> trustedHtmlVariables;
 }

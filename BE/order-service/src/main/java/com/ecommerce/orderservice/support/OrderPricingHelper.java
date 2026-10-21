@@ -11,6 +11,8 @@ public final class OrderPricingHelper {
 
     public static final BigDecimal VAT_RATE = new BigDecimal("0.10");
     public static final BigDecimal POINTS_TO_VND = new BigDecimal("1000");
+    /** COD chỉ cho đơn có thành tiền <= 20.000.000đ (payment-service kiểm tra lại khi khởi tạo thanh toán). */
+    public static final BigDecimal COD_MAX_AMOUNT = new BigDecimal("20000000");
 
     private OrderPricingHelper() {
     }
@@ -39,10 +41,16 @@ public final class OrderPricingHelper {
         BigDecimal shipDisc = nonNegative(shippingDiscount);
         BigDecimal pointDisc = nonNegative(pointDiscount);
 
-        BigDecimal shippingFee = ShippingFeeCalculator.calculate(safeSubtotal);
+        BigDecimal shippingFee = ShippingFeeCalculator.calculate(safeSubtotal, productDisc);
+        // Giảm phí ship (voucher freeship) không được vượt phí ship thực tế, không trừ lấn sang tiền hàng
+        // (TC_PH3_PRICE_04).
+        shipDisc = shipDisc.min(shippingFee);
+        // Giá niêm yết ĐÃ BAO GỒM VAT 10%: không cộng thêm VAT. vatAmount chỉ là phần VAT tách ra từ giá
+        // để hiển thị trên hóa đơn = phần chịu thuế x 10/110.
         BigDecimal taxable = safeSubtotal.subtract(productDisc).subtract(pointDisc).max(BigDecimal.ZERO);
-        BigDecimal vat = taxable.multiply(VAT_RATE).setScale(0, RoundingMode.HALF_UP);
-        BigDecimal finalAmount = taxable.add(vat).add(shippingFee).subtract(shipDisc).max(BigDecimal.ZERO);
+        BigDecimal vat = taxable.multiply(VAT_RATE)
+                .divide(BigDecimal.ONE.add(VAT_RATE), 0, RoundingMode.HALF_UP);
+        BigDecimal finalAmount = taxable.add(shippingFee).subtract(shipDisc).max(BigDecimal.ZERO);
         BigDecimal totalDiscount = productDisc.add(shipDisc).add(pointDisc);
 
         return PricingBreakdown.builder()

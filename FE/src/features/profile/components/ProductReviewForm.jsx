@@ -86,6 +86,10 @@ export default function ProductReviewForm({ item, onSubmitted, onCancel }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+      setError("Vui lòng chọn số sao từ 1 đến 5.");
+      return;
+    }
     if (!comment.trim()) {
       setError("Vui lòng nhập nội dung đánh giá.");
       return;
@@ -104,7 +108,13 @@ export default function ProductReviewForm({ item, onSubmitted, onCancel }) {
       });
       onSubmitted?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Gửi đánh giá thất bại");
+      // Hiện đúng thông báo của server (400: điểm ngoài 1–5, 503: không xác minh được đơn hàng...).
+      const message = err instanceof Error ? err.message : "";
+      if (err?.status === 503 || /HTTP 503/.test(message)) {
+        setError("Không thể xác minh đơn hàng lúc này, vui lòng thử lại sau.");
+      } else {
+        setError(message || "Gửi đánh giá thất bại");
+      }
     } finally {
       setSubmitting(false);
     }

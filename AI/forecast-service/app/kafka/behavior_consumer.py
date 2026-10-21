@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from aiokafka import AIOKafkaConsumer
 from sqlalchemy import text
 
+from app.core.timestamps import parse_event_timestamp
 from shared_common.config import shared_settings
 from shared_common.contracts import (
     TOPIC_PRODUCT_VIEWED,
@@ -117,10 +118,12 @@ def _parse_message(topic: str, payload: dict) -> dict | None:
     return None
 
 
-def _parse_timestamp(raw: str) -> datetime:
-    """ISO không timezone, quy ước là UTC cho MỌI nguồn: FE `toISOString()`, BE Java
-    `LocalDateTime.now(ZoneOffset.UTC)` — cùng múi giờ với NOW() của DB."""
-    return datetime.fromisoformat(raw)
+def _parse_timestamp(raw) -> datetime:
+    """Trả datetime UTC không tzinfo, cùng múi giờ với NOW() của DB. Không có offset thì quy ước UTC
+    cho MỌI nguồn: FE `toISOString()` (hậu tố Z), BE Java `LocalDateTime.now(ZoneOffset.UTC).toString()`
+    (phần giây tới 9 chữ số). `datetime.fromisoformat` của Python 3.10 từ chối cả hai định dạng này,
+    làm phần lớn sự kiện xem/thêm giỏ bị bỏ — xem app/core/timestamps.py."""
+    return parse_event_timestamp(raw)
 
 
 class BehaviorEventConsumer:

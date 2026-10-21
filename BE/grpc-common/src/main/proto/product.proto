@@ -32,6 +32,9 @@ message ProductPriceInfoGrpc {
   repeated ProductVariantInfoGrpc variants = 7;
   string list_price = 8;
   string sale_price = 9;
+  // true = ngừng kinh doanh (không cho thêm giỏ / đặt hàng). Đặt theo nghĩa phủ định để giá trị mặc định
+  // false của proto3 an toàn: product-service bản cũ (không set trường này) vẫn được coi là còn bán.
+  bool discontinued = 10;
 }
 
 message ProductVariantInfoGrpc {

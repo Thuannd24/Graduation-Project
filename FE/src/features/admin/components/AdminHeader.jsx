@@ -1,7 +1,43 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Icon from "../../../components/common/Icon.jsx";
+import { inventoryApi } from "../../../services/inventoryApi.ts";
 
-export default function AdminHeader({ activeTab, darkMode, onToggleDarkMode }) {
+const LOW_STOCK_THRESHOLD = 10;
+
+export default function AdminHeader({ activeTab, darkMode, onToggleDarkMode, orders = [], setActiveTab }) {
+  const [bellOpen, setBellOpen] = useState(false);
+  const [lowStockCount, setLowStockCount] = useState(null); // null = không tải được
+  const bellRef = useRef(null);
+
+  // Số SKU tồn thấp lấy từ API thật (/admin/inventories/low-stock, lọc quantity <= ngưỡng).
+  useEffect(() => {
+    let cancelled = false;
+    inventoryApi
+      .getLowStock(LOW_STOCK_THRESHOLD)
+      .then((items) => { if (!cancelled) setLowStockCount(items.length); })
+      .catch(() => { if (!cancelled) setLowStockCount(null); });
+    return () => { cancelled = true; };
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!bellOpen) return undefined;
+    const onClick = (e) => {
+      if (bellRef.current && !bellRef.current.contains(e.target)) setBellOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [bellOpen]);
+
+  const pendingOrders = (Array.isArray(orders) ? orders : []).filter(
+    (o) => ["PENDING", "CONFIRMED", "RETURNING"].includes(o?.status)
+  ).length;
+  const totalAlerts = pendingOrders + (lowStockCount || 0);
+
+  const goTo = (tab) => {
+    setBellOpen(false);
+    if (setActiveTab) setActiveTab(tab);
+  };
+
   const getTabTitle = () => {
     switch (activeTab) {
       case "overview":
@@ -23,7 +59,17 @@ export default function AdminHeader({ activeTab, darkMode, onToggleDarkMode }) {
       case "campaigns":
         return "Quy Trình Khuyến Mãi";
       case "promotion-stats":
-        return "Thống Kê Promotion";
+        return "Thống Kê Khuyến Mãi";
+      case "transactions":
+        return "Giao Dịch Thanh Toán";
+      case "admin-role":
+        return "Phân Quyền Quản Trị";
+      case "reviews":
+        return "Quản Lý Đánh Giá";
+      case "analytics-ai":
+        return "Phân Tích AI";
+      case "support-chat":
+        return "Hỗ Trợ Khách Hàng";
       default:
         return "Hệ thống Quản Trị";
     }
@@ -36,13 +82,53 @@ export default function AdminHeader({ activeTab, darkMode, onToggleDarkMode }) {
       </span>
 
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 relative rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-        >
-          <Icon name="notifications" className="text-xl" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500" />
-        </button>
+        <div className="relative" ref={bellRef}>
+          <button
+            type="button"
+            onClick={() => setBellOpen((v) => !v)}
+            aria-label={totalAlerts > 0 ? `${totalAlerts} việc cần xử lý` : "Thông báo"}
+            title="Việc cần xử lý"
+            className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 relative rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          >
+            <Icon name="notifications" className="text-xl" />
+            {totalAlerts > 0 && (
+              <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-rose-500 text-white text-[9px] font-black flex items-center justify-center">
+                {totalAlerts > 99 ? "99+" : totalAlerts}
+              </span>
+            )}
+          </button>
+          {bellOpen && (
+            <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-30 overflow-hidden">
+              <p className="px-4 py-2.5 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 dark:border-slate-700">
+                Việc cần xử lý
+              </p>
+              <button
+                type="button"
+                onClick={() => goTo("orders")}
+                className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+              >
+                <Icon name="receipt_long" className="text-amber-500 text-lg" />
+                <span className="flex-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
+                  {pendingOrders > 0 ? `${pendingOrders} đơn cần xử lý (chờ xác nhận / chờ giao / chờ hoàn hàng)` : "Không có đơn chờ xử lý"}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => goTo("inventory")}
+                className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+              >
+                <Icon name="inventory_2" className="text-rose-500 text-lg" />
+                <span className="flex-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
+                  {lowStockCount == null
+                    ? "Không tải được cảnh báo tồn kho"
+                    : lowStockCount > 0
+                    ? `${lowStockCount} SKU tồn kho ≤ ${LOW_STOCK_THRESHOLD}`
+                    : "Không có SKU sắp hết hàng"}
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
 
         <button
           type="button"

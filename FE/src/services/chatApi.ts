@@ -83,16 +83,25 @@ export const chatApi = {
     });
   },
 
-  handoverToStaff: async (roomId: string): Promise<ChatRoomResponse> => {
+  handoverToStaff: async (roomId: string, guestId?: string): Promise<ChatRoomResponse> => {
+    const headers: Record<string, string> = {};
+    if (guestId) {
+      headers["X-Guest-Id"] = guestId;
+    }
     return apiClient.get<ChatRoomResponse>(`/public/chat/rooms/${roomId}/handover`, {
-      method: "PUT"
+      method: "PUT",
+      headers
     });
   },
 
-  uploadImage: async (roomId: string, file: File): Promise<{ url: string }> => {
+  uploadImage: async (roomId: string, file: File, guestId?: string): Promise<{ url: string }> => {
     const formData = new FormData();
     formData.append("file", file);
-    return apiClient.upload<{ url: string }>(`/public/chat/rooms/${roomId}/upload-image`, formData);
+    const headers: Record<string, string> = {};
+    if (guestId) {
+      headers["X-Guest-Id"] = guestId;
+    }
+    return apiClient.upload<{ url: string }>(`/public/chat/rooms/${roomId}/upload-image`, formData, { headers });
   },
 
   // --- STAFF / ADMIN APIs ---

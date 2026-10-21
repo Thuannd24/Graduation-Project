@@ -45,8 +45,16 @@ minio:
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  internal:
+    # Shared key for /api/internal/** calls (user-service email lookup)
+    api-key: ${INTERNAL_API_KEY:dev-internal-api-key}
+  user-service:
+    base-url: ${USER_SERVICE_URL:http://user-service}
   mail:
     from: ${MAIL_FROM:${MAIL_USERNAME}}
+    retry:
+      max-attempts: ${MAIL_RETRY_MAX_ATTEMPTS:3}
+      backoff-ms: ${MAIL_RETRY_BACKOFF_MS:1000}
   brand:
     name: AuraTech
     tagline: Công nghệ chính hãng · Giao nhanh toàn quốc

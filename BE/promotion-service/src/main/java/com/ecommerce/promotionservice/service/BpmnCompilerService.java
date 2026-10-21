@@ -6,9 +6,15 @@ import com.ecommerce.promotionservice.dto.WorkflowNodeDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.promotionservice.service.support.ProvinceNormalizer;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -160,12 +166,18 @@ public class BpmnCompilerService {
         }
 
         // ── Sequence Flows ────────────────────────────────────────────────────
+        Map<String, String> nodeTypeById = nodes.stream()
+                .filter(n -> n.getId() != null && n.getType() != null)
+                .collect(Collectors.toMap(WorkflowNodeDto::getId, WorkflowNodeDto::getType, (a, b) -> a));
         for (WorkflowEdgeDto edge : edges) {
             sb.append("    <bpmn:sequenceFlow id=\"").append(edge.getId()).append("\"")
               .append(" sourceRef=\"").append(edge.getFrom()).append("\"")
               .append(" targetRef=\"").append(edge.getTo()).append("\"");
 
             String condition = edge.getCondition();
+            if ("Condition_Location".equals(nodeTypeById.get(edge.getFrom()))) {
+                condition = buildLocationCondition(edge, condition);
+            }
             boolean isDefault = Boolean.TRUE.equals(edge.getIsDefault());
 
             if (condition != null && !condition.isBlank() && !isDefault) {
@@ -311,6 +323,50 @@ public class BpmnCompilerService {
             sb.append("      <bpmn:outgoing>").append(e.getId()).append("</bpmn:outgoing>\n");
         }
         return sb.toString();
+    }
+
+    private static final Pattern LEGACY_LOCATION_EXPR =
+            Pattern.compile("targetProvince\\s*(==|!=)\\s*['\"]([^'\"]+)['\"]");
+
+    /**
+     * Rewrites a Condition_Location branch into a comparison on the normalised province key.
+     * The builder sends full names ("Thành phố Hà Nội") while order addresses may say "Hà Nội" or
+     * "TP. Hồ Chí Minh", so an exact {@code targetProvince == '...'} test almost never matched.
+     * {@code execution.getVariable} is used so a process without the variable (no address known)
+     * evaluates to false instead of failing with "Unknown property used in expression".
+     * Falls back to the client expression when no province value can be determined.
+     */
+    String buildLocationCondition(WorkflowEdgeDto edge, String clientCondition) {
+        Map<String, Object> props = edge.getProperties() != null ? edge.getProperties() : Map.of();
+        List<String> keys = new ArrayList<>();
+        Object value = props.get("value");
+        if (value instanceof Collection<?> values) {
+            for (Object v : values) {
+                String key = v != null ? ProvinceNormalizer.normalize(v.toString()) : "";
+                if (!key.isEmpty() && !keys.contains(key)) keys.add(key);
+            }
+        } else if (value != null) {
+            String key = ProvinceNormalizer.normalize(value.toString());
+            if (!key.isEmpty()) keys.add(key);
+        }
+        boolean notEqual = "NOT_EQUAL".equalsIgnoreCase(getString(props, "operator"));
+        if (keys.isEmpty() && clientCondition != null) {
+            Matcher m = LEGACY_LOCATION_EXPR.matcher(clientCondition);
+            if (m.find()) {
+                notEqual = "!=".equals(m.group(1));
+                String key = ProvinceNormalizer.normalize(m.group(2));
+                if (!key.isEmpty()) keys.add(key);
+            }
+        }
+        if (keys.isEmpty()) {
+            return clientCondition;
+        }
+        String var = "execution.getVariable('targetProvinceKey')";
+        String op = notEqual ? " != '" : " == '";
+        String joined = keys.stream()
+                .map(k -> var + op + k + "'")
+                .collect(Collectors.joining(notEqual ? " && " : " || "));
+        return "${" + joined + "}";
     }
 
     private String getString(Map<String, Object> props, String key) {

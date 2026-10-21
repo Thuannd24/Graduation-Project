@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { cartApi } from "../services/cartApi";
 import { hasAuthToken } from "../services/apiClient";
 import keycloak from "../services/keycloak";
-import { VAT_RATE, calculateShippingFee } from "../utils/checkoutConstants";
+import { computeOrderTotals } from "../utils/pricing";
 
 const CartContext = createContext(null);
 
@@ -67,7 +67,9 @@ export function CartProvider({ children }) {
     loadCart();
   }, []);
 
-  async function addToCart(product, variant = null) {
+  // qty: số lượng thêm; mặc định lấy product.buyQty (luồng "Mua ngay" trước khi đăng nhập) hoặc 1.
+  async function addToCart(product, variant = null, qty) {
+    const quantity = Math.max(1, Math.floor(Number(qty ?? product?.buyQty ?? 1)) || 1);
     if (!keycloak.authenticated) {
       showToast("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
       setTimeout(() => {
@@ -80,7 +82,7 @@ export function CartProvider({ children }) {
     try {
       const chosenVariant = variant || product?.selectedVariant || (Array.isArray(product?.variants) ? product.variants[0] : null);
       const variantId = chosenVariant && typeof chosenVariant === "object" ? chosenVariant.id : chosenVariant;
-      const data = await cartApi.addItem(product.id, 1, variantId || undefined);
+      const data = await cartApi.addItem(product.id, quantity, variantId || undefined);
       setItems(Array.isArray(data) ? data.map(normalizeCartItem) : []);
       showToast("Đã thêm sản phẩm vào giỏ hàng.");
       return true;
@@ -115,11 +117,8 @@ export function CartProvider({ children }) {
 
   const summary = useMemo(() => {
     const subtotal = items.reduce((total, item) => total + Number(item.price || 0) * item.qty, 0);
-    const discount = 0;
-    const shipping = calculateShippingFee(subtotal);
-    const vat = Math.round(subtotal * VAT_RATE);
-    const total = subtotal - discount + shipping + vat;
-    return { subtotal, discount, shipping, vat, total };
+    // Giá đã gồm VAT: total = subtotal + phí ship (miễn phí từ FREE_SHIP_THRESHOLD), vat chỉ để hiển thị.
+    return computeOrderTotals({ subtotal });
   }, [items]);
 
   const value = { items, addToCart, updateQty, removeItem, summary, toast, showToast, reloadCart: loadCart };

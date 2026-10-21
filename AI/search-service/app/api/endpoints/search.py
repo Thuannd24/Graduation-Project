@@ -16,15 +16,19 @@ from shared_common.logger import get_logger
 logger = get_logger(__name__)
 router = APIRouter()
 
+# top_k âm/0 trước đây đi thẳng xuống ES (`size=-15`): ES báo lỗi và catalog._mark_es_down() tắt BM25 30s
+# cho MỌI người dùng (TC_PH2_HYB_06). Chặn ở biên API: 422.
+MAX_TOP_K = 100
+
 
 # ── TEXT / HYBRID SEARCH ─────────────────────────────────────────────────────
 
 @router.get("/search", response_model=ApiResponse)
 def get_hybrid_search(
     q: str = Query(..., description="Query string"),
-    top_k: int = Query(10, description="Number of results"),
-    min_price: Optional[float] = Query(None, description="Minimum price filter"),
-    max_price: Optional[float] = Query(None, description="Maximum price filter"),
+    top_k: int = Query(10, ge=1, le=MAX_TOP_K, description="Number of results"),
+    min_price: Optional[float] = Query(None, ge=0, description="Minimum price filter"),
+    max_price: Optional[float] = Query(None, ge=0, description="Maximum price filter"),
     x_user_id: Optional[str] = Header(None, alias="X-User-Id"),
 ):
     try:
@@ -75,7 +79,7 @@ def _visual_response(items, crop_box) -> ApiResponse:
 async def find_similar_by_image(
     file: Optional[UploadFile] = File(None),
     image: Optional[UploadFile] = File(None, description="Ảnh sản phẩm cần tìm"),
-    top_k: int = Query(10),
+    top_k: int = Query(10, ge=1, le=MAX_TOP_K),
     x_user_id: Optional[str] = Header(None, alias="X-User-Id"),
 ):
     upload = image or file  # FE gửi field 'image'; giữ tương thích 'file'
@@ -98,7 +102,7 @@ async def multimodal_search(
     q: str = Form(..., description="Text mô tả bổ sung, vd: 'màu xanh'"),
     file: Optional[UploadFile] = File(None),
     image: Optional[UploadFile] = File(None),
-    top_k: int = Query(10),
+    top_k: int = Query(10, ge=1, le=MAX_TOP_K),
     x_user_id: Optional[str] = Header(None, alias="X-User-Id"),
 ):
     upload = image or file
@@ -117,7 +121,7 @@ async def multimodal_search(
 
 
 @router.get("/search/similar/{product_id}", response_model=ApiResponse)
-def get_similar_products(product_id: int, top_k: int = Query(10)):
+def get_similar_products(product_id: int, top_k: int = Query(10, ge=1, le=MAX_TOP_K)):
     """Sản phẩm tương tự (đọc item-to-item đã precompute trong MongoDB product_similarities)."""
     items = visual_search_service.get_similar_by_product(product_id, top_k=top_k)
     return success(SimilarResponse(

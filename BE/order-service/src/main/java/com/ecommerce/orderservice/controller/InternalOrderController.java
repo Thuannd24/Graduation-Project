@@ -41,9 +41,10 @@ public class InternalOrderController {
             return ApiResponse.success(false);
         }
         
-        // Trạng thái đơn hàng phải là SHIPPED hoặc DELIVERED
+        // Chỉ người đã NHẬN hàng mới được đánh giá: đơn phải DELIVERED (COMPLETED giữ cho dữ liệu cũ).
+        // Đơn SHIPPED (đang giao, có thể bị hoàn) không còn đủ điều kiện.
         String status = order.getStatus();
-        if (!"DELIVERED".equalsIgnoreCase(status) && !"SHIPPED".equalsIgnoreCase(status) && !"COMPLETED".equalsIgnoreCase(status)) {
+        if (!"DELIVERED".equalsIgnoreCase(status) && !"COMPLETED".equalsIgnoreCase(status)) {
             log.warn("Order {} is in status {}, not eligible for review", orderId, status);
             return ApiResponse.success(false);
         }
@@ -90,6 +91,11 @@ public class InternalOrderController {
                         .shippingAddress(order.getShippingAddress())
                         .phoneNumber(order.getPhoneNumber())
                         .productIds(productIds)
+                        .recipientName(order.getRecipientName())
+                        .paymentDeadline(order.getCreatedAt() != null
+                                ? order.getCreatedAt().plusMinutes(
+                                        com.ecommerce.orderservice.scheduler.OrderExpiryScheduler.PAYMENT_WINDOW_MINUTES)
+                                : null)
                         .build();
         return ApiResponse.success(summary);
     }

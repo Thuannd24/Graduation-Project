@@ -132,7 +132,8 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
                 </p>
                 """
                 + shopeeButton("Xem chi tiết đơn hàng", frontendUrl + "/order/{{orderId}}")
-                + shopeeOrderInfo("{{orderId}}", "Chờ thanh toán / Vận chuyển")),
+                + shopeeOrderInfo("{{orderId}}", "Chờ thanh toán / Vận chuyển")
+                + "{{orderDetailsHtml}}"),
         "EMAIL");
     seedOrUpdate(
         "order_cancelled_template",
@@ -185,11 +186,31 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
                   Xin chào bạn,
                 </p>
                 <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#334155;">
-                  Thanh toán cho đơn hàng của bạn đã thất bại hoặc bị hủy. Vui lòng thử lại để hoàn tất đơn hàng — sản phẩm vẫn đang được giữ trong giỏ cho bạn.
+                  Thanh toán cho đơn hàng của bạn chưa thành công hoặc đã bị hủy ở cổng thanh toán. Đơn hàng vẫn được giữ trong 30 phút kể từ lúc đặt — bạn có thể thanh toán lại hoặc chuyển sang thanh toán khi nhận hàng (COD) trong trang chi tiết đơn.
                 </p>
                 """
                 + shopeeButton("Xem chi tiết đơn hàng để thanh toán", frontendUrl + "/order/{{orderId}}")
                 + shopeeOrderInfo("{{orderId}}", "Chưa thanh toán")),
+        "EMAIL");
+    seedOrUpdate(
+        "refund_completed_template",
+        "Email xác nhận hoàn tiền",
+        "Hoàn tiền thành công — Đơn #{{orderId}}",
+        emailShell(
+            "#0ea5e9",
+            "💸",
+            "Hoàn tiền thành công",
+            """
+                <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#334155;">
+                  Xin chào bạn,
+                </p>
+                <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#334155;">
+                  AuraTech đã hoàn tiền cho đơn hàng của bạn. Với thanh toán VNPay, tiền sẽ về tài khoản/thẻ theo thời gian xử lý của ngân hàng (thường 1–7 ngày làm việc); với đơn COD, bộ phận hỗ trợ sẽ liên hệ để chuyển khoản lại cho bạn.
+                </p>
+                """
+                + "{{refundInfoHtml}}"
+                + shopeeButton("Xem chi tiết đơn hàng", frontendUrl + "/order/{{orderId}}")
+                + shopeeOrderInfo("{{orderId}}", "Đã hoàn tiền")),
         "EMAIL");
     seedOrUpdate(
         "order_shipped_template",
@@ -208,7 +229,8 @@ public class NotificationTemplateSeeder implements ApplicationRunner {
                 </p>
                 """
                 + shopeeButton("Theo dõi hành trình đơn", frontendUrl + "/order/{{orderId}}")
-                + shopeeOrderInfo("{{orderId}}", "Đang giao hàng")),
+                + shopeeOrderInfo("{{orderId}}", "Đang giao hàng")
+                + "{{trackingInfoHtml}}"),
         "EMAIL");
     seedOrUpdate(
         "order_delivered_template",

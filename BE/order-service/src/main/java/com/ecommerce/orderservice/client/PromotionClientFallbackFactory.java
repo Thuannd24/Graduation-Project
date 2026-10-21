@@ -39,6 +39,13 @@ public class PromotionClientFallbackFactory implements FallbackFactory<Promotion
                         request != null ? request.getOrderId() : null, cause.getMessage());
                 return ApiResponse.error("SERVICE_UNAVAILABLE", "Không thể giải phóng voucher.");
             }
+
+            @Override
+            public ApiResponse<java.util.Map<String, Object>> restoreVoucher(VoucherOrderActionRequest request) {
+                log.error("promotion-service unavailable for restore orderId={}: {}",
+                        request != null ? request.getOrderId() : null, cause.getMessage());
+                return ApiResponse.error("SERVICE_UNAVAILABLE", "Không thể trả lại voucher.");
+            }
         };
     }
 }

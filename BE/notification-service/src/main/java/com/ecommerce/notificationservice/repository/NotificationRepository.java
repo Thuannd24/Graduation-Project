@@ -12,4 +12,7 @@ public interface NotificationRepository extends MongoRepository<Notification, St
 
     // Idempotent consumer check: đã xử lý event này cho order này chưa (chống gửi trùng khi Kafka retry)
     boolean existsByOrderIdAndEventType(Long orderId, String eventType);
+
+    // Chống gửi trùng cho sự kiện không gắn đơn hàng (vd. SupportChatOfflineEvent:<roomId>)
+    boolean existsByEventType(String eventType);
 }

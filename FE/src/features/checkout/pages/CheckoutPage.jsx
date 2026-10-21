@@ -8,6 +8,9 @@ import { useCart } from "../../../context/CartContext.jsx";
 import { orderApi } from "../../../services/orderApi";
 import { authApi } from "../../../services/authApi";
 import { formatVnd } from "../../../utils/format.js";
+import { computeOrderTotals } from "../../../utils/pricing";
+import { COD_LIMIT } from "../../../utils/checkoutConstants";
+import { isValidVnPhone, VN_PHONE_ERROR } from "../../../utils/validation";
 import keycloak from "../../../services/keycloak.js";
 import { trackBehavior } from "../../../services/behaviorTracker.ts";
 
@@ -17,6 +20,7 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [successOrder, setSuccessOrder] = useState(null);
+  const [placedAddress, setPlacedAddress] = useState("");
   const idempotencyKeyRef = useRef(crypto.randomUUID());
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -204,11 +208,11 @@ export default function CheckoutPage() {
     }
   }, [appliedVoucher]);
 
-  // Calculate local checkout summary taking voucher and VAT into account
-  const localSummary = useMemo(() => {
+  // Ước tính tại chỗ (giá đã gồm VAT, cùng công thức với order-service) để hiển thị ngay khi đổi voucher/điểm
+  const estimatedSummary = useMemo(() => {
     const subtotal = summary.subtotal;
     let discount = 0;
-    
+
     if (appliedVoucher?.productDiscountAmount !== undefined) {
       discount = appliedVoucher.productDiscountAmount;
     } else if (appliedVoucher?.discountAmount !== undefined) {
@@ -216,33 +220,59 @@ export default function CheckoutPage() {
     } else if (discountPercent > 0) {
       discount = Math.round(subtotal * discountPercent);
     }
-    
-    let shipping = summary.shipping !== undefined ? summary.shipping : 30000;
-    if (appliedVoucher?.shippingDiscountAmount > 0) {
-      shipping = Math.max(0, shipping - appliedVoucher.shippingDiscountAmount);
-    }
 
-    const pointDiscount = appliedPoints?.pointDiscount || 0;
-    const vat = Math.round((subtotal - discount) * 0.1);
-    const total = Math.max(0, subtotal - discount + shipping + vat - pointDiscount);
-
-    return {
+    return computeOrderTotals({
       subtotal,
-      discount,
-      shipping,
-      vat,
-      pointDiscount,
-      total
-    };
+      productDiscount: discount,
+      pointDiscount: appliedPoints?.pointDiscount || 0,
+      shippingDiscount: appliedVoucher?.shippingDiscountAmount || 0
+    });
   }, [summary, discountPercent, appliedVoucher, appliedPoints]);
+
+  // Số tiền do server tính là số tiền thật sẽ bị trừ -> ưu tiên hiển thị số này để xem trước và đơn tạo ra luôn khớp
+  const [serverPreview, setServerPreview] = useState(null);
+  const pointsToRedeem = appliedPoints?.pointsToRedeem || 0;
+  useEffect(() => {
+    if (!summary.subtotal) {
+      setServerPreview(null);
+      return;
+    }
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      orderApi.previewCheckout({ couponCode: couponCode || undefined, pointsToRedeem: pointsToRedeem || undefined })
+        .then((p) => { if (!cancelled) setServerPreview(p); })
+        .catch(() => { if (!cancelled) setServerPreview(null); });
+    }, 300);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [couponCode, pointsToRedeem, summary.subtotal]);
+
+  const localSummary = useMemo(() => {
+    if (!serverPreview) return estimatedSummary;
+    const shipping = Number(serverPreview.shippingFee || 0);
+    return {
+      subtotal: Number(serverPreview.subtotal || 0),
+      discount: Number(serverPreview.productDiscount || 0),
+      pointDiscount: Number(serverPreview.pointDiscount || 0),
+      shipping,
+      shippingDiscount: Math.min(shipping, Number(serverPreview.shippingDiscount || 0)),
+      vat: Number(serverPreview.vatAmount || 0),
+      total: Number(serverPreview.finalAmount || 0),
+      vatIncluded: true
+    };
+  }, [serverPreview, estimatedSummary]);
+
+  const codAllowed = localSummary.total <= COD_LIMIT;
+  useEffect(() => {
+    if (!codAllowed && paymentMethod === "COD") setPaymentMethod("VNPAY");
+  }, [codAllowed, paymentMethod]);
 
   const validateForm = () => {
     const errors = {};
     if (!fullName.trim()) errors.fullName = "Họ và tên không được để trống.";
     if (!phoneNumber.trim()) {
       errors.phoneNumber = "Số điện thoại không được để trống.";
-    } else if (!/^[0-9]{10,11}$/.test(phoneNumber.trim().replace(/\s/g, ""))) {
-      errors.phoneNumber = "Số điện thoại không hợp lệ (10-11 chữ số).";
+    } else if (!isValidVnPhone(phoneNumber)) {
+      errors.phoneNumber = VN_PHONE_ERROR;
     }
     if (email.trim() && !/\S+@\S+\.\S+/.test(email)) {
       errors.email = "Địa chỉ email không hợp lệ.";
@@ -270,6 +300,11 @@ export default function CheckoutPage() {
     setSubmitting(true);
     setError("");
 
+    if (paymentMethod === "COD" && !codAllowed) {
+      setError(`Đơn hàng trên ${formatVnd(COD_LIMIT)} cần thanh toán trước qua VNPAY.`);
+      return;
+    }
+
     let finalShippingAddress = shippingAddress;
     if (isNewAddress) {
       finalShippingAddress = `${detailAddress.trim()}, ${wardName}, ${provinceName}`;
@@ -295,13 +330,14 @@ export default function CheckoutPage() {
       }
 
       const orderData = await orderApi.createOrder({
+        recipientName: fullName.trim(),
         shippingAddress: finalShippingAddress.trim(),
         phoneNumber: phoneNumber.trim(),
         couponCode: couponCode.trim() || null,
-        shippingFee: localSummary.shipping,
         pointsToRedeem: appliedPoints?.pointsToRedeem || null,
         note: note.trim() || null
       }, idempotencyKeyRef.current);
+      setPlacedAddress(orderData?.shippingAddress || finalShippingAddress.trim());
 
       // Clear applied vouchers
       sessionStorage.removeItem("techstore_coupon_code");
@@ -316,10 +352,11 @@ export default function CheckoutPage() {
           return;
         }
       } catch (payErr) {
+        // Đơn đã tạo và đang được giữ: đưa khách tới trang đơn hàng để thanh toán lại hoặc đổi phương thức.
         console.error("Payment initiation failed", payErr);
-        setError("Tạo đơn hàng thành công, nhưng không thể khởi tạo phương thức thanh toán: " + payErr.message);
-        setSuccessOrder(orderData);
+        showToast("Đơn hàng đã được tạo nhưng chưa thanh toán được: " + payErr.message);
         reloadCart?.();
+        navigate(`/order/${orderData.id}`);
         return;
       }
 
@@ -388,7 +425,7 @@ export default function CheckoutPage() {
             </div>
             <div className="flex justify-between border-b border-slate-200/50 dark:border-slate-800 pb-2">
               <span>Địa chỉ nhận hàng</span>
-              <span className="text-slate-800 dark:text-slate-200 text-right max-w-xs line-clamp-2">{shippingAddress}</span>
+              <span className="text-slate-800 dark:text-slate-200 text-right max-w-xs line-clamp-2">{placedAddress || shippingAddress}</span>
             </div>
             {note && (
               <div className="flex justify-between border-b border-slate-200/50 dark:border-slate-800 pb-2">
@@ -679,22 +716,29 @@ export default function CheckoutPage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Option 1: COD */}
-              <label className={`flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                paymentMethod === "COD" 
-                  ? "border-primary bg-red-500/5 text-primary" 
-                  : "border-slate-250 dark:border-slate-800 hover:border-slate-350 bg-slate-50 dark:bg-slate-950 text-slate-850 dark:text-slate-250"
+              <label className={`flex items-start gap-3 p-4 rounded-xl border-2 transition-all ${
+                !codAllowed
+                  ? "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-400 opacity-70 cursor-not-allowed"
+                  : paymentMethod === "COD"
+                  ? "border-primary bg-red-500/5 text-primary cursor-pointer"
+                  : "border-slate-250 dark:border-slate-800 hover:border-slate-350 bg-slate-50 dark:bg-slate-950 text-slate-850 dark:text-slate-250 cursor-pointer"
               }`}>
-                <input 
-                  type="radio" 
-                  name="paymentMethod" 
-                  value="COD" 
-                  checked={paymentMethod === "COD"} 
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="COD"
+                  checked={paymentMethod === "COD"}
+                  disabled={!codAllowed}
                   onChange={() => setPaymentMethod("COD")}
-                  className="mt-1 accent-primary cursor-pointer"
+                  className="mt-1 accent-primary cursor-pointer disabled:cursor-not-allowed"
                 />
                 <div>
                   <span className="font-extrabold text-xs block uppercase">COD (Thanh toán khi nhận hàng)</span>
-                  <span className="text-[10px] text-slate-400 font-semibold block mt-1">Trả tiền mặt khi sản phẩm được giao đến tận nhà.</span>
+                  <span className="text-[10px] text-slate-400 font-semibold block mt-1">
+                    {codAllowed
+                      ? `Trả tiền mặt khi nhận hàng. Áp dụng cho đơn đến ${formatVnd(COD_LIMIT)}.`
+                      : `Không áp dụng cho đơn trên ${formatVnd(COD_LIMIT)}. Vui lòng thanh toán trước qua VNPAY.`}
+                  </span>
                 </div>
               </label>
 

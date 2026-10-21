@@ -4,6 +4,15 @@ export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+/** Thông báo lỗi số điện thoại, khớp với backend. */
+export const VN_PHONE_ERROR = "Số điện thoại không hợp lệ (10 số bắt đầu bằng 0, hoặc +84 và 9 số)";
+
+/** Số điện thoại Việt Nam theo đúng quy tắc backend: bỏ khoảng trắng/dấu chấm/gạch, rồi 0 + 9 số hoặc +84 + 9 số. */
+export function isValidVnPhone(phone: string): boolean {
+  const normalized = String(phone || "").replace(/[\s.-]/g, "");
+  return /^(0\d{9}|\+84\d{9})$/.test(normalized);
+}
+
 export function isStrongPassword(password: string): boolean {
   return /[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password) && /[^A-Za-z0-9]/.test(password) && password.length >= 8;
 }

@@ -34,18 +34,34 @@ def _normalize(image: Image.Image, max_side: Optional[int] = None) -> Image.Imag
     return image
 
 
+def _open_checked(data: bytes) -> Image.Image:
+    """Mở + giải mã ảnh, chặn "bom giải nén" TRƯỚC khi cấp phát pixel.
+
+    Một PNG ~60 byte có thể khai báo 20000x20000 px (400M px ~ 1,2GB RAM khi load). PIL chỉ ném
+    `DecompressionBombError` — KHÔNG phải OSError — nên trước đây lọt qua except và endpoint trả 500.
+    Kiểm `image.size` (đọc từ header, chưa giải mã) với ngưỡng riêng, thấp hơn ngưỡng mặc định của PIL."""
+    try:
+        image = Image.open(io.BytesIO(data))
+        width, height = image.size
+        if width * height > search_settings.MAX_IMAGE_PIXELS:
+            raise InvalidImageError(
+                f"Ảnh quá lớn ({width}x{height} px), tối đa {search_settings.MAX_IMAGE_PIXELS:,} px."
+            )
+        image.load()
+    except InvalidImageError:
+        raise
+    except (UnidentifiedImageError, OSError, Image.DecompressionBombError, ValueError) as e:
+        raise InvalidImageError("File tải lên không phải ảnh hợp lệ.") from e
+    return image
+
+
 def load_image_from_bytes(data: bytes) -> Image.Image:
     max_bytes = search_settings.MAX_UPLOAD_MB * 1024 * 1024
     if not data:
         raise InvalidImageError("File ảnh rỗng.")
     if len(data) > max_bytes:
         raise InvalidImageError(f"Ảnh vượt quá {search_settings.MAX_UPLOAD_MB}MB.")
-    try:
-        image = Image.open(io.BytesIO(data))
-        image.load()
-    except (UnidentifiedImageError, OSError) as e:
-        raise InvalidImageError("File tải lên không phải ảnh hợp lệ.") from e
-    return _normalize(image)
+    return _normalize(_open_checked(data))
 
 
 def load_image_from_file(file_like) -> Image.Image:
@@ -101,10 +117,9 @@ def load_image_from_url(url: str, max_side: Optional[int] = None) -> Optional[Im
     if data is None:
         return None
     try:
-        image = Image.open(io.BytesIO(data))
-        image.load()
-    except (UnidentifiedImageError, OSError) as e:
-        logger.warning(f"Ảnh hỏng, bỏ qua {url}: {e}")
+        image = _open_checked(data)
+    except InvalidImageError as e:
+        logger.warning(f"Ảnh hỏng/quá lớn, bỏ qua {url}: {e}")
         return None
 
     if search_settings.IMG_CACHE_ENABLED:

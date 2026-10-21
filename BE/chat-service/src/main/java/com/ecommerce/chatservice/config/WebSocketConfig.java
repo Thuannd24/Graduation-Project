@@ -96,6 +96,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                             log.warn("WebSocket connection rejected: Missing Authorization token and Guest-Id");
                             throw new MessageDeliveryException("Missing Authorization token or Guest-Id");
                         }
+                        // Same rule as the REST API: a guest id must be the widget-generated
+                        // "guest_*" form, never a member's id (would impersonate the member).
+                        if (!guestId.matches("^guest_[A-Za-z0-9_-]{1,80}$")) {
+                            log.warn("WebSocket connection rejected: invalid Guest-Id format");
+                            throw new MessageDeliveryException("Invalid Guest-Id");
+                        }
                         
                         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_GUEST"));
                         UsernamePasswordAuthenticationToken auth =

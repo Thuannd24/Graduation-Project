@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi.ts";
 import keycloak from "../../../services/keycloak.js";
+import { applyProductPlaceholder } from "../../../utils/imageFallback.js";
 
 function flattenCategoryTree(nodes, prefix = "", level = 0) {
   const result = [];
@@ -59,7 +60,7 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
       const [catsTree, brandsList, statsPage] = await Promise.all([
         productApi.listCategories(),
         productApi.listBrands(),
-        productApi.listProductsPaged({ page: "0", size: "500" })
+        productApi.adminListProductsPaged({ page: "0", size: "500" })
       ]);
       setFlatCategories(flattenCategoryTree(catsTree));
       setBrands(brandsList || []);
@@ -79,7 +80,7 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
     try {
       let result;
       if (searchQuery.trim()) {
-        result = await productApi.searchProducts(searchQuery.trim(), page, pageSize);
+        result = await productApi.adminSearchProducts(searchQuery.trim(), page, pageSize);
       } else {
         const params = {
           page: String(page),
@@ -87,7 +88,7 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
         };
         if (filterActive !== "") params.active = filterActive;
         if (filterCategoryId) params.categoryId = filterCategoryId;
-        result = await productApi.listProductsPaged(params);
+        result = await productApi.adminListProductsPaged(params);
       }
 
       let items = result.items.map(p => ({
@@ -282,7 +283,7 @@ export default function ProductsTab({ setActiveTab, setEditingProductId }) {
                       <td className="p-4">
                         <div className="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-600 p-0.5 overflow-hidden">
                           {p.image ? (
-                            <img src={p.image} alt="" className="w-full h-full object-cover rounded-lg" />
+                            <img src={p.image} alt={p.name} onError={applyProductPlaceholder} className="w-full h-full object-contain rounded-lg" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-slate-300">
                               <Icon name="image" className="text-lg" />

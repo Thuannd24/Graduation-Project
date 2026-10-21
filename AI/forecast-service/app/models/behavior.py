@@ -3,8 +3,11 @@
 Validate ở tầng schema (Pydantic) thay vì tin FE: endpoint này là **public** (khách chưa đăng nhập
 vẫn duyệt hàng và vẫn cần ghi nhận hành vi), nên phải coi mọi field là dữ liệu không tin cậy.
 """
+import math
+
 from pydantic import BaseModel, Field, field_validator
 
+from app.core.timestamps import normalize_event_timestamp
 from shared_common.contracts import FE_BEHAVIOR_ACTIONS, IMPRESSION_SOURCES
 
 # Chặn client gửi lô khổng lồ làm nghẽn Kafka/DB. 200 đủ rộng cho 1 phiên duyệt dài giữa 2 lần flush
@@ -46,9 +49,19 @@ class BehaviorEvent(BaseModel):
     @classmethod
     def _sane_weight(cls, v: float | None) -> float | None:
         # Chặn giá trị vô lý (âm, hoặc dwell hàng năm) để không làm lệch feature thống kê sau này.
-        if v is not None and (v < 0 or v > 86400):
+        # NaN: mọi phép so sánh đều False nên `v < 0 or v > 86400` để lọt -> phải chặn tường minh,
+        # nếu không NaN sẽ làm hỏng mọi feature thống kê (mean/sum) tính trên cột weight.
+        if v is not None and (math.isnan(v) or v < 0 or v > 86400):
             raise ValueError("weight phải trong [0, 86400]")
         return v
+
+    @field_validator("timestamp", mode="before")
+    @classmethod
+    def _valid_timestamp(cls, v) -> str:
+        # Chặn ngay ở endpoint (422) thay vì để consumer parse lỗi rồi LẶNG LẼ bỏ event. Nhận mọi
+        # định dạng hợp lệ (ISO có/không offset, `Z`, nano giây, epoch ms) và chuẩn hoá về ISO UTC
+        # không tzinfo — xem app/core/timestamps.py.
+        return normalize_event_timestamp(v)
 
 
 class BehaviorBatchRequest(BaseModel):

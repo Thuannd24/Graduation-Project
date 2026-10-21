@@ -5,12 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "campaigns")
+// Only dirty columns are written on UPDATE, so editing name/dates/workflow never writes back a
+// stale remaining_budget over a concurrent voucher reservation.
+@DynamicUpdate
 @Data
 @Builder
 @NoArgsConstructor

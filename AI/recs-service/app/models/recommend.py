@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Union
 
 class RecommendRequest(BaseModel):
@@ -6,7 +6,7 @@ class RecommendRequest(BaseModel):
     # Vẫn nhận số nguyên cho client cũ, chuẩn hoá về chuỗi để khớp key Redis `user:{id}:history`.
     userId: Optional[Union[str, int]] = None
     sessionId: str
-    top_k: int = 10
+    top_k: int = Field(10, ge=1, le=100)
 
     @field_validator("userId")
     @classmethod

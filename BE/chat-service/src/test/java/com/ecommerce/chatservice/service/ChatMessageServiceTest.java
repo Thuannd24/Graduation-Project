@@ -56,6 +56,7 @@ public class ChatMessageServiceTest {
     public void testSaveMessage_whenRoomIsActive() {
         ChatRoom room = ChatRoom.builder()
                 .id("room123")
+                .customerId("user1") // người gửi CUSTOMER phải là chủ phòng (TC_PH10_OWN_01)
                 .status("ACTIVE")
                 .build();
 

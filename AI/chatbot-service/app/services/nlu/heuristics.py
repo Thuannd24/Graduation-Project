@@ -4,6 +4,7 @@ NLU (app.services.nlu.classifier, which owns intent+sentiment+entity extraction
 together) has no provider configured or the call fails. Kept in one module since
 both heuristics exist purely to serve that single fallback path.
 """
+from app.services.nlu.price_range import parse_price_range
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
@@ -31,6 +32,29 @@ POSITIVE_WORDS = ["tốt", "đẹp", "nhanh", "ok", "tuyệt", "xịn", "thích"
 # through to the policy_faq keyword check below instead of wrongly demanding login for
 # a question anyone could ask.
 PERSONAL_MARKERS = ["của tôi", "của mình", "của em", "tôi có", "tôi muốn", "mình có", "cho tôi", "giúp tôi"]
+
+
+# Khiếu nại phải được nhận ra TRƯỚC từ khoá sản phẩm: "Tôi mua tai nghe về bị hỏng, thất vọng quá" chứa
+# cả "mua"/"tai nghe" (PRODUCT_TERMS) nên trước đây bị xếp product_search và khách đang bức xúc nhận về
+# một danh sách sản phẩm (TC_PH10_NLU_05).
+# - Từ cảm xúc mạnh: đủ để coi là khiếu nại.
+# - Từ hư hỏng: chỉ khi kèm ngữ cảnh "đã trải qua" (bị/mua về/nhận được) và KHÔNG phải câu hỏi quy định
+#   ("tai nghe bị hỏng thì đổi trả thế nào?" là policy_faq).
+EMOTIONAL_COMPLAINT_WORDS = ["thất vọng", "bức xúc", "bực", "lừa đảo", "tệ quá", "quá tệ", "tồi tệ", "không chấp nhận được"]
+DAMAGE_WORDS = ["hỏng", "lỗi", "vỡ", "nứt", "trầy", "không lên nguồn", "không dùng được", "không hoạt động"]
+EXPERIENCE_MARKERS = ["bị", "mua về", "mua xong", "vừa mua", "nhận được", "nhận hàng", "giao tới", "mới mua"]
+POLICY_QUESTION_MARKERS = ["chính sách", "thế nào", "như nào", "được không", "có được", "bao lâu", "ở đâu", "làm sao"]
+SHOPPING_MARKERS = ["quà tặng", "gợi ý", "tư vấn", "nên mua"]
+
+
+def _is_complaint(text_lower: str) -> bool:
+    if any(w in text_lower for w in EMOTIONAL_COMPLAINT_WORDS):
+        return True
+    return (
+        any(w in text_lower for w in DAMAGE_WORDS)
+        and any(m in text_lower for m in EXPERIENCE_MARKERS)
+        and not any(q in text_lower for q in POLICY_QUESTION_MARKERS)
+    )
 
 
 def _is_personal(text_lower: str) -> bool:
@@ -61,6 +85,15 @@ def predict_intent(text: str) -> str:
         "giao", "ship", "tới", "đâu", "trạng thái", "tracking", "vận đơn", "khi nào", "nhận", "vận chuyển"
     ]):
         return "order_tracking"
+
+    if _is_complaint(text_lower):
+        return "complaint"
+
+    # "tai nghe dưới 500 nghìn", "gợi ý quà tặng dưới 500k": tìm SP theo khoảng giá, không phải hỏi giá 1 SP
+    # và càng không phải lạc đề. Câu chính sách có số tiền ("miễn phí ship đơn trên 500k?") vẫn để policy_faq.
+    is_policy = any(w in text_lower for w in ["chính sách", "phí ship", "miễn phí", "vận chuyển", "đổi trả", "bảo hành", "trả góp"])
+    if not is_policy and (parse_price_range(text) is not None or any(w in text_lower for w in SHOPPING_MARKERS)):
+        return "product_search"
 
     if any(w in text_lower for w in ["giá", "bao nhiêu", "nhiêu", "bán mấy", "đắt", "rẻ", "báo giá"]):
         return "price_inquiry"

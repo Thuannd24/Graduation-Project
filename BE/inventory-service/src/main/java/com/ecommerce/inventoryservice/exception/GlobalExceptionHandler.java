@@ -4,6 +4,8 @@ import com.ecommerce.inventoryservice.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -50,9 +52,24 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.<Map<String, String>>builder()
                         .success(false)
-                        .message("Validation failed")
+                        // Trả câu báo lỗi cụ thể (tiếng Việt) để giao diện hiển thị thẳng cho admin.
+                        .message(errors.isEmpty() ? "Validation failed" : String.join("; ", errors.values()))
                         .data(errors)
                         .build());
+    }
+
+    // Body sai định dạng (vd. số lượng "2.5" hoặc chữ) trước đây rơi vào handler chung -> 500.
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNotReadable(HttpMessageNotReadableException ex) {
+        log.warn("Malformed request body: {}", ex.getMessage());
+        String message = "Dữ liệu yêu cầu không hợp lệ.";
+        Throwable cause = ex.getCause();
+        if (cause instanceof JsonMappingException jme && jme.getOriginalMessage() != null) {
+            message = jme.getOriginalMessage();
+        }
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(message));
     }
 
     @ExceptionHandler(Exception.class)

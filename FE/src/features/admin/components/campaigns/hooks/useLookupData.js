@@ -44,7 +44,7 @@ export default function useLookupData() {
   const searchProducts = useCallback(async query => {
     const q = String(query || "").trim();
     if (q.length < 2) return [];
-    const result = await productApi.searchProducts(q, 0, 15);
+    const result = await productApi.adminSearchProducts(q, 0, 15);
     return result?.items || result?.content || [];
   }, []);
 

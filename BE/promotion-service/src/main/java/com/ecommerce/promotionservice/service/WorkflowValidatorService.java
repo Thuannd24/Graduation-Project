@@ -104,6 +104,21 @@ public class WorkflowValidatorService {
             }
         }
 
+        // 1b) Dangling edges: every edge must connect two existing nodes. Otherwise the compiled
+        //     BPMN has a sequenceFlow whose sourceRef/targetRef points nowhere and Camunda rejects
+        //     the deployment (e.g. End node deleted but edge a1 -> e1 left behind).
+        for (WorkflowEdgeDto edge : edges) {
+            String edgeId = edge.getId() != null ? edge.getId() : "edge";
+            if (edge.getFrom() == null || !nodeMap.containsKey(edge.getFrom())) {
+                errors.add(err(edgeId, "invalid_connectivity", "from",
+                        String.format("Cạnh \"%s\" xuất phát từ node không tồn tại: \"%s\".", edgeId, edge.getFrom())));
+            }
+            if (edge.getTo() == null || !nodeMap.containsKey(edge.getTo())) {
+                errors.add(err(edgeId, "invalid_connectivity", "to",
+                        String.format("Cạnh \"%s\" trỏ tới node không tồn tại: \"%s\".", edgeId, edge.getTo())));
+            }
+        }
+
         // 2) Exactly one Trigger (Start Event)
         List<WorkflowNodeDto> triggers = nodes.stream()
                 .filter(n -> TRIGGER_TYPES.contains(n.getType()))

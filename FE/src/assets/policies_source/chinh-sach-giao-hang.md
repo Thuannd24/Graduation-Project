@@ -2,7 +2,7 @@
 
 > **Danh mục:** Giao hàng & Vận chuyển
 > **Đơn vị vận hành:** Hệ thống bán lẻ công nghệ AuraTech
-> **Ngày cập nhật:** 2026-07-27
+> **Ngày cập nhật:** 2026-10-19
 
 ---
 
@@ -24,35 +24,28 @@ Mua hàng online bằng cách đặt hàng trên website hoặc các hình thứ
 
 #### a. Giao hàng và thanh toán tại nhà (COD)
 
-Thanh toán khi nhận hàng tại địa chỉ của khách.
+Thanh toán bằng tiền mặt khi nhận hàng tại địa chỉ của khách.
 
-#### b. Chuyển khoản hoặc thanh toán online
+- COD chỉ áp dụng cho đơn hàng có tổng thanh toán **đến 20.000.000 đồng**.
+- Đơn hàng có tổng thanh toán **trên 20.000.000 đồng** vui lòng thanh toán trước online qua **VNPay**.
 
-Miễn phí với các loại thẻ: tín dụng, ATM, Internet Banking, Zalo Pay, MoMo, VN Pay,...
+#### b. Thanh toán online qua VNPay
 
-Khách hàng có thể thanh toán chuyển khoản qua **Viet QR** cực kỳ đơn giản — chỉ cần quét mã, tất cả thông tin được điền tự động, không cần nhập số tài khoản hay số tiền.
+Thanh toán online qua cổng **VNPay** (thẻ ATM nội địa/Internet Banking, thẻ quốc tế và các hình thức được VNPay hỗ trợ), không mất phí giao dịch.
 
-#### c. Mua hàng xuất hóa đơn VAT cho công ty
+> **Lưu ý:** Website hiện **chưa hỗ trợ trả góp** (trả góp qua thẻ tín dụng hoặc công ty tài chính). Quý khách vui lòng chọn thanh toán toàn bộ qua VNPay hoặc COD.
 
-Với các đơn hàng từ **5.000.000 đồng** trở lên, để hóa đơn VAT hợp lệ theo quy định, quý khách vui lòng thanh toán **không dùng tiền mặt**, cụ thể:
+#### c. Giá bán và hóa đơn VAT
 
-- Chuyển khoản từ tài khoản ngân hàng mang tên tổ chức/công ty
-- Thanh toán qua thẻ tín dụng/thẻ ghi nợ đứng tên công ty (qua POS hoặc cổng thanh toán online)
-- Thanh toán qua tài khoản công ty tại các cổng trung gian (Alepay, Onepay, VN Pay…)
-
-Quý khách được khuyến khích sử dụng **mã QR chuyển khoản** để đảm bảo thông tin chính xác và đối soát nhanh chóng.
+- Giá bán niêm yết trên website **đã bao gồm thuế VAT 10%**. Khi thanh toán, hệ thống **không cộng thêm VAT**; phần VAT chỉ được tách ra để hiển thị.
+- Website hiện chưa có mục nhập thông tin xuất hóa đơn công ty khi đặt hàng. Quý khách có nhu cầu xuất hóa đơn VAT cho công ty vui lòng liên hệ tổng đài **0389.468.847** sau khi đặt hàng.
 
 #### d. Chi phí vận chuyển
 
-- **Miễn phí** vận chuyển mọi đơn hàng đối với mọi hạng thành viên
-
-**Phụ thu phí cồng kềnh** *(nếu có)*, áp dụng với các đơn hàng vận chuyển bởi AuraTech và đối tác giao hàng. Đơn hàng được xác định là cồng kềnh nếu rơi vào một trong các trường hợp:
-
-1. Khối lượng thực tế > **8 kg**
-2. Khối lượng quy đổi > **10 kg** (D × R × C / 5000)
-3. Cả 3 chiều có kích thước lớn hơn **35 cm**
-4. Cả 2 chiều có kích thước lớn hơn **45 cm**
-5. Chỉ cần một chiều có kích thước lớn hơn **50 cm**
+- Phí giao hàng tiêu chuẩn: **30.000 đồng**/đơn hàng.
+- **Miễn phí giao hàng** cho đơn hàng có giá trị sản phẩm (sau khi trừ giảm giá sản phẩm) **từ 500.000 đồng**.
+- Voucher miễn phí vận chuyển (nếu có) được trừ vào phí giao hàng, tối đa bằng phí giao hàng của đơn.
+- Phí giao hàng được chốt ở bước nhập địa chỉ và thanh toán (trang giỏ hàng chỉ hiển thị tạm tính).
 
 ---
 
@@ -60,57 +53,33 @@ Quý khách được khuyến khích sử dụng **mã QR chuyển khoản** đ�
 
 #### a. Phạm vi áp dụng
 
-AuraTech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồm:
+AuraTech giao hàng toàn quốc qua đối tác vận chuyển, tại địa chỉ khách hàng cung cấp khi đặt hàng.
 
-- **Giao hàng nội thành**: TP. HCM, Hà Nội và các khu vực trung tâm.
-- **Giao hàng ngoại thành**: Vùng ven, huyện thuộc HCM/HN và các tỉnh thành khác.
-- **Giao hàng liên tỉnh**: Toàn quốc, qua đội ngũ giao nhận của AuraTech và đối tác 3PLs.
-- **Hàng điện máy / Cồng kềnh**: Giao tận nơi; một số sản phẩm hỗ trợ lắp đặt tùy chính sách.
+#### b. Hình thức giao hàng
 
-#### b. Hình thức và dịch vụ giao hàng
-
-- **Giao tiêu chuẩn**: Giao tại địa chỉ khách hàng cung cấp.
-- **Giao nhanh 2 giờ** *(tùy khu vực)*: Áp dụng tại một số quận nội thành, với các sản phẩm: điện thoại, Laptop, Máy tính bảng, Phụ kiện và các sản phẩm có kích thước vừa và nhỏ *(1 trong 3 cạnh ≤ 50 cm)*.
-
-| Khu vực | Nội thành | Ngoại thành |
-|---|---|---|
-| **Hồ Chí Minh** | Giao nhanh từ **1–2 giờ** (bán kính ≤ 10 km, trừ huyện Cần Giờ, Củ Chi, Nhà Bè) | Trong vòng **24–48 giờ** (khoảng cách > 10 km) |
-| **Hà Nội** | Giao nhanh từ **1–2 giờ** (bán kính ≤ 10 km, trừ các huyện ngoại thành xa) | Trong vòng **24–48 giờ** (khoảng cách > 10 km) |
-| **Tỉnh có cửa hàng AuraTech** *(trừ HCM và HN)* | Trong vòng **24 giờ** (≤ 10 km) | Trong vòng **1–2 ngày** (> 10 km) |
-| **Các khu vực còn lại** *(nội tỉnh – liên tỉnh)* | Trong vòng **2–5 ngày** | — |
-
-- **Giao & lắp đặt** *(hàng cồng kềnh/điện máy)*: Điều hòa, máy giặt, tủ lạnh, TV, máy lọc không khí,... Thời gian giao/lắp đặt sẽ được liên hệ xác nhận trước.
+- **Giao tiêu chuẩn**: Giao tại địa chỉ khách hàng cung cấp. Thời gian giao hàng phụ thuộc khu vực và đối tác vận chuyển; quý khách theo dõi trạng thái đơn trong mục **Lịch sử đơn hàng**.
+- Website hiện **chưa hỗ trợ giao nhanh/hỏa tốc** và chưa hiển thị thời gian giao dự kiến theo địa chỉ.
 
 #### c. Lưu ý khi giao hàng
 
-- Thời gian giao hàng nội thành HCM và HN: **8:00 – 20:00**. Giao nội tỉnh/liên tỉnh qua đối tác sẽ được liên hệ trước khi giao.
-- Thời gian trên áp dụng với các đơn hàng xác nhận **trước 14h**; đơn hàng sau thời điểm này tính cho ngày kế tiếp.
-- Thời gian giao hàng ngoại thành và tỉnh thành khác **không bao gồm Chủ nhật và ngày Lễ, Tết**.
-- Vui lòng ghi chú đặt hàng nếu có nhu cầu xuất hóa đơn.
 - Vui lòng cung cấp đầy đủ: Tên người nhận, địa chỉ, số điện thoại.
-
-#### d. Quy định khi giao nhận hàng
-
-- Với đơn hàng từ **10 triệu đồng** trở lên, AuraTech xin phép kiểm tra thẻ thanh toán và CCCD của chủ thẻ trước khi giao hàng, nhằm hạn chế rủi ro gian lận.
+- Thời gian giao hàng **không bao gồm Chủ nhật và ngày Lễ, Tết**.
 
 ---
 
 ### 4. Huỷ đơn hàng và thời gian hoàn tiền
 
+- Quý khách có thể **hủy đơn** trong mục Lịch sử đơn hàng khi đơn **chưa được giao cho đơn vị vận chuyển** (trước trạng thái "Đang giao"). Đơn đã giao cho đơn vị vận chuyển vui lòng liên hệ tổng đài **0389.468.847**.
+- Voucher đã dùng cho đơn bị hủy sẽ được **hoàn lại vào tài khoản nếu voucher còn hạn sử dụng**.
+
 | Hình thức thanh toán | Thời gian hoàn tiền |
 |---|---|
-| Tiền mặt | Hoàn ngay tại cửa hàng |
-| Chuyển khoản | Trong vòng **03 ngày** làm việc |
-| Thẻ ATM | Trong vòng **7–10 ngày** làm việc |
-| Thẻ Visa / Mastercard / JCB | Trong vòng **7–15 ngày** làm việc |
-| MPOS / Alepay / Onepay | Trong vòng **7–14 ngày** làm việc |
-| VNPAY / Kredivo / MoMo / Shopee Pay / Zalopay / Fundiin | Trong vòng **3–8 ngày** làm việc |
+| COD (chưa thanh toán) | Không phát sinh hoàn tiền |
+| VNPay | Trong vòng **3–8 ngày** làm việc *(tùy ngân hàng)* |
 
-> **Hiệu lực áp dụng:** Kể từ ngày 12/12/2022 đến khi có thông báo thay thế mới.
->
 > **Ngày làm việc** là các ngày từ thứ 2 đến thứ 6, không bao gồm thứ 7, Chủ nhật và ngày Lễ, Tết theo quy định pháp luật.
 >
-> **Lưu ý:** AuraTech sẽ hoàn lại giá trị sản phẩm khách đã thanh toán. Phí vận chuyển *(với sản phẩm không được miễn phí vận chuyển)*, phụ phí, phí chuyển đổi trả góp và các khuyến mãi cộng thêm **sẽ không được hoàn lại**.
+> **Lưu ý:** AuraTech hoàn lại số tiền khách đã thanh toán cho đơn hàng bị hủy.
 
 ---
 
@@ -118,15 +87,16 @@ AuraTech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồm
 
 - Sản phẩm được **quấn bọt khí** trước khi bỏ vào hộp carton và đóng gói trước camera ghi hình.
 - Đơn hàng **trên 1 triệu đồng** được dán **tem vỡ logo AuraTech** ngoài hộp carton.
-- Trường hợp hộp hàng khi giao đến **không còn nguyên vẹn**, ẩm ướt, móp méo hoặc mất tem vỡ — vui lòng **từ chối nhận** và liên hệ cửa hàng để xử lý.
+- Trường hợp hộp hàng khi giao đến **không còn nguyên vẹn**, ẩm ướt, móp méo hoặc mất tem vỡ — vui lòng **từ chối nhận** và liên hệ tổng đài **0389.468.847** để xử lý.
 
 ---
 
 ### 6. Chính sách đổi mới
 
-- Áp dụng chính sách đổi mới như khách mua tại cửa hàng.
+- Áp dụng chính sách đổi mới như khách mua tại cửa hàng (xem **Chính sách đổi trả**).
 - Thời gian đổi mới tính từ ngày khách hàng **nhận máy** và không quá **35 ngày** kể từ ngày xuất bán.
-- Khách hàng gửi máy đổi mới vui lòng **đóng gói cẩn thận** và liên hệ cửa hàng xử lý đơn hàng.
+- Website hiện **chưa hỗ trợ gửi yêu cầu đổi trả/bảo hành trực tuyến**. Quý khách vui lòng liên hệ tổng đài **0389.468.847** hoặc chat với CSKH trên website để được hướng dẫn gửi máy.
+- Khách hàng gửi máy đổi mới vui lòng **đóng gói cẩn thận**.
 
 > **Lưu ý:** Các thất thoát, hư hỏng sản phẩm trong quá trình vận chuyển **sẽ không được** hưởng chế độ đổi trả và bảo hành.
 
@@ -138,5 +108,4 @@ AuraTech cung cấp dịch vụ giao hàng cho toàn bộ đơn hàng, bao gồm
 
 | Trường hợp | Yêu cầu |
 |---|---|
-| Mua tặng hoặc không thanh toán tiền mặt | Thanh toán trước **100%** giá trị đơn hàng |
-| Đơn hàng có giá trị trên **30 triệu đồng** | Chuyển khoản **100%** hoặc phần số dư vượt 30 triệu |
+| Đơn hàng có tổng thanh toán **trên 20.000.000 đồng** | Thanh toán trước **100%** qua VNPay *(không áp dụng COD)* |

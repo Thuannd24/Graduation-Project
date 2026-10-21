@@ -43,6 +43,12 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         ChatRoom room = chatRoomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy phòng chat"));
 
+        // TC_PH10_OWN_01: a customer/guest may only post into their own room; only staff can
+        // post into any room.
+        if (!"STAFF".equals(senderRole) && (senderId == null || !senderId.equals(room.getCustomerId()))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Không có quyền gửi tin nhắn vào phòng chat này");
+        }
+
         if ("CLOSED".equals(room.getStatus())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Phòng chat đã đóng. Không thể gửi tin nhắn.");
         }
@@ -127,7 +133,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy phòng chat"));
 
         boolean isStaff = userRoles.contains("STAFF") || userRoles.contains("ADMIN");
-        boolean isOwner = room.getCustomerId().equals(userId);
+        boolean isOwner = userId != null && userId.equals(room.getCustomerId());
         if (!isStaff && !isOwner) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Không có quyền xem lịch sử phòng chat này");
         }

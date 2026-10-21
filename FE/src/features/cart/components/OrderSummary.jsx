@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { formatVnd } from "../../../utils/format.js";
 import Icon from "../../../components/common/Icon.jsx";
+import { FREE_SHIP_THRESHOLD } from "../../../utils/checkoutConstants";
 
 export default function OrderSummary({ 
   summary, 
@@ -106,7 +107,14 @@ export default function OrderSummary({
 
             <div className="flex justify-between items-center">
               <span className="text-slate-500 font-semibold text-xs">Phí vận chuyển</span>
-              {summary.shipping === 0 ? (
+              {summary.shippingPending ? (
+                <span className="text-slate-500 font-bold text-xs text-right">
+                  Tính ở bước sau
+                  <span className="block text-[9px] font-semibold text-emerald-600">
+                    Miễn phí cho đơn từ {formatVnd(FREE_SHIP_THRESHOLD)}
+                  </span>
+                </span>
+              ) : summary.shipping === 0 ? (
                 <span className="text-emerald-600 font-bold text-xs flex items-center gap-0.5 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 rounded-lg">
                   <Icon name="local_shipping" className="text-xs" />
                   Miễn phí
@@ -116,10 +124,17 @@ export default function OrderSummary({
               )}
             </div>
 
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500 font-semibold text-xs">Thuế VAT (10%)</span>
-              <span className="text-slate-800 dark:text-slate-200 font-extrabold text-xs">{formatVnd(summary.vat)}</span>
-            </div>
+            {summary.vatIncluded ? (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-400 font-semibold text-[11px]">Trong đó VAT (10%)</span>
+                <span className="text-slate-400 font-bold text-[11px]">{formatVnd(summary.vat || 0)}</span>
+              </div>
+            ) : (
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-semibold text-xs">Thuế VAT (10%)</span>
+                <span className="text-slate-800 dark:text-slate-200 font-extrabold text-xs">{formatVnd(summary.vat)}</span>
+              </div>
+            )}
           </div>
 
           <div className="border-t border-dashed border-slate-200 dark:border-slate-800 my-4" />
@@ -127,7 +142,9 @@ export default function OrderSummary({
           {/* ===== Total ===== */}
           <div className="space-y-1.5">
             <div className="flex justify-between items-center">
-              <strong className="text-slate-800 dark:text-slate-100 uppercase font-black text-xs tracking-wider">Tổng thanh toán</strong>
+              <strong className="text-slate-800 dark:text-slate-100 uppercase font-black text-xs tracking-wider">
+                {summary.shippingPending ? "Tổng tạm tính" : "Tổng thanh toán"}
+              </strong>
               <motion.span
                 key={summary.total}
                 initial={{ scale: 1.15, color: "#a90010" }}
@@ -140,7 +157,11 @@ export default function OrderSummary({
             </div>
             {summary.subtotal > 0 && (
               <p className="text-right text-[9px] text-slate-400 font-semibold">
-                (Đã bao gồm VAT & các khoản giảm trừ)
+                {summary.vatIncluded
+                  ? summary.shippingPending
+                    ? "(Giá đã gồm VAT, chưa gồm phí vận chuyển)"
+                    : "(Giá đã gồm VAT & các khoản giảm trừ)"
+                  : "(Đã bao gồm VAT & các khoản giảm trừ)"}
               </p>
             )}
           </div>
@@ -189,11 +210,11 @@ export default function OrderSummary({
               <a href="tel:0389468847" className="text-primary font-bold hover:underline">
                 0389.468.847
               </a>{' '}
-              để được tư vấn 24/7.
+              để được tư vấn (8:00–22:00 hằng ngày).
             </p>
             <div className="flex gap-2 mt-2.5">
               <span className="text-[9px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Miễn phí</span>
-              <span className="text-[9px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">24/7</span>
+              <span className="text-[9px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">8:00–22:00</span>
             </div>
           </div>
         </div>

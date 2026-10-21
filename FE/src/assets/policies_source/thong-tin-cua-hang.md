@@ -2,7 +2,7 @@
 
 > **Danh mục:** Thông tin cửa hàng
 > **Đơn vị vận hành:** Hệ thống bán lẻ công nghệ AuraTech
-> **Ngày cập nhật:** 2026-07-27
+> **Ngày cập nhật:** 2026-10-19
 
 ---
 
@@ -19,17 +19,15 @@
 
 ---
 
-## 2. Giờ hoạt động cửa hàng
+## 2. Kênh bán hàng
 
-- **Thứ 2 – Thứ 6:** 8:00 – 21:30
-- **Thứ 7 – Chủ nhật:** 8:00 – 22:00
-- **Ngày lễ:** Mở cửa bình thường (trừ Tết Nguyên Đán)
+AuraTech hiện bán hàng **trực tuyến qua website**. Website chưa có trang tra cứu hệ thống cửa hàng và chưa hỗ trợ nhận hàng tại cửa hàng.
 
 ---
 
-## 3. Danh sách cửa hàng
+## 3. Bảo hành
 
-Danh sách cửa hàng cập nhật theo thời gian thực tại trang **Hệ thống cửa hàng** trên website AuraTech. Khách hàng có thể tìm cửa hàng gần nhất theo tỉnh thành.
+Yêu cầu bảo hành, đổi trả vui lòng liên hệ tổng đài **0389.468.847** hoặc chat với CSKH; sản phẩm cũng có thể được bảo hành tại **trung tâm bảo hành ủy quyền của hãng**.
 
 ---
 

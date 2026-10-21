@@ -66,25 +66,39 @@ public class WebhookController {
         boolean isBrowser = acceptHeader != null && acceptHeader.contains("text/html");
 
         if (isBrowser) {
+            // Trước đây paymentStatus = RspCode của IPN ("00" = "đã xử lý webhook", kể cả khi khách HỦY ở VNPay)
+            // nên trang kết quả báo "thành công" sai (UI_PH5_FR02_007). Giờ mã hiển thị lấy theo trạng thái
+            // Payment thật trong DB sau khi xử lý (idempotent: IPN và trình duyệt cùng gọi cũng không sao):
+            //   "00" chỉ khi Payment SUCCESS; còn lại là vnp_ResponseCode của VNPay (vd. 24 = khách hủy) hoặc 99.
+            // paymentResult = SUCCESS | FAILED | PENDING để FE hiển thị; FE nên gọi
+            // GET /api/v1/payments/order/{orderId}/status để lấy kết quả chính thức.
             String txnRef = queryParams.get("vnp_TxnRef");
             Long orderId = null;
-            String displayRspCode = rspCode;
+            String displayRspCode = "99";
+            String paymentResult = "FAILED";
             if (txnRef != null) {
                 Payment payment = paymentRepository.findByTxnRef(txnRef).orElse(null);
                 if (payment != null) {
                     orderId = payment.getOrderId();
-                    // If the database has already updated the payment to SUCCESS (e.g. via fast IPN webhook),
-                    // we override the redirect code to "00" so the user sees the payment success page.
-                    if ("SUCCESS".equalsIgnoreCase(payment.getStatus()) && "02".equals(rspCode)) {
-                        log.info("Overriding redirect rspCode from 02 to 00 for user experience, since payment status is SUCCESS in DB");
+                    String status = payment.getStatus() == null ? "" : payment.getStatus().toUpperCase();
+                    String vnpCode = queryParams.get("vnp_ResponseCode");
+                    if ("SUCCESS".equals(status)) {
                         displayRspCode = "00";
+                        paymentResult = "SUCCESS";
+                    } else if ("PENDING".equals(status)) {
+                        displayRspCode = vnpCode != null && !"00".equals(vnpCode) ? vnpCode : "99";
+                        paymentResult = "PENDING";
+                    } else {
+                        displayRspCode = vnpCode != null && !"00".equals(vnpCode) ? vnpCode : "99";
+                        paymentResult = "FAILED";
                     }
                 }
             }
 
             String targetUrl = frontendUrl + "/profile";
             if (orderId != null) {
-                targetUrl = frontendUrl + "/order/" + orderId + "?paymentStatus=" + displayRspCode;
+                targetUrl = frontendUrl + "/order/" + orderId + "?paymentStatus=" + displayRspCode
+                        + "&paymentResult=" + paymentResult;
             }
 
             log.info("Redirecting customer browser to: {}", targetUrl);

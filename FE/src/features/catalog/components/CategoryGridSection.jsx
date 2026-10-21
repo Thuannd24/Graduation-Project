@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import Icon from "../../../components/common/Icon";
 import { getRootCategories } from "../utils/categoryUtils.js";
+import { PRODUCT_PLACEHOLDER } from "../../../utils/imageFallback.js";
 
-const FALLBACK_IMG = "https://placehold.co/56x56/f8f9fb/6b7280?text=SP";
+const FALLBACK_IMG = PRODUCT_PLACEHOLDER;
 
 // Lưới "Danh mục nổi bật": mọi danh mục GỐC đang active, theo sortOrder — đúng với mọi catalog.
 // Thay cho AccessoriesSection cũ (chỉ tìm danh mục "phụ kiện" của shop điện tử, đã xoá).
