@@ -21,6 +21,8 @@ ORDER_STATUS_LABELS = {
     "SHIPPED": "đã được giao cho đơn vị vận chuyển",
     "DELIVERED": "đã giao thành công",
     "CANCELLED": "đã bị huỷ",
+    "RETURNING": "đã huỷ khi đang giao, hàng đang được hoàn về kho",
+    "RETURNED": "đã huỷ, hàng đã hoàn về kho",
     "REFUNDED": "đã được hoàn tiền",
 }
 
@@ -242,3 +244,57 @@ CANCEL_ORDER_GUIDE = (
     "Nếu đơn đã được giao cho đơn vị vận chuyển, bạn cần liên hệ hỗ trợ thay vì tự huỷ. "
     f"{HOTLINE_SUFFIX}"
 )
+
+
+RECENT_ORDERS_LIMIT = 5
+
+
+def list_recent_orders(user_id: str, user_roles: Optional[str] = None, authorization: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    """Khách đã đăng nhập hỏi "đơn hàng của tôi" mà không nêu mã -> liệt kê các đơn gần nhất thay vì hỏi lại
+    mã đơn (đăng nhập rồi thì hệ thống phải tự biết khách là ai).
+
+    Gọi GET /api/v1/orders của order-service (đơn của chính user theo X-User-Id + JWT). Lọc lại theo userId
+    để tài khoản ADMIN/STAFF (order-service có thể trả mọi đơn) cũng chỉ thấy đơn của CHÍNH MÌNH trong chat.
+    Trả None khi không tra được (nơi gọi rơi về hỏi mã đơn như cũ)."""
+    url = f"{chatbot_settings.ORDER_SERVICE_URL}/api/v1/orders"
+    try:
+        resp = requests.get(url, headers=_headers(user_id, user_roles, authorization), timeout=5)
+        resp.raise_for_status()
+        orders = resp.json().get("data") or []
+    except (requests.RequestException, ValueError) as e:
+        logger.error(f"list_recent_orders failed for user {user_id}: {e}")
+        return None
+    if not isinstance(orders, list):
+        return None
+
+    orders = [o for o in orders if not o.get("userId") or str(o.get("userId")) == str(user_id)]
+    if not orders:
+        return _text_only("Bạn chưa có đơn hàng nào tại AuraTech.")
+    orders.sort(key=lambda o: (o.get("createdAt") or "", o.get("id") or 0), reverse=True)
+    recent = orders[:RECENT_ORDERS_LIMIT]
+
+    lines = [f"Đây là {len(recent)} đơn hàng gần nhất của bạn:"]
+    card_orders = []
+    for o in recent:
+        status_code = o.get("status") or ""
+        label = _translate_status(status_code) if status_code else "không rõ trạng thái"
+        amount = o.get("finalAmount")
+        amount_str = f", {amount:,.0f}đ" if isinstance(amount, (int, float)) else ""
+        items = o.get("items") or []
+        first = items[0].get("productName") if items else None
+        more = f" và {len(items) - 1} sản phẩm khác" if len(items) > 1 else ""
+        what = f" — {first}{more}" if first else ""
+        lines.append(f"- #{o.get('id')} ({_format_date(o.get('createdAt'))}): {label}{amount_str}{what}")
+        card_orders.append({
+            "orderId": o.get("id"),
+            "createdAt": _format_date(o.get("createdAt")),
+            "statusCode": status_code,
+            "statusLabel": label,
+            "finalAmount": amount,
+            "trackingCode": o.get("trackingCode"),
+            "itemCount": len(items),
+            "firstProductName": first,
+            "firstProductImage": items[0].get("productImage") if items else None,
+        })
+    lines.append("Bạn muốn xem chi tiết đơn nào, gửi Aura mã đơn (ví dụ #123) nhé.")
+    return {"message": "\n".join(lines), "card": {"type": "order_list", "orders": card_orders}}

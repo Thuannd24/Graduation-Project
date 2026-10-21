@@ -33,3 +33,18 @@ class FakeRedis:
 @pytest.fixture
 def fake_redis():
     return FakeRedis()
+
+
+@pytest.fixture(autouse=True)
+def _no_real_db(monkeypatch):
+    """Không test nào được chạm MariaDB thật (infra-mariadb mở cổng 3308 ra host, mật khẩu mặc định):
+    mọi truy vấn catalog lỗi ngay -> các hàm catalog đi nhánh "DB lỗi" (fail-open). Test cần dữ liệu
+    catalog tự monkeypatch hàm cụ thể như trước."""
+    from app.services import catalog
+
+    class _NoDb:
+        def connect(self):
+            raise RuntimeError("tests must not touch the real DB")
+
+    monkeypatch.setattr(catalog, "get_engine", lambda *a, **k: _NoDb())
+    catalog._category_cache.update(at=0.0, tree=None)

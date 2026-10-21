@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import forecast_settings
 from app.api.endpoints import forecast, pricing
 from app.state import behavior_consumer, behavior_producer, risk_producer, risk_scheduler
@@ -32,13 +31,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# KHÔNG thêm CORSMiddleware (giống recs/search/chatbot-service): browser chỉ gọi service này QUA
+# api-gateway, và gateway đã tự thêm header CORS (CorsConfig.java + SecurityConfig `.cors()`). Thêm ở đây
+# thì response có HAI header `Access-Control-Allow-Origin` -> trình duyệt chặn, tab AI Analytics rơi về
+# số minh hoạ dù model đã train.
 
 app.include_router(forecast.router, prefix=forecast_settings.API_V1_STR)
 app.include_router(pricing.router, prefix=forecast_settings.API_V1_STR)

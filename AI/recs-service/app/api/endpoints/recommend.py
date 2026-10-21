@@ -3,9 +3,11 @@ from typing import Literal, Optional
 from fastapi import APIRouter, Header, HTTPException, Query, Response
 
 from app.models.recommend import RecommendRequest, RecommendResponse, RecommendedItem
-from app.services.catalog import get_products_by_ids
+from app.services.catalog import get_product_meta, get_products_by_ids
+from app.services.cross_sell import recommend_for_cart
 from app.services.popularity import popularity_rec_service
 from app.services.recency import recency_rec_service
+from app.services.rerank import history_median_price, rerank
 from app.services.sasrec import sasrec_service
 from shared_common.contracts import HISTORY_MAX_LEN, session_history_key, user_history_key
 from shared_common.logger import get_logger
@@ -16,6 +18,13 @@ router = APIRouter()
 
 # Nguồn gợi ý cho từng khối UI — xem `_recommend_for_history`. Giá trị lạ -> FastAPI trả 422.
 Source = Literal["auto", "for_you", "recent", "trending"]
+
+# top_k âm trước đây bị cắt kiểu Python ([:-1] -> n-1 item) thay vì báo lỗi (TC_PH8_TOPK_04).
+MAX_TOP_K = 100
+TopK = Query(10, ge=1, le=MAX_TOP_K)
+# SASRec trả dư ứng viên để còn đủ top_k sau khi lọc hết hàng/ngừng bán và re-rank theo giá/đa dạng.
+SASREC_CANDIDATE_FACTOR = 4
+SASREC_MIN_CANDIDATES = 40
 
 
 def _read_history(history_key: Optional[str], redis_client) -> list[int]:
@@ -45,6 +54,18 @@ def _resolve_history(user_id: Optional[str], session_id: Optional[str]) -> list[
     return history
 
 
+def _clean_history(item_history: list[int]) -> tuple[list[int], Optional[dict]]:
+    """Bỏ SP đã xoá/ngừng bán khỏi lịch sử (trước đây lịch sử vẫn chứa SP không còn tra cứu được,
+    làm nhiễu cả Recency lẫn đầu vào SASRec). Trả kèm meta (giá, danh mục) để re-rank dùng lại.
+    DB lỗi -> giữ nguyên lịch sử (meta=None) thay vì xoá sạch."""
+    if not item_history:
+        return item_history, {}
+    meta = get_product_meta(item_history)
+    if meta is None:
+        return item_history, None
+    return [i for i in item_history if i in meta], meta
+
+
 def _recommend_for_history(item_history: list[int], top_k: int, source: Source = "auto") -> tuple[str, list[dict]]:
     """Thang chiến lược theo thứ tự ưu tiên, mỗi tầng chỉ dùng khi tầng trước không áp dụng được:
 
@@ -61,13 +82,14 @@ def _recommend_for_history(item_history: list[int], top_k: int, source: Source =
       - `recent`   — xem lại: Recency; chưa có lịch sử thì trả rỗng (không bịa).
       - `trending` — Popularity toàn cục.
     """
+    item_history, history_meta = _clean_history(item_history)
     if source == "recent":
         return "recency", recency_rec_service.recommend(item_history, top_k=top_k) if item_history else []
     if source == "trending":
         return "popularity", popularity_rec_service.get_popular_items(top_k=top_k)
 
     if item_history and sasrec_service.is_ready():
-        items = _sasrec_items(item_history, top_k)
+        items = _sasrec_items(item_history, top_k, history_meta)
         if items:
             return "sasrec", items
 
@@ -84,16 +106,19 @@ def _recommend_for_history(item_history: list[int], top_k: int, source: Source =
     return "popularity", popularity_rec_service.get_popular_items(top_k=top_k)
 
 
-def _sasrec_items(item_history: list[int], top_k: int) -> list[dict]:
-    sasrec_recs = sasrec_service.recommend(item_history, top_k=top_k)
+def _sasrec_items(item_history: list[int], top_k: int, history_meta: Optional[dict] = None) -> list[dict]:
+    pool = max(top_k * SASREC_CANDIDATE_FACTOR, SASREC_MIN_CANDIDATES)
+    sasrec_recs = sasrec_service.recommend(item_history, top_k=pool)
     if not sasrec_recs:
         return []
+    # get_products_by_ids chỉ trả SP ACTIVE + còn hàng -> SP ngừng bán/hết hàng rơi khỏi danh sách.
     product_map = get_products_by_ids([r["product_id"] for r in sasrec_recs])
-    return [
+    items = [
         {**product_map[r["product_id"]], "score": r["score"]}
         for r in sasrec_recs
         if r["product_id"] in product_map
     ]
+    return rerank(items, top_k, history_median_price(item_history, history_meta))
 
 
 @router.post("/recommend", response_model=RecommendResponse)
@@ -124,7 +149,7 @@ def _personal(user_id: Optional[str], session_id: Optional[str], top_k: int, sou
 @router.get("/recommendations/personal")
 def get_personal_recommendations(
     response: Response,
-    top_k: int = 10,
+    top_k: int = TopK,
     source: Source = "auto",
     x_user_id: Optional[str] = Header(None),
     x_session_id: Optional[str] = Header(None),
@@ -144,7 +169,7 @@ def get_personal_recommendations(
 @router.get("/public/recommendations/personal")
 def get_public_personal_recommendations(
     response: Response,
-    top_k: int = 10,
+    top_k: int = TopK,
     source: Source = "auto",
     x_user_id: Optional[str] = Header(None),
     x_session_id: Optional[str] = Header(None),
@@ -162,14 +187,42 @@ def get_public_personal_recommendations(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/recommendations/cross-sell")
-def get_cross_sell_combo(item_ids: str = Query(..., alias="item_ids"), top_k: int = 5):
+def _parse_item_ids(raw: str) -> list[int]:
+    ids: list[int] = []
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if not part.isdigit():
+            raise HTTPException(status_code=422, detail=f"item_ids phải là danh sách id số, nhận '{part}'")
+        if int(part) not in ids:
+            ids.append(int(part))
+    if not ids:
+        raise HTTPException(status_code=422, detail="item_ids rỗng")
+    return ids[:50]
+
+
+def _cross_sell(item_ids: str, top_k: int, response: Response) -> list[dict]:
+    cart_ids = _parse_item_ids(item_ids)
     try:
-        logger.info(f"Cross-sell requested for items: {item_ids}")
-        # TODO(platform_v1): dùng co-occurrence thật (item-item) khi có đủ dữ liệu order thật;
-        # hiện chưa có bước tính đó nên vẫn rơi về Popularity thay vì bịa "combo".
-        recs = popularity_rec_service.get_popular_items(top_k=top_k)
-        return recs
+        strategy, recs = recommend_for_cart(cart_ids, top_k)
     except Exception as e:
         logger.error(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    response.headers["X-Recs-Strategy"] = strategy
+    return recs
+
+
+@router.get("/recommendations/cross-sell")
+def get_cross_sell_combo(response: Response, item_ids: str = Query(..., alias="item_ids"),
+                         top_k: int = Query(5, ge=1, le=MAX_TOP_K)):
+    """"Mua kèm" cho giỏ hàng: `item_ids` = product id trong giỏ, phân tách bằng dấu phẩy.
+    Phụ thuộc giỏ (mua cùng đơn + phụ kiện cùng hệ), xem app/services/cross_sell.py."""
+    return _cross_sell(item_ids, top_k, response)
+
+
+@router.get("/public/recommendations/cross-sell")
+def get_public_cross_sell_combo(response: Response, item_ids: str = Query(..., alias="item_ids"),
+                                top_k: int = Query(5, ge=1, le=MAX_TOP_K)):
+    """Bản public cho khách chưa đăng nhập (giỏ khách vãng lai) — không dùng danh tính nào."""
+    return _cross_sell(item_ids, top_k, response)

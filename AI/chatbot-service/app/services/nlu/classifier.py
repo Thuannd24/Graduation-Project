@@ -30,7 +30,9 @@ nếu Aura vừa hỏi "cho Aura biết mã đơn hàng" thì "#1" nghĩa là kh
 general_chat.
 
 intent — đúng 1 nhãn trong danh sách:
-- product_search: tìm, so sánh, hoặc hỏi tư vấn chọn sản phẩm (không hỏi giá cụ thể).
+- product_search: tìm, so sánh, hoặc hỏi tư vấn chọn sản phẩm (không hỏi giá cụ thể). Gồm cả tìm/gợi ý
+  sản phẩm THEO KHOẢNG GIÁ hoặc QUÀ TẶNG ("tai nghe dưới 500 nghìn", "laptop từ 15 đến 20 triệu",
+  "Gợi ý quà tặng dưới 500 nghìn") — đây KHÔNG BAO GIỜ là off_topic.
 - price_inquiry: hỏi GIÁ hoặc khuyến mãi của MỘT sản phẩm cụ thể.
 - order_tracking: hỏi trạng thái/vị trí một đơn hàng CỤ THỂ (có mã đơn hoặc "đơn hàng của tôi").
 - order_action: khách MUỐN THỰC HIỆN NGAY một hành động lên đơn/tài khoản của chính họ, hoặc hỏi
@@ -45,7 +47,8 @@ intent — đúng 1 nhãn trong danh sách:
   web/app, hoặc bất kỳ câu hỏi nào liên quan tới dịch vụ của AuraTech mà không khớp rõ vào các
   nhãn khác. Nếu không có context để trả lời, hệ thống sẽ tự nói "chưa có thông tin" — KHÔNG vì
   vậy mà xếp câu hỏi này vào off_topic.
-- complaint: phàn nàn, khiếu nại về trải nghiệm mua hàng/sản phẩm/dịch vụ.
+- complaint: phàn nàn, khiếu nại về trải nghiệm mua hàng/sản phẩm/dịch vụ — kể cả khi câu có nhắc tên
+  sản phẩm hay chữ "mua" ("Tôi mua tai nghe về bị hỏng, thất vọng quá" là complaint, không phải product_search).
 - off_topic: CHỈ dùng khi câu hỏi HOÀN TOÀN không liên quan tới AuraTech/mua sắm/công nghệ/dịch
   vụ khách hàng — ví dụ toán học, thời tiết, chính trị, tán gẫu ngoài lề. Đây là nhãn hiếm gặp
   nhất; nếu phân vân giữa off_topic và policy_faq, LUÔN chọn policy_faq.
@@ -83,7 +86,7 @@ DOMAIN_KEYWORDS = [
     "cửa hàng", "khiếu nại", "lỗi", "hỏng", "auratech", "aura", "iphone", "samsung",
     "laptop", "macbook", "điện thoại", "máy tính", "tai nghe", "phụ kiện",
     "mật khẩu", "đăng nhập", "tài khoản", "sao lưu", "dữ liệu", "thu cũ", "đổi mới",
-    "nhân viên", "vnpay", "cod",
+    "nhân viên", "vnpay", "cod", "quà tặng", "gợi ý", "tư vấn",
 ]
 GREETING_KEYWORDS = ["chào", "hi", "hello", "cảm ơn", "thank", "bạn là ai", "giúp gì", "giúp được"]
 

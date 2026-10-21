@@ -5,6 +5,7 @@ from typing import List, Dict, Any, Optional
 
 from app.core.config import chatbot_settings
 from app.services import llm_client
+from app.services.nlu.price_range import PriceRange, remove_price_phrases
 from shared_common.logger import get_logger
 
 import requests
@@ -125,6 +126,38 @@ def _mock_reply_from_context(system_prompt: str) -> Optional[str]:
     return f"Theo thông tin Aura tra được: {body}"
 
 
+# Loại sản phẩm mà TÊN sản phẩm thật sự chứa (dùng để lọc kết quả: search của product-service khớp cả MÔ TẢ,
+# nên "tai nghe" trả về cả pin dự phòng có câu "sạc được tai nghe"). Thứ tự: cụm dài trước.
+NAME_CATEGORY_TERMS = [
+    "pin dự phòng", "pin sạc", "ốp lưng", "bàn phím", "màn hình", "tai nghe", "máy ảnh", "đồng hồ",
+    "loa", "sạc", "cáp", "chuột", "laptop", "macbook", "tivi", "ipad", "iphone", "airpods",
+]
+# "Quà tặng"/không nêu loại SP + có khoảng giá: tìm trong các nhóm phụ kiện/quà phổ biến.
+GIFT_TERMS = ["tai nghe", "loa", "sạc", "pin dự phòng", "ốp lưng", "đồng hồ", "chuột", "bàn phím"]
+GIFT_MARKERS = ["qua", "goi y", "sinh nhat", "tang ban", "tang nguoi"]
+PRICE_POOL_SIZE = 60
+PRICE_RESULT_LIMIT = 5
+
+
+def _name_has(term: str, name: str) -> bool:
+    """Mọi từ của loại SP đều có trong tên (theo từ, không theo chuỗi con): "pin dự phòng" khớp
+    "Pin sạc dự phòng Aukey", "sạc" không khớp "sạch"."""
+    name_words = set(re.findall(r"\w+", _strip_diacritics(name.lower())))
+    return all(w in name_words for w in _strip_diacritics(term.lower()).split())
+
+
+def _price_of(item: Dict[str, Any]) -> Optional[float]:
+    for key in ("effectivePrice", "salePrice", "price"):
+        value = item.get(key)
+        if isinstance(value, (int, float)):
+            return float(value)
+    return None
+
+
+def _vnd(value: float) -> str:
+    return f"{value:,.0f}đ".replace(",", ".")
+
+
 class ProductRagService:
     """
     RAG over the live product catalog: turns a free-form customer message into a
@@ -196,7 +229,75 @@ class ProductRagService:
                 list(pool.map(_fetch, items))
         return items
 
-    def _search_one(self, query: str) -> List[Dict[str, Any]]:
+    def retrieve_in_price_range(self, query: str, price_range: PriceRange) -> tuple:
+        """Tìm theo LOẠI sản phẩm trong câu rồi lọc đúng khoảng giá. Trả (items, ghi_chú_cho_context).
+
+        - Có loại SP nêu tên ("tai nghe") -> tìm loại đó, chỉ giữ SP có tên chứa đúng loại đó.
+        - Không nêu loại ("gợi ý quà tặng dưới 500 nghìn") -> tìm trong các nhóm quà/phụ kiện phổ biến.
+        - Không có SP nào trong khoảng giá -> KHÔNG bịa: trả vài SP gần khoảng giá nhất và ghi rõ trong
+          context là ngoài khoảng giá, để câu trả lời nói thật "chưa có tai nghe dưới 500.000đ".
+        """
+        rest = remove_price_phrases(query)
+        rest_plain = _strip_diacritics(rest.lower())
+        terms = [t for t in NAME_CATEGORY_TERMS if _strip_diacritics(t) in rest_plain]
+        # bỏ cụm con đã nằm trong cụm dài hơn ("sạc" trong "pin sạc")
+        terms = [t for t in terms if not any(t != o and _strip_diacritics(t) in _strip_diacritics(o) for o in terms)]
+        keywords = _extract_search_keywords(rest)
+        gift = not terms and (not keywords or any(m in rest_plain for m in GIFT_MARKERS))
+
+        candidates: Dict[Any, Dict[str, Any]] = {}
+        if terms or gift:
+            for term in terms or GIFT_TERMS:
+                for item in self._search_one(term, size=PRICE_POOL_SIZE):
+                    if _name_has(term, item.get("name") or ""):
+                        candidates.setdefault(item.get("id"), item)
+        else:
+            for item in self._search_one(rest, size=PRICE_POOL_SIZE):
+                candidates.setdefault(item.get("id"), item)
+
+        pool = [c for c in candidates.values() if _price_of(c) is not None]
+        in_range = [c for c in pool if price_range.contains(_price_of(c))]
+        label = ", ".join(terms) if terms else ("quà tặng/phụ kiện" if gift else (keywords or "sản phẩm"))
+        if in_range:
+            in_range.sort(key=lambda c: (-(c.get("ratingAvg") or 0), -(c.get("salesCount") or 0), _price_of(c)))
+            picked = self._diverse(in_range, PRICE_RESULT_LIMIT, by_term=terms or (GIFT_TERMS if gift else []))
+            note = f"Các sản phẩm ({label}) có giá {price_range.describe()} đang bán tại AuraTech:"
+            return self._attach_specs(picked), note
+
+        def distance(c):
+            price = _price_of(c)
+            if price_range.max_price is not None and price > price_range.max_price:
+                return price - price_range.max_price
+            if price_range.min_price is not None and price < price_range.min_price:
+                return price_range.min_price - price
+            return 0.0
+
+        nearest = sorted(pool, key=distance)[:3]
+        if not nearest:
+            return [], f"KHÔNG có sản phẩm ({label}) nào có giá {price_range.describe()} trong kho."
+        note = (
+            f"KHÔNG có sản phẩm ({label}) nào có giá {price_range.describe()} trong kho. "
+            f"Phải nói rõ điều này với khách. Các sản phẩm GẦN khoảng giá nhất (NGOÀI khoảng giá, chỉ để tham khảo):"
+        )
+        return nearest, note
+
+    @staticmethod
+    def _diverse(items: List[Dict[str, Any]], limit: int, by_term: List[str]) -> List[Dict[str, Any]]:
+        """Xen kẽ các loại SP (vd quà tặng: không trả 5 cái ốp lưng liền nhau)."""
+        if len(by_term) <= 1:
+            return items[:limit]
+        buckets: Dict[str, List[Dict[str, Any]]] = {}
+        for item in items:
+            key = next((t for t in by_term if _name_has(t, item.get("name") or "")), "")
+            buckets.setdefault(key, []).append(item)
+        out: List[Dict[str, Any]] = []
+        while len(out) < limit and any(buckets.values()):
+            for key in list(buckets):
+                if buckets[key] and len(out) < limit:
+                    out.append(buckets[key].pop(0))
+        return out
+
+    def _search_one(self, query: str, size: int = 5) -> List[Dict[str, Any]]:
         keywords = _extract_search_keywords(query)
         logger.info(f"Retrieving product context for query: '{query}' -> keywords: '{keywords}'")
         url = f"{chatbot_settings.PRODUCT_SERVICE_URL}/api/v1/public/products/search"
@@ -216,7 +317,7 @@ class ProductRagService:
                 return []
 
         # 1. Direct search with all cleaned keywords
-        items = _do_search(keywords, 5)
+        items = _do_search(keywords, size)
         if items:
             return items
 
@@ -224,7 +325,7 @@ class ProductRagService:
         no_specs = re.sub(r'\b(\d+gb|\d+tb|5g|4g|lte)\b', '', keywords, flags=re.IGNORECASE).strip()
         no_specs = re.sub(r'\s+', ' ', no_specs)
         if no_specs and no_specs != keywords:
-            items = _do_search(no_specs, 5)
+            items = _do_search(no_specs, size)
             if items:
                 return items
 
@@ -233,7 +334,7 @@ class ProductRagService:
         model_tokens = [w for w in words if any(c.isdigit() for c in w) or w in {"flip", "fold", "ultra", "plus", "pro", "max", "air"}]
         if model_tokens:
             model_query = " ".join(model_tokens)
-            items = _do_search(model_query, 5)
+            items = _do_search(model_query, size)
             if items:
                 return items
 
@@ -246,20 +347,20 @@ class ProductRagService:
                 continue # Skip generic brand name at this step
             if len(w) < 3:
                 continue
-            items = _do_search(w, 5)
+            items = _do_search(w, size)
             if items:
                 return items
 
         # 5. Last resort fallback: first word (covers a bare brand-name query, e.g. "samsung",
         # which step 4 deliberately skips).
         if words and len(words[0]) >= 3:
-            return _do_search(words[0], 5)
+            return _do_search(words[0], size)
 
         return []
 
-    def format_context_string(self, items: List[Dict[str, Any]]) -> str:
+    def format_context_string(self, items: List[Dict[str, Any]], note: Optional[str] = None) -> str:
         if not items:
-            return "Không tìm thấy sản phẩm nào trong kho khớp trực tiếp với mô tả."
+            return note or "Không tìm thấy sản phẩm nào trong kho khớp trực tiếp với mô tả."
 
         context_lines = []
         for idx, item in enumerate(items):
@@ -282,6 +383,8 @@ class ProductRagService:
             if clean_desc:
                 line += f"\n   Mô tả: {clean_desc}"
             context_lines.append(line)
+        if note:
+            context_lines.insert(0, note)
         return "\n".join(context_lines)
 
     def generate_reply(

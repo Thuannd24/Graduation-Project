@@ -50,6 +50,9 @@ class SearchSettings(BaseModel):
     DEFAULT_TOP_K: int = int(os.getenv("DEFAULT_TOP_K", "10"))
     RRF_K: int = int(os.getenv("RRF_K", "60"))              # khớp hybrid_search.py
     MAX_UPLOAD_MB: int = int(os.getenv("MAX_UPLOAD_MB", "10"))
+    # Trần số pixel của ảnh (đọc từ header trước khi giải mã) — chặn "bom giải nén". 50M px đủ cho ảnh
+    # chụp điện thoại 48MP; CLIP chỉ nhìn 224px nên ảnh lớn hơn không có ích gì.
+    MAX_IMAGE_PIXELS: int = int(os.getenv("MAX_IMAGE_PIXELS", "50000000"))
     # Trọng số kết hợp multimodal (ảnh + text) — cùng không gian CLIP
     MM_IMAGE_WEIGHT: float = float(os.getenv("MM_IMAGE_WEIGHT", "0.7"))
     MM_TEXT_WEIGHT: float = float(os.getenv("MM_TEXT_WEIGHT", "0.3"))
