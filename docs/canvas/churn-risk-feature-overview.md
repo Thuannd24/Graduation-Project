@@ -1,4 +1,4 @@
-# Tính năng: Phát hiện nguy cơ rời bỏ & tự động kích hoạt campaign
+# Báo cáo tính năng Churn Risk AI — trình bày kèm phản biện
 
 > Tài liệu mô tả tính năng (feature overview) — khác với
 > [`churn-risk-implementation-plan.md`](churn-risk-implementation-plan.md) (kế hoạch triển khai
@@ -12,17 +12,17 @@
 > trong quá trình đó. Số liệu cũ (bộ sinh) được giữ lại ở cuối mỗi mục dạng trích dẫn khi có giá trị
 > so sánh phương pháp.
 
-## 1. Tính năng làm gì (góc nhìn người dùng cuối)
+---
 
-User đăng nhập → xem sản phẩm, thêm giỏ hàng → **không thanh toán** → hệ thống tự phát hiện đây
-là dấu hiệu có thể rời bỏ (churn) → **tự động** kích hoạt 1 chiến dịch khuyến mãi cá nhân hóa
-(voucher/email) cho đúng user đó, không cần admin phải rà soát thủ công từng khách hàng.
+## 0. Tóm tắt
 
-Kết quả nhìn thấy được: admin vào **Coupon Code** (tab campaign builder trên FE) tạo 1 campaign
-với trigger "Nguy cơ rời bỏ (AI)" → dựng hành động (tặng voucher/gửi email) → activate → từ đó về
-sau, hệ thống tự chạy, admin không cần làm gì thêm cho từng khách hàng cụ thể.
+**Bài toán.** Khách hàng ngừng mua thì cửa hàng mất doanh thu, nhưng ngân sách khuyến mãi luôn có hạn nên
+không thể tặng voucher cho tất cả. Cần (1) biết khách nào có nguy cơ ngừng mua, (2) chọn đúng người đáng
+cứu nhất trong ngân sách, (3) làm việc đó tự động.
 
-## 2. Sơ đồ luồng hoạt động
+**Giải pháp.** Chấm xác suất rời bỏ cho từng khách bằng Logistic Regression đã hiệu chỉnh, xếp hạng theo
+*tổn thất kỳ vọng* (`xác suất × giá trị khách hàng`), cắt theo ngân sách, rồi phát sự kiện để engine
+campaign có sẵn (Camunda) tự phát voucher.
 
 ```
 FE (xem SP / giỏ hàng)
@@ -76,8 +76,28 @@ tổng hợp mỗi lần gọi (cách cũ treo 25–40+ phút trên quy mô dữ
 
 ## 3. AI được dùng chính xác ở đâu — KHÔNG ở đâu khác
 
-Đây là điểm quan trọng nhất khi giải thích tính năng: **chỉ 1 bước trong toàn bộ pipeline là AI
-thật (machine learning tự học từ dữ liệu)**, mọi bước còn lại là hạ tầng/automation thuần.
+```
+FE (xem SP / giỏ hàng) ── X-User-Id (Keycloak UUID) ──▶ product-service / order-service ──▶ Kafka
+                                                        (product-viewed-events, cart-updated-events)
+                                                                          │
+                                                                          ▼
+                                                       forecast-service (Python)
+                                                       behavior_consumer ─▶ bảng user_events
+                                                                          │
+                                                  (định kỳ, mỗi chu kỳ scan — không mỗi request)
+                                                                          ▼
+                       risk_scheduler: feature_store.refresh() ─▶ risk_scoring.predict()   ★ AI ở đây ★
+                         tầng 0  dân số ≥ 2 đơn DELIVERED          (khớp dân số huấn luyện)
+                         tầng 1  segment "At Risk" + xác suất ≥ ngưỡng        ← AI
+                         tầng 2  vừa bỏ giỏ hàng trong 24 giờ                 ← rule (thời điểm)
+                         tầng 3  xếp hạng theo tổn thất kỳ vọng, cắt ngân sách ← quyết định
+                                                                          │ publish
+                                                                          ▼
+                                       Kafka user-risk-events ──▶ promotion-service (Camunda 7)
+                                                                  rule cứng: event đến → chạy workflow
+                                                                          ▼
+                                                           Voucher / Email cá nhân hóa
+```
 
 | Bước | File | Có phải AI không? |
 |---|---|---|
@@ -88,7 +108,13 @@ thật (machine learning tự học từ dữ liệu)**, mọi bước còn lạ
 | Lọc điều kiện kích hoạt (có bỏ giỏ hàng gần đây) | `AI/forecast-service/app/services/risk_scheduler.py` | ❌ Rule tay (`if... then...`) |
 | Publish sự kiện, tìm campaign, chạy Camunda | `risk_producer.py`, `PromotionKafkaConsumer.java`, `CampaignTriggerService.java` | ❌ Automation/workflow engine thuần |
 
-### 3.1. Cơ chế AI cụ thể: 2 mô hình học máy phối hợp
+| Bước | Có phải AI? |
+|---|---|
+| Ghi nhận hành vi (xem SP, thêm giỏ) → Kafka → bảng `user_events` | ❌ ETL thuần |
+| Tính 11 đặc trưng cho mọi khách (`feature_store`) | ❌ thống kê thuần, không học |
+| **Chấm xác suất rời bỏ + gán phân khúc** (`train.py`, `risk_scoring.py`) | ✅ **duy nhất bước này** |
+| Lọc "vừa bỏ giỏ trong 24 giờ" (`risk_scheduler.py`) | ❌ rule tay, **cố ý** (mục 6.1) |
+| Publish sự kiện, tìm campaign, chạy Camunda | ❌ workflow engine |
 
 **Mô hình 1 — KMeans clustering (không giám sát):** tự nhóm user thành 4 cụm hành vi dựa trên
 **11 đặc trưng** (không phải rule tay `if recency > 30 ngày`). Việc **gán nhãn** cho cụm dùng chính
@@ -123,10 +149,13 @@ lệch hệ thống, và toàn bộ tầng quyết định (xếp hạng theo t�
 11 đặc trưng đầu vào (định nghĩa 1 lần duy nhất tại
 `AI/shared-common/shared_common/features/`, dùng chung cho cả 2 model):
 
-| Nhóm | Đặc trưng |
-|---|---|
-| Từ đơn hàng (`orders`) | recency, frequency, monetary, avg_order_value, cancel_rate, discount_dependency |
-| Từ hành vi (`user_events`) | recent_view_count, days_since_last_activity, cart_abandon_count, view_to_cart_conversion_rate, category_diversity_viewed |
+| Phương án | Vì sao loại | Bằng chứng |
+|---|---|---|
+| Bộ sinh tham số đặt tay | Lệch lõi động lực (số trên); không kiểm chứng được gì độc lập | Log 2026-10-01 |
+| Bộ sinh neo BG/NBD (Online Retail II) | Đã làm và hiệu chỉnh xong, nhưng chủ dự án chọn transform dữ liệu thật thay vì mô phỏng | Log 2026-10-01, 2026-10-02 |
+| Olist (marketplace Brazil) | Chỉ ~3% khách mua lặp; churn 97,3% thoái hóa; không có clickstream | ✅ 2.801/93.897 user có ≥2 đơn; churn 0,9729 — Log 2026-08-03 |
+| RetailRocket | Chỉ 3 loại sự kiện (xem/thêm giỏ/mua) → không đủ để kiểm giả thuyết thứ tự hành vi | Log 2026-08-04 |
+| REES46 Cosmetics | Một ngành duy nhất; chỉ dùng cho các thí nghiệm nghiên cứu riêng | Log 2026-10-02 |
 
 **Đã thử mở rộng thêm 7 khối đặc trưng ứng viên** (hình dạng bỏ giỏ, độ phân tán khoảng cách mua,
 đối chứng âm, session, review, voucher, nhịp thời gian) qua `ablation.py` trên dữ liệu thật — **tất
@@ -200,7 +229,12 @@ và model được re-baseline hoàn toàn trên hành vi người dùng thật.
 đã phát hiện/sửa trong chính nguồn REES46 (log giỏ hàng thiếu trước 12/2019, mã danh mục sai từ
 12/2019, 4 ngày mất log đơn hàng): [`rees46-transform-mapping.md`](rees46-transform-mapping.md).
 
-### 3.4. Hiệu chỉnh xác suất — điều kiện cần để dùng xác suất vào quyết định
+Campaign Builder đã có sẵn node điều kiện `Condition_ChurnRiskTier` (rẽ nhánh theo % xác suất đã hiệu chỉnh) và
+nhiều loại action (voucher %, tiền, freeship, điểm thưởng, nâng hạng, email) — admin kéo-thả được luồng "rủi ro
+cao → voucher mạnh, vừa → freeship" mà không cần code. Đã kiểm chứng bằng harness Java `validate()` + `compile()`
+ra BPMN XML hợp lệ (7.311 ký tự, đủ `exclusiveGateway` + 2 `conditionExpression`). **Chưa có:** campaign mẫu dựng
+sẵn; chưa chạy process instance thật; nhánh rẽ theo **ngưỡng % người đặt**, chưa theo 4 phân khúc KMeans — tức
+vẫn là "rule trên con số AI", chưa phải chính sách học được từ hiệu quả thật. *(Log 2026-08-03 "Tầng 3")*
 
 `LogisticRegression(class_weight="balanced")` khiến model ước lượng hậu nghiệm dưới **tiên nghiệm
 50/50** thay vì tỉ lệ thật. Hiệu chỉnh là biến đổi đơn điệu nhưng **phi tuyến**, nên AUC và xếp-hạng-
@@ -214,7 +248,9 @@ ngưỡng từ **metadata của chính model đang chạy** thay vì hardcode, v
 nghĩa nhãn và theo mỗi lần train; gặp model chưa hiệu chỉnh thì tự lùi về ngưỡng an toàn 0,5 kèm
 cảnh báo.
 
-### 3.5. Từ dự đoán sang quyết định — xếp hạng theo tổn thất kỳ vọng
+✅ **Đo độ muộn** (REES46 Cosmetics, **3.570.193** lượt thêm giỏ): 74,7% giỏ không bao giờ thành đơn (cùng SP, 30
+ngày). Trong số giỏ **có** mua lại: **52,5% trong 1 giờ, 76,3% trong 24 giờ, 91,3% trong 7 ngày**; khả năng
+quay lại mua cùng SP rơi từ 13,9% (sau 1 giờ) xuống 2,9% (sau 7 ngày). *(`cart_recovery.json`)*
 
 Đây là chỗ AI làm được việc mà rule **về nguyên tắc** không làm được (xem mục 3.2 điểm 3). Ngân sách
 marketing luôn có hạn: nếu chỉ phát được K voucher, chọn ai?
@@ -305,7 +341,7 @@ lỗi, qua đúng con đường mà production/FE thật sự đi qua.
 | `promotion-service` (Java/Camunda 7) | Nhận sự kiện, chạy campaign đã cấu hình sẵn (BPMN) |
 | FE Campaign Builder (tab **"Coupon Code"**, tên hiển thị không khớp tên chức năng thật) | Nơi admin dựng campaign với trigger "Nguy cơ rời bỏ (AI)" |
 
-## 5. Vận hành / kiểm thử
+---
 
 ```bash
 # 1. Train model (nơi DUY NHẤT model được fit)
@@ -324,7 +360,10 @@ curl http://localhost:8004/api/v1/models/card
 # Camunda Cockpit: http://localhost:8087/camunda/app/cockpit/
 ```
 
-**Các endpoint phân tích** (thuần đo lường — KHÔNG lưu model, KHÔNG đổi hành vi phát voucher):
+**`published = 0` là đúng theo dữ liệu, không phải lỗi:** dữ liệu REES46 đóng băng đến 2026-10-01, trong khi quy
+tắc tầng 2 so với đồng hồ thật (`NOW()`); khi chạy ở ngày sau đó, không user nào "vừa bỏ giỏ trong 24 giờ". Toàn
+bộ chuỗi (chấm điểm → lọc dân số → lọc thời điểm → xếp hạng ngân sách → gọi Kafka producer) đã chạy không lỗi
+qua đường HTTP mà production/FE thật đi qua.
 
 ```bash
 curl -X POST http://localhost:8004/api/v1/models/rule-benchmark   # Rule vs AI (mục 3.2)
