@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi.ts";
 import { authApi } from "../../../services/authApi.ts";
+import { PRODUCT_PLACEHOLDER, applyProductPlaceholder } from "../../../utils/imageFallback.js";
 
 function formatDate(dateStr) {
   if (!dateStr) return "";
@@ -93,7 +94,7 @@ export default function ReviewsTab() {
 
   useEffect(() => {
     fetchReviews(0);
-    productApi.listAllProducts().then(setProducts).catch(() => setProducts([]));
+    productApi.adminListAllProducts().then(setProducts).catch(() => setProducts([]));
     authApi.adminSearchUsers({ page: 0, size: 1000 })
       .then(res => setCustomers(res?.content || []))
       .catch(() => setCustomers([]));
@@ -203,7 +204,7 @@ export default function ReviewsTab() {
                     >
                       <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 p-1 flex items-center justify-center shrink-0 overflow-hidden">
                         {product?.image ? (
-                          <img src={product.image} alt={product.name} className="w-full h-full object-contain rounded" />
+                          <img src={product.image || PRODUCT_PLACEHOLDER} alt={product.name} onError={applyProductPlaceholder} className="w-full h-full object-contain rounded" />
                         ) : (
                           <Icon name="inventory_2" className="text-slate-300 text-base" />
                         )}
@@ -357,7 +358,7 @@ export default function ReviewsTab() {
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-12 h-12 rounded-lg bg-slate-50 border border-slate-100 p-1 flex items-center justify-center shrink-0 overflow-hidden">
                   {viewingProduct.image ? (
-                    <img src={viewingProduct.image} alt={viewingProduct.name} className="w-full h-full object-contain rounded" />
+                    <img src={viewingProduct.image || PRODUCT_PLACEHOLDER} alt={viewingProduct.name} onError={applyProductPlaceholder} className="w-full h-full object-contain rounded" />
                   ) : (
                     <Icon name="inventory_2" className="text-slate-300 text-xl" />
                   )}

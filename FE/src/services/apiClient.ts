@@ -166,7 +166,10 @@ async function request<T>(path: string, options: RequestInit & { requireAuth?: b
       throw new Error(AUTH_EXPIRED_MESSAGE);
     }
 
-    throw new Error(getApiErrorMessage(payload, response.status));
+    // Gắn mã HTTP vào lỗi để nơi gọi phân biệt được 404/503... (message giữ nguyên như cũ).
+    const error = new Error(getApiErrorMessage(payload, response.status)) as Error & { status?: number };
+    error.status = response.status;
+    throw error;
   }
 
   // Validation endpoint returns code VALIDATION_FAILED with the result in data
@@ -233,14 +236,15 @@ export const apiClient = {
       method: "DELETE",
       requireAuth: true
     }),
-  upload: async <T>(path: string, formData: FormData): Promise<T> => {
+  upload: async <T>(path: string, formData: FormData, options: { headers?: Record<string, string> } = {}): Promise<T> => {
     const token = getAuthToken();
     const url = `${API_BASE_URL}${path}`;
 
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {})
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(options.headers || {})
       },
       body: formData
     });

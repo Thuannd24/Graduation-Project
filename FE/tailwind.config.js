@@ -1,5 +1,36 @@
 import forms from "@tailwindcss/forms";
 import containerQueries from "@tailwindcss/container-queries";
+import defaultColors from "tailwindcss/colors.js";
+
+// Giao diện dùng nhiều sắc độ "lẻ" (slate-850, emerald-650, rose-955...) mà Tailwind không có,
+// nên các class đó không sinh CSS (ví dụ nút bg-slate-850 chữ trắng thành chữ trắng trên nền trắng).
+// Nội suy các sắc độ này từ hai sắc độ chuẩn kề nhau; sắc độ > 950 pha thêm màu đen.
+const STANDARD_SHADES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+const EXTRA_SHADES = [55, 105, 150, 205, 250, 305, 350, 355, 450, 455, 505, 550, 650, 655, 705, 750, 755, 850, 955];
+const EXTENDED_FAMILIES = ["slate", "red", "rose", "emerald", "amber", "blue", "indigo", "teal"];
+
+function mixHex(a, b, t) {
+  const pa = a.match(/\w\w/g).map((h) => parseInt(h, 16));
+  const pb = b.match(/\w\w/g).map((h) => parseInt(h, 16));
+  return "#" + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, "0")).join("");
+}
+
+function extraShades(family) {
+  const base = defaultColors[family];
+  const shades = {};
+  for (const shade of EXTRA_SHADES) {
+    const lower = [...STANDARD_SHADES].reverse().find((s) => s <= shade);
+    const upper = STANDARD_SHADES.find((s) => s > shade);
+    shades[shade] = upper
+      ? mixHex(base[lower], base[upper], (shade - lower) / (upper - lower))
+      : mixHex(base[lower], "#000000", (shade - lower) / 100);
+  }
+  return shades;
+}
+
+const extendedPalette = Object.fromEntries(
+  EXTENDED_FAMILIES.map((family) => [family, { ...defaultColors[family], ...extraShades(family) }])
+);
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -8,6 +39,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        ...extendedPalette,
         "secondary-fixed-dim": "#c8c6c5",
         "primary": "#a90010",
         "on-surface-variant": "#5e3f3c",

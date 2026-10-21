@@ -2,7 +2,7 @@
 
 > **Danh mục:** Bảo hành & Sửa chữa
 > **Đơn vị vận hành:** Hệ thống bán lẻ công nghệ AuraTech
-> **Ngày cập nhật:** 2026-07-27
+> **Ngày cập nhật:** 2026-10-19
 
 ---
 
@@ -81,16 +81,19 @@ Sản phẩm được bảo hành chính hãng khi đáp ứng đủ các điề
 
 ## 5. Quy trình gửi bảo hành
 
-### Bước 1: Chuẩn bị trước khi mang đến
+### Bước 1: Liên hệ và chuẩn bị
+
+- Liên hệ tổng đài **0389.468.847** (8:00–22:00 hằng ngày) hoặc chat với CSKH trên website, cung cấp mã đơn hàng và mô tả lỗi. Website hiện chỉ hỗ trợ **xem hạn bảo hành**, chưa hỗ trợ tạo yêu cầu bảo hành trực tuyến.
 
 - Sao lưu toàn bộ dữ liệu cá nhân trên thiết bị *(AuraTech không chịu trách nhiệm về mất dữ liệu trong quá trình bảo hành)*
 - Đăng xuất tài khoản iCloud / Google trên thiết bị (bắt buộc với iPhone/iPad/MacBook)
 - Tắt Find My iPhone / Find My Device
 - Mang theo hoá đơn mua hàng và hộp sản phẩm (nếu có)
 
-### Bước 2: Tiếp nhận tại cửa hàng
+### Bước 2: Tiếp nhận bảo hành
 
-- Nhân viên kiểm tra tình trạng máy và xác nhận lỗi
+- CSKH hướng dẫn gửi máy về AuraTech hoặc mang đến **trung tâm bảo hành ủy quyền của hãng**
+- Kỹ thuật viên kiểm tra tình trạng máy và xác nhận lỗi
 - Lập **phiếu tiếp nhận bảo hành** ghi rõ tình trạng máy, lỗi cần xử lý, thời gian dự kiến
 - Khách hàng ký xác nhận phiếu tiếp nhận
 
@@ -112,11 +115,11 @@ Sản phẩm được bảo hành chính hãng khi đáp ứng đủ các điề
 ## 6. Bảo hành trong thời gian chờ sửa
 
 Trong trường hợp thời gian bảo hành kéo dài (trên 7 ngày), AuraTech hỗ trợ:
-- **Điện thoại cho mượn** trong thời gian chờ (tùy cửa hàng, tùy tình huống)
+- **Điện thoại cho mượn** trong thời gian chờ (tùy tình huống, liên hệ CSKH để được hỗ trợ)
 - Thông báo tiến độ qua **SMS / Email** khi có cập nhật
 
 ---
 
 ## 7. Địa điểm gửi bảo hành
 
-Khách hàng có thể gửi bảo hành tại **bất kỳ cửa hàng AuraTech** trên toàn quốc. Không cần gửi về đúng cửa hàng đã mua.
+Khách hàng gửi bảo hành theo hướng dẫn của CSKH AuraTech (tổng đài **0389.468.847**), hoặc mang trực tiếp đến **trung tâm bảo hành ủy quyền của hãng** kèm hoá đơn/mã đơn hàng.

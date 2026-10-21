@@ -79,6 +79,8 @@ const ORDER_STATUS_BADGE_STYLES = {
   SHIPPED: "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-400",
   DELIVERED: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400",
   CANCELLED: "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-400",
+  RETURNING: "bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400",
+  RETURNED: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400",
   REFUNDED: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
 };
 const DEFAULT_STATUS_BADGE = "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400";
@@ -115,6 +117,40 @@ function ChatCardView({ card }) {
             )}
           </div>
         </div>
+      </div>
+    );
+  }
+
+  if (card.type === "order_list" && Array.isArray(card.orders) && card.orders.length > 0) {
+    return (
+      <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+        {card.orders.map((o) => (
+          <Link
+            key={o.orderId}
+            to={`/order/${o.orderId}`}
+            className="flex items-center gap-2.5 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl hover:border-rose-200 transition-colors"
+          >
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-extrabold text-[10px] text-slate-800 dark:text-slate-200">
+                  Đơn #{o.orderId}{o.createdAt ? ` · ${o.createdAt}` : ""}
+                </span>
+                <span className={`text-[8px] font-black px-2 py-0.5 rounded-full whitespace-nowrap ${ORDER_STATUS_BADGE_STYLES[o.statusCode] || DEFAULT_STATUS_BADGE}`}>
+                  {o.statusLabel}
+                </span>
+              </div>
+              {o.firstProductName && (
+                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                  {o.firstProductName}{o.itemCount > 1 ? ` và ${o.itemCount - 1} sản phẩm khác` : ""}
+                </p>
+              )}
+              {o.finalAmount != null && (
+                <p className="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold mt-0.5">{formatVnd(o.finalAmount)}</p>
+              )}
+            </div>
+            <Icon name="chevron_right" className="text-slate-400 text-sm shrink-0" />
+          </Link>
+        ))}
       </div>
     );
   }
@@ -206,7 +242,14 @@ export default function AIChatbotWidget() {
   const location = useLocation();
   const [popupText, setPopupText] = useState("AuraTech xin chào! 👋");
   const [isOpen, setIsOpen] = useState(false);
-  const [showPopup, setShowPopup] = useState(true);
+  // Bong bóng chào chỉ hiện ngắn và không hiện lại trong phiên nếu khách đã tắt (tránh che nội dung trang).
+  const [showPopup, setShowPopup] = useState(() => {
+    try {
+      return sessionStorage.getItem("aura_greeting_dismissed") !== "1";
+    } catch {
+      return true;
+    }
+  });
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -264,7 +307,7 @@ export default function AIChatbotWidget() {
       setPopupText("AuraTech xin chào! 👋");
       const timer = setTimeout(() => {
         setShowPopup(false);
-      }, 12000);
+      }, 6000);
       return () => clearTimeout(timer);
     }
   }, [location.pathname]);
@@ -363,7 +406,7 @@ export default function AIChatbotWidget() {
     if (!dbRoom || dbRoom.status === "CLOSED") return;
     try {
       setLoading(true);
-      const updatedRoom = await chatApi.handoverToStaff(dbRoom.id);
+      const updatedRoom = await chatApi.handoverToStaff(dbRoom.id, guestId);
       setDbRoom(updatedRoom);
       setIsEscalated(true);
 
@@ -372,7 +415,7 @@ export default function AIChatbotWidget() {
         sender: "system",
         text: updatedRoom.status === "ACTIVE"
           ? `Đã kết nối với nhân viên hỗ trợ: ${updatedRoom.staffName || "Nhân viên"}`
-          : "Không có nhân viên online trực tuyến. Tin nhắn của bạn đã được chuyển tiếp đến email hỗ trợ. Chúng tôi sẽ phản hồi sớm nhất!",
+          : "Hiện chưa có nhân viên trực tuyến. Tin nhắn của bạn đã được lưu và báo cho bộ phận hỗ trợ; nhân viên sẽ phản hồi tại đây trong giờ làm việc (8:00–22:00).",
         timestamp: new Date()
       };
       setMessages((prev) => [...prev, systemMsg]);
@@ -444,7 +487,7 @@ export default function AIChatbotWidget() {
 
       if (response.intent === "escalate") {
         if (dbRoom) {
-          const updatedRoom = await chatApi.handoverToStaff(dbRoom.id);
+          const updatedRoom = await chatApi.handoverToStaff(dbRoom.id, guestId);
           setDbRoom(updatedRoom);
           setIsEscalated(true);
 
@@ -453,7 +496,7 @@ export default function AIChatbotWidget() {
             sender: "system",
             text: updatedRoom.status === "ACTIVE" 
               ? `Đã kết nối với nhân viên hỗ trợ: ${updatedRoom.staffName || "Nhân viên"}` 
-              : "Hệ thống đã nhận dạng cảm xúc tiêu cực. Vì không có nhân viên trực tuyến trực tiếp lúc này, tin nhắn của bạn đã được chuyển tiếp đến email hỗ trợ để giải quyết gấp!",
+              : "Rất xin lỗi vì trải nghiệm chưa tốt. Hiện chưa có nhân viên trực tuyến; tin nhắn của bạn đã được lưu và báo cho bộ phận hỗ trợ, nhân viên sẽ phản hồi tại đây trong giờ làm việc (8:00–22:00).",
             timestamp: new Date()
           };
           setMessages((prev) => [...prev, assistantMsg, systemMsg]);
@@ -509,7 +552,7 @@ export default function AIChatbotWidget() {
 
     try {
       setLoading(true);
-      const { url } = await chatApi.uploadImage(dbRoom.id, file);
+      const { url } = await chatApi.uploadImage(dbRoom.id, file, guestId);
       if (stompClientRef.current && stompClientRef.current.connected) {
         stompClientRef.current.publish({
           destination: "/app/chat.sendMessage",
@@ -593,6 +636,11 @@ export default function AIChatbotWidget() {
               onClick={(e) => {
                 e.stopPropagation();
                 setShowPopup(false);
+                try {
+                  sessionStorage.setItem("aura_greeting_dismissed", "1");
+                } catch {
+                  // bỏ qua khi trình duyệt chặn storage
+                }
               }}
               className="text-[#968e7d] hover:text-[#c82229] dark:hover:text-rose-400 bg-transparent border-none cursor-pointer p-0.5 shrink-0"
               title="Đóng thông báo"

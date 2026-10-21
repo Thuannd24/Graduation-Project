@@ -8,6 +8,7 @@ import keycloak from "../../../services/keycloak.js";
 // Import modular subcomponents
 import AdminSidebar from "../components/AdminSidebar.jsx";
 import AdminHeader from "../components/AdminHeader.jsx";
+import { PRODUCT_PLACEHOLDER } from "../../../utils/imageFallback.js";
 
 // Tabs are code-split: only the active tab's chunk (and its heavy deps like
 // recharts / @xyflow/react) is downloaded, instead of bundling all of them upfront.
@@ -114,7 +115,7 @@ export default function AdminDashboardPage() {
 
   const fetchProducts = async () => {
     try {
-      const data = await productApi.listAllProducts();
+      const data = await productApi.adminListAllProducts();
       setProducts(data || []);
     } catch (err) {
       console.error("Failed to fetch products:", err);
@@ -155,32 +156,38 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleCancelOrder = async (orderId) => {
-    if (!window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) return;
-    try {
-      await orderApi.cancelOrder(orderId);
-      alert("Hủy đơn hàng thành công!");
-      fetchOrders();
-      if (selectedOrder && selectedOrder.id === orderId) {
-        const updated = await orderApi.getOrder(orderId);
-        setSelectedOrder(updated);
-      }
-    } catch (err) {
-      alert("Lỗi khi hủy đơn hàng: " + err.message);
+  const refreshSelectedOrder = async (orderId) => {
+    fetchOrders();
+    if (selectedOrder && selectedOrder.id === orderId) {
+      const updated = await orderApi.getOrder(orderId);
+      setSelectedOrder(updated);
     }
   };
 
-  const handleTriggerWebhook = async (orderId, status) => {
+  // Hủy đơn (bắt buộc lý do). Đơn đang giao sẽ chuyển sang "Chờ hoàn hàng", kho chỉ cộng lại khi nhận hàng hoàn.
+  // Lỗi được ném lại để hộp thoại hiển thị.
+  const handleCancelOrder = async (orderId, reasonCode, reason) => {
+    const updated = await orderApi.cancelOrder(orderId, reasonCode, reason);
+    await refreshSelectedOrder(orderId);
+    return updated;
+  };
+
+  const handleTriggerWebhook = async (orderId, status, reason) => {
     try {
-      await orderApi.updateDeliveryStatus(orderId, status);
-      alert(`Đã cập nhật trạng thái giao vận thành ${status} thành công!`);
-      fetchOrders();
-      if (selectedOrder && selectedOrder.id === orderId) {
-        const updated = await orderApi.getOrder(orderId);
-        setSelectedOrder(updated);
-      }
+      await orderApi.updateDeliveryStatus(orderId, status, reason);
+      await refreshSelectedOrder(orderId);
     } catch (err) {
-      alert("Lỗi cập nhật trạng thái giao vận: " + err.message);
+      alert("Không thể cập nhật trạng thái: " + err.message);
+    }
+  };
+
+  const handleReturnReceived = async (orderId) => {
+    if (!window.confirm("Xác nhận kho đã nhận lại hàng hoàn của đơn này? Tồn kho sẽ được cộng lại và đơn đã thanh toán online sẽ được hoàn tiền.")) return;
+    try {
+      await orderApi.confirmReturnReceived(orderId);
+      await refreshSelectedOrder(orderId);
+    } catch (err) {
+      alert("Không thể xác nhận nhận hàng hoàn: " + err.message);
     }
   };
 
@@ -195,17 +202,13 @@ export default function AdminDashboardPage() {
   };
 
   const getOrderItemImage = (item) => {
-    if (!item || !item.productName) return "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100";
+    // Không đoán ảnh minh họa theo tên (ảnh stock không liên quan) -> dùng ảnh thật nếu có, không thì placeholder.
+    if (item?.imageUrl) return item.imageUrl;
+    if (!item || !item.productName) return PRODUCT_PLACEHOLDER;
     const itemNameLower = String(item.productName).toLowerCase();
     const matched = products.find(p => p && p.name && String(p.name).toLowerCase().includes(itemNameLower));
     if (matched && matched.image) return matched.image;
-    if (itemNameLower.includes("phone") || itemNameLower.includes("webcam")) {
-      return "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=100";
-    }
-    if (itemNameLower.includes("bag") || itemNameLower.includes("wallet")) {
-      return "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100";
-    }
-    return "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100";
+    return PRODUCT_PLACEHOLDER;
   };
 
   const formatOrderDate = (dateStr) => {
@@ -231,8 +234,8 @@ export default function AdminDashboardPage() {
   const totalOrdersCount = orders.length || 0;
   const newOrdersCount = orders.filter(o => o && (o.status === "PENDING" || o.status === "AWAITING_PAYMENT")).length || 0;
   const completedOrdersCount = orders.filter(o => o && o.status === "DELIVERED").length || 0;
-  const canceledOrdersCount = orders.filter(o => o && o.status === "CANCELLED").length || 0;
-  const pendingOrdersCount = orders.filter(o => o && ["PENDING", "AWAITING_PAYMENT", "CONFIRMED", "SHIPPED"].includes(o.status)).length || 0;
+  const canceledOrdersCount = orders.filter(o => o && ["CANCELLED", "RETURNED"].includes(o.status)).length || 0;
+  const pendingOrdersCount = orders.filter(o => o && ["PENDING", "AWAITING_PAYMENT", "CONFIRMED", "SHIPPED", "RETURNING"].includes(o.status)).length || 0;
 
   const handleSaveCampaignFlow = () => {
     alert("Quy trình chiến dịch khuyến mãi đã được lưu thành công vào hệ thống!");
@@ -248,7 +251,13 @@ export default function AdminDashboardPage() {
       />
 
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-50 dark:bg-slate-950 transition-colors">
-        <AdminHeader activeTab={activeTab} darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />
+        <AdminHeader
+          activeTab={activeTab}
+          darkMode={darkMode}
+          onToggleDarkMode={toggleDarkMode}
+          orders={orders}
+          setActiveTab={setActiveTab}
+        />
 
         <Suspense fallback={<TabFallback />}>
         {activeTab === "overview" && (
@@ -288,6 +297,7 @@ export default function AdminDashboardPage() {
             handleShipOrder={handleShipOrder}
             handleCancelOrder={handleCancelOrder}
             handleSimulateWebhook={handleTriggerWebhook}
+            handleReturnReceived={handleReturnReceived}
           />
         )}
 
@@ -345,7 +355,7 @@ export default function AdminDashboardPage() {
         )}
 
         {activeTab === "analytics-ai" && (
-          <AnalyticsAITab />
+          <AnalyticsAITab onNavigate={setActiveTab} />
         )}
 
         {activeTab === "support-chat" && (

@@ -84,7 +84,8 @@ export function normalizeProduct(product: Partial<Product>): Product {
     listPrice: pricing.listPrice,
     price: pricing.price,
     salePrice: pricing.salePrice,
-    costPrice: Number(product.costPrice ?? 0),
+    // API công khai không trả giá vốn (null) -> để undefined thay vì 0 để không ghi đè nhầm khi lưu.
+    costPrice: product.costPrice != null ? Number(product.costPrice) : undefined,
     oldPrice: pricing.oldPrice,
     slug: product.slug ? String(product.slug) : undefined,
     active: product.active !== false,
@@ -111,6 +112,33 @@ function parseSliceProducts(data: unknown): ProductPageResult {
     size: Number(slice?.size ?? content.length),
     hasNext: slice?.hasNext != null ? Boolean(slice.hasNext) : slice?.last === false,
     hasPrevious: slice?.hasPrevious != null ? Boolean(slice.hasPrevious) : slice?.first === false
+  };
+}
+
+function parseSearchPage(data: unknown, page: number, size: number): ProductPageResult {
+  const pageData = data as Record<string, unknown>;
+  const content = Array.isArray(pageData?.content) ? pageData.content : [];
+  return {
+    items: (content as Partial<Product>[]).map((doc) =>
+      normalizeProduct({
+        id: doc.id,
+        name: doc.name,
+        description: doc.description,
+        price: doc.price,
+        salePrice: doc.salePrice,
+        imageUrl: doc.imageUrl ?? doc.image,
+        brand: doc.brand,
+        categoryId: doc.categoryId,
+        slug: doc.slug,
+        active: doc.active,
+        ratingAvg: doc.ratingAvg,
+        reviewCount: doc.reviewCount
+      })
+    ),
+    page: Number(pageData?.number ?? page),
+    size: Number(pageData?.size ?? size),
+    hasNext: pageData?.hasNext != null ? Boolean(pageData.hasNext) : pageData?.last === false,
+    hasPrevious: pageData?.hasPrevious != null ? Boolean(pageData.hasPrevious) : pageData?.first === false
   };
 }
 
@@ -171,28 +199,60 @@ export const productApi = {
     const data = await apiClient.get<unknown>(
       `/public/products/search?q=${encodeURIComponent(query)}&page=${page}&size=${size}`
     );
-    const pageData = data as Record<string, unknown>;
-    const content = Array.isArray(pageData?.content) ? pageData.content : [];
+    return parseSearchPage(data, page, size);
+  },
+
+  /** Sản phẩm liên quan do server tính (cùng danh mục/thương hiệu/tầm giá, chỉ sản phẩm đang bán). */
+  async getRelatedProducts(productId: string | number, limit = 8): Promise<Product[]> {
+    const data = await apiClient.get<unknown>(`/public/products/${productId}/related?limit=${limit}`);
+    return (Array.isArray(data) ? data : []).map((p) => normalizeProduct(p as Partial<Product>));
+  },
+
+  /* ---------- Admin (ADMIN/STAFF): gồm cả sản phẩm đã ẩn và có giá vốn ---------- */
+
+  /** GET /admin/products?page&size[&active][&categoryId] — cùng dạng Slice với API công khai. */
+  async adminListProductsPaged(params: Record<string, string> = {}): Promise<ProductPageResult> {
+    const query = new URLSearchParams(params).toString();
+    const data = await apiClient.get<unknown>(`/admin/products${query ? `?${query}` : ""}`, { requireAuth: true });
+    return parseSliceProducts(data);
+  },
+
+  /** Toàn bộ sản phẩm cho trang quản trị (duyệt hết các trang). */
+  async adminListAllProducts(params: Record<string, string> = {}): Promise<Product[]> {
+    const all: Product[] = [];
+    let page = 0;
+    const MAX_PAGES = 50;
+    while (page < MAX_PAGES) {
+      const result = await this.adminListProductsPaged({ ...params, page: String(page), size: "200" });
+      all.push(...result.items);
+      if (!result.hasNext || result.items.length === 0) break;
+      page += 1;
+    }
+    return all;
+  },
+
+  async adminSearchProducts(query: string, page = 0, size = 10): Promise<ProductPageResult> {
+    const data = await apiClient.get<unknown>(
+      `/admin/products/search?q=${encodeURIComponent(query)}&page=${page}&size=${size}`,
+      { requireAuth: true }
+    );
+    return parseSearchPage(data, page, size);
+  },
+
+  /** Chi tiết cho màn sửa sản phẩm: có costPrice (API công khai trả null). */
+  async adminGetProductDetail(productId: string | number): Promise<Product> {
+    const raw = await apiClient.get<Record<string, unknown>>(`/admin/products/${productId}`, { requireAuth: true });
     return {
-      items: (content as Partial<Product>[]).map((doc) =>
-        normalizeProduct({
-          id: doc.id,
-          name: doc.name,
-          description: doc.description,
-          price: doc.price,
-          salePrice: doc.salePrice,
-          imageUrl: doc.imageUrl ?? doc.image,
-          brand: doc.brand,
-          categoryId: doc.categoryId,
-          slug: doc.slug,
-          active: doc.active
-        })
-      ),
-      page: Number(pageData?.number ?? page),
-      size: Number(pageData?.size ?? size),
-      hasNext: pageData?.hasNext != null ? Boolean(pageData.hasNext) : pageData?.last === false,
-      hasPrevious: pageData?.hasPrevious != null ? Boolean(pageData.hasPrevious) : pageData?.first === false
-    };
+      // Giữ mọi trường gốc (weight, length, width, height...) cho form sửa, rồi ghi đè bằng bản chuẩn hóa.
+      ...raw,
+      ...normalizeProduct(raw as Partial<Product>),
+      costPrice: raw.costPrice != null ? Number(raw.costPrice) : undefined,
+      attributes: raw.attributes,
+      variants: raw.variants || [],
+      tags: raw.tags,
+      warrantyPeriod: raw.warrantyPeriod,
+      warrantyPolicy: raw.warrantyPolicy
+    } as Product;
   },
 
   async listCategories(): Promise<Category[]> {

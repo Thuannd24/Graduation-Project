@@ -7,10 +7,16 @@ import { useCart } from "../../../context/CartContext.jsx";
 import { useWishlist } from "../../../context/WishlistContext.jsx";
 import { productApi } from "../../../services/productApi";
 import { authApi } from "../../../services/authApi";
+import { inventoryApi } from "../../../services/inventoryApi";
 import { calculateDiscountPercent, formatVnd } from "../../../utils/format.js";
 import { resolveProductPrices } from "../../../utils/pricing.ts";
+import { FREE_SHIP_THRESHOLD, MAX_QTY_PER_ITEM } from "../../../utils/checkoutConstants";
 import keycloak from "../../../services/keycloak.js";
 import { trackBehavior } from "../../../services/behaviorTracker.ts";
+import { PRODUCT_PLACEHOLDER } from "../../../utils/imageFallback.js";
+
+// Ảnh thay thế khi sản phẩm không có ảnh hoặc ảnh lỗi (giống ProductCard).
+const PRODUCT_IMAGE_FALLBACK = PRODUCT_PLACEHOLDER;
 
 /* ======================== Helper Functions ======================== */
 
@@ -383,6 +389,7 @@ export default function ProductDetailPage() {
   const [reviewFilter, setReviewFilter] = useState(0); // 0 = all
   const [reviewSort, setReviewSort] = useState("newest");
   const [quantity, setQuantity] = useState(1);
+  const [stock, setStock] = useState(null); // null = chưa biết (API tồn kho lỗi / chưa tải)
 
   const variantAxes = useMemo(
     () => (Array.isArray(categoryAttributes) ? categoryAttributes.filter((attr) => attr?.isVariant) : []),
@@ -418,6 +425,12 @@ export default function ProductDetailPage() {
     return Array.from(new Set(images));
   }, [product, selectedVariant]);
   const isLiked = product ? isInWishlist(product.id) : false;
+  // Điểm trung bình: ưu tiên tính từ danh sách đánh giá vừa tải (luôn mới nhất), nếu không có thì dùng
+  // ratingAvg/reviewCount từ API sản phẩm (có thể bị cache cũ).
+  const reviewCount = reviews.length > 0 ? reviews.length : Number(product?.reviews || 0);
+  const avgRating = reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + Number(r.rating || 0), 0) / reviews.length
+    : Number(product?.rating || 0);
 
   // Filtered & sorted reviews
   const filteredReviews = useMemo(() => {
@@ -443,9 +456,9 @@ export default function ProductDetailPage() {
         setProduct(detail);
 
         // Non-blocking: related products don't block the main render
-        productApi.listProducts()
-          .then((products) => setRelated((Array.isArray(products) ? products : []).filter((item) => item.id !== detail.id).slice(0, 8)))
-          .catch(() => {});
+        productApi.getRelatedProducts(detail.id, 8)
+          .then((products) => setRelated((Array.isArray(products) ? products : []).filter((item) => item.id !== detail.id)))
+          .catch(() => setRelated([]));
 
         const userIds = Array.from(new Set((reviewList || []).map((r) => r.userId).filter(Boolean)));
 
@@ -480,7 +493,7 @@ export default function ProductDetailPage() {
             avatarUrl: uInfo?.avatarUrl || null,
             createdAt: review.createdAt,
             date: review.createdAt,
-            rating: review.rating || 5,
+            rating: Number(review.rating || 0),
             content: review.comment || "",
             comment: review.comment || "",
             imageUrls: review.imageUrls || [],
@@ -495,7 +508,15 @@ export default function ProductDetailPage() {
         const firstImage = detail?.gallery?.[0] || detail?.image || detail?.imageUrl || selectedVariant?.imageUrl || "";
         setActiveImage(firstImage);
       })
-      .catch((err) => setError(err instanceof Error ? err.message : "Không thể tải sản phẩm."))
+      .catch((err) => {
+        // 404 = sản phẩm không tồn tại -> hiển thị trạng thái "Không tìm thấy sản phẩm" thay vì lỗi.
+        if (err?.status === 404) {
+          setProduct(null);
+          setError("");
+          return;
+        }
+        setError(err instanceof Error ? err.message : "Không thể tải sản phẩm.");
+      })
       .finally(() => setLoading(false));
   }, [productId]);
 
@@ -518,6 +539,35 @@ export default function ProductDetailPage() {
     }
   }, [selectedVariant?.id, selectedVariant?.imageUrl, gallery]);
 
+  // Tồn kho thật của biến thể đang chọn (API công khai /inventories). Lỗi thì giữ null, không chặn mua.
+  useEffect(() => {
+    if (!product?.id) return;
+    let cancelled = false;
+    const productIdNum = Number(product.id);
+    const variantIdNum = Number(selectedVariant?.id || 0);
+    inventoryApi
+      .getInventory(productIdNum, variantIdNum)
+      .then((record) => {
+        if (cancelled) return;
+        const qty = Number(record?.quantity);
+        setStock(Number.isFinite(qty) ? qty : null);
+      })
+      .catch(() => {
+        if (!cancelled) setStock(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [product?.id, selectedVariant?.id]);
+
+  // Sản phẩm ngừng kinh doanh hoặc hết hàng thì không cho mua.
+  const canPurchase = Boolean(product) && product.active !== false && stock !== 0;
+  const maxQty = stock != null ? Math.max(1, Math.min(stock, MAX_QTY_PER_ITEM)) : MAX_QTY_PER_ITEM;
+
+  useEffect(() => {
+    setQuantity((q) => Math.min(q, maxQty));
+  }, [maxQty]);
+
   const handleVariantChange = (axisCode, optionValue) => {
     setSelectedOptions((current) => ({ ...current, [axisCode]: optionValue }));
   };
@@ -525,23 +575,22 @@ export default function ProductDetailPage() {
   const handleBuyNow = async (e) => {
     e.preventDefault();
     if (!product) return;
-    const checkoutProduct = { ...product, selectedVariant: selectedVariant || null };
+    if (!canPurchase) return;
+    const checkoutProduct = { ...product, selectedVariant: selectedVariant || null, buyQty: quantity };
     if (!keycloak.authenticated) {
       sessionStorage.setItem("pending_buy_now", JSON.stringify(checkoutProduct));
       keycloak.login({ redirectUri: window.location.origin + "/checkout" });
       return;
     }
-    const success = await addToCart(checkoutProduct, selectedVariant || null);
+    const success = await addToCart(checkoutProduct, selectedVariant || null, quantity);
     if (success) {
       navigate("/checkout");
     }
   };
 
   const handleAddToCart = async () => {
-    if (!product) return;
-    for (let i = 0; i < quantity; i++) {
-      await addToCart({ ...product, selectedVariant: selectedVariant || null }, selectedVariant || null);
-    }
+    if (!product || !canPurchase) return;
+    await addToCart({ ...product, selectedVariant: selectedVariant || null }, selectedVariant || null, quantity);
   };
 
   // Loading State
@@ -611,7 +660,11 @@ export default function ProductDetailPage() {
               <div className="w-full aspect-square md:aspect-[4/3] flex items-center justify-center p-6">
                 <img
                   alt={product.name}
-                  src={activeImage || gallery[0] || product.image}
+                  src={activeImage || gallery[0] || product.image || PRODUCT_IMAGE_FALLBACK}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = PRODUCT_IMAGE_FALLBACK;
+                  }}
                   className="max-h-full max-w-full object-contain cursor-zoom-in transition-transform duration-500 group-hover:scale-110"
                   onClick={() => {
                     setZoomModal(true);
@@ -661,7 +714,15 @@ export default function ProductDetailPage() {
                   }`}
                   type="button"
                 >
-                  <img alt="" src={image} className="max-h-full max-w-full object-contain p-1" />
+                  <img
+                    alt={`${product.name} - ảnh ${idx + 1}`}
+                    src={image}
+                    className="max-h-full max-w-full object-contain p-1"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = PRODUCT_IMAGE_FALLBACK;
+                    }}
+                  />
                 </button>
               ))}
             </div>
@@ -678,7 +739,21 @@ export default function ProductDetailPage() {
                       {product.brand}
                     </span>
                   )}
-                  {product.active !== false && (
+                  {product.active === false ? (
+                    <span className="text-[10px] font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                      Ngừng kinh doanh
+                    </span>
+                  ) : stock === 0 ? (
+                    <span className="text-[10px] font-bold text-red-600 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded flex items-center gap-0.5">
+                      <Icon name="block" className="text-[10px]" />
+                      Hết hàng
+                    </span>
+                  ) : stock != null && stock <= 5 ? (
+                    <span className="text-[10px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded flex items-center gap-0.5">
+                      <Icon name="inventory_2" className="text-[10px]" />
+                      Chỉ còn {stock} sản phẩm
+                    </span>
+                  ) : (
                     <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded flex items-center gap-0.5">
                       <Icon name="check_circle" className="text-[10px]" />
                       Còn hàng
@@ -689,13 +764,19 @@ export default function ProductDetailPage() {
                   {product.name}
                 </h1>
                 <div className="flex items-center gap-3 mt-2">
-                  <div className="flex items-center gap-1">
-                    <StarRating rating={Math.round(product.rating || 0)} size="xs" />
-                    <span className="text-sm font-bold text-amber-500 ml-1">{product.rating || "0"}</span>
-                  </div>
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    ({reviews.length} đánh giá)
-                  </span>
+                  {avgRating > 0 ? (
+                    <>
+                      <div className="flex items-center gap-1">
+                        <StarRating rating={Math.round(avgRating)} size="xs" />
+                        <span className="text-sm font-bold text-amber-500 ml-1">{avgRating.toFixed(1)}</span>
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-medium">
+                        ({reviewCount} đánh giá)
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-[11px] text-slate-400 font-medium">Chưa có đánh giá</span>
+                  )}
                   {typeof product.salesCount === "number" && (
                     <>
                       <span className="w-1 h-1 rounded-full bg-slate-300"></span>
@@ -731,7 +812,9 @@ export default function ProductDetailPage() {
                   </span>
                   <span className="flex items-center gap-0.5">
                     <Icon name="local_shipping" className="text-primary text-xs" />
-                    Miễn phí vận chuyển
+                    {basePrice >= FREE_SHIP_THRESHOLD
+                      ? "Miễn phí vận chuyển"
+                      : `Miễn phí vận chuyển cho đơn từ ${formatVnd(FREE_SHIP_THRESHOLD)}`}
                   </span>
                 </div>
               </div>
@@ -774,6 +857,7 @@ export default function ProductDetailPage() {
                 <div className="flex items-center border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    aria-label="Giảm số lượng"
                     className="w-9 h-9 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border-none cursor-pointer text-slate-600 dark:text-slate-300 font-bold"
                     type="button"
                     disabled={quantity <= 1}
@@ -783,14 +867,17 @@ export default function ProductDetailPage() {
                   <input
                     type="number"
                     value={quantity}
-                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                    onChange={(e) => setQuantity(Math.min(maxQty, Math.max(1, parseInt(e.target.value) || 1)))}
+                    aria-label="Số lượng"
                     className="w-14 h-9 text-center text-sm font-bold border-x border-slate-200 dark:border-slate-700 bg-transparent outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <button
-                    onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+                    onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
+                    aria-label="Tăng số lượng"
+                    title={quantity >= maxQty ? (stock != null && stock < MAX_QTY_PER_ITEM ? `Chỉ còn ${stock} sản phẩm` : `Tối đa ${MAX_QTY_PER_ITEM} sản phẩm mỗi loại`) : undefined}
                     className="w-9 h-9 flex items-center justify-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border-none cursor-pointer text-slate-600 dark:text-slate-300 font-bold"
                     type="button"
-                    disabled={quantity >= 99}
+                    disabled={quantity >= maxQty}
                   >
                     <Icon name="add" className="text-sm" />
                   </button>
@@ -799,21 +886,31 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Action Buttons */}
+            {!canPurchase && (
+              <p className="text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-2 flex items-center gap-1.5">
+                <Icon name="info" className="text-sm" />
+                {product.active === false
+                  ? "Sản phẩm đã ngừng kinh doanh, không thể đặt mua."
+                  : "Sản phẩm tạm hết hàng, vui lòng quay lại sau."}
+              </p>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <button
                 onClick={handleBuyNow}
-                className="py-3.5 bg-gradient-to-r from-primary to-red-600 text-white font-black text-sm uppercase rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/30 hover:-translate-y-0.5 flex flex-col items-center justify-center leading-none cursor-pointer border-none"
+                disabled={!canPurchase}
+                className="disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 py-3.5 bg-gradient-to-r from-primary to-red-600 text-white font-black text-sm uppercase rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/30 hover:-translate-y-0.5 flex flex-col items-center justify-center leading-none cursor-pointer border-none"
                 type="button"
               >
                 <span className="flex items-center gap-1.5">
                   <Icon name="flash_on" className="text-lg" />
                   MUA NGAY
                 </span>
-                <span className="text-[9px] font-normal tracking-wide text-white/80 mt-0.5">Giao hàng nhanh trong 2h</span>
+                <span className="text-[9px] font-normal tracking-wide text-white/80 mt-0.5">Thanh toán COD hoặc VNPay</span>
               </button>
               <button
                 onClick={handleAddToCart}
-                className="py-3.5 border-2 border-primary text-primary hover:bg-primary hover:text-white dark:hover:bg-primary font-black text-sm uppercase rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer group"
+                disabled={!canPurchase}
+                className="disabled:opacity-50 disabled:cursor-not-allowed py-3.5 border-2 border-primary text-primary hover:bg-primary hover:text-white dark:hover:bg-primary font-black text-sm uppercase rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer group"
                 type="button"
               >
                 <Icon name="add_shopping_cart" className="text-lg group-hover:scale-110 transition-transform" />
@@ -829,7 +926,7 @@ export default function ProductDetailPage() {
               </span>
               <span className="flex items-center gap-1 bg-slate-50 dark:bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
                 <Icon name="swap_horiz" className="text-primary text-xs" />
-                Đổi trả 30 ngày
+                Lỗi NSX đổi mới 30 ngày (qua CSKH)
               </span>
               {Number(product.warrantyPeriod) > 0 && (
                 <span className="flex items-center gap-1 bg-slate-50 dark:bg-slate-950 px-2.5 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">

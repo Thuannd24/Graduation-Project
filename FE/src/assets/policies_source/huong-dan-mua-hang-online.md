@@ -2,13 +2,13 @@
 
 > **Danh mục:** Hướng dẫn mua hàng
 > **Đơn vị vận hành:** Hệ thống bán lẻ công nghệ AuraTech
-> **Ngày cập nhật:** 2026-07-27
+> **Ngày cập nhật:** 2026-10-19
 
 ---
 
-Website https://auratechvn.online đã hỗ trợ việc thanh toán online **miễn phí** với nhiều hình thức khác nhau giúp mang đến sự tiện lợi nhất cho khách hàng. Quý khách hàng có thể lựa chọn các hình thức thanh toán bằng các loại thẻ ATM, thẻ tín dụng, chuyển khoản, Zalopay, VNPAY, Moca, OnePay, Kredivo,... đi kèm với nhiều ưu đãi hấp dẫn.
+Website https://auratechvn.online hỗ trợ 2 hình thức thanh toán: thanh toán online **miễn phí** qua cổng **VNPAY** và thanh toán tiền mặt khi nhận hàng (**COD**, áp dụng cho đơn có tổng thanh toán đến **20.000.000 đ**). Website hiện **chưa hỗ trợ trả góp**.
 
-Các giao dịch này hoàn toàn **miễn phí**, an toàn, bảo mật và nhanh chóng trong 2 giây.
+Giá sản phẩm trên website **đã bao gồm VAT 10%**. Phí giao hàng **30.000 đ**/đơn, **miễn phí** cho đơn hàng từ **500.000 đ**.
 
 Dưới đây là các bước hướng dẫn đặt hàng và thanh toán trực tuyến trên website AuraTech:
 
@@ -20,7 +20,7 @@ Lựa chọn sản phẩm bạn muốn mua, sau đó chọn một trong các hì
 
 - **Mua ngay** — nếu muốn thanh toán thẳng
 
-> Các bước dưới đây hướng dẫn cách thanh toán trực tuyến (mua thẳng, không qua trả góp).
+> Các bước dưới đây hướng dẫn cách đặt hàng và thanh toán trên website.
 
 ---
 
@@ -40,9 +40,7 @@ Quý khách vui lòng nhập đầy đủ các thông tin: Họ và tên, số �
 
 Bên cạnh đó, quý khách có thể **đăng nhập** để lưu lại thông tin cá nhân, tiện cho việc mua sắm về sau.
 
-Quý khách có thể lựa chọn:
-- **Giao hàng tận nhà**
-- **Nhận hàng tại cửa hàng** — trong hệ thống các cửa hàng AuraTech trên toàn quốc
+Đơn hàng được **giao tận nhà** tại địa chỉ quý khách cung cấp (website chưa hỗ trợ nhận hàng tại cửa hàng).
 
 Hãy để lại ghi chú trong phần **Yêu cầu khác** nếu có lưu ý đặc biệt khi giao hàng.
 
@@ -50,7 +48,7 @@ Hãy để lại ghi chú trong phần **Yêu cầu khác** nếu có lưu ý đ
 
 ## Bước 4: Nhập mã giảm giá (nếu có)
 
-If bạn có mã giảm giá, hãy nhập vào ô **"Nhập mã giảm giá"** để được hưởng ưu đãi.
+Nếu bạn có mã giảm giá, hãy nhập vào ô **"Nhập mã giảm giá"** để được hưởng ưu đãi.
 
 Sau đó, nhấn **"Tiếp tục"**.
 
@@ -58,10 +56,10 @@ Sau đó, nhấn **"Tiếp tục"**.
 
 ## Bước 5: Chọn hình thức thanh toán
 
-AuraTech cho phép khách hàng chọn thanh toán bằng tiền mặt tại nhà/cửa hàng khi nhận hàng, hoặc thanh toán online. Các cổng thanh toán online hiện có:
+AuraTech cho phép khách hàng chọn một trong hai hình thức:
 
-- Thanh toán qua **VNPAY**
-- **Chuyển khoản qua Viet QR** — chỉ cần quét mã, không cần nhập số tài khoản thủ công
+- Thanh toán online qua **VNPAY**
+- **Thanh toán khi nhận hàng (COD)** — chỉ áp dụng cho đơn có tổng thanh toán đến **20.000.000 đ**; đơn lớn hơn vui lòng thanh toán qua VNPAY
 
 Tick vào hình thức thanh toán bạn muốn chọn và nhấn **"TIẾP TỤC"** để hoàn thành đơn hàng.
 
@@ -78,7 +76,7 @@ Tick vào hình thức thanh toán bạn muốn chọn và nhấn **"TIẾP TỤ
 ## Thông tin thêm
 
 - Xem thêm thông tin về giao hàng
-- Để huỷ đơn hàng, vui lòng xem hướng dẫn tại: https://auratechvn.online/profile?tab=account
+- Quý khách có thể huỷ đơn trong mục Lịch sử đơn hàng khi đơn chưa được giao cho đơn vị vận chuyển: https://auratechvn.online/profile?tab=account. Voucher đã dùng được hoàn lại nếu còn hạn.
 
 ---
 

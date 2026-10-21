@@ -2,16 +2,14 @@
 
 > **Danh mục:** FAQ & Hỗ trợ khách hàng
 > **Đơn vị vận hành:** Hệ thống bán lẻ công nghệ AuraTech
-> **Ngày cập nhật:** 2026-07-27
+> **Ngày cập nhật:** 2026-10-19
 
 ---
 
 ## 🛒 Mua hàng & Đặt hàng
 
 **Q: Tôi có thể mua hàng theo những cách nào?**
-A: AuraTech hỗ trợ 2 kênh mua hàng:
-- **Online:** Đặt hàng qua website — thêm vào giỏ hàng → chọn địa chỉ → thanh toán → chờ giao hàng.
-- **Tại cửa hàng:** Đến trực tiếp hệ thống cửa hàng AuraTech trên toàn quốc để xem hàng thực tế và mua trực tiếp.
+A: AuraTech bán hàng trực tuyến: đặt hàng qua website — thêm vào giỏ hàng → chọn địa chỉ → thanh toán → chờ giao hàng. Bạn cũng có thể gọi tổng đài **0389.468.847** để được tư vấn.
 
 **Q: Tôi đặt hàng xong có thể thay đổi địa chỉ giao hàng không?**
 A: Được, nhưng chỉ khi đơn hàng còn ở trạng thái **PENDING** hoặc **CONFIRMED**. Sau khi đơn đã chuyển sang **SHIPPED** (đang vận chuyển) thì không thể thay đổi nữa. Vui lòng liên hệ tổng đài **0389.468.847** để được hỗ trợ.
@@ -31,14 +29,17 @@ A: Nếu bạn đã **đăng nhập**, giỏ hàng được lưu trên server v�
 
 **Q: AuraTech hỗ trợ những hình thức thanh toán nào?**
 A: Hiện tại có 2 hình thức:
-- **COD (tiền mặt khi nhận hàng):** Trả tiền cho shipper khi nhận hàng.
-- **VNPAY:** Thanh toán online qua thẻ ATM, thẻ tín dụng (Visa/Mastercard/JCB), ví điện tử (MoMo, ZaloPay...).
+- **COD (tiền mặt khi nhận hàng):** Trả tiền cho shipper khi nhận hàng. Chỉ áp dụng cho đơn có tổng thanh toán **đến 20.000.000 đ**; đơn lớn hơn phải thanh toán online qua VNPAY.
+- **VNPAY:** Thanh toán online qua thẻ ATM, thẻ quốc tế và các hình thức được VNPAY hỗ trợ.
+
+**Q: AuraTech có hỗ trợ trả góp không?**
+A: Hiện tại website **chưa hỗ trợ trả góp** (kể cả trả góp 0% qua thẻ tín dụng hay công ty tài chính). Bạn có thể thanh toán toàn bộ qua VNPAY hoặc COD (đơn đến 20.000.000 đ).
 
 **Q: Thuế VAT bao nhiêu? Giá hiển thị đã bao gồm VAT chưa?**
-A: Thuế VAT là **10%** và được tính vào giá cuối khi thanh toán. Giá hiển thị trên trang sản phẩm là giá chưa bao gồm VAT. Bạn sẽ thấy VAT được tách riêng ở bước xem trước thanh toán (checkout preview).
+A: Thuế VAT là **10%**. Giá hiển thị trên trang sản phẩm **đã bao gồm VAT**, khi thanh toán hệ thống **không cộng thêm VAT**. Phần VAT nằm trong giá chỉ được tách ra để hiển thị ở bước thanh toán.
 
 **Q: Phí vận chuyển bao nhiêu tiền?**
-A: Phí vận chuyển tiêu chuẩn là **30.000 đ** cho mọi đơn hàng. Thành viên **SILVER, GOLD, VIP** được **miễn phí vận chuyển** hoàn toàn. Ngoài ra, một số voucher freeship cũng có thể miễn phí ship.
+A: Phí vận chuyển tiêu chuẩn là **30.000 đ**/đơn. Đơn hàng có giá trị sản phẩm (sau giảm giá sản phẩm) **từ 500.000 đ** được **miễn phí vận chuyển**. Ngoài ra, voucher freeship có thể giảm phí ship cho đơn chưa đạt mức này.
 
 **Q: Tôi nhập mã voucher ở đâu?**
 A: Tại trang thanh toán (checkout), có ô nhập mã voucher ngay trước khi xác nhận đặt hàng. Mỗi đơn chỉ dùng được **1 mã voucher**.
@@ -63,7 +64,7 @@ A: Phụ thuộc vào khu vực:
 A: Khi đơn hàng chuyển sang trạng thái **SHIPPED**, bạn sẽ nhận được **mã vận đơn (tracking code)** qua email. Dùng mã này để tra cứu trên trang của đơn vị vận chuyển. Ngoài ra, bạn có thể xem trạng thái trong mục **Lịch sử đơn hàng**.
 
 **Q: Tôi có thể yêu cầu giao hàng nhanh / hỏa tốc không?**
-A: Hiện tại AuraTech chưa hỗ trợ giao hàng hỏa tốc qua website. Bạn có thể đến mua trực tiếp tại cửa hàng nếu cần gấp.
+A: Hiện tại AuraTech chưa hỗ trợ giao hàng hỏa tốc qua website.
 
 **Q: Giao hàng thất bại (không có người nhận) thì sao?**
 A: Đơn vị vận chuyển sẽ thử giao lại tối đa **2 lần**. Nếu vẫn không giao được, đơn hàng sẽ được hoàn về kho và bạn cần liên hệ AuraTech để xử lý.
@@ -73,16 +74,15 @@ A: Đơn vị vận chuyển sẽ thử giao lại tối đa **2 lần**. Nếu 
 ## ❌ Huỷ đơn hàng
 
 **Q: Tôi có thể huỷ đơn hàng không?**
-A: Được, nếu đơn đang ở trạng thái **PENDING**, **AWAITING_PAYMENT** hoặc **CONFIRMED**. Đơn hàng đã **SHIPPED** (đang giao) thì không huỷ được qua website — liên hệ tổng đài để được hỗ trợ.
+A: Được, khi đơn **chưa được giao cho đơn vị vận chuyển** (trạng thái **PENDING**, **AWAITING_PAYMENT** hoặc **CONFIRMED**). Đơn hàng đã **SHIPPED** (đang giao) thì không huỷ được qua website — liên hệ tổng đài để được hỗ trợ.
 
 **Q: Huỷ đơn thì tiền được hoàn lại không? Mất bao lâu?**
 A:
 - **COD (chưa trả tiền):** Không mất tiền, không cần hoàn.
-- **VNPAY:** Hoàn tiền trong **3–8 ngày làm việc**.
-- **Thẻ tín dụng:** Hoàn trong **7–15 ngày làm việc**.
+- **VNPAY:** Hoàn tiền trong **3–8 ngày làm việc** (tùy ngân hàng).
 
 **Q: Voucher đã dùng khi đặt hàng bị huỷ thì sao?**
-A: Voucher sẽ được **hoàn trả tự động** vào tài khoản để dùng cho lần sau.
+A: Nếu voucher **còn hạn sử dụng**, voucher sẽ được **hoàn trả tự động** vào tài khoản để dùng cho lần sau. Voucher đã hết hạn sẽ không được hoàn.
 
 **Q: Điểm thưởng đã dùng bị huỷ đơn thì sao?**
 A: Điểm thưởng đã dùng cũng được **hoàn lại tự động** vào tài khoản.
@@ -90,6 +90,9 @@ A: Điểm thưởng đã dùng cũng được **hoàn lại tự động** vào
 ---
 
 ## 🔄 Đổi trả hàng
+
+**Q: Tôi gửi yêu cầu đổi trả như thế nào?**
+A: Website hiện **chưa có chức năng gửi yêu cầu đổi trả trực tuyến**. Vui lòng liên hệ tổng đài **0389.468.847** hoặc chat với CSKH trên website, cung cấp mã đơn hàng và tình trạng sản phẩm để được hướng dẫn.
 
 **Q: Điều kiện để đổi trả hàng là gì?**
 A: Sản phẩm đủ điều kiện đổi trả khi:
@@ -99,7 +102,7 @@ A: Sản phẩm đủ điều kiện đổi trả khi:
 - Sản phẩm bị lỗi kỹ thuật từ nhà sản xuất.
 
 **Q: Tôi muốn đổi size / màu khác thì làm thế nào?**
-A: Liên hệ tổng đài **0389.468.847** hoặc đến trực tiếp cửa hàng AuraTech trong vòng **7 ngày** kể từ ngày nhận hàng. Sản phẩm phải còn nguyên vẹn, chưa sử dụng.
+A: Liên hệ tổng đài **0389.468.847** hoặc chat với CSKH trong vòng **7 ngày** kể từ ngày nhận hàng. Sản phẩm phải còn nguyên vẹn, chưa sử dụng.
 
 **Q: Hàng giao bị sai / thiếu thì phải làm gì?**
 A: Liên hệ ngay tổng đài **0389.468.847** trong vòng **48 giờ** kể từ khi nhận hàng, kèm ảnh chụp sản phẩm và hộp. AuraTech sẽ xử lý đổi hàng miễn phí.
@@ -115,20 +118,20 @@ A: Có. Tất cả sản phẩm đều được bảo hành theo chính sách c�
 A: Bảo hành chính hãng là miễn phí, do hãng sản xuất thực hiện, có giới hạn điều kiện. Bảo hành mở rộng của AuraTech có phí, bổ sung thêm phạm vi bảo hành và thời gian, thường bao gồm cả một số trường hợp hư hỏng do sử dụng.
 
 **Q: Tôi muốn gửi sản phẩm đi bảo hành thì làm thế nào?**
-A: Đến trực tiếp bất kỳ cửa hàng AuraTech, mang theo sản phẩm và hoá đơn mua hàng. Nhân viên sẽ kiểm tra và tiếp nhận bảo hành.
+A: Website hiện chỉ hỗ trợ **xem hạn bảo hành** trong mục Bảo hành của tài khoản, chưa hỗ trợ tạo yêu cầu bảo hành trực tuyến. Vui lòng liên hệ tổng đài **0389.468.847** hoặc chat với CSKH để được hướng dẫn gửi sản phẩm bảo hành (mang theo hoá đơn/mã đơn hàng).
 
 ---
 
 ## ⭐ Tài khoản & Điểm thưởng
 
 **Q: Tôi tích điểm thưởng như thế nào?**
-A: Mỗi **10.000 đ** chi tiêu thực tế = **1 điểm thưởng**. Hệ số nhân điểm tăng theo hạng thành viên: MEMBER ×1.0, SILVER ×1.2, GOLD ×1.5, VIP ×2.0.
+A: Điểm thưởng **không tự động cộng** khi mua hàng. Điểm được tặng qua các **chương trình khuyến mãi** của AuraTech (ví dụ: tặng điểm theo giá trị đơn hàng thành công trong thời gian chương trình). Điều kiện và mức điểm cụ thể được công bố theo từng chương trình.
 
 **Q: Điểm thưởng dùng được để làm gì?**
 A: Đổi trực tiếp thành tiền giảm giá: **1 điểm = 1.000 đ**. Có thể dùng khi thanh toán đơn hàng.
 
 **Q: Điểm thưởng có hết hạn không?**
-A: Có, điểm thưởng có hiệu lực **12 tháng** kể từ ngày tích lũy.
+A: Hiện tại điểm thưởng **chưa có thời hạn sử dụng**.
 
 **Q: Làm sao để lên hạng thành viên?**
 A: Hạng được tính dựa trên tổng chi tiêu tích lũy:

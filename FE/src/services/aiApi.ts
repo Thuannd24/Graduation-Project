@@ -153,9 +153,32 @@ export const aiApi = {
     }
   },
 
+  // Tìm kiếm ngữ nghĩa (BM25 + vector, search-service): hiểu "tai nghe chống ồn" ~ "headphone ANC".
+  // Chỉ trả sản phẩm đang bán. Lỗi -> trả [] để trang tìm kiếm quay về tìm theo từ khóa.
+  searchText: async (query: string, topK = 40): Promise<AIProduct[]> => {
+    try {
+      const res = await apiClient.get<{ items?: Array<Record<string, unknown>> }>(
+        `/public/search?q=${encodeURIComponent(query)}&top_k=${topK}`
+      );
+      return (res?.items || []).map((item) => ({
+        id: item.id as string | number,
+        name: String(item.name || ""),
+        price: Number(item.price || 0),
+        image: String(item.image || ""),
+        brand: "",
+        category: "",
+        matchScore: Number(item.score || 0)
+      }));
+    } catch (err) {
+      console.warn("Semantic search unavailable, falling back to keyword search.", err);
+      return [];
+    }
+  },
+
   getCrossSellCombo: async (itemIds: string[]): Promise<AIProduct[]> => {
     try {
-      return asProductList(await apiClient.get(`/recommendations/cross-sell?item_ids=${itemIds.join(",")}`));
+      // Alias public để giỏ của khách chưa đăng nhập cũng có gợi ý mua kèm theo sản phẩm trong giỏ.
+      return asProductList(await apiClient.get(`/public/recommendations/cross-sell?item_ids=${itemIds.join(",")}&top_k=4`));
     } catch (err) {
       console.warn("Cross-sell API fallback.", err);
       return [];

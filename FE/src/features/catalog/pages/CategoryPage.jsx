@@ -165,6 +165,14 @@ export default function CategoryPage() {
   }, [minPrice, maxPrice]);
 
   useEffect(() => {
+    // Chỉ đẩy giá trị nhập tay lên URL khi debounce đã bắt kịp bản nháp. Nếu không, khi bấm một mốc
+    // giá có sẵn (URL + nháp đổi ngay), giá trị debounce CŨ sẽ ghi đè mốc vừa chọn về toàn bộ khoảng giá.
+    if (
+      debouncedPrice.min !== priceDraft.min ||
+      debouncedPrice.max !== priceDraft.max
+    ) {
+      return;
+    }
     if (
       debouncedPrice.min === minPrice &&
       debouncedPrice.max === maxPrice
@@ -175,7 +183,7 @@ export default function CategoryPage() {
       { minPrice: debouncedPrice.min, maxPrice: debouncedPrice.max },
       { resetPage: true }
     );
-  }, [debouncedPrice, minPrice, maxPrice, updateFilters]);
+  }, [debouncedPrice, priceDraft, minPrice, maxPrice, updateFilters]);
 
   useEffect(() => {
     let cancelled = false;
@@ -444,6 +452,7 @@ export default function CategoryPage() {
         {/* Main content */}
         <section className="flex-1 min-w-0 space-y-5">
           <ProductToolbar
+            loading={loading}
             title={displayTitle}
             count={filteredProducts.length}
             sort={sort}
@@ -562,9 +571,9 @@ export default function CategoryPage() {
       {/* Trust badges */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-100 dark:border-slate-800 pt-8 mt-4">
         {[
-          { icon: "verified_user", title: "Cam kết chính hãng", desc: "Đền bù 200% nếu phát hiện hàng giả" },
-          { icon: "security", title: "Bảo hành 1 đổi 1", desc: "Lỗi do NSX được đổi sản phẩm mới ngay" },
-          { icon: "local_shipping", title: "Giao hàng siêu tốc", desc: "Nhận hàng trong 2 giờ tại TP lớn" },
+          { icon: "verified_user", title: "Cam kết chính hãng", desc: "Sản phẩm chính hãng, giá đã gồm VAT" },
+          { icon: "security", title: "Lỗi NSX đổi mới 30 ngày", desc: "Hỗ trợ qua hotline 0389.468.847" },
+          { icon: "local_shipping", title: "Miễn phí giao hàng", desc: "Cho đơn hàng từ 500.000đ" },
         ].map((item) => (
           <div key={item.title} className="flex flex-col items-center text-center p-5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl">
             <Icon name={item.icon} className="text-3xl text-[#D70018] mb-2" />

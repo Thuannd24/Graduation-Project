@@ -6,27 +6,27 @@ import { authApi } from "../../../services/authApi.ts";
 const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=60";
 
 const NAV_MAIN = [
-  { tab: "overview", icon: "dashboard", label: "Dashboard" },
-  { tab: "orders", icon: "shopping_bag", label: "Order Management", showOrdersCount: true },
-  { tab: "customers", icon: "group", label: "Customers" },
-  { tab: "campaigns", icon: "local_offer", label: "Coupon Code" },
-  { tab: "promotion-stats", icon: "insights", label: "Thống kê Promotion" },
-  { tab: "analytics-ai", icon: "psychology", label: "AI Analytics", activeClass: "bg-rose-600" },
-  { tab: "support-chat", icon: "chat", label: "Customer Chat" },
-  { tab: "categories", icon: "category", label: "Categories" },
-  { tab: "transactions", icon: "account_balance_wallet", label: "Transaction" },
-  { tab: "brands", icon: "star", label: "Brand" },
-  { tab: "reviews", icon: "rate_review", label: "Reviews" }
+  { tab: "overview", icon: "dashboard", label: "Tổng quan" },
+  { tab: "orders", icon: "shopping_bag", label: "Đơn hàng", showOrdersCount: true },
+  { tab: "customers", icon: "group", label: "Khách hàng" },
+  { tab: "campaigns", icon: "local_offer", label: "Khuyến mãi & Voucher" },
+  { tab: "promotion-stats", icon: "insights", label: "Thống kê khuyến mãi" },
+  { tab: "analytics-ai", icon: "psychology", label: "Phân tích AI", activeClass: "bg-rose-600" },
+  { tab: "support-chat", icon: "chat", label: "Chat hỗ trợ" },
+  { tab: "categories", icon: "category", label: "Danh mục" },
+  { tab: "transactions", icon: "account_balance_wallet", label: "Giao dịch" },
+  { tab: "brands", icon: "star", label: "Thương hiệu" },
+  { tab: "reviews", icon: "rate_review", label: "Đánh giá" }
 ];
 
 const NAV_PRODUCT = [
-  { tab: "add-product", icon: "add_circle", label: "Add Products" },
-  { tab: "products", icon: "list_alt", label: "Product List" },
-  { tab: "inventory", icon: "warehouse", label: "Quản Lý Tồn Kho" }
+  { tab: "add-product", icon: "add_circle", label: "Thêm sản phẩm" },
+  { tab: "products", icon: "list_alt", label: "Danh sách sản phẩm" },
+  { tab: "inventory", icon: "warehouse", label: "Tồn kho" }
 ];
 
 const NAV_ADMIN = [
-  { tab: "admin-role", icon: "admin_panel_settings", label: "Admin role" }
+  { tab: "admin-role", icon: "admin_panel_settings", label: "Phân quyền" }
 ];
 
 export default function AdminSidebar({ activeTab, setActiveTab, ordersCount, handleLogout }) {
@@ -107,7 +107,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, ordersCount, han
           {/* 1. Main menu */}
           <div>
             {!collapsed && (
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5">Main menu</div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5">Quản lý chung</div>
             )}
             <nav className="space-y-0.5">
               {NAV_MAIN.map(renderNavButton)}
@@ -117,7 +117,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, ordersCount, han
           {/* 2. Product */}
           <div>
             {!collapsed && (
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5">Product</div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5">Sản phẩm</div>
             )}
             <nav className="space-y-0.5">
               {NAV_PRODUCT.map(renderNavButton)}
@@ -127,7 +127,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, ordersCount, han
           {/* 3. Admin */}
           <div>
             {!collapsed && (
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5">Admin</div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-1.5">Quản trị</div>
             )}
             <nav className="space-y-0.5">
               {NAV_ADMIN.map(renderNavButton)}

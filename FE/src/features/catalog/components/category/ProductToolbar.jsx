@@ -11,13 +11,14 @@ export default function ProductToolbar({
   onBrandToggle,
   onOpenFilters,
   activeFilterCount = 0,
+  loading = false,
 }) {
   return (
     <div className="space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 shadow-sm">
         <div>
           <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">{title}</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{count} sản phẩm</p>
+          <p className="text-sm text-slate-500 mt-0.5">{loading ? "Đang tìm kiếm..." : `${count} sản phẩm`}</p>
         </div>
 
         <div className="flex items-center gap-2">

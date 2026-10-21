@@ -16,6 +16,7 @@ import Icon from "../../../components/common/Icon.jsx";
 import { productApi } from "../../../services/productApi.ts";
 import { inventoryApi } from "../../../services/inventoryApi.ts";
 import { hasAuthToken } from "../../../services/apiClient.ts";
+import { PRODUCT_PLACEHOLDER, applyProductPlaceholder } from "../../../utils/imageFallback.js";
 
 const STOCK_COLORS = {
   healthy: "#10b981",
@@ -99,7 +100,7 @@ async function enrichProductsWithVariants(products) {
 
   const detailed = await Promise.all(
     needsDetail.map(p =>
-      productApi.getProductDetail(p.id).catch(err => {
+      productApi.adminGetProductDetail(p.id).catch(err => {
         console.warn(`Không tải chi tiết SP #${p.id}:`, err);
         return p;
       })
@@ -142,8 +143,13 @@ export default function InventoryTab() {
   const [stockFilter, setStockFilter] = useState("all");
 
   const [modal, setModal] = useState(null);
-  const [modalQty, setModalQty] = useState(0);
-  const [restockQty, setRestockQty] = useState(10);
+  // Giữ dạng chuỗi để phân biệt "để trống" với 0 (để trống KHÔNG được hiểu thành 0).
+  const [modalQty, setModalQty] = useState("");
+  const [adjustReason, setAdjustReason] = useState("Kiểm kê");
+  const [adjustReasonText, setAdjustReasonText] = useState("");
+  const [adjustError, setAdjustError] = useState("");
+  const [restockQty, setRestockQty] = useState("10");
+  const [restockError, setRestockError] = useState("");
   const [restockNote, setRestockNote] = useState("");
   const [restockSupplier, setRestockSupplier] = useState("");
   const [saving, setSaving] = useState(false);
@@ -174,9 +180,9 @@ export default function InventoryTab() {
     try {
       let productResult;
       if (searchQuery.trim()) {
-        productResult = await productApi.searchProducts(searchQuery.trim(), page, pageSize);
+        productResult = await productApi.adminSearchProducts(searchQuery.trim(), page, pageSize);
       } else {
-        productResult = await productApi.listProductsPaged({ page: String(page), size: String(pageSize) });
+        productResult = await productApi.adminListProductsPaged({ page: String(page), size: String(pageSize) });
       }
 
       let prods = await enrichProductsWithVariants(productResult.items || []);
@@ -221,7 +227,7 @@ export default function InventoryTab() {
         // Danh sách sản phẩm công khai đã trả kèm variants theo lô (xem ProductServiceImpl.convertToDtoList),
         // nên KHÔNG gọi enrichProductsWithVariants ở đây — tránh bắn hàng trăm/nghìn request chi tiết riêng lẻ
         // cho từng sản phẩm không có biến thể (buildRows đã tự fallback 1 SKU đơn cho trường hợp đó).
-        const allProducts = await productApi.listAllProducts();
+        const allProducts = await productApi.adminListAllProducts();
         const ids = allProducts.map(p => Number(p.id)).filter(id => id > 0);
         const inv = ids.length ? await getBatchByProductIdsChunked(ids) : [];
         if (!cancelled) {
@@ -285,12 +291,16 @@ export default function InventoryTab() {
 
   const openAdjust = (row) => {
     setModal({ type: "adjust", row });
-    setModalQty(row.quantity);
+    setModalQty(String(row.quantity ?? 0));
+    setAdjustReason("Kiểm kê");
+    setAdjustReasonText("");
+    setAdjustError("");
   };
 
   const openRestock = (row) => {
     setModal({ type: "restock", row });
-    setRestockQty(10);
+    setRestockQty("10");
+    setRestockError("");
     setRestockNote("");
     setRestockSupplier("");
   };
@@ -323,9 +333,34 @@ export default function InventoryTab() {
       alert("Vui lòng đăng nhập tài khoản ADMIN/STAFF để chỉnh tồn kho.");
       return;
     }
+    const raw = String(modalQty).trim();
+    if (!/^\d+$/.test(raw)) {
+      setAdjustError(raw === "" ? "Vui lòng nhập số lượng tồn kho." : "Số lượng phải là số nguyên ≥ 0.");
+      return;
+    }
+    const newQty = Number(raw);
+    const currentQty = Number(modal.row.quantity ?? 0);
+    if (newQty === currentQty) {
+      setAdjustError("Số lượng mới trùng với tồn hiện tại.");
+      return;
+    }
+    const note = adjustReasonText.trim();
+    if (adjustReason === "Khác" && !note) {
+      setAdjustError("Vui lòng ghi rõ lý do điều chỉnh.");
+      return;
+    }
+    const reason = adjustReason === "Khác" ? note : note ? `${adjustReason}: ${note}` : adjustReason;
+    const delta = newQty - currentQty;
+    if (newQty === 0 || Math.abs(delta) >= 50) {
+      const msg = newQty === 0
+        ? `Đặt tồn kho của "${modal.row.productName}" về 0 (hết hàng)?\nTồn hiện tại: ${currentQty}.`
+        : `Điều chỉnh lớn: ${currentQty} → ${newQty} (${delta > 0 ? "+" : ""}${delta}).\nXác nhận cập nhật?`;
+      if (!window.confirm(msg)) return;
+    }
+    setAdjustError("");
     setSaving(true);
     try {
-      await inventoryApi.updateStock(modal.row.productId, modalQty, modal.row.variantId);
+      await inventoryApi.updateStock(modal.row.productId, newQty, modal.row.variantId, reason);
       alert("Cập nhật tồn kho thành công!");
       setModal(null);
       loadData();
@@ -343,14 +378,16 @@ export default function InventoryTab() {
       alert("Vui lòng đăng nhập tài khoản ADMIN/STAFF để nhập kho.");
       return;
     }
-    if (!restockQty || restockQty < 1) {
-      alert("Số lượng nhập phải ≥ 1.");
+    const rawRestock = String(restockQty).trim();
+    if (!/^[1-9]\d*$/.test(rawRestock)) {
+      setRestockError(rawRestock === "" ? "Vui lòng nhập số lượng nhập kho." : "Số lượng nhập phải là số nguyên dương (không nhập số lẻ).");
       return;
     }
+    setRestockError("");
     setSaving(true);
     try {
       await inventoryApi.restock(modal.row.productId, {
-        quantity: restockQty,
+        quantity: Number(rawRestock),
         note: restockNote || undefined,
         supplier: restockSupplier || undefined
       }, modal.row.variantId);
@@ -566,7 +603,7 @@ export default function InventoryTab() {
               {syncing ? "Đang đồng bộ..." : "Đồng bộ Redis từ DB"}
             </button>
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-              <span>Ngưỡng cảnh báo:</span>
+              <span>Cảnh báo khi tồn ≤</span>
               <input
                 type="number"
                 min={1}
@@ -645,7 +682,7 @@ export default function InventoryTab() {
                         <div className="flex items-center gap-3">
                           <div className="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-600 overflow-hidden shrink-0">
                             {row.productImage ? (
-                              <img src={row.productImage} alt="" className="w-full h-full object-cover" />
+                              <img src={row.productImage || PRODUCT_PLACEHOLDER} alt={row.productName} onError={applyProductPlaceholder} className="w-full h-full object-contain" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-slate-300">
                                 <Icon name="image" />
@@ -727,9 +764,45 @@ export default function InventoryTab() {
               {modal.type === "adjust" && (
                 <>
                   <div>
-                    <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Số lượng tuyệt đối</label>
-                    <input type="number" min={0} value={modalQty} onChange={(e) => setModalQty(Number(e.target.value))} className={input} />
+                    <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">
+                      Số lượng tuyệt đối * <span className="normal-case font-semibold text-slate-400">(hiện tại: {modal.row.quantity ?? 0})</span>
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1}
+                      inputMode="numeric"
+                      value={modalQty}
+                      onChange={(e) => { setModalQty(e.target.value); setAdjustError(""); }}
+                      className={`${input} ${adjustError ? "!border-rose-400" : ""}`}
+                    />
                   </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Lý do điều chỉnh *</label>
+                    <select
+                      value={adjustReason}
+                      onChange={(e) => { setAdjustReason(e.target.value); setAdjustError(""); }}
+                      className={input}
+                    >
+                      <option value="Kiểm kê">Kiểm kê</option>
+                      <option value="Hư hỏng">Hư hỏng</option>
+                      <option value="Mất mát">Mất mát</option>
+                      <option value="Khác">Khác</option>
+                    </select>
+                    <textarea
+                      rows={2}
+                      value={adjustReasonText}
+                      onChange={(e) => { setAdjustReasonText(e.target.value); setAdjustError(""); }}
+                      maxLength={400}
+                      className={`${input} mt-2`}
+                      placeholder={adjustReason === "Khác" ? "Ghi rõ lý do (bắt buộc)..." : "Ghi chú thêm (tùy chọn)..."}
+                    />
+                  </div>
+                  {adjustError && (
+                    <p className="text-xs font-semibold text-rose-600 flex items-center gap-1">
+                      <Icon name="error" className="text-sm" /> {adjustError}
+                    </p>
+                  )}
                   <button type="button" disabled={saving} onClick={handleSaveAdjust} className="w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-black uppercase disabled:opacity-60">
                     {saving ? "Đang lưu..." : "Cập nhật tồn"}
                   </button>
@@ -740,7 +813,20 @@ export default function InventoryTab() {
                 <>
                   <div>
                     <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Số lượng nhập thêm *</label>
-                    <input type="number" min={1} value={restockQty} onChange={(e) => setRestockQty(Number(e.target.value))} className={input} />
+                    <input
+                      type="number"
+                      min={1}
+                      step={1}
+                      inputMode="numeric"
+                      value={restockQty}
+                      onChange={(e) => { setRestockQty(e.target.value); setRestockError(""); }}
+                      className={`${input} ${restockError ? "!border-rose-400" : ""}`}
+                    />
+                    {restockError && (
+                      <p className="text-xs font-semibold text-rose-600 flex items-center gap-1 mt-1">
+                        <Icon name="error" className="text-sm" /> {restockError}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Nhà cung cấp</label>

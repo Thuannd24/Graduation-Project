@@ -2,11 +2,13 @@
 
 > **Danh mục:** Đổi trả & Hoàn tiền
 > **Đơn vị vận hành:** Hệ thống bán lẻ công nghệ AuraTech
-> **Ngày cập nhật:** 2026-07-27
+> **Ngày cập nhật:** 2026-10-19
 
 ---
 
 AuraTech luôn nỗ lực tối đa để hỗ trợ khách hàng bảo vệ quyền lợi mua sắm. Dưới đây là chính sách đổi trả, hoàn tiền và nhập lại sản phẩm áp dụng trên toàn hệ thống cửa hàng và kênh online của AuraTech.
+
+> **Cách gửi yêu cầu:** Website hiện **chưa hỗ trợ tạo yêu cầu đổi trả/bảo hành trực tuyến**. Quý khách vui lòng liên hệ tổng đài **0389.468.847** hoặc chat với CSKH trên website, cung cấp mã đơn hàng để được tiếp nhận và hướng dẫn.
 
 ---
 
@@ -54,11 +56,8 @@ Khi đơn hàng hủy hoặc giao dịch nhập lại sản phẩm được phê
 
 | Hình thức hoàn tiền | Thời gian |
 |---|---|
-| **Tiền mặt** | Nhận ngay tại quầy thu ngân sau khi kiểm tra đủ điều kiện |
-| **Chuyển khoản ngân hàng** | **1–3 ngày** làm việc kể từ khi hoàn tất thủ tục trả máy |
-| **Thẻ ATM nội địa** | **7–10 ngày** làm việc |
-| **Thẻ tín dụng quốc tế** (Visa/Mastercard) | **7–15 ngày** làm việc *(tùy ngân hàng phát hành thẻ)* |
-| **Ví điện tử** (Momo, Zalo Pay, VN Pay,...) | **3–8 ngày** làm việc |
+| **Đơn thanh toán qua VNPay** | **3–8 ngày** làm việc *(tùy ngân hàng)* |
+| **Đơn COD đã nhận hàng** (trả hàng) | Chuyển khoản **1–3 ngày** làm việc kể từ khi hoàn tất thủ tục trả máy, theo thông tin tài khoản khách cung cấp cho CSKH |
 
 > [!IMPORTANT]
-> Giá trị hoàn lại được tính dựa trên giá trị thanh toán thực tế của sản phẩm tại thời điểm mua (sau khi đã trừ các voucher, mã giảm giá và chiết khấu). Các loại phụ phí giao hàng và phí chuyển đổi trả góp **sẽ không được hoàn lại**.
+> Giá trị hoàn lại được tính dựa trên giá trị thanh toán thực tế của sản phẩm tại thời điểm mua (sau khi đã trừ các voucher, mã giảm giá và chiết khấu). Phí giao hàng (nếu có) **sẽ không được hoàn lại** với trường hợp trả hàng không do lỗi sản phẩm. Website hiện chưa hỗ trợ trả góp.

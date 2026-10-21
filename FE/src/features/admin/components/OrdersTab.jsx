@@ -2,6 +2,41 @@ import React, { useState, useEffect, useMemo } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import Pagination from "../../../components/common/Pagination.jsx";
 import { orderApi } from "../../../services/orderApi.ts";
+import CancelOrderDialog from "../../../components/common/CancelOrderDialog.jsx";
+import { formatVnd } from "../../../utils/format.js";
+import { cancelReasonLabel, orderStatusLabel } from "../../../utils/orderStatus.js";
+
+const PENDING_STATUSES = ["PENDING", "AWAITING_PAYMENT", "CONFIRMED", "SHIPPED", "RETURNING"];
+const CLOSED_STATUSES = ["CANCELLED", "RETURNED"];
+const TERMINATED_STATUSES = ["CANCELLED", "RETURNING", "RETURNED"];
+
+const STATUS_PILL = {
+  DELIVERED: ["bg-emerald-50 text-emerald-700", "bg-emerald-500"],
+  CANCELLED: ["bg-rose-50 text-rose-600", "bg-rose-500"],
+  RETURNED: ["bg-slate-100 text-slate-600", "bg-slate-400"],
+  RETURNING: ["bg-orange-50 text-orange-600", "bg-orange-500"],
+  SHIPPED: ["bg-blue-50 text-blue-755", "bg-blue-500"],
+  CONFIRMED: ["bg-teal-50 text-teal-700", "bg-teal-500"]
+};
+
+function paymentDisplay(payment) {
+  if (!payment) return { method: null, label: "Chưa thanh toán", tone: "amber" };
+  const method = payment.paymentMethod?.toUpperCase();
+  const status = payment.status?.toUpperCase();
+  if (["REFUNDED", "PARTIALLY_REFUNDED"].includes(status)) return { method, label: "Đã hoàn tiền", tone: "slate" };
+  if (status === "REFUND_PENDING") return { method, label: "Đang hoàn tiền", tone: "amber" };
+  if (status === "SUCCESS") return { method, label: "Đã thanh toán", tone: "emerald" };
+  if (status === "FAILED" || status === "EXPIRED") return { method, label: "GD không thành công", tone: "rose" };
+  if (method === "COD") return { method, label: "Thu khi giao", tone: "amber" };
+  return { method, label: "Chờ thanh toán", tone: "amber" };
+}
+
+const TONE = {
+  emerald: ["bg-emerald-500", "text-emerald-700"],
+  rose: ["bg-rose-500", "text-rose-600"],
+  amber: ["bg-amber-500", "text-amber-600"],
+  slate: ["bg-slate-400", "text-slate-600"]
+};
 
 export default function OrdersTab({
   orders,
@@ -20,8 +55,11 @@ export default function OrdersTab({
   formatOrderDate,
   handleShipOrder,
   handleCancelOrder,
-  handleSimulateWebhook
+  handleSimulateWebhook,
+  handleReturnReceived
 }) {
+  // { orderId, mode: "cancel" | "cancel-shipping" }
+  const [cancelDialog, setCancelDialog] = useState(null);
   const [paymentInfo, setPaymentInfo] = useState(null);
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [paymentMethodFilter, setPaymentMethodFilter] = useState("all");
@@ -56,12 +94,12 @@ export default function OrdersTab({
 
     let matchesStatus = true;
     if (orderFilter === "completed") matchesStatus = o.status === "DELIVERED";
-    else if (orderFilter === "pending") matchesStatus = ["PENDING", "AWAITING_PAYMENT", "CONFIRMED", "SHIPPED"].includes(o.status);
-    else if (orderFilter === "cancelled") matchesStatus = o.status === "CANCELLED";
+    else if (orderFilter === "pending") matchesStatus = PENDING_STATUSES.includes(o.status);
+    else if (orderFilter === "cancelled") matchesStatus = CLOSED_STATUSES.includes(o.status);
 
     let matchesPaymentMethod = true;
     const payment = payments?.find(p => p.orderId === o.id);
-    const method = payment ? payment.paymentMethod?.toUpperCase() : "COD"; // default COD
+    const method = payment ? payment.paymentMethod?.toUpperCase() : null;
     if (paymentMethodFilter === "cod") {
       matchesPaymentMethod = method === "COD";
     } else if (paymentMethodFilter === "vnpay") {
@@ -87,9 +125,9 @@ export default function OrdersTab({
 
   // Số lượng đơn hàng
   const totalOrdersCount = orders.length;
-  const pendingOrdersCount = orders.filter(o => o && ["PENDING", "AWAITING_PAYMENT", "CONFIRMED", "SHIPPED"].includes(o.status)).length;
+  const pendingOrdersCount = orders.filter(o => o && PENDING_STATUSES.includes(o.status)).length;
   const completedOrdersCount = orders.filter(o => o && o.status === "DELIVERED").length;
-  const canceledOrdersCount = orders.filter(o => o && o.status === "CANCELLED").length;
+  const canceledOrdersCount = orders.filter(o => o && CLOSED_STATUSES.includes(o.status)).length;
 
   return (
     <div className="space-y-6 animate-fadeIn p-6">
@@ -263,9 +301,9 @@ export default function OrdersTab({
                   const otherItemsCount = o.items && o.items.length > 1 ? o.items.length - 1 : 0;
 
                   const payment = payments?.find(p => p.orderId === o.id);
-                  const paymentMethod = payment ? payment.paymentMethod?.toUpperCase() : (o.status === "PENDING" || o.status === "AWAITING_PAYMENT" ? "COD" : "N/A");
-                  const paymentStatus = payment ? payment.status?.toUpperCase() : (["DELIVERED", "CONFIRMED", "SHIPPED"].includes(o.status) ? "SUCCESS" : "PENDING");
-                  const isPaid = paymentStatus === "SUCCESS";
+                  const pay = paymentDisplay(payment);
+                  const [payDot, payText] = TONE[pay.tone];
+                  const [pillClass, pillDot] = STATUS_PILL[o.status] || ["bg-amber-50 text-amber-600", "bg-amber-500"];
 
                   return (
                     <tr
@@ -299,59 +337,27 @@ export default function OrdersTab({
                       </td>
                       <td className="p-4 text-slate-500 font-medium">{formatOrderDate(o.createdAt)}</td>
                       <td className="p-4 font-extrabold text-slate-800 text-right">
-                        {o.finalAmount?.toLocaleString("vi-VN")}đ
+                        {formatVnd(Number(o.finalAmount || 0))}
                       </td>
                       <td className="p-4">
                         <div className="space-y-1">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
-                            paymentMethod === "COD" ? "bg-slate-100 text-slate-700" : "bg-indigo-50 text-indigo-750 font-extrabold"
-                          }`}>
-                            {paymentMethod === "COD" ? "Ship COD" : "Online (VNPAY)"}
-                          </span>
-                          <div className="flex items-center gap-1.5 mt-0.5">
-                            <span className={`w-1.5 h-1.5 rounded-full ${
-                              isPaid ? "bg-emerald-500" : paymentStatus === "FAILED" ? "bg-rose-500" : "bg-amber-500"
-                            }`}></span>
-                            <span className={`text-[10px] font-bold ${
-                              isPaid ? "text-emerald-700" : paymentStatus === "FAILED" ? "text-rose-600" : "text-amber-600"
+                          {pay.method && (
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
+                              pay.method === "COD" ? "bg-slate-100 text-slate-700" : "bg-indigo-50 text-indigo-750 font-extrabold"
                             }`}>
-                              {isPaid ? "Đã thanh toán" : paymentStatus === "FAILED" ? "Lỗi GD" : "Chờ thanh toán"}
+                              {pay.method === "COD" ? "Ship COD" : "Online (VNPAY)"}
                             </span>
+                          )}
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            <span className={`w-1.5 h-1.5 rounded-full ${payDot}`}></span>
+                            <span className={`text-[10px] font-bold ${payText}`}>{pay.label}</span>
                           </div>
                         </div>
                       </td>
                       <td className="p-4">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                          o.status === "DELIVERED"
-                            ? "bg-emerald-50 text-emerald-700"
-                            : o.status === "CANCELLED"
-                            ? "bg-rose-50 text-rose-600"
-                            : o.status === "SHIPPED"
-                            ? "bg-blue-50 text-blue-755"
-                            : o.status === "CONFIRMED"
-                            ? "bg-teal-50 text-teal-700"
-                            : "bg-amber-50 text-amber-600"
-                        }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${
-                            o.status === "DELIVERED"
-                              ? "bg-emerald-500"
-                              : o.status === "CANCELLED"
-                              ? "bg-rose-500"
-                              : o.status === "SHIPPED"
-                              ? "bg-blue-500"
-                              : o.status === "CONFIRMED"
-                              ? "bg-teal-500"
-                              : "bg-amber-500"
-                          }`}></span>
-                          {o.status === "DELIVERED" 
-                            ? "Đã giao" 
-                            : o.status === "CANCELLED" 
-                            ? "Đã hủy" 
-                            : o.status === "SHIPPED" 
-                            ? "Đang vận chuyển" 
-                            : o.status === "CONFIRMED" 
-                            ? "Đã xác nhận" 
-                            : "Chờ xử lý"}
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${pillClass}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${pillDot}`}></span>
+                          {orderStatusLabel(o.status)}
                         </span>
                       </td>
                     </tr>
@@ -400,10 +406,14 @@ export default function OrdersTab({
                 {/* Thông tin khách hàng */}
                 <div className="space-y-2">
                   <span className="font-bold text-slate-400 text-[10px] uppercase block tracking-wider">Thông Tin Khách Hàng</span>
-                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2 text-slate-700">
+                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2 text-xs text-slate-700">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400 font-semibold">Người nhận:</span>
+                      <span className="font-extrabold">{selectedOrder.recipientName || "—"}</span>
+                    </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400 font-semibold">Điện thoại:</span>
-                      <span className="font-extrabold">{selectedOrder.phoneNumber}</span>
+                      <span className="font-extrabold">{selectedOrder.recipientPhone || selectedOrder.phoneNumber}</span>
                     </div>
                     <div className="space-y-1">
                       <span className="text-slate-400 font-semibold block">Địa chỉ giao hàng:</span>
@@ -415,6 +425,12 @@ export default function OrdersTab({
                         <span className="italic text-slate-500 block">"{selectedOrder.note}"</span>
                       </div>
                     )}
+                    {(selectedOrder.cancelReasonCode || selectedOrder.cancelReason) && (
+                      <div className="space-y-1 border-t border-slate-200/60 pt-2">
+                        <span className="text-slate-400 font-semibold block">Lý do hủy ({selectedOrder.cancelledBy === "CUSTOMER" ? "khách hàng" : selectedOrder.cancelledBy === "SYSTEM" ? "hệ thống" : selectedOrder.cancelledBy === "CARRIER" ? "vận chuyển" : "quản trị"}):</span>
+                        <span className="text-rose-600 font-semibold block">{cancelReasonLabel(selectedOrder.cancelReasonCode, selectedOrder.cancelReason)}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -424,12 +440,18 @@ export default function OrdersTab({
                   <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2 text-xs text-slate-700">
                     <div className="flex justify-between">
                       <span className="text-slate-400 font-semibold">Tổng tiền hàng:</span>
-                      <span className="font-extrabold text-slate-800">{(selectedOrder.totalAmount || 0).toLocaleString("vi-VN")}đ</span>
+                      <span className="font-extrabold text-slate-800">{formatVnd(Number(selectedOrder.totalAmount || 0))}</span>
                     </div>
                     {selectedOrder.discountAmount > 0 && (
                       <div className="flex justify-between text-rose-600">
                         <span className="font-semibold">Giảm giá voucher:</span>
-                        <span className="font-extrabold">-{selectedOrder.discountAmount.toLocaleString("vi-VN")}đ</span>
+                        <span className="font-extrabold">-{formatVnd(Number(selectedOrder.discountAmount))}</span>
+                      </div>
+                    )}
+                    {selectedOrder.pointDiscountAmount > 0 && (
+                      <div className="flex justify-between text-rose-600">
+                        <span className="font-semibold">Giảm bằng điểm:</span>
+                        <span className="font-extrabold">-{formatVnd(Number(selectedOrder.pointDiscountAmount))}</span>
                       </div>
                     )}
                     {selectedOrder.couponCode && (
@@ -438,11 +460,27 @@ export default function OrdersTab({
                         <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">{selectedOrder.couponCode}</span>
                       </div>
                     )}
+                    <div className="flex justify-between">
+                      <span className="text-slate-400 font-semibold">Phí vận chuyển:</span>
+                      <span className="font-bold text-slate-700">{Number(selectedOrder.shippingFee || 0) > 0 ? formatVnd(Number(selectedOrder.shippingFee)) : "Miễn phí"}</span>
+                    </div>
+                    {selectedOrder.shippingDiscountAmount > 0 && (
+                      <div className="flex justify-between text-rose-600">
+                        <span className="font-semibold">Giảm phí vận chuyển:</span>
+                        <span className="font-extrabold">-{formatVnd(Number(selectedOrder.shippingDiscountAmount))}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between border-t border-slate-200/60 pt-2">
                       <span className="text-slate-700 font-extrabold">Thành tiền:</span>
-                      <span className="font-black text-emerald-600">{(selectedOrder.finalAmount || 0).toLocaleString("vi-VN")}đ</span>
+                      <span className="font-black text-emerald-600">{formatVnd(Number(selectedOrder.finalAmount || 0))}</span>
                     </div>
-                    
+                    {selectedOrder.vatAmount > 0 && (
+                      <div className="flex justify-between text-[10px] text-slate-400">
+                        <span>Trong đó VAT (10%):</span>
+                        <span>{formatVnd(Number(selectedOrder.vatAmount))}</span>
+                      </div>
+                    )}
+
                     <div className="border-t border-slate-200/60 my-2"></div>
                     
                     {loadingPayment ? (
@@ -457,7 +495,7 @@ export default function OrdersTab({
                           <span className="text-slate-400 font-semibold">Trạng thái GD:</span>
                           <span className={`font-extrabold px-1.5 py-0.5 rounded text-[10px] ${
                             paymentInfo.status === "SUCCESS" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"
-                          }`}>{paymentInfo.status || "N/A"}</span>
+                          }`}>{paymentDisplay(paymentInfo).label}</span>
                         </div>
                         {paymentInfo.transactionNo && (
                           <div className="flex justify-between">
@@ -524,7 +562,7 @@ export default function OrdersTab({
 
                     {/* Step 2 */}
                     {(() => {
-                      const isCancelled = selectedOrder.status === "CANCELLED";
+                      const isCancelled = TERMINATED_STATUSES.includes(selectedOrder.status);
                       const isPending = selectedOrder.status === "PENDING";
                       const dotColor = isCancelled ? "bg-rose-500" : isPending ? "bg-blue-500 animate-pulse" : "bg-emerald-500";
                       const textColor = isCancelled ? "text-rose-600" : isPending ? "text-blue-600" : "text-emerald-700";
@@ -540,9 +578,9 @@ export default function OrdersTab({
 
                     {/* Step 3 */}
                     {(() => {
-                      const isCancelled = selectedOrder.status === "CANCELLED";
-                      const payMethod = paymentInfo ? paymentInfo.paymentMethod?.toUpperCase() : (selectedOrder.status === "PENDING" || selectedOrder.status === "AWAITING_PAYMENT" ? "COD" : "N/A");
-                      const payStatus = paymentInfo ? paymentInfo.status?.toUpperCase() : (["DELIVERED", "CONFIRMED", "SHIPPED"].includes(selectedOrder.status) ? "SUCCESS" : "PENDING");
+                      const isCancelled = TERMINATED_STATUSES.includes(selectedOrder.status);
+                      const payMethod = paymentInfo?.paymentMethod?.toUpperCase() || null;
+                      const payStatus = paymentInfo?.status?.toUpperCase() || null;
                       
                       let dotColor = "bg-slate-300";
                       let textColor = "text-slate-400";
@@ -551,7 +589,11 @@ export default function OrdersTab({
                       if (isCancelled) {
                         dotColor = "bg-rose-500";
                         textColor = "text-rose-600";
-                        subText = "Giao dịch thanh toán bị hủy";
+                        subText = ["REFUNDED", "PARTIALLY_REFUNDED", "REFUND_PENDING"].includes(payStatus)
+                          ? "Đơn đã hủy - đã/đang hoàn tiền cho khách"
+                          : "Đơn đã hủy";
+                      } else if (!payMethod) {
+                        subText = "Khách chưa chọn/khởi tạo thanh toán";
                       } else if (payMethod === "COD") {
                         const isConfirmed = ["CONFIRMED", "SHIPPED", "DELIVERED"].includes(selectedOrder.status);
                         dotColor = isConfirmed ? "bg-emerald-500" : "bg-amber-500";
@@ -585,7 +627,7 @@ export default function OrdersTab({
 
                     {/* Step 4 */}
                     {(() => {
-                      const isCancelled = selectedOrder.status === "CANCELLED";
+                      const isCancelled = TERMINATED_STATUSES.includes(selectedOrder.status);
                       const isShipped = ["SHIPPED", "DELIVERED"].includes(selectedOrder.status);
                       const isReady = selectedOrder.status === "CONFIRMED";
 
@@ -596,7 +638,11 @@ export default function OrdersTab({
                       if (isCancelled) {
                         dotColor = "bg-rose-500";
                         textColor = "text-rose-600";
-                        subText = "Đã hủy bàn giao giao vận";
+                        subText = selectedOrder.status === "RETURNING"
+                          ? "Đơn bị hủy khi đang giao - chờ hàng hoàn về kho"
+                          : selectedOrder.status === "RETURNED"
+                          ? "Kho đã nhận lại hàng hoàn, tồn kho đã được cộng lại"
+                          : "Không bàn giao vận chuyển";
                       } else if (isShipped) {
                         dotColor = "bg-emerald-500";
                         textColor = "text-emerald-700";
@@ -618,7 +664,7 @@ export default function OrdersTab({
 
                     {/* Step 5 */}
                     {(() => {
-                      const isCancelled = selectedOrder.status === "CANCELLED";
+                      const isCancelled = TERMINATED_STATUSES.includes(selectedOrder.status);
                       const isDelivered = selectedOrder.status === "DELIVERED";
                       const isShipped = selectedOrder.status === "SHIPPED";
 
@@ -655,54 +701,81 @@ export default function OrdersTab({
               </div>
             </div>
 
-            {/* Footer Drawer / Webhook Simulator */}
-            <div className="p-6 border-t border-slate-100 bg-slate-50 space-y-4 sticky bottom-0">
-              <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm space-y-3">
-                <span className="font-extrabold text-[10px] text-slate-500 uppercase block tracking-wider">Cập Nhật Trạng Thái Giao Vận (Admin/Shipper)</span>
-                <div className="grid grid-cols-3 gap-2">
+            {/* Footer: thao tác theo đúng trình tự trạng thái (backend kiểm tra lại) */}
+            <div className="p-6 border-t border-slate-100 bg-slate-50 space-y-3 sticky bottom-0">
+              {selectedOrder.status === "CONFIRMED" && (
+                <div className="flex gap-3">
                   <button
                     onClick={() => handleSimulateWebhook(selectedOrder.id, "SHIPPED")}
-                    disabled={selectedOrder.status === "CANCELLED" || selectedOrder.status === "DELIVERED" || selectedOrder.status === "PENDING" || selectedOrder.status === "AWAITING_PAYMENT"}
-                    className="py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-[9px] font-extrabold disabled:opacity-50 transition-colors"
-                  >
-                    Đang Giao Hàng
-                  </button>
-                  <button
-                    onClick={() => handleSimulateWebhook(selectedOrder.id, "DELIVERED")}
-                    disabled={selectedOrder.status === "CANCELLED" || selectedOrder.status === "DELIVERED" || selectedOrder.status !== "SHIPPED"}
-                    className="py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-[9px] font-extrabold disabled:opacity-50 transition-colors"
-                  >
-                    Đã Giao Thành Công
-                  </button>
-                  <button
-                    onClick={() => handleSimulateWebhook(selectedOrder.id, "CANCELLED")}
-                    disabled={selectedOrder.status === "CANCELLED" || selectedOrder.status === "DELIVERED" || selectedOrder.status === "PENDING" || selectedOrder.status === "AWAITING_PAYMENT"}
-                    className="py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-lg text-[9px] font-extrabold disabled:opacity-50 transition-colors"
-                  >
-                    Hủy Giao Hàng
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                {selectedOrder.status === "CONFIRMED" && (
-                  <button
-                    onClick={() => handleShipOrder(selectedOrder.id)}
                     className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm"
                   >
-                    Xác Nhận Giao Hàng
+                    Bàn giao vận chuyển
                   </button>
-                )}
-                {["PENDING", "AWAITING_PAYMENT", "CONFIRMED"].includes(selectedOrder.status) && (
                   <button
-                    onClick={() => handleCancelOrder(selectedOrder.id)}
+                    onClick={() => setCancelDialog({ orderId: selectedOrder.id, mode: "cancel" })}
                     className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm"
                   >
-                    Hủy Đơn Hàng
+                    Hủy đơn hàng
                   </button>
-                )}
-              </div>
+                </div>
+              )}
+              {["PENDING", "AWAITING_PAYMENT"].includes(selectedOrder.status) && (
+                <div className="space-y-2">
+                  <p className="text-[10px] text-slate-500 font-semibold">Đơn đang chờ khách thanh toán; chưa thể bàn giao vận chuyển. Đơn chưa thanh toán sẽ tự hủy khi hết hạn.</p>
+                  <button
+                    onClick={() => setCancelDialog({ orderId: selectedOrder.id, mode: "cancel" })}
+                    className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm"
+                  >
+                    Hủy đơn hàng
+                  </button>
+                </div>
+              )}
+              {selectedOrder.status === "SHIPPED" && (
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => handleSimulateWebhook(selectedOrder.id, "DELIVERED")}
+                    className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm"
+                  >
+                    Đã giao thành công
+                  </button>
+                  <button
+                    onClick={() => setCancelDialog({ orderId: selectedOrder.id, mode: "cancel-shipping" })}
+                    className="flex-1 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-lg text-[10px] font-bold transition-all"
+                  >
+                    Hủy giao hàng (hoàn hàng)
+                  </button>
+                </div>
+              )}
+              {selectedOrder.status === "RETURNING" && (
+                <div className="space-y-2">
+                  <p className="text-[10px] text-orange-600 font-semibold">Hàng đang được hoàn về. Chỉ xác nhận khi kho đã nhận và kiểm tra hàng; khi đó tồn kho được cộng lại và đơn đã thanh toán online sẽ được hoàn tiền.</p>
+                  <button
+                    onClick={() => handleReturnReceived(selectedOrder.id)}
+                    className="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm"
+                  >
+                    Xác nhận đã nhận hàng hoàn
+                  </button>
+                </div>
+              )}
+              {["DELIVERED", "CANCELLED", "RETURNED"].includes(selectedOrder.status) && (
+                <p className="text-[10px] text-slate-400 font-semibold text-center">Đơn hàng đã kết thúc, không còn thao tác nào.</p>
+              )}
             </div>
+
+            <CancelOrderDialog
+              open={!!cancelDialog}
+              orderId={cancelDialog?.orderId}
+              title={cancelDialog?.mode === "cancel-shipping" ? `Hủy giao hàng đơn #${cancelDialog?.orderId}` : undefined}
+              note={cancelDialog?.mode === "cancel-shipping"
+                ? "Đơn sẽ chuyển sang \"Chờ hoàn hàng\". Tồn kho chỉ được cộng lại khi kho xác nhận đã nhận hàng hoàn."
+                : "Voucher của khách (nếu còn hạn) sẽ được trả lại; đơn đã thanh toán online sẽ được hoàn tiền."}
+              confirmLabel={cancelDialog?.mode === "cancel-shipping" ? "Xác nhận hủy giao" : "Xác nhận hủy đơn"}
+              onConfirm={async (reasonCode, reason) => {
+                await handleCancelOrder(cancelDialog.orderId, reasonCode, reason);
+                setCancelDialog(null);
+              }}
+              onClose={() => setCancelDialog(null)}
+            />
 
           </div>
         </>

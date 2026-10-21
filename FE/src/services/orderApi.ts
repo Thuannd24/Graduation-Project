@@ -54,12 +54,47 @@ export const orderApi = {
     return apiClient.putAuth(`/orders/${orderId}/ship`);
   },
 
-  cancelOrder(orderId: string | number): Promise<unknown> {
-    return apiClient.postAuth(`/orders/${orderId}/cancel`);
+  /** Hủy đơn: bắt buộc lý do. reasonCode thuộc CANCEL_REASONS; "OTHER" cần kèm reason. */
+  cancelOrder(orderId: string | number, reasonCode: string, reason?: string): Promise<any> {
+    return apiClient.postAuth(`/orders/${orderId}/cancel`, { reasonCode, reason: reason?.trim() || undefined });
   },
 
-  updateDeliveryStatus(orderId: string | number, status: string): Promise<unknown> {
-    return apiClient.put(`/orders/${orderId}/delivery-status?status=${status}`, {}, { requireAuth: true });
+  updateDeliveryStatus(orderId: string | number, status: string, reason?: string): Promise<unknown> {
+    const reasonParam = reason ? `&reason=${encodeURIComponent(reason)}` : "";
+    return apiClient.put(`/orders/${orderId}/delivery-status?status=${status}${reasonParam}`, {}, { requireAuth: true });
+  },
+
+  /** Admin xác nhận đã nhận hàng hoàn: RETURNING -> RETURNED (cộng lại kho, hoàn tiền nếu đã thanh toán). */
+  confirmReturnReceived(orderId: string | number, note?: string): Promise<any> {
+    return apiClient.putAuth(`/orders/${orderId}/return-received`, note ? { note } : {});
+  },
+
+  /** Quy tắc đơn hàng do server công bố (phí ship, ngưỡng COD, lý do hủy...). */
+  getOrderPolicy(): Promise<any> {
+    return apiClient.get(`/orders/policy`, { requireAuth: true });
+  },
+
+  /** Trạng thái thanh toán THẬT của đơn (không dựa vào tham số trên URL trả về từ VNPay). */
+  getPaymentStatus(orderId: string | number): Promise<{
+    orderId: number;
+    orderStatus: string;
+    paymentMethod?: string;
+    paymentStatus: string;
+    result: "SUCCESS" | "FAILED" | "PENDING" | "REFUNDED" | "NOT_INITIATED";
+    failureCode?: string;
+    message?: string;
+    amount?: number;
+    paidAt?: string;
+    canRetry: boolean;
+    canSwitchToCod: boolean;
+    codMaxAmount?: number;
+  }> {
+    return apiClient.get(`/payments/order/${orderId}/status`, { requireAuth: true });
+  },
+
+  /** Thanh toán lại VNPay (URL mới) hoặc đổi sang COD cho đơn đang chờ thanh toán. */
+  retryPayment(orderId: string | number, paymentMethod: "VNPAY" | "COD"): Promise<{ paymentId: number; redirectUrl?: string }> {
+    return apiClient.postAuth(`/payments/order/${orderId}/retry`, { paymentMethod });
   },
 
   getPaymentByOrderId(orderId: string | number): Promise<any> {

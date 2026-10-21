@@ -7,6 +7,8 @@ import ProductCard from "../../catalog/components/ProductCard.jsx";
 import { useCart } from "../../../context/CartContext.jsx";
 import { productApi } from "../../../services/productApi";
 import { formatVnd } from "../../../utils/format.js";
+import { computeOrderTotals } from "../../../utils/pricing";
+import { MAX_QTY_PER_ITEM } from "../../../utils/checkoutConstants";
 import { aiApi } from "../../../services/aiApi.ts";
 import { orderApi } from "../../../services/orderApi";
 import { hasAuthToken } from "../../../services/apiClient";
@@ -25,6 +27,10 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
 
   const unitPrice = Number(item.price || 0);
   const lineTotal = unitPrice * item.qty;
+  // Tồn kho còn lại (nếu API giỏ hàng trả về) — giới hạn nút "+" theo min(tồn kho, MAX_QTY_PER_ITEM).
+  const rawStock = item.stock ?? item.availableStock ?? item.availableQuantity ?? item.stockQuantity;
+  const stock = rawStock != null && !Number.isNaN(Number(rawStock)) ? Number(rawStock) : null;
+  const maxQty = stock != null ? Math.max(0, Math.min(stock, MAX_QTY_PER_ITEM)) : MAX_QTY_PER_ITEM;
 
   return (
     <motion.article
@@ -77,9 +83,19 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
                 <Icon name="verified" className="text-[9px]" />
                 Chính hãng
               </span>
-              {item.qty >= 3 && (
+              {stock != null && stock > 0 && stock <= 5 && (
                 <span className="text-[9px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded">
-                  Mua sỉ
+                  Chỉ còn {stock} sản phẩm
+                </span>
+              )}
+              {stock === 0 && item.active !== false && (
+                <span className="text-[9px] font-bold text-red-600 bg-red-50 dark:bg-red-950/30 px-1.5 py-0.5 rounded">
+                  Hết hàng
+                </span>
+              )}
+              {item.active === false && (
+                <span className="text-[9px] font-bold text-red-600 bg-red-50 dark:bg-red-950/30 px-1.5 py-0.5 rounded">
+                  Ngừng kinh doanh — vui lòng xóa khỏi giỏ
                 </span>
               )}
             </div>
@@ -103,6 +119,7 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
             <button
               onClick={() => onUpdateQty(item.id, item.variant, item.qty - 1)}
               disabled={item.qty <= 1}
+              aria-label="Giảm số lượng"
               className="w-8 h-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed border-none cursor-pointer transition-colors"
               type="button"
             >
@@ -113,7 +130,9 @@ function CartItemCard({ item, onUpdateQty, onRemove }) {
             </div>
             <button
               onClick={() => onUpdateQty(item.id, item.variant, item.qty + 1)}
-              disabled={item.qty >= 99}
+              disabled={item.qty >= maxQty}
+              aria-label="Tăng số lượng"
+              title={item.qty >= maxQty ? (stock != null && stock <= MAX_QTY_PER_ITEM ? `Chỉ còn ${stock} sản phẩm` : `Tối đa ${MAX_QTY_PER_ITEM} sản phẩm mỗi loại`) : undefined}
               className="w-8 h-full flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed border-none cursor-pointer transition-colors"
               type="button"
             >
@@ -209,9 +228,8 @@ function EmptyCart() {
 /* ===================== Main CartPage ===================== */
 
 export default function CartPage() {
-  const { items, updateQty, removeItem, summary, addToCart, showToast } = useCart();
+  const { items, updateQty, removeItem, summary, addToCart } = useCart();
   const [recommended, setRecommended] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [backendSummary, setBackendSummary] = useState(null);
   const [previewLoading, setPreviewLoading] = useState(false);
 
@@ -257,36 +275,32 @@ export default function CartPage() {
     }
   }, [items]);
 
+  // Bước giỏ hàng: giá đã gồm VAT, chưa có địa chỉ nên không chốt phí ship (trừ khi chắc chắn được miễn phí).
+  // Chỉ lấy subtotal/giảm giá từ server (nếu có) và tự tính tổng theo cùng quy tắc với order-service.
   const localSummary = useMemo(() => {
-    if (backendSummary) {
-      return {
-        subtotal: backendSummary.subtotal || 0,
-        discount: backendSummary.totalDiscount || 0,
-        shipping: backendSummary.shippingFee || 0,
-        shippingDiscount: backendSummary.shippingDiscount || 0,
-        pointDiscount: backendSummary.pointDiscount || 0,
-        vat: backendSummary.vatAmount || 0,
-        total: backendSummary.finalAmount || 0,
-      };
-    }
-    const subtotal = summary.subtotal;
-    const discount = 0;
-    const shipping = subtotal >= 500000 ? 0 : 30000;
-    const vat = Math.round(subtotal * 0.1);
-    const total = subtotal - discount + shipping + vat;
-    return { subtotal, discount, shipping, vat, total };
+    const totals = computeOrderTotals({
+      subtotal: backendSummary ? Number(backendSummary.subtotal || 0) : summary.subtotal,
+      // totalDiscount của server = giảm SP + giảm ship + giảm điểm -> tách lại phần giảm giá sản phẩm.
+      productDiscount: backendSummary
+        ? Number(
+            backendSummary.productDiscount ??
+              Math.max(
+                0,
+                Number(backendSummary.totalDiscount || 0) -
+                  Number(backendSummary.shippingDiscount || 0) -
+                  Number(backendSummary.pointDiscount || 0)
+              )
+          )
+        : 0,
+      pointDiscount: backendSummary ? Number(backendSummary.pointDiscount || 0) : 0,
+    });
+    const shippingPending = totals.shipping > 0;
+    return {
+      ...totals,
+      shippingPending,
+      total: shippingPending ? totals.total - totals.shipping : totals.total,
+    };
   }, [summary, backendSummary]);
-
-  // Toggle select all
-  const toggleSelectAll = () => {
-    if (selectedItems.length === items.length) {
-      setSelectedItems([]);
-    } else {
-      setSelectedItems(items.map((item) => `${item.id}-${item.variant}`));
-    }
-  };
-
-  const allSelected = items.length > 0 && selectedItems.length === items.length;
 
   const steps = [
     { num: 1, label: "Giỏ hàng", active: true },
@@ -345,7 +359,7 @@ export default function CartPage() {
                       Giỏ hàng
                     </h1>
                     <p className="text-[11px] text-slate-500 font-medium">
-                      {items.length} sản phẩm đang chọn
+                      {items.length} sản phẩm trong giỏ
                     </p>
                   </div>
                 </div>
@@ -397,8 +411,9 @@ export default function CartPage() {
         {items.length > 0 && (
           <OrderSummary
             summary={localSummary}
-            actionLabel="Tiến hành thanh toán"
+            actionLabel={items.some((i) => i.active === false) ? "Xóa sản phẩm ngừng kinh doanh để tiếp tục" : "Tiến hành thanh toán"}
             actionTo="/checkout"
+            disabled={items.some((i) => i.active === false)}
           />
         )}
       </div>
@@ -415,7 +430,7 @@ export default function CartPage() {
                 <h2 className="text-base font-black text-slate-800 dark:text-slate-200 tracking-tight flex items-center gap-2">
                   {items.length > 0 ? (
                     <>
-                      Ưu đãi mua kèm <span className="text-[10px] bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">AI Combo Recommended</span>
+                      Gợi ý mua kèm <span className="text-[10px] bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">Gợi ý AI</span>
                     </>
                   ) : (
                     "Gợi ý sản phẩm nổi bật"
@@ -423,7 +438,7 @@ export default function CartPage() {
                 </h2>
                 <p className="text-[10.5px] text-slate-400 font-medium">
                   {items.length > 0 
-                    ? "Sản phẩm thường được mua cùng các món trong giỏ hàng của bạn (FP-Growth Association)" 
+                    ? "Sản phẩm có thể bạn cần thêm cho đơn hàng này" 
                     : "Khám phá những sản phẩm đang được yêu thích nhất"
                   }
                 </p>
@@ -452,6 +467,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={() => {
+                    // addToCart tự báo kết quả thật (thành công / hết hàng / ngừng kinh doanh) sau khi server trả lời.
                     addToCart({
                       id: product.id,
                       name: product.name,
@@ -460,7 +476,6 @@ export default function CartPage() {
                       qty: 1,
                       variant: "Tiêu chuẩn"
                     });
-                    showToast(`Đã thêm ${product.name} vào giỏ hàng!`);
                   }}
                   className="w-full mt-3 py-2 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]"
                 >

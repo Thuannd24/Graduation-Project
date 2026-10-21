@@ -20,8 +20,8 @@ const RegisterPage = lazy(() => import("./features/auth/pages/RegisterPage.jsx")
 const ProfilePage = lazy(() => import("./features/profile/pages/ProfilePage.jsx"));
 const SearchPage = lazy(() => import("./features/catalog/pages/SearchPage.jsx"));
 const OrderDetailPage = lazy(() => import("./features/profile/pages/OrderDetailPage.jsx"));
-const TradeInPage = lazy(() => import("./pages/TradeInPage.jsx"));
-const StorePage = lazy(() => import("./pages/StorePage.jsx"));
+// TradeInPage ("Thu cũ đổi mới") và StorePage ("Hệ thống cửa hàng") chưa có backend nên tạm gỡ khỏi
+// router (giữ file trong src/pages để bật lại khi có API /tradein, /stores).
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage.jsx"));
 const WishlistPage = lazy(() => import("./features/catalog/pages/WishlistPage.jsx"));
 const AdminDashboardPage = lazy(() => import("./features/admin/pages/AdminDashboardPage.jsx"));
@@ -101,8 +101,6 @@ export default function App() {
               <Route path="/search" element={<SearchPage />} />
               <Route path="/order/:orderId" element={<RequireAuth><OrderDetailPage /></RequireAuth>} />
               <Route path="/warranty" element={<Navigate to="/profile?tab=warranty" replace />} />
-              <Route path="/tradein" element={<TradeInPage />} />
-              <Route path="/stores" element={<StorePage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>

@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
+import CancelOrderDialog from "../../../components/common/CancelOrderDialog.jsx";
+import { isCustomerCancellable, orderStatusBadge, orderStatusLabel } from "../../../utils/orderStatus.js";
 import { formatVnd } from "../../../utils/format.js";
+import { isValidVnPhone, VN_PHONE_ERROR } from "../../../utils/validation";
 import keycloak from "../../../services/keycloak.js";
 import { orderApi } from "../../../services/orderApi";
 import { authApi } from "../../../services/authApi";
@@ -187,47 +190,8 @@ function normalizeAddresses(data) {
   return normalizeDefaultAddressList(addresses);
 }
 
-function getStatusBadgeClass(status) {
-  const s = String(status || "").toUpperCase();
-  switch (s) {
-    case "PENDING":
-      return "bg-amber-50 text-amber-600 dark:bg-amber-955/20 dark:text-amber-400 border-amber-200/60 dark:border-amber-900/40";
-    case "AWAITING_PAYMENT":
-      return "bg-blue-50 text-blue-600 dark:bg-blue-955/20 dark:text-blue-400 border-blue-200/60 dark:border-blue-900/40";
-    case "CONFIRMED":
-      return "bg-emerald-50 text-emerald-750 dark:bg-emerald-955/20 dark:text-emerald-400 border-emerald-250/60 dark:border-emerald-900/40";
-    case "SHIPPED":
-      return "bg-indigo-50 text-indigo-755 dark:bg-indigo-955/20 dark:text-indigo-400 border-indigo-200/60 dark:border-indigo-900/40";
-    case "DELIVERED":
-    case "COMPLETED":
-      return "bg-teal-50 text-teal-700 dark:bg-teal-955/20 dark:text-teal-400 border-teal-200/60 dark:border-teal-900/40";
-    case "CANCELLED":
-      return "bg-rose-50 text-rose-600 dark:bg-rose-955/20 dark:text-rose-400 border-rose-200/60 dark:border-rose-900/40";
-    default:
-      return "bg-slate-50 text-slate-600 dark:bg-slate-900/30 dark:text-slate-400 border-slate-200/60 dark:border-slate-850/40";
-  }
-}
-
-function getStatusLabel(status) {
-  const s = String(status || "").toUpperCase();
-  switch (s) {
-    case "PENDING":
-      return "Chờ xác nhận";
-    case "AWAITING_PAYMENT":
-      return "Chờ thanh toán";
-    case "CONFIRMED":
-      return "Đã xác nhận";
-    case "SHIPPED":
-      return "Đang giao hàng";
-    case "DELIVERED":
-    case "COMPLETED":
-      return "Đã giao hàng";
-    case "CANCELLED":
-      return "Đã hủy";
-    default:
-      return s || "Đang xử lý";
-  }
-}
+const getStatusBadgeClass = orderStatusBadge;
+const getStatusLabel = orderStatusLabel;
 
 const navSections = [
   {
@@ -525,33 +489,16 @@ export default function ProfilePage() {
     return { id: activeTab, label: "Tài khoản", icon: "account_circle" };
   }, [activeTab]);
 
-  const getCancelTimeLeft = (createdAt) => {
-    if (!createdAt) return 0;
-    const limitMs = 2 * 60 * 60 * 1000;
-    const elapsedMs = new Date().getTime() - new Date(createdAt).getTime();
-    return Math.max(0, limitMs - elapsedMs);
-  };
+  // Quy tắc hủy theo TRẠNG THÁI (backend kiểm tra lại): chỉ khi đơn chưa bàn giao cho đơn vị vận chuyển.
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [orderNotice, setOrderNotice] = useState("");
 
-  const isOrderCancelable = (ord) => {
-    if (!ord) return false;
-    const status = String(ord.status || "").toUpperCase();
-    if (!["PENDING", "AWAITING_PAYMENT", "CONFIRMED"].includes(status)) {
-      return false;
-    }
-    const timeLeft = getCancelTimeLeft(ord.createdAt);
-    return timeLeft > 0;
-  };
-
-  const handleCancelOrder = async (orderId) => {
-    if (!window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) return;
-    try {
-      await orderApi.cancelOrder(orderId);
-      alert("Hủy đơn hàng thành công!");
-      const data = await orderApi.listOrders();
-      setOrders(Array.isArray(data) ? data : []);
-    } catch (err) {
-      alert("Lỗi khi hủy đơn hàng: " + err.message);
-    }
+  const handleConfirmCancel = async (reasonCode, reason) => {
+    await orderApi.cancelOrder(cancelTarget, reasonCode, reason);
+    setOrderNotice(`Đã hủy đơn hàng #${cancelTarget}. Voucher đã dùng (nếu còn hạn) được trả lại vào ví voucher.`);
+    setCancelTarget(null);
+    const data = await orderApi.listOrders();
+    setOrders(Array.isArray(data) ? data : []);
   };
   const [addresses, setAddresses] = useState([]);
   const [addressForm, setAddressForm] = useState(emptyAddressForm);
@@ -769,6 +716,11 @@ export default function ProfilePage() {
     e.preventDefault();
     setProfileMessage("");
     setProfileError("");
+    const phone = profileForm.phoneNumber.trim();
+    if (phone && !isValidVnPhone(phone)) {
+      setProfileError(VN_PHONE_ERROR);
+      return;
+    }
     setSavingProfile(true);
 
     try {
@@ -800,6 +752,10 @@ export default function ProfilePage() {
   const handleAddressSubmit = async (e) => {
     e.preventDefault();
     setAddressError("");
+    if (!isValidVnPhone(addressForm.phoneNumber)) {
+      setAddressError(VN_PHONE_ERROR);
+      return;
+    }
     setSavingAddress(true);
 
     try {
@@ -1147,6 +1103,19 @@ export default function ProfilePage() {
                 <Icon className="text-primary text-[20px]" name="receipt_long" />
               </div>
 
+              {orderNotice && (
+                <p className="text-xs font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 rounded-xl px-3 py-2">
+                  {orderNotice}
+                </p>
+              )}
+              <CancelOrderDialog
+                open={cancelTarget != null}
+                orderId={cancelTarget}
+                note="Bạn có thể hủy đơn khi đơn chưa được bàn giao cho đơn vị vận chuyển. Đơn đã thanh toán online sẽ được hoàn tiền."
+                onConfirm={handleConfirmCancel}
+                onClose={() => setCancelTarget(null)}
+              />
+
               {loadingOrders ? (
                 <div className="flex flex-col items-center py-12">
                   <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -1240,9 +1209,9 @@ export default function ProfilePage() {
 
                         {/* Bottom Actions Row */}
                         <div className="pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-end gap-2">
-                          {isOrderCancelable(order) && (
+                          {isCustomerCancellable(order.status) && (
                             <button
-                              onClick={() => handleCancelOrder(order.id)}
+                              onClick={() => setCancelTarget(order.id)}
                               className="px-3 py-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-955/15 hover:bg-rose-100/50 dark:hover:bg-rose-955/35 border border-rose-150/40 dark:border-rose-900/30 rounded-xl transition-colors"
                               type="button"
                             >
@@ -1455,7 +1424,7 @@ export default function ProfilePage() {
               <div className="border-b border-surface-container-highest pb-xs flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-headline-md text-on-surface">Điểm thưởng & ưu đãi</h3>
-                  <p className="text-xs text-secondary mt-1">1 điểm = 1.000đ khi thanh toán. Tích 10.000đ chi tiêu = 1 điểm.</p>
+                  <p className="text-xs text-secondary mt-1">Điểm thưởng được tặng qua các chương trình khuyến mãi (ví dụ: tặng điểm theo giá trị đơn hàng thành công), không tự cộng khi mua hàng. 1 điểm = 1.000đ khi thanh toán.</p>
                 </div>
                 <Icon className="text-primary text-[24px]" name="loyalty" />
               </div>
