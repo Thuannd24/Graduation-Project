@@ -13,6 +13,8 @@ RUN pip install --no-cache-dir -e /workspace/shared-common
 # Copy and install recs-service
 COPY recs-service /workspace/recs-service
 WORKDIR /workspace/recs-service
+# PyTorch CPU-only (như search-service): tránh pip kéo wheel CUDA vài GB; container không dùng GPU.
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8003

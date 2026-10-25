@@ -26,7 +26,9 @@ class ChatbotSettings(BaseModel):
 
     # LLM provider — see app/services/llm_client.py. DeepSeek is the only provider used;
     # there is no Gemini/OpenAI fallback despite comments to that effect in older docs.
-    DEEPSEEK_MODEL_NAME: str = os.getenv("DEEPSEEK_MODEL_NAME", "deepseek-chat")
+    # `or`: docker-compose truyền `DEEPSEEK_MODEL_NAME=${DEEPSEEK_MODEL_NAME}`, khi .env không khai báo thì biến
+    # tồn tại nhưng RỖNG -> getenv trả "" (không dùng default) -> DeepSeek trả 400 và chatbot luôn rơi về fallback.
+    DEEPSEEK_MODEL_NAME: str = os.getenv("DEEPSEEK_MODEL_NAME") or "deepseek-chat"
 
     # Policy RAG (FAISS) Settings
     POLICY_EMBEDDING_MODEL: str = os.getenv("POLICY_EMBEDDING_MODEL", "intfloat/multilingual-e5-base")
