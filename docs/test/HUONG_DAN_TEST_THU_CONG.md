@@ -16,7 +16,7 @@
 1. [Bảng địa chỉ (URL)](#1-bảng-địa-chỉ-url)
 2. [Tài khoản test](#2-tài-khoản-test)
 3. [PH1 – Tài khoản, đăng nhập, phân quyền](#3-ph1--tài-khoản-đăng-nhập-phân-quyền)
-4. [PH2 – Sản phẩm, tìm kiếm văn bản và ảnh](#4-ph2--sản-phẩm-tìm-kiếm-văn-bản-và-ảnh)
+4. [PH2 – Sản phẩm và tìm kiếm văn bản](#4-ph2--sản-phẩm-và-tìm-kiếm-văn-bản)
 5. [PH3 – Giỏ hàng, đặt hàng, vận chuyển, bảo hành](#5-ph3--giỏ-hàng-đặt-hàng-vận-chuyển-bảo-hành)
 6. [PH4 – Tồn kho](#6-ph4--tồn-kho)
 7. [PH5 – Thanh toán (COD, VNPay)](#7-ph5--thanh-toán-cod-vnpay)
@@ -84,7 +84,7 @@ Lưu ý trước khi test:
 
 - [ ] **Không dùng** container cũ `infra-eureka`, `infra-gateway` (build từ code cũ). Chạy Eureka/Gateway bằng code `develop`.
 - [ ] Debezium có đủ 2 connector: mở http://localhost:8088/connectors → thấy `order-outbox-connector`, `payment-outbox-connector`. Thiếu thì đơn hàng sẽ kẹt ở `PENDING`.
-- [ ] Chỉ mục search đã dựng: http://localhost:8001/health thấy `image_index_ready: true`, `text_index_ready: true`. Chưa có thì `docker exec -it ai-search-service python scripts/build_index.py`.
+- [ ] Chỉ mục search đã dựng: http://localhost:8001/health thấy `text_index_ready: true`. Chưa có thì `docker exec -it ai-search-service python scripts/build_index.py`.
 - [ ] `AI/.env` có `DEEPSEEK_API_KEY` (chatbot cần).
 - [ ] Muốn bật lại các trang công cụ: `docker start infra-kibana infra-redis-insight infra-kafka-ui`.
 - [ ] Sau khi một AI service vừa tắt/bật lại, gateway có thể trả 503 trong ~10–30 giây (circuit breaker) — đợi rồi thử lại.
@@ -198,19 +198,16 @@ Hoặc làm bằng giao diện: http://localhost:8083/admin → chọn realm **e
 
 ---
 
-## 4. PH2 – Sản phẩm, tìm kiếm văn bản và ảnh
+## 4. PH2 – Sản phẩm và tìm kiếm văn bản
 
 > **Luồng hoạt động.** Thông tin sản phẩm nằm ở product-service; khách xem không cần đăng nhập. Mỗi lần mở trang chi
 > tiết, product-service đăng tin "khách vừa xem sản phẩm X" (`product-viewed-events`) để phần AI ghi nhận hành vi.
 >
-> **Có 3 kiểu tìm kiếm, cần phân biệt khi test:**
+> **Có 2 kiểu tìm kiếm văn bản, cần phân biệt khi test:**
 >
 > 1. **Ô tìm kiếm trên header:** hỏi thẳng product-service, so khớp theo tên/từ khóa (kiểu truyền thống).
-> 2. **Tìm bằng ảnh (nút máy ảnh):** ảnh được gửi sang search-service. Model **CLIP** biến ảnh thành một dãy số
->    (vector) mô tả "ảnh này trông như thế nào". Mọi ảnh sản phẩm cũng đã được biến thành vector từ trước và lưu trong
->    **FAISS**. Hệ thống tìm những vector gần nhất, tức là các sản phẩm trông giống ảnh bạn tải lên.
-> 3. **Tìm kiếm ngữ nghĩa** (chỉ thử được qua Swagger 8001): câu hỏi được tìm song song theo 2 cách, theo **nghĩa**
->    (model e5 hiểu "tai nghe chống ồn" gần với "headphone ANC") và theo **từ khóa** (Elasticsearch BM25). Hai danh sách
+> 2. **Tìm kiếm ngữ nghĩa lai** (thử qua Swagger 8001): câu hỏi được tìm song song theo 2 cách, theo **nghĩa**
+>    (model multilingual-e5-large hiểu "tai nghe chống ồn" gần với "headphone ANC") và theo **từ khóa** (Elasticsearch BM25). Hai danh sách
 >    được trộn bằng **RRF**: sản phẩm đứng cao ở cả hai danh sách thì lên đầu.
 
 ### Khách (chưa đăng nhập)
@@ -228,8 +225,7 @@ Hoặc làm bằng giao diện: http://localhost:8083/admin → chọn realm **e
 | ✔ | Làm gì | Kết quả đúng | Ghi chú |
 |---|---|---|---|
 | [ ] | Ô tìm kiếm trên header gõ `iphone` | Trang `/search?q=iphone` có kết quả | Đây là tìm kiếm của product-service (xem mục 13) |
-| [ ] | Bấm **biểu tượng máy ảnh** trên header → tải ảnh một chiếc điện thoại/tai nghe | Chuyển `/search?imageSearch=true`, ra sản phẩm giống ảnh | Ảnh search dùng CLIP + FAISS |
-| [ ] | http://localhost:8001/docs → `GET /api/v1/search?q=tai nghe chống ồn` | Kết quả lai (BM25 + vector + RRF) | Tìm kiếm ngữ nghĩa thật — chỉ thử được qua Swagger |
+| [ ] | http://localhost:8001/docs → `GET /api/v1/search?q=tai nghe chống ồn` | Kết quả lai (BM25 + vector + RRF) | Tìm kiếm ngữ nghĩa thật — thử qua Swagger |
 | [ ] | `GET /api/v1/search/suggest?q=ip` | Danh sách gợi ý từ khóa | |
 | [ ] | `GET /api/v1/search/similar/{product_id}` | Sản phẩm tương tự | |
 
@@ -566,7 +562,6 @@ Các mục này đã nằm trong mục 4.1 của [MUC_LUC_BAO_CAO.md](../bao-cao
 | Chức năng | Hành vi hiện tại |
 |---|---|
 | Tìm kiếm trên web | Ô tìm kiếm gọi product-service, chưa gọi tìm kiếm ngữ nghĩa (chỉ thử được qua Swagger 8001) |
-| Tìm kiếm bằng ảnh | Nhãn "YOLO v8 detected" luôn hiện; "Độ khớp %" không phản ánh độ tin cậy; tiêu đề `Kết quả cho ""` |
 | Sản phẩm liên quan | Luôn là 8 sản phẩm đầu danh sách, không phải AI |
 | Điểm đánh giá | Trang sản phẩm hiện 0 sao dù có đánh giá |
 | `/stores`, `/tradein` | Chưa có backend |

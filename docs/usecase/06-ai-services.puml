@@ -20,7 +20,6 @@ rectangle "AI services" {
   package "Search service" {
     usecase "Tìm kiếm văn bản hybrid\n(e5 + BM25 + RRF, lọc giá)" as A1
     usecase "Gợi ý từ khóa tự động" as A2
-    usecase "Tìm kiếm bằng hình ảnh (CLIP)" as A3
   }
 
   package "Chatbot service" {
@@ -58,7 +57,6 @@ rectangle "AI services" {
 
 Guest --> A1
 Guest --> A2
-Guest --> A3
 Guest --> A4
 Guest --> A5
 Guest --> A18

@@ -19,12 +19,11 @@ services:
       - DB_NAME=ecommerce_product_db
       - CATALOG_SOURCE=mariadb
       - DATA_DIR=/data
-      - YOLO_ENABLED=false
       - PRELOAD_MODELS=false
     volumes:
-      # Giữ FAISS index + cache ảnh sau khi build (không mất khi restart container)
+      # Giữ FAISS index sau khi build (không mất khi restart container)
       - search-index-data:/data
-      # Cache model HuggingFace (CLIP ~600MB, e5-large ~2GB): chỉ tải 1 lần, không mất khi rebuild
+      # Cache model HuggingFace (e5-large ~2GB): chỉ tải 1 lần, không mất khi rebuild
       - search-model-cache:/root/.cache
     networks:
       - ecommerce-network

@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Scrape, mirror ảnh lên R2, và import catalog vào AuraTech product-service",
   "scripts": {
+    "reset-db": "node -e \"console.log('Please execute ./reset-to-main-db.ps1 (PowerShell) or ./reset-to-main-db.sh (Bash)')\"",
     "setup": "node setup.mjs",
     "setup:dry-run": "node setup.mjs --dry-run",
     "seed-inventory": "node seed-inventory.mjs",

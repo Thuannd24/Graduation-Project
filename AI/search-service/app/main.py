@@ -2,7 +2,6 @@ from fastapi import FastAPI
 
 from app.core.config import search_settings
 from app.api.endpoints import search
-from app.services.visual_search import visual_search_service
 from app.services.text_search import text_search_service
 from shared_common.logger import get_logger
 
@@ -10,7 +9,7 @@ logger = get_logger(__name__)
 
 app = FastAPI(
     title=search_settings.PROJECT_NAME,
-    description="Microservice for semantic hybrid text search and visual search",
+    description="Microservice for semantic hybrid text search",
     version="1.0.0",
 )
 
@@ -27,20 +26,18 @@ app.include_router(search.router, prefix=f"{search_settings.API_V1_STR}/public")
 @app.on_event("startup")
 def on_startup():
     """
-    Load FAISS index vào RAM (nhẹ, nhanh). Nếu PRELOAD_MODELS=true thì nạp sẵn cả
-    CLIP/e5/YOLO (chậm, tốn RAM) — mặc định lazy-load lần gọi đầu.
+    Load FAISS text index vào RAM (nhẹ, nhanh). Nếu PRELOAD_MODELS=true thì nạp sẵn
+    e5 model (chậm, tốn RAM) — mặc định lazy-load lần gọi đầu.
     Mọi lỗi được nuốt để service vẫn UP (index có thể chưa build).
     """
     try:
-        visual_search_service.store.load()
         text_search_service.store.load()
     except Exception as e:  # pragma: no cover
         logger.error(f"Lỗi load FAISS index khi startup: {e}")
 
     if search_settings.PRELOAD_MODELS:
-        logger.info("PRELOAD_MODELS=true → nạp sẵn model encoders...")
+        logger.info("PRELOAD_MODELS=true → nạp sẵn text encoder...")
         try:
-            visual_search_service.warmup()
             text_search_service.warmup()
         except Exception as e:  # pragma: no cover
             logger.error(f"Lỗi preload models: {e}")
@@ -52,10 +49,6 @@ def health_check():
         "status": "UP",
         "service": search_settings.PROJECT_NAME,
         "text_model": search_settings.TEXT_MODEL_NAME,
-        "vision_model": search_settings.VISION_MODEL_NAME,
-        "yolo_enabled": search_settings.YOLO_ENABLED,
-        "image_index_ready": visual_search_service.store.is_ready,
-        "image_index_size": visual_search_service.store.size,
         "text_index_ready": text_search_service.store.is_ready,
         "text_index_size": text_search_service.store.size,
     }

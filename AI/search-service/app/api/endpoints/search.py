@@ -1,16 +1,14 @@
 from typing import Optional
 
-from fastapi import APIRouter, UploadFile, File, Form, Query, Header, HTTPException
+from fastapi import APIRouter, Query, Header, HTTPException
 
 from app.core.response import ApiResponse, success
 from app.models.search import (
     SearchResponse, SuggestResponse, SearchItem,
-    VisualSearchResponse, VisualSearchItem, CropBox, SimilarResponse,
+    SimilarResponse, SimilarItem,
 )
 from app.services.hybrid_search import hybrid_search_service
-from app.services.visual_search import visual_search_service
 from app.services import catalog
-from app.services.image_loader import InvalidImageError
 from shared_common.logger import get_logger
 
 logger = get_logger(__name__)
@@ -56,75 +54,13 @@ def get_autocomplete_suggestions(q: str = Query(..., description="Autocomplete p
     return success(SuggestResponse(suggestions=suggestions))
 
 
-# ── VISUAL SEARCH ─────────────────────────────────────────────────────────────
-
-def _require_image_index() -> None:
-    store = visual_search_service.store
-    store.reload_if_changed()
-    if not store.is_ready:
-        # Không nạp CLIP vô ích khi chưa có index — báo rõ để admin chạy build_index.py
-        raise HTTPException(status_code=503, detail="Chỉ mục ảnh sản phẩm chưa được xây dựng. Vui lòng thử lại sau.")
-
-
-def _visual_response(items, crop_box) -> ApiResponse:
-    return success(VisualSearchResponse(
-        total=len(items),
-        items=[VisualSearchItem(**it) for it in items],
-        cropBox=CropBox(**crop_box) if crop_box else None,
-    ))
-
-
-@router.post("/search/similar-image", response_model=ApiResponse)
-@router.post("/search/image", response_model=ApiResponse)
-async def find_similar_by_image(
-    file: Optional[UploadFile] = File(None),
-    image: Optional[UploadFile] = File(None, description="Ảnh sản phẩm cần tìm"),
-    top_k: int = Query(10, ge=1, le=MAX_TOP_K),
-    x_user_id: Optional[str] = Header(None, alias="X-User-Id"),
-):
-    upload = image or file  # FE gửi field 'image'; giữ tương thích 'file'
-    if upload is None:
-        raise HTTPException(status_code=422, detail="Thiếu file ảnh (field 'image' hoặc 'file').")
-    _require_image_index()
-    try:
-        vector, crop_box = visual_search_service.process_upload(upload.file)
-        items = visual_search_service.search_similar_images(vector, top_k=top_k)
-        return _visual_response(items, crop_box)
-    except InvalidImageError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Error executing visual search: {e}")
-        raise HTTPException(status_code=500, detail="Visual search failed")
-
-
-@router.post("/search/multimodal", response_model=ApiResponse)
-async def multimodal_search(
-    q: str = Form(..., description="Text mô tả bổ sung, vd: 'màu xanh'"),
-    file: Optional[UploadFile] = File(None),
-    image: Optional[UploadFile] = File(None),
-    top_k: int = Query(10, ge=1, le=MAX_TOP_K),
-    x_user_id: Optional[str] = Header(None, alias="X-User-Id"),
-):
-    upload = image or file
-    if upload is None:
-        raise HTTPException(status_code=422, detail="Thiếu file ảnh.")
-    _require_image_index()
-    try:
-        vector, crop_box = visual_search_service.process_upload(upload.file)
-        items = visual_search_service.search_multimodal(vector, q, top_k=top_k)
-        return _visual_response(items, crop_box)
-    except InvalidImageError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    except Exception as e:
-        logger.error(f"Error executing multimodal search: {e}")
-        raise HTTPException(status_code=500, detail="Multimodal search failed")
-
+# ── SIMILAR PRODUCTS (PRECOMPUTED) ───────────────────────────────────────────
 
 @router.get("/search/similar/{product_id}", response_model=ApiResponse)
 def get_similar_products(product_id: int, top_k: int = Query(10, ge=1, le=MAX_TOP_K)):
     """Sản phẩm tương tự (đọc item-to-item đã precompute trong MongoDB product_similarities)."""
-    items = visual_search_service.get_similar_by_product(product_id, top_k=top_k)
+    items = catalog.get_similar_by_product(product_id, top_k=top_k)
     return success(SimilarResponse(
         total=len(items),
-        items=[VisualSearchItem(**it) for it in items],
+        items=[SimilarItem(**it) for it in items],
     ))

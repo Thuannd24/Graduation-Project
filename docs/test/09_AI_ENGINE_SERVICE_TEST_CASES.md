@@ -10,7 +10,7 @@
 
 | Service | Trạng thái |
 |---|---|
-| `search-service` (:8001) | Kết quả **thật**: tìm văn bản hybrid = BM25 trên Elasticsearch index `products` + dense (multilingual-e5-large trên FAISS), hợp nhất bằng RRF; tìm ảnh bằng CLIP trên FAISS. Trả sản phẩm có thật trong catalog |
+| `search-service` (:8001) | Kết quả **thật**: tìm văn bản hybrid = BM25 trên Elasticsearch index `products` + dense (multilingual-e5-large trên FAISS), hợp nhất bằng RRF. Trả sản phẩm có thật trong catalog |
 | `chatbot-service` (:8002) | Gọi **DeepSeek thật**: NLU (intent + sentiment + order_id) bằng một lời gọi LLM ở chế độ JSON (`response_format = json_object`), chỉ rơi về heuristic từ khóa khi không cấu hình LLM hoặc lời gọi lỗi; RAG sản phẩm/chính sách; intent `complaint` trả `escalate` để chuyển nhân viên |
 | `recs-service` (:8003) | Trả sản phẩm có thật từ catalog. SASRec chỉ chạy khi nạp được file trọng số đã huấn luyện (`MODEL_WEIGHTS_PATH`, mặc định `data/models/sasrec.pt`); nếu không, rơi về Recency/Popularity. `cross-sell` chưa có bước tính đồng mua nên hiện trả Popularity |
 | `forecast-service` (:8004) | Churn-risk/segmentation dùng model thật (`/admin/analytics/segmentation`, risk-scan phát `ChurnRiskDetectedEvent` lên `user-risk-events`). **Demand forecasting** (`/forecast`, `/admin/analytics/demand-forecasting`) và **anomaly detection** (`/admin/analytics/anomalies`) vẫn là **dữ liệu minh họa** — response mang cờ `is_demo_data: true` kèm `note` |

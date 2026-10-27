@@ -5,7 +5,6 @@ import { useWishlist } from "../../context/WishlistContext.jsx";
 import Icon from "./Icon.jsx";
 import keycloak from "../../services/keycloak.js";
 import CategorySidebar from "../../features/catalog/components/CategorySidebar.jsx";
-import VisualSearchModal from "../../features/catalog/components/VisualSearchModal.jsx";
 import { productApi } from "../../services/productApi";
 import { getCategoryIconFallback } from "../../utils/categoryIcon.js";
 
@@ -17,7 +16,6 @@ export default function Header() {
   const { wishlist } = useWishlist();
   const count = items.reduce((total, item) => total + item.qty, 0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isVisualSearchOpen, setIsVisualSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
 
@@ -125,25 +123,17 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Center: Beautiful Search bar with Image & Keyword support (Desktop only) */}
+        {/* Center: Search bar (Desktop only) */}
         <div className="flex-1 max-w-xl hidden md:block">
           <form onSubmit={handleSearchSubmit} className="relative w-full">
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/10 text-white placeholder:text-white/60 border border-white/5 rounded-full pl-5 pr-20 py-2 focus:bg-white/15 focus:ring-2 focus:ring-white/30 transition-all text-sm outline-none"
+              className="w-full bg-white/10 text-white placeholder:text-white/60 border border-white/5 rounded-full pl-5 pr-10 py-2 focus:bg-white/15 focus:ring-2 focus:ring-white/30 transition-all text-sm outline-none"
               placeholder="Bạn muốn mua gì hôm nay ? "
               type="search"
             />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setIsVisualSearchOpen(true)}
-                className="text-white/70 hover:text-white bg-transparent border-0 p-0 cursor-pointer flex items-center transition-colors"
-                title="Tìm bằng hình ảnh"
-              >
-                <Icon name="photo_camera" className="text-base" />
-              </button>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
               <button
                 type="submit"
                 className="text-white/75 hover:text-white bg-transparent border-0 p-0 cursor-pointer flex items-center transition-colors"
@@ -192,19 +182,11 @@ export default function Header() {
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white/10 text-white placeholder:text-white/60 border border-white/5 rounded-full pl-4 pr-16 py-1.5 focus:bg-white/15 focus:ring-2 focus:ring-white/30 transition-all text-xs outline-none"
+            className="w-full bg-white/10 text-white placeholder:text-white/60 border border-white/5 rounded-full pl-4 pr-10 py-1.5 focus:bg-white/15 focus:ring-2 focus:ring-white/30 transition-all text-xs outline-none"
             placeholder="Bạn muốn mua gì hôm nay ? "
             type="search"
           />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={() => setIsVisualSearchOpen(true)}
-              className="text-white/70 hover:text-white bg-transparent border-0 p-0 cursor-pointer flex items-center transition-colors"
-              title="Tìm bằng hình ảnh"
-            >
-              <Icon name="photo_camera" className="text-base" />
-            </button>
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
             <button
               type="submit"
               className="text-white/75 hover:text-white bg-transparent border-0 p-0 cursor-pointer flex items-center transition-colors"
@@ -277,7 +259,6 @@ export default function Header() {
         </div>
       )}
 
-      <VisualSearchModal isOpen={isVisualSearchOpen} onClose={() => setIsVisualSearchOpen(false)} />
     </header>
   );
 }

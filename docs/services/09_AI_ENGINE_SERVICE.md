@@ -1,7 +1,7 @@
 # TÀI LIỆU THIẾT KẾ: AI ENGINE SERVICE
 ## (Dịch Vụ Trí Tuệ Nhân Tạo & Dự Báo)
 
-> **Lưu ý (cập nhật 2026-10-11):** Tài liệu này mô tả **thiết kế ban đầu** với một dịch vụ duy nhất "AI Engine :8000" và **đã lỗi thời**. Hệ thống thực tế gồm **4 service FastAPI** trong thư mục `AI/`: **search-service :8001**, **chatbot-service :8002**, **recs-service :8003**, **forecast-service :8004** (xem [`AI/README.md`](../../AI/README.md)). Về tìm kiếm, tài liệu đúng với code là [`docs/AI/visual-search.md`](../AI/visual-search.md), [`docs/AI/text-search.md`](../AI/text-search.md) và [`docs/AI/search-evaluation.md`](../AI/search-evaluation.md). Bên dưới chỉ sửa các mô tả liên quan đến tìm kiếm; phần còn lại giữ nguyên như thiết kế ban đầu.
+> **Lưu ý (cập nhật 2026-10):** Tài liệu này mô tả **thiết kế ban đầu** với một dịch vụ duy nhất "AI Engine :8000" và **đã được tái cấu trúc**. Hệ thống AI microservices thực tế nằm trong thư mục `AI/` (xem [`AI/README.md`](../../AI/README.md)) gồm các service FastAPI chuyên biệt: **chatbot-service :8002** (RAG Chatbot Aura), **recs-service :8003** (SASRec sequential recommendations), và **forecast-service :8004** (dự báo tồn kho, churn risk, K-Means RFM phân khúc, dynamic pricing). Về tìm kiếm văn bản ngữ nghĩa, xem thêm [`docs/AI/text-search.md`](../AI/text-search.md).
 
 > **Port (thiết kế ban đầu):** `8000` | **Technology:** Python FastAPI, PyTorch, Transformers, LangChain/LlamaIndex, Scikit-learn (K-Means), LightGBM/Prophet | **Version:** 1.0.0
 
@@ -12,11 +12,11 @@
 AI Engine Service là trung tâm xử lý dữ liệu thông minh của hệ thống. Dịch vụ được xây dựng bằng Python để tận dụng tối đa hệ sinh thái Machine Learning & LLM.
 
 ### 1.1. Các nhiệm vụ cốt lõi
-1. **RAG Chatbot & NLP Engine:** Xử lý hội thoại tự động thông qua kiến trúc RAG (Retrieval-Augmented Generation), tích hợp tìm kiếm sản phẩm từ Elasticsearch để trả lời câu hỏi của khách hàng.
-2. **Visual & Semantic Search** (nay là **search-service :8001**): vector ảnh **CLIP ViT-B/32 (512 chiều)** và vector văn bản **multilingual-e5-large (1024 chiều)**, tìm trên **FAISS `IndexFlatIP`**; tìm văn bản kết hợp BM25 (Elasticsearch) bằng RRF.
-3. **Weekly K-Means RFM Worker:** Định kỳ chạy offline hàng tuần để tính toán điểm RFM (Recency, Frequency, Monetary) của khách hàng từ dữ liệu đơn hàng và thực hiện phân cụm (Clustering), sau đó cập nhật nhãn phân khúc về User Service.
-4. **Dynamic Pricing Model (Định giá Động):** Cung cấp API tính toán điểm nhạy cảm giá của người dùng phục vụ cho Camunda Promotion Workflow.
-5. **Demand Forecasting (Dự báo nhu cầu tồn kho):** Huấn luyện mô hình time-series (LightGBM/Prophet) dựa trên lịch sử tồn kho để đưa ra dự báo số lượng cần restock.
+1. **RAG Chatbot & NLP Engine (chatbot-service :8002):** Xử lý hội thoại tự động thông qua kiến trúc RAG với DeepSeek-Chat, tích hợp truy xuất sản phẩm từ Catalog và tra cứu chính sách FAISS để hỗ trợ khách hàng theo thời gian thực.
+2. **Personalized Sequential Recommendations (recs-service :8003):** Mô hình SASRec (Self-Attentive Sequential Recommendation) trên nền tảng PyTorch, gợi ý sản phẩm cá nhân hóa theo chuỗi tương tác (xem, click, giỏ hàng) và giải quyết cold-start qua tầng dự phòng Recency / Popularity.
+3. **Customer Churn Risk & RFM Segmentation (forecast-service :8004):** Đánh giá nguy cơ rời bỏ khách hàng (Churn Risk) phát sự kiện tới promotion-service; định kỳ phân cụm K-Means RFM để phân nhóm khách hàng (VIP Champions, Potential Loyalists, At Risk, New Customers).
+4. **Demand Forecasting (Dự báo nhu cầu tồn kho):** Huấn luyện mô hình time-series (LightGBM/Prophet) dựa trên lịch sử tồn kho để đưa ra dự báo số lượng cần restock và cảnh báo tồn kho an toàn.
+5. **Dynamic Pricing Model (Định giá Động):** Cung cấp API tính toán điểm nhạy cảm giá của người dùng phục vụ cho chính sách khuyến mãi.
 
 ---
 
@@ -24,23 +24,23 @@ AI Engine Service là trung tâm xử lý dữ liệu thông minh của hệ th�
 
 ```
                        ┌────────────────────────────────────────┐
-                       │          AI ENGINE (:8000)             │
+                       │          AI SERVICES CLUSTER           │
                        │                                        │
                        │  ┌──────────────┐    ┌──────────────┐  │
-                       │  │ RAG Chatbot  │    │ Vectorizer   │  │
-                       │  │ (LlamaIndex) │    │ (CLIP/e5)    │  │
+                       │  │ RAG Chatbot  │    │ Recs Engine  │  │
+                       │  │ (DeepSeek)   │    │   (SASRec)   │  │
                        │  └──────┬───────┘    └──────┬───────┘  │
                        │         │                   │          │
                        │  ┌──────▼───────┐    ┌──────▼───────┐  │
-                       │  │K-Means Worker│    │Forecast Model│  │
-                       │  │   (RFM)      │    │  (LightGBM)  │  │
+                       │  │Churn & RFM   │    │Forecast Model│  │
+                       │  │(KMeans/XGB)  │    │  (LightGBM)  │  │
                        │  └──────────────┘    └──────────────┘  │
                        └─────────┬───────────────────┬──────────┘
                                  │                   │
   ┌──────────────────────────────┼───────────────────┼──────────────────────────────┐
   ▼                              ▼                   ▼                              ▼
-[Redis Cache]               [MongoDB]         [Elasticsearch]                [PostgreSQL]
-(Hot similar items)    (Backup similarities)  (BM25 — vector: FAISS)       (Orders & Snapshots)
+[Redis Cache]               [MongoDB]         [Kafka Event Bus]             [MariaDB]
+(User Sessions & History)  (Chat & NoSQL)    (User Behavior & Risks)    (Orders, Inventory, Users)
 ```
 
 ---
@@ -70,28 +70,32 @@ AI Engine Service là trung tâm xử lý dữ liệu thông minh của hệ th�
     4. Gọi OpenAI/Gemini hoặc Local LLM để sinh phản hồi dưới dạng Stream (Server-Sent Events) để trả về cho Client gõ chữ thời gian thực.
     5. Đẩy tin nhắn của khách và phản hồi của bot vào hàng đợi lưu trữ MongoDB.
 
-### 3.2. Tìm kiếm bằng ảnh và ngữ nghĩa (search-service :8001)
-Thiết kế ban đầu có `POST /api/ai/embed/image` và `POST /api/ai/embed/text` trả mảng float; các endpoint này **không tồn tại**. Search-service trả thẳng danh sách sản phẩm (mount ở cả `/api/v1/...` và `/api/v1/public/...`):
-*   **Tìm bằng ảnh — `POST /api/v1/search/image`:** multipart field `image`; CLIP ViT-B/32 → vector 512 chiều → FAISS `IndexFlatIP` (tìm chính xác, cosine) → top_k sản phẩm kèm `score`, `matchScore`, `cropBox`.
-*   **Tìm văn bản — `GET /api/v1/search?q=…`:** BM25 (Elasticsearch) + multilingual-e5-large 1024 chiều (FAISS), gộp bằng RRF k = 60.
-*   **Khác:** `POST /api/v1/search/multimodal`, `GET /api/v1/search/similar/{product_id}`, `GET /api/v1/search/suggest`.
-*   Chi tiết và số liệu đo: `docs/AI/visual-search.md`, `docs/AI/text-search.md`, `docs/AI/search-evaluation.md`.
+### 3.2. Personalized Sequential Recommendation Engine (recs-service :8003)
+*   **Mô hình cốt lõi:** SASRec (Self-Attentive Sequential Recommendation) huấn luyện trên PyTorch.
+*   **Kiến trúc phục vụ 3 tầng (3-tier fallback):**
+    1. *Tầng 1 (Cá nhân hóa):* SASRec dự đoán top-K sản phẩm tiếp theo dựa trên chuỗi tương tác gần nhất của user (chuỗi xem sản phẩm, thêm vào giỏ).
+    2. *Tầng 2 (Recency fallback):* Nếu chưa đủ độ dài chuỗi hành vi, fallback theo các danh mục/sản phẩm user vừa xem gần nhất.
+    3. *Tầng 3 (Popularity / Trending):* Đối với khách vãng lai mới hoàn toàn (cold-start), gợi ý sản phẩm bán chạy hoặc thịnh hành theo danh mục.
+*   **Endpoint chính:** `GET /public/recommendations/personal?source=auto|for_you|recent|trending` và `POST /recommendations/cross-sell`.
+*   **Mã nguồn dịch vụ:** Tham khảo triển khai tại `AI/recs-service/` và tài liệu tổng thể `AI/README.md`.
 
-### 3.3. Weekly K-Means RFM Segmenter (Chạy ngầm - Celery Scheduler)
-*   **Tần suất:** 01:00 Chủ nhật hàng tuần.
-*   **Quy trình chạy:**
-    1. Query cơ sở dữ liệu `ecommerce_order_db` lấy toàn bộ đơn hàng trong 180 ngày gần nhất của tất cả user hoạt động.
-    2. Tính toán các chỉ số RFM cho mỗi User ID:
-        *   **R (Recency):** Số ngày kể từ đơn hàng cuối cùng đến thời điểm hiện tại.
-        *   **F (Frequency):** Tổng số đơn hàng thành công của user.
-        *   **M (Monetary):** Tổng số tiền mua sắm tích lũy của user.
-    3. Áp dụng chuẩn hóa MinMax Scaler và chạy thuật toán phân cụm **K-Means** (với $K=4$).
-    4. Gán nhãn phân khúc cho từng user:
-        *   *Nhóm 1:* `VIP Champions` (R thấp, F cao, M cao).
-        *   *Nhóm 2:* `Potential Loyalists` (F trung bình, M khá).
-        *   *Nhóm 3:* `At Risk / About to Sleep` (R cao - lâu chưa mua lại).
-        *   *Nhóm 4:* `New Customers` (R thấp, F thấp, M thấp).
-    5. Gọi API nội bộ của Identity & User Service: `PUT /api/internal/users/{userId}/segmentation` để lưu nhãn phân khúc phục vụ khuyến mãi.
+### 3.3. Customer Churn Risk & RFM Segmentation (forecast-service :8004)
+*   **Dự báo nguy cơ rời bỏ (Churn Risk):**
+    *   Mô hình đánh giá điểm rủi ro khách hàng rời bỏ dựa trên tần suất tương tác, thời gian không hoạt động, biến động giỏ hàng và phản hồi đánh giá.
+    *   Khi phát hiện nguy cơ cao, phát `ChurnRiskDetectedEvent` lên Kafka topic `user-risk-events` để Promotion Service kích hoạt chiến dịch giữ chân khách hàng (voucher tái kích hoạt).
+    *   Chi tiết: Tham khảo [`docs/AI/churn-risk-feature-overview.md`](../AI/churn-risk-feature-overview.md).
+*   **Weekly K-Means RFM Segmenter (Chạy ngầm):**
+    *   **Tần suất:** 01:00 Chủ nhật hàng tuần.
+    *   **Quy trình chạy:**
+        1. Query cơ sở dữ liệu lấy toàn bộ đơn hàng trong 180 ngày gần nhất của tất cả user hoạt động.
+        2. Tính toán các chỉ số RFM (Recency, Frequency, Monetary) cho mỗi User ID.
+        3. Áp dụng chuẩn hóa MinMax Scaler và chạy thuật toán phân cụm **K-Means** (với $K=4$).
+        4. Gán nhãn phân khúc cho từng user:
+            *   *Nhóm 1:* `VIP Champions` (R thấp, F cao, M cao).
+            *   *Nhóm 2:* `Potential Loyalists` (F trung bình, M khá).
+            *   *Nhóm 3:* `At Risk / About to Sleep` (R cao - lâu chưa mua lại).
+            *   *Nhóm 4:* `New Customers` (R thấp, F thấp, M thấp).
+        5. Gọi API nội bộ của Identity & User Service: `PUT /api/internal/users/{userId}/segmentation` để lưu nhãn phân khúc phục vụ khuyến mãi.
 
 ### 3.4. Dynamic Pricing Engine (Mô hình Định giá Động)
 *   **Endpoint:** `POST /api/ai/pricing/predict`

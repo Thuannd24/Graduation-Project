@@ -75,7 +75,6 @@ Mật khẩu chung cho cả 3 tài khoản là `12345678`.
 - **Trình duyệt 1** (cửa sổ thường): đăng nhập `customer`.
 - **Trình duyệt 2** (cửa sổ ẩn danh, hoặc trình duyệt khác): đăng nhập `admin`. Dùng thêm `staff` khi demo phần chat.
 - Mở sẵn các tab: http://localhost:5173, http://localhost:8761, http://localhost:8001/docs, http://localhost:8004/docs.
-- Chuẩn bị sẵn 1 ảnh điện thoại hoặc tai nghe trên máy, dùng cho phần tìm kiếm bằng ảnh.
 - Mỗi khách chỉ được có **tối đa 3 đơn chưa thanh toán** cùng lúc. Trước buổi demo, hủy các đơn test còn treo của `customer`.
 - Đóng các ứng dụng nặng. Toàn hệ thống dùng khoảng 20 GB RAM; khi máy thiếu RAM, trang đăng nhập Keycloak sẽ rất chậm.
 
@@ -114,9 +113,8 @@ Mật khẩu chung cho cả 3 tài khoản là `12345678`.
 | 2.2 | `/category`: lọc danh mục **Laptop**, chọn mức giá có sẵn **2 – 10 triệu**, sắp xếp theo giá | Danh sách đổi đúng, bộ lọc giữ đúng mức giá | |
 | 2.3 | Mở một sản phẩm, đổi phiên bản (màu, dung lượng) | Giá và tồn kho đổi theo phiên bản; có điểm đánh giá trung bình và số lượt đánh giá; "Sản phẩm liên quan" cùng loại | |
 | 2.4 ⭐ | Gõ `tai nghe chống ồn` vào ô tìm kiếm trên header | Ra các tai nghe chống ồn, kể cả sản phẩm không chứa đúng cụm từ | "Ô tìm kiếm dùng tìm kiếm ngữ nghĩa: BM25 của Elasticsearch kết hợp vector của model e5, trộn bằng RRF. Nếu dịch vụ AI chậm quá 4 giây, web tự dùng kết quả tìm theo từ khóa." |
-| 2.5 ⭐ | Bấm **biểu tượng máy ảnh** và tải ảnh đã chuẩn bị | Ra các sản phẩm giống ảnh | "Ảnh được model CLIP biến thành vector 512 chiều, rồi tìm sản phẩm gần nhất trong chỉ mục FAISS (khoảng 10.000 ảnh sản phẩm)." |
-| 2.6 | Admin → **Thêm sản phẩm**: tạo 1 sản phẩm có 2 phiên bản, dán link ảnh | Sản phẩm hiện ở trang khách và tìm thấy bằng ô tìm kiếm | "Sau khi lưu, sản phẩm được đưa vào Elasticsearch và cache được xóa. Giá vốn chỉ trả về cho trang quản trị, API công khai không lộ giá vốn." |
-| 2.7 | (Tùy chọn) Admin → **Danh sách sản phẩm** → tắt một sản phẩm, rồi mở sản phẩm đó ở trang khách | Hiện "Ngừng kinh doanh", nút mua bị khóa; sản phẩm biến mất khỏi danh sách và tìm kiếm | |
+| 2.5 | Admin → **Thêm sản phẩm**: tạo 1 sản phẩm có 2 phiên bản, dán link ảnh | Sản phẩm hiện ở trang khách và tìm thấy bằng ô tìm kiếm | "Sau khi lưu, sản phẩm được đưa vào Elasticsearch và cache được xóa. Giá vốn chỉ trả về cho trang quản trị, API công khai không lộ giá vốn." |
+| 2.6 | (Tùy chọn) Admin → **Danh sách sản phẩm** → tắt một sản phẩm, rồi mở sản phẩm đó ở trang khách | Hiện "Ngừng kinh doanh", nút mua bị khóa; sản phẩm biến mất khỏi danh sách và tìm kiếm | |
 
 ---
 
@@ -316,7 +314,6 @@ Thẻ test sandbox (ngân hàng **NCB**):
 | Sau khi khởi động lại máy / Docker Desktop | `docker start infra-eureka infra-gateway ai-recs-service ai-search-service` (4 container này không tự bật), đặt lại mật khẩu theo mục 0.3, rồi chạy lại 8 service Java |
 | Trang đăng nhập Keycloak quay mãi | Máy thiếu RAM: đóng bớt ứng dụng, đợi 1–2 phút rồi thử lại |
 | Đơn đứng mãi ở **Chờ xác nhận** / **Chờ thanh toán** (COD) | Mở http://localhost:8088/connectors?expand=status. Nếu task của connector báo FAILED: `curl -X POST http://localhost:8088/connectors/payment-outbox-connector/tasks/0/restart` (hoặc `order-outbox-connector`); sự kiện tồn đọng sẽ được giao tiếp |
-| Tìm kiếm bằng ảnh báo lỗi 503 | Chỉ mục ảnh chưa được build: `docker exec ai-search-service python scripts/build_index.py` (mất khoảng 30 phút, phải làm trước buổi demo) |
 | Chatbot không trả lời | Kiểm tra http://localhost:8002/health; chatbot cần Internet để gọi DeepSeek |
 | Service Java build lại xong không khởi động | Build lại bằng `mvn clean package -DskipTests` với JDK 17 |
 | Máy chậm, service tự tắt | Thiếu RAM: đóng bớt ứng dụng, tắt các service AI không cần (`docker stop ai-forecast-service`…) |

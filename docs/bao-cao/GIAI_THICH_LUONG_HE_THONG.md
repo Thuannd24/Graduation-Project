@@ -27,7 +27,7 @@
 - [Luồng 12. Gửi email](#luồng-12-gửi-email)
 - [Luồng 13. Theo dõi hành vi người dùng](#luồng-13-theo-dõi-hành-vi-người-dùng)
 - [Luồng 14. Gợi ý sản phẩm](#luồng-14-gợi-ý-sản-phẩm)
-- [Luồng 15. Tìm kiếm bằng ảnh và tìm kiếm ngữ nghĩa](#luồng-15-tìm-kiếm-bằng-ảnh-và-tìm-kiếm-ngữ-nghĩa)
+- [Luồng 15. Tìm kiếm ngữ nghĩa lai (Semantic & Hybrid Search)](#luồng-15-tìm-kiếm-ngữ-nghĩa-lai-semantic--hybrid-search)
 - [Luồng 16. Dự đoán khách rời bỏ (churn) và tự động giữ chân](#luồng-16-dự-đoán-khách-rời-bỏ-churn-và-tự-động-giữ-chân)
 - [Luồng 17. Chatbot AI](#luồng-17-chatbot-ai)
 - [Luồng 18. Chat với nhân viên](#luồng-18-chat-với-nhân-viên)
@@ -120,7 +120,7 @@ cần làm). **Camunda** là "máy chạy quy trình": nạp bản vẽ BPMN và
 
 Model AI biến một ảnh hay một câu thành **một dãy số** (vector). Hai thứ **giống nhau về nghĩa** thì hai dãy số **gần
 nhau**. **FAISS** là thư viện tìm "những vector gần nhất" trong hàng chục nghìn vector chỉ trong vài mili giây. Đây là
-nền của tìm kiếm bằng ảnh, tìm kiếm ngữ nghĩa và tra tài liệu chính sách cho chatbot.
+nền của tìm kiếm ngữ nghĩa và tra tài liệu chính sách cho chatbot.
 
 ---
 
@@ -725,31 +725,17 @@ Header **`X-Recs-Strategy`** của phản hồi cho biết lần này dùng `sas
 
 ---
 
-## Luồng 15. Tìm kiếm bằng ảnh và tìm kiếm ngữ nghĩa
+## Luồng 15. Tìm kiếm ngữ nghĩa lai (Semantic & Hybrid Search)
 
-### 15.1 Chuẩn bị trước: dựng chỉ mục (làm 1 lần, chạy lại khi thêm sản phẩm)
+### 15.1 Chuẩn bị trước: dựng chỉ mục văn bản (làm 1 lần, chạy lại khi thêm sản phẩm)
 
 Script `build_index.py`:
-1. Lấy mọi sản phẩm đang bán từ MariaDB (kèm thương hiệu, danh mục, **mọi ảnh**).
-2. **Ảnh:** tải từng ảnh (thu nhỏ còn 448px) → model **CLIP ViT-B/32** biến mỗi ảnh thành vector **512 số** → lưu vào FAISS.
-3. **Chữ:** ghép "tên. Thương hiệu… Danh mục… mô tả" → model **multilingual-e5-large** biến thành vector **1.024 số** → lưu vào FAISS.
-4. Tính sẵn "sản phẩm tương tự" (60% giống ảnh + 40% giống chữ), lưu MongoDB.
-5. Ghi file chỉ mục mới **thay nguyên khối** file cũ; service đang chạy tự nhận file mới trong vòng 30 giây, không cần
-   khởi động lại.
+1. Lấy mọi sản phẩm đang bán từ MariaDB (kèm thương hiệu, danh mục, thông số).
+2. **Chữ:** ghép "tên. Thương hiệu… Danh mục… mô tả" → model **multilingual-e5-large** biến thành vector **1.024 số** → lưu vào FAISS.
+3. Tính sẵn "sản phẩm tương tự" dựa trên khoảng cách vector văn bản, lưu MongoDB `product_similarities`.
+4. Ghi file chỉ mục mới **thay nguyên khối** file cũ; service đang chạy tự nhận file mới trong vòng 30 giây, không cần khởi động lại.
 
-### 15.2 Tìm bằng ảnh
-
-> An chụp chiếc tai nghe của bạn, bấm nút máy ảnh và tải lên. Hệ thống "nhìn" ảnh, so với hơn 10.000 ảnh sản phẩm và
-> trả về những sản phẩm trông giống nhất.
-
-1. Kiểm tra ảnh (≤ 10MB), xoay đúng chiều, nền trong suốt chuyển thành nền trắng.
-2. *(Tùy chọn, đang tắt)* YOLO tìm vật thể chính trong ảnh và cắt ra.
-3. CLIP biến ảnh thành vector, chuẩn hóa độ dài.
-4. FAISS tìm **200 ảnh gần nhất** (đo bằng cosine: càng gần 1 càng giống).
-5. **Gộp theo sản phẩm:** một sản phẩm có nhiều ảnh thì lấy ảnh giống nhất làm điểm của sản phẩm.
-6. Trả danh sách sản phẩm; web chuyển sang `/search?imageSearch=true`.
-
-### 15.3 Tìm kiếm ngữ nghĩa (lai)
+### 15.2 Tìm kiếm ngữ nghĩa lai
 
 > Gõ "tai nghe chống ồn đi máy bay": tìm theo từ khóa thì bỏ sót sản phẩm ghi "ANC", còn tìm theo nghĩa thì hiểu
 > được. Hệ thống làm **cả hai** rồi trộn kết quả.
@@ -764,8 +750,7 @@ Script `build_index.py`:
 > **Lưu ý:** ô tìm kiếm trên web hiện **chưa** gọi tìm kiếm ngữ nghĩa này (gọi tìm kiếm thường của product-service).
 > Tìm kiếm ngữ nghĩa thử qua http://localhost:8001/docs.
 
-**Code:** `AI/search-service/scripts/build_index.py`, `app/services/visual_search.py`, `hybrid_search.py`,
-`faiss_store.py`, `catalog.py`.
+**Code:** `AI/search-service/scripts/build_index.py`, `hybrid_search.py`, `text_search.py`, `faiss_store.py`, `catalog.py`.
 
 ---
 

@@ -216,11 +216,7 @@ Nguyên tắc khi bị hỏi trúng điểm yếu: **thừa nhận, giải thíc
 
 ### G2. Tìm kiếm hoạt động thế nào? Elasticsearch sập thì sao?
 ✅ Ô tìm kiếm dùng **Elasticsearch**; Elasticsearch sập thì tự chuyển sang tìm trong MariaDB.
-⚠️ Tìm kiếm ngữ nghĩa (BM25 + vector e5 + RRF) đã xây dựng ở AI search-service nhưng **ô tìm kiếm trên web chưa dùng**, chỉ thử được qua Swagger.
-
-### G3. Tìm bằng ảnh hoạt động thế nào? Thêm sản phẩm mới có tìm bằng ảnh được ngay không?
-✅ Model CLIP biến ảnh thành vector 512 chiều, rồi tìm ảnh sản phẩm gần nhất trong chỉ mục FAISS (khoảng 10.000 ảnh).
-⚠️ Chỉ mục ảnh phải **build lại thủ công** (khoảng 30 phút), nên sản phẩm mới chưa tìm bằng ảnh được ngay. Dưới tải đồng thời, tìm kiếm AI chậm (p95 khoảng 27 giây với 5 người dùng), do model chạy trên CPU và chặn luồng xử lý.
+⚠️ Tìm kiếm ngữ nghĩa lai (BM25 + vector multilingual-e5-large + RRF) đã xây dựng ở AI search-service nhưng **ô tìm kiếm trên web chưa dùng**, thử được qua Swagger (:8001).
 
 ---
 

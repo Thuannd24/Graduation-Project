@@ -1,8 +1,6 @@
 # Báo cáo tính năng Churn Risk AI — trình bày kèm phản biện
 
-> Tài liệu mô tả tính năng (feature overview) — khác với
-> [`churn-risk-implementation-plan.md`](churn-risk-implementation-plan.md) (kế hoạch triển khai
-> theo phase, dành cho lúc code). File này để giải thích tính năng cho người đọc sau (báo cáo,
+> Tài liệu mô tả tính năng (feature overview) giải thích tính năng cho người đọc (báo cáo,
 > bảo vệ đồ án), tập trung vào **AI được dùng chính xác ở đâu**.
 >
 > **Cập nhật toàn bộ 2026-10-06.** Mọi số liệu mô hình trong bản này đo trên **dữ liệu hành vi THẬT**
@@ -189,9 +187,9 @@ giá) là Tiki thật; hành vi + giao dịch là **REES46 đa ngành** (12/2019
 102.004 đơn / 7.378.602 sự kiện) — một sàn TMĐT thật khác, ánh xạ vào đúng schema hệ thống theo quy
 tắc xác định (danh mục + giá gần nhất). Đây là thay đổi kiến trúc lớn nhất của dự án (2026-10-02):
 trước đó mọi số liệu đo trên bộ sinh synthetic (tự mô phỏng tham số), nay toàn bộ feature engineering
-và model được re-baseline hoàn toàn trên hành vi người dùng thật. Chi tiết mapping schema và 3 lỗi
-đã phát hiện/sửa trong chính nguồn REES46 (log giỏ hàng thiếu trước 12/2019, mã danh mục sai từ
-12/2019, 4 ngày mất log đơn hàng): [`rees46-transform-mapping.md`](rees46-transform-mapping.md).
+và model được re-baseline hoàn toàn trên hành vi người dùng thật (đã xử lý mapping schema và 3 lỗi
+trong chính nguồn REES46: log giỏ hàng thiếu trước 12/2019, mã danh mục sai từ
+12/2019, 4 ngày mất log đơn hàng).
 
 Các nguồn dữ liệu khác đã cân nhắc và loại:
 
@@ -258,8 +256,7 @@ XML hợp lệ (7.311 ký tự, đủ `exclusiveGateway` + 2 `conditionExpressio
 Hai điểm chưa có: (1) chưa dựng sẵn campaign mẫu nào để demo, (2)
 nhánh rẽ theo **ngưỡng % xác suất** người tự đặt, chưa rẽ theo đúng 4 phân khúc KMeans — tức đây vẫn
 là "rule trên con số AI", chưa phải "chính sách học được từ hiệu quả thật" (cần vòng phản hồi đo kết
-quả campaign — xem `churn-risk-roadmap.md` Tầng 4, hiện chỉ có thiết kế, không thực nghiệm được
-trong phạm vi đồ án).
+quả campaign — hiện chỉ có thiết kế, không thực nghiệm được trong phạm vi đồ án).
 
 ### 3.6. Không refit liên tục — tách huấn luyện khỏi vận hành
 
@@ -387,8 +384,7 @@ Action = tặng voucher/gửi email → Activate.
   trên máy dev không gặp — đã sửa, xem mục 3.7) — cảnh báo chung: khác biệt phiên bản thư viện có
   thể che giấu bug, không nên coi "đã test bằng script" là tương đương "đã test qua production".
 - **Chưa có vòng phản hồi từ kết quả campaign.** Model không học từ việc voucher có hiệu quả hay
-  không — cần bảng theo dõi outcome; xem `churn-risk-roadmap.md` Tầng 4 (hiện chỉ có thiết kế, không
-  thực nghiệm được trong phạm vi đồ án do thiếu dữ liệu outcome thật).
+  không — cần bảng theo dõi outcome (hiện chỉ có thiết kế, không thực nghiệm được trong phạm vi đồ án do thiếu dữ liệu outcome thật).
 - Chỉ hoạt động chính xác với **user đã đăng nhập** (có Keycloak UUID thật); phần lớn user REES46
   transform là tài khoản nội bộ (`rees_<id>@rees46.internal`), không đăng nhập được qua FE thật —
   demo end-to-end bằng tài khoản thật cần dùng đúng nhóm nhỏ user có thể đăng nhập (đã verify E2E
@@ -399,12 +395,7 @@ Action = tặng voucher/gửi email → Activate.
 
 ## Xem thêm
 
-- [`churn-risk-log.md`](churn-risk-log.md) — **nhật ký làm việc theo timeline**: mọi số đo, mọi thứ
-  đã thử và bị loại, kèm lý do. Đây là nơi tra cứu khi cần con số gốc của bất kỳ bảng nào ở trên.
-- [`rees46-transform-mapping.md`](rees46-transform-mapping.md) — chi tiết việc chuyển dữ liệu REES46
-  thật thành dữ liệu hệ thống (schema mapping, 3 lỗi nguồn đã phát hiện/sửa).
-- [`churn-risk-roadmap.md`](churn-risk-roadmap.md) — kế hoạch dài hạn xếp theo thứ tự phụ thuộc, kèm
-  trạng thái ĐÃ XONG/CÒN LẠI cập nhật tới 2026-10-06.
-- [`churn-risk-implementation-plan.md`](churn-risk-implementation-plan.md) — kế hoạch/nhật ký
-  triển khai chi tiết theo 7 phase (hạ tầng Kafka/Camunda/FE), kèm ghi chú lệch phát sinh khi code.
-- [`recommendation-complete.md`](recommendation-complete.md) — blueprint gốc (ý tưởng ban đầu).
+- [`../services/09_AI_ENGINE_SERVICE.md`](../services/09_AI_ENGINE_SERVICE.md) — Kiến trúc tổng thể hệ thống AI và các endpoints dịch vụ.
+- [`dashboard-ai.md`](dashboard-ai.md) — Báo cáo phân tích dữ liệu và các chỉ số kinh doanh AI.
+- [`chatbot-ai.md`](chatbot-ai.md) — Tài liệu kỹ thuật dịch vụ trợ lý ảo AI.
+- [`text-search.md`](text-search.md) — Tài liệu kỹ thuật tìm kiếm ngữ nghĩa đa phương thức.

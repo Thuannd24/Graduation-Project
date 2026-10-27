@@ -17,7 +17,6 @@ const DEFAULT_MAX_PRICE = PRICE_MAX;
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-  const isImageSearch = searchParams.get("imageSearch") === "true";
 
   // Tìm kiếm = hành vi chủ động tìm thứ cụ thể, khác hẳn duyệt lướt. KHÔNG gửi nội dung truy vấn
   // (không cần cho bài toán, và tránh thu thập dữ liệu không cần thiết) — chỉ ghi nhận "đã tìm".
@@ -59,9 +58,6 @@ export default function SearchPage() {
   const [error, setError] = useState("");
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
-  const [uploadedImage, setUploadedImage] = useState("");
-  const [cropBox, setCropBox] = useState(null);
-
   const [priceDraft, setPriceDraft] = useState({ min: minPrice, max: maxPrice });
   const debouncedPrice = useDebounce(priceDraft, 400);
 
@@ -96,45 +92,34 @@ export default function SearchPage() {
     setLoading(true);
     setError("");
 
-    if (isImageSearch) {
-      const cachedResults = sessionStorage.getItem("visual_search_results");
-      const cachedImage = sessionStorage.getItem("visual_search_image");
-      const cachedCrop = sessionStorage.getItem("visual_search_crop");
-
-      setAllProducts(cachedResults ? JSON.parse(cachedResults) : []);
-      if (cachedImage) setUploadedImage(cachedImage);
-      if (cachedCrop) setCropBox(JSON.parse(cachedCrop));
-      setLoading(false);
-    } else {
-      // Chạy song song tìm theo từ khóa và tìm ngữ nghĩa (AI). Giữ thứ tự xếp hạng của AI (đã kết hợp
-      // BM25 + vector), dùng bản ghi đầy đủ từ product-service khi có, rồi nối các kết quả chỉ khớp từ khóa.
-      Promise.all([
-        productApi.searchProducts(query, 0, 100).then((result) => result.items).catch(() => null),
-        // Tìm kiếm AI có giới hạn 4 giây (vd. lúc model vừa khởi động) -> quá hạn thì dùng kết quả từ khóa.
-        Promise.race([aiApi.searchText(query, 40), new Promise((resolve) => setTimeout(() => resolve([]), 4000))])
-      ])
-        .then(([keywordItems, semanticItems]) => {
-          if (keywordItems === null && semanticItems.length === 0) {
-            throw new Error("Không thể tìm kiếm lúc này, vui lòng thử lại.");
-          }
-          const keywordById = new Map((keywordItems || []).map((p) => [String(p.id), p]));
-          const seen = new Set();
-          const merged = [];
-          for (const item of semanticItems) {
-            const id = String(item.id);
-            if (seen.has(id)) continue;
-            seen.add(id);
-            merged.push(keywordById.get(id) || item);
-          }
-          for (const item of keywordItems || []) {
-            if (!seen.has(String(item.id))) merged.push(item);
-          }
-          setAllProducts(merged);
-        })
-        .catch((err) => setError(err.message))
-        .finally(() => setLoading(false));
-    }
-  }, [query, isImageSearch]);
+    // Chạy song song tìm theo từ khóa và tìm ngữ nghĩa (AI). Giữ thứ tự xếp hạng của AI (đã kết hợp
+    // BM25 + vector), dùng bản ghi đầy đủ từ product-service khi có, rồi nối các kết quả chỉ khớp từ khóa.
+    Promise.all([
+      productApi.searchProducts(query, 0, 100).then((result) => result.items).catch(() => null),
+      // Tìm kiếm AI có giới hạn 4 giây (vd. lúc model vừa khởi động) -> quá hạn thì dùng kết quả từ khóa.
+      Promise.race([aiApi.searchText(query, 40), new Promise((resolve) => setTimeout(() => resolve([]), 4000))])
+    ])
+      .then(([keywordItems, semanticItems]) => {
+        if (keywordItems === null && semanticItems.length === 0) {
+          throw new Error("Không thể tìm kiếm lúc này, vui lòng thử lại.");
+        }
+        const keywordById = new Map((keywordItems || []).map((p) => [String(p.id), p]));
+        const seen = new Set();
+        const merged = [];
+        for (const item of semanticItems) {
+          const id = String(item.id);
+          if (seen.has(id)) continue;
+          seen.add(id);
+          merged.push(keywordById.get(id) || item);
+        }
+        for (const item of keywordItems || []) {
+          if (!seen.has(String(item.id))) merged.push(item);
+        }
+        setAllProducts(merged);
+      })
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [query]);
 
   const availableBrands = useMemo(() => {
     const names = Array.from(new Set(allProducts.map((p) => p.brand).filter(Boolean)));
@@ -209,48 +194,11 @@ export default function SearchPage() {
 
   return (
     <div className="max-w-container-max w-full mx-auto py-6 px-4 lg:px-6 min-h-screen">
-      {/* Visual Search Context header */}
-      {isImageSearch && uploadedImage ? (
-        <div className="mb-6 p-5 bg-gradient-to-r from-rose-50 to-slate-50 dark:from-slate-900/40 dark:to-slate-900/10 rounded-2xl border border-rose-100 dark:border-slate-800 flex flex-col md:flex-row gap-6 items-center">
-          <div className="relative w-36 h-36 bg-white dark:bg-slate-950 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800 shrink-0">
-            <img src={uploadedImage} alt="Search Query" className="w-full h-full object-contain" />
-            {cropBox && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: `${cropBox.x}%`,
-                  top: `${cropBox.y}%`,
-                  width: `${cropBox.width}%`,
-                  height: `${cropBox.height}%`,
-                  border: "2px solid #ef4444",
-                  boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.2)"
-                }}
-              />
-            )}
-            <span className="absolute bottom-2 left-2 bg-rose-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow">
-              YOLO v8 detected
-            </span>
-          </div>
-          <div className="flex-1 space-y-2 text-center md:text-left">
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 text-[10px] font-black uppercase rounded-full tracking-wider shadow-sm">
-              <Icon name="center_focus_strong" className="text-xs" />
-              Tìm kiếm bằng hình ảnh
-            </span>
-            <h1 className="text-2xl font-black text-slate-800 dark:text-slate-200">
-              Sản phẩm tương đồng với ảnh tải lên
-            </h1>
-            <p className="text-sm text-slate-500">
-              Aura AI đã trích xuất đặc trưng hình ảnh bằng mô hình <strong>CLIP ViT-B/32</strong> và tìm kiếm trên chỉ mục <strong>FAISS FlatIP Index</strong>.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="mb-5">
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-            Kết quả tìm kiếm: <span className="text-[#D70018]">"{query}"</span>
-          </h1>
-        </div>
-      )}
+      <div className="mb-5">
+        <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+          Kết quả tìm kiếm: <span className="text-[#D70018]">"{query}"</span>
+        </h1>
+      </div>
 
       {error && (
         <div className="text-center py-16 bg-red-50 dark:bg-red-950/20 border border-red-200 rounded-2xl mb-4">
@@ -304,12 +252,6 @@ export default function SearchPage() {
               {sortedProducts.map((product) => (
                 <div key={product.id} className="relative group">
                   <ProductCard product={product} />
-                  {isImageSearch && product.matchScore && (
-                    <div className="absolute top-3 left-3 bg-emerald-600 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-md z-10 flex items-center gap-1 select-none">
-                      <Icon name="check_circle" className="text-[10px]" />
-                      Độ khớp: {product.matchScore}%
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

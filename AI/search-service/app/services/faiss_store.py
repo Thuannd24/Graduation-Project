@@ -151,8 +151,8 @@ class FaissStore:
 
         with self._lock:
             index, ids = self._index, self._ids
-        # Lấy dư để còn đủ top_k sản phẩm sau khi gộp: index ảnh có ~9 vector / sản phẩm, lấy top_k*4
-        # có thể chỉ ra vài sản phẩm. Flat index vài chục nghìn vector nên lấy sâu vẫn rất nhanh.
+        # Lấy dư để còn đủ top_k sản phẩm sau khi gộp. Flat index nên lấy sâu vẫn rất nhanh.
+
         k = min(index.ntotal, max(top_k * 20, 200))
         scores, positions = index.search(query, k)
 

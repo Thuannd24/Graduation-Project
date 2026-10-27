@@ -2,7 +2,7 @@
 
 > Cập nhật 2026-10-11 theo code nhánh `feat/image-search-ai` (commit `ea338a1`).
 
-> Tài liệu kỹ thuật của chức năng tìm kiếm văn bản trong `AI/search-service` (FastAPI, cổng 8001). Hệ thống dùng kiến trúc **tìm kiếm lai (Hybrid Search)**: tìm theo từ khoá (Sparse — BM25 trên Elasticsearch) và tìm theo ngữ nghĩa (Dense — `multilingual-e5-large` + FAISS), gộp bằng **Reciprocal Rank Fusion (RRF)**. Không có bước xếp hạng lại (re-ranking). Số liệu đo chi tiết: [search-evaluation.md](search-evaluation.md).
+> Tài liệu kỹ thuật của chức năng tìm kiếm văn bản trong `AI/search-service` (FastAPI, cổng 8001). Hệ thống dùng kiến trúc **tìm kiếm lai (Hybrid Search)**: tìm theo từ khoá (Sparse — BM25 trên Elasticsearch) và tìm theo ngữ nghĩa (Dense — `multilingual-e5-large` + FAISS), gộp bằng **Reciprocal Rank Fusion (RRF)**. Không có bước xếp hạng lại (re-ranking).
 
 > **Lưu ý quan trọng:** trang tìm kiếm của website **chưa gọi** endpoint này. `SearchPage.jsx` dùng `productApi.searchProducts` → `GET /api/v1/public/products/search` của **product-service**; chatbot cũng gọi thẳng product-service. `GET /search` và `GET /search/suggest` của search-service hiện chưa có FE nào gọi.
 
@@ -12,11 +12,11 @@
 
 | Thành phần | Trạng thái | Ghi chú |
 | :--- | :--- | :--- |
-| Dense retrieval `multilingual-e5-large` (1024-d) + FAISS | Đã cài đặt & đã đo | [search-evaluation.md](search-evaluation.md) §3.2 |
+| Dense retrieval `multilingual-e5-large` (1024-d) + FAISS | Đã cài đặt & đã đo | Vector ngữ nghĩa sản phẩm |
 | BM25 trên Elasticsearch (fallback MariaDB `LIKE`) | Đã cài đặt & đã đo | Đo khi ES chạy bình thường; fallback chưa đo |
 | Hybrid RRF (k = 60, không trọng số) — `GET /search` | Đã cài đặt & đã đo (in-process) | Chưa tích hợp vào FE |
 | Autocomplete `GET /search/suggest` | Đã cài đặt, chưa đo | Không có FE gọi |
-| Sản phẩm tương tự `GET /search/similar/{product_id}` | Đã cài đặt, chưa đo | Dùng chung với visual search |
+| Sản phẩm tương tự `GET /search/similar/{product_id}` | Đã cài đặt, chưa đo | Tìm kiếm sản phẩm tương tự |
 | Cross-encoder re-ranking, fine-tune e5, PhoBERT, analyzer tiếng Việt | Thiết kế, chưa cài đặt | Xem §7 |
 
 ---
@@ -54,7 +54,7 @@ Mã nguồn: `app/services/{hybrid_search, text_search, catalog, faiss_store}.py
 
 * **Model:** `intfloat/multilingual-e5-large`, vector **1024 chiều**, dùng nguyên bản (không fine-tune).
 * **Prefix bắt buộc của e5:** câu tìm kiếm mã hoá dạng `"query: " + q`, tài liệu dạng `"passage: " + …`.
-* **Passage của mỗi sản phẩm** (`build_index.py`): `tên. Thương hiệu {brand}. Danh mục {category}. {mô tả}` — mô tả được bỏ thẻ HTML và cắt 800 ký tự. Mỗi sản phẩm 1 vector (1.123 vector ở lần đo, [search-evaluation.md](search-evaluation.md) §1).
+* **Passage của mỗi sản phẩm** (`build_index.py`): `tên. Thương hiệu {brand}. Danh mục {category}. {mô tả}` — mô tả được bỏ thẻ HTML và cắt 800 ký tự. Mỗi sản phẩm 1 vector.
 * **Index:** FAISS `IndexFlatIP` trên vector đã L2-normalize ⇒ cosine, tìm chính xác. Index được build tay bằng `scripts/build_index.py` và service tự nạp lại trong ≤ 30 giây.
 * **Khi chưa có text index:** dense trả rỗng (không nạp e5) và hybrid **âm thầm chỉ còn BM25**, response không báo điều này.
 
@@ -89,7 +89,7 @@ Router được mount ở cả `/api/v1/...` (gateway yêu cầu đăng nhập) 
 | :--- | :--- |
 | `GET /search?q=…&top_k=10&min_price=…&max_price=…` | Hybrid search như §1. Response `{query_understood, total, items[{id, name, price, image, score, match_reason}]}` trong envelope `{code, message, data}`. `query_understood` hiện chỉ là danh sách từ tách theo khoảng trắng, không có NLU |
 | `GET /search/suggest?q=…` | Gợi ý tên sản phẩm: cần ≥ 2 ký tự, `match_phrase_prefix` trên `name` (sắp theo điểm rồi `salesCount`), fallback `LIKE` trên MariaDB, trả tối đa **5** tên |
-| `GET /search/similar/{product_id}?top_k=10` | Đọc `product_similarities` (MongoDB) đã tính sẵn: 0.6 × cosine ảnh + 0.4 × cosine text, top-20/sản phẩm — chi tiết ở [visual-search.md](visual-search.md) §7 |
+| `GET /search/similar/{product_id}?top_k=10` | Đọc `product_similarities` (MongoDB) đã tính sẵn: 0.6 × cosine ảnh + 0.4 × cosine text, top-20/sản phẩm |
 
 `PRELOAD_MODELS=false` nên request đầu tiên phải nạp e5-large; request này có thể vượt giới hạn 30 giây của gateway.
 
@@ -97,7 +97,7 @@ Router được mount ở cả `/api/v1/...` (gateway yêu cầu đăng nhập) 
 
 ## 6. Kết Quả Đo (Tóm Tắt)
 
-Đo in-process (không qua HTTP), CPU-only, 200 sản phẩm, seed 42. Chi tiết: [search-evaluation.md](search-evaluation.md) §3.2, §4.3.
+Đo in-process (không qua HTTP), CPU-only, 200 sản phẩm, seed 42.
 
 | Loại truy vấn | BM25 | Dense | Hybrid |
 | :--- | :---: | :---: | :---: |
@@ -118,5 +118,5 @@ Router được mount ở cả `/api/v1/...` (gateway yêu cầu đăng nhập) 
 * **Tích hợp vào FE:** cho `SearchPage` gọi `GET /search` và ô tìm kiếm gọi `/search/suggest`.
 * **Cross-encoder re-ranking** (vd `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`) trên top ứng viên sau RRF — đánh đổi thêm độ trễ trên CPU.
 * **Fine-tune e5** bằng `MultipleNegativesRankingLoss` (in-batch negatives) trên cặp (truy vấn, sản phẩm) lấy từ log tìm kiếm hoặc sinh bằng LLM.
-* **Model nhẹ hơn:** `multilingual-e5-base` (768-d) để giảm độ trễ — cần đo lại chất lượng ([search-evaluation.md](search-evaluation.md) §4.4); PhoBERT nếu chỉ phục vụ tiếng Việt.
+* **Model nhẹ hơn:** `multilingual-e5-base` (768-d) để giảm độ trễ; PhoBERT nếu chỉ phục vụ tiếng Việt.
 * **Analyzer tiếng Việt cho Elasticsearch** (vd `icu_tokenizer`, tách từ ghép bằng `underthesea`) và đổi `brand` / `categoryName` sang trường `Text` (hoặc multi-field) để boost có tác dụng với từng từ.

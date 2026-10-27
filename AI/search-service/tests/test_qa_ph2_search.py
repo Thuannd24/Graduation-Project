@@ -1,16 +1,14 @@
 """PH2 (phần AI) — Unit test search-service: hợp nhất RRF, hybrid search + lọc giá, hiểu truy vấn/từ khoá,
-gợi ý (suggest), kiểm tra ảnh upload, FAISS store (build/save/load/reload) và metadata catalog.
+gợi ý (suggest), FAISS store (build/save/load/reload) và metadata catalog.
 
-Elasticsearch, MariaDB, MongoDB và model e5/CLIP đều được mock; FAISS dùng index nhỏ (dim=4) trong thư mục tạm.
+Elasticsearch, MariaDB, MongoDB và model e5 đều được mock; FAISS dùng index nhỏ (dim=4) trong thư mục tạm.
 """
-import io
 import os
 import time
 
 import numpy as np
 import pytest
 from fastapi.testclient import TestClient
-from PIL import Image
 
 from app.api.endpoints import search as search_ep
 from app.core.config import search_settings
@@ -19,8 +17,7 @@ from app.services import catalog
 from app.services import hybrid_search as hs_module
 from app.services.faiss_store import FaissStore
 from app.services.hybrid_search import HybridSearchService
-from app.services.image_loader import InvalidImageError, load_image_from_bytes
-from app.services.visual_search import _to_match_score
+from app.services.catalog import _to_match_score
 
 META = {
     1: {"name": "iPhone 15", "price": 20_000_000.0, "image": "/1.png"},
@@ -244,59 +241,10 @@ def test_tc_ph2_sug_03_db_fallback(monkeypatch):
     assert captured["params"] == ["%Sạc%", "Sạc%", 10]
 
 
-# ─────────────────────────── Ảnh upload ───────────────────────────
+# ─────────────────────────── Match score bounds ───────────────────────────
 
-def _png(mode="RGB", size=(8, 8), color=(255, 0, 0)):
-    buf = io.BytesIO()
-    Image.new(mode, size, color).save(buf, format="PNG")
-    return buf.getvalue()
-
-
-def test_tc_ph2_img_01_empty_and_non_image():
-    """TC_PH2_IMG_01: File rỗng -> InvalidImageError 'rỗng'; byte không phải ảnh -> InvalidImageError (endpoint trả 400 thay vì 500)."""
-    with pytest.raises(InvalidImageError, match="rỗng"):
-        load_image_from_bytes(b"")
-    with pytest.raises(InvalidImageError, match="không phải ảnh"):
-        load_image_from_bytes(b"%PDF-1.4 day la file pdf")
-
-
-def test_tc_ph2_img_02_size_limit(monkeypatch):
-    """TC_PH2_IMG_02: Ảnh vượt MAX_UPLOAD_MB (đặt 1MB) bị từ chối; đúng 1MB vẫn qua bước kiểm tra kích thước."""
-    monkeypatch.setattr(search_settings, "MAX_UPLOAD_MB", 1)
-    with pytest.raises(InvalidImageError, match="1MB"):
-        load_image_from_bytes(b"\x00" * (1024 * 1024 + 1))
-    with pytest.raises(InvalidImageError, match="không phải ảnh"):  # đúng biên: qua kiểm tra size, rơi vào kiểm tra định dạng
-        load_image_from_bytes(b"\x00" * (1024 * 1024))
-
-
-def test_tc_ph2_img_03_normalize_transparent_to_white_rgb():
-    """TC_PH2_IMG_03: PNG nền trong suốt (RGBA) được ghép lên nền TRẮNG và đưa về RGB; ảnh grayscale cũng về RGB."""
-    img = load_image_from_bytes(_png("RGBA", color=(0, 0, 0, 0)))
-    assert img.mode == "RGB" and img.getpixel((0, 0)) == (255, 255, 255)
-    assert load_image_from_bytes(_png("L", color=128)).mode == "RGB"
-
-
-def test_tc_ph2_img_04_image_endpoint_guards(monkeypatch):
-    """TC_PH2_IMG_04: /search/image: thiếu file -> 422; chưa có chỉ mục ảnh -> 503; file hỏng (index sẵn sàng) -> 400."""
-    class Store:
-        is_ready = False
-
-        def reload_if_changed(self):
-            pass
-
-    store = Store()
-    monkeypatch.setattr(search_ep.visual_search_service, "store", store)
-    client = TestClient(app)
-    assert client.post("/api/v1/search/image").status_code == 422
-    files = {"image": ("x.jpg", b"not an image", "image/jpeg")}
-    assert client.post("/api/v1/search/image", files=files).status_code == 503
-    store.is_ready = True
-    r = client.post("/api/v1/search/image", files=files)
-    assert r.status_code == 400 and "không phải ảnh" in r.json()["detail"]
-
-
-def test_tc_ph2_img_05_match_score_bounds():
-    """TC_PH2_IMG_05: Cosine quy về % badge: -1 -> 0, 0 -> 50, 1 -> 100, vượt biên bị kẹp."""
+def test_tc_ph2_match_score_bounds():
+    """TC_PH2_MATCH_01: Cosine quy về % badge: -1 -> 0, 0 -> 50, 1 -> 100, vượt biên bị kẹp."""
     assert [_to_match_score(x) for x in (-1.0, 0.0, 1.0, 1.5, -2.0)] == [0, 50, 100, 100, 0]
 
 

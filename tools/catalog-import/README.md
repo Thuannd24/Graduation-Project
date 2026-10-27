@@ -8,7 +8,9 @@ Công cụ scrape sản phẩm từ **cellphones.com.vn**, mirror ảnh lên Clo
 
 ```
 catalog-import/
-├── setup.mjs                  # ⭐ LỆNH CHÍNH — import toàn bộ manifests/*.json + flush cache
+├── reset-to-main-db.ps1       # ⭐ Script reset DB toàn diện (truncate + flush + setup + seed) trên Windows
+├── reset-to-main-db.sh        # ⭐ Script reset DB toàn diện trên Linux / macOS / Bash
+├── setup.mjs                  # Lệnh import toàn bộ manifests/*.json + flush Redis
 ├── seed-inventory.mjs         # Set tồn kho mặc định cho mọi variant (chạy sau setup.mjs)
 ├── clean-broken-products.mjs  # Dọn sản phẩm không có ảnh thật khỏi manifests/ (chạy sau khi scrape/mirror)
 ├── scrape-cellphones.mjs      # Scraper (crawl sản phẩm từ cellphones.com.vn) — chỉ cần khi lấy dữ liệu mới
@@ -17,38 +19,63 @@ catalog-import/
 ├── import.mjs                 # Import 1 file lẻ (setup.mjs gọi lại cái này cho từng file — dùng riêng khi debug)
 ├── .env                        # Cấu hình API_BASE_URL + ADMIN_TOKEN + R2 (không commit)
 ├── .env.example                # Mẫu cấu hình
-└── manifests/                  # 19 file JSON đã scrape sẵn (~1100 sản phẩm) — dùng để import ngay
+└── manifests/                  # 19 file JSON chuẩn CellphoneS (~1100 sản phẩm) — catalog gốc của main
 ```
 
 > Mỗi file JSON chứa đầy đủ: **attributes, categories, categoryAttributes, brands, products, variants** — import 1 file là đủ cho cả danh mục đó (nhưng nên import cả 19 file, vì 1 brand/category có thể xuất hiện ở nhiều file — `setup.mjs` tự làm việc này).
 
 ---
 
-## 🆘 Build/khôi phục toàn bộ dữ liệu — chỉ vài lệnh
+## 🆘 Khôi phục / Reset toàn bộ dữ liệu về baseline `main`
 
-Dùng khi: dự án mới build lần đầu, DB bị trắng, hoặc muốn reset lại catalog demo.
+Dùng khi: dự án mới build lần đầu, DB bị lệch/bẩn sau các thử nghiệm, hoặc muốn reset catalog demo về trạng thái chuẩn.
 
-```bash
-cd tools/catalog-import
-cp .env.example .env           # rồi điền ADMIN_TOKEN (xem cách lấy ở dưới)
+### Cách 1: Chạy Script Tự Động Reset (Khuyên Dùng)
 
-npm run setup                  # import categories + brands + products + variants + ảnh (đã có URL R2 sẵn)
-npm run seed-inventory         # set tồn kho mặc định = 10 cho mọi variant
-```
+Khi Docker infra đang chạy (`infra-mariadb`, `infra-mongodb`, `infra-redis`, cùng backend microservices):
 
-> **Không cần `npm install`** cho 2 lệnh trên — `setup.mjs`/`seed-inventory.mjs` chỉ dùng module có sẵn của Node (`fs`, `path`, `child_process`), không import `cheerio`/`@aws-sdk/client-s3`. `npm install` chỉ cần khi chạy `scrape`/`mirror`/`backup`/`clean-broken-products` (xem mục dưới).
+1. **Chuẩn bị cấu hình:**
+   ```bash
+   cd tools/catalog-import
+   cp .env.example .env
+   ```
+2. **Lấy `ADMIN_TOKEN`:**
+   - Đăng nhập admin tại giao diện FE (`http://localhost:3000` hoặc `http://localhost:5173`).
+   - Mở Developer Tools (`F12`) → thẻ **Application** → **Local Storage** → copy giá trị `access_token`.
+   - Dán vào file `.env`: `ADMIN_TOKEN=<access_token>`.
 
-Xong — có đủ category, attribute, brand, product, variant, ảnh (trỏ R2, không phụ thuộc cellphones.com.vn), tồn kho. Elasticsearch tự re-index qua bước import (BE tự gọi `indexProduct` mỗi lần tạo/update product).
+3. **Chạy script reset:**
+   - Trên **Windows (PowerShell)**:
+     ```powershell
+     .\reset-to-main-db.ps1
+     ```
+   - Trên **Linux / macOS / Git Bash**:
+     ```bash
+     chmod +x reset-to-main-db.sh
+     ./reset-to-main-db.sh
+     ```
 
-**Lấy ADMIN_TOKEN:** đăng nhập admin tại Trang Dashboard  → F12 → Application → Local Storage → copy `access_token`.
-> Token hết hạn sau **15 phút**. Nếu `npm run setup` báo lỗi 401 giữa đường — lấy token mới, dán lại vào `.env`, chạy `npm run setup` lần nữa. An toàn chạy lại nhiều lần: file đã import trước đó chỉ bị **update**, không tạo trùng.
+Script sẽ tự động:
+1. **TRUNCATE** toàn bộ các bảng trong `ecommerce_product_db` (MariaDB):
+   `variant_option_values`, `product_variants`, `product_images`, `product_tags`, `product_attribute_values`, `products`, `brand_categories`, `brands`, `category_attributes`, `categories`, `attributes`.
+2. **TRUNCATE** các bảng tồn kho trong `ecommerce_inventory_db` (MariaDB):
+   `inventories`, `inventory_transactions`.
+3. **Drop / Flush** MongoDB database `ecommerce_product_nosql`.
+4. **FLUSHALL** Redis cache (`infra-redis`).
+5. **Import & Seed:** Chạy `node setup.mjs` (nạp 19 file JSON từ `manifests/`) và `node seed-inventory.mjs --qty 10`.
 
-**Muốn set số lượng tồn kho khác 10:**
-```bash
-node seed-inventory.mjs --qty 20
-```
+> **Chỉ muốn truncate sạch DB & flush cache (không chạy import/seed ngay):**
+> ```powershell
+> .\reset-to-main-db.ps1 -TruncateOnly
+> # hoặc trên bash:
+> ./reset-to-main-db.sh --truncate-only
+> ```
 
-**Nếu DB cũ còn tồn dữ liệu bẩn/lệch** (VD sau khi sửa `manifests/`, có sản phẩm cũ không còn trong file JSON nữa) — import không tự xóa được sản phẩm đã bị loại khỏi manifest, cần truncate trước khi `npm run setup`:
+---
+
+### Cách 2: Chạy Thủ Công Từng Bước
+
+1. Truncate các bảng MariaDB:
 ```bash
 docker exec -i infra-mariadb mariadb -u root -proot ecommerce_product_db -e "
 SET FOREIGN_KEY_CHECKS=0;
@@ -71,6 +98,18 @@ TRUNCATE TABLE inventories;
 TRUNCATE TABLE inventory_transactions;
 SET FOREIGN_KEY_CHECKS=1;
 "
+```
+
+2. Flush MongoDB và Redis:
+```bash
+docker exec -i infra-mongodb mongosh ecommerce_product_nosql --eval "db.dropDatabase()"
+docker exec -i infra-redis redis-cli FLUSHALL
+```
+
+3. Import catalog và seed tồn kho:
+```bash
+npm run setup                  # import categories + brands + products + variants + ảnh từ manifests/
+npm run seed-inventory         # set tồn kho mặc định = 10 cho mọi variant
 ```
 
 **Nếu mất cả `manifests/`** (máy hỏng, chưa từng backup) — tải lại từ R2 (bucket đã backup ở mục "Backup dữ liệu" phía dưới, prefix `manifests-backup/`) bằng `rclone`/AWS CLI. Nếu chưa từng backup thật sự mất — phải crawl lại, xem mục **"Scrape lại dữ liệu"** phía dưới.

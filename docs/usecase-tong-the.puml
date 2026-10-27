@@ -23,7 +23,6 @@ rectangle "Hệ thống thương mại điện tử AuraTech" {
   usecase "Duyệt danh mục\n& thương hiệu" as C4 #DCEBFA
   usecase "Xem chi tiết sản phẩm" as C5 #DCEBFA
   usecase "Tìm sản phẩm bằng chữ" as C6 #DCEBFA
-  usecase "Tìm sản phẩm bằng hình ảnh" as C7 #DCEBFA
   usecase "Nhận gợi ý sản phẩm\n(cá nhân hóa, mua kèm)" as C8 #DCEBFA
   usecase "Lưu sản phẩm yêu thích" as C9 #DCEBFA
   usecase "Chat với trợ lý AI" as C10 #DCEBFA
@@ -72,7 +71,6 @@ Customer --> C3
 Customer --> C4
 Customer --> C5
 Customer --> C6
-Customer --> C7
 Customer --> C8
 Customer --> C9
 Customer --> C10

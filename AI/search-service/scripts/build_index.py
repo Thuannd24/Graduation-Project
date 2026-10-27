@@ -2,8 +2,7 @@
 Build chỉ mục cho search-service từ catalog thật (MariaDB `ecommerce_product_db`):
 
   1. Text index  : e5 encode "passage: tên + thương hiệu + danh mục + mô tả"  → text_index.faiss
-  2. Image index : tải ảnh sản phẩm (có cache) → CLIP encode                  → item_index.faiss
-  3. Similar     : cosine giữa sản phẩm (ảnh + text) → top-K                  → MongoDB product_similarities
+  2. Similar     : cosine giữa sản phẩm (text) → top-K                        → MongoDB product_similarities
 
 Service đang chạy tự nạp index mới trong ≤30s (FaissStore.reload_if_changed), không cần restart.
 
@@ -11,16 +10,13 @@ Chạy trong container:
     docker exec -it ai-search-service python scripts/build_index.py
 Chạy local (từ AI/search-service, đã cài requirements):
     python scripts/build_index.py --limit 50          # thử nhanh với 50 sản phẩm
-    python scripts/build_index.py --skip-text         # chỉ build ảnh (bỏ qua e5-large ~2GB)
 """
 import argparse
-import gc
 import html
 import os
 import re
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Tuple
 
 import numpy as np
@@ -30,16 +26,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.core.config import search_settings  # noqa: E402
 from app.services import catalog  # noqa: E402
-from app.services.image_loader import load_image_from_url  # noqa: E402
 from app.services.text_search import text_search_service  # noqa: E402
-from app.services.visual_search import visual_search_service  # noqa: E402
 from shared_common.logger import get_logger  # noqa: E402
 
 logger = get_logger("build_index")
-
-IMAGE_CHUNK = 128
-HOLDOUT_MIN_IMAGES = 4  # khớp scripts/evaluate.py --holdout last
-IMAGE_MAX_SIDE = 448
 
 _TAG_RE = re.compile(r"<[^>]+>")
 _WS_RE = re.compile(r"\s+")
@@ -86,61 +76,7 @@ def build_text_index(products: List[Dict], batch_size: int) -> Dict[int, np.ndar
     return dict(zip(ids, vectors))
 
 
-# ── 2. Image ─────────────────────────────────────────────────────────────────
-
-def image_urls_for_index(p: Dict, max_images: int, holdout_last: bool) -> List[str]:
-    urls = list(p["images"])
-    if holdout_last and len(urls) >= HOLDOUT_MIN_IMAGES:
-        urls = urls[:-1]  # ảnh cuối để dành làm ảnh test "chưa từng thấy" (scripts/evaluate.py)
-    return urls[:max_images] if max_images > 0 else urls
-
-
-def build_image_index(
-    products: List[Dict], max_images: int, workers: int, batch_size: int, holdout_last: bool = False
-) -> Dict[int, np.ndarray]:
-    jobs: List[Tuple[int, str]] = [
-        (p["id"], url) for p in products for url in image_urls_for_index(p, max_images, holdout_last)
-    ]
-    logger.info(
-        f"[image] {len(jobs)} ảnh, xử lý theo lô {IMAGE_CHUNK} ({workers} luồng tải, "
-        f"cache: {search_settings.img_cache_dir}), encode bằng {search_settings.VISION_MODEL_NAME}..."
-    )
-    model = visual_search_service._get_model()
-
-    # Tải + encode từng lô rồi bỏ ảnh đi — chỉ giữ vector 512-dim. Giữ nguyên cả catalog ảnh
-    # đã giải mã (~2MB/ảnh) trong RAM sẽ bị OOM kill giữa chừng.
-    t0 = time.time()
-    ids: List[int] = []
-    chunks: List[np.ndarray] = []
-    failed = 0
-    with ThreadPoolExecutor(max_workers=workers) as pool:
-        for start in range(0, len(jobs), IMAGE_CHUNK):
-            batch = jobs[start: start + IMAGE_CHUNK]
-            images = list(pool.map(lambda job: load_image_from_url(job[1], max_side=IMAGE_MAX_SIDE), batch))
-            ok = [(pid, img) for (pid, _), img in zip(batch, images) if img is not None]
-            failed += len(batch) - len(ok)
-            if ok:
-                vecs = model.encode([img for _, img in ok], batch_size=batch_size, normalize_embeddings=True)
-                chunks.append(np.asarray(vecs, dtype="float32"))
-                ids.extend(pid for pid, _ in ok)
-            done = min(start + IMAGE_CHUNK, len(jobs))
-            logger.info(f"[image] {done}/{len(jobs)} ảnh ({failed} lỗi) — {time.time() - t0:.0f}s")
-
-    if not ids:
-        raise RuntimeError("Không tải được ảnh nào — kiểm tra kết nối mạng / URL ảnh trong DB.")
-    vectors = np.vstack(chunks)
-
-    visual_search_service.store.build(vectors, ids)
-    visual_search_service.store.save()
-
-    # Vector đại diện mỗi sản phẩm = trung bình các ảnh của nó (đã normalize)
-    per_product: Dict[int, List[np.ndarray]] = {}
-    for pid, vec in zip(ids, vectors):
-        per_product.setdefault(pid, []).append(vec)
-    return {pid: _l2norm(np.mean(vs, axis=0, keepdims=True))[0] for pid, vs in per_product.items()}
-
-
-# ── 3. Similar items ─────────────────────────────────────────────────────────
+# ── 2. Similar items ─────────────────────────────────────────────────────────
 
 def _cosine_matrix(vecs: Dict[int, np.ndarray], ids: List[int]) -> np.ndarray:
     """Ma trận cosine (n×n) theo thứ tự ids; sản phẩm thiếu vector ⇒ hàng/cột NaN."""
@@ -152,22 +88,14 @@ def _cosine_matrix(vecs: Dict[int, np.ndarray], ids: List[int]) -> np.ndarray:
     return m @ m.T
 
 
-def build_similarities(
-    image_vecs: Dict[int, np.ndarray], text_vecs: Dict[int, np.ndarray], top_k: int, image_weight: float
-) -> int:
-    ids = sorted(set(image_vecs) | set(text_vecs))
+def build_similarities(text_vecs: Dict[int, np.ndarray], top_k: int) -> int:
+    ids = sorted(text_vecs.keys())
     if len(ids) < 2:
         logger.warning("[similar] Không đủ sản phẩm để tính tương tự.")
         return 0
-    logger.info(f"[similar] Tính top-{top_k} tương tự cho {len(ids)} sản phẩm (ảnh {image_weight:.0%} / text)...")
+    logger.info(f"[similar] Tính top-{top_k} tương tự cho {len(ids)} sản phẩm (text)...")
 
-    img = _cosine_matrix(image_vecs, ids) if image_vecs else np.full((len(ids), len(ids)), np.nan)
-    txt = _cosine_matrix(text_vecs, ids) if text_vecs else np.full((len(ids), len(ids)), np.nan)
-    # Có cả 2 ⇒ trộn theo trọng số; chỉ có 1 ⇒ dùng cái có
-    sim = np.where(
-        np.isnan(img), txt,
-        np.where(np.isnan(txt), img, image_weight * img + (1 - image_weight) * txt),
-    )
+    sim = _cosine_matrix(text_vecs, ids)
     sim = np.nan_to_num(sim, nan=-1.0)
     np.fill_diagonal(sim, -np.inf)
 
@@ -186,19 +114,12 @@ def build_similarities(
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Build FAISS index + product_similarities cho search-service")
+    ap = argparse.ArgumentParser(description="Build FAISS text index + product_similarities cho search-service")
     ap.add_argument("--skip-text", action="store_true", help="Không build text index (e5)")
-    ap.add_argument("--skip-image", action="store_true", help="Không build image index (CLIP)")
     ap.add_argument("--skip-similar", action="store_true", help="Không ghi product_similarities")
     ap.add_argument("--limit", type=int, default=0, help="Chỉ lấy N sản phẩm đầu (thử nhanh)")
-    ap.add_argument("--max-images", type=int, default=0,
-                    help="Số ảnh tối đa / sản phẩm (0 = tất cả — index nhiều góc chụp cho kết quả tốt hơn)")
-    ap.add_argument("--holdout-last", action="store_true",
-                    help="CHỈ ĐỂ ĐÁNH GIÁ: bỏ ảnh cuối của sản phẩm có >=4 ảnh khỏi index")
-    ap.add_argument("--workers", type=int, default=8, help="Số luồng tải ảnh")
     ap.add_argument("--batch-size", type=int, default=32)
     ap.add_argument("--similar-top-k", type=int, default=20)
-    ap.add_argument("--image-weight", type=float, default=0.6, help="Trọng số ảnh khi trộn similar (0–1)")
     args = ap.parse_args()
 
     t0 = time.time()
@@ -211,21 +132,14 @@ def main() -> int:
         return 1
 
     text_vecs: Dict[int, np.ndarray] = {}
-    image_vecs: Dict[int, np.ndarray] = {}
     if not args.skip_text:
         text_vecs = build_text_index(products, args.batch_size)
-        # Giải phóng e5 (~2GB RAM) trước khi nạp CLIP + ảnh
-        text_search_service.model = None
-        gc.collect()
     elif not args.skip_similar and text_search_service.store.load():
         text_vecs = text_search_service.store.vectors_by_product()
         logger.info(f"[text] Bỏ qua encode, dùng lại {len(text_vecs)} vector từ text index đã build.")
-    if not args.skip_image:
-        image_vecs = build_image_index(
-            products, args.max_images, args.workers, args.batch_size, holdout_last=args.holdout_last
-        )
-    if not args.skip_similar and (text_vecs or image_vecs):
-        build_similarities(image_vecs, text_vecs, args.similar_top_k, args.image_weight)
+
+    if not args.skip_similar and text_vecs:
+        build_similarities(text_vecs, args.similar_top_k)
 
     logger.info(f"Hoàn tất trong {time.time() - t0:.0f}s. Service sẽ tự nạp index mới trong ≤30s.")
     return 0

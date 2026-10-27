@@ -12,13 +12,13 @@ AI/
 │   ├── shared_common/      # Source package của shared library
 │   └── setup.py            # File cấu hình để cài đặt package chung (-e ../shared-common)
 │
-├── search-service/         # Microservice xử lý Visual & Text Hybrid Search (:8001)
+├── search-service/         # Microservice xử lý Semantic & Text Hybrid Search (:8001)
 │   ├── app/
-│   │   ├── api/            # Endpoints: /search, /search/suggest, /search/image, /search/multimodal, /search/similar/{id}
+│   │   ├── api/            # Endpoints: /search, /search/suggest
 │   │   ├── core/           # Cấu hình riêng cho Search Service
 │   │   ├── models/         # Pydantic schemas xác thực request/response
-│   │   └── services/       # Dense (e5-large) + BM25 (Elasticsearch) + RRF, Visual (CLIP + FAISS), YOLO crop (mặc định tắt)
-│   ├── scripts/            # build_index.py (build FAISS index, chạy tay), evaluate.py, experiment_visual.py
+│   │   └── services/       # Dense (e5-large) + BM25 (Elasticsearch) + RRF
+│   ├── scripts/            # build_index.py (build FAISS text index, chạy tay)
 │   ├── Dockerfile
 │   └── requirements.txt
 │
@@ -58,13 +58,12 @@ AI/
 
 ## 2. Các Công Nghệ Và Mô Hình AI Sử Dụng
 
-1. **Visual Search:** Trích xuất đặc trưng hình ảnh bằng **CLIP (ViT-B/32, 512 chiều)**, tìm chính xác trên FAISS `IndexFlatIP` (index tất cả ảnh sản phẩm, build tay bằng `scripts/build_index.py`). YOLOv8 crop có code nhưng mặc định tắt. Chi tiết: `docs/AI/visual-search.md`.
-2. **Semantic Text Search:** Vector ngữ nghĩa **multilingual-e5-large** (1024 chiều) + **BM25** trên Elasticsearch, gộp bằng **Reciprocal Rank Fusion (RRF, k = 60)**. Trang tìm kiếm của website hiện vẫn dùng search của product-service. Chi tiết: `docs/AI/text-search.md`; số liệu đo: `docs/AI/search-evaluation.md`.
-3. **Personalized Recommendations:** Mô hình **SASRec (Self-Attentive Sequential Recommendation)** chạy trên PyTorch, gợi ý dựa trên lịch sử xem/thêm giỏ của user (hoặc của phiên nếu chưa đăng nhập). Phục vụ theo thang 3 tầng SASRec → Recency → Popularity; checkpoint chỉ được nạp khi qua cổng đánh giá. Chi tiết: [`docs/AI/recsys-behavior-knowledge-transfer.md`](../docs/AI/recsys-behavior-knowledge-transfer.md).
-4. **Demand Forecasting:** Dự báo nhu cầu tồn kho kho hàng dựa trên dữ liệu lịch sử bằng **LightGBM Regressor** hoặc **Meta Prophet**.
-5. **Customer Segmentation:** Định kỳ chạy phân cụm **K-Means (RFM)** chia nhóm người dùng để cấu hình chính sách khuyến mãi.
-6. **Dynamic Pricing:** Thuật toán đánh giá độ nhạy cảm giá người dùng để xuất hành động cho Camunda Workflow engine.
-7. **RAG Chatbot:** Kiến trúc RAG với **DeepSeek-Chat** (nhà cung cấp LLM duy nhất, không có Gemini/GPT dự phòng) cho cả phân loại ý định lẫn sinh câu trả lời; RAG chính sách dùng FAISS + `multilingual-e5-base` thật, RAG sản phẩm là keyword-search gọi thẳng product-service (không có vector store riêng). Chi tiết: `docs/AI/chatbot-ai.md`.
+1. **Semantic Text Search:** Vector ngữ nghĩa **multilingual-e5-large** (1024 chiều) + **BM25** trên Elasticsearch, gộp bằng **Reciprocal Rank Fusion (RRF, k = 60)**. Trang tìm kiếm của website hiện vẫn dùng search của product-service. Chi tiết: `docs/AI/text-search.md`.
+2. **Personalized Recommendations:** Mô hình **SASRec (Self-Attentive Sequential Recommendation)** chạy trên PyTorch, gợi ý dựa trên lịch sử xem/thêm giỏ của user (hoặc của phiên nếu chưa đăng nhập). Phục vụ theo thang 3 tầng SASRec → Recency → Popularity; checkpoint chỉ được nạp khi qua cổng đánh giá. Chi tiết: [`docs/services/09_AI_ENGINE_SERVICE.md`](../docs/services/09_AI_ENGINE_SERVICE.md).
+3. **Demand Forecasting:** Dự báo nhu cầu tồn kho kho hàng dựa trên dữ liệu lịch sử bằng **LightGBM Regressor** hoặc **Meta Prophet**.
+4. **Customer Segmentation & Churn Risk:** Định kỳ chạy phân cụm **K-Means (RFM)** chia nhóm người dùng và mô hình dự báo rủi ro rời bỏ khách hàng (Churn Risk) tích hợp Kafka event tới promotion-service.
+5. **Dynamic Pricing:** Thuật toán đánh giá độ nhạy cảm giá người dùng để xuất hành động cho chính sách khuyến mãi.
+6. **RAG Chatbot:** Kiến trúc RAG với **DeepSeek-Chat** (nhà cung cấp LLM duy nhất, không có Gemini/GPT dự phòng) cho cả phân loại ý định lẫn sinh câu trả lời; RAG chính sách dùng FAISS + `multilingual-e5-base` thật, RAG sản phẩm là keyword-search gọi thẳng product-service (không có vector store riêng). Chi tiết: `docs/AI/chatbot-ai.md`.
 
 ---
 

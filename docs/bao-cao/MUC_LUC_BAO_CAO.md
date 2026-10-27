@@ -96,8 +96,7 @@ CHƯƠNG 4. THỰC NGHIỆM VÀ ĐÁNH GIÁ
   4.3.2 Kết quả và hiệu chỉnh xác suất
   4.3.3 So sánh với phương pháp dựa trên luật
  4.4 Đánh giá chức năng tìm kiếm sản phẩm
-  4.4.1 Tìm kiếm bằng văn bản
-  4.4.2 Tìm kiếm bằng hình ảnh
+  4.4.1 Tìm kiếm văn bản và ngữ nghĩa lai
  4.5 Đánh giá hiệu năng hệ thống
 
 KẾT LUẬN
@@ -168,7 +167,7 @@ PHỤ LỤC
 | Phân hệ | Use case / Activity | Sequence diagram | State diagram | Dữ liệu (ERD / mô hình) |
 |---|---|---|---|---|
 | PH1 | UC quản lý tài khoản, quản lý người dùng | Đăng nhập OIDC → gateway kiểm JWT, gắn header → tự tạo hồ sơ | — | User, Address |
-| PH2 | UC quản lý sản phẩm, mua sắm, tìm kiếm | **Tìm kiếm lai: BM25 (Elasticsearch) + vector e5 (FAISS) → hợp nhất RRF**; **Tìm bằng ảnh: CLIP → FAISS `IndexFlatIP` → gộp theo sản phẩm**; Dựng chỉ mục offline (`build_index.py`); Tạo sản phẩm → commit → đánh chỉ mục ES; Đánh giá có xác thực đã mua | — | Category (cây), Attribute, Brand, Product, Variant, Review, Wishlist, Store; chỉ mục ES (văn bản), chỉ mục FAISS (ảnh, văn bản) |
+| PH2 | UC quản lý sản phẩm, mua sắm, tìm kiếm | **Tìm kiếm lai: BM25 (Elasticsearch) + vector e5 (FAISS) → hợp nhất RRF**; Dựng chỉ mục offline (`build_index.py`); Tạo sản phẩm → commit → đánh chỉ mục ES; Đánh giá có xác thực đã mua | — | Category (cây), Attribute, Brand, Product, Variant, Review, Wishlist, Store; chỉ mục ES (văn bản), chỉ mục FAISS (văn bản) |
 | PH3 | UC đặt hàng; **Activity đặt hàng** | **Đặt hàng → giữ kho → Kafka → chờ thanh toán → xác nhận**; **Hủy đơn và bù trừ**; Giao hàng → webhook GHTK | **Đơn hàng** | Order, OrderItem, OutboxEvent, CompensationTask, TradeIn |
 | PH4 | UC quản lý kho | Nhận `OrderCreated` → `SELECT FOR UPDATE` → phát `inventory-events` | — | Inventory, InventoryTransaction, RestockRequest, InventoryDailySnapshot |
 | PH5 | UC thanh toán, hoàn tiền | **Thanh toán VNPay → callback → Outbox/Debezium → xác nhận đơn**; Hoàn tiền | **Thanh toán** | Payment, Refund, WebhookLog, OutboxEvent |
@@ -232,7 +231,6 @@ Kiểm kê từ code (controller, endpoint, trang FE, Kafka listener, scheduler)
 | Chi tiết sản phẩm: chọn biến thể, phóng to ảnh, thông số, bảo hành, sản phẩm liên quan | `ProductDetailPage` | PH2 |
 | Tìm kiếm toàn văn bằng Elasticsearch, tự chuyển sang truy vấn DB khi ES lỗi | `SearchServiceImpl` (product-service) | PH2 |
 | Tìm kiếm ngữ nghĩa lai (BM25 + vector multilingual-e5-large + RRF), gợi ý từ khóa — backend đã chạy thật, trang tìm kiếm của web chưa gọi | search-service `/search`, `/search/suggest` | PH2 |
-| Tìm kiếm bằng hình ảnh (có cắt ảnh), tìm sản phẩm tương tự theo ảnh (CLIP) | search-service `/search/image`, `/search/similar-image`, `VisualSearchModal` | PH2 |
 | Đánh giá sản phẩm có xác thực đã mua, kèm ảnh; xem đánh giá đang chờ trong hồ sơ | `ReviewServiceImpl`, order-service `check-eligible` | PH2 |
 | Danh sách yêu thích (khách vãng lai lưu cục bộ) | `WishlistController` | PH2 |
 | Tra cứu hệ thống cửa hàng | `StorePage`, `GET /stores` | PH2 |
@@ -323,7 +321,7 @@ Kiểm kê từ code (controller, endpoint, trang FE, Kafka listener, scheduler)
 | `tools/data-seed` | Dữ liệu tổng hợp có seed cố định: ~500 user, ~3.000 đơn trong 12 tháng, 19 loại hành vi có báo cáo độ trung thực so với REES46/Taobao, đánh giá, voucher; chế độ xuất CSV cho huấn luyện; biến đổi REES46 | 3.6.3, 4.1 |
 | `tools/real-data-seed` | Import bộ dữ liệu thật Olist (Kaggle): đơn và đánh giá; hành vi được sinh khớp với thời điểm đặt hàng thật | 3.6.3, 4.1 |
 
-**Không đưa vào báo cáo** (chưa có mã nguồn): ví MoMo, trả hàng/đổi trả (RMA), SMS, **SIEM/SOAR** (chỉ có kế hoạch trong `docs/AI/siem-soar-execution-plan.md`), pipeline CI/CD, giám sát (Prometheus/Grafana/tracing), sao lưu CSDL tự động. Những mục này thuộc *Hạn chế / Hướng phát triển*.
+**Không đưa vào báo cáo** (chưa có mã nguồn): ví MoMo, trả hàng/đổi trả (RMA), SMS, **SIEM/SOAR**, pipeline CI/CD, giám sát (Prometheus/Grafana/tracing), sao lưu CSDL tự động. Những mục này thuộc *Hạn chế / Hướng phát triển*.
 
 ---
 
@@ -337,7 +335,6 @@ thành, nên cần làm xong (hoặc chuyển sang *Hạn chế*) trước buổ
 | Xong | Phân hệ | Chức năng | Việc còn thiếu | Vị trí |
 |---|---|---|---|---|
 | [ ] | PH2 | Tìm kiếm ngữ nghĩa lai, gợi ý từ khóa | Backend chạy thật (FAISS + ES + RRF) nhưng trang tìm kiếm của web vẫn gọi product-service; chưa có FE gọi `/search`, `/search/suggest` | `SearchPage.jsx`, `productApi.ts` |
-| [ ] | PH2 | Tìm kiếm bằng ảnh | Đã chạy thật qua giao diện. Còn: nhãn "YOLO v8 detected" luôn hiện dù YOLO tắt; "Độ khớp %" không phản ánh độ tin cậy; tiêu đề "Kết quả cho \"\"" | `SearchPage.jsx`, `visual_search.py` |
 | [ ] | PH2 | Sản phẩm liên quan | Đang lấy 8 sản phẩm đầu danh sách | `ProductDetailPage.jsx:446` |
 | [ ] | PH2 | Điểm đánh giá trung bình | Trang sản phẩm hiện 0 sao dù có đánh giá | `ProductDetailPage.jsx` |
 | [ ] | PH2 | Hệ thống cửa hàng | Chưa có backend và route gateway cho `GET /stores` | `shopApi.ts` |
@@ -400,33 +397,33 @@ Hành vi người dùng (FE tracker + Kafka) ──▶ user_events / lịch sử
 | 1.1 | Bài toán TMĐT đồ công nghệ: mở rộng, nhất quán dữ liệu, tìm kiếm, cá nhân hóa, hỗ trợ khách hàng, giữ chân khách hàng | [README.md](../../README.md) |
 | 1.2.1 | So sánh Shopee, Tiki, CellphoneS, Amazon… (bảng chức năng) | Tự khảo sát |
 | 1.2.2 | Monolith vs microservices | Tự khảo sát |
-| 1.2.3 | AI trong TMĐT: tìm kiếm ngữ nghĩa/ảnh, gợi ý, chatbot, phân tích khách hàng, marketing tự động | [ai-ecommerce-blueprint.md](../AI/ai-ecommerce-blueprint.md), [recsys-research-and-plan.md](../AI/recsys-research-and-plan.md), [churn-risk-feature-overview.md](../AI/churn-risk-feature-overview.md) |
+| 1.2.3 | AI trong TMĐT: tìm kiếm ngữ nghĩa/ảnh, gợi ý, chatbot, phân tích khách hàng, marketing tự động | [churn-risk-feature-overview.md](../AI/churn-risk-feature-overview.md), [dashboard-ai.md](../AI/dashboard-ai.md), [chatbot-ai.md](../AI/chatbot-ai.md), [text-search.md](../AI/text-search.md) |
 | 1.3 | Microservices + Kafka/CDC + Camunda + các dịch vụ AI (cầu nối sang Chương 2) | Mục 5 của file này, [AI/README.md](../../AI/README.md) |
 | 2.1–2.3 | Gateway, Eureka, gRPC, Kafka, Outbox, Debezium, WebSocket/STOMP, circuit breaker, Keycloak | [services/00_INDEX.md](../services/00_INDEX.md), [keycloak_setup_guide.md](../keycloak_setup_guide.md) |
 | 2.4 | BPMN 2.0 (sự kiện, gateway, service task, timer), Camunda engine, delegate | [07_PROMOTION_SERVICE.md](../services/07_PROMOTION_SERVICE.md) |
-| 2.5 | Chỉ mục ngược + BM25; dense retrieval (multilingual-e5); Reciprocal Rank Fusion; CLIP | [text-search.md](../AI/text-search.md), [visual-search.md](../AI/visual-search.md) |
-| 2.6 | SASRec: nguồn gốc, kiến trúc, độ phức tạp O(n²d), ví dụ | [recommendation-complete.md](../AI/recommendation-complete.md) |
+| 2.5 | Chỉ mục ngược + BM25; dense retrieval (multilingual-e5); Reciprocal Rank Fusion | [text-search.md](../AI/text-search.md) |
+| 2.6 | SASRec: nguồn gốc, kiến trúc, độ phức tạp O(n²d), ví dụ | [09_AI_ENGINE_SERVICE.md](../services/09_AI_ENGINE_SERVICE.md), `AI/recs-service` |
 | 2.7 | LLM, Retrieval-Augmented Generation, NLU bằng LLM (đầu ra JSON) kèm luật dự phòng, embedding multilingual-e5 + FAISS cho truy xuất chính sách, gọi công cụ (tool) | [chatbot-ai.md](../AI/chatbot-ai.md) |
-| 2.8 | RFM + KMeans; Logistic Regression + hiệu chỉnh xác suất (isotonic/Platt); LightGBM cho dự báo chuỗi thời gian; Isolation Forest | [churn-risk-implementation-plan.md](../AI/churn-risk-implementation-plan.md), [dashboard-ai.md](../AI/dashboard-ai.md), [ai-ecommerce-blueprint.md](../AI/ai-ecommerce-blueprint.md) |
+| 2.8 | RFM + KMeans; Logistic Regression + hiệu chỉnh xác suất (isotonic/Platt); LightGBM cho dự báo chuỗi thời gian; Isolation Forest | [churn-risk-feature-overview.md](../AI/churn-risk-feature-overview.md), [dashboard-ai.md](../AI/dashboard-ai.md) |
 | 2.9 | Spring Boot/Cloud, FastAPI, React, MariaDB, MongoDB, Redis, Elasticsearch, MinIO, Caddy | docker-compose trong `BE/`, `AI/` |
 | 3.1 | 9 quy trình nghiệp vụ vẽ bằng BPMN (mục 2.4 của file này) | [DETAILED_ORDER_FLOW.md](../DETAILED_ORDER_FLOW.md) |
 | 3.2 | Tác nhân, use case theo 10 phân hệ (mục 2 và 3 của file này) | [system_roles_permissions.md](../system_roles_permissions.md) |
 | 3.3 | Theo mục 2.3 của file này | `BE/api-gateway`, `BE/order-service`, `BE/payment-service`, `BE/promotion-service`, `AI/shared-common`, docker-compose (Debezium) |
 | 3.4.1–3.4.7 | Theo mục 2.2 của file này | [services/01…08](../services/), mã nguồn từng service |
-| 3.4.2 (tìm kiếm) | Tìm kiếm toàn văn, lai, bằng ảnh | `BE/product-service`, `AI/search-service`, [text-search.md](../AI/text-search.md), [visual-search.md](../AI/visual-search.md) |
+| 3.4.2 (tìm kiếm) | Tìm kiếm toàn văn, lai | `BE/product-service`, `AI/search-service`, [text-search.md](../AI/text-search.md) |
 | 3.4.6 | Dữ liệu chiến dịch/voucher/ngân sách, luật kiểm tra workflow, trigger/điều kiện/hành động, trạng thái voucher, điểm thưởng | `BE/promotion-service`, `FE/src/features/admin/components/campaigns/` |
-| 3.4.8 | Luồng hành vi FE/BE → Kafka → forecast-service → MariaDB/Redis → recs | [recsys-behavior-flow-review.md](../AI/recsys-behavior-flow-review.md), `AI/recs-service` |
-| 3.4.9 | Phân khúc, rời bỏ, quét rủi ro, dự báo, bất thường, định giá | [churn-risk-log.md](../AI/churn-risk-log.md), [dashboard-ai.md](../AI/dashboard-ai.md), `AI/forecast-service` |
+| 3.4.8 | Luồng hành vi FE/BE → Kafka → forecast-service → MariaDB/Redis → recs | [09_AI_ENGINE_SERVICE.md](../services/09_AI_ENGINE_SERVICE.md), `AI/recs-service` |
+| 3.4.9 | Phân khúc, rời bỏ, quét rủi ro, dự báo, bất thường, định giá | [churn-risk-feature-overview.md](../AI/churn-risk-feature-overview.md), [dashboard-ai.md](../AI/dashboard-ai.md), `AI/forecast-service` |
 | 3.4.10 | Chatbot, chat-service, chuyển sang nhân viên | [chatbot-ai.md](../AI/chatbot-ai.md), [10_CHAT_SERVICE.md](../services/10_CHAT_SERVICE.md), `AI/chatbot-service`, `BE/chat-service`, `SupportChatTab.jsx` |
 | 3.5 | Wireframe/ảnh các màn hình chính | `FE/src/features/` |
 | 3.6.2 | Ảnh chụp màn hình theo phân hệ, đoạn code tiêu biểu | `FE/`, `BE/`, `AI/` |
-| 3.6.3 | Crawl/import sản phẩm (cellphones, Tiki), dữ liệu tổng hợp, dữ liệu Olist, biến đổi REES46 | [tools/](../../tools/), [multi-category-audit.md](../AI/multi-category-audit.md), [rees46-transform-mapping.md](../AI/rees46-transform-mapping.md) |
+| 3.6.3 | Crawl/import sản phẩm (cellphones, Tiki), dữ liệu tổng hợp, dữ liệu Olist, biến đổi REES46 | [tools/](../../tools/) |
 | 3.7 | Chiến lược và kết quả kiểm thử; test của recs-service và forecast-service | [docs/test/](../test/), Postman collection (đã xoá khỏi `docs/` ở commit `0454831`; lấy lại: `git show 0454831^:docs/order_service_test_collection.json`), `AI/recs-service/tests/`, `AI/forecast-service/tests/` |
 | 3.8 | Docker Compose, Caddy, AWS EC2 | [BE/DEPLOY.md](../../BE/DEPLOY.md) |
 | 4.1 | Mô tả bộ dữ liệu (tổng hợp và Olist), tỉ lệ chia, phần cứng | `tools/data-seed`, `tools/real-data-seed` |
-| 4.2 | Temporal split, 2 track explore/repeat, 5 baseline, HR/NDCG/MRR, coverage, Gini, khoảng tin cậy bootstrap, ablation, cổng đánh giá | `AI/recs-service/evaluation/`, [recsys-behavior-knowledge-transfer.md](../AI/recsys-behavior-knowledge-transfer.md) |
+| 4.2 | Temporal split, 2 track explore/repeat, 5 baseline, HR/NDCG/MRR, coverage, Gini, khoảng tin cậy bootstrap, ablation, cổng đánh giá | `AI/recs-service/evaluation/`, [09_AI_ENGINE_SERVICE.md](../services/09_AI_ENGINE_SERVICE.md) |
 | 4.3 | Ablation, calibration, chẩn đoán nhãn, so sánh với luật, model card. ⚠️ Số liệu trong `churn-risk-feature-overview.md` (AUC 0,7354) là thí nghiệm REES46, không phải model đang chạy | `AI/forecast-service/app/training/`, `/models/*`, [churn-risk-feature-overview.md](../AI/churn-risk-feature-overview.md) |
-| 4.4 | Văn bản: MRR, Hit@k (so BM25, dense, lai); ảnh: Hit@k, Tie@k, CatP@k. Chỉ dùng số đo trong search-evaluation (đã ghi giới hạn và rủi ro rò rỉ) | [search-evaluation.md](../AI/search-evaluation.md) |
+| 4.4 | Văn bản: MRR, Hit@k (so BM25, dense, lai). Đánh giá hiệu năng tìm kiếm | [text-search.md](../AI/text-search.md), `AI/search-service/scripts/evaluate.py` |
 | Kết luận / Hạn chế | Các mục "Không đưa vào báo cáo" ở cuối mục 3.4 và các mục còn mở ở 4.1 | — |
 | Phụ lục A | Danh sách API | Controller từng service; bản hợp đồng API cũ `FRONTEND_API_CONTRACT.md` đã xoá ở commit `0454831` (lấy lại: `git show 0454831^:docs/prompt_Fe/FRONTEND_API_CONTRACT.md`) |
 | Phụ lục B | Hướng dẫn cài đặt, cấu hình Keycloak | [README.md](../../README.md), [keycloak_setup_guide.md](../keycloak_setup_guide.md) |

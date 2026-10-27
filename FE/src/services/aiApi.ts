@@ -60,14 +60,6 @@ export interface VouchersCard {
 
 export type ChatCard = OrderStatusCard | WarrantyCard | LoyaltyCard | VouchersCard;
 
-export interface CropBox {
-  // Vùng sản phẩm YOLO nhận diện — đơn vị % (0–100), khớp cách FE vẽ khung overlay.
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
 export interface ChatMessage {
   id: string;
   sender: "user" | "assistant" | "system";
@@ -107,33 +99,7 @@ export const aiApi = {
     }
   },
 
-  // 2. Visual Search (Tìm kiếm bằng hình ảnh)
-  // search-service trả { total, items, cropBox } — cropBox = {x,y,width,height} theo % (có thể null
-  // khi YOLO tắt). apiClient.postForm gửi multipart đúng chuẩn và đã bóc sẵn lớp .data.
-  searchByImage: async (imageFile: File): Promise<{ items: AIProduct[]; cropBox: CropBox | null }> => {
-    try {
-      const formData = new FormData();
-      formData.append("image", imageFile);
-      const data = await apiClient.postForm<{ total: number; items: AIProduct[]; cropBox: CropBox | null }>(
-        "/public/search/image?top_k=50",
-        formData
-      );
-      // total=0 (không tìm thấy sản phẩm khớp) là kết quả HỢP LỆ — trả mảng rỗng để hiện empty state,
-      // KHÔNG fallback mock. Chỉ khi call thật lỗi (service chết/timeout/500) mới ném lỗi ở catch bên dưới.
-      return { items: data.items ?? [], cropBox: data.cropBox ?? null };
-    } catch (err) {
-      // Không nuốt lỗi thành data giả: mock che mất việc AI service chết/timeout, khiến UI trông
-      // như đang chạy nhưng thực ra là dữ liệu ảo. Ném lỗi để tầng UI báo cho người dùng biết.
-      console.error("Visual Search API error:", err);
-      throw new Error(
-        err instanceof Error && err.message
-          ? err.message
-          : "Không thể kết nối dịch vụ tìm kiếm hình ảnh. Vui lòng thử lại sau."
-      );
-    }
-  },
-
-  // 3. Recommendations
+  // 2. Recommendations
   // Danh tính KHÔNG truyền qua query nữa: gateway inject X-User-Id từ JWT (nếu đăng nhập) và apiClient
   // luôn gửi X-Session-Id — nên khách chưa đăng nhập cũng nhận gợi ý theo phiên đang duyệt. Tham số
   // `_userId` giữ lại chỉ để không vỡ chỗ gọi cũ.

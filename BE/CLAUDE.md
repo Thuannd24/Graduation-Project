@@ -83,7 +83,7 @@ Thư mục gốc tuân thủ chuẩn Maven với `pom.xml`:
 ```
 AI/
 ├── shared-common/                      # Thư viện dùng chung (DB connections, Logger, Settings)
-├── search-service/                     # Microservice xử lý Visual & Text Search (:8001)
+├── search-service/                     # Microservice xử lý Semantic & Hybrid Text Search (:8001)
 ├── chatbot-service/                    # Microservice RAG Chatbot, Intent & Sentiment (:8002)
 ├── recs-service/                       # Microservice gợi ý cá nhân hóa và Cold-start (:8003)
 └── forecast-service/                   # Microservice dự báo, RFM phân cụm & Định giá (:8004)

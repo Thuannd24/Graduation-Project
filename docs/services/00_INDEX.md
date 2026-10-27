@@ -169,7 +169,7 @@ graph TD
 | **Cache** | Redis 7.x (Lettuce) | Cache, Blacklist, Stock, Cart, Rate limiting |
 | **Distributed Lock** | Redis `SET NX` (bean Redisson có khai báo nhưng không dùng) | Khóa phân tán (checkout, consumer kho, scheduler) |
 | **Message Queue** | Apache Kafka 3.x + Debezium CDC | Event-driven async communication (Outbox) |
-| **Search** | Elasticsearch 8.x | Keyword search + k-NN Dense Vector search (Visual / Semantic) |
+| **Search** | Elasticsearch 8.x | Keyword search + k-NN Dense Vector search (Semantic) |
 | **Object Storage** | MinIO | Lưu trữ ảnh sản phẩm |
 
 ---
@@ -233,7 +233,7 @@ graph TD
 - [x] Redis Cache — giảm 95% query xuống DB cho đọc sản phẩm & sản phẩm tương đồng
 - [x] Redis DECRBY — lọc sớm 99.9% request hết hàng tại RAM
 - [x] Async Event-Driven — không block response của user
-- [x] Elasticsearch (BM25) + FAISS (vector, AI search-service) — tìm kiếm ảnh/ngữ nghĩa thời gian thực không block MariaDB
+- [x] Elasticsearch (BM25) + FAISS (vector, AI search-service) — tìm kiếm ngữ nghĩa thời gian thực không block MariaDB
 
 ### Security (Bảo mật)
 - [x] API Gateway centralized auth — Verify JWT tại Gateway, inject X-User-Id header

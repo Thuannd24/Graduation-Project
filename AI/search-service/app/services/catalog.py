@@ -346,6 +346,32 @@ def save_similarities(similar: Dict[int, List[Tuple[int, float]]]) -> int:
     return len(ops)
 
 
+def _to_match_score(cosine: float) -> int:
+    """Quy cosine (đã normalize) về 0–100 để hiển thị badge %."""
+    pct = (cosine + 1.0) / 2.0 * 100.0
+    return int(max(0, min(100, round(pct))))
+
+
+def get_similar_by_product(product_id: int, top_k: int = 10) -> List[Dict[str, Any]]:
+    """Đọc top similar đã precompute từ MongoDB (nhanh, không cần FAISS real-time)."""
+    sims = get_similar_ids(product_id)[:top_k]
+    meta = get_products_by_ids([s["id"] for s in sims])
+    items = []
+    for s in sims:
+        m = meta.get(s["id"])
+        if not m:
+            continue
+        items.append({
+            "id": str(s["id"]),
+            "name": m["name"],
+            "price": m["price"],
+            "image": m.get("image"),
+            "score": round(float(s["score"]), 4),
+            "matchScore": _to_match_score(s["score"]),
+        })
+    return items
+
+
 def clear_meta_cache(product_ids: Optional[List[int]] = None) -> None:
     with _meta_lock:
         if product_ids is None:

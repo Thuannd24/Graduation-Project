@@ -65,7 +65,7 @@ npm run dev     # http://localhost:5173
 
 ## 🤖 AI SERVICES (Python/FastAPI — độc lập với BE, KHÔNG chạy trong IntelliJ)
 
-> 4 service Python nằm trong `AI/`: `chatbot-service` (8002), `search-service` (8001), `recs-service` (8003), `forecast-service` (8004). Chi tiết kiến trúc: [`AI/README.md`](AI/README.md); riêng chatbot xem thêm [`docs/AI/chatbot-ai.md`](docs/AI/chatbot-ai.md); search xem [`docs/AI/visual-search.md`](docs/AI/visual-search.md), [`docs/AI/text-search.md`](docs/AI/text-search.md), [`docs/AI/search-evaluation.md`](docs/AI/search-evaluation.md).
+> 4 service Python nằm trong `AI/`: `chatbot-service` (8002), `search-service` (8001), `recs-service` (8003), `forecast-service` (8004). Chi tiết kiến trúc: [`AI/README.md`](AI/README.md); riêng chatbot xem thêm [`docs/AI/chatbot-ai.md`](docs/AI/chatbot-ai.md); text search xem [`docs/AI/text-search.md`](docs/AI/text-search.md).
 
 ```bash
 cd AI
@@ -89,9 +89,8 @@ python main.py                          # cổng 8002
 ```
 Lặp lại `pip install -r requirements.txt` + `python main.py` trong thư mục từng service còn lại (`search-service`, `recs-service`, `forecast-service`).
 
-> **search-service cần dựng chỉ mục một lần** (tải ảnh sản phẩm, encode CLIP/e5, ghi FAISS): chưa có chỉ mục thì tìm bằng ảnh
-> trả 503. Docker: `docker exec -it ai-search-service python scripts/build_index.py`; chạy trực tiếp:
-> `cd search-service && python scripts/build_index.py`. Chi tiết: [`docs/AI/visual-search.md`](docs/AI/visual-search.md) mục 2.
+> **search-service cần dựng chỉ mục văn bản** (encode multilingual-e5-large, ghi FAISS): Docker: `docker exec -it ai-search-service python scripts/build_index.py`; chạy trực tiếp:
+> `cd search-service && python scripts/build_index.py`. Chi tiết: [`docs/AI/text-search.md`](docs/AI/text-search.md).
 
 > Cần Redis chạy sẵn (từ `docker-compose-infra.yml` ở BE) để lưu lịch sử chat. Thiếu `order-service`/`user-service`/`promotion-service` vẫn khởi động được, chỉ các câu hỏi tra cứu đơn hàng/điểm thưởng/voucher sẽ báo "chưa tra cứu được".
 
