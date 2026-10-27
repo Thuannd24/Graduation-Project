@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class ProductDto {
     private Long id;
 
@@ -53,6 +53,7 @@ public class ProductDto {
     private List<String> images; // Gallery ảnh phụ
     private Integer salesCount;
     private BigDecimal ratingAvg;
+    private Integer reviewCount;
 
     private Integer warrantyPeriod;
     private String warrantyPolicy;

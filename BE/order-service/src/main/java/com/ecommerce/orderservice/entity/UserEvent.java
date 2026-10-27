@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * Bảng ghi nhận hành vi thô (xem sản phẩm / thao tác giỏ hàng) phục vụ pipeline churn-risk
- * detection (xem docs/canvas/churn-risk-implementation-plan.md Phase 2). Entity này CHỈ để
+ * detection (xem docs/AI/churn-risk-implementation-plan.md Phase 2). Entity này CHỈ để
  * Hibernate `ddl-auto: update` tự tạo/quản lý schema — order-service không tự ghi vào bảng này,
  * việc ghi do forecast-service/behavior_consumer.py (Phase 4) thực hiện qua raw SQL sau khi
  * consume Kafka topic `product-viewed-events`/`cart-updated-events`.
@@ -51,6 +51,14 @@ public class UserEvent {
 
     @Column(name = "weight")
     private Double weight;
+
+    /**
+     * Nơi hành vi xảy ra, hiện dùng cho IMPRESSION: khối gợi ý nào (for_you/recent/trending) hay trang
+     * search/category. Không có cột này thì không tính được CTR theo từng khối gợi ý. Nullable — dữ
+     * liệu cũ và các action khác giữ NULL. Tập giá trị: IMPRESSION_SOURCES trong shared_common/contracts.py.
+     */
+    @Column(name = "source", length = 30)
+    private String source;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

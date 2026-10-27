@@ -1,94 +1,78 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
+import CancelOrderDialog from "../../../components/common/CancelOrderDialog.jsx";
 import { authApi } from "../../../services/authApi";
 import { orderApi } from "../../../services/orderApi";
 import { productApi } from "../../../services/productApi";
 import { formatVnd } from "../../../utils/format.js";
-
-function getStatusBadgeClass(status) {
-  const s = String(status || "").toUpperCase();
-  switch (s) {
-    case "PENDING":
-      return "bg-amber-50 text-amber-600 dark:bg-amber-955/20 dark:text-amber-400 border-amber-200/60 dark:border-amber-900/40";
-    case "AWAITING_PAYMENT":
-      return "bg-blue-50 text-blue-600 dark:bg-blue-955/20 dark:text-blue-400 border-blue-200/60 dark:border-blue-900/40";
-    case "CONFIRMED":
-      return "bg-emerald-50 text-emerald-750 dark:bg-emerald-955/20 dark:text-emerald-400 border-emerald-250/60 dark:border-emerald-900/40";
-    case "SHIPPED":
-      return "bg-indigo-50 text-indigo-755 dark:bg-indigo-955/20 dark:text-indigo-400 border-indigo-200/60 dark:border-indigo-900/40";
-    case "DELIVERED":
-    case "COMPLETED":
-      return "bg-teal-50 text-teal-700 dark:bg-teal-955/20 dark:text-teal-400 border-teal-200/60 dark:border-teal-900/40";
-    case "CANCELLED":
-      return "bg-rose-50 text-rose-600 dark:bg-rose-955/20 dark:text-rose-400 border-rose-200/60 dark:border-rose-900/40";
-    default:
-      return "bg-slate-50 text-slate-600 dark:bg-slate-900/30 dark:text-slate-400 border-slate-200/60 dark:border-slate-850/40";
-  }
-}
-
-function getStatusLabel(status) {
-  const s = String(status || "").toUpperCase();
-  switch (s) {
-    case "PENDING":
-      return "Chờ xác nhận";
-    case "AWAITING_PAYMENT":
-      return "Chờ thanh toán";
-    case "CONFIRMED":
-      return "Đã xác nhận";
-    case "SHIPPED":
-      return "Đang giao hàng";
-    case "DELIVERED":
-    case "COMPLETED":
-      return "Đã giao hàng";
-    case "CANCELLED":
-      return "Đã hủy";
-    default:
-      return s || "Đang xử lý";
-  }
-}
+import { cancelReasonLabel, isCustomerCancellable, orderStatusBadge, orderStatusLabel } from "../../../utils/orderStatus.js";
 
 export default function OrderDetailPage() {
   const { orderId } = useParams();
   const [searchParams] = useSearchParams();
-  const paymentStatus = searchParams.get("paymentStatus");
+  // Có tham số này nghĩa là vừa quay về từ VNPay; KẾT QUẢ thì luôn lấy từ server (không tin URL).
+  const returnedFromGateway = searchParams.has("paymentStatus") || searchParams.has("paymentResult");
   
   const [order, setOrder] = useState(null);
   const [payment, setPayment] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [cancelling, setCancelling] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [notice, setNotice] = useState(null);
+  const [payInfo, setPayInfo] = useState(null);
+  const [payAction, setPayAction] = useState("");
 
-  const getCancelTimeLeft = (createdAt) => {
-    if (!createdAt) return 0;
-    const limitMs = 2 * 60 * 60 * 1000;
-    const elapsedMs = new Date().getTime() - new Date(createdAt).getTime();
-    return Math.max(0, limitMs - elapsedMs);
+  const loadPaymentStatus = useCallback(
+    () => orderApi.getPaymentStatus(orderId).then((info) => { setPayInfo(info); return info; }).catch(() => null),
+    [orderId]
+  );
+
+  // Vừa quay về từ VNPay: IPN có thể đến chậm vài giây -> hỏi lại server tối đa ~10 giây khi còn PENDING.
+  useEffect(() => {
+    if (!returnedFromGateway) return undefined;
+    let attempts = 0;
+    let timer;
+    const poll = async () => {
+      const info = await loadPaymentStatus();
+      attempts += 1;
+      if (info && info.result === "PENDING" && !info.canRetry && attempts < 5) {
+        timer = setTimeout(poll, 2000);
+      } else if (info) {
+        orderApi.getOrder(orderId).then((o) => setOrder((prev) => (prev ? { ...o, items: prev.items } : o))).catch(() => {});
+      }
+    };
+    poll();
+    return () => clearTimeout(timer);
+  }, [returnedFromGateway, loadPaymentStatus, orderId]);
+
+  const handleConfirmCancel = async (reasonCode, reason) => {
+    const updated = await orderApi.cancelOrder(orderId, reasonCode, reason);
+    setCancelDialogOpen(false);
+    const fresh = updated && updated.status ? updated : await orderApi.getOrder(orderId);
+    setOrder((prev) => (prev ? { ...fresh, items: prev.items } : fresh));
+    loadPaymentStatus();
+    setNotice({ type: "success", text: "Đã hủy đơn hàng. Voucher đã dùng (nếu còn hạn) được trả lại vào ví voucher của bạn." });
   };
 
-  const isOrderCancelable = (ord) => {
-    if (!ord) return false;
-    const status = String(ord.status || "").toUpperCase();
-    if (!["PENDING", "AWAITING_PAYMENT", "CONFIRMED"].includes(status)) {
-      return false;
-    }
-    const timeLeft = getCancelTimeLeft(ord.createdAt);
-    return timeLeft > 0;
-  };
-
-  const handleCancelClick = async () => {
-    if (!window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) return;
-    setCancelling(true);
+  const handleRetryPayment = async (method) => {
+    if (payAction) return;
+    setPayAction(method);
+    setNotice(null);
     try {
-      await orderApi.cancelOrder(orderId);
-      alert("Hủy đơn hàng thành công!");
-      const updated = await orderApi.getOrder(orderId);
-      setOrder(updated);
+      const res = await orderApi.retryPayment(orderId, method);
+      if (method === "VNPAY" && res?.redirectUrl) {
+        window.location.href = res.redirectUrl;
+        return;
+      }
+      const [fresh] = await Promise.all([orderApi.getOrder(orderId), loadPaymentStatus()]);
+      setOrder((prev) => (prev ? { ...fresh, items: prev.items } : fresh));
+      setNotice({ type: "success", text: "Đã chuyển sang thanh toán khi nhận hàng (COD). Đơn hàng đã được xác nhận." });
     } catch (err) {
-      alert("Lỗi khi hủy đơn hàng: " + err.message);
+      setNotice({ type: "error", text: err.message || "Không thể xử lý thanh toán. Vui lòng thử lại." });
     } finally {
-      setCancelling(false);
+      setPayAction("");
     }
   };
 
@@ -98,6 +82,7 @@ export default function OrderDetailPage() {
       .then((user) => setCurrentUser(user))
       .catch((err) => console.warn("Failed to load user profile in order detail page", err));
 
+    loadPaymentStatus();
     Promise.all([
       orderApi.getOrder(orderId),
       orderApi.getPaymentByOrderId(orderId).catch(err => {
@@ -131,7 +116,7 @@ export default function OrderDetailPage() {
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [orderId]);
+  }, [orderId, loadPaymentStatus]);
 
   if (loading) {
     return (
@@ -165,27 +150,64 @@ export default function OrderDetailPage() {
         <Icon name="arrow_back" className="text-sm" /> Quay lại hồ sơ tài khoản
       </Link>
 
-      {/* Payment Status Notification Banner */}
-      {paymentStatus && (
-        paymentStatus === "00" && order.status !== "CANCELLED" ? (
-          <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-250 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-3 shadow-[0_2px_15px_rgba(16,185,129,0.06)] animate-fadeIn">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 shrink-0">
-              <Icon name="verified" className="text-[20px]" />
-            </div>
-            <span>Thanh toán thành công qua cổng VNPAY! Đơn hàng của bạn đang được chuẩn bị để giao nhận.</span>
+      {notice && (
+        <div className={`p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-3 border ${
+          notice.type === "success"
+            ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-250 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300"
+            : "bg-rose-50 dark:bg-rose-955/20 border-rose-250 dark:border-rose-800 text-rose-800 dark:text-rose-300"
+        }`}>
+          <Icon name={notice.type === "success" ? "check_circle" : "error"} className="text-[20px] shrink-0" />
+          <span>{notice.text}</span>
+        </div>
+      )}
+
+      {/* Kết quả / trạng thái thanh toán online: lấy từ server, không dựa vào tham số URL */}
+      {payInfo && (payInfo.canRetry || (returnedFromGateway && payInfo.paymentMethod === "VNPAY")) && (
+        payInfo.result === "SUCCESS" ? (["CANCELLED", "RETURNING", "RETURNED"].includes(order.status) ? null :
+          <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-250 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-3">
+            <Icon name="verified" className="text-[20px] text-emerald-600 shrink-0" />
+            <span>Thanh toán thành công qua VNPAY! Đơn hàng của bạn đang được chuẩn bị để giao.</span>
           </div>
-        ) : (
-          <div className="bg-rose-50 dark:bg-rose-955/20 border border-rose-250 dark:border-rose-800 text-rose-800 dark:text-rose-300 p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-3 shadow-[0_2px_15px_rgba(239,68,68,0.06)] animate-fadeIn">
-            <div className="w-8 h-8 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-rose-600 shrink-0">
-              <Icon name="error" className="text-[20px]" />
+        ) : payInfo.canRetry ? (
+          <div className="bg-rose-50 dark:bg-rose-955/20 border border-rose-250 dark:border-rose-800 text-rose-800 dark:text-rose-300 p-3.5 rounded-2xl text-xs font-semibold space-y-3">
+            <div className="flex items-start gap-3">
+              <Icon name="error" className="text-[20px] text-rose-600 shrink-0" />
+              <span>
+                {payInfo.message || "Đơn hàng chưa được thanh toán."} Đơn hàng vẫn được giữ; đơn chưa thanh toán sẽ tự hủy sau 30 phút kể từ lúc đặt.
+              </span>
             </div>
-            <span>
-              {order.status === "CANCELLED"
-                ? "Giao dịch thanh toán VNPAY được ghi nhận thành công, nhưng đơn hàng này đã bị hủy trước đó. Vui lòng liên hệ chăm sóc khách hàng để tiến hành hoàn tiền."
-                : `Thanh toán qua cổng VNPAY không thành công hoặc giao dịch đã bị hủy (Mã lỗi: ${paymentStatus}). Quý khách có thể thử lại hoặc liên hệ hotline để được hỗ trợ.`}
-            </span>
+            <div className="flex flex-wrap gap-2 pl-8">
+              <button
+                type="button"
+                onClick={() => handleRetryPayment("VNPAY")}
+                disabled={!!payAction}
+                className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold disabled:opacity-50"
+              >
+                {payAction === "VNPAY" ? "Đang chuyển hướng..." : "Thanh toán lại qua VNPAY"}
+              </button>
+              {payInfo.canSwitchToCod && (
+                <button
+                  type="button"
+                  onClick={() => handleRetryPayment("COD")}
+                  disabled={!!payAction}
+                  className="px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-[11px] font-bold disabled:opacity-50"
+                >
+                  {payAction === "COD" ? "Đang xử lý..." : "Đổi sang thanh toán khi nhận hàng"}
+                </button>
+              )}
+            </div>
           </div>
-        )
+        ) : payInfo.result === "PENDING" ? (
+          <div className="bg-amber-50 dark:bg-amber-955/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-3">
+            <Icon name="schedule" className="text-[20px] shrink-0" />
+            <span>{payInfo.message || "Đang chờ VNPAY xác nhận giao dịch. Vui lòng tải lại trang sau ít phút."}</span>
+          </div>
+        ) : payInfo.result === "FAILED" ? (
+          <div className="bg-rose-50 dark:bg-rose-955/20 border border-rose-250 dark:border-rose-800 text-rose-800 dark:text-rose-300 p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-3">
+            <Icon name="error" className="text-[20px] text-rose-600 shrink-0" />
+            <span>{payInfo.message || "Thanh toán không thành công. Quý khách vui lòng liên hệ hotline để được hỗ trợ."}</span>
+          </div>
+        ) : null
       )}
 
       {/* Redesigned Header & Progress Combined Panel */}
@@ -208,38 +230,40 @@ export default function OrderDetailPage() {
           <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <div className="flex items-center gap-1.5">
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Trạng thái:</span>
-              <span className={`font-extrabold text-[11px] px-3 py-0.5 rounded-full border ${getStatusBadgeClass(order.status)}`}>
-                {getStatusLabel(order.status)}
+              <span className={`font-extrabold text-[11px] px-3 py-0.5 rounded-full border ${orderStatusBadge(order.status)}`}>
+                {orderStatusLabel(order.status)}
               </span>
             </div>
-            {isOrderCancelable(order) ? (
-              <div className="flex items-center gap-2 bg-rose-50/50 dark:bg-rose-955/10 border border-rose-100 dark:border-rose-900/30 px-3 py-1 rounded-xl">
-                <button
-                  onClick={handleCancelClick}
-                  disabled={cancelling}
-                  className="text-rose-600 hover:text-rose-700 disabled:opacity-50 text-xs font-bold transition-all flex items-center gap-1"
-                >
-                  <Icon name="cancel" className="text-sm" /> Hủy đơn
-                </button>
-                <span className="text-[9px] text-rose-500 font-bold border-l border-rose-200/50 pl-2">
-                  Còn {Math.round(getCancelTimeLeft(order.createdAt) / 60000)} phút
-                </span>
-              </div>
-            ) : (
-              ["PENDING", "AWAITING_PAYMENT", "CONFIRMED"].includes(String(order.status).toUpperCase()) && (
-                <span className="text-[10px] text-rose-500 font-bold bg-rose-50/30 px-2.5 py-1 rounded-full border border-rose-100/50">
-                  Hết hạn hủy
-                </span>
-              )
+            {isCustomerCancellable(order.status) && (
+              <button
+                onClick={() => setCancelDialogOpen(true)}
+                className="text-rose-600 hover:text-rose-700 text-xs font-bold transition-all flex items-center gap-1 bg-rose-50/50 dark:bg-rose-955/10 border border-rose-100 dark:border-rose-900/30 px-3 py-1 rounded-xl"
+              >
+                <Icon name="cancel" className="text-sm" /> Hủy đơn
+              </button>
             )}
           </div>
         </div>
 
         {/* Bottom Stepper Progress Row */}
-        {order.status === "CANCELLED" ? (
-          <div className="p-3 sm:p-4 bg-rose-50/20 dark:bg-rose-955/5 flex items-center gap-3 text-xs text-rose-600">
-            <Icon name="error_outline" className="text-lg animate-pulse" />
-            <span className="font-semibold">Đơn hàng này đã bị hủy. Cảm ơn quý khách đã tin tưởng AuraTech.</span>
+        {["CANCELLED", "RETURNING", "RETURNED"].includes(order.status) ? (
+          <div className="p-3 sm:p-4 bg-rose-50/20 dark:bg-rose-955/5 flex items-start gap-3 text-xs text-rose-600">
+            <Icon name="error_outline" className="text-lg shrink-0" />
+            <div className="space-y-0.5 font-semibold">
+              <p>
+                {order.status === "RETURNING"
+                  ? "Đơn hàng đã bị hủy khi đang giao. Hàng đang được đơn vị vận chuyển hoàn về kho."
+                  : order.status === "RETURNED"
+                  ? "Hàng đã được hoàn về kho. Nếu bạn đã thanh toán online, tiền sẽ được hoàn về tài khoản/thẻ theo thời gian xử lý của ngân hàng (thường 3–7 ngày làm việc)."
+                  : "Đơn hàng này đã bị hủy."}
+              </p>
+              {(order.cancelReasonCode || order.cancelReason) && (
+                <p className="text-rose-500/90 font-medium">
+                  Lý do: {cancelReasonLabel(order.cancelReasonCode, order.cancelReason)}
+                  {order.cancelledAt ? ` · ${new Date(order.cancelledAt).toLocaleString("vi-VN")}` : ""}
+                </p>
+              )}
+            </div>
           </div>
         ) : (
           <div className="p-4 sm:p-5 pb-5 sm:pb-6 bg-slate-50/30 dark:bg-slate-900/10">
@@ -376,11 +400,11 @@ export default function OrderDetailPage() {
             <div className="space-y-2 text-xs font-semibold text-slate-650 dark:text-slate-400">
               <div className="flex gap-2">
                 <span className="text-slate-400 dark:text-slate-500 shrink-0 w-24">Người nhận hàng:</span>
-                <span className="text-slate-800 dark:text-slate-205 font-bold">{order.recipientName || order.name || currentUser?.fullName || currentUser?.name || "Khách hàng"}</span>
+                <span className="text-slate-800 dark:text-slate-205 font-bold">{order.recipientName || currentUser?.fullName || currentUser?.name || "Khách hàng"}</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-slate-400 dark:text-slate-500 shrink-0 w-24">Số điện thoại:</span>
-                <span className="text-slate-800 dark:text-slate-205 font-bold">{order.phoneNumber || "-"}</span>
+                <span className="text-slate-800 dark:text-slate-205 font-bold">{order.recipientPhone || order.phoneNumber || "-"}</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-slate-400 dark:text-slate-500 shrink-0 w-24">Địa chỉ nhận hàng:</span>
@@ -459,11 +483,9 @@ export default function OrderDetailPage() {
               )}
 
               {order.vatAmount > 0 && (
-                <div className="flex justify-between text-slate-500 font-medium">
-                  <span>Thuế VAT (10%):</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">
-                    +{formatVnd(Number(order.vatAmount))}
-                  </span>
+                <div className="flex justify-between text-slate-400 text-[11px]">
+                  <span>Trong đó VAT (10%):</span>
+                  <span className="font-semibold">{formatVnd(Number(order.vatAmount))}</span>
                 </div>
               )}
 
@@ -483,9 +505,19 @@ export default function OrderDetailPage() {
             </h2>
             
             {(() => {
-              const payMethod = payment ? payment.paymentMethod?.toUpperCase() : (order.status === "PENDING" || order.status === "AWAITING_PAYMENT" ? "COD" : "N/A");
-              const payStatus = payment ? payment.status?.toUpperCase() : (["DELIVERED", "CONFIRMED", "SHIPPED"].includes(order.status) ? "SUCCESS" : "PENDING");
-              const isPaid = payStatus === "SUCCESS" || order.status === "DELIVERED";
+              const payMethod = (payInfo?.paymentMethod || payment?.paymentMethod || "").toUpperCase();
+              const payStatus = (payInfo?.paymentStatus || payment?.status || "").toUpperCase();
+              // COD chỉ "đã thanh toán" khi đã giao; VNPay theo trạng thái giao dịch thật.
+              const isPaid = payMethod === "COD" ? order.status === "DELIVERED" : payStatus === "SUCCESS";
+              const isRefunded = ["REFUNDED", "PARTIALLY_REFUNDED", "REFUND_PENDING"].includes(payStatus);
+              const isFailed = (payStatus === "FAILED" || payStatus === "EXPIRED") && !["CANCELLED", "RETURNING", "RETURNED"].includes(order.status);
+              const statusText = isRefunded
+                ? (payStatus === "REFUND_PENDING" ? "Đang hoàn tiền" : payStatus === "PARTIALLY_REFUNDED" ? "Đã hoàn một phần" : "Đã hoàn tiền")
+                : isPaid ? "Đã thanh toán"
+                : ["CANCELLED", "RETURNING", "RETURNED"].includes(order.status) ? "Không thu tiền (đơn đã hủy)"
+                : payStatus === "FAILED" || payStatus === "EXPIRED" ? "Thanh toán không thành công"
+                : payMethod === "COD" ? "Thu tiền khi giao hàng"
+                : !payMethod ? "Chưa thanh toán" : "Chờ thanh toán";
 
               return (
                 <div className="space-y-4">
@@ -500,7 +532,7 @@ export default function OrderDetailPage() {
                     </div>
                     <div>
                       <p className="text-xs font-bold text-slate-850 dark:text-slate-200 leading-tight">
-                        {payMethod === "COD" ? "Thanh toán khi nhận hàng" : "Thanh toán Online VNPAY"}
+                        {payMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : payMethod === "VNPAY" ? "Thanh toán online qua VNPAY" : "Chưa chọn phương thức"}
                       </p>
                       <p className="text-[10px] text-slate-400 mt-0.5">Hình thức thanh toán</p>
                     </div>
@@ -511,23 +543,23 @@ export default function OrderDetailPage() {
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
                       isPaid 
                         ? "bg-emerald-50 dark:bg-emerald-955/20 text-emerald-600 border border-emerald-250/20" 
-                        : payStatus === "FAILED" 
+                        : isFailed
                         ? "bg-rose-50 dark:bg-rose-955/20 text-rose-600 border border-rose-200/20" 
                         : "bg-amber-50 dark:bg-amber-955/20 text-amber-600 border border-amber-200/20"
                     }`}>
-                      <Icon className="text-[18px]" name={isPaid ? "check_circle" : payStatus === "FAILED" ? "error" : "schedule"} />
+                      <Icon className="text-[18px]" name={isPaid ? "check_circle" : isFailed ? "error" : isRefunded ? "currency_exchange" : "schedule"} />
                     </div>
                     <div>
                       <p className={`text-xs font-bold leading-tight ${
-                        isPaid ? "text-emerald-700" : payStatus === "FAILED" ? "text-rose-600" : "text-amber-600"
+                        isPaid ? "text-emerald-700" : isFailed ? "text-rose-600" : "text-amber-600"
                       }`}>
-                        {isPaid ? "Đã nhận thanh toán" : payStatus === "FAILED" ? "Thanh toán bị lỗi" : "Chờ thanh toán"}
+                        {statusText}
                       </p>
                       <p className="text-[10px] text-slate-400 mt-0.5">Trạng thái giao dịch</p>
                     </div>
                   </div>
 
-                  {payment && payment.transactionNo && (
+                  {payMethod === "VNPAY" && payment && payment.transactionNo && (
                     <div className="pt-3 border-t border-slate-100 dark:border-slate-800/60 text-[10px] font-semibold text-slate-500 space-y-2">
                       <div className="flex justify-between">
                         <span>Mã giao dịch:</span>
@@ -548,6 +580,16 @@ export default function OrderDetailPage() {
             })()}
           </div>
 
+          <CancelOrderDialog
+            open={cancelDialogOpen}
+            orderId={order.id}
+            note={payInfo?.paymentStatus === "SUCCESS"
+              ? "Đơn đã thanh toán online sẽ được hoàn tiền về tài khoản/thẻ sau khi hủy."
+              : "Bạn có thể hủy đơn khi đơn chưa được bàn giao cho đơn vị vận chuyển."}
+            onConfirm={handleConfirmCancel}
+            onClose={() => setCancelDialogOpen(false)}
+          />
+
           {/* Customer Support Panel */}
           <div className="bg-slate-50 dark:bg-slate-800/30 border border-slate-150 dark:border-slate-850 rounded-2xl p-4 space-y-2.5 text-xs text-slate-500 dark:text-slate-400">
             <h3 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
@@ -558,7 +600,7 @@ export default function OrderDetailPage() {
             </p>
             <div className="flex items-center gap-1.5 font-bold text-primary pt-1 border-t border-slate-150 dark:border-slate-800/60">
               <Icon name="phone_in_talk" className="text-sm animate-pulse" />
-              <span>Hotline miễn phí: 1800.2097</span>
+              <span>Hotline hỗ trợ: 0389.468.847</span>
             </div>
           </div>
         </div>

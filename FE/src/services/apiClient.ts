@@ -13,7 +13,7 @@ const SESSION_ID_KEY = "techstore_session_id";
 
 // Session id ổn định trong 1 tab/1 phiên trình duyệt (sessionStorage: mất khi đóng tab, không
 // chia sẻ giữa các tab) — dùng để nhóm hành vi xem/giỏ hàng theo phiên cho churn-risk feature
-// (xem docs/canvas/churn-risk-roadmap.md Tầng 1.1). Không phải session id bảo mật, chỉ là nhãn
+// (xem docs/AI/churn-risk-roadmap.md Tầng 1.1). Không phải session id bảo mật, chỉ là nhãn
 // nhóm hành vi nên không cần luân chuyển/ký.
 function getSessionId(): string {
   if (typeof window === "undefined") return "";
@@ -63,6 +63,7 @@ function stringifyErrorValue(value: unknown): string[] {
     if (typeof record.defaultMessage === "string") return [record.defaultMessage];
     if (typeof record.reason === "string") return [record.reason];
     if (typeof record.error === "string") return [record.error];
+    if (typeof record.msg === "string") return [record.msg]; // FastAPI validation item
 
     return Object.entries(record).flatMap(([key, item]) => {
       const messages = stringifyErrorValue(item);
@@ -84,7 +85,8 @@ function getApiErrorMessage(payload: unknown, status: number): string {
     ...(hasGenericValidationMessage ? [] : stringifyErrorValue(record?.message)),
     ...stringifyErrorValue(record?.data),
     ...stringifyErrorValue(record?.errors),
-    ...stringifyErrorValue(record?.error)
+    ...stringifyErrorValue(record?.error),
+    ...stringifyErrorValue(record?.detail) // FastAPI (AI services) trả lỗi ở "detail"
   ].filter(Boolean);
 
   const uniqueMessages = Array.from(new Set(messages));
@@ -131,10 +133,13 @@ async function request<T>(path: string, options: RequestInit & { requireAuth?: b
   const token = getAuthToken();
   const { requireAuth: _requireAuth, headers: customHeaders, ...requestOptions } = options;
   const url = `${API_BASE_URL}${path}`;
+  // FormData (upload ảnh) phải để trình duyệt tự set Content-Type kèm boundary multipart —
+  // KHÔNG ép application/json, nếu không server không parse được file.
+  const isFormData = typeof FormData !== "undefined" && requestOptions.body instanceof FormData;
 
   const response = await fetch(url, {
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       "X-Session-Id": getSessionId(),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(customHeaders as Record<string, string> || {})
@@ -161,7 +166,10 @@ async function request<T>(path: string, options: RequestInit & { requireAuth?: b
       throw new Error(AUTH_EXPIRED_MESSAGE);
     }
 
-    throw new Error(getApiErrorMessage(payload, response.status));
+    // Gắn mã HTTP vào lỗi để nơi gọi phân biệt được 404/503... (message giữ nguyên như cũ).
+    const error = new Error(getApiErrorMessage(payload, response.status)) as Error & { status?: number };
+    error.status = response.status;
+    throw error;
   }
 
   // Validation endpoint returns code VALIDATION_FAILED with the result in data
@@ -184,6 +192,12 @@ export const apiClient = {
     request<T>(path, {
       method: "POST",
       body: body === undefined ? undefined : JSON.stringify(body)
+    }),
+  postForm: <T>(path: string, formData: FormData, options?: { requireAuth?: boolean }) =>
+    request<T>(path, {
+      method: "POST",
+      body: formData,
+      requireAuth: options?.requireAuth
     }),
   postAuth: <T, B = unknown>(path: string, body?: B) =>
     request<T>(path, {
@@ -222,6 +236,31 @@ export const apiClient = {
       method: "DELETE",
       requireAuth: true
     }),
+  upload: async <T>(path: string, formData: FormData, options: { headers?: Record<string, string> } = {}): Promise<T> => {
+    const token = getAuthToken();
+    const url = `${API_BASE_URL}${path}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(options.headers || {})
+      },
+      body: formData
+    });
+
+    const payload = await response.json().catch(() => null);
+
+    if (!response.ok || payload?.success === false || payload?.code === "ERROR") {
+      throw new Error(getApiErrorMessage(payload, response.status));
+    }
+
+    if (payload && (payload.code === "SUCCESS" || typeof payload.success === "boolean")) {
+      return payload.data as T;
+    }
+
+    return payload as T;
+  },
   uploadAuth: async <T>(path: string, formData: FormData): Promise<T> => {
     if (!hasAuthToken()) {
       throw new Error("Vui lòng đăng nhập để tiếp tục.");

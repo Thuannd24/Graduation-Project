@@ -23,10 +23,9 @@ const SOCIAL_LINKS = [
 ];
 
 const PAYMENT_METHODS = [
-  { name: "VISA", bg: "linear-gradient(135deg,#1a1f71,#2b3a9e)" },
-  { name: "MoMo", bg: "linear-gradient(135deg,#a50064,#d82d8b)" },
-  { name: "ZaloPay", bg: "linear-gradient(135deg,#0068ff,#00a2ff)" },
-  { name: "VNPAY", bg: "linear-gradient(135deg,#005baa,#00a8e8)" }
+  // Chỉ liệt kê phương thức hệ thống thật sự hỗ trợ (order/payment-service): VNPay và COD.
+  { name: "VNPAY", bg: "linear-gradient(135deg,#005baa,#00a8e8)" },
+  { name: "COD", bg: "linear-gradient(135deg,#334155,#64748b)" }
 ];
 
 export default function Footer() {
@@ -42,15 +41,15 @@ export default function Footer() {
             <span className="font-light text-rose-600 text-lg border-l border-slate-300 pl-2 ml-2 tracking-widest">Tech</span>
           </Link>
           <p className="text-sm leading-relaxed text-slate-500">
-            Sàn thương mại điện tử đa ngành hàng: thời trang, làm đẹp, nhà cửa, mẹ & bé, điện tử và hơn thế nữa. Cam kết chất lượng, đổi trả dễ dàng.
+            Sàn thương mại điện tử đa ngành hàng: thời trang, làm đẹp, nhà cửa, mẹ & bé, điện tử và hơn thế nữa. Cam kết hàng chính hãng, hỗ trợ đổi trả và bảo hành qua hotline.
           </p>
           <div className="flex items-center gap-3.5 bg-white border border-slate-200/80 rounded-2xl p-4 mt-2 shadow-sm">
             <div className="p-2.5 bg-red-500/10 rounded-xl text-red-600">
               <Icon name="phone_in_talk" className="text-xl" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Hotline hỗ trợ (Miễn phí)</p>
-              <a href="tel:18002097" className="text-lg font-black text-slate-900 hover:text-red-600 transition-colors">1800.2097</a>
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Hotline hỗ trợ</p>
+              <a href="tel:0389468847" className="text-lg font-black text-slate-900 hover:text-red-600 transition-colors">0389.468.847</a>
             </div>
           </div>
         </section>
@@ -68,7 +67,7 @@ export default function Footer() {
             </li>
             <li>
               <Link to="/profile?tab=policy" className="hover:text-red-600 hover:translate-x-1.5 inline-flex items-center gap-1.5 transition-all duration-200">
-                <span className="text-[10px] text-red-500">●</span> Chính sách đổi trả 30 ngày
+                <span className="text-[10px] text-red-500">●</span> Chính sách đổi trả
               </Link>
             </li>
             <li>

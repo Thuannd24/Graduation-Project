@@ -1,6 +1,6 @@
 """Đo giá trị của THỨ TỰ trên REES46 Cosmetics — phép kiểm ghép cặp.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §5.2/5.3.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §5.2/5.3.
 
 Luật quyết định (chốt trước): nhận khi mean(Δ) > std(Δ) VÀ >=80% fold dương. Đối chứng âm bắt
 buộc: xáo B_SESS giữa các hàng.

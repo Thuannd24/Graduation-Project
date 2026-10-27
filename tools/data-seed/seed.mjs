@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Sinh dữ liệu user/order/behavior TỔNG HỢP (synthetic) để mở khóa phần ML của churn-risk
- * detection (xem docs/canvas/churn-risk-implementation-plan.md Phase 3).
+ * detection (xem docs/AI/churn-risk-implementation-plan.md Phase 3).
  *
  * QUAN TRỌNG: đây là dữ liệu tổng hợp, không phải hành vi người dùng thật. Metric đo được từ
  * model train trên dữ liệu này phản ánh "model có phục hồi được cấu trúc sinh dữ liệu hay
@@ -95,7 +95,7 @@ function parseArgs(argv) {
 
 function printHelp() {
   console.log(`
-Data seed tool cho churn-risk detection (xem docs/canvas/churn-risk-implementation-plan.md)
+Data seed tool cho churn-risk detection (xem docs/AI/churn-risk-implementation-plan.md)
 
   node seed.mjs --dry-run                  Chỉ in thống kê, không ghi DB
   node seed.mjs                             Ghi DB thật
@@ -171,7 +171,7 @@ function summarize(profiles, users, st) {
   console.log(`Behavior events (19 loại hành vi): ${st.events}`);
   console.log(`Users có ít nhất 1 đơn: ${st.usersWithOrders} / ${users.length}`);
 
-  // Tiêu chí thành công Tầng 1.1/1.2 (docs/canvas/churn-risk-roadmap.md): tỉ lệ session_id NULL
+  // Tiêu chí thành công Tầng 1.1/1.2 (docs/AI/churn-risk-roadmap.md): tỉ lệ session_id NULL
   // < 5%, events_per_session > 1 — in ra ngay lúc seed để phát hiện sớm nếu cụm phiên bị lỗi.
   const nullSessionRatio = st.events ? (100 * (st.events - st.eventsWithSession)) / st.events : 0;
   console.log(`Session: ${st.sessions} phiên, ${(st.events / Math.max(st.sessions, 1)).toFixed(2)} event/phiên trung bình, ${nullSessionRatio.toFixed(1)}% event không có session_id`);

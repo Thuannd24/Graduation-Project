@@ -1,4 +1,12 @@
 # TÀI LIỆU THIẾT KẾ: NOTIFICATION SERVICE
+
+> 🗄️ **Thiết kế ban đầu — một số phần KHÔNG khớp với code hiện tại (rà soát 2026-10-11).** Khác biệt chính:
+> - Chỉ consume **`order-events`** (`OrderConfirmedEvent`, `OrderCancelledEvent`, `OrderShippedEvent`, `OrderDeliveredEvent`) và **`payment-events`** (`PaymentSuccessEvent`, `PaymentFailedEvent`). **Không** xử lý `OrderCreatedEvent`, `RefundCompletedEvent`, không có topic `user-events`/`UserRegisteredEvent`/`PasswordResetEvent`, không nghe `inventory-events`. Topic `notification-events` (chat-service publish) cũng **không có consumer**.
+> - Kênh: **Email (SMTP, `spring-boot-starter-mail`) gửi thật**; **Push FCM chỉ ghi log** ("Simulating FCM Push"), không gọi Firebase; **không có SMS** (Twilio/ESMS) và **không có WebSocket/In-App real-time**.
+> - Template không dùng Thymeleaf: template lưu ở collection `notification_templates` (seed bởi `NotificationTemplateSeeder`, vd `order_confirmed_template`, `payment_success_template`, `promotion_voucher_template`) và render bằng thay thế placeholder `{{key}}` (`TemplateRenderer`).
+> - Có gọi đồng bộ: endpoint nội bộ **`POST /api/internal/notifications/send`** (promotion-service `SendEmailDelegate` gọi qua Feign).
+> - API người dùng thực tế chỉ có **`GET /api/v1/notifications`** và **`POST /api/v1/notifications/fcm-token`** (header `X-User-Id`); không có `unread-count`, `read`, `read-all`, `DELETE fcm-token` và không có endpoint admin (`/api/admin/notifications/**`).
+> - **Không có** `NotificationRetryScheduler` và Circuit Breaker cho email provider (mục VII); chống gửi trùng bằng kiểm tra `existsByOrderIdAndEventType`.
 ## (Dịch vụ Thông báo)
 
 > **Port:** `8086` | **DB:** `notif_db` (MongoDB) | **Version:** 1.0.0
@@ -13,8 +21,8 @@
 |---|---|
 | **Email** | Gửi email xác nhận đơn hàng, OTP, thông báo thanh toán |
 | **Push Notification** | Gửi thông báo đẩy Web/App khi trạng thái đơn thay đổi |
-| **SMS** | Gửi SMS OTP, trạng thái giao hàng (tích hợp Twilio/ESMS) |
-| **In-App Notification** | Lưu và hiển thị thông báo trong ứng dụng (real-time qua WebSocket) |
+| **SMS** | ~~Gửi SMS OTP, trạng thái giao hàng (tích hợp Twilio/ESMS)~~ — không có trong code |
+| **In-App Notification** | Lưu lịch sử thông báo vào MongoDB, xem qua `GET /api/v1/notifications` (không có WebSocket real-time) |
 | **Template Engine** | Quản lý và render template thông báo đẹp, đa ngôn ngữ |
 
 ### 1.2. Nguyên tắc thiết kế cốt lõi: FULLY ASYNCHRONOUS
@@ -71,15 +79,14 @@ graph TD
 
 | Topic | Event | Thông báo được gửi |
 |---|---|---|
-| `order-events` | `OrderCreatedEvent` | Email xác nhận đơn hàng mới |
+| `order-events` | `OrderConfirmedEvent` | Email xác nhận đơn hàng (thiết kế cũ: `OrderCreatedEvent`) |
 | `order-events` | `OrderCancelledEvent` | Email thông báo hủy đơn |
-| `order-events` | `OrderShippedEvent` | Email + SMS + Push: Đơn đang giao |
+| `order-events` | `OrderShippedEvent` | Email (+ Push FCM chỉ ghi log): Đơn đang giao |
 | `order-events` | `OrderDeliveredEvent` | Email + Push: Giao hàng thành công |
 | `payment-events` | `PaymentSuccessEvent` | Email xác nhận thanh toán |
 | `payment-events` | `PaymentFailedEvent` | Email thông báo thanh toán thất bại |
-| `payment-events` | `RefundCompletedEvent` | Email xác nhận hoàn tiền |
-| `user-events` | `UserRegisteredEvent` | Email chào mừng + xác thực tài khoản |
-| `user-events` | `PasswordResetEvent` | Email OTP đặt lại mật khẩu |
+| ~~`payment-events`~~ | ~~`RefundCompletedEvent`~~ | Không được xử lý trong code |
+| ~~`user-events`~~ | ~~`UserRegisteredEvent`, `PasswordResetEvent`~~ | Topic không tồn tại — không có trong code |
 
 ---
 
@@ -134,6 +141,8 @@ sequenceDiagram
 
 ### 3.2. Luồng gửi Push Notification (FCM)
 
+> ⚠️ _Thực tế FCM **chỉ ghi log** mô phỏng (không gọi `fcm.googleapis.com`). Sơ đồ dưới đây là thiết kế ban đầu._
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -161,6 +170,8 @@ sequenceDiagram
 ## IV. TEMPLATE ENGINE
 
 ### 4.1. Thymeleaf Email Template
+
+> ⚠️ _Không dùng Thymeleaf trong code; template lấy từ MongoDB `notification_templates` và thay placeholder `{{key}}`._
 
 ```html
 <!-- templates/email/order-confirmation.html -->
@@ -316,14 +327,15 @@ db.fcm_tokens.createIndex({ "fcmToken": 1 }, { unique: true })
 
 | Method | Endpoint | Mô tả |
 |---|---|---|
-| GET | `/api/notifications` | Lấy danh sách thông báo của tôi |
-| GET | `/api/notifications/unread-count` | Số thông báo chưa đọc |
-| PUT | `/api/notifications/{id}/read` | Đánh dấu đã đọc |
-| PUT | `/api/notifications/read-all` | Đánh dấu tất cả đã đọc |
-| POST | `/api/notifications/fcm-token` | Đăng ký FCM Token thiết bị |
-| DELETE | `/api/notifications/fcm-token` | Xóa FCM Token khi đăng xuất |
+| GET | `/api/v1/notifications` | Lấy danh sách thông báo của tôi |
+| ~~GET~~ | ~~`/api/notifications/unread-count`~~ | Không có trong code |
+| ~~PUT~~ | ~~`/api/notifications/{id}/read`~~ | Không có trong code |
+| ~~PUT~~ | ~~`/api/notifications/read-all`~~ | Không có trong code |
+| POST | `/api/v1/notifications/fcm-token` | Đăng ký FCM Token thiết bị |
+| ~~DELETE~~ | ~~`/api/notifications/fcm-token`~~ | Không có trong code |
+| POST | `/api/internal/notifications/send` | (Nội bộ) Gửi thông báo theo template — gọi bởi promotion-service |
 
-#### `GET /api/notifications?page=0&size=20&unreadOnly=false`
+#### `GET /api/v1/notifications` (thiết kế cũ có tham số `page`, `size`, `unreadOnly` — code không nhận tham số)
 ```json
 // Response 200 OK
 {
@@ -344,7 +356,7 @@ db.fcm_tokens.createIndex({ "fcmToken": 1 }, { unique: true })
 }
 ```
 
-#### `POST /api/notifications/fcm-token`
+#### `POST /api/v1/notifications/fcm-token`
 ```json
 // Request Body
 {
@@ -358,6 +370,8 @@ db.fcm_tokens.createIndex({ "fcmToken": 1 }, { unique: true })
 
 ### 6.2. Admin Endpoints
 
+> ⚠️ _Không tồn tại trong code — notification-service không có endpoint admin._
+
 | Method | Endpoint | Mô tả |
 |---|---|---|
 | GET | `/api/admin/notifications/stats` | Thống kê gửi thông báo |
@@ -368,6 +382,8 @@ db.fcm_tokens.createIndex({ "fcmToken": 1 }, { unique: true })
 ---
 
 ## VII. CƠ CHẾ RETRY VÀ RESILIENCE
+
+> ⚠️ _Thiết kế ban đầu, chưa hiện thực: không có `NotificationRetryScheduler` và Circuit Breaker cho email provider._
 
 ### 7.1. Retry Strategy
 
@@ -419,6 +435,8 @@ public void sendEmailFallback(EmailRequest request, Exception ex) {
 ---
 
 ## VIII. REAL-TIME IN-APP NOTIFICATION (WebSocket)
+
+> ⚠️ _Thiết kế ban đầu, chưa hiện thực: notification-service không có WebSocket._
 
 ### 8.1. Kiến trúc WebSocket
 

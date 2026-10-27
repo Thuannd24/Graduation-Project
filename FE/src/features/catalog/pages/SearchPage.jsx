@@ -6,6 +6,7 @@ import FilterDrawer from "../components/category/FilterDrawer.jsx";
 import ProductToolbar from "../components/category/ProductToolbar.jsx";
 import ProductGridSkeleton from "../components/category/ProductGridSkeleton.jsx";
 import Icon from "../../../components/common/Icon.jsx";
+import { aiApi } from "../../../services/aiApi.ts";
 import { productApi } from "../../../services/productApi";
 import { PRICE_PRESETS, PRICE_MAX } from "../utils/categoryUtils.js";
 import { useDebounce } from "../hooks/useDebounce.js";
@@ -105,9 +106,31 @@ export default function SearchPage() {
       if (cachedCrop) setCropBox(JSON.parse(cachedCrop));
       setLoading(false);
     } else {
-      productApi
-        .searchProducts(query, 0, 100)
-        .then((result) => setAllProducts(result.items))
+      // Chạy song song tìm theo từ khóa và tìm ngữ nghĩa (AI). Giữ thứ tự xếp hạng của AI (đã kết hợp
+      // BM25 + vector), dùng bản ghi đầy đủ từ product-service khi có, rồi nối các kết quả chỉ khớp từ khóa.
+      Promise.all([
+        productApi.searchProducts(query, 0, 100).then((result) => result.items).catch(() => null),
+        // Tìm kiếm AI có giới hạn 4 giây (vd. lúc model vừa khởi động) -> quá hạn thì dùng kết quả từ khóa.
+        Promise.race([aiApi.searchText(query, 40), new Promise((resolve) => setTimeout(() => resolve([]), 4000))])
+      ])
+        .then(([keywordItems, semanticItems]) => {
+          if (keywordItems === null && semanticItems.length === 0) {
+            throw new Error("Không thể tìm kiếm lúc này, vui lòng thử lại.");
+          }
+          const keywordById = new Map((keywordItems || []).map((p) => [String(p.id), p]));
+          const seen = new Set();
+          const merged = [];
+          for (const item of semanticItems) {
+            const id = String(item.id);
+            if (seen.has(id)) continue;
+            seen.add(id);
+            merged.push(keywordById.get(id) || item);
+          }
+          for (const item of keywordItems || []) {
+            if (!seen.has(String(item.id))) merged.push(item);
+          }
+          setAllProducts(merged);
+        })
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
     }
@@ -159,7 +182,7 @@ export default function SearchPage() {
   // Ghi nhận sản phẩm THẬT SỰ hiển thị cho user sau khi lọc/sắp xếp xong — không phải toàn bộ
   // allProducts đã tải (có thể lớn hơn nhiều những gì user thấy).
   useEffect(() => {
-    if (sortedProducts.length > 0) trackImpressions(sortedProducts.map((p) => p.id));
+    if (sortedProducts.length > 0) trackImpressions(sortedProducts.map((p) => p.id), "search");
   }, [sortedProducts]);
 
   const filterPanelProps = {
@@ -249,6 +272,7 @@ export default function SearchPage() {
           <ProductToolbar
             title={`Kết quả cho "${query}"`}
             count={sortedProducts.length}
+            loading={loading}
             sort={sort}
             onSortChange={(v) => updateFilters({ sort: v })}
             brands={availableBrands}

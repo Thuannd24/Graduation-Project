@@ -1,6 +1,6 @@
 """Feature store tối giản cho chấm điểm churn THẬT (serving), quyết định 2026-10-06 sau khi đo được
 `build_feature_matrix()` gốc (SQL tổng hợp) mất 25-40+ phút trên dữ liệu REES46 thật — xem
-docs/canvas/churn-risk-log.md mục 2026-10-06. Kiến trúc:
+docs/AI/churn-risk-log.md mục 2026-10-06. Kiến trúc:
 
   Tính trước (pandas, `fast_compute.py`, vài giây) -> LƯU vào bảng `user_feature_vectors`
   -> lúc cần chấm điểm (`risk_scoring.predict()`) chỉ ĐỌC bảng này (SELECT đơn giản, mili-giây).

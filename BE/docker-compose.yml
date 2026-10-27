@@ -102,6 +102,10 @@ services:
     depends_on:
       debezium-connect:
         condition: service_healthy
+      order-service:
+        condition: service_healthy
+      payment-service:
+        condition: service_healthy
     networks:
       - ecommerce-network
     environment:
@@ -234,7 +238,9 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET}
       - DOMAIN=${DOMAIN:-localhost}
-      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.migration.replace-placeholders=true -DGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -DGOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -DKEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -DDOMAIN=${DOMAIN:-localhost}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.migration.replace-placeholders=true -DGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -DGOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -DKEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -DDOMAIN=${DOMAIN:-localhost} -DMAIL_USERNAME=${MAIL_USERNAME} -DMAIL_PASSWORD=${MAIL_PASSWORD}
     volumes:
       - ./keycloak-data:/opt/keycloak/data/import
       - ./keycloak-themes:/opt/keycloak/themes
@@ -379,6 +385,15 @@ services:
         condition: service_healthy
     networks:
       - ecommerce-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --spider http://localhost:8082/actuator/health || exit 1",
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 15
 
   inventory-service:
     build:
@@ -386,7 +401,7 @@ services:
       dockerfile: inventory-service/Dockerfile
     container_name: inventory-service
     ports:
-      - "8093:8093"
+      - "8094:8094"
     environment:
       - EUREKA_HOST=eureka-server
       - DB_HOST=mariadb
@@ -436,6 +451,15 @@ services:
         condition: service_healthy
     networks:
       - ecommerce-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --spider http://localhost:8084/actuator/health || exit 1",
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 15
 
   notification-service:
     build:
@@ -451,6 +475,7 @@ services:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - MAIL_USERNAME=${MAIL_USERNAME}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
       - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh
     depends_on:
       eureka-server:
@@ -477,6 +502,33 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  chat-service:
+    build:
+      context: .
+      dockerfile: chat-service/Dockerfile
+    container_name: chat-service
+    ports:
+      - "8095:8095"   # app nghe 8095 (application.yml); 8088 đã do debezium-connect dùng
+    environment:
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_PUBLIC_ENDPOINT=http://localhost:9000
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=12345678a@
+      - EUREKA_HOST=eureka-server
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KEYCLOAK_ISSUER_URI=http://localhost:8083/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh
     depends_on:
       eureka-server:

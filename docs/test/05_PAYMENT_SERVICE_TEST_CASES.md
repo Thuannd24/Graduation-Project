@@ -47,7 +47,7 @@ Các luồng gọi ra ngoài tới VNPAY (`restTemplate`/`standardRestTemplate.p
 
 ### 0.3. Test được với DB thật (Integration Test)
 
-- Idempotency khi initiate payment (kiểm tra bản ghi `Payment` trong Postgres/H2)
+- Idempotency khi initiate payment (kiểm tra bản ghi `Payment` trong MariaDB/H2)
 - Refund logic tính tổng `sumSuccessfulRefunds`, khóa pessimistic (`findByIdWithLock`, `findByTxnRefWithLock`)
 - Payment expiry scheduler quét `findAllByStatusAndCreatedAtBefore`
 - Outbox event ghi vào bảng `outbox_events` (không cần Kafka thật, chỉ cần verify bản ghi outbox — Debezium CDC nằm ngoài phạm vi IT của service này)
@@ -56,7 +56,7 @@ Các luồng gọi ra ngoài tới VNPAY (`restTemplate`/`standardRestTemplate.p
 ### 0.4. Quy ước Test ID
 
 - `UT-PAYMENT-0xx`: Unit Test — mock toàn bộ dependency (Repository, RestTemplate, KafkaTemplate, Redis).
-- `IT-PAYMENT-0xx`: Integration Test — dùng DB thật (Testcontainers Postgres/H2), Redis thật, mock VNPAY qua WireMock/MockRestServiceServer.
+- `IT-PAYMENT-0xx`: Integration Test — dùng DB thật (Testcontainers MariaDB/H2), Redis thật, mock VNPAY qua WireMock/MockRestServiceServer.
 
 ---
 
@@ -141,7 +141,7 @@ Các luồng gọi ra ngoài tới VNPAY (`restTemplate`/`standardRestTemplate.p
 
 | Test ID | Module/Endpoint | Loại | Mô tả | Tiền điều kiện | Input/Steps | Kết quả mong đợi | Priority |
 |---|---|---|---|---|---|---|---|
-| IT-PAYMENT-009 | `processRefund` — 2 refund đồng thời cùng payment (race condition) | Integration | Đảm bảo pessimistic lock (`findByIdWithLock`) chặn được double-refund vượt hạn mức khi 2 request refund gửi đồng thời | Payment SUCCESS `amount=1000000`, DB thật (Postgres/Testcontainers) hỗ trợ lock thật; mock VNPAY luôn trả 00 | 2 thread gọi `processRefund` đồng thời, mỗi thread refund `amount=600000` (tổng 1,200,000 > amount payment) | Chỉ 1 request refund thành công (`SUCCESS`, tổng refund ≤ 1,000,000); request còn lại nhận `IllegalArgumentException` "Security Violation..." khi re-validate dưới lock ở STEP 3 (dù đã pass check ở STEP 1 snapshot do race) — tổng `refund_amount` trong DB **không vượt** `payment.amount` | Cao |
+| IT-PAYMENT-009 | `processRefund` — 2 refund đồng thời cùng payment (race condition) | Integration | Đảm bảo pessimistic lock (`findByIdWithLock`) chặn được double-refund vượt hạn mức khi 2 request refund gửi đồng thời | Payment SUCCESS `amount=1000000`, DB thật (MariaDB/Testcontainers) hỗ trợ lock thật; mock VNPAY luôn trả 00 | 2 thread gọi `processRefund` đồng thời, mỗi thread refund `amount=600000` (tổng 1,200,000 > amount payment) | Chỉ 1 request refund thành công (`SUCCESS`, tổng refund ≤ 1,000,000); request còn lại nhận `IllegalArgumentException` "Security Violation..." khi re-validate dưới lock ở STEP 3 (dù đã pass check ở STEP 1 snapshot do race) — tổng `refund_amount` trong DB **không vượt** `payment.amount` | Cao |
 | UT-PAYMENT-030 | `processRefund` — Snapshot pass nhưng lock re-check fail | Unit | Mô phỏng race: STEP 1 snapshot đọc `remaining=600000` (đủ), nhưng giữa lúc gọi VNPAY và lúc vào transaction, refund khác đã commit trước làm remaining thực tế còn 0 | Mock `sumSuccessfulRefunds` trả về giá trị khác nhau giữa 2 lần gọi (snapshot vs trong transaction) | Gọi `processRefund` | Sau khi gọi VNPAY (tốn tiền phí gọi API dù có thể lãng phí), transaction re-check tại STEP 3 ném `IllegalArgumentException` Security Violation → refund KHÔNG được lưu là SUCCESS dù VNPAY đã trả 00 ở bước gateway (rủi ro cần lưu ý: tiền đã bị trừ ở VNPAY nhưng DB reject — cần theo dõi log để xử lý thủ công) | Cao |
 | IT-PAYMENT-010 | `processPendingRefunds` — Scheduler + lock chống xử lý trùng | Integration | Refund `status=PENDING` được 2 instance scheduler lấy song song, chỉ 1 xử lý thành công nhờ `findByIdWithLock` | 1 Refund PENDING; 2 thread gọi `processPendingRefunds()` đồng thời | Chạy đồng thời | Refund chỉ được set `SUCCESS` một lần; thread thứ 2 thấy `status` không còn PENDING (do đã xử lý) → log "already processed by another instance" và skip | Cao |
 

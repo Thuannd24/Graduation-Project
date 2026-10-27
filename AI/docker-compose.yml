@@ -16,6 +16,16 @@ services:
       - ELASTICSEARCH_HOST=http://infra-elasticsearch:9200
       - DB_HOST=infra-mariadb
       - DB_PORT=3306
+      - DB_NAME=ecommerce_product_db
+      - CATALOG_SOURCE=mariadb
+      - DATA_DIR=/data
+      - YOLO_ENABLED=false
+      - PRELOAD_MODELS=false
+    volumes:
+      # Giữ FAISS index + cache ảnh sau khi build (không mất khi restart container)
+      - search-index-data:/data
+      # Cache model HuggingFace (CLIP ~600MB, e5-large ~2GB): chỉ tải 1 lần, không mất khi rebuild
+      - search-model-cache:/root/.cache
     networks:
       - ecommerce-network
 
@@ -24,6 +34,7 @@ services:
       context: .
       dockerfile: chatbot-service/Dockerfile
     container_name: ai-chatbot-service
+    restart: unless-stopped
     ports:
       - "8002:8002"
     environment:
@@ -34,6 +45,12 @@ services:
       - MONGO_URI=mongodb://infra-mongodb:27017/ecommerce_product_nosql
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_MODEL_NAME=${DEEPSEEK_MODEL_NAME}
+
+      - ORDER_SERVICE_URL=http://order-service:8082
+      - USER_SERVICE_URL=http://user-service:8085
+      - PROMOTION_SERVICE_URL=http://promotion-service:8087
     depends_on:
       - search-service
     networks:
@@ -52,6 +69,11 @@ services:
       - REDIS_PORT=6379
       - DB_HOST=infra-mariadb
       - DB_PORT=3306
+      # Checkpoint SASRec platform_v1: đặt file vào AI/models/sasrec.pt (gitignored, sinh lại được bằng
+      # recsys_platform_sasrec.py). Thiếu file thì service tự rơi về Recency/Popularity, không lỗi.
+      - MODEL_WEIGHTS_PATH=/workspace/recs-service/data/models/sasrec.pt
+    volumes:
+      - ./models:/workspace/recs-service/data/models
     networks:
       - ecommerce-network
 
@@ -88,3 +110,7 @@ networks:
     # không bao giờ join đúng network, không thể kết nối Kafka/MariaDB của BE dù code đúng.
     name: ecommerce-network
     external: true
+
+volumes:
+  search-index-data:
+  search-model-cache:

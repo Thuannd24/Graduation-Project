@@ -256,7 +256,7 @@ export default function AddProductTab({ onSaveProduct, editingProductId, setEdit
           // để useEffect theo dõi categoryId không chạy reset data
           isEditingLoadStarted.current = true;
 
-          const detail = await productApi.getProductDetail(editingProductId);
+          const detail = await productApi.adminGetProductDetail(editingProductId);
 
           // Set ref NGAY LẬP TỨC sau khi có detail, TRƯỚC setBasicInfo
           // → đảm bảo Guard 2 trong useEffect #2 đã có giá trị

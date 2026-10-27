@@ -1,0 +1,14 @@
+# Secrets — never commit, see .env.example for the template
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Model / index artifacts pulled at runtime (HF cache) — NOT the committed FAISS index
+.cache/

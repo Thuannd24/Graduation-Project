@@ -1,6 +1,6 @@
 """Chạy risk-scan định kỳ: predict (không refit) → lọc user "At Risk" + xác suất churn vượt
 ngưỡng → CHỈ publish cho user nào thực sự vừa bỏ giỏ hàng gần đây (rule tầng 2, xem Context trong
-docs/canvas/churn-risk-implementation-plan.md — AI quyết định segment/xác suất, rule quyết định
+docs/AI/churn-risk-implementation-plan.md — AI quyết định segment/xác suất, rule quyết định
 thời điểm). `max_instances=1` bắt buộc để tránh 2 lần scan chồng nhau nếu 1 lần chạy > interval.
 """
 from apscheduler.schedulers.asyncio import AsyncIOScheduler

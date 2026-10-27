@@ -305,7 +305,7 @@ export default function CategorySidebar({ withFilters = false, isDropdown = fals
             <Icon name="support_agent" className="text-red-600 dark:text-red-500 text-lg shrink-0" />
             <div className="min-w-0">
               <p className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 leading-none">Tư vấn mua hàng</p>
-              <p className="text-[10px] text-red-600 dark:text-red-400 font-bold mt-0.5 leading-none">1800.2097 (Miễn phí)</p>
+              <p className="text-[10px] text-red-600 dark:text-red-400 font-bold mt-0.5 leading-none">0389.468.847</p>
             </div>
           </div>
           <div className="flex items-center gap-2">

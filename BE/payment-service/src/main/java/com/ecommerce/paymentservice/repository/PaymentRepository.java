@@ -22,6 +22,10 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     Optional<Payment> findByTxnRefWithLock(@Param("txnRef") String txnRef);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Payment p where p.previousTxnRefs like concat('%', :txnRef, '%')")
+    Optional<Payment> findBySupersededTxnRefWithLock(@Param("txnRef") String txnRef);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Payment p where p.orderId = :orderId")
     Optional<Payment> findByOrderIdWithLock(@Param("orderId") Long orderId);
 
@@ -30,4 +34,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     Optional<Payment> findByIdWithLock(@Param("id") Long id);
 
     List<Payment> findAllByStatusAndCreatedAtBefore(String status, LocalDateTime createdAt);
+
+    /** Lượt thanh toán quá hạn: tính theo lần khởi tạo gần nhất (attemptAt), dữ liệu cũ thì theo createdAt. */
+    @Query("select p from Payment p where p.status = :status and coalesce(p.attemptAt, p.createdAt) < :cutoff")
+    List<Payment> findExpiredAttempts(@Param("status") String status, @Param("cutoff") LocalDateTime cutoff);
 }

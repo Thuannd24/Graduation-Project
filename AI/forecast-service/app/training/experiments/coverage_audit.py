@@ -1,6 +1,6 @@
 """Dataset có bao phủ đủ feature space không? — đo ĐỘ PHỦ, không phải tương quan.
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 Tương quan (script trước) trả lời "candidate có trùng feature khác không". Script này trả lời câu
 hỏi khác, đứng trước cả tương quan: MỖI CHIỀU trong feature space có đủ user MANG GIÁ TRỊ THẬT

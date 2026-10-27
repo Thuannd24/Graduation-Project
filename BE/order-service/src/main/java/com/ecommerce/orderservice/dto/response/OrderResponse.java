@@ -32,6 +32,14 @@ public class OrderResponse {
     private String shippingAddress;
     private String phoneNumber;
     private String note;
+    /** Tên / SĐT người nhận của đơn (đơn cũ: recipientPhone = phoneNumber, recipientName null). */
+    private String recipientName;
+    private String recipientPhone;
+    /** Lý do hủy (khi CANCELLED / RETURNING / RETURNED do hủy). */
+    private String cancelReasonCode;
+    private String cancelReason;
+    private String cancelledBy;
+    private LocalDateTime cancelledAt;
     private List<OrderItemResponse> items;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

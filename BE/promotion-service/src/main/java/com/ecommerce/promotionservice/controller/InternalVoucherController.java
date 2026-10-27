@@ -66,4 +66,18 @@ public class InternalVoucherController {
         voucherRedemptionService.releaseByOrderId(request.getOrderId());
         return ApiResponse.success(null);
     }
+
+    /**
+     * Hủy đơn trước khi giao: trả voucher (RESERVED hoặc USED) về cho khách nếu còn hạn.
+     * Khác /release (chỉ gỡ RESERVED, dùng khi thanh toán thất bại/đơn hết hạn thanh toán).
+     * Idempotent - gọi lại cho cùng orderId trả result=NOT_FOUND và không đổi gì.
+     */
+    @PostMapping("/restore")
+    public ApiResponse<Map<String, Object>> restore(@RequestBody VoucherOrderActionRequest request) {
+        String result = voucherRedemptionService.restoreByOrderId(request.getOrderId());
+        Map<String, Object> body = new HashMap<>();
+        body.put("orderId", request.getOrderId());
+        body.put("result", result);
+        return ApiResponse.success(body);
+    }
 }

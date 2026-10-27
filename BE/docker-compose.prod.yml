@@ -71,7 +71,9 @@ services:
       - KC_HTTP_ENABLED=true
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=IGNORE_EXISTING -Dkeycloak.migration.replace-placeholders=true -Denv.GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -Denv.GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -Denv.KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -Denv.DOMAIN=${DOMAIN}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=IGNORE_EXISTING -Dkeycloak.migration.replace-placeholders=true -Denv.GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -Denv.GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -Denv.KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -Denv.DOMAIN=${DOMAIN} -Denv.MAIL_USERNAME=${MAIL_USERNAME} -Denv.MAIL_PASSWORD=${MAIL_PASSWORD}
 
   # ===========================================================================
   # Business services: trim JVM heap to fit the box, point issuer/URLs at the
@@ -153,6 +155,15 @@ services:
       - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - CAMUNDA_ADMIN_PASSWORD=${CAMUNDA_ADMIN_PASSWORD}
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
+
+  chat-service:
+    ports: !reset []
+    mem_limit: 384m
+    restart: always
+    environment:
+      - KEYCLOAK_ISSUER_URI=https://auth.${DOMAIN}/realms/ecommerce-realm
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh -Xmx256m -Xms128m
 
   # ===========================================================================

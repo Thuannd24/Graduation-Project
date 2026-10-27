@@ -1,8 +1,16 @@
 # experiments/ — thí nghiệm đo lường, KHÔNG phải code production
 
-Script ở đây **không được service nào import**, không lưu model, không đổi hành vi production. Chúng
-là các phép đo một lần dùng để **quyết định có nên đầu tư vào một hướng ML hay không** — chạy tay,
-đọc số, rồi ghi kết luận vào `docs/canvas/churn-risk-log.md`.
+Script ở đây **không được service nào import** (production không gọi tới thư mục này). Phần lớn là các
+phép đo một lần dùng để **quyết định có nên đầu tư vào một hướng ML hay không** — chạy tay, đọc số, rồi
+ghi kết luận vào `docs/AI/churn-risk-log.md` (churn) hoặc các file `docs/AI/recsys-*.md` (gợi ý).
+
+**Ngoại lệ — có script GHI model:**
+- `retrain_on_real_rees46.py` gọi đúng `train_and_evaluate()` của production (ghi đè tham số thời gian:
+  nhãn 60 ngày, `LABEL_VERSION = churn_label_v3_orders_60d_min2_rees46real`), **lưu model và cập nhật
+  `latest.json` nếu qua retrain gate** — tức là ĐỔI model mà forecast-service đang phục vụ. Mặc định trỏ
+  `MODELS_DIR`/`REPO_ROOT` về `D:/JAVA/Graduation-Project` (máy cũ), phải đặt lại biến môi trường trước khi chạy.
+- `recsys_sasrec.py`, `recsys_platform_sasrec.py` lưu checkpoint SASRec (`torch.save`, mặc định vào `/tmp/...pt`,
+  đổi được qua `SASREC_MODEL_PATH` / `PLATFORM_SASREC_MODEL_PATH`).
 
 Lý do tách riêng: mọi thứ trong `app/training/` còn lại đều nằm trên đường đi của
 `POST /api/v1/models/train` (production). Trộn code thí nghiệm vào đó sẽ khiến người sau không biết
@@ -14,11 +22,12 @@ Trả lời câu hỏi: **bài toán bỏ giỏ hàng có thuộc lớp mà rule
 
 Dữ liệu: [RetailRocket clickstream](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset)
 — hành vi người thật, 2,76M event. Tải bằng `kagglehub.dataset_download("retailrocket/ecommerce-dataset")`
-(không cần xác thực), rồi copy `events.csv` vào `/tmp/rr_events.csv` trong container.
+(không cần xác thực), rồi copy `events.csv` vào `/tmp/rr_events.csv` trong container (hoặc đặt `RR_EVENTS_PATH`).
 
 ```bash
-docker exec ai-forecast-service python /tmp/build_seq_dataset.py   # dựng nhãn + feature
-docker exec ai-forecast-service python /tmp/run_seq_experiment.py  # đo 4 mốc
+docker cp .../cart_abandon_build_dataset.py .../cart_abandon_rule_vs_ml.py ai-forecast-service:/tmp/
+docker exec ai-forecast-service python /tmp/cart_abandon_build_dataset.py  # dựng nhãn + feature -> /tmp/seq_dataset.csv
+docker exec ai-forecast-service python /tmp/cart_abandon_rule_vs_ml.py     # đo 4 mốc
 ```
 
 **Thiết kế cốt lõi — chia feature theo *cái rule truy cập được*:**
@@ -69,3 +78,17 @@ rule thắng cả 2 hoặc ML thắng cả 2 thì **harness sai, không được
 **Giới hạn:** DGP do người viết thiết kế ⇒ chứng minh *"NẾU hành vi thật có dạng này THÌ rule không
 bắt được"*, **KHÔNG** chứng minh hành vi thật *có* dạng đó. Cần traffic thật từ tracker vi hành vi rồi
 chạy lại `cart_abandon_rule_vs_ml.py` để biết.
+
+## Danh sách script (theo nhóm)
+
+| Nhóm | Script |
+|---|---|
+| Churn trên REES46 thật (2026-10) | `retrain_on_real_rees46.py` (re-baseline, **ghi model**), `ablation_on_real_rees46.py`, `rule_benchmark_on_real_rees46.py`, `algorithm_comparison_on_real_rees46.py`, `algorithm_comparison_full_on_real_rees46.py`, `fast_panel_builder.py` + `fast_candidates_builder.py` (panel builder pandas thay SQL chậm) |
+| Churn — chẩn đoán / kiểm lại ablation | `diagnose_model_ceiling.py`, `churn_signal_decomposition.py`, `ablation_paired_retest.py`, `ablation_repeated_retest.py`, `churn_product_block.py` |
+| Churn — neo số bằng dữ liệu ngoài | `churn_fit_bgnbd.py`, `churn_bgnbd_benchmark.py`, `churn_cancel_feature_onlineretail.py`, `churn_measure_amazon_repurchase.py`, `churn_measure_category_repurchase.py`, `churn_measure_cart_recovery.py`, `churn_measure_prechurn_behavior.py`, `churn_measure_session_split.py` |
+| Bỏ giỏ / thứ tự hành vi | `cart_abandon_build_dataset.py`, `cart_abandon_rule_vs_ml.py`, `cart_sequence_early_warning.py`, `synthetic_sequence_dgp.py`, `cosmetics_build_dataset.py`, `cosmetics_order_test.py`, `cosmetics_order_importance.py` |
+| Nâng cấp feature space (xem `docs/AI/feature-space-upgrade-plan.md`) | `build_item_features.py`, `build_population_features.py`, `measure_feature_groups.py`, `measure_feature_groups_repeated.py`, `measure_rule_parity.py`, `l1_path_AC.py`, `corr_audit.py`, `coverage_audit.py` |
+| Khảo sát dữ liệu | `signal_survey.py`, `dataset_richness_survey.py`, `taobao_richness.py`, `taobao_timeline_check.py` |
+| Recsys / SASRec | `recsys_build_interactions.py`, `recsys_filter_strong_signal.py`, `recsys_build_sequences.py`, `recsys_item_category_map.py`, `recsys_gts_baseline.py`, `recsys_pipeline.py`, `recsys_sasrec.py` (**ghi checkpoint**), `recsys_platform_sasrec.py` (**ghi checkpoint**), `recsys_platform_bootstrap_ci.py`, `run_platform_multiseed.sh`, `run_platform_multiseed_detached.sh` |
+| Recsys — đo hành vi để lái bộ sinh dữ liệu | `recsys_behavior_stats.py`, `recsys_measure_behavior_patterns.py`, `recsys_measure_behavior_patterns_taobao.py`, `recsys_measure_item_popularity.py`, `recsys_measure_recency_baseline.py`, `recsys_measure_revisit_patterns.py` |
+| Colab | `build_colab_notebook.py`, `colab_env_check.ipynb`, `colab_train_smoke.ipynb`, `colab_train_overnight.ipynb` |

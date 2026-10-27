@@ -40,7 +40,8 @@ const SLIDE_TITLES = [
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [personalizedProducts, setPersonalizedProducts] = useState([]);
+  const [recommendations, setRecommendations] = useState({ for_you: [], recent: [], trending: [] });
+  const [recsLoading, setRecsLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [newsList, setNewsList] = useState([]);
@@ -56,10 +57,16 @@ export default function HomePage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // 3 tab của khối gợi ý = 3 nguồn thật, tải song song (mỗi request ~15 ms ở recs-service)
   useEffect(() => {
-    aiApi.getPersonalizedRecommendations()
-      .then(setPersonalizedProducts)
-      .catch(() => {});
+    Promise.all([
+      aiApi.getRecommendations("for_you"),
+      aiApi.getRecommendations("recent"),
+      aiApi.getRecommendations("trending"),
+    ])
+      .then(([for_you, recent, trending]) => setRecommendations({ for_you, recent, trending }))
+      .catch(() => {})
+      .finally(() => setRecsLoading(false));
   }, []);
 
   useEffect(() => {
@@ -210,25 +217,26 @@ export default function HomePage() {
               <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-3 shadow-sm flex flex-col justify-between flex-[2.2]">
                 <h5 className="text-[11px] font-extrabold text-red-600 tracking-wider uppercase border-b border-slate-100 dark:border-slate-800 pb-1 mb-1.5">Ưu đãi độc quyền</h5>
                 <div className="flex flex-col gap-2.5 flex-1 justify-center">
-                  <div className="flex items-center gap-2 group cursor-pointer">
-                    <Icon name="school" className="text-slate-400 group-hover:text-red-500 text-base shrink-0 transition-colors" />
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate leading-none">Ưu đãi cho Học sinh - Sinh viên</p>
-                      <p className="text-[9px] text-slate-400 mt-0.5 leading-none">Giảm thêm đến 3% toàn bộ sản phẩm</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 group cursor-pointer">
-                    <Icon name="sync" className="text-slate-400 group-hover:text-red-500 text-base shrink-0 transition-colors" />
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate leading-none">Thu cũ đổi mới trợ giá khủng</p>
-                      <p className="text-[9px] text-slate-400 mt-0.5 leading-none">Thu cũ lên đời trợ giá đến 2 triệu</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 group cursor-pointer">
+                  {/* Chỉ nêu các quyền lợi hệ thống thật sự áp dụng (xem utils/checkoutConstants.ts) */}
+                  <div className="flex items-center gap-2 group">
                     <Icon name="local_shipping" className="text-slate-400 group-hover:text-red-500 text-base shrink-0 transition-colors" />
                     <div className="min-w-0">
-                      <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate leading-none">Giao hàng miễn phí toàn quốc</p>
-                      <p className="text-[9px] text-slate-400 mt-0.5 leading-none">Đơn hàng từ 300k - Giao nhanh 2h</p>
+                      <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate leading-none">Miễn phí giao hàng</p>
+                      <p className="text-[9px] text-slate-400 mt-0.5 leading-none">Cho đơn hàng từ 500.000đ</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 group">
+                    <Icon name="payments" className="text-slate-400 group-hover:text-red-500 text-base shrink-0 transition-colors" />
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate leading-none">Thanh toán VNPay hoặc COD</p>
+                      <p className="text-[9px] text-slate-400 mt-0.5 leading-none">COD cho đơn đến 20.000.000đ</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 group">
+                    <Icon name="verified" className="text-slate-400 group-hover:text-red-500 text-base shrink-0 transition-colors" />
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate leading-none">Giá đã gồm VAT</p>
+                      <p className="text-[9px] text-slate-400 mt-0.5 leading-none">Hàng chính hãng, bảo hành theo hãng</p>
                     </div>
                   </div>
                 </div>
@@ -255,7 +263,7 @@ export default function HomePage() {
       <FlashDealSection products={products} loading={loading} />
 
       {/* Ảnh 2: Gợi ý cho bạn */}
-      <SuggestedSection products={personalizedProducts} loading={loading} />
+      <SuggestedSection lists={recommendations} loading={recsLoading} />
 
       {/* Danh mục nổi bật (mọi danh mục gốc) */}
       <CategoryGridSection categories={categories} />

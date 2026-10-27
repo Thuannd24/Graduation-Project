@@ -10,7 +10,7 @@
 //     chéo độc lập bằng recsys_behavior_stats.py (cùng kết quả, chỉ khác định nghĩa gộp/tách).
 //   - Taobao UserBehavior, 100.150.807 sự kiện, phiên SUY LUẬN (ngắt 30 phút) — script
 //     recsys_measure_behavior_patterns_taobao.py. Quy tắc đối chiếu 2 nguồn: xem
-//     docs/canvas/recsys-execution-plan.md §5.9.
+//     docs/AI/recsys-execution-plan.md §5.9.
 //   - Độ tập trung độ phổ biến SP: REES46 (mỹ phẩm 5 tháng + đa ngành 10/2019) và Taobao 20 triệu
 //     dòng — recsys_measure_item_popularity.py.
 //
@@ -154,7 +154,7 @@ export const PURCHASE_PROCESS = {
 // tiếp cấp user). Tách khỏi TARGETS vì tham số cấp phiên ≠ chỉ số cấp user (vd lượt quay lại SP cũ thường
 // đổi category → phải bù ở pSameCategoryNew; người dùng hay mở phiên mới bằng đúng SP đang xem dở).
 // Object có thể ghi đè khi chạy hiệu chỉnh (simulate.mjs đọc trực tiếp từ đây). Giá trị: xem lịch sử
-// hiệu chỉnh ở docs/canvas/recsys-execution-plan.md.
+// hiệu chỉnh ở docs/AI/recsys-execution-plan.md.
 // Hiệu chỉnh 2026-10-01 (lưới 36 + 24 tổ hợp, 800 user × 12 tháng, catalog Tiki thật 1.868 SP, chấm theo tổng
 // độ lệch chuẩn hoá): chọn tổ hợp mọi mục đều cách ngưỡng đạt an toàn (không lấy tổ hợp điểm thấp nhất vì
 // lặp cấp user chỉ dư 0,005), rồi hạ sessionResume 0,65→0,58 để recency giữa mục tiêu trên cả catalog giả.
@@ -162,7 +162,7 @@ export const PURCHASE_PROCESS = {
 // 0,159 · top10 0,633 (mục tiêu 0,492 / 0,106 / 0,508 / 0,192 / 0,657). repeatPrev < số đo 0,1064 vì SP hot
 // đôi khi bị bốc trúng lại tình cờ (đuôi dài) — cộng lại đúng số đo.
 // HIỆU CHỈNH LẠI 2026-10-01 (sau khi thay lõi mua bằng BG/NBD + thêm hành trình mua + độ dài phiên tách loại): mọi
-// tham số dưới đây là bộ cuối của tìm kiếm ngẫu nhiên trên 2–3 seed; số đầu ra & lịch sử: docs/canvas/churn-risk-log.md.
+// tham số dưới đây là bộ cuối của tìm kiếm ngẫu nhiên trên 2–3 seed; số đầu ra & lịch sử: docs/AI/churn-risk-log.md.
 export const GENERATION = {
   pSameCategoryNew: 0.66,     // P(giữ category) khi chọn SP MỚI (bù cho lượt quay lại SP cũ hay đổi category)
   repeatPrev: 0.08,           // P(xem lại ngay SP vừa xem)
@@ -224,7 +224,7 @@ export const REGRESSION_GUARDS = {
 
 // LỆCH ĐÃ BIẾT — mục fidelity lệch số thật vì GIỚI HẠN CẤU TRÚC đã phân tích, chưa sửa (có lý do + phạm vi ảnh hưởng).
 // Báo cáo vẫn in rõ "LỆCH ĐÃ BIẾT" kèm số sinh/thật; KHÔNG chặn cổng kiểm tra. Chỉ thêm mục vào đây khi đã ghi lý do
-// trong docs/canvas/churn-risk-log.md — không dùng để giấu mục trượt chưa hiểu.
+// trong docs/AI/churn-risk-log.md — không dùng để giấu mục trượt chưa hiểu.
 export const KNOWN_GAPS = {
   "% phiên có thêm giỏ":
     "bộ sinh tách mỗi SP trong đơn thành 1 phiên 1 lượt thêm giỏ (thật: phiên có giỏ TB 10,3 sự kiện, nhiều lượt thêm giỏ) → " +

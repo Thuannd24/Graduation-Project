@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import Icon from "../../../components/common/Icon";
 import { getRootCategories } from "../utils/categoryUtils.js";
+import { PRODUCT_PLACEHOLDER } from "../../../utils/imageFallback.js";
 
-const FALLBACK_IMG = "https://placehold.co/56x56/f8f9fb/6b7280?text=SP";
+const FALLBACK_IMG = PRODUCT_PLACEHOLDER;
 
 // Lưới "Danh mục nổi bật": mọi danh mục GỐC đang active, theo sortOrder — đúng với mọi catalog.
 // Thay cho AccessoriesSection cũ (chỉ tìm danh mục "phụ kiện" của shop điện tử, đã xoá).
@@ -24,7 +25,14 @@ export default function CategoryGridSection({ categories }) {
     return padded;
   };
 
+  if (!cats || cats.length === 0) return null;
+
   const paddedCats = getPaddedCats(cats);
+  const N = cats.length;
+  const limitDesktop = Math.ceil(N / 6) * 6;
+  const limitTablet = Math.ceil(N / 4) * 4;
+  const limitMobile = Math.ceil(N / 3) * 3;
+  const limitSmallMobile = Math.ceil(N / 2) * 2;
   if (paddedCats.length === 0) return null;
 
   return (
@@ -90,10 +98,17 @@ export default function CategoryGridSection({ categories }) {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
+
+        .accessories-item:nth-child(n+${limitDesktop + 1}) {
+          display: none;
+        }
         
         @media (max-width: 1024px) {
           .catgrid-grid {
             grid-template-columns: repeat(4, 1fr);
+          }
+          .accessories-item:nth-child(n+${limitTablet + 1}) {
+            display: none;
           }
         }
         @media (max-width: 768px) {
@@ -115,6 +130,9 @@ export default function CategoryGridSection({ categories }) {
           .catgrid-title-row h2 {
             font-size: 14px !important;
           }
+          .accessories-item:nth-child(n+${limitMobile + 1}) {
+            display: none;
+          }
         }
         @media (max-width: 480px) {
           .catgrid-grid {
@@ -131,6 +149,9 @@ export default function CategoryGridSection({ categories }) {
           }
           .catgrid-item-title {
             font-size: 11.5px;
+          }
+          .accessories-item:nth-child(n+${limitSmallMobile + 1}) {
+            display: none;
           }
         }
       `}</style>

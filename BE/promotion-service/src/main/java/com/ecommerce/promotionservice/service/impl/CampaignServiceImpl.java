@@ -75,7 +75,7 @@ public class CampaignServiceImpl implements CampaignService {
         if (dto.getEndDate() == null) {
             throw new IllegalArgumentException("Ngày kết thúc chiến dịch không được để trống.");
         }
-        if (dto.getEndDate().isBefore(dto.getStartDate())) {
+        if (!dto.getEndDate().isAfter(dto.getStartDate())) {
             throw new IllegalArgumentException("Ngày kết thúc phải sau ngày bắt đầu.");
         }
 
@@ -211,7 +211,11 @@ public class CampaignServiceImpl implements CampaignService {
                     WorkflowBudgetHelper.resolveTotalBudget(workflowGraph, dto.getTotalBudget()),
                     workflowGraph));
         }
-        if (dto.getStartDate() != null && dto.getEndDate() != null && dto.getEndDate().isBefore(dto.getStartDate())) {
+        // Validate against the EFFECTIVE dates: a partial update that only moves endDate must
+        // still be checked against the stored startDate (and vice versa) - TC_PH6_CAMP_05.
+        LocalDateTime effectiveStart = dto.getStartDate() != null ? dto.getStartDate() : existing.getStartDate();
+        LocalDateTime effectiveEnd = dto.getEndDate() != null ? dto.getEndDate() : existing.getEndDate();
+        if (effectiveStart != null && effectiveEnd != null && !effectiveEnd.isAfter(effectiveStart)) {
             throw new IllegalArgumentException("Ngày kết thúc phải sau ngày bắt đầu.");
         }
         if (dto.getBpmnProcessDefinitionKey() != null && !dto.getBpmnProcessDefinitionKey().trim().isEmpty()) {
@@ -224,18 +228,26 @@ public class CampaignServiceImpl implements CampaignService {
         }
 
         if (dto.getName() != null) existing.setName(dto.getName());
-        if (dto.getTotalBudget() != null) {
-            BigDecimal oldTotal = existing.getTotalBudget();
+        // Only touch remainingBudget when the total really changes. Re-saving an unchanged
+        // total used to write back the remainingBudget read at the start of this request,
+        // wiping out vouchers reserved concurrently (Campaign is @DynamicUpdate, so untouched
+        // budget columns are no longer part of the UPDATE statement).
+        if (dto.getTotalBudget() != null
+                && (existing.getTotalBudget() == null || dto.getTotalBudget().compareTo(existing.getTotalBudget()) != 0)) {
+            BigDecimal oldTotal = existing.getTotalBudget() != null ? existing.getTotalBudget() : BigDecimal.ZERO;
+            BigDecimal oldRemaining = existing.getRemainingBudget() != null ? existing.getRemainingBudget() : oldTotal;
             BigDecimal newTotal = dto.getTotalBudget();
-            BigDecimal used = oldTotal.subtract(existing.getRemainingBudget());
+            BigDecimal used = oldTotal.subtract(oldRemaining).max(BigDecimal.ZERO);
             existing.setTotalBudget(newTotal);
             existing.setRemainingBudget(newTotal.subtract(used).max(BigDecimal.ZERO));
         }
         if (dto.getStartDate() != null) existing.setStartDate(dto.getStartDate());
         if (dto.getEndDate() != null) existing.setEndDate(dto.getEndDate());
+        boolean syncSuspension = dto.getActive() != null;
         if (dto.getActive() != null) existing.setActive(dto.getActive());
 
         // ── Redeploy BPMN if workflow changed ─────────────────────────────────
+        boolean redeployed = false;
         if (dto.getWorkflowJson() != null && !dto.getWorkflowJson().trim().isEmpty()
                 && !dto.getWorkflowJson().equals(existing.getWorkflowJson())) {
             try {
@@ -263,6 +275,9 @@ public class CampaignServiceImpl implements CampaignService {
                             .deploy();
                     log.info("Redeployed process '{}' revision. Deployment id: {}",
                             existing.getBpmnProcessDefinitionKey(), deployment.getId());
+                    // The new definition version starts active; re-apply the campaign state so an
+                    // inactive campaign doesn't come back to life through a redeploy.
+                    redeployed = true;
                 } catch (Exception ex) {
                     log.error("Camunda re-deployment failed: {}", ex.getMessage(), ex);
                     throw new RuntimeException("Không thể triển khai lại BPMN: " + ex.getMessage());
@@ -276,6 +291,11 @@ public class CampaignServiceImpl implements CampaignService {
         }
 
         Campaign updated = campaignRepository.save(existing);
+        if (syncSuspension || redeployed) {
+            // TC_PH6_CAMP_06: active=false through the edit form must stop the Camunda process
+            // (running instances + timer start jobs) exactly like toggleCampaignActive does.
+            syncCamundaSuspension(updated.getBpmnProcessDefinitionKey(), Boolean.TRUE.equals(updated.getActive()));
+        }
         log.info("Updated campaign id={}", updated.getId());
         return mapToDto(updated);
     }
@@ -284,6 +304,10 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     @Transactional
     public void deleteCampaign(Long id) {
+        // Stop the Camunda side first: deleting only the DB row left a scheduled (timer) campaign
+        // firing and running instances issuing rewards after the campaign was gone.
+        campaignRepository.findById(id).ifPresent(campaign ->
+                syncCamundaSuspension(campaign.getBpmnProcessDefinitionKey(), false));
         campaignRepository.deleteById(id);
         log.info("Deleted campaign id={}", id);
     }
@@ -414,8 +438,22 @@ public class CampaignServiceImpl implements CampaignService {
         campaign.setActive(active);
         campaign = campaignRepository.save(campaign);
 
+        syncCamundaSuspension(campaign.getBpmnProcessDefinitionKey(), active);
+
+        log.info("Toggled campaign id={} active status to {}", id, active);
+        return mapToDto(campaign);
+    }
+
+    /**
+     * Suspends (all versions + running instances + timer start jobs) or re-activates the
+     * campaign's Camunda process definition. Camunda errors are logged, not rethrown, so the
+     * campaign state change itself is never lost.
+     */
+    private void syncCamundaSuspension(String processKey, boolean active) {
+        if (processKey == null || processKey.isBlank()) {
+            return;
+        }
         try {
-            String processKey = campaign.getBpmnProcessDefinitionKey();
             if (active) {
                 log.info("Activating Camunda process definition for key: {}", processKey);
                 repositoryService.activateProcessDefinitionByKey(processKey, true, null);
@@ -424,12 +462,9 @@ public class CampaignServiceImpl implements CampaignService {
                 repositoryService.suspendProcessDefinitionByKey(processKey, true, null);
             }
         } catch (Exception e) {
-            log.warn("Could not sync suspension state with Camunda Engine for processKey '{}': {}", 
-                    campaign.getBpmnProcessDefinitionKey(), e.getMessage());
+            log.warn("Could not sync suspension state with Camunda Engine for processKey '{}': {}",
+                    processKey, e.getMessage());
         }
-
-        log.info("Toggled campaign id={} active status to {}", id, active);
-        return mapToDto(campaign);
     }
 
     // ── Mapper ─────────────────────────────────────────────────────────────────

@@ -8,11 +8,12 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 /**
  * Wire DTO {@link CartUpdatedEvent} (đã tồn tại từ trước, chưa từng được publish) lên Kafka cho
- * pipeline churn-risk detection (xem docs/canvas/churn-risk-implementation-plan.md Phase 2).
+ * pipeline churn-risk detection (xem docs/AI/churn-risk-implementation-plan.md Phase 2).
  * Consumer là forecast-service/app/kafka/behavior_consumer.py (Phase 4).
  */
 @Component
@@ -41,7 +42,8 @@ public class CartEventProducer {
             CartUpdatedEvent event = CartUpdatedEvent.builder()
                     .eventId(UUID.randomUUID().toString())
                     .eventType("CartUpdatedEvent")
-                    .timestamp(LocalDateTime.now().toString())
+                    // UTC tường minh — cùng lý do với ProductViewEventProducer (khớp FE + NOW() của DB)
+                    .timestamp(LocalDateTime.now(ZoneOffset.UTC).toString())
                     .userId(userId)
                     .sessionId(sessionId)
                     .productId(productId)

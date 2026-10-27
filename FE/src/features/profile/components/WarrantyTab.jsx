@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import { shopApi } from "../../../services/shopApi";
+import { PRODUCT_PLACEHOLDER } from "../../../utils/imageFallback.js";
 
 export default function WarrantyTab() {
   const [results, setResults] = useState(null);
@@ -135,7 +136,7 @@ export default function WarrantyTab() {
                           alt={item.productName} 
                           className="object-contain w-full h-full p-1"
                           onError={(e) => {
-                            e.target.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300";
+                            e.target.src = PRODUCT_PLACEHOLDER;
                           }}
                         />
                       ) : (

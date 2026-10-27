@@ -79,7 +79,7 @@ N_CLUSTERS = 4
 CV_SPLITS = 5
 DEFAULT_THRESHOLD = 0.5
 
-# Hiệu chỉnh xác suất (Tầng 0.1 — xem docs/canvas/churn-risk-tier0-plan.md). Đo được trên run
+# Hiệu chỉnh xác suất (Tầng 0.1 — xem docs/AI/churn-risk-tier0-plan.md). Đo được trên run
 # 2026-07-31: model thô dự đoán churn trung bình 0.4217 trong khi thực tế 0.2420 (thổi phồng ~1,74x,
 # ECE 0.1797) vì `class_weight='balanced'` ước lượng hậu nghiệm dưới tiên nghiệm 50/50. `isotonic`
 # đưa ECE về 0.0391 mà AUC không đổi -> chọn isotonic.
@@ -271,7 +271,7 @@ def _assert_panel_not_contaminated(panel: pd.DataFrame, cutoffs: list) -> None:
     2016-2018 của `tools/real-data-seed` với dữ liệu synthetic 2025-2026 của `tools/data-seed` trong
     CÙNG 1 database).
 
-    Vì sao cần guard này (đã xảy ra thật, 2026-08-04 — xem docs/canvas/churn-risk-log.md): khi trộn
+    Vì sao cần guard này (đã xảy ra thật, 2026-08-04 — xem docs/AI/churn-risk-log.md): khi trộn
     2 nguồn, mọi user của nguồn cũ có đơn cuối cùng cách mốc cắt nhiều NĂM nên luôn bị dán churn=1,
     và `recency`/`days_since_last_activity` của họ lớn bất thường -> model chỉ cần học "user thuộc
     nguồn dữ liệu nào" là đã phân loại gần như hoàn hảo. Kết quả đo được lúc đó: **AUC 0.9908** (so

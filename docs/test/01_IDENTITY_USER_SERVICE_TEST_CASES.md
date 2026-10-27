@@ -13,7 +13,7 @@
   - `InternalUserController` (`/api/internal/users/**`): segmentation, profile-ai, keycloak/{id}, tier, points (PUT adjust, GET balance, POST redeem, POST refund).
   - `LocationController` (`/api/v1/public/locations/**`): provinces, wards.
 - Business logic thật trong `service/impl/*`: auto-provisioning user khi login lần đầu, đồng bộ field từ JWT header mỗi lần gọi `/me`, validate DTO (`jakarta.validation`), `LoyaltyPointPolicy` (tính điểm, quy đổi điểm, giới hạn redeem), idempotency của redeem/refund điểm theo `orderId`, address default (unset default), soft-delete user, xử lý ngoại lệ tập trung (`GlobalExceptionHandler`).
-- Phân quyền: 2 tầng theo `SecurityConfig` — `@PreAuthorize` role-based (ROLE_ADMIN/ROLE_STAFF/ROLE_USER) + `InternalApiKeyFilter` (header `X-Internal-Api-Key`) cho `/api/internal/**`.
+- Phân quyền: 2 tầng theo `SecurityConfig` — `@PreAuthorize` role-based (ROLE_ADMIN/ROLE_STAFF/ROLE_CUSTOMER) + `InternalApiKeyFilter` (header `X-Internal-Api-Key`) cho `/api/internal/**`.
 - Edge case thật sự có giá trị: race condition khi 2 request đồng thời tạo hồ sơ cho cùng `keycloakUserId` hoặc redeem điểm 2 lần cho cùng `orderId`; giới hạn số học (điểm = 0, âm, vượt số dư).
 
 ### 1.2. KHÔNG cover (do phụ thuộc hệ thống ngoài / ngoài phạm vi service)
@@ -177,7 +177,7 @@
 | Test ID | Module/Endpoint | Loại | Mô tả | Tiền điều kiện | Input/Steps | Kết quả mong đợi | Priority |
 |---|---|---|---|---|---|---|---|
 | IT-USER-064 | GET /api/v1/admin/users | Integration | RBAC: role ADMIN và STAFF đều được phép truy cập | JWT có `ROLE_ADMIN` hoặc `ROLE_STAFF` | GET `/api/v1/admin/users` | HTTP 200 cho cả 2 role, `data` là Page mặc định size=20, sort createdAt | High |
-| IT-USER-065 | GET /api/v1/admin/users | Integration | RBAC: role USER thường bị chặn; không có token bị chặn | JWT `ROLE_USER`; hoặc không có Authorization | GET `/api/v1/admin/users` | HTTP 403 (role USER); HTTP 401 (không token) | High |
+| IT-USER-065 | GET /api/v1/admin/users | Integration | RBAC: role CUSTOMER bị chặn; không có token bị chặn | JWT `ROLE_CUSTOMER`; hoặc không có Authorization | GET `/api/v1/admin/users` | HTTP 403 (role CUSTOMER); HTTP 401 (không token) | High |
 | IT-USER-066 | GET /api/v1/admin/users | Integration | Filter theo `search`/`tier`/`blacklisted`, kết hợp nhiều filter, ký tự đặc biệt SQL wildcard, và phân trang tuỳ chỉnh | — | GET `?search=nguyen`, `?tier=GOLD`, `?blacklisted=true`, `?search=a&tier=MEMBER&active=true`, `?search=%`, `?page=2&size=5` | HTTP 200 cho mọi trường hợp, kết quả lọc đúng điều kiện (AND khi kết hợp), không lỗi 500 với ký tự wildcard (parameterized query), phân trang đúng `size` | Medium |
 
 ---
@@ -230,7 +230,7 @@
 | IT-USER-087 | GET /api/v1/admin/users/roles | Integration | Lấy tất cả role hệ thống (chỉ ADMIN) | JWT ROLE_ADMIN | GET `/api/v1/admin/users/roles` | HTTP 200, list role từ Keycloak | High |
 | IT-USER-088 | GET/PUT /api/v1/admin/users/roles, /{userId}/roles | Integration | RBAC: role STAFF bị chặn ở lấy-tất-cả-role và gán role (chỉ ADMIN) | JWT ROLE_STAFF | GET `/roles`; PUT `/{userId}/roles` | HTTP 403 cho cả 2 endpoint | High |
 | IT-USER-089 | GET /api/v1/admin/users/{userId}/roles | Integration | Lấy roles của 1 user (ADMIN + STAFF được phép); Keycloak lỗi khi lấy roles → trả về rỗng, không throw | JWT ROLE_STAFF; `keycloakAdminClient.getUserRealmRoles` throw exception (case 2) | GET `/api/v1/admin/users/{userId}/roles` | HTTP 200 cho case happy path; case Keycloak lỗi trả về `[]`, không lỗi 500 | Medium |
-| IT-USER-090 | PUT /api/v1/admin/users/{userId}/roles | Integration | Gán roles hợp lệ (validate `roles` rỗng → 400); Keycloak lỗi khi set roles → throw | JWT ROLE_ADMIN; `keycloakAdminClient.setUserRoles` throw exception (case 3) | Body `{"roles":["ROLE_USER","ROLE_SELLER"]}`; Body `{"roles":[]}` | HTTP 200 khi hợp lệ (roles Keycloak được ghi đè); HTTP 400 khi `roles` rỗng (`@NotEmpty`); HTTP 500 khi Keycloak lỗi | High |
+| IT-USER-090 | PUT /api/v1/admin/users/{userId}/roles | Integration | Gán roles hợp lệ (validate `roles` rỗng → 400); Keycloak lỗi khi set roles → throw | JWT ROLE_ADMIN; `keycloakAdminClient.setUserRoles` throw exception (case 3) | Body `{"roles":["ROLE_STAFF","ROLE_CUSTOMER"]}`; Body `{"roles":[]}` | HTTP 200 khi hợp lệ (roles Keycloak được ghi đè); HTTP 400 khi `roles` rỗng (`@NotEmpty`); HTTP 500 khi Keycloak lỗi | High |
 
 ---
 
@@ -239,7 +239,7 @@
 | Test ID | Module/Endpoint | Loại | Mô tả | Tiền điều kiện | Input/Steps | Kết quả mong đợi | Priority |
 |---|---|---|---|---|---|---|---|
 | IT-USER-091 | GET /api/v1/admin/users/stats | Integration | Happy path (ADMIN/STAFF) | Data seed sẵn: 100 user, 5 blacklist, phân bố tier | GET `/api/v1/admin/users/stats` | HTTP 200, `totalUsers=100`, `blacklistedUsers=5`, `activeUsers=95`, `tierDistribution` đủ 4 khóa DIAMOND/GOLD/SILVER/MEMBER | High |
-| IT-USER-092 | GET /api/v1/admin/users/stats | Integration | Role USER thường cố xem stats | JWT ROLE_USER | GET | HTTP 403 | High |
+| IT-USER-092 | GET /api/v1/admin/users/stats | Integration | Role CUSTOMER cố xem stats | JWT ROLE_CUSTOMER | GET | HTTP 403 | High |
 | UT-USER-093 | UserServiceImpl.adminGetUserStats | Unit | Không có user nào trong hệ thống (không chia 0); `newUsersThisWeek`/`newUsersThisMonth` luôn = 0 | `count()=0` | `adminGetUserStats()` | `totalUsers=0, activeUsers=0`, không throw chia 0. **GAP ghi nhận**: `newUsersThisWeek`/`newUsersThisMonth` là giá trị hard-coded = 0, chưa implement thật dù có field trong response | Low |
 
 ---

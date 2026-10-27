@@ -235,7 +235,9 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET}
       - DOMAIN=${DOMAIN:-localhost}
-      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.migration.replace-placeholders=true -DGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -DGOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -DKEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -DDOMAIN=${DOMAIN:-localhost}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - JAVA_OPTS_APPEND=-Dfile.encoding=UTF-8 -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/opt/keycloak/data/import -Dkeycloak.migration.strategy=OVERWRITE_EXISTING -Dkeycloak.migration.replace-placeholders=true -DGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} -DGOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} -DKEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET} -DDOMAIN=${DOMAIN:-localhost} -DMAIL_USERNAME=${MAIL_USERNAME} -DMAIL_PASSWORD=${MAIL_PASSWORD}
     volumes:
       - ./keycloak-data:/opt/keycloak/data/import
       - ./keycloak-themes:/opt/keycloak/themes
@@ -279,48 +281,54 @@ services:
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 -Duser.timezone=Asia/Ho_Chi_Minh
       - INTERNAL_API_KEY=${INTERNAL_API_KEY:-dev-internal-api-key}
+      - AI_CHATBOT_URL=${AI_CHATBOT_URL:-http://host.docker.internal:8002}
+      - RATE_LIMIT_REPLENISH=${RATE_LIMIT_REPLENISH:-20}
+      - RATE_LIMIT_BURST=${RATE_LIMIT_BURST:-50}
     depends_on:
       eureka-server:
         condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - ecommerce-network
 
   # =============================================================================
-  # UI TOOLS (Redis Insight, Kafka UI, Kibana)
+  # UI TOOLS (Redis Insight, Kafka UI, Kibana) — Đã tắt để tiết kiệm RAM máy
+  # Bỏ comment nếu cần mở giao diện trực quan để debug
   # =============================================================================
-  redis-insight:
-    image: redis/redisinsight:latest
-    container_name: infra-redis-insight
-    ports:
-      - "5540:5540"
-    networks:
-      - ecommerce-network
-    restart: always
+  # redis-insight:
+  #   image: redis/redisinsight:latest
+  #   container_name: infra-redis-insight
+  #   ports:
+  #     - "5540:5540"
+  #   networks:
+  #     - ecommerce-network
+  #   restart: always
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: infra-kafka-ui
-    ports:
-      - "8090:8080"
-    environment:
-      - KAFKA_CLUSTERS_0_NAME=local
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
-      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME=debezium
-      - KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS=http://debezium-connect:8083
-    networks:
-      - ecommerce-network
-    restart: always
+  # kafka-ui:
+  #   image: provectuslabs/kafka-ui:latest
+  #   container_name: infra-kafka-ui
+  #   ports:
+  #     - "8090:8080"
+  #   environment:
+  #     - KAFKA_CLUSTERS_0_NAME=local
+  #     - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+  #     - KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME=debezium
+  #     - KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS=http://debezium-connect:8083
+  #   networks:
+  #     - ecommerce-network
+  #   restart: always
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.10.2
-    container_name: infra-kibana
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    networks:
-      - ecommerce-network
-    restart: always
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.10.2
+  #   container_name: infra-kibana
+  #   ports:
+  #     - "5601:5601"
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   networks:
+  #     - ecommerce-network
+  #   restart: always
 
 volumes:
   mariadb_data:

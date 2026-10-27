@@ -6,7 +6,7 @@ Ghi lại toàn bộ các bước đã làm để deploy hệ thống lên produ
 
 Quét lại toàn bộ source code phát hiện các giá trị fallback mặc định (`${VAR:giá-trị-thật}`) bị hardcode nhầm **giá trị thật** thay vì placeholder giả — đã sửa hết trong code, nhưng lịch sử Git (commit cũ) vẫn còn chứa các giá trị này nếu repo là public:
 
-1. **`notification-service/application.yml`** — Gmail cá nhân thật (`thuan2412004@gmail.com`) + App Password thật bị hardcode làm default. **Đã thu hồi/tạo App Password mới chưa? Nếu repo public và chưa làm — làm ngay tại myaccount.google.com → Security → App Passwords.**
+1. **`notification-service/application.yml`** — Gmail cá nhân thật (địa chỉ đã gỡ khỏi tài liệu) + App Password thật bị hardcode làm default. **Đã thu hồi/tạo App Password mới chưa? Nếu repo public và chưa làm — làm ngay tại myaccount.google.com → Security → App Passwords.**
 2. **`user-service/application.yml`** — `KEYCLOAK_ADMIN_CLIENT_SECRET` thật bị hardcode làm default (cũng lộ trong `keycloak-data/ecommerce-realm-realm.json`) — đã regenerate qua Admin Console cho server đang chạy, đã sửa code dùng placeholder.
 3. **`promotion-service/application.yml`** — Camunda admin/admin hardcode cứng không qua biến môi trường — đã sửa thành biến `CAMUNDA_ADMIN_PASSWORD`.
 
@@ -19,7 +19,7 @@ Quét lại toàn bộ source code phát hiện các giá trị fallback mặc �
 - **Storage**: 50GB gp3.
 - **Key pair**: tên `aura` (file `.pem` đã tải về máy công ty lúc launch — cần cho SSH client thật; không bắt buộc nếu chỉ dùng EC2 Instance Connect qua browser).
 - **Domain**: `auratechvn.online` (mua ở Tenten/Mắt Bão, ~35,000đ/năm). DNS: 3 bản ghi A (`@`, `auth`, `cdn`) đều trỏ về IP EC2.
-- **IP hiện tại**: `13.217.142.118` (⚠️ IP này KHÔNG cố định — nếu instance bị stop/start lại, IP sẽ đổi trừ khi gắn Elastic IP. Nếu IP đổi, phải cập nhật lại 3 bản ghi A trên Tenten).
+- **IP hiện tại**: `<EC2_PUBLIC_IP>` (xem trên AWS Console; ⚠️ IP này KHÔNG cố định — nếu instance bị stop/start lại, IP sẽ đổi trừ khi gắn Elastic IP. Nếu IP đổi, phải cập nhật lại 3 bản ghi A trên Tenten).
 
 ## 1. Launch EC2 instance
 
@@ -89,7 +89,7 @@ Vào phần quản lý DNS của domain, thêm 3 bản ghi **A**, đều trỏ v
 
 DNS lan truyền trong vòng vài phút đến 24 giờ.
 
-> Nếu chưa có/không mua được domain: dùng free `<ip-with-dashes>.sslip.io` (ví dụ IP `13.217.142.118` → `13-217-142-118.sslip.io`), không cần đăng ký gì, Let's Encrypt vẫn cấp HTTPS bình thường.
+> Nếu chưa có/không mua được domain: dùng free `<ip-with-dashes>.sslip.io` (ví dụ IP `203.0.113.10` → `203-0-113-10.sslip.io`), không cần đăng ký gì, Let's Encrypt vẫn cấp HTTPS bình thường.
 
 ## 4b. (Khuyến nghị) Đưa domain qua Cloudflare — chống DDoS, ẩn IP thật, miễn phí
 
@@ -202,9 +202,9 @@ cd ~/auratech/BE
 mvn clean package -DskipTests
 ```
 
-(Lần đầu mất ~5-15 phút do tải dependency + compile 10 module.)
+(Lần đầu mất ~5-15 phút do tải dependency + compile 12 module.)
 
-> ✅ **Kết quả hợp lệ**: cuối log thấy `BUILD SUCCESS` và bảng "Reactor Summary" liệt kê đủ 10 module (`ecommerce-parent`, `grpc-common`, `eureka-server`, `api-gateway`, `user-service`, `product-service`, `order-service`, `inventory-service`, `payment-service`, `notification-service`, `promotion-service`) đều `SUCCESS`. Nếu có dòng `BUILD FAILURE` — đọc lỗi ngay phía trên, thường do thiếu dependency mạng hoặc code lỗi biên dịch.
+> ✅ **Kết quả hợp lệ**: cuối log thấy `BUILD SUCCESS` và bảng "Reactor Summary" liệt kê đủ 12 module (`ecommerce-parent`, `grpc-common`, `eureka-server`, `api-gateway`, `user-service`, `product-service`, `order-service`, `inventory-service`, `payment-service`, `notification-service`, `promotion-service`, `chat-service`) đều `SUCCESS`. Nếu có dòng `BUILD FAILURE` — đọc lỗi ngay phía trên, thường do thiếu dependency mạng hoặc code lỗi biên dịch.
 
 ## 9. Chạy toàn bộ stack production
 
@@ -213,6 +213,7 @@ cd ~/auratech/BE
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build \
   eureka-server api-gateway user-service product-service order-service \
   inventory-service payment-service notification-service promotion-service \
+  chat-service \
   mariadb mongodb redis kafka debezium-connect debezium-init elasticsearch \
   minio keycloak caddy
 ```
@@ -236,11 +237,11 @@ Cố ý **không** chạy `kafka-ui`, `redis-insight`, `kibana` (tool dev-only, 
 - [ ] Truy cập `https://auratechvn.online` trên trình duyệt — FE load được, ổ khóa HTTPS hợp lệ (không cảnh báo "Not secure").
 - [ ] Truy cập `https://auth.auratechvn.online/admin` — vào được trang đăng nhập Keycloak Admin Console, login bằng `admin` + mật khẩu đã lưu (`KEYCLOAK_ADMIN_PASSWORD` trong `.env`).
 - [ ] Đăng ký 1 user test qua UI thật, xong chạy `docker compose -f docker-compose.yml -f docker-compose.prod.yml restart keycloak`, kiểm tra user đó **không bị mất** (xác nhận fix `IGNORE_EXISTING` hoạt động). ⚠️ Sau khi restart bất kỳ service backend nào thủ công, nhớ restart luôn `caddy` (`docker compose ... restart caddy`) — nếu không Caddy có thể giữ kết nối tới IP nội bộ cũ và trả về lỗi 502.
-- [ ] Kiểm tra các port cũ (3308, 27017, 6379, 9200, 8090, 5540, 5601, 9001, 8761, 8085, 8089, 8082, 8093, 8084, 8086, 8087) **không** truy cập được từ bên ngoài.
+- [ ] Kiểm tra các port cũ (3308, 27017, 6379, 9200, 8090, 5540, 5601, 9001, 8761, 8085, 8089, 8082, 8094, 8084, 8086, 8087, 8088, 8095) **không** truy cập được từ bên ngoài.
 
   **Cách test** (bắt buộc làm từ **máy khác**, KHÔNG phải từ chính server — vì trong docker network port vẫn "mở" nội bộ, đó là bình thường):
-  - Cách 1 — dùng trang **canyouseeme.org**: đổi IP về `13.217.142.118` (hoặc IP hiện tại), nhập lần lượt từng port (`3306`, `27017`, `6379`, `8085`, `8089`, `8082`, `8093`, `8084`, `8086`, `8087`, `8761`, `9200`, `8090`, `5540`, `5601`, `9001`) → kỳ vọng **"Error: I could not see your service"** (nghĩa là đóng, an toàn) cho TẤT CẢ các port này.
-  - Cách 2 — có terminal (máy nhà/điện thoại có Termux...): `curl -m 5 http://13.217.142.118:3306` → kỳ vọng lệnh treo rồi báo timeout (`curl: (28) Connection timed out`), KHÔNG được trả lời gì (nếu trả lời tức là đang lộ).
+  - Cách 1 — dùng trang **canyouseeme.org**: đổi IP về IP public hiện tại của EC2, nhập lần lượt từng port (`3306`, `27017`, `6379`, `8085`, `8089`, `8082`, `8094`, `8084`, `8086`, `8087`, `8088`, `8761`, `9200`, `8090`, `5540`, `5601`, `9001`) → kỳ vọng **"Error: I could not see your service"** (nghĩa là đóng, an toàn) cho TẤT CẢ các port này.
+  - Cách 2 — có terminal (máy nhà/điện thoại có Termux...): `curl -m 5 http://<EC2_PUBLIC_IP>:3306` → kỳ vọng lệnh treo rồi báo timeout (`curl: (28) Connection timed out`), KHÔNG được trả lời gì (nếu trả lời tức là đang lộ).
   - Chỉ port **80** và **443** được phép "mở"/trả lời — đây là port Caddy phục vụ công khai, đúng thiết kế.
 
 ## 11. Import dữ liệu catalog mẫu (~1,100 sản phẩm)

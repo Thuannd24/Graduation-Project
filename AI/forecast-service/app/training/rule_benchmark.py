@@ -1,4 +1,4 @@
-"""Benchmark Rule-based vs AI (Tầng 2.2 — xem docs/canvas/churn-risk-roadmap.md).
+"""Benchmark Rule-based vs AI (Tầng 2.2 — xem docs/AI/churn-risk-roadmap.md).
 
 Trả lời câu hỏi phản biện trực tiếp: *"Sao không viết vài câu IF/SQL cho xong?"*
 

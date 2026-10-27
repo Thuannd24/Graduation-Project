@@ -26,6 +26,9 @@ public class InventoryKafkaConsumer {
     @KafkaListener(topics = "order-events", groupId = "inventory-service-group")
     public void consumeOrderEvent(String message, Acknowledgment ack) {
         String lockKey = null;
+        // Chỉ xóa khóa khi chính instance này giành được khóa (TC_PH4_KAFKA_06). Trước đây nhánh
+        // "không giành được khóa" vẫn chạy finally và xóa khóa của instance khác đang xử lý cùng đơn.
+        boolean lockAcquired = false;
         try {
             log.info("Received order event: {}", message);
 
@@ -45,7 +48,6 @@ public class InventoryKafkaConsumer {
             
             Long orderId = jsonNode.get("orderId").asLong();
             lockKey = "lock:inventory-consumer:" + orderId;
-            boolean lockAcquired = false;
 
             // Retry for up to 5 seconds to acquire the lock
             for (int i = 0; i < 50; i++) {
@@ -98,6 +100,12 @@ public class InventoryKafkaConsumer {
                 log.error("Insufficient stock detected for order event. Publishing failure and acknowledging. Error: {}", rootCause.getMessage());
                 try {
                     JsonNode jsonNode = objectMapper.readTree(message);
+                    // Payload có thể bị mã hóa 2 lần (chuỗi JSON lồng trong chuỗi) - giống nhánh xử lý
+                    // chính ở trên. Không bóc lớp này thì không đọc được orderId, đơn treo PENDING
+                    // vì không bao giờ nhận được InventoryDeductedEvent FAILED (TC_PH4_KAFKA_07).
+                    if (jsonNode.isTextual()) {
+                        jsonNode = objectMapper.readTree(jsonNode.asText());
+                    }
                     if (jsonNode.has("orderId")) {
                         Long orderId = jsonNode.get("orderId").asLong();
                         deductService.publishFailureEvent(orderId, rootCause.getMessage());
@@ -113,7 +121,7 @@ public class InventoryKafkaConsumer {
                 throw new RuntimeException("Error processing Kafka message, retrying...", e);
             }
         } finally {
-            if (lockKey != null) {
+            if (lockKey != null && lockAcquired) {
                 try {
                     redisTemplate.delete(lockKey);
                 } catch (Exception e) {

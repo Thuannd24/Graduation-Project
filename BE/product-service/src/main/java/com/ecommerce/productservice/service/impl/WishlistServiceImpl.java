@@ -126,7 +126,10 @@ public class WishlistServiceImpl implements WishlistService {
             return Collections.emptyList();
         }
 
-        return productService.getProductsByIds(productIds);
+        // Danh sách yêu thích là dữ liệu hiển thị cho khách -> bỏ giá vốn
+        return productService.getProductsByIds(productIds).stream()
+                .map(ProductServiceImpl::toPublicView)
+                .collect(Collectors.toList());
     }
 
     @Override

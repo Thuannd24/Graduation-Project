@@ -83,10 +83,11 @@ export const inventoryApi = {
     return Array.isArray(data) ? data : [];
   },
 
-  async updateStock(productId: number, quantity: number, variantId = 0): Promise<InventoryRecord> {
+  /** Đặt tồn kho tuyệt đối. `reason` (kiểm kê, hư hỏng, mất mát...) là bắt buộc ở backend. */
+  async updateStock(productId: number, quantity: number, variantId = 0, reason?: string): Promise<InventoryRecord> {
     return apiClient.putAuth<InventoryRecord>(
       `/admin/inventories/${productId}?variantId=${variantId}`,
-      { quantity }
+      { quantity, reason }
     );
   },
 

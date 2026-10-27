@@ -80,6 +80,35 @@ public class VoucherRedemptionServiceImpl implements VoucherRedemptionService {
         });
     }
 
+    @Override
+    @Transactional
+    public String restoreByOrderId(Long orderId) {
+        if (orderId == null) {
+            return "IGNORED";
+        }
+        return voucherRepository.findWithLockByUsedOrderId(orderId).map(voucher -> {
+            VoucherStatus previous = voucher.getStatus();
+            if (previous != VoucherStatus.RESERVED && previous != VoucherStatus.USED) {
+                log.info("Voucher {} of order {} is {} - nothing to restore", voucher.getCode(), orderId, previous);
+                return "NOT_APPLICABLE";
+            }
+            voucher.setStatus(VoucherStatus.UNUSED);
+            voucher.setUsedOrderId(null);
+            voucher.setUsedAt(null);
+            voucherRepository.save(voucher);
+            // Past its expiry: becomes EXPIRED and its reserved amount goes back to the campaign budget.
+            voucherMaintenanceService.expireIfNeeded(voucher);
+            if (voucher.getStatus() == VoucherStatus.EXPIRED) {
+                log.info("Voucher {} of cancelled order {} has expired - not returned to the customer",
+                        voucher.getCode(), orderId);
+                return "EXPIRED";
+            }
+            log.info("Restored voucher {} ({} -> UNUSED) after order {} was cancelled",
+                    voucher.getCode(), previous, orderId);
+            return "RESTORED";
+        }).orElse("NOT_FOUND");
+    }
+
     private VoucherApplyResult evaluate(VoucherApplyRequest request, boolean reserve) {
         String code = normalizeCode(request.getCode());
         if (code.isBlank()) {

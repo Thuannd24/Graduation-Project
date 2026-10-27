@@ -3,11 +3,17 @@ package com.ecommerce.productservice.controller;
 import com.ecommerce.productservice.dto.ApiResponse;
 import com.ecommerce.productservice.dto.CategoryDto;
 import com.ecommerce.productservice.dto.ProductDto;
+import com.ecommerce.productservice.entity.ProductDocument;
+import com.ecommerce.productservice.exception.ResourceNotFoundException;
 import com.ecommerce.productservice.service.CategoryService;
 import com.ecommerce.productservice.service.ProductService;
+import com.ecommerce.productservice.service.SearchService;
 import com.ecommerce.productservice.service.StorageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +29,38 @@ public class AdminProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final StorageService storageService;
+    private final SearchService searchService;
+
+    // Danh sách sản phẩm cho trang quản trị: gồm cả sản phẩm đã ẩn (lọc tùy chọn theo active,
+    // categoryId) và có giá vốn — API công khai không còn trả 2 thứ này.
+    @GetMapping("/products")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ApiResponse<Slice<ProductDto>> getProducts(
+            @RequestParam(value = "active", required = false) Boolean active,
+            @RequestParam(value = "categoryId", required = false) Long categoryId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ApiResponse.success(productService.getAdminProducts(categoryId, active, PageRequest.of(page, size)));
+    }
+
+    @GetMapping("/products/search")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ApiResponse<Page<ProductDocument>> searchProducts(
+            @RequestParam("q") String query,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ApiResponse.success(searchService.searchAllProducts(query, PageRequest.of(page, size)));
+    }
+
+    @GetMapping("/products/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    public ApiResponse<ProductDto> getProduct(@PathVariable Long id) {
+        ProductDto product = productService.getProductById(id);
+        if (product == null) {
+            throw new ResourceNotFoundException("Product", "id", id);
+        }
+        return ApiResponse.success(product);
+    }
 
     @PostMapping(value = "/products/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")

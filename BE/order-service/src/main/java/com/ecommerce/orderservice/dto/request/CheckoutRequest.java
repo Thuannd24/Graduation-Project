@@ -17,8 +17,12 @@ public class CheckoutRequest {
     @NotBlank(message = "Shipping address is required")
     private String shippingAddress;
 
-    @NotBlank(message = "Phone number is required")
+    @NotBlank(message = "Vui lòng nhập số điện thoại người nhận.")
     private String phoneNumber;
+
+    /** Tên người nhận hàng (lấy từ sổ địa chỉ hoặc nhập mới). Nên gửi; thiếu thì đơn không có tên người nhận. */
+    @jakarta.validation.constraints.Size(max = 150, message = "Tên người nhận tối đa 150 ký tự.")
+    private String recipientName;
 
     private String couponCode;
 

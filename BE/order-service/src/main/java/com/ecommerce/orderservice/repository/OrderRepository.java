@@ -25,6 +25,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUserIdAndStatus(String userId, String status);
     
     List<Order> findAllByStatusInAndCreatedAtBefore(List<String> statuses, LocalDateTime dateTime);
+
+    long countByUserIdAndStatusIn(String userId, java.util.Collection<String> statuses);
     
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT o FROM Order o WHERE o.id = :id")

@@ -1,7 +1,16 @@
 # TÀI LIỆU THIẾT KẾ: INVENTORY SERVICE
+
+> 🗄️ **Thiết kế ban đầu — một số phần KHÔNG khớp với code hiện tại (rà soát 2026-10-11).** Khác biệt chính:
+> - Port REST là **`8094`** (không phải `8093`), có thêm **gRPC server `9093`** (`GetInventory`, `GetBatchInventory` — order-service gọi khi Redis cache miss). CSDL là **MariaDB 10.11**, không phải PostgreSQL.
+> - Đường dẫn API thực tế: public `GET /api/v1/inventories/{productId}`, `GET /api/v1/inventories/batch`; admin `/api/v1/admin/inventories/**` (ADMIN hoặc STAFF), không phải `/api/inventories`, `/api/admin/inventories`.
+> - Khi consume `order-events`, mỗi đơn được khóa bằng Redis `SET NX` key `lock:inventory-consumer:{orderId}` (bean Redisson có khai báo nhưng không dùng). Không có Redis key `inventory:reserved:{orderId}`.
+> - Order-service giảm kho ảo bằng **Lua script** (không phải `DECRBY` trần); inventory-service cũng dùng Lua để hoàn kho ảo.
+> - Nếu nhận `OrderCancelledEvent` khi đơn chưa từng `DEDUCT` (trừ kho thất bại / lệch thứ tự Kafka), service ghi tombstone `CANCEL_RECEIVED` và `INCRBY` hoàn kho ảo Redis; `OrderCreatedEvent` đến sau sẽ bị bỏ qua.
+> - Đồng bộ Redis toàn bộ chạy **02:00 hằng ngày** (`InventorySyncScheduler`, có thể gọi tay `POST /api/v1/admin/inventories/sync-redis`); snapshot `inventory_daily_snapshots` chụp lúc **23:00** hằng ngày.
+> - Kafka consumer chỉ cấu hình `ack-mode: manual_immediate` + `DefaultErrorHandler` (backoff); các tham số `max-poll-records`, `isolation.level`, `concurrency: 3` ở mục 4.3 không có trong cấu hình. `InventoryDeductedEvent` chỉ gửi về Order Service (Notification không consume `inventory-events`).
 ## (Dịch vụ Quản lý Kho hàng)
 
-> **Port:** `8093` | **DB:** `ecommerce_inventory_db` (PostgreSQL) | **Version:** 1.0.0
+> **Port:** `8094` (gRPC `9093`) | **DB:** `ecommerce_inventory_db` (MariaDB 10.11) | **Version:** 1.0.0
 
 ---
 
@@ -75,7 +84,7 @@ sequenceDiagram
     autonumber
     participant Kafka as Kafka (order-events)
     participant IS as Inventory Service
-    participant DB as PostgreSQL
+    participant DB as MariaDB
     participant Redis as Redis (Stock Cache)
     participant KafkaOut as Kafka (inventory-events)
 
@@ -180,7 +189,7 @@ public void syncRedisWithDatabase() {
 | Topic | Consume | Produce | Mô tả |
 |---|---|---|---|
 | `order-events` | ✅ | | Nhận lệnh trừ/hoàn kho từ Order Service |
-| `inventory-events` | | ✅ | Gửi kết quả xử lý về Order/Notification |
+| `inventory-events` | | ✅ | Gửi kết quả xử lý về Order Service |
 
 ### 4.2. Events Schema
 
@@ -207,7 +216,7 @@ public void syncRedisWithDatabase() {
 }
 ```
 
-#### Produce: `InventoryDeductedEvent` (gửi về Order & Notification Service)
+#### Produce: `InventoryDeductedEvent` (gửi về Order Service)
 ```json
 {
   "eventType": "InventoryDeductedEvent",
@@ -310,7 +319,7 @@ CREATE INDEX idx_inv_snap_date ON inventory_daily_snapshots(snapshot_date, produ
 | Key Pattern | Type | TTL | Mô tả |
 |---|---|---|---|
 | `product:stock:{productId}:{variantId}` | String | Không có TTL | Tồn kho khả dụng (luôn in sync với DB) |
-| `inventory:reserved:{orderId}` | Hash | 15 phút | Tracking các items đã giữ chỗ |
+| `lock:inventory-consumer:{orderId}` | String | 10 giây | Khóa `SET NX` khi xử lý event của 1 đơn (thay cho `inventory:reserved:{orderId}` trong thiết kế cũ — key đó không tồn tại) |
 
 ---
 
@@ -320,10 +329,10 @@ CREATE INDEX idx_inv_snap_date ON inventory_daily_snapshots(snapshot_date, produ
 
 | Method | Endpoint | Mô tả |
 |---|---|---|
-| GET | `/api/inventories/{productId}` | Lấy tồn kho của sản phẩm |
-| GET | `/api/inventories/batch` | Lấy tồn kho nhiều sản phẩm |
+| GET | `/api/v1/inventories/{productId}` | Lấy tồn kho của sản phẩm |
+| GET | `/api/v1/inventories/batch` | Lấy tồn kho nhiều sản phẩm |
 
-#### `GET /api/inventories/{productId}`
+#### `GET /api/v1/inventories/{productId}`
 ```json
 // Response 200 OK
 {
@@ -334,7 +343,7 @@ CREATE INDEX idx_inv_snap_date ON inventory_daily_snapshots(snapshot_date, produ
 }
 ```
 
-#### `GET /api/inventories/batch?productIds=101,202,303`
+#### `GET /api/v1/inventories/batch?productIds=101,202,303`
 ```json
 // Response 200 OK
 [
@@ -344,17 +353,17 @@ CREATE INDEX idx_inv_snap_date ON inventory_daily_snapshots(snapshot_date, produ
 ]
 ```
 
-### 6.2. Admin Endpoints (Cần ROLE_ADMIN)
+### 6.2. Admin Endpoints (Cần ROLE_ADMIN hoặc ROLE_STAFF)
 
 | Method | Endpoint | Mô tả |
 |---|---|---|
-| PUT | `/api/admin/inventories/{productId}` | Cập nhật tồn kho trực tiếp |
-| POST | `/api/admin/inventories/{productId}/restock` | Nhập kho |
-| GET | `/api/admin/inventories/{productId}/transactions` | Lịch sử biến động kho |
-| GET | `/api/admin/inventories/low-stock` | Danh sách sản phẩm sắp hết hàng |
-| POST | `/api/admin/inventories/sync-redis` | Đồng bộ lại Redis từ DB (Manual trigger) |
+| PUT | `/api/v1/admin/inventories/{productId}` | Cập nhật tồn kho trực tiếp |
+| POST | `/api/v1/admin/inventories/{productId}/restock` | Nhập kho |
+| GET | `/api/v1/admin/inventories/{productId}/transactions` | Lịch sử biến động kho |
+| GET | `/api/v1/admin/inventories/low-stock` | Danh sách sản phẩm sắp hết hàng |
+| POST | `/api/v1/admin/inventories/sync-redis` | Đồng bộ lại Redis từ DB (Manual trigger) |
 
-#### `POST /api/admin/inventories/{productId}/restock`
+#### `POST /api/v1/admin/inventories/{productId}/restock`
 ```json
 // Request Body
 {
@@ -444,15 +453,16 @@ erDiagram
 inventory-service:
   image: ecommerce/inventory-service:latest
   ports:
-    - "8093:8093"
+    - "8094:8094"
+    - "9093:9093"
   environment:
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_inventory_db
+    DB_HOST: mariadb   # jdbc:mariadb://mariadb:3306/ecommerce_inventory_db
     SPRING_DATA_REDIS_HOST: redis
     SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     KAFKA_TOPIC_ORDER_EVENTS: order-events
     KAFKA_TOPIC_INVENTORY_EVENTS: inventory-events
   depends_on:
-    - postgres
+    - mariadb
     - redis
     - kafka
   networks:
@@ -465,7 +475,7 @@ inventory-service:
 
 | Tính năng | Ưu tiên | Mô tả |
 |---|---|---|
-| **Redis Lua Script** | Cao | Thay thế Redisson Lock bằng Lua Script cho atomic operation gọn hơn |
+| **Redis Lua Script** | ✅ Đã có | Lua script cho tăng/giảm kho ảo nguyên tử (Redisson không được dùng) |
 | **Multi-warehouse** | Thấp | Hỗ trợ nhiều kho hàng theo vị trí địa lý |
 | **Low Stock Alert** | Trung bình | Cảnh báo admin khi tồn kho < ngưỡng tối thiểu |
 | **Forecast** | Thấp | Dự báo nhu cầu tồn kho dựa trên lịch sử bán hàng |

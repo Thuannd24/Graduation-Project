@@ -72,7 +72,9 @@ public class ProductGrpcServerService extends ProductGrpcServiceGrpc.ProductGrpc
                 .setSalePrice(product.getSalePrice() != null ? bigDecimalToString(product.getSalePrice()) : "")
                 .setCostPrice(bigDecimalToString(product.getCostPrice()))
                 .setWeight(bigDecimalToString(product.getWeight()))
-                .setImageUrl(nullToEmpty(product.getImageUrl()));
+                .setImageUrl(nullToEmpty(product.getImageUrl()))
+                // Luôn set (proto3 bool mặc định false): null coi như còn kinh doanh giống mặc định của entity.
+                .setDiscontinued(Boolean.FALSE.equals(product.getActive()));
 
         if (product.getVariants() != null) {
             for (ProductVariantDto variant : product.getVariants()) {

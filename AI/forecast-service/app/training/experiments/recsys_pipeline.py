@@ -1,6 +1,6 @@
 """Pipeline gợi ý — 3 tầng TÁCH BIỆT, đo riêng từng tầng, thay vì 1 bước chấm-điểm-toàn-catalog.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §6.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §6.
 
 ## Vì sao tách tầng (đúng phê bình "pipeline quá ít công đoạn")
 

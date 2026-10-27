@@ -59,8 +59,11 @@ export default function TransactionsTab({ orders = [], payments = [], users = []
       const statusUpper = String(p.status || "").toUpperCase();
       if (statusUpper === "SUCCESS" || statusUpper === "COMPLETED") {
         mappedStatus = "Complete";
-      } else if (statusUpper === "REFUNDED") {
+      } else if (statusUpper === "REFUNDED" || statusUpper === "PARTIALLY_REFUNDED") {
         mappedStatus = "Refunded";
+      } else if (statusUpper === "REFUND_PENDING") {
+        // Đã gửi yêu cầu hoàn tiền nhưng cổng thanh toán chưa xác nhận -> vẫn là việc đang chờ.
+        mappedStatus = "Pending";
       } else if (statusUpper === "FAILED" || statusUpper === "EXPIRED" || statusUpper === "CANCELLED") {
         mappedStatus = "Canceled";
       }
@@ -188,8 +191,11 @@ export default function TransactionsTab({ orders = [], payments = [], users = []
     try {
       const paymentId = Number(selectedTx.id);
       const numericAmount = parseInt(selectedTx.total.replace(/[^\d]/g, "")) || 0;
-      await orderApi.refundPayment(paymentId, numericAmount, refundReason.trim());
-      alert("Thực hiện hoàn tiền thành công!");
+      const result = await orderApi.refundPayment(paymentId, numericAmount, refundReason.trim());
+      // Chỉ báo "thành công" khi cổng thanh toán đã xác nhận; còn lại là "đã gửi yêu cầu".
+      alert(result?.message || (result?.status === "SUCCESS"
+        ? "Hoàn tiền thành công."
+        : "Đã gửi yêu cầu hoàn tiền, đang chờ cổng thanh toán xác nhận."));
       setRefundReason("");
       setIsModalOpen(false);
       if (onRefresh) onRefresh();

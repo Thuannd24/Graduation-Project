@@ -1,6 +1,6 @@
 """Đo giá trị của từng NHÓM feature mới, trên cùng giao thức đã dùng cho baseline.
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 Mốc phải vượt (đã đo, `cart_abandon_rule_vs_ml.py`):
     LightGBM trên 17 feature hành vi phẳng = **0,7462**, sàn nhiễu **±0,0111**

@@ -106,6 +106,16 @@ Thứ tự đúng khi có data mới: `scrape` → `mirror` → `clean-broken-pr
 
 ---
 
+## Giá tham khảo cho sản phẩm "Liên hệ"
+
+Khi trang nguồn không niêm yết giá (hàng cũ/đời cũ đã hết, ghi "Liên hệ"), `scrape-cellphones.mjs` gán tạm
+`1.000.000đ`. 311 sản phẩm như vậy trong `manifests/` đã được thay bằng **giá tham khảo** (21/10/2026):
+suy từ sản phẩm cùng dòng đang có giá thật (điều chỉnh theo dung lượng và tình trạng máy cũ), hoặc theo giá thị
+trường Việt Nam khi catalog không có sản phẩm cùng dòng. Giá vốn = 76% giá bán, như phần còn lại của catalog.
+Căn cứ từng sản phẩm nằm trong `price-estimates.csv`.
+
+> Scrape lại dữ liệu mới sẽ gặp lại giá tạm 1.000.000đ cho các trang "Liên hệ" — cần ước giá lại hoặc ẩn các sản phẩm đó.
+
 ## Backup dữ liệu lên cloud (đề phòng mất máy)
 
 `manifests/*.json` (giá, tên, thông số...) hiện chỉ tồn tại trên máy bạn — không có git. Backup lên R2 để có thêm 1 bản ngoài máy:

@@ -9,4 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductSearchRepository extends ElasticsearchRepository<ProductDocument, Long> {
     Page<ProductDocument> findByNameContainingOrDescriptionContaining(String name, String description, Pageable pageable);
+
+    // Tìm kiếm công khai: chỉ trả sản phẩm đang bán (active = true)
+    Page<ProductDocument> findByActiveTrue(Pageable pageable);
+
+    Page<ProductDocument> findByActiveTrueAndNameContainingOrActiveTrueAndDescriptionContaining(String name, String description, Pageable pageable);
 }

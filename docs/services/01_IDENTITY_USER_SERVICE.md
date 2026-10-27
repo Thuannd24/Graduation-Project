@@ -1,7 +1,17 @@
 # TÀI LIỆU THIẾT KẾ: IDENTITY & USER SERVICE (KEYCLOAK INTEGRATION)
+
+> 🗄️ **Thiết kế ban đầu — một số phần KHÔNG khớp với code hiện tại (rà soát 2026-10-11).** Khác biệt chính:
+> - CSDL là **MariaDB 10.11** (`ecommerce_user_db`, host port `3308`), không phải PostgreSQL.
+> - Role thực tế: **`ROLE_CUSTOMER`, `ROLE_STAFF`, `ROLE_ADMIN`** (realm roles, đọc từ `realm_access.roles`); không có `ROLE_USER`/`ROLE_SELLER`. `ROLE_CUSTOMER` là default realm role.
+> - **Không có Keycloak Event Listener SPI / topic `keycloak-user-events`.** User được tạo trong `users` khi API Gateway gọi `POST /api/internal/users/provision` ở request đã xác thực đầu tiên (auto-provision). User Service chỉ *publish* `UserRegisteredEvent` lên `user-created-events`.
+> - Keycloak chạy ở host port **`8083`** (`start-dev`, admin/admin, realm `ecommerce-realm` tự import từ `BE/keycloak-data`), không phải `8080`; không có DB Postgres riêng cho Keycloak.
+> - **Không tồn tại** bảng `user_devices`, `chat_sessions` và collection `chat_messages` trong user-service; các endpoint `/api/chat/**` ở mục 5.3 không thuộc user-service. Chatbot nằm ở AI chatbot-service `:8002` (`POST /api/v1/chatbot/message`, trả JSON, không stream SSE); chat với nhân viên nằm ở chat-service `:8095`.
+> - Điểm thưởng **không tự cộng theo từng đơn hàng**: chỉ được cộng qua node chiến dịch `Action_Loyalty_Point` (Promotion/Camunda); order-service chỉ gọi redeem/refund điểm (`/api/internal/users/{userId}/points/redeem|refund`). Hạng thành viên đổi qua Admin (`PUT /api/v1/admin/users/{userId}/tier`) hoặc node `Action_Upgrade_MemberRank`, không tự nâng/hạ theo đơn. Hệ số hạng trong code chỉ có SILVER 1.2 / GOLD 1.5 / VIP 2.0 / còn lại 1.0 (không có `DIAMOND`).
+> - Sổ địa chỉ dùng danh mục **2 cấp tỉnh/thành → phường/xã** (bảng `provinces`, `wards`; API `GET /api/v1/public/locations/provinces`, `/provinces/{code}/wards`).
+> - Gateway inject header `X-User-Id`, `X-User-Email`, `X-User-Username`, `X-User-Name`, `X-User-Avatar`, `X-User-Roles` (không phải `X-Roles`).
 ## (Dịch vụ Xác thực & Người dùng)
 
-> **Port:** `8085` | **DB:** `ecommerce_user_db` (PostgreSQL) | **Auth Server:** Keycloak 24.x | **Version:** 2.0.0
+> **Port:** `8085` | **DB:** `ecommerce_user_db` (MariaDB 10.11) | **Auth Server:** Keycloak 24.x | **Version:** 2.0.0
 
 ---
 
@@ -13,10 +23,10 @@
 |---|---|
 | **Quản lý Xác thực (IAM)** | Ủy quyền toàn bộ việc Đăng ký, Đăng nhập, Đổi mật khẩu, MFA cho **Keycloak** qua chuẩn OpenID Connect (OIDC) |
 | **Bảo mật Token (JWKS)** | API Gateway xác thực chữ ký JWT của client bằng tập khóa công khai JWKS tải từ Keycloak, không gọi DB |
-| **Phân quyền (RBAC)** | Sử dụng Keycloak Realm Roles/Client Roles (`ROLE_USER`, `ROLE_ADMIN`, `ROLE_SELLER`) nhúng trong JWT |
-| **Đồng bộ hóa User Profile** | Lắng nghe Kafka Event (`keycloak-user-events`) từ Keycloak SPI để tự động đồng bộ tài khoản về `user_db` |
+| **Phân quyền (RBAC)** | Sử dụng Keycloak Realm Roles/Client Roles (`ROLE_CUSTOMER`, `ROLE_STAFF`, `ROLE_ADMIN`) nhúng trong JWT |
+| **Đồng bộ hóa User Profile** | ~~Lắng nghe Kafka Event (`keycloak-user-events`) từ Keycloak SPI~~ — thực tế: API Gateway gọi `POST /api/internal/users/provision` để tự tạo hồ sơ trong `user_db` ở request đã xác thực đầu tiên |
 | **Quản lý thông tin mở rộng** | CRUD địa chỉ giao hàng, phân hạng khách hàng (`customer_tier`), trạng thái blacklist (`is_blacklisted`) |
-| **Kiểm soát thiết bị (Anti-Fraud)** | Lưu trữ và đối chiếu thông tin thiết bị (`user_devices`) cho bài toán chống gian lận khuyến mãi |
+| **Kiểm soát thiết bị (Anti-Fraud)** | ~~Lưu trữ và đối chiếu thông tin thiết bị (`user_devices`)~~ — **không có trong code** |
 
 ### 1.2. Vị trí trong kiến trúc OIDC
 
@@ -25,14 +35,14 @@
                                       │
                          (1) Đăng nhập / Nhận JWT
                                       ▼
-                            [ Keycloak :8080 ]
+                            [ Keycloak :8083 ]
                                       │
                           (2) Request + Bearer JWT
                                       ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        API Gateway (:8080)                             │
 │   - Tự động verify signature JWT bằng JWKS cached từ Keycloak          │
-│   - Giải mã JWT, inject header X-User-Id (Keycloak UUID) & X-Roles     │
+│   - Giải mã JWT, inject header X-User-Id (Keycloak UUID) & X-User-Roles│
 └─────────────────────────────────────┬──────────────────────────────────┘
                                       │
                            (3) Forward Authorized Req
@@ -52,6 +62,8 @@
 3.  **Key Rotation:** Cấu hình Gateway tự động refresh JWKS cache sau mỗi 24 giờ hoặc khi phát hiện Token sử dụng `kid` (Key ID) mới.
 
 ### 2.2. Đồng bộ hóa User bất đồng bộ (Kafka Event Sync)
+
+> ⚠️ _Mục này là thiết kế ban đầu, **chưa được hiện thực**: không có Keycloak SPI và topic `keycloak-user-events`. Xem banner đầu tài liệu về cơ chế auto-provision qua Gateway._
 Để đảm bảo tính độc lập giữa Keycloak và Database của hệ thống E-commerce, chúng ta cấu hình một **Keycloak Event Listener SPI** để đẩy event lên Kafka mỗi khi có tài khoản mới được đăng ký hoặc cập nhật:
 
 ```
@@ -59,10 +71,12 @@
                                                                    │
                                                                    ▼ (Consume)
                                                         [ User Service :8085 ]
-                                                   (Đồng bộ sang PostgreSQL local)
+                                                   (Đồng bộ sang MariaDB local)
 ```
 
 ### 2.3. Quy tắc tính Điểm thưởng & Hạng thành viên (Loyalty Point Policy)
+
+> ⚠️ _Code (`LoyaltyPointPolicy`) có công thức tính điểm/quy đổi bên dưới, nhưng **không có luồng tự cộng điểm cho mỗi đơn hàng** và không tự nâng/hạ hạng — điểm chỉ được cộng khi chiến dịch có node `Action_Loyalty_Point` chạy; hạng `DIAMOND` không tồn tại._
 Để khuyến khích khách hàng mua sắm, hệ thống thiết lập chính sách tích điểm và nâng hạng tự động:
 1. **Tích lũy điểm (Earn points):** Mặc định mỗi **10,000 VND** chi tiêu thực tế (sau giảm giá) = **1 điểm cơ bản**.
 2. **Hệ số nhân theo hạng (Tier Multipliers):**
@@ -84,7 +98,7 @@
 | **Auth Server** | Keycloak 24.x (Quarkus-based) | Chuẩn công nghiệp OIDC, tích hợp sẵn MFA, Social Login, quản lý phiên |
 | **Framework** | Spring Boot 3.2.x | Hệ sinh thái ổn định, bảo mật tốt |
 | **Security Client** | `spring-boot-starter-oauth2-resource-server` | Tích hợp giải mã JWT từ OIDC Server tự động |
-| **Database** | PostgreSQL | ACID, dùng chung hạ tầng microservices |
+| **Database** | MariaDB 10.11 | ACID, dùng chung hạ tầng microservices |
 | **Event Bus** | Apache Kafka | Đảm bảo đồng bộ dữ liệu người dùng bất đồng bộ và tin cậy |
 
 ---
@@ -93,7 +107,7 @@
 
 Khi tích hợp Keycloak, chúng ta loại bỏ các bảng quản lý mật khẩu (`password`), quyền (`roles`, `user_roles`), và session (`refresh_tokens`) khỏi DB `ecommerce_user_db` để tránh trùng lặp dữ liệu.
 
-### 4.1. Schema `ecommerce_user_db` (PostgreSQL)
+### 4.1. Schema `ecommerce_user_db` (MariaDB 10.11)
 
 #### Bảng `users` (Chỉ lưu thông tin hồ sơ & nghiệp vụ thương mại)
 ```sql
@@ -135,7 +149,7 @@ CREATE INDEX idx_loyalty_tx_created_at ON loyalty_point_transactions(created_at)
 ```
 ```
 
-#### Bảng `chat_sessions` (Phiên trò chuyện - Điều phối Bot & Tư vấn viên)
+#### Bảng `chat_sessions` (Phiên trò chuyện - Điều phối Bot & Tư vấn viên) — ⚠️ không tồn tại trong code
 ```sql
 CREATE TABLE chat_sessions (
     session_id          VARCHAR(64)     PRIMARY KEY,
@@ -150,7 +164,7 @@ CREATE INDEX idx_chat_sess_user ON chat_sessions(user_id);
 CREATE INDEX idx_chat_sess_last ON chat_sessions(last_message_at);
 ```
 
-#### Bảng `user_devices` (Vân tay thiết bị chống gian lận)
+#### Bảng `user_devices` (Vân tay thiết bị chống gian lận) — ⚠️ không tồn tại trong code
 ```sql
 CREATE TABLE user_devices (
     id              BIGSERIAL          PRIMARY KEY,
@@ -180,7 +194,7 @@ CREATE TABLE addresses (
 CREATE INDEX idx_addr_user ON addresses(user_id);
 ```
 
-### 4.2. Schema MongoDB (Lịch sử tin nhắn chi tiết — Write-Heavy & Dynamic Meta)
+### 4.2. Schema MongoDB (Lịch sử tin nhắn chi tiết — Write-Heavy & Dynamic Meta) — ⚠️ không tồn tại trong user-service
 
 Để tối ưu hóa hiệu năng ghi tải cao và lưu trữ các cấu trúc siêu dữ liệu động từ AI Chatbot (như danh sách sản phẩm gợi ý, tài liệu RAG nguồn), các tin nhắn chi tiết được lưu trữ tại MongoDB.
 
@@ -223,14 +237,14 @@ API Gateway sau khi verify JWT thành công sẽ trích xuất `sub` (Keycloak U
 
 | Method | Endpoint | Quyền hạn | Mô tả |
 |---|---|---|---|
-| GET | `/api/v1/users/me` | `ROLE_USER` | Lấy thông tin cá nhân hiện tại (của user đang đăng nhập) |
-| PUT | `/api/v1/users/me` | `ROLE_USER` | Cập nhật thông tin profile |
-| POST | `/api/v1/users/me/avatar` | `ROLE_USER` | Cập nhật ảnh đại diện (Multipart File) |
-| GET | `/api/v1/users/me/addresses` | `ROLE_USER` | Danh sách địa chỉ giao hàng |
-| POST | `/api/v1/users/me/addresses` | `ROLE_USER` | Thêm địa chỉ mới |
-| DELETE | `/api/v1/users/me/addresses/{id}` | `ROLE_USER` | Xóa địa chỉ giao hàng |
-| GET | `/api/v1/users/me/loyalty/points` | `ROLE_USER` | Lấy số dư điểm tích lũy của tôi |
-| GET | `/api/v1/users/me/loyalty/history` | `ROLE_USER` | Lấy lịch sử biến động điểm tích lũy (phân trang) |
+| GET | `/api/v1/users/me` | Đăng nhập | Lấy thông tin cá nhân hiện tại (của user đang đăng nhập) |
+| PUT | `/api/v1/users/me` | Đăng nhập | Cập nhật thông tin profile |
+| POST | `/api/v1/users/me/avatar` | Đăng nhập | Cập nhật ảnh đại diện (Multipart File) |
+| GET | `/api/v1/users/me/addresses` | Đăng nhập | Danh sách địa chỉ giao hàng |
+| POST | `/api/v1/users/me/addresses` | Đăng nhập | Thêm địa chỉ mới |
+| DELETE | `/api/v1/users/me/addresses/{id}` | Đăng nhập | Xóa địa chỉ giao hàng |
+| GET | `/api/v1/users/me/loyalty/points` | Đăng nhập | Lấy số dư điểm tích lũy của tôi |
+| GET | `/api/v1/users/me/loyalty/history` | Đăng nhập | Lấy lịch sử biến động điểm tích lũy (phân trang) |
 
 #### `GET /api/v1/users/me`
 *   **Request Headers:** `X-User-Id: e143d2c8-8fc2-4017-8051-fb05cf781a5c`
@@ -251,6 +265,8 @@ API Gateway sau khi verify JWT thành công sẽ trích xuất `sub` (Keycloak U
 ```
 
 ### 5.3. Chatbot AI & Handover Endpoints (Cần JWT)
+
+> ⚠️ _Các endpoint dưới đây **không tồn tại** trong user-service. Chatbot thực tế ở AI chatbot-service (`POST /api/v1/chatbot/message`, `POST /api/v1/chatbot/escalate`, trả JSON) và chat với nhân viên ở chat-service (`/api/v1/public/chat/**`)._
 
 | Method | Endpoint | Quyền hạn | Mô tả |
 |---|---|---|---|
@@ -293,9 +309,12 @@ data: {"text": " tuổi..."}
 | PUT | `/api/internal/users/{userId}/segmentation` | Internal | Cập nhật nhãn phân khúc khách hàng (từ AI K-Means weekly job) |
 | GET | `/api/internal/users/{userId}/profile-ai` | Internal | Lấy thông tin user phục vụ RAG và Dynamic Pricing |
 | GET | `/api/internal/users/keycloak/{keycloakUserId}` | Internal | Lấy thông tin user theo Keycloak UUID |
-| PUT | `/api/internal/users/{userId}/tier` | Internal | Cập nhật hạng thành viên sau khi đơn hàng hoàn thành |
+| PUT | `/api/internal/users/{userId}/tier` | Internal | Cập nhật hạng thành viên (gọi bởi node chiến dịch `Action_Upgrade_MemberRank`) |
 | PUT | `/api/internal/users/{userId}/points` | Internal | Cộng/trừ/điều chỉnh điểm thưởng tích lũy |
 | GET | `/api/internal/users/{userId}/points` | Internal | Lấy số dư điểm tích lũy |
+| POST | `/api/internal/users/{userId}/points/redeem` | Internal | Trừ điểm khi checkout (gọi bởi order-service) |
+| POST | `/api/internal/users/{userId}/points/refund` | Internal | Hoàn điểm khi hủy đơn (gọi bởi order-service) |
+| POST | `/api/internal/users/provision` | Internal | Tự tạo hồ sơ user khi đăng nhập lần đầu (gọi bởi API Gateway) |
 
 #### `PUT /api/internal/users/{userId}/segmentation`
 *   **Request Body:**
@@ -409,14 +428,14 @@ erDiagram
     USERS ||--o{ ADDRESSES : "owns"
     USERS ||--o{ USER_DEVICES : "uses"
     USERS ||--o{ CHAT_SESSIONS : "initiates"
-    CHAT_SESSIONS ||--o{ CHAT_MESSAGES : "contains (Hybrid PostgreSQL-MongoDB)"
+    CHAT_SESSIONS ||--o{ CHAT_MESSAGES : "contains (thiết kế, không có trong code)"
 ```
 
 ---
 
 ## VII. CẤU HÌNH DOCKER COMPOSE TÍCH HỢP
 
-Cấu hình khởi chạy song song **User Service** và **Keycloak Server** sử dụng PostgreSQL làm DB:
+Cấu hình khởi chạy song song **User Service** và **Keycloak Server** (bản thiết kế ban đầu; thực tế xem `BE/docker-compose-infra.yml`: Keycloak `24.0.0` chạy `start-dev`, port `8083:8080`, admin/admin, không dùng Postgres; User Service dùng MariaDB):
 
 ```yaml
 version: '3.8'
@@ -444,7 +463,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: adminpassword
     ports:
-      - "8080:8080"
+      - "8083:8080"
     depends_on:
       - keycloak-db
     networks:
@@ -455,7 +474,7 @@ services:
     ports:
       - "8085:8085"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_user_db
+      DB_HOST: mariadb   # jdbc:mariadb://mariadb:3306/ecommerce_user_db
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI: http://keycloak:8080/realms/ecommerce-realm
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: http://keycloak:8080/realms/ecommerce-realm/protocol/openid-connect/certs
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092

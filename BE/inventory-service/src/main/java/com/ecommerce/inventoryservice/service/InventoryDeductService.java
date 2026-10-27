@@ -172,10 +172,25 @@ public class InventoryDeductService {
                     .build();
             transactionRepository.save(tombstone);
 
-            // Rollback Redis stock since database was never deducted but Redis was decremented at checkout
+            // Rollback Redis stock since database was never deducted but Redis was decremented at checkout.
+            // Chỉ trả Redis SAU KHI commit (TC_PH4_RELEASE_05), giống nhánh releaseInventory: nếu ghi
+            // tombstone bị rollback thì Kafka sẽ gửi lại sự kiện, trả Redis ngay sẽ bị cộng 2 lần.
             if (event.getItems() != null) {
-                for (OrderCancelledEvent.OrderItemInfo item : event.getItems()) {
-                    incrementRedisStock(item.getProductId(), item.getVariantId(), item.getQuantity());
+                final List<OrderCancelledEvent.OrderItemInfo> items = event.getItems();
+                Runnable rollbackRedis = () -> {
+                    for (OrderCancelledEvent.OrderItemInfo item : items) {
+                        incrementRedisStock(item.getProductId(), item.getVariantId(), item.getQuantity());
+                    }
+                };
+                if (TransactionSynchronizationManager.isSynchronizationActive()) {
+                    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                        @Override
+                        public void afterCommit() {
+                            rollbackRedis.run();
+                        }
+                    });
+                } else {
+                    rollbackRedis.run();
                 }
             }
             return;

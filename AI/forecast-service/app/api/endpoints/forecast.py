@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from app.core.security import require_admin
 from app.models.behavior import BehaviorBatchRequest
 from app.models.forecast import ForecastRequest, ForecastResponse, AnomalyRequest, AnomalyResponse, ForecastPoint
 from app.services.demand import demand_forecasting_service
@@ -20,6 +21,10 @@ from shared_common.pool import get_engine
 
 logger = get_logger(__name__)
 router = APIRouter()
+
+# Chỉ ADMIN: các thao tác ghi/tốn tài nguyên (fit model, thí nghiệm nặng, phân cụm lại, quét rủi ro PHÁT
+# VOUCHER). Gateway chỉ yêu cầu "đã đăng nhập" cho /models, /risk, /rfm — xem app/core/security.py.
+ADMIN_ONLY = [Depends(require_admin)]
 
 @router.get("/forecast", response_model=ForecastResponse)
 def get_demand_forecast(
@@ -59,7 +64,7 @@ def detect_metric_anomaly(request: AnomalyRequest):
         logger.error(f"Error in anomaly detection endpoint: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/rfm/trigger")
+@router.post("/rfm/trigger", dependencies=ADMIN_ONLY)
 def trigger_rfm_clustering():
     try:
         res = rfm_segmentation_service.run_rfm_clustering()
@@ -69,11 +74,11 @@ def trigger_rfm_clustering():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/models/train")
+@router.post("/models/train", dependencies=ADMIN_ONLY)
 def train_churn_models():
     """Train (fit) lại KMeans segmentation + Logistic Regression churn classifier, lưu artifact
     qua shared_common.registry. Đây là nơi DUY NHẤT model được fit — mọi endpoint/scan định kỳ
-    khác chỉ predict bằng model đã lưu (xem docs/canvas/churn-risk-implementation-plan.md Phase 5).
+    khác chỉ predict bằng model đã lưu (xem docs/AI/churn-risk-implementation-plan.md Phase 5).
     Chạy tay khi demo/cần cập nhật model; có thể lên lịch chạy định kỳ (vd hàng ngày) sau này."""
     try:
         metrics = train_and_evaluate()
@@ -83,7 +88,7 @@ def train_churn_models():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/models/ablation")
+@router.post("/models/ablation", dependencies=ADMIN_ONLY)
 def run_feature_ablation():
     """Thí nghiệm mở rộng feature (bước 3): so baseline 11 feature với baseline + từng block ứng
     viên, kết luận GIỮ/LOẠI bằng cách so delta AUC với sàn nhiễu (std của grouped CV) — không phải
@@ -99,7 +104,7 @@ def run_feature_ablation():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/models/calibration")
+@router.post("/models/calibration", dependencies=ADMIN_ONLY)
 def run_calibration():
     """Kiểm định & hiệu chỉnh xác suất churn (Tầng 0.1). `class_weight='balanced'` làm model ước
     lượng hậu nghiệm dưới tiên nghiệm 50/50 thay vì base rate thật ⇒ xác suất bị thổi phồng hệ thống.
@@ -116,7 +121,7 @@ def run_calibration():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/models/label-diagnostics")
+@router.post("/models/label-diagnostics", dependencies=ADMIN_ONLY)
 def run_label_diag():
     """Chẩn đoán định nghĩa nhãn churn (Tầng 0.2). Nhãn hiện tại ("không hoạt động 30 ngày tới", từ
     orders ∪ user_events) cùng nguồn với feature mạnh nhất (số category XEM 30 ngày qua) ⇒ bài toán
@@ -133,7 +138,7 @@ def run_label_diag():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/models/rule-benchmark")
+@router.post("/models/rule-benchmark", dependencies=ADMIN_ONLY)
 def run_rule_bench():
     """Benchmark Rule-based vs AI (Tầng 2.2) — trả lời "sao không viết vài câu IF/SQL cho xong?".
 
@@ -166,7 +171,7 @@ def get_model_card():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/risk/trigger-scan")
+@router.post("/risk/trigger-scan", dependencies=ADMIN_ONLY)
 async def trigger_risk_scan():
     """Chạy risk-scan ngay (không đợi lịch APScheduler) — phục vụ test/demo. Cần đã train model
     qua POST /models/train trước, nếu không sẽ trả status=SKIPPED kèm lý do rõ ràng."""
@@ -306,6 +311,7 @@ async def ingest_behavior_events(request: BehaviorBatchRequest, x_user_id: str |
                 "actionType": e.actionType,
                 "weight": e.weight,
                 "timestamp": e.timestamp,
+                "source": e.source,
             }
         )
 

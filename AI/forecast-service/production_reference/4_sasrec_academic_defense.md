@@ -1,5 +1,7 @@
 # Academic Defense: Architecture Choices in Sequential Recommendation
 
+> **Ghi chú tham khảo do AI tổng hợp — không phải mô tả hệ thống, không dùng làm trích dẫn.**
+
 *Target: Defending the use of SASRec over RNNs/Matrix Factorization, and explaining Causal Masking.*
 *Core Paper: "Self-Attentive Sequential Recommendation" (Kang & McAuley, ICDM 2018).*
 

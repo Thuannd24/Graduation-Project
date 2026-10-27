@@ -1,6 +1,6 @@
 """Dựng chuỗi hành vi theo user từ `interactions_strong.csv` — đầu vào cho SASRec.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §6.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §6.
 
 ## Vì sao cần bước riêng này
 

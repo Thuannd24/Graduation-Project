@@ -1,6 +1,7 @@
 package com.ecommerce.promotionservice.delegate;
 
 import com.ecommerce.promotionservice.delegate.support.CampaignUserContextResolver;
+import com.ecommerce.promotionservice.delegate.support.DelegateFailurePolicy;
 import com.ecommerce.promotionservice.delegate.support.DelegateVariableHelper;
 import com.ecommerce.promotionservice.dto.IssueVoucherResult;
 import com.ecommerce.promotionservice.service.VoucherIssuanceService;
@@ -48,6 +49,12 @@ public class IssueVoucherPercentDelegate implements JavaDelegate {
             applyResult(execution, result);
             log.info("[IssueVoucherPercent] Issued voucher {} for user {}", result.getVoucherCode(), userDbId.get());
         } catch (Exception ex) {
+            if (!DelegateFailurePolicy.isBusinessFailure(ex)) {
+                // Transient/technical failure (DB, network): rethrow so Camunda retries the async
+                // job instead of silently losing the voucher. Issuance is idempotent per key.
+                log.error("[IssueVoucherPercent] Transient failure, leaving it to Camunda retry: {}", ex.getMessage());
+                throw ex;
+            }
             log.error("[IssueVoucherPercent] Failed: {}", ex.getMessage());
             execution.setVariable("voucherIssued", false);
         }

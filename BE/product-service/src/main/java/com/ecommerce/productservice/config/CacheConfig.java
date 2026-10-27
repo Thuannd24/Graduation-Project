@@ -1,6 +1,7 @@
 package com.ecommerce.productservice.config;
 
 import com.ecommerce.productservice.dto.ProductDto;
+import com.ecommerce.productservice.dto.ProductListCacheEntry;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -38,16 +39,30 @@ public class CacheConfig {
         Jackson2JsonRedisSerializer<ProductDto> serializer =
                 new Jackson2JsonRedisSerializer<>(objectMapper, ProductDto.class);
 
+        // "products_list" chỉ cache ProductListCacheEntry (content + hasNext, không có Pageable)
+        // -> serializer riêng bind cứng vào type này, cùng lý do bảo mật/ổn định như trên.
+        Jackson2JsonRedisSerializer<ProductListCacheEntry> listSerializer =
+                new Jackson2JsonRedisSerializer<>(objectMapper, ProductListCacheEntry.class);
+
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(24)) // TTL mặc định cho product catalog
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
                 // Cho phép cache giá trị Null để ngăn chặn lỗi Cache Penetration (Xuyên thủng cache)
 
+        RedisCacheConfiguration listConfig = RedisCacheConfiguration.defaultCacheConfig()
+                // TTL ngắn hơn (so với cache theo id/slug) vì key là tổ hợp phân trang/lọc,
+                // không thể evict chính xác từng key khi có thay đổi - evict thủ công (.clear())
+                // ở các hàm create/update/delete lo phần "mới nhất ngay lập tức", TTL chỉ là lưới an toàn.
+                .entryTtl(Duration.ofMinutes(10))
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(listSerializer));
+
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)
                 .withCacheConfiguration("products", config.entryTtl(Duration.ofHours(24)))
                 .withCacheConfiguration("products_slug", config.entryTtl(Duration.ofHours(24)))
+                .withCacheConfiguration("products_list", listConfig)
                 .build();
     }
 }

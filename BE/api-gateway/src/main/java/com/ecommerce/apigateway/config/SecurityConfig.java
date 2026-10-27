@@ -27,10 +27,14 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Hồ sơ công khai (tên + ảnh người đánh giá) hiện trên trang chi tiết sản phẩm cho cả khách
+                        // chưa đăng nhập; user-service đã permitAll route này và chỉ trả trường không nhạy cảm.
+                        .pathMatchers(HttpMethod.GET, "/api/v1/users/public/**").permitAll()
                         // Whitelist: public endpoints không cần token
                         .pathMatchers(
                                 "/api/v1/public/**", // Tất cả /public/** là public thật sự
                                 "/api/v1/inventories/**", // Xem tồn kho công khai
+                                "/api/v1/chatbot/**", // AI chatbot: khách chưa đăng nhập vẫn chat được (tư vấn sản phẩm/chính sách); JWT nếu có vẫn được verify và forward bình thường cho các câu hỏi cần đăng nhập (đơn hàng, điểm thưởng...)
                                 "/eureka/**", // Eureka dashboard
                                 "/actuator/health", // Health check (giới hạn chỉ /health, không expose tất cả)
                                 "/fallback/**", // Fallback endpoints của Circuit Breaker

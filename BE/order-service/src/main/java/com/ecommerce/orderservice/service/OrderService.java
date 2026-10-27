@@ -14,10 +14,16 @@ public interface OrderService {
     List<OrderResponse> getOrdersByUser(String userId, String rolesHeader);
     void cancelOrder(Long orderId, String userId, String email);
     void cancelOrder(Long orderId, String userId, String email, String rolesHeader);
+    /** Hủy đơn kèm lý do (bắt buộc). Khách: chỉ khi chưa giao vận. Admin/staff hủy đơn SHIPPED -> RETURNING. */
+    OrderResponse cancelOrder(Long orderId, String userId, String email, String rolesHeader, String reasonCode,
+            String reason);
+    /** Admin xác nhận đã nhận hàng hoàn: RETURNING -> RETURNED, hoàn kho + hoàn tiền nếu đã thanh toán. */
+    OrderResponse confirmReturnReceived(Long orderId, String note);
     void updateOrderStatus(Long orderId, String status);
     OrderResponse shipOrder(Long orderId);
     void handleShippingWebhook(String trackingCode, String status);
     OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status);
+    OrderResponse updateDeliveryStatusByAdmin(Long orderId, String status, String reason);
     List<WarrantyItemResponse> getMyWarranty(String userId);
     void expireOrder(Long orderId);
     void retryCompensationTask(Long taskId);

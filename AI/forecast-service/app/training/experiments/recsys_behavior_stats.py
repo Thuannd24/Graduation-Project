@@ -1,7 +1,7 @@
 """Đo quy luật hành vi THẬT từ REES46 Cosmetics — dùng để lái bộ sinh dữ liệu giả lập
 (`tools/data-seed/lib/simulate.mjs`) thay vì luật tay đoán mò.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §10.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §10.
 
 ## Vì sao cần đo lại, không dùng số cũ
 

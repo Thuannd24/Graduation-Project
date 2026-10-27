@@ -3,20 +3,32 @@ import { Link } from "react-router-dom";
 import { useWishlist } from "../../../context/WishlistContext.jsx";
 import { calculateDiscountPercent, formatVnd } from "../../../utils/format.js";
 import Icon from "../../../components/common/Icon.jsx";
+import { FREE_SHIP_THRESHOLD } from "../../../utils/checkoutConstants";
+import { PRODUCT_PLACEHOLDER, applyProductPlaceholder } from "../../../utils/imageFallback.js";
 
 const RED = "#D70018";
 const GOLD = "#F59E0B";
 const FONT = "'Inter', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
-/* ========== Star Rating - 1 icon sao đen + số điểm (mặc định 5 sao khi sản phẩm chưa có đánh giá) ========== */
-function StarRating({ rating }) {
-  const score = rating > 0 ? rating : 5;
+/* ========== Star Rating - 1 icon sao + điểm trung bình thật; chưa có đánh giá thì ghi rõ ========== */
+function StarRating({ rating, reviewCount }) {
+  if (!(rating > 0)) {
+    return (
+      <span style={{ fontSize: 11, fontWeight: 600, color: "#9CA3AF" }}>
+        Chưa có đánh giá
+      </span>
+    );
+  }
+  const score = Math.min(rating, 5);
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-      <Icon name="star" filled style={{ fontSize: 16, color: "#1F2937" }} />
+    <div style={{ display: "flex", alignItems: "center", gap: 3 }} title={`${score.toFixed(1)}/5 sao`}>
+      <Icon name="star" filled style={{ fontSize: 16, color: GOLD }} />
       <span style={{ fontSize: 13, fontWeight: 800, color: "#1F2937" }}>
         {score % 1 === 0 ? score.toFixed(0) : score.toFixed(1)}
       </span>
+      {reviewCount > 0 && (
+        <span style={{ fontSize: 11, fontWeight: 500, color: "#9CA3AF" }}>({reviewCount})</span>
+      )}
     </div>
   );
 }
@@ -36,6 +48,9 @@ export default function ProductCard({
   );
   const isLiked = isInWishlist(product.id);
   const rating = Number(product.rating || 0);
+  const reviewCount = Number(product.reviews || product.reviewCount || 0);
+  // Đơn từ FREE_SHIP_THRESHOLD được miễn phí vận chuyển -> một sản phẩm có giá từ ngưỡng này chắc chắn được freeship.
+  const freeShip = Number(product.price || 0) >= FREE_SHIP_THRESHOLD;
   const hasOld = Number(product.oldPrice) > Number(product.price);
   const isLaptop = variant === "laptop";
   const [imgHover, setImgHover] = useState(false);
@@ -167,7 +182,7 @@ export default function ProductCard({
       >
         <img
           alt={product.name}
-          src={product.image || product.imageUrl || `https://placehold.co/200x200/f8f9fb/6b7280?text=${encodeURIComponent("SP")}`}
+          src={product.image || product.imageUrl || PRODUCT_PLACEHOLDER}
           style={{
             width: "100%",
             height: "100%",
@@ -175,10 +190,7 @@ export default function ProductCard({
             transition: "transform 0.4s ease",
             transform: imgHover ? "scale(1.05)" : "scale(1)",
           }}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = `https://placehold.co/200x200/f8f9fb/6b7280?text=${encodeURIComponent("SP")}`;
-          }}
+          onError={applyProductPlaceholder}
         />
       </Link>
 
@@ -274,8 +286,8 @@ export default function ProductCard({
           </div>
         )}
 
-        {/* Shipping info */}
-        {showShipping && (
+        {/* Shipping info: chỉ hiện điều chắc chắn đúng (miễn phí vận chuyển theo ngưỡng giá trị đơn) */}
+        {showShipping && freeShip && (
           <div style={{
             display: "flex",
             alignItems: "center",
@@ -289,21 +301,10 @@ export default function ProductCard({
               gap: 4,
               fontSize: 11,
               fontWeight: 700,
-              color: RED,
+              color: "#059669",
             }}>
-              <Icon name="local_shipping" style={{ fontSize: 15, color: RED }} />
-              Ship 2 ngày
-            </span>
-            <span style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              fontSize: 11,
-              color: "#6B7280",
-              fontWeight: 500,
-            }}>
-              <Icon name="location_on" style={{ fontSize: 14, color: "#9CA3AF" }} />
-              Hà Nội
+              <Icon name="local_shipping" style={{ fontSize: 15, color: "#059669" }} />
+              Miễn phí vận chuyển
             </span>
           </div>
         )}
@@ -318,7 +319,7 @@ export default function ProductCard({
           borderTop: "1px solid #F1F2F4",
         }}>
           {showRating ? (
-            <StarRating rating={rating} />
+            <StarRating rating={rating} reviewCount={reviewCount} />
           ) : <span />}
 
           <button

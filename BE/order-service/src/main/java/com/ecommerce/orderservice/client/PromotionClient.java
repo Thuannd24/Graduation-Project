@@ -28,6 +28,11 @@ public interface PromotionClient {
     @PostMapping("/api/internal/vouchers/release")
     ApiResponse<Void> releaseVoucher(@RequestBody VoucherOrderActionRequest request);
 
+    /** Trả voucher (RESERVED/USED -> UNUSED nếu còn hạn) khi đơn bị hủy trước khi giao vận. Idempotent.
+     *  data: {orderId, result: RESTORED | EXPIRED | NOT_FOUND | NOT_APPLICABLE | IGNORED}. */
+    @PostMapping("/api/internal/vouchers/restore")
+    ApiResponse<java.util.Map<String, Object>> restoreVoucher(@RequestBody VoucherOrderActionRequest request);
+
     @Data
     @Builder
     @NoArgsConstructor

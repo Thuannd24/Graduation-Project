@@ -2,8 +2,17 @@ fastapi>=0.100.0
 uvicorn>=0.22.0
 pydantic>=2.0
 numpy>=1.24.0
-elasticsearch>=8.0.0
+# Client phải cùng major với server (infra-elasticsearch 8.10.x)
+elasticsearch>=8.0.0,<9
 sentence-transformers>=2.2.2
 pillow>=9.5.0
 python-multipart>=0.0.6
+# Visual search: ANN index + object detection/crop
+faiss-cpu>=1.7.4
+ultralytics>=8.0.0
+# Catalog metadata (MariaDB via shared-common) + item-to-item (MongoDB)
+pymongo>=4.3.0
+# Tải ảnh sản phẩm từ CDN/cloud khi build index
+requests>=2.31.0
+tqdm>=4.66.0
 -e ../shared-common

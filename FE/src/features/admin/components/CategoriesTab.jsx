@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import Icon from "../../../components/common/Icon.jsx";
 import Pagination from "../../../components/common/Pagination.jsx";
 import { productApi } from "../../../services/productApi.ts";
+import { PRODUCT_PLACEHOLDER, applyProductPlaceholder } from "../../../utils/imageFallback.js";
 
 export default function CategoriesTab({ onNavigateToAddProduct }) {
   // Main Navigation Tab
@@ -70,7 +71,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
       setLoading(true);
       const [catsTree, prodsList, attrsList] = await Promise.all([
         productApi.listCategories(),
-        productApi.listAllProducts(),
+        productApi.adminListAllProducts(),
         productApi.listAttributes()
       ]);
 
@@ -924,7 +925,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded bg-slate-50 border border-slate-150 p-1 flex items-center justify-center">
-                            <img src={p.image} alt={p.name} className="w-full h-full object-contain rounded" />
+                            <img src={p.image || PRODUCT_PLACEHOLDER} alt={p.name} onError={applyProductPlaceholder} className="w-full h-full object-contain rounded" />
                           </div>
                           <div>
                             <span className="font-extrabold text-slate-700 block truncate max-w-[200px]">{p.name}</span>
@@ -935,7 +936,7 @@ export default function CategoriesTab({ onNavigateToAddProduct }) {
                         </div>
                       </td>
                       <td className="p-4 text-emerald-700 font-bold">
-                        {p.price ? `${p.price.toLocaleString("vi-VN")} đ` : "Liên hệ"}
+                        {p.price ? `${Number(p.price).toLocaleString("vi-VN")}đ` : "Liên hệ"}
                       </td>
                       <td className="p-4 text-slate-550 font-bold text-center">
                         {p.rating ? `${p.rating} ⭐` : "Chưa có"}

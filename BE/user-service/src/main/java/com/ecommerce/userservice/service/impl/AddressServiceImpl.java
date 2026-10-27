@@ -35,6 +35,11 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public AddressResponse addAddress(Long userId, AddressRequest request) {
         log.info("Adding address for user: {}", userId);
+        String recipientName = requireText(request.getRecipientName(), "Tên người nhận không được để trống");
+        String phoneNumber = normalizeVietnamesePhone(request.getPhoneNumber());
+        String province = requireText(request.getProvince(), "Tỉnh/thành phố không được để trống");
+        String districtWard = requireText(request.getDistrictWard(), "Phường/xã không được để trống");
+        String detailAddress = requireText(request.getDetailAddress(), "Địa chỉ chi tiết không được để trống");
 
         // Dùng @Modifying bulk update thay vì N+1 save() trong vòng lặp
         if (Boolean.TRUE.equals(request.getIsDefault())) {
@@ -43,11 +48,11 @@ public class AddressServiceImpl implements AddressService {
 
         Address address = Address.builder()
                 .userId(userId)
-                .recipientName(request.getRecipientName())
-                .phoneNumber(request.getPhoneNumber())
-                .province(request.getProvince())
-                .districtWard(request.getDistrictWard())
-                .detailAddress(request.getDetailAddress())
+                .recipientName(recipientName)
+                .phoneNumber(phoneNumber)
+                .province(province)
+                .districtWard(districtWard)
+                .detailAddress(detailAddress)
                 .isDefault(Boolean.TRUE.equals(request.getIsDefault()))
                 .build();
 
@@ -64,6 +69,27 @@ public class AddressServiceImpl implements AddressService {
     }
 
     // ──────────────────────────────────────────────────────────────────────────
+    private static final java.util.regex.Pattern VN_PHONE = java.util.regex.Pattern.compile("^(0[0-9]{9}|\\+84[0-9]{9})$");
+
+    // Số điện thoại Việt Nam: 10 số bắt đầu bằng 0, hoặc +84 theo sau 9 số. Bỏ dấu cách/chấm/gạch trước khi kiểm tra.
+    static String normalizeVietnamesePhone(String raw) {
+        if (raw == null || raw.isBlank()) {
+            throw new IllegalArgumentException("Số điện thoại không được để trống");
+        }
+        String phone = raw.replaceAll("[\\s.\\-]", "");
+        if (!VN_PHONE.matcher(phone).matches()) {
+            throw new IllegalArgumentException("Số điện thoại không hợp lệ (10 số bắt đầu bằng 0, hoặc +84 và 9 số)");
+        }
+        return phone;
+    }
+
+    private static String requireText(String value, String message) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(message);
+        }
+        return value.trim();
+    }
+
     private AddressResponse mapToResponse(Address address) {
         return AddressResponse.builder()
                 .id(address.getId())

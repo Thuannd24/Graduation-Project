@@ -1,6 +1,6 @@
 """Kiểm lại giả thuyết THỨ TỰ trên REES46 Cosmetics Shop — dữ liệu thật có `remove_from_cart`.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §5.2.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §5.2.
 
 ## Vì sao thí nghiệm này khác RetailRocket
 

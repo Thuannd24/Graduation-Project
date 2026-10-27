@@ -1,0 +1,312 @@
+﻿product_id,danh_muc,ten_san_pham,gia_tham_khao,phuong_phap,can_cu
+331,Laptop,Laptop ASUS ExpertBook B3 B3405CCA-LY0077W - Đã Kích Hoạt,21690000,Giá thị trường tham khảo,Ref Vivobook S16 CU5 225H (mới ~22.9tr); ExpertBook B3 doanh nghiệp +5%; Đã Kích Hoạt -10%
+182,Laptop,Laptop ASUS ExpertBook P1 P1503CVA-C5H16-63WS - Đã Kích Hoạt,16590000,Giá thị trường tham khảo,Ref ASUS Gaming V16 V3607VJ Core 5 210H RTX3050 mới ~23.0tr; ExpertBook P1 không dGPU -20%; Đã Kích Hoạt -10%
+183,Laptop,Laptop ASUS ROG Zephyrus G14 GA403WR-QS103WS - Cũ Đẹp,60390000,Suy từ sản phẩm cùng dòng,"Sibling Zephyrus G14 GA403GM mới 62.99tr (RTX5060 16/512); RAM 32GB +6%, 1TB +10%, RTX5070Ti +11% (theo G16 AM→AR), HX 370 đời trước -5%; Cũ Đẹp -22%"
+294,Laptop,Laptop ASUS TUF Gaming A14 FA401EA-RG041W,58990000,Suy từ sản phẩm cùng dòng,"Sibling TUF A14 FA401EA-RG034W Cũ Đẹp 53.69tr (AI MAX+ 392 64GB/1TB) → mới 68.8tr; RAM 32GB -6%, SSD 512GB -10%"
+160,Laptop,Laptop ASUS TUF Gaming A15 FA507NU-LP140W - Cũ Xước Cấn,14490000,Suy từ sản phẩm cùng dòng,"Sibling TUF A15 FA507NU-LP031W Cũ Xước Cấn 16.19tr (R7 7735HS 16GB); RAM 8GB -6%, R5 7535HS -5%"
+295,Laptop,Laptop ASUS TUF Gaming A16 FA608UHI-TU121W,34790000,Giá thị trường tham khảo,TUF A16 R7 260 RTX5050 16/512; tham chiếu LOQ 15IRX10 RTX5050 mới ~34.7tr; ≈ TUF A16 RTX5060 -8%
+296,Laptop,Laptop ASUS TUF Gaming A16 FA608UMI-TU162W,37790000,Giá thị trường tham khảo,"Ref TUF A14 FA401KM RTX5060 32/1TB Cũ Đẹp 34.39tr → mới 44.1tr; RAM 16GB -6%, SSD 512GB -10%"
+334,Laptop,Laptop ASUS VivoBook S16 S3607AA-SH042W - Đã Kích Hoạt,20590000,Suy từ sản phẩm cùng dòng,Sibling Vivobook S16 S3607CA-SH082WS Cũ Trầy 16.49tr → mới 22.9tr; S3607AA CU5 325 tương đương; Đã Kích Hoạt -10%
+304,Laptop,Laptop ASUS Vivobook 14 X1404MA-EB027W,18990000,Giá thị trường tham khảo,"Vivobook 14 Core 3 304 8/512; tham chiếu IdeaPad Slim 3 14IWC11 Core 5 320 8GB 21.29tr, Core 3 -10%"
+305,Laptop,Laptop ASUS Vivobook 14 X1404MA-EB028W,22990000,Giá thị trường tham khảo,"Vivobook 14 Core 5 320 16/512; tham chiếu IdeaPad Slim 3 14IWC11 Core 5 320 16GB 24.19tr, ASUS Vivobook -5%"
+306,Laptop,Laptop ASUS Vivobook 14 X1404MA-EB029W,24790000,Giá thị trường tham khảo,Vivobook 14 Core 7 350 16/512; = bản Core 5 320 (22.99tr) +8%
+184,Laptop,Laptop ASUS Vivobook 14 X1404VA-NK050W - Cũ Trầy Xước,10490000,Suy từ sản phẩm cùng dòng,"Sibling Vivobook 14 X1404VA-EB509W Cũ Trầy Xước 10.49tr (i5-1335U 16/512), cùng cấu hình và tình trạng"
+307,Laptop,Laptop ASUS Vivobook 16 X1607CA-MB387W,21790000,Giá thị trường tham khảo,Vivobook 16 CU5 225H 16/512; Vivobook S16 cùng CPU mới ~22.9tr -5%; ≈ Vivobook 16 M1607KA (mới ~21.8tr)
+185,Laptop,Laptop ASUS Vivobook Go 15 E1504FA-BQ340W - Đã Kích Hoạt,12990000,Suy từ sản phẩm cùng dòng,Sibling Vivobook Go 14 E1404FA Cũ Xước Cấn 9.09tr (R5 7520U 16/512) → mới 14.0tr; bản 15 inch +3%; Đã Kích Hoạt -10%
+274,Laptop,Laptop ASUS Vivobook S14 M3407KA-SF034W,19490000,Giá thị trường tham khảo,Vivobook S14 Ryzen AI 5 330 16/512; dưới Vivobook S16 CU5 225H (mới ~22.9tr) và Vivobook 16 AI 7 350 (mới ~21.8tr)
+275,Laptop,Laptop ASUS Vivobook S16 S3607CA-SH080W,22890000,Suy từ sản phẩm cùng dòng,Sibling Vivobook S16 S3607CA-SH082WS Cũ Trầy Xước 16.49tr (CU5 225H 16/512) → mới 22.9tr
+335,Laptop,Laptop ASUS Vivobook X1504VA-NJ526W - Cũ Đẹp,10190000,Suy từ sản phẩm cùng dòng,"Sibling ASUS VivoBook 15 X1504VA 0031S1335U Cũ Đẹp 10.19tr (i5-1335U), cùng tình trạng"
+186,Laptop,Laptop ASUS ZenBook S16 UM5606GA-SS384WS - Cũ Trầy Xước,33790000,Giá thị trường tham khảo,"Ref ZenBook 14 UX3405CA-ST648W Đã KH 32.49tr (CU9 32/1TB, mới ~36.1tr); ZenBook S16 Ryzen AI 9 465 OLED +30%; Cũ Trầy Xước -28%"
+308,Laptop,Laptop ASUS Zenbook 14 UM3406GA-QD075W,29790000,Giá thị trường tham khảo,"Ref ZenBook 14 UX3405CA-ST629W Đã KH 29.99tr (CU7 32GB, mới ~33.3tr); Ryzen AI 7 445 -5%, RAM 16GB -6%"
+309,Laptop,Laptop ASUS Zenbook S 14 UX5406AA-SU348W,41990000,Giá thị trường tham khảo,"Zenbook S 14 CU9 386H 16/512 OLED 3K; trên ZenBook 14 CU9 285H 32/1TB (mới ~36.1tr), dòng S cao cấp"
+157,Laptop,Laptop Acer Aspire Vero AV14-51-73LM - Cũ Xước Cấn,11290000,Giá thị trường tham khảo,"Ref Dell Inspiron 15 3520 i7-1255U Cũ Đẹp 11.69tr (≈mới 15.0tr); Vero i7-1255U +5%, 1TB +10% ≈17.3tr; Cũ Xước Cấn -35%"
+158,Laptop,Laptop Acer Gaming Nitro V 15 ANV15-41-R732 - Cũ Trầy Xước,15990000,Giá thị trường tham khảo,"Ref Nitro V ANV15-51-57B2 RTX4050 Cũ Đẹp 17.19tr (≈mới 22.0tr); RAM 16GB +6%, R5 6600H đời cũ -5%; Cũ Trầy Xước -28%"
+159,Laptop,Laptop Asus ROG Strix G16 G614JU-N3777W - Cũ Xước Cấn,23990000,Giá thị trường tham khảo,"Ref LOQ 15IRX9 i7-13650HX RTX4050 Cũ Đẹp 27.59tr (≈mới 35.4tr); ROG Strix +10%, model 2023 -5%; Cũ Xước Cấn -35%"
+278,Laptop,Laptop Dell 14 DC14255 DC4A5330W1 - Bảo hành 2 năm,26490000,Giá thị trường tham khảo,"Dell 14 DC14255 Ryzen AI 5 330 16/512 BH 2 năm; tham chiếu Dell 15 DC15255 R5 7530U 24.99tr, Dell 14 DC14250 Core 5 120U 31.39tr"
+178,Laptop,Laptop Dell 15 DC15250 H02DF - Cũ Xước Cấn,14090000,Suy từ sản phẩm cùng dòng,"Sibling Dell 15 DC15250 4CDJW mới 22.79tr; i5-1334U -10%, RAM 24GB +6%; Cũ Xước Cấn -35%"
+161,Laptop,Laptop Dell 15 DC15250 H5YXJ - Cũ Đẹp,19590000,Suy từ sản phẩm cùng dòng,Sibling Dell 15 DC15250 4CDJW mới 22.79tr (i7-1355U 16/512); SSD 1TB +10%; Cũ Đẹp -22%
+179,Laptop,Laptop Dell 15 DC15250 I5U165W11SLU-5 - Đã Kích Hoạt,18490000,Suy từ sản phẩm cùng dòng,Sibling Dell 15 DC15250 4CDJW mới 22.79tr; i5-1334U -10%; Đã Kích Hoạt -10%
+162,Laptop,Laptop Dell 15 DC15250 KR0N9 - Cũ Trầy Xước,14790000,Suy từ sản phẩm cùng dòng,Sibling Dell 15 DC15250 4CDJW mới 22.79tr (i7); i5-1334U -10%; Cũ Trầy Xước -28%
+163,Laptop,Laptop Dell Inspiron 15 3505 Y1N1T3 - Cũ Xước Cấn,5290000,Giá thị trường tham khảo,"Inspiron 3505 R3 3250U 8/256 đời 2020, giá máy cũ; tham chiếu Inspiron 3501 cũ 5.59–7.09tr; Cũ Xước Cấn"
+187,Laptop,Laptop Dell Inspiron 15 3520 N3520-I5U165W11SLU - Cũ Xước Cấn,8990000,Suy từ sản phẩm cùng dòng,Sibling Inspiron 15 3520 71061229 Cũ Trầy Xước 9.99tr (i5-1235U 16/512) → mới 13.9tr; Cũ Xước Cấn -35%
+188,Laptop,Laptop Dell Inspiron 16 5620 P1WKN - Cũ Trầy Xước,9790000,Giá thị trường tham khảo,"Ref Inspiron 15 3520 i5-1235U Cũ Trầy Xước 9.99tr; Inspiron 16 5620 +15%, RAM 8GB -6%, SSD 256GB -9%"
+164,Laptop,Laptop Dell Latitude 7420 - Cũ Xước Cấn,7490000,Giá thị trường tham khảo,"Latitude 7420 i5-1145G7 16/256 đời 2021, giá máy cũ doanh nhân trên thị trường; tham chiếu Latitude 5420 Cũ Đẹp 7.99tr; Cũ Xước Cấn"
+340,Laptop,Laptop Gaming Acer Nitro V ANV15-51-72VS NH.QNASV.004 - Cũ Xước Cấn,13090000,Suy từ sản phẩm cùng dòng,"Sibling Nitro V ANV15-51-57B2 Cũ Đẹp 17.19tr → mới 22.0tr; RTX2050 -20%, i7-13620H +8%, RAM 16GB +6%; Cũ Xước Cấn -35%"
+189,Laptop,Laptop HP Gaming OMEN 16-AM0176TX BX9D3PA - Cũ Đẹp,35090000,Giá thị trường tham khảo,OMEN 16 CU7 255H RTX5060 mới ~45tr (trên TUF A16/A14 RTX5060 ~38–44tr trong catalog); Cũ Đẹp -22%
+190,Laptop,Laptop HP Gaming Victus 16-E1107AX 7C140PA - Cũ Trầy Xước,13490000,Giá thị trường tham khảo,"Victus 16 2022 R5 6600H RTX3050 4GB 8/512, hàng đời cũ; tham chiếu Victus 15-FB1013DX Cũ Xước Cấn 13.59tr; Cũ Trầy Xước -28%"
+165,Laptop,Laptop HP Omnibook 7 Aero 13-BG1087AU BZ7S1PA - Cũ Đẹp,21890000,Suy từ sản phẩm cùng dòng,Sibling HP OmniBook 7 Aero 13-BG1085AU mới 31.19tr (Ryzen AI 7 350); Ryzen AI 5 340 -10%; Cũ Đẹp -22%
+343,Laptop,Laptop HP Victus 16-R0374TX AY8Y7PA - Cũ Trầy Xước,17090000,Giá thị trường tham khảo,"Ref Victus 16-S0143AX RTX4050 32GB Cũ Trầy 17.29tr; RAM 16GB -6%, i5-13500HX +5%; Cũ Trầy Xước -28%"
+166,Laptop,Laptop Huawei Matebook D15 - Cũ Xước Cấn,7890000,Giá thị trường tham khảo,Ref Huawei Matebook D14 Cũ Trầy Xước 8.69tr (≈mới 12.1tr); D15 i5-1135G7 8/512 tương đương; Cũ Xước Cấn -35%
+318,Laptop,Laptop LG Gram 2023 16Z90R-E.AH75A5 - Cũ Trầy Xước,17990000,Giá thị trường tham khảo,"LG Gram 2023 16 i7-1360P RTX3050 (2023), giá máy cũ; tham chiếu Gram 2021 16Z90P Cũ XC 12.49tr; Cũ Trầy Xước -28%"
+328,Laptop,Laptop Lenovo IdeaPad Slim 3 14ARP10 83K600E6VN,17690000,Suy từ sản phẩm cùng dòng,"Sibling IdeaPad Slim 3 14ARP10 883K600E9VN Đã Kích Hoạt 15.89tr (R5 7535HS 16/512, cùng cấu hình) → giá mới"
+172,Laptop,Laptop Lenovo IdeaPad Slim 3 16IWC11 83RS002KVN,22190000,Suy từ sản phẩm cùng dòng,Sibling IdeaPad Slim 3 14IWC11 83RQ002PVN mới 21.29tr (Core 5 320 8/512); bản 16 inch +4%
+193,Laptop,Laptop Lenovo IdeaPad Slim 5 OLED 14IRH10 83HR0001VN - Cũ Trầy Xước,16890000,Giá thị trường tham khảo,"IdeaPad Slim 5 OLED 14IRH10 i5-13420H 32GB/1TB mới ~23.5tr (Slim 5 15IRU9 32GB Cũ Trầy 13.09tr, 14AKP10 Cũ XC 17.99tr); Cũ Trầy Xước -28%"
+345,Laptop,Laptop Lenovo Ideapad Slim 3 14IRH10 83K0000CVN - Cũ Trầy Xước,12090000,Giá thị trường tham khảo,"Ref IdeaPad Slim 3 14ARP10 Cũ Trầy 10.39tr (→mới 14.4tr); RAM 24GB +6%, màn OLED +10%; Cũ Trầy Xước -28%"
+181,Laptop,Laptop Lenovo LOQ 15ARP10E 83S0007AVN - Cũ Đẹp,19890000,Suy từ sản phẩm cùng dòng,"Sibling LOQ 15ARP10E 83S000DEVN Đã Kích Hoạt 22.99tr (R7 170≈7735HS, RTX3050 16/512) → mới 25.5tr; Cũ Đẹp -22%"
+315,Laptop,Laptop Lenovo Legion 5 15AHP10 83M0002XVN - Cũ Trầy Xước,28090000,Giá thị trường tham khảo,Legion 5 15AHP10 R7 260 RTX5050 24GB OLED (2025) mới ~39tr (≈ Legion 5 15AHP11 mới); Cũ Trầy Xước -28%
+329,Laptop,Laptop Lenovo Legion 5 15AHP11 83Q7001HVN,39890000,Giá thị trường tham khảo,Ref LOQ 15IRX10 RTX5050 mới ~34.7tr; Legion 5 15AHP11 R7 250 RTX5050 màn 2.5K +15%
+235,Laptop,Laptop Lenovo Thinkpad X1 Carbon Gen 10 21CC-S4RA00 - Cũ Xước Cấn,11490000,Giá thị trường tham khảo,"ThinkPad X1 Carbon Gen 10 i7-1265U 16/512 (2022), giá máy cũ thị trường; tham chiếu ZBook Firefly G9 Cũ XC 11.79tr, EliteBook 840 G10 Cũ Trầy 13.49tr"
+173,Laptop,Laptop Lenovo Yoga 7 2-in-1 14IPH11 83TC002KVN,32490000,Giá thị trường tham khảo,"Ref Yoga Slim 7 14IPH11 mới 40.99tr (CU7 355); CU5 322 -12%, dòng Yoga 7 2-in-1 -10%"
+292,Laptop,Laptop Lenovo Yoga Pro 7 14ASP9 83HN000GCD - Cũ Xước Cấn,22790000,Giá thị trường tham khảo,Yoga Pro 7 14ASP9 Ryzen AI 9 365 32GB/1TB OLED (2024) mới ~35tr; tham chiếu Yoga Slim 7 14IMH9 Cũ XC 18.49tr; Cũ Xước Cấn -35%
+236,Laptop,Laptop MSI Crosshair 16 HX E14WEK-076VN,45990000,Giá thị trường tham khảo,"Ref Cyborg 15 i7 RTX5050 16/512 mới 36.49tr; Crosshair 16 HX i9-14900HX, 32GB/1TB, QHD+ 16 inch (+~26%)"
+175,Laptop,Laptop MSI Cyborg 15 C13WEO-418VN,33590000,Suy từ sản phẩm cùng dòng,Sibling MSI Cyborg 15 C13WEO-417VN mới 36.49tr (i7-13620H RTX5050); i5-13420H -8%
+197,Laptop,Laptop MSI Gaming Thin GF63 12VE-454VN - Cũ Xước Cấn,12490000,Giá thị trường tham khảo,"Ref MSI GF63 12UC-887VN Cũ Trầy Xước 13.09tr (i7 RTX3050) → mới 18.2tr; i5-12450H -8%, RTX4050 +15%; Cũ Xước Cấn -35%"
+239,Laptop,Laptop MSI Modern 14 H1M-014VN,20990000,Giá thị trường tham khảo,MSI Modern 14 Core 7 150U 16/512 mới; thấp hơn IdeaPad Slim 3 14IWC11 16GB 24.19tr (dòng phổ thông)
+241,Laptop,Laptop MSI Raider A16 HX B8WH-031VN,79990000,Giá thị trường tham khảo,Raider A16 HX R9 8940HX RTX5070Ti 32/1TB; giữa Stealth A16 AI+ 5070Ti (mới ~65tr) và Zephyrus G16 5070Ti 99.99tr
+242,Laptop,Laptop MSI Stealth 16 AI+ B3WGX-051VN,74990000,Giá thị trường tham khảo,"Stealth 16 AI+ CU9 386H RTX5070 32/1TB; tham chiếu Zephyrus G16 GU606AM 5060 89.99tr, Stealth A16 5070Ti mới ~65tr"
+350,Laptop,Laptop MSI Vector A16 HX A8WHG-010VN - Đã Kích Hoạt,52390000,Giá thị trường tham khảo,"Ref Raider A16 HX cùng CPU/GPU 79.99tr; Vector -15%, RAM 16GB -6%, SSD 512GB -9%; Đã Kích Hoạt -10%"
+827,Máy tính bảng,HONOR Pad V9 Wifi 8GB 256GB,11990000,Giá thị trường tham khảo,HONOR Pad V9 Dimensity 8350 8/256; trên HONOR Pad 10 8/256 10.99tr
+894,Máy tính bảng,HONOR Pad X9a,7990000,Giá thị trường tham khảo,HONOR Pad X9a SD685 8/256; trên Honor Pad X8b 6/128 7.29tr
+847,Máy tính bảng,Lenovo Idea Tab 5G 8GB 128GB ZAFM0709VN - Kèm bút,7490000,Suy từ sản phẩm cùng dòng,"Sibling Lenovo Idea Tab 5G 8GB 128GB ZAFM0710VN kèm bút 7.49tr, cùng cấu hình"
+841,Máy tính bảng,Lenovo Legion Tab Gen 5 12GB 256GB ZAH20093VN,23490000,Suy từ sản phẩm cùng dòng,"Sibling Lenovo Legion Tab Gen 5 12GB 256GB 23.49tr, cùng cấu hình"
+905,Máy tính bảng,Lenovo Tab One 4G 4GB 128GB ZAF00170VN,3590000,Suy từ sản phẩm cùng dòng,"Sibling Lenovo Tab One 4GB 64GB 2.99tr; 128GB +10%, bản 4G +10%"
+904,Máy tính bảng,Lenovo Tab One 4G 4GB 128GB ZAF10179VN,3590000,Suy từ sản phẩm cùng dòng,"Sibling Lenovo Tab One 4GB 64GB 2.99tr; 128GB +10%, bản 4G +10%"
+919,Máy tính bảng,Lenovo Tab One 4G 4GB 64GB ZAF10022VN,3290000,Suy từ sản phẩm cùng dòng,Sibling Lenovo Tab One 4GB 64GB 2.99tr; bản 4G +10%
+931,Máy tính bảng,Lenovo Xiaoxin Pad Pro 8GB 256GB,8490000,Giá thị trường tham khảo,"Lenovo Xiaoxin Pad Pro Dimensity 8300 8/256 (hàng nội địa TQ); dưới Xiaomi Pad 8 8/128 11.19tr, ngang Poco Pad M1/X1"
+858,Máy tính bảng,OPPO Pad SE,6990000,Suy từ sản phẩm cùng dòng,Sibling OPPO Pad SE WiFi 4GB 128GB 6.99tr (bản cơ bản)
+909,Máy tính bảng,Samsung Galaxy Tab S10 Lite 5G,9790000,Suy từ sản phẩm cùng dòng,Sibling Galaxy Tab S10 Lite Wifi 6/128 8.49tr; bản 5G +15% (theo chênh S10 FE/S11 Wifi→5G)
+850,Máy tính bảng,Xiaomi Pad 8 8GB 256GB Wifi,12290000,Suy từ sản phẩm cùng dòng,Sibling Xiaomi Pad 8 8GB 128GB 11.19tr; 256GB +10%
+855,Máy tính bảng,Xiaomi Pad 8 Pro 12GB 256GB,16890000,Suy từ sản phẩm cùng dòng,"Sibling Xiaomi Pad 8 Pro 8GB 128GB 14.49tr; 256GB +10%, RAM 12GB +6%"
+851,Máy tính bảng,Xiaomi Pad 8 Pro 12GB 512GB Wifi,18590000,Suy từ sản phẩm cùng dòng,"Sibling Xiaomi Pad 8 Pro 8GB 128GB 14.49tr; 512GB (x2 hai lần) +21%, RAM 12GB +6%"
+852,Máy tính bảng,Xiaomi Pad 8 Pro 8GB 256GB Wifi,15890000,Suy từ sản phẩm cùng dòng,Sibling Xiaomi Pad 8 Pro 8GB 128GB 14.49tr; 256GB +10%
+921,Máy tính bảng,Xiaomi Redmi Pad 2 4G,6090000,Suy từ sản phẩm cùng dòng,"Sibling Redmi Pad 2 Wifi 4/256 5.99tr; 128GB -10%, bản 4G +12% (theo Redmi Pad 2 9.7 4G vs Wifi)"
+553,OPPO,OPPO A1,2490000,Giá thị trường tham khảo,A1 5G (TQ 2023) giá rẻ; giá thanh lý
+568,OPPO,OPPO A1 Pro,4490000,Giá thị trường tham khảo,"A1 Pro 5G (TQ 2022, camera 108MP); giá xách tay thanh lý"
+594,OPPO,OPPO A16e,2390000,Giá thị trường tham khảo,"A16e (Ấn Độ 2022), ngang A16K (2.390.000)"
+617,OPPO,OPPO A16s,2690000,Giá thị trường tham khảo,"A16s (2021), ngang A16 (2.790.000)"
+555,OPPO,OPPO A1x,2390000,Giá thị trường tham khảo,"A1x 5G (TQ 2023) giá rẻ, thấp hơn A1; giá thanh lý"
+535,OPPO,OPPO A2,3490000,Giá thị trường tham khảo,A2 5G chỉ bán TQ (2023); giá xách tay thanh lý
+534,OPPO,OPPO A2 Pro,4490000,Giá thị trường tham khảo,A2 Pro 5G chỉ bán TQ (2023); giá xách tay thanh lý
+536,OPPO,OPPO A2m,3290000,Giá thị trường tham khảo,A2m chỉ bán TQ (2023); giá xách tay thanh lý
+537,OPPO,OPPO A2x,2990000,Giá thị trường tham khảo,"A2x chỉ bán TQ (2023), máy giá rẻ; giá thanh lý"
+612,OPPO,OPPO A54s,3490000,Giá thị trường tham khảo,A54s (châu Âu 2021); dưới A54 (4.690.000)
+558,OPPO,OPPO A56,2490000,Giá thị trường tham khảo,A56 5G (TQ 2021); giá thanh lý
+559,OPPO,OPPO A56s,2690000,Giá thị trường tham khảo,A56s 5G (TQ 2022); giá thanh lý
+578,OPPO,OPPO A57e,3290000,Giá thị trường tham khảo,"A57e (Ấn Độ 2022), thấp hơn A57 4/64 (3.790.000)"
+543,OPPO,OPPO A58 8GB 256GB,5090000,Suy từ sản phẩm cùng dòng,Từ 'OPPO A58 8GB 128GB' (4.500.000đ); 128GB→256GB +12%
+584,OPPO,OPPO A97,3990000,Giá thị trường tham khảo,"A97 5G (TQ 2021); xách tay, dưới A96 (5.090.000)"
+547,OPPO,OPPO A98 5G,5990000,Giá thị trường tham khảo,"A98 5G (VN 2023, ra mắt 8.990.000); giá xả kho 2026"
+605,OPPO,OPPO F21,4990000,Giá thị trường tham khảo,Tên không xác nhận (OPPO F21); quy theo F21 Pro (5.490.000) bản thấp hơn
+593,OPPO,OPPO F21 Pro,5490000,Giá thị trường tham khảo,"F21 Pro (Ấn Độ 2022, ~Reno7 4G 6.000.000); giá thanh lý"
+576,OPPO,OPPO F21s Pro,4990000,Giá thị trường tham khảo,F21s Pro (Ấn Độ/Pakistan 2022); giá thanh lý
+546,OPPO,OPPO F23 5G,4990000,Giá thị trường tham khảo,"F23 5G bán tại Ấn Độ (2023), tương đương A78 5G; giá xách tay"
+548,OPPO,OPPO F23 Pro,6490000,Giá thị trường tham khảo,"Trang tin đồn F23 Pro; quy theo F23 5G (4.990.000) + nâng cấp, dưới Reno10"
+604,OPPO,OPPO Find N,9990000,Giá thị trường tham khảo,"Find N gập đời đầu chỉ bán TQ (2021); xách tay, dưới Find N2"
+572,OPPO,OPPO Find N2,13990000,Giá thị trường tham khảo,"Find N2 gập ngang chỉ bán TQ (2022); xách tay, dưới Find N3 (26.990.000)"
+598,OPPO,OPPO Find X5 Lite,6990000,Giá thị trường tham khảo,Find X5 Lite (châu Âu) = Reno7 5G; giá thanh lý
+575,OPPO,OPPO Find X6,9990000,Giá thị trường tham khảo,Find X6 chỉ bán TQ (2023); giá xách tay tồn kho
+579,OPPO,OPPO Find X6 Pro,12990000,Giá thị trường tham khảo,"Find X6 Pro chỉ bán TQ (2023); xách tay, ngang Find X5 Pro 12/256 (12.990.000)"
+540,OPPO,OPPO Find X7 5G 12GB 256GB,10890000,Giá thị trường tham khảo,Find X7 12GB/256GB xách tay; = bản 16GB (11.490.000) −6% RAM
+529,OPPO,OPPO Find X7 5G 16GB 256GB,11490000,Giá thị trường tham khảo,Find X7 chỉ bán TQ (01/2024); giá xách tay tồn kho 2026
+539,OPPO,OPPO Find X7 Pro,15990000,Giá thị trường tham khảo,"Trang tin đồn (không có Find X7 Pro, bản cao nhất là X7 Ultra); quy theo Find X7 Ultra 12GB/256GB"
+531,OPPO,OPPO Find X7 Ultra 12GB 256GB,15990000,Giá thị trường tham khảo,Find X7 Ultra 12GB/256GB; = bản 16GB (16.990.000) −6% RAM
+530,OPPO,OPPO Find X7 Ultra 16GB 256GB,16990000,Giá thị trường tham khảo,Find X7 Ultra chỉ bán TQ (01/2024); giá xách tay tồn kho 2026
+595,OPPO,OPPO K10,4990000,Giá thị trường tham khảo,"K10 (TQ 2022, Dimensity 8000); giá xách tay thanh lý"
+592,OPPO,OPPO K10 Pro,5990000,Giá thị trường tham khảo,K10 Pro (TQ 2022); giá xách tay thanh lý
+573,OPPO,OPPO K10x,2990000,Giá thị trường tham khảo,K10x (TQ 2022); giá xách tay thanh lý
+541,OPPO,OPPO K11,5490000,Giá thị trường tham khảo,K11 chỉ bán TQ (2023); giá xách tay thanh lý
+545,OPPO,OPPO K11x,3990000,Giá thị trường tham khảo,K11x chỉ bán TQ (2023); giá xách tay thanh lý
+603,OPPO,OPPO K9x,2990000,Giá thị trường tham khảo,K9x (TQ 2021); giá thanh lý
+549,OPPO,OPPO PHF110,3990000,Giá thị trường tham khảo,Mã máy nội địa TQ PHF110 (dòng A 5G 2023); quy theo OPPO A1 5G / A2
+550,OPPO,OPPO Reno10 Z,7190000,Giá thị trường tham khảo,Trang tin đồn Reno10 Z; quy theo Reno10 128GB (7.990.000) −10%
+533,OPPO,OPPO Reno11 F 5G 8GB 256GB-Tím,7490000,Giá thị trường tham khảo,"Reno11 F 5G (VN 02/2024, ra mắt 8.990.000); giá xả kho 2026, cạnh Reno10 5G 8/256 (8.490.000)"
+599,OPPO,OPPO Reno7 Z (5G)-Hồng,6990000,Suy từ sản phẩm cùng dòng,"Từ 'OPPO Reno7 Z (5G)' (7.000.000đ); cùng model, khác màu"
+588,OPPO,OPPO Reno8 Lite,6990000,Giá thị trường tham khảo,Reno8 Lite (châu Âu) là bản đổi tên Reno7 Z 5G (7.000.000)
+589,OPPO,OPPO Reno8 Pro Plus,18990000,Giá thị trường tham khảo,Reno8 Pro+ (Ấn Độ) tương đương Reno8 Pro 5G; giữ bằng giá Reno8 Pro 12/256 trong catalog (18.990.000)
+564,OPPO,OPPO Reno8 T 5G 128GB,7890000,Suy từ sản phẩm cùng dòng,Từ 'OPPO Reno8 T 5G (8GB - 128GB)' (7.890.000đ); cùng cấu hình
+561,OPPO,OPPO Reno8 T 5G 8GB 256GB,8790000,Suy từ sản phẩm cùng dòng,Từ 'OPPO Reno8 T 5G (8GB - 128GB)' (7.890.000đ); 128GB→256GB +12%
+551,OPPO,OPPO Reno9 Lite,6490000,Giá thị trường tham khảo,Tên không xác nhận (Reno9 Lite); quy theo Reno8 T 5G 128GB (7.890.000) bản thấp hơn
+571,OPPO,OPPO Reno9 Pro,7490000,Giá thị trường tham khảo,"Reno9 Pro chỉ bán TQ (2022); xách tay, dưới Reno9 Pro+"
+570,OPPO,OPPO Reno9 Pro Plus,8490000,Giá thị trường tham khảo,"Reno9 Pro+ chỉ bán TQ (2022); xách tay, dưới Reno10 Pro+ (10.490.000)"
+552,OPPO,OPPO Reno9 Z,8990000,Giá thị trường tham khảo,Trang tin đồn Reno9 Z; quy theo Reno8 Z (10.490.000) và Reno10 (7.990.000)
+616,OPPO,Oppo A11s,2490000,Giá thị trường tham khảo,A11s (TQ 2021) giá rẻ; giá thanh lý
+619,OPPO,Oppo A16 - Đen,2790000,Suy từ sản phẩm cùng dòng,"Từ 'OPPO A16' (2.790.000đ); cùng model, khác màu"
+606,OPPO,Oppo A55s,3490000,Giá thị trường tham khảo,A55s 5G (Nhật/TQ 2021); ngang A55 4/64 (3.490.000)
+587,OPPO,Oppo A77 5G,4490000,Giá thị trường tham khảo,A77 5G (Nhật/TQ 2022); dưới A77s 8/128 (4.790.000)
+618,OPPO,Oppo A93s,3490000,Giá thị trường tham khảo,A93s 5G (TQ 2021); giá thanh lý
+641,OPPO,Oppo A94-Trắng,4490000,Giá thị trường tham khảo,"A94 (VN 2021, ra mắt 7.690.000); giá thanh lý, dưới A74 (6.990.000)"
+628,OPPO,Oppo A95-Đen,5090000,Suy từ sản phẩm cùng dòng,"Từ 'OPPO A95' (5.090.000đ); cùng model, khác màu"
+636,OPPO,Oppo F19,3690000,Giá thị trường tham khảo,F19 (Ấn Độ 2021); giá thanh lý
+635,OPPO,Oppo F19 Pro,4490000,Giá thị trường tham khảo,F19 Pro (Ấn Độ 2021); giá thanh lý
+634,OPPO,Oppo F19 Pro Plus,5490000,Giá thị trường tham khảo,F19 Pro+ 5G (Ấn Độ 2021); giá thanh lý
+613,OPPO,Oppo F19s,3990000,Giá thị trường tham khảo,F19s (Ấn Độ 2021); giá thanh lý
+624,OPPO,Oppo Find X4,9990000,Giá thị trường tham khảo,Trang tin đồn (ra mắt thành Find X5); quy theo Find X5 Pro (12.990.000) −~25%
+623,OPPO,Oppo Find X4 Pro,12990000,Giá thị trường tham khảo,Trang tin đồn (ra mắt thành Find X5 Pro); quy theo Find X5 Pro 12/256 (12.990.000)
+627,OPPO,Oppo K9,3790000,Giá thị trường tham khảo,"K9 5G (TQ 2021); giá thanh lý, dưới K9 Pro"
+615,OPPO,Oppo K9 Pro,4990000,Giá thị trường tham khảo,K9 Pro (TQ 2021); giá xách tay thanh lý
+611,OPPO,Oppo K9s,3990000,Giá thị trường tham khảo,K9s (TQ 2021); giá thanh lý
+638,OPPO,Oppo Reno 5K,4990000,Giá thị trường tham khảo,Reno5 K 5G (TQ 2020); giá xách tay thanh lý
+626,OPPO,Oppo Reno 6 Pro,9990000,Giá thị trường tham khảo,Reno6 Pro 5G (2021); trên Reno6 5G (8.990.000)
+625,OPPO,Oppo Reno 6 Pro Plus,10990000,Giá thị trường tham khảo,"Reno6 Pro+ 5G (2021); trên Reno6 Pro, cạnh Reno 7 Pro (9.990.000)"
+609,OPPO,Oppo Reno 7 Pro-Đen,9990000,Suy từ sản phẩm cùng dòng,"Từ 'OPPO Reno 7 Pro' (9.990.000đ); cùng model, khác màu"
+639,OPPO,Oppo Reno5 F,3990000,Giá thị trường tham khảo,Reno5 F (2021); giá thanh lý
+631,OPPO,Oppo Reno5 Lite,4490000,Giá thị trường tham khảo,Reno5 Lite (2021); dưới Reno5 Marvel (6.990.000)
+637,OPPO,Oppo Reno5 Z 5G,4990000,Giá thị trường tham khảo,Reno5 Z 5G (2021); giá thanh lý
+607,OPPO,Oppo Reno6 Lite,4990000,Giá thị trường tham khảo,Reno6 Lite (châu Âu 2022); ngang A96 (5.090.000)
+608,OPPO,Oppo Reno7 SE,5490000,Giá thị trường tham khảo,Reno7 SE 5G (TQ 2021); giá xách tay thanh lý
+581,OPPO,Oppo Reno8 4G,8990000,Suy từ sản phẩm cùng dòng,Từ 'OPPO Reno8' (8.990.000đ); anchor 'OPPO Reno8' là bản 4G (bản 5G là 13.990.000)
+425,"PC, Máy tính để bàn",PC CPS Core Work S460 AMD Ryzen 5 4600G / WIN11 PRO,9290000,Giá thị trường tham khảo,CPS Core Work R5 4600G; nội suy giữa S320 R3 3200G 8.39tr và S560 R5 5600GT 9.99tr
+470,"PC, Máy tính để bàn",PC CPS Gaming G9,66990000,Giá thị trường tham khảo,"i7-14700K + RTX4080 32GB/1TB Z790; tham chiếu Quantum Blaze 5070 Ti 67.99tr, CPU i7 thấp hơn"
+469,"PC, Máy tính để bàn",PC CPS Đồ họa D5,68990000,Giá thị trường tham khảo,"i9-14900K + RTX4080 32GB/1TB; tham chiếu CPS Quantum Blaze 5070 Ti (i9 32GB) 67.99tr, RTX4080 ≈ 5070 Ti"
+507,"PC, Máy tính để bàn",PC FPT E-POWER 009,6990000,Giá thị trường tham khảo,"FPT i5-11400 RAM 4GB SSD 128GB (đời cũ); tham chiếu PC CPS AMD 5.82tr, CPS văn phòng S3 8.39tr"
+508,"PC, Máy tính để bàn",PC HP Pavilion TP01-2006D 46K05PA,10490000,Giá thị trường tham khảo,"HP Pavilion TP01 i5-11400 8/256 (đời 2021, hàng tồn); tham chiếu Dell Inspiron 3020MT i3-13100 10.99tr"
+509,"PC, Máy tính để bàn",PC HP S01-PF1000D,7990000,Giá thị trường tham khảo,HP S01 i3-10105 8/256 (đời cũ); tham chiếu ASUS S500SD i3-12100 9.49tr
+411,"PC, Máy tính để bàn",PC SingPC HI31282S0-W,9990000,Giá thị trường tham khảo,"SingPC i3-12100 8/256 Win11 Pro; tham chiếu ASUS S500SD i3-12100 9.49tr, CPS Core Work S121 10.69tr"
+412,"PC, Máy tính để bàn",PC SingPC HI51282S0-W,11990000,Giá thị trường tham khảo,SingPC i5-12400 8/256 Win11 Pro; tham chiếu CPS Core Work S124 i5-12400 12.79tr
+817,Samsung,Samsung Galaxy A02s-Đỏ,2290000,Giá thị trường tham khảo,"Galaxy A02s (2020); giá thanh lý, dưới A03s (3.690.000)"
+778,Samsung,Samsung Galaxy A03 4GB 64GB,2590000,Suy từ sản phẩm cùng dòng,"Từ 'Samsung Galaxy A03 (3GB - 32GB)' (2.150.000đ); 3→4GB RAM +6%, 32→64GB +12%"
+746,Samsung,Samsung Galaxy A04s-Trắng,2790000,Suy từ sản phẩm cùng dòng,"Từ 'Samsung Galaxy A04s (4GB - 64GB)' (2.750.000đ); cùng model, khác màu"
+794,Samsung,Samsung Galaxy A12s,4290000,Giá thị trường tham khảo,Tên không xác nhận (A12s); quy theo Galaxy A12 (4.290.000)
+775,Samsung,Samsung Galaxy A13 6GB 128GB,4490000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy A13 (4G)' (4.190.000đ); anchor 4GB; 4→6GB RAM +6%
+704,Samsung,Samsung Galaxy A14 4G 6GB 128GB,3190000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy A14 4G' (2.990.000đ); anchor 4GB; 4→6GB RAM +6%
+803,Samsung,Samsung Galaxy A22s,3290000,Giá thị trường tham khảo,Tên không xác nhận (A22s); quy theo A22 5G 6/128 (≈3.100.000 máy mới)
+769,Samsung,Samsung Galaxy A23 6GB 128GB,3790000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy A23 4G' (3.600.000đ); anchor 4GB; 4→6GB RAM +6%
+740,Samsung,Samsung Galaxy A24,4190000,Giá thị trường tham khảo,Galaxy A24 (2023); giữa A23 4G (3.600.000) và A25 5G (4.690.000)
+708,Samsung,Samsung Galaxy A34 5G 8GB 256GB,7990000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy A34 5G 8GB 128GB' (7.090.000đ); 128GB→256GB +12%
+705,Samsung,Samsung Galaxy A34 8GB 256GB-Bạc,7990000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy A34 5G 8GB 128GB' (7.090.000đ); 128GB→256GB +12%
+707,Samsung,Samsung Galaxy A34 8GB 256GB-Xanh,7990000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy A34 5G 8GB 128GB' (7.090.000đ); 128GB→256GB +12%
+706,Samsung,Samsung Galaxy A34 8GB 256GB-Đen,7990000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy A34 5G 8GB 128GB' (7.090.000đ); 128GB→256GB +12%
+824,Samsung,Samsung Galaxy A52 5G,5990000,Giá thị trường tham khảo,"Galaxy A52 5G (2021); giá thanh lý, trên A52 4G"
+810,Samsung,Samsung Galaxy A52-Trắng,5490000,Giá thị trường tham khảo,"Galaxy A52 4G (2021); giá thanh lý, dưới A52s (10.990.000)"
+742,Samsung,Samsung Galaxy A74,11990000,Giá thị trường tham khảo,Trang tin đồn Galaxy A74; quy theo Galaxy A73 128GB (11.990.000)
+732,Samsung,Samsung Galaxy A75,11990000,Giá thị trường tham khảo,Trang tin đồn Galaxy A75; quy theo Galaxy A73 128GB (11.990.000)
+820,Samsung,Samsung Galaxy A82,6990000,Giá thị trường tham khảo,Galaxy A82 5G (Hàn Quốc 2021); xách tay thanh lý
+736,Samsung,Samsung Galaxy Buddy2,3990000,Giá thị trường tham khảo,"Galaxy Buddy2 (Hàn Quốc 2022, ~M23); giá xách tay thanh lý"
+811,Samsung,Samsung Galaxy F02s,2190000,Giá thị trường tham khảo,"Galaxy F02s (Ấn Độ 2020, ~M02s); giá thanh lý"
+721,Samsung,Samsung Galaxy F04s,2690000,Giá thị trường tham khảo,Tên không xác nhận (F04s); quy theo Galaxy A04s 4/64 (2.750.000)
+737,Samsung,Samsung Galaxy F13,2990000,Giá thị trường tham khảo,"Galaxy F13 (Ấn Độ 2022, ~M13); giá thanh lý"
+799,Samsung,Samsung Galaxy F22,3490000,Giá thị trường tham khảo,"Galaxy F22 (Ấn Độ 2021, ~M22); giá thanh lý"
+767,Samsung,Samsung Galaxy F23 5G,4490000,Giá thị trường tham khảo,Galaxy F23 5G (Ấn Độ) = M23; giá thanh lý
+693,Samsung,Samsung Galaxy F34 5G,5890000,Giá thị trường tham khảo,F34 5G (Ấn Độ) là bản đổi tên M34 5G (5.890.000)
+700,Samsung,Samsung Galaxy F54 5G,7990000,Giá thị trường tham khảo,F54 5G (Ấn Độ) = M54 5G; giá thanh lý 2026
+699,Samsung,Samsung Galaxy Fold5,27990000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy Z Fold5 12GB 256GB' (27.990.000đ); giả định bản gốc 12GB/256GB
+748,Samsung,Samsung Galaxy Jump2,4490000,Giá thị trường tham khảo,"Galaxy Jump2 (Hàn Quốc 2022, ~M33); giá xách tay thanh lý"
+712,Samsung,Samsung Galaxy K748,2490000,Giá thị trường tham khảo,Model không xác định (Galaxy K748); quy theo máy phổ thông cũ dòng A (A04/A03s)
+752,Samsung,Samsung Galaxy M13 5G,3290000,Giá thị trường tham khảo,Galaxy M13 5G (Ấn Độ 2022); giá thanh lý
+766,Samsung,Samsung Galaxy M23,4490000,Giá thị trường tham khảo,Galaxy M23 (2022); giá thanh lý
+786,Samsung,Samsung Galaxy M33,4990000,Giá thị trường tham khảo,Galaxy M33 5G (2022); giá thanh lý
+809,Samsung,Samsung Galaxy M42,4490000,Giá thị trường tham khảo,Galaxy M42 5G (Ấn Độ 2021); giá thanh lý
+689,Samsung,Samsung Galaxy M44,6990000,Giá thị trường tham khảo,Trang tin đồn Galaxy M44; quy theo M34 5G (5.890.000) và M54
+779,Samsung,Samsung Galaxy M52 (5G)-Đen,9690000,Suy từ sản phẩm cùng dòng,"Từ 'Samsung Galaxy M52 (5G)-Xanh' (9.690.000đ); cùng model, khác màu"
+756,Samsung,Samsung Galaxy M53 5G,6990000,Giá thị trường tham khảo,Galaxy M53 5G (2022); giá thanh lý
+724,Samsung,Samsung Galaxy M54 5G,7990000,Giá thị trường tham khảo,"M54 5G (2023, 8/256); giá thanh lý 2026, trên M34 (5.890.000)"
+822,Samsung,Samsung Galaxy Note 21,33990000,Giá thị trường tham khảo,Trang tin đồn (Note 21 không ra mắt); quy theo Galaxy S21 Ultra 256GB (33.990.000)
+825,Samsung,Samsung Galaxy Note 30 Ultra,36990000,Giá thị trường tham khảo,Trang tin đồn (Note 30 Ultra không tồn tại); quy theo Galaxy S22 Ultra 12/512 (36.990.000)
+768,Samsung,Samsung Galaxy S21 FE 8GB 128GB - Đã kích hoạt-Xám,7890000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy S21 FE 8GB 128GB' (8.800.000đ); Đã kích hoạt −10%
+823,Samsung,Samsung Galaxy S21 FE-đen,8790000,Suy từ sản phẩm cùng dòng,"Từ 'Samsung Galaxy S21 FE 8GB 128GB' (8.800.000đ); giả định 8GB/128GB, khác màu"
+813,Samsung,Samsung Galaxy S21 Plus 5G 256GB-Đen,28990000,Suy từ sản phẩm cùng dòng,"Từ 'Samsung Galaxy S21 Plus 5G 256GB' (28.990.000đ); cùng cấu hình, khác màu"
+807,Samsung,Samsung Galaxy S21 Ultra 5G 256GB-Bạc,33990000,Suy từ sản phẩm cùng dòng,"Từ 'Samsung Galaxy S21 Ultra 5G 256GB' (33.990.000đ); cùng cấu hình, khác màu"
+815,Samsung,Samsung Galaxy S21 Ultra 5G 256GB-Xám,33990000,Suy từ sản phẩm cùng dòng,"Từ 'Samsung Galaxy S21 Ultra 5G 256GB' (33.990.000đ); cùng cấu hình, khác màu"
+754,Samsung,Samsung Galaxy S22 FE,11890000,Giá thị trường tham khảo,Trang tin đồn (S22 FE không ra mắt); giữa S21 FE 8/128 (8.800.000) và S23 FE 8/128 (14.890.000)
+782,Samsung,Samsung Galaxy S22 Note,30990000,Giá thị trường tham khảo,Trang tin đồn (Note thay bằng S22 Ultra); quy theo Galaxy S22 Ultra 8/128 (30.990.000)
+796,Samsung,Samsung Galaxy S30,22190000,Giá thị trường tham khảo,"Trang tin đồn (tên đồn của Galaxy S21); quy theo S21 Plus 256GB (28.990.000) −15% bản thường, −10% 128GB"
+755,Samsung,Samsung Galaxy XCover Pro 2,8990000,Giá thị trường tham khảo,Trang tin đồn (XCover Pro 2 ra mắt thành XCover6 Pro); quy theo XCover6 Pro
+745,Samsung,Samsung Galaxy XCover6 Pro,8990000,Giá thị trường tham khảo,"XCover6 Pro máy siêu bền (2022, ra mắt ~14 triệu); giá thanh lý"
+819,Samsung,Samsung Galaxy Xcover 5,4490000,Giá thị trường tham khảo,Galaxy XCover 5 siêu bền (2021); giá thanh lý
+719,Samsung,Samsung Galaxy Z Flip5 512GB,29090000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy Z Flip5 256GB' (25.990.000đ); 256GB→512GB +12%
+690,Samsung,Samsung Galaxy Z Flip5 512GB Line Friends,29090000,Suy từ sản phẩm cùng dòng,Từ 'Samsung Galaxy Z Flip5 256GB' (25.990.000đ); 256GB→512GB +12% (bản Line Friends giữ cùng giá)
+749,Samsung,Samsung Galaxy Z Silde,29990000,Giá thị trường tham khảo,Trang tin đồn (máy cuộn Z Slide); quy theo Z Fold6 12/256 (29.990.000)
+725,Samsung,Samsung W22,19990000,Giá thị trường tham khảo,"W22 = Z Fold3 bản cao cấp nội địa TQ (2021); xách tay, dưới Z Fold4 256GB (22.490.000)"
+1072,Xiaomi,Black Shark 5S,5990000,Giá thị trường tham khảo,Tên không xác nhận (Black Shark 5S); quy theo Black Shark 5 (5.490.000)
+1071,Xiaomi,Black Shark 5S Pro,7990000,Giá thị trường tham khảo,Tên không xác nhận (Black Shark 5S Pro); quy theo Black Shark 5 Pro xách tay
+1055,Xiaomi,Redmi 11A,2190000,Giá thị trường tham khảo,Redmi 11A (≈Redmi 12C); quy theo Redmi 12C 4/64 (2.190.000)
+1056,Xiaomi,Redmi A1+,1790000,Giá thị trường tham khảo,Redmi A1+ (2022) máy giá rẻ; trên Redmi A1 (1.690.000)
+1110,Xiaomi,Redmi K50 Gaming Edition,6990000,Giá thị trường tham khảo,Redmi K50 Gaming chỉ bán TQ (2022); xách tay thanh lý
+1086,Xiaomi,Redmi K50i 5G,5990000,Giá thị trường tham khảo,Redmi K50i 5G (Ấn Độ 2022); giá thanh lý
+1077,Xiaomi,Redmi K60,6990000,Giá thị trường tham khảo,Redmi K60 chỉ bán TQ (12/2022); xách tay thanh lý
+1048,Xiaomi,Redmi K60 Pro 5G,8490000,Giá thị trường tham khảo,Redmi K60 Pro chỉ bán TQ (12/2022); xách tay thanh lý
+1020,Xiaomi,Redmi K60 Ultra,8990000,Giá thị trường tham khảo,Redmi K60 Ultra chỉ bán TQ (08/2023); xách tay thanh lý
+1057,Xiaomi,Redmi Note 11 Prime 5G,3490000,Giá thị trường tham khảo,Redmi Note 11 Prime 5G (Ấn Độ 2022); giá thanh lý
+1058,Xiaomi,Redmi Note 11 SE,3490000,Giá thị trường tham khảo,"Redmi Note 11 SE (Ấn Độ 2022, ~Note 10S); giá thanh lý"
+1059,Xiaomi,Redmi Note 11R,2990000,Giá thị trường tham khảo,Redmi Note 11R chỉ bán TQ (2022); xách tay thanh lý
+1016,Xiaomi,Redmi Note 12T Pro,5990000,Giá thị trường tham khảo,Redmi Note 12T Pro chỉ bán TQ (2023); xách tay thanh lý
+1111,Xiaomi,Xiaomi 11i HyperCharge,5490000,Giá thị trường tham khảo,"Xiaomi 11i HyperCharge (Ấn Độ 2022, = Redmi Note 11 Pro+); giá thanh lý"
+1113,Xiaomi,Xiaomi 12 Lite,5990000,Giá thị trường tham khảo,"Xiaomi 12 Lite (VN 2022, ra mắt 9.490.000); giá thanh lý, dưới 13 Lite (8.290.000)"
+1112,Xiaomi,Xiaomi 12 Lite Zoom,6490000,Giá thị trường tham khảo,Trang tin đồn (12 Lite Zoom); quy theo Xiaomi 12 Lite (5.990.000)
+1091,Xiaomi,Xiaomi 12S,8990000,Giá thị trường tham khảo,Xiaomi 12S chỉ bán TQ (2022); xách tay thanh lý
+1092,Xiaomi,Xiaomi 12S Pro,10990000,Giá thị trường tham khảo,Xiaomi 12S Pro chỉ bán TQ (2022); xách tay thanh lý
+1080,Xiaomi,Xiaomi 12S Ultra,13990000,Giá thị trường tham khảo,"Xiaomi 12S Ultra chỉ bán TQ (2022); xách tay thanh lý, dưới 12T Pro (14.690.000)"
+1121,Xiaomi,Xiaomi 12X,6990000,Giá thị trường tham khảo,"Xiaomi 12X chỉ bán TQ (2021); xách tay thanh lý, dưới 12S"
+1120,Xiaomi,Xiaomi 12X-Đen,6990000,Giá thị trường tham khảo,"Xiaomi 12X chỉ bán TQ (2021); xách tay thanh lý, dưới 12S"
+1049,Xiaomi,Xiaomi 12i HyperCharge,7490000,Giá thị trường tham khảo,"Tên không xác nhận (Xiaomi 12i HyperCharge, ~Redmi Note 12 Pro+); quy theo Note 12 Pro+ (7.490.000)"
+1078,Xiaomi,Xiaomi 13 Ultra,24990000,Giá thị trường tham khảo,Xiaomi 13 Ultra chỉ bán TQ (2023); giữ ≥ Xiaomi 13 Pro 12/256 trong catalog (24.490.000)
+1037,Xiaomi,Xiaomi 13S Ultra,24990000,Giá thị trường tham khảo,Trang tin đồn (13S Ultra ra mắt thành 13 Ultra); quy theo Xiaomi 13 Ultra
+1022,Xiaomi,Xiaomi 13T Pro 5G 12GB 512GB,11990000,Giá thị trường tham khảo,"Xiaomi 13T Pro 12/512 (VN 2023, ra mắt 15.990.000); thanh lý, dưới 14T Pro 12/512 (12.990.000), trên 13T 12/512"
+982,Xiaomi,Xiaomi 14 12GB 256GB,18990000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi 14 12GB 256GB' (18.990.000đ); cùng cấu hình
+983,Xiaomi,Xiaomi 14 12GB 512GB,21290000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi 14 12GB 256GB' (18.990.000đ); 256→512GB +12%
+981,Xiaomi,Xiaomi 14 16GB - 1TB,25890000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi 14 12GB 256GB' (18.990.000đ); 12→16GB +6%, 256→512 +12%, 512→1TB +15%"
+980,Xiaomi,Xiaomi 14 8GB 128GB,16090000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi 14 12GB 256GB' (18.990.000đ); 12→8GB RAM −6%, 256→128GB −10%"
+984,Xiaomi,Xiaomi 14 8GB 256GB,17890000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi 14 12GB 256GB' (18.990.000đ); 12→8GB RAM −6%
+1032,Xiaomi,Xiaomi 14 Lite,9490000,Giá thị trường tham khảo,"Xiaomi 14 Lite (≈14 Civi), giả định 8/256; trên Xiaomi 13 Lite (8.290.000)"
+986,Xiaomi,Xiaomi 14 Lite 8GB 256GB,9490000,Giá thị trường tham khảo,"Xiaomi 14 Lite (≈14 Civi); xách tay, trên Xiaomi 13 Lite (8.290.000)"
+1033,Xiaomi,Xiaomi 14 Pro,19990000,Giá thị trường tham khảo,"Xiaomi 14 Pro chỉ bán TQ, giả định 12/256; giữ ≥ Xiaomi 14 12/256"
+987,Xiaomi,Xiaomi 14 Pro 12GB 256GB,19990000,Giá thị trường tham khảo,"Xiaomi 14 Pro chỉ bán TQ; xách tay, giữ ≥ Xiaomi 14 12/256 (18.990.000)"
+988,Xiaomi,Xiaomi 14 Pro 12GB 512GB,22390000,Giá thị trường tham khảo,Xiaomi 14 Pro 12/512 = bản 12/256 (19.990.000) +12%
+989,Xiaomi,Xiaomi 14 Pro 8GB 256GB,18890000,Giá thị trường tham khảo,Xiaomi 14 Pro 8/256 = bản 12/256 (19.990.000) −6% RAM
+990,Xiaomi,Xiaomi 14 Ultra 12GB 256GB,20490000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi 14 Ultra 5G 16GB 512GB' (24.090.000đ); 16→12GB −6%, 512→256GB −10%"
+991,Xiaomi,Xiaomi 14 Ultra 12GB 512GB,22690000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi 14 Ultra 5G 16GB 512GB' (24.090.000đ); 16→12GB RAM −6%
+992,Xiaomi,Xiaomi 14 Ultra 8GB 256GB,19290000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi 14 Ultra 5G 16GB 512GB' (24.090.000đ); 16→8GB −6% ×2, 512→256GB −10%"
+993,Xiaomi,Xiaomi 14T 12GB 256GB,10190000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi 14T 12GB 512GB' (11.290.000đ); 512→256GB −10%
+994,Xiaomi,Xiaomi 14T 12GB 512GB,11290000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi 14T 12GB 512GB' (11.290.000đ); cùng cấu hình
+995,Xiaomi,Xiaomi 14T 8GB 256GB,9590000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi 14T 12GB 512GB' (11.290.000đ); 512→256GB −10%, 12→8GB −6%"
+996,Xiaomi,Xiaomi 14T Pro 12GB 256GB,11690000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi 14T Pro 12GB 512GB' (12.990.000đ); 512→256GB −10%
+997,Xiaomi,Xiaomi 14T Pro 8GB 256GB,10990000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi 14T Pro 12GB 512GB' (12.990.000đ); 512→256GB −10%, 12→8GB −6%"
+1076,Xiaomi,Xiaomi Black Shark 5,5490000,Giá thị trường tham khảo,Black Shark 5 gaming (TQ 2022); xách tay thanh lý
+1029,Xiaomi,Xiaomi Black Shark 6,6990000,Giá thị trường tham khảo,Trang tin đồn (Black Shark 6); quy theo Black Shark 5 (5.490.000) đời sau
+1027,Xiaomi,Xiaomi Black Shark 6 Pro,9490000,Giá thị trường tham khảo,Trang tin đồn (Black Shark 6 Pro không ra mắt); quy theo Black Shark 5 Pro xách tay
+1028,Xiaomi,Xiaomi Black Shark 6 RS,7990000,Giá thị trường tham khảo,Trang tin đồn (Black Shark 6 RS); quy theo Black Shark 5 RS xách tay
+1100,Xiaomi,Xiaomi CIVI 1S,4990000,Giá thị trường tham khảo,Xiaomi Civi 1S chỉ bán TQ (2022); xách tay thanh lý
+1030,Xiaomi,Xiaomi CIVI 3,6990000,Giá thị trường tham khảo,Xiaomi Civi 3 chỉ bán TQ (2023); xách tay thanh lý
+1099,Xiaomi,Xiaomi CIVI S-Đen,4790000,Giá thị trường tham khảo,"Xiaomi Civi (đời đầu, TQ 2021); xách tay thanh lý, dưới Civi 1S"
+1052,Xiaomi,Xiaomi Civi 1S,4990000,Giá thị trường tham khảo,Xiaomi Civi 1S chỉ bán TQ (2022); xách tay thanh lý
+1102,Xiaomi,Xiaomi Civi 2,5990000,Giá thị trường tham khảo,Xiaomi Civi 2 chỉ bán TQ (2022); xách tay thanh lý
+1054,Xiaomi,Xiaomi Mix Alpha,39990000,Giá thị trường tham khảo,"Mix Alpha: máy concept 2019, sản xuất giới hạn, không thương mại rộng; giá sưu tầm ước lượng"
+1031,Xiaomi,Xiaomi Mix Fold 3,17990000,Giá thị trường tham khảo,"Mix Fold 3 gập chỉ bán TQ (08/2023); xách tay thanh lý, dưới Mix Fold 4"
+1001,Xiaomi,Xiaomi Mix Fold 4,22990000,Giá thị trường tham khảo,Mix Fold 4 gập chỉ bán TQ (07/2024); xách tay tồn kho 2026
+1115,Xiaomi,Xiaomi Note 11 Pro,5590000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi Redmi Note 11 Pro 5G' (5.590.000đ); = Redmi Note 11 Pro, bỏ hậu tố 5G"
+1012,Xiaomi,Xiaomi Note 12 Pro Plus,7490000,Giá thị trường tham khảo,Redmi Note 12 Pro+ 5G (2022-23); trên Note 12 Pro 5G (6.590.000)
+1053,Xiaomi,Xiaomi POCO C50,1690000,Giá thị trường tham khảo,POCO C50 (Ấn Độ 2023) máy giá rẻ; giá thanh lý
+1024,Xiaomi,Xiaomi POCO C51,1890000,Giá thị trường tham khảo,POCO C51 (2023) máy giá rẻ; giá thanh lý
+1038,Xiaomi,Xiaomi POCO C55,2290000,Giá thị trường tham khảo,POCO C55 (2023); giá thanh lý
+1002,Xiaomi,Xiaomi POCO C65,2890000,Giá thị trường tham khảo,POCO C65 (2023) = Redmi 13C; quy theo Redmi 13C 6/128 (2.990.000)
+1040,Xiaomi,Xiaomi POCO F5 Pro,8490000,Giá thị trường tham khảo,"POCO F5 Pro (2023); giá thanh lý, trên POCO F4 (5.890.000)"
+1107,Xiaomi,Xiaomi POCO X4,5490000,Giá thị trường tham khảo,Tên không xác nhận (POCO X4); quy theo POCO X4 Pro (6.090.000) bản thấp hơn
+1094,Xiaomi,Xiaomi Poco C40,1990000,Giá thị trường tham khảo,POCO C40 (2022); giá thanh lý
+1095,Xiaomi,Xiaomi Poco F4 GT,7490000,Giá thị trường tham khảo,"POCO F4 GT (2022); giá thanh lý, trên POCO F4 (5.890.000)"
+1085,Xiaomi,Xiaomi Poco X4 GT 8GB 256GB,5990000,Suy từ sản phẩm cùng dòng,Từ 'POCO X4 GT 8GB 256GB' (5.990.000đ); cùng cấu hình 8/256
+1098,Xiaomi,Xiaomi Redmi 10 Prime Plus,3790000,Giá thị trường tham khảo,Tên không xác nhận (Redmi 10 Prime Plus 5G); quy theo Redmi 10 5G (3.790.000)
+1089,Xiaomi,Xiaomi Redmi 11,3490000,Giá thị trường tham khảo,Tên không xác nhận (Redmi 11); quy theo Redmi 10 6/128 (3.490.000)
+1067,Xiaomi,Xiaomi Redmi 11 Prime 4G,2890000,Giá thị trường tham khảo,Redmi 11 Prime 4G (Ấn Độ 2022); giá thanh lý
+1068,Xiaomi,Xiaomi Redmi 11 Prime 5G,3290000,Giá thị trường tham khảo,Redmi 11 Prime 5G (Ấn Độ 2022); giá thanh lý
+1064,Xiaomi,Xiaomi Redmi 11 Pro,3990000,Giá thị trường tham khảo,Tên không xác nhận (Redmi 11 Pro); quy theo Redmi 10/Note 11 (≈4 triệu)
+1036,Xiaomi,Xiaomi Redmi A2+,1890000,Giá thị trường tham khảo,Redmi A2+ (2023) máy giá rẻ; trên Redmi A2 2/32 (1.590.000)
+1101,Xiaomi,Xiaomi Redmi K40S,5490000,Giá thị trường tham khảo,Redmi K40S chỉ bán TQ (2022); xách tay thanh lý
+1090,Xiaomi,Xiaomi Redmi K50 Ultra,9990000,Giá thị trường tham khảo,"Redmi K50 Ultra chỉ bán TQ (2022, = 12T Pro); xách tay, dưới 12T Pro (14.690.000)"
+1075,Xiaomi,Xiaomi Redmi K50S Pro,9990000,Giá thị trường tham khảo,Trang tin đồn (K50S Pro ra mắt thành K50 Ultra/12T Pro); quy theo Redmi K50 Ultra
+1004,Xiaomi,Xiaomi Redmi K70,8990000,Giá thị trường tham khảo,Redmi K70 chỉ bán TQ (11/2023); xách tay tồn kho
+1003,Xiaomi,Xiaomi Redmi K70 Pro,10990000,Giá thị trường tham khảo,Redmi K70 Pro chỉ bán TQ (11/2023); xách tay tồn kho
+1005,Xiaomi,Xiaomi Redmi K70e,6990000,Giá thị trường tham khảo,Redmi K70E chỉ bán TQ (11/2023); xách tay tồn kho
+1097,Xiaomi,Xiaomi Redmi Note 10T,3490000,Giá thị trường tham khảo,Redmi Note 10T 5G (2021); giá thanh lý
+1070,Xiaomi,Xiaomi Redmi Note 11SE,3490000,Giá thị trường tham khảo,Redmi Note 11 SE (2022); giá thanh lý
+1114,Xiaomi,Xiaomi Redmi Note 11T 5G,3990000,Giá thị trường tham khảo,Redmi Note 11T 5G (Ấn Độ 2021); giá thanh lý
+1046,Xiaomi,Xiaomi Redmi Note 12 Pro 4G,5690000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi Redmi Note 12 Pro 4G 8GB 256GB' (5.690.000đ); cùng model (8/256)
+1018,Xiaomi,Xiaomi Redmi Note 12 Pro 4G-Xanh dương,5690000,Suy từ sản phẩm cùng dòng,"Từ 'Xiaomi Redmi Note 12 Pro 4G 8GB 256GB' (5.690.000đ); cùng model, khác màu (8/256)"
+1051,Xiaomi,Xiaomi Redmi Note 12 Pro+,7490000,Giá thị trường tham khảo,Redmi Note 12 Pro+ 5G (2022-23); trên Note 12 Pro 5G (6.590.000)
+1021,Xiaomi,Xiaomi Redmi Note 12 Turbo,5990000,Giá thị trường tham khảo,"Redmi Note 12 Turbo (TQ 2023, = POCO F5); xách tay thanh lý"
+1019,Xiaomi,Xiaomi Redmi Note 12R Pro,4990000,Giá thị trường tham khảo,Redmi Note 12R Pro chỉ bán TQ (2023); xách tay thanh lý
+1015,Xiaomi,Xiaomi Redmi Note 12T Pro,5990000,Giá thị trường tham khảo,Redmi Note 12T Pro chỉ bán TQ (2023); xách tay thanh lý
+1000,Xiaomi,Xiaomi Redmi Note 13 8GB 128GB,3990000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi Redmi Note 13 6GB 128GB' (3.790.000đ); 6→8GB RAM +6%
+978,Xiaomi,Xiaomi Redmi Note 13 Pro 5G,5290000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi Redmi Note 13 Pro 4G 8GB 128GB' (4.690.000đ); bỏ hậu tố 5G; giả định 8/256: 128GB→256GB +12%
+979,Xiaomi,Xiaomi Redmi Note 13 Pro Plus 4G,6490000,Suy từ sản phẩm cùng dòng,Từ 'Xiaomi Redmi Note 13 Pro Plus 5G 8GB 256GB' (6.490.000đ); Note 13 Pro+ chỉ có bản 5G; cùng cấu hình 8/256
+977,Xiaomi,Xiaomi Redmi Note 14 Pro 5G 8GB 256GB,6990000,Giá thị trường tham khảo,"Redmi Note 14 Pro 5G 8/256 (VN 01/2025, ra mắt ~8,5 triệu); dưới Note 14 Pro+ 8/256 (7.990.000)"
+985,Xiaomi,Xiaomii 14 Lite 12GB 512GB,11290000,Giá thị trường tham khảo,"Xiaomi 14 Lite (≈14 Civi, không bán chính hãng VN); bản 8/256 9.490.000 +6% RAM +12% bộ nhớ"
+1096,Xiaomi,Xiaomi Redmi 10 Power,3490000,Giá thị trường tham khảo,Redmi 10 Power (Ấn Độ 2022); giá thanh lý
+131,iPhone,Apple iPhone 5S 16GB,1290000,Giá thị trường tham khảo,"Máy rất cũ (2013), giá thanh lý; thấp hơn iPhone 6S 16GB cũ đẹp (2.090.000)"
+137,iPhone,Apple iPhone 8 64GB - Cũ đẹp,4390000,Suy từ sản phẩm cùng dòng,"Từ 'Apple iPhone 8 64GB - Cũ trầy xước' (4.090.000đ); quy về máy mới (÷0,72) rồi Cũ Đẹp −22%"
+139,iPhone,Apple iPhone 8 Plus 64GB -Cũ Đẹp,6890000,Suy từ sản phẩm cùng dòng,"Từ 'Apple iPhone 8 Plus 256GB - Cũ đẹp' (8.490.000đ); 256GB→64GB (−10% ×2), cùng tình trạng Cũ Đẹp"
+145,iPhone,iPhone,24290000,Giá thị trường tham khảo,Tên chung chung 'iPhone'; quy theo iPhone 17 256GB (24.290.000)
+143,iPhone,iPhone 13 Pro 256GB | Chính hãng VN/A Đã kích hoạt-Xanh dương,15590000,Suy từ sản phẩm cùng dòng,"Từ 'iPhone 13 Pro 256GB - Đổi Bảo Hành VN/A' (15.890.000đ); quy về máy mới (÷0,92) rồi Đã kích hoạt −10%"
+115,iPhone,iPhone 14 Pro 128GB- Xám,22990000,Suy từ sản phẩm cùng dòng,"Từ 'iPhone 14 Pro 128GB | Chính hãng VN/A' (22.990.000đ); cùng cấu hình, khác màu"
+80,iPhone,iPhone 15 Pro Max 2TB | Chính hãng VN/A,38390000,Suy từ sản phẩm cùng dòng,Từ 'iPhone 15 Pro Max 1TB | Chính hãng VN/A' (31.990.000đ); 15 Pro Max không có bản 2TB; quy 1TB→2TB +20%
+89,iPhone,iPhone 16 Max,24490000,Giá thị trường tham khảo,Tên không tồn tại (tin đồn 'iPhone 16 Max'); quy theo iPhone 16 Plus 128GB (24.490.000)
+124,iPhone,iPhone SE 2022 64GB -Đổi Bảo Hành (VN/A),7890000,Suy từ sản phẩm cùng dòng,Từ 'iPhone SE 2022 64GB - Đổi Bảo Hành' (7.890.000đ); cùng cấu hình Đổi bảo hành

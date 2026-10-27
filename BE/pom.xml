@@ -39,6 +39,7 @@
         <module>payment-service</module>
         <module>notification-service</module>
         <module>promotion-service</module>
+        <module>chat-service</module>
     </modules>
 
     <dependencyManagement>

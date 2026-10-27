@@ -1,6 +1,6 @@
 """Feature thứ tự nào THỰC SỰ mang giá trị, và chúng liên kết với nhau thế nào.
 
-Xem [`docs/canvas/recsys-execution-plan.md`](../../../../docs/canvas/recsys-execution-plan.md) §5.3.
+Xem [`docs/AI/recsys-execution-plan.md`](../../../../docs/AI/recsys-execution-plan.md) §5.3.
 
 `cosmetics_order_test.py` đã xác nhận NHÓM feature thứ tự (B_SESS) có giá trị tổng, BỀN VỮNG qua
 cả 5 tháng (Δ=+0,00749, 5/5 fold, |Δ|/std=6,6×). Câu hỏi tiếp: giá trị đó nằm ở ĐÂU, và các cột

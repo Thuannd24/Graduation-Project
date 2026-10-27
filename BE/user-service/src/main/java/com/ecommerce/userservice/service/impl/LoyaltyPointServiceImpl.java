@@ -243,7 +243,14 @@ public class LoyaltyPointServiceImpl implements LoyaltyPointService {
         if (mode == null || mode.isBlank()) {
             return LoyaltyPointPolicy.MODE_FIXED;
         }
-        return mode.trim().toUpperCase();
+        String normalized = mode.trim().toUpperCase();
+        // Chỉ chấp nhận chế độ đã biết; mode lạ (VD: "BONUS_X") không được âm thầm xử lý như FIXED
+        if (!LoyaltyPointPolicy.MODE_FIXED.equals(normalized)
+                && !LoyaltyPointPolicy.MODE_ORDER_SPEND.equals(normalized)) {
+            throw new IllegalArgumentException("Chế độ tính điểm không hợp lệ: " + mode
+                    + ". Chỉ hỗ trợ FIXED hoặc ORDER_SPEND.");
+        }
+        return normalized;
     }
 
     private String buildReferenceId(PointUpdateRequest request) {

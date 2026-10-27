@@ -1,6 +1,6 @@
 // Tạo user thật trong Keycloak cho nhóm "10 user demo" (đăng nhập được qua UI thật), khác với
 // 490 user còn lại chỉ tồn tại trong DB làm "dân số thống kê" cho train model (xem Phase 3 trong
-// docs/canvas/churn-risk-implementation-plan.md).
+// docs/AI/churn-risk-implementation-plan.md).
 //
 // Dùng admin-cli + tài khoản admin/admin của MASTER realm (default của Keycloak, xem
 // BE/docker-compose-infra.yml: KEYCLOAK_ADMIN=admin/KEYCLOAK_ADMIN_PASSWORD=admin) thay vì

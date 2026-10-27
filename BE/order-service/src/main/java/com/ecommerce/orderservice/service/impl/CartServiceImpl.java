@@ -23,7 +23,9 @@ import java.time.Duration;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import com.ecommerce.orderservice.exception.BusinessRuleException;
 import com.ecommerce.orderservice.exception.InsufficientStockException;
+import com.ecommerce.orderservice.support.OrderPolicy;
 
 @Service
 @RequiredArgsConstructor
@@ -165,6 +167,7 @@ public class CartServiceImpl implements CartService {
                             .quantity(reqItem.getQuantity())
                             .subtotal(itemTotal)
                             .weight(weight)
+                            .active(!prodInfo.getDiscontinued())
                             .build());
                 } else {
                     log.warn("Product ID {} in cart not found in product-service details", productId);
@@ -261,6 +264,26 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    /** Sản phẩm ngừng kinh doanh không được thêm vào giỏ. Lỗi gRPC thì bỏ qua (checkout sẽ kiểm tra lại). */
+    private void rejectInactiveProduct(Long productId) {
+        GetPriceInfoResponse response;
+        try {
+            response = productGrpcClient.getPriceInfo(List.of(productId));
+        } catch (Exception e) {
+            log.warn("[gRPC] Could not verify product {} status when adding to cart: {}", productId, e.getMessage());
+            return;
+        }
+        if (response == null) {
+            return;
+        }
+        for (ProductPriceInfoGrpc info : response.getProductsList()) {
+            if (productId.equals(info.getId()) && info.getDiscontinued()) {
+                throw new BusinessRuleException("PRODUCT_INACTIVE",
+                        "Sản phẩm " + info.getName() + " đã ngừng kinh doanh.");
+            }
+        }
+    }
+
     @Override
     public CartResponse addItemToCart(String cartKey, String sessionId, CartItemRequest itemRequest) {
         String key = getRedisKey(cartKey);
@@ -276,13 +299,17 @@ public class CartServiceImpl implements CartService {
                 }
             }
 
+            // Giới hạn số lượng mỗi sản phẩm/biến thể (chống gom hàng), kiểm tra trước tồn kho.
+            OrderPolicy.checkQuantity(newQuantity);
+            rejectInactiveProduct(itemRequest.getProductId());
+
             // Validate stock before saving
             validateStock(itemRequest.getProductId(), itemRequest.getVariantId(), newQuantity);
 
             itemRequest.setQuantity(newQuantity);
             redisTemplate.opsForHash().put(key, fieldKey, itemRequest);
             redisTemplate.expire(key, Duration.ofDays(30));
-        } catch (InsufficientStockException e) {
+        } catch (InsufficientStockException | BusinessRuleException e) {
             throw e;
         } catch (Exception e) {
             log.error("Failed to add item to cart in Redis: {}", e.getMessage(), e);
@@ -311,6 +338,7 @@ public class CartServiceImpl implements CartService {
                         redisTemplate.opsForHash().delete(key, fieldKey);
                         cartEventProducer.publishCartUpdated(cartKey, sessionId, productId, variantId, 0, "REMOVE_ITEM");
                     } else {
+                        OrderPolicy.checkQuantity(quantity);
                         // Validate stock before updating
                         validateStock(productId, variantId, quantity);
                         existingItem.setQuantity(quantity);
@@ -320,7 +348,7 @@ public class CartServiceImpl implements CartService {
                     }
                 }
             }
-        } catch (InsufficientStockException e) {
+        } catch (InsufficientStockException | BusinessRuleException e) {
             throw e;
         } catch (Exception e) {
             log.error("Failed to update item quantity in Redis: {}", e.getMessage(), e);

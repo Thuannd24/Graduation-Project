@@ -27,13 +27,15 @@ public class ProductController {
     private final com.ecommerce.productservice.service.StorageService storageService;
     private final ProductViewEventProducer productViewEventProducer;
 
+    // API công khai chỉ trả sản phẩm đang bán và không có giá vốn. Tham số "active" được giữ để
+    // tương thích ngược nhưng bị bỏ qua — trang quản trị dùng GET /api/v1/admin/products.
     @GetMapping("/api/v1/public/products")
     public ApiResponse<Slice<ProductDto>> getAllProducts(
             @RequestParam(value = "active", required = false) Boolean active,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponse.success(productService.getAllProducts(active, pageable));
+        return ApiResponse.success(productService.getPublicProducts(pageable));
     }
 
     @GetMapping("/api/v1/public/products/category/{categoryId}")
@@ -42,19 +44,35 @@ public class ProductController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ApiResponse.success(productService.getProductsByCategory(categoryId, pageable));
+        return ApiResponse.success(productService.getPublicProductsByCategory(categoryId, pageable));
     }
+
+    // Sản phẩm liên quan: cùng danh mục (ưu tiên cùng thương hiệu, gần giá), rồi cùng thương hiệu,
+    // rồi cùng nhánh danh mục cha; không gồm chính sản phẩm và sản phẩm ngừng bán.
+    @GetMapping("/api/v1/public/products/{id}/related")
+    public ApiResponse<List<ProductDto>> getRelatedProducts(
+            @PathVariable Long id,
+            @RequestParam(value = "limit", defaultValue = "8") int limit) {
+        return ApiResponse.success(productService.getRelatedProducts(id, limit));
+    }
+
+    // Chỉ ghi VIEW_PRODUCT khi client NÓI RÕ đây là người dùng đang xem trang chi tiết (opt-in).
+    // Endpoint này còn được gọi để LẤY DỮ LIỆU ở nhiều nơi (admin Inventory gọi hàng loạt, trang đơn
+    // hàng, hồ sơ, đánh giá...) — trước đây mọi lời gọi đều bị tính là "xem", làm bẩn chuỗi hành vi
+    // mà gợi ý/churn học từ đó. Opt-in để nơi gọi mới mặc định KHÔNG sinh lượt xem giả.
+    private static final String TRACK_VIEW_HEADER = "X-Track-View";
 
     @GetMapping("/api/v1/public/products/{id}")
     public ApiResponse<ProductDto> getProductById(
             @PathVariable Long id,
             @RequestHeader(value = "X-User-Id", required = false) String userId,
-            @RequestHeader(value = "X-Session-Id", required = false) String sessionId) {
-        ProductDto product = productService.getProductById(id);
-        if (product == null) {
-            throw new RuntimeException("Product not found with id: " + id);
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId,
+            @RequestHeader(value = TRACK_VIEW_HEADER, required = false) String trackView) {
+        // 404 nếu không tồn tại; sản phẩm ngừng bán vẫn trả về với active=false để FE hiện "Ngừng kinh doanh"
+        ProductDto product = productService.getPublicProductById(id);
+        if ("1".equals(trackView) && !Boolean.FALSE.equals(product.getActive())) {
+            productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
         }
-        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
         return ApiResponse.success(product);
     }
 
@@ -62,12 +80,12 @@ public class ProductController {
     public ApiResponse<ProductDto> getProductBySlug(
             @PathVariable String slug,
             @RequestHeader(value = "X-User-Id", required = false) String userId,
-            @RequestHeader(value = "X-Session-Id", required = false) String sessionId) {
-        ProductDto product = productService.getProductBySlug(slug);
-        if (product == null) {
-            throw new RuntimeException("Product not found with slug: " + slug);
+            @RequestHeader(value = "X-Session-Id", required = false) String sessionId,
+            @RequestHeader(value = TRACK_VIEW_HEADER, required = false) String trackView) {
+        ProductDto product = productService.getPublicProductBySlug(slug);
+        if ("1".equals(trackView) && !Boolean.FALSE.equals(product.getActive())) {
+            productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
         }
-        productViewEventProducer.publishProductViewed(product.getId(), product.getCategoryId(), userId, sessionId);
         return ApiResponse.success(product);
     }
 
@@ -99,9 +117,8 @@ public class ProductController {
     public ApiResponse<ProductReviewDto> addReview(
             @RequestHeader(value = "X-User-Id", required = false) String userId,
             @RequestBody ProductReviewDto reviewDto) {
-        if (userId != null) {
-            reviewDto.setUserId(userId);
-        }
+        // Người đánh giá luôn lấy từ header do gateway gắn theo token, không tin userId trong body
+        reviewDto.setUserId(userId);
         return ApiResponse.success(reviewService.addReview(reviewDto));
     }
 

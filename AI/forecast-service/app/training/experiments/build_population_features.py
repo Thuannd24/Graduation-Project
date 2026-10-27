@@ -1,6 +1,6 @@
 """Ngày 2 — NHÓM D: thống kê mức DÂN SỐ (trục xuyên user).
 
-Xem [`docs/canvas/feature-space-upgrade-plan.md`](../../../../docs/canvas/feature-space-upgrade-plan.md).
+Xem [`docs/AI/feature-space-upgrade-plan.md`](../../../../docs/AI/feature-space-upgrade-plan.md).
 
 ## Vì sao nhóm này tồn tại
 

@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Icon from "../../../components/common/Icon.jsx";
 import { aiApi } from "../../../services/aiApi.ts";
 import { formatVnd } from "../../../utils/format.js";
+import { chatApi } from "../../../services/chatApi.ts";
+import { createWebSocketClient } from "../../../services/websocketService.ts";
+import keycloak from "../../../services/keycloak.js";
 
 // Import transparent robot poses
 import robot1 from "../../../assets/images/robot1.png";
@@ -67,6 +70,167 @@ function AnimatedRobotMascot({ waving = true, size = 56 }) {
   );
 }
 
+/* ===================== Structured lookup cards (order/points/voucher/warranty) ===================== */
+const ORDER_STATUS_BADGE_STYLES = {
+  PENDING: "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400",
+  AWAITING_PAYMENT: "bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400",
+  CONFIRMED: "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400",
+  PROCESSING: "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400",
+  SHIPPED: "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-400",
+  DELIVERED: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400",
+  CANCELLED: "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-400",
+  RETURNING: "bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400",
+  RETURNED: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400",
+  REFUNDED: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+};
+const DEFAULT_STATUS_BADGE = "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400";
+
+function ChatCardView({ card }) {
+  if (!card) return null;
+
+  if (card.type === "order_status") {
+    const badgeClass = ORDER_STATUS_BADGE_STYLES[card.statusCode] || DEFAULT_STATUS_BADGE;
+    return (
+      <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-2.5 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl">
+          <div className="p-2 bg-white dark:bg-slate-950 rounded-lg border border-slate-100 dark:border-slate-800 shrink-0">
+            <Icon name="local_shipping" className="text-rose-600 text-base" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-extrabold text-[10px] text-slate-800 dark:text-slate-200">
+                Đơn hàng #{card.orderId}
+              </span>
+              <span className={`text-[8px] font-black px-2 py-0.5 rounded-full whitespace-nowrap ${badgeClass}`}>
+                {card.statusLabel}
+              </span>
+            </div>
+            {card.trackingCode && (
+              <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-1">
+                Mã vận đơn: <span className="font-mono font-bold">{card.trackingCode}</span>
+              </p>
+            )}
+            {card.finalAmount != null && (
+              <p className="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold mt-0.5">
+                {formatVnd(card.finalAmount)}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (card.type === "order_list" && Array.isArray(card.orders) && card.orders.length > 0) {
+    return (
+      <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+        {card.orders.map((o) => (
+          <Link
+            key={o.orderId}
+            to={`/order/${o.orderId}`}
+            className="flex items-center gap-2.5 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl hover:border-rose-200 transition-colors"
+          >
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-extrabold text-[10px] text-slate-800 dark:text-slate-200">
+                  Đơn #{o.orderId}{o.createdAt ? ` · ${o.createdAt}` : ""}
+                </span>
+                <span className={`text-[8px] font-black px-2 py-0.5 rounded-full whitespace-nowrap ${ORDER_STATUS_BADGE_STYLES[o.statusCode] || DEFAULT_STATUS_BADGE}`}>
+                  {o.statusLabel}
+                </span>
+              </div>
+              {o.firstProductName && (
+                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                  {o.firstProductName}{o.itemCount > 1 ? ` và ${o.itemCount - 1} sản phẩm khác` : ""}
+                </p>
+              )}
+              {o.finalAmount != null && (
+                <p className="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold mt-0.5">{formatVnd(o.finalAmount)}</p>
+              )}
+            </div>
+            <Icon name="chevron_right" className="text-slate-400 text-sm shrink-0" />
+          </Link>
+        ))}
+      </div>
+    );
+  }
+
+  if (card.type === "loyalty") {
+    return (
+      <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-3 p-3 bg-gradient-to-br from-amber-50 to-rose-50 dark:from-amber-950/20 dark:to-rose-950/10 border border-amber-100 dark:border-amber-900/30 rounded-xl">
+          <div className="p-2 bg-white dark:bg-slate-950 rounded-full border border-amber-200 dark:border-amber-900/40 shrink-0">
+            <Icon name="workspace_premium" className="text-amber-500 text-lg" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-black text-sm text-slate-800 dark:text-slate-100">
+              {card.points.toLocaleString("vi-VN")} điểm
+            </p>
+            <p className="text-[9px] text-slate-500 dark:text-slate-400">
+              Tương đương {formatVnd(card.value)} giảm giá
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (card.type === "vouchers") {
+    return (
+      <div className="mt-3 grid grid-cols-1 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+        {card.vouchers.map((v, idx) => (
+          <div
+            key={idx}
+            className="flex items-center gap-3 p-2.5 bg-gradient-to-r from-rose-50 to-white dark:from-rose-950/20 dark:to-slate-900 border border-dashed border-rose-200 dark:border-rose-900/40 rounded-xl"
+          >
+            <div className="p-2 bg-rose-600 rounded-lg shrink-0">
+              <Icon name="confirmation_number" className="text-white text-base" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-extrabold text-[10px] text-slate-800 dark:text-slate-200 truncate">{v.title}</p>
+              <p className="text-[9px] text-slate-500 dark:text-slate-400 font-mono">
+                {v.code} · HSD {v.expiresAt}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (card.type === "warranty") {
+    return (
+      <div className="mt-3 grid grid-cols-1 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+        {card.items.map((item, idx) => (
+          <div
+            key={idx}
+            className="flex items-center gap-3 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl"
+          >
+            <div className={`p-2 rounded-lg shrink-0 ${item.active ? "bg-emerald-50 dark:bg-emerald-950/20" : "bg-slate-100 dark:bg-slate-800"}`}>
+              <Icon
+                name={item.active ? "verified_user" : "gpp_bad"}
+                className={`text-base ${item.active ? "text-emerald-600" : "text-slate-400"}`}
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-extrabold text-[10px] text-slate-800 dark:text-slate-200 truncate">
+                {item.productName}
+              </p>
+              <p className="text-[9px] text-slate-500 dark:text-slate-400">
+                {item.active
+                  ? `Còn bảo hành${item.daysRemaining != null ? ` · ${item.daysRemaining} ngày` : ""}`
+                  : "Đã hết bảo hành"} · HSD {item.expiry}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return null;
+}
+
 const STARTER_PROMPTS = [
   { text: "Gợi ý quà tặng dưới 500 nghìn", icon: "redeem" },
   { text: "Chính sách đổi trả ra sao?", icon: "shield" },
@@ -78,14 +242,37 @@ export default function AIChatbotWidget() {
   const location = useLocation();
   const [popupText, setPopupText] = useState("AuraTech xin chào! 👋");
   const [isOpen, setIsOpen] = useState(false);
-  const [showPopup, setShowPopup] = useState(true);
+  // Bong bóng chào chỉ hiện ngắn và không hiện lại trong phiên nếu khách đã tắt (tránh che nội dung trang).
+  const [showPopup, setShowPopup] = useState(() => {
+    try {
+      return sessionStorage.getItem("aura_greeting_dismissed") !== "1";
+    } catch {
+      return true;
+    }
+  });
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [isEscalated, setIsEscalated] = useState(false);
-  const [sessionId] = useState(() => "session_" + Math.random().toString(36).substr(2, 9));
+  
+  // Persistent guest identifier
+  const [guestId] = useState(() => {
+    let id = localStorage.getItem("aura_guest_chat_id");
+    if (!id) {
+      id = "guest_" + Math.random().toString(36).substr(2, 9) + "_" + Date.now();
+      localStorage.setItem("aura_guest_chat_id", id);
+    }
+    return id;
+  });
+
+  const clientId = keycloak.authenticated ? keycloak.subject : guestId;
+  const clientName = keycloak.authenticated ? (keycloak.tokenParsed?.name || "Khách hàng") : "Khách vãng lai";
+
+  const [dbRoom, setDbRoom] = useState(null);
+  const stompClientRef = useRef(null);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+  const chatImageInputRef = useRef(null);
 
   // Initialize with greeting message
   useEffect(() => {
@@ -114,53 +301,168 @@ export default function AIChatbotWidget() {
       
       const timer = setTimeout(() => {
         setShowPopup(false);
-      }, 3500); // Dismiss quickly in 3.5 seconds
-      
+      }, 3500);
       return () => clearTimeout(timer);
     } else {
       setPopupText("AuraTech xin chào! 👋");
-      
-      // Auto-dismiss after 12s on other pages
       const timer = setTimeout(() => {
         setShowPopup(false);
-      }, 12000);
+      }, 6000);
       return () => clearTimeout(timer);
     }
   }, [location.pathname]);
 
-  // Syncer for escalated customer session
+  // Load chat session room and history from database when widget is opened
   useEffect(() => {
-    if (!isEscalated) return;
-
-    // Check if session needs to be registered
-    const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-    if (!activeSessions.includes(sessionId)) {
-      activeSessions.push(sessionId);
-      localStorage.setItem("aura_escalated_sessions", JSON.stringify(activeSessions));
+    if (!isOpen) {
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate();
+        stompClientRef.current = null;
+      }
+      return;
     }
 
-    const syncInterval = setInterval(() => {
-      const chatData = JSON.parse(localStorage.getItem("aura_chat_session_" + sessionId) || "null");
-      if (chatData) {
-        // If staff closed the chat session
-        if (!chatData.isEscalated) {
-          setIsEscalated(false);
-          setMessages(chatData.messages);
-          return;
-        }
+    const initChatRoom = async () => {
+      try {
+        setLoading(true);
+        const room = await chatApi.getOrCreateRoom(guestId, clientName);
+        setDbRoom(room);
 
-        // Sync messages from staff/system
-        if (chatData.messages.length !== messages.length) {
-          setMessages(chatData.messages);
+        const status = room.status;
+        const escalated = status === "ACTIVE" || status === "WAITING";
+        setIsEscalated(escalated);
+
+        const historyPage = await chatApi.getMyMessages(room.id, guestId, 0, 50);
+        if (historyPage && historyPage.content) {
+          const historyMsgs = historyPage.content
+            .map((msg) => ({
+              id: msg.id,
+              sender: msg.senderRole === "SYSTEM" ? "system" : (msg.senderId === clientId ? "user" : "assistant"),
+              text: msg.type === "IMAGE" ? "" : msg.content,
+              imageUrl: msg.type === "IMAGE" ? msg.content : undefined,
+              timestamp: new Date(msg.createdAt)
+            }))
+            .reverse();
+          
+          if (historyMsgs.length > 0) {
+            setMessages(historyMsgs);
+          }
         }
+      } catch (err) {
+        console.error("Failed to load chat room history", err);
+      } finally {
+        setLoading(false);
       }
-    }, 1200);
+    };
 
-    return () => clearInterval(syncInterval);
-  }, [isEscalated, sessionId, messages.length]);
+    initChatRoom();
+  }, [isOpen, guestId, clientName, clientId]);
+
+  // Establish WebSocket connection when room is ready
+  useEffect(() => {
+    if (!dbRoom) return;
+
+    const client = createWebSocketClient({
+      guestId,
+      roomId: dbRoom.id,
+      onConnect: () => {
+        console.log("WebSocket connected to room: " + dbRoom.id);
+      },
+      onMessageReceived: (payload) => {
+        if (payload.senderRole === "STAFF") {
+          setIsEscalated(true);
+        }
+
+        if (payload.type === "SYSTEM_ROOM_CLOSED") {
+          setIsEscalated(false);
+          setDbRoom((prev) => (prev ? { ...prev, status: "CLOSED" } : prev));
+        }
+
+        const stompMsg = {
+          id: payload.id || "sys_" + Date.now(),
+          sender: payload.senderRole === "SYSTEM" ? "system" : (payload.senderId === clientId ? "user" : "assistant"),
+          text: payload.type === "IMAGE" ? "" : payload.content,
+          imageUrl: payload.type === "IMAGE" ? payload.content : undefined,
+          timestamp: new Date(payload.createdAt)
+        };
+
+        setMessages((prev) => {
+          if (stompMsg.id && prev.some((m) => m.id === stompMsg.id)) return prev;
+          return [...prev, stompMsg];
+        });
+      }
+    });
+
+    client.activate();
+    stompClientRef.current = client;
+
+    return () => {
+      client.deactivate();
+      stompClientRef.current = null;
+    };
+  }, [dbRoom, guestId, clientId]);
+
+  const requestStaffHandover = async () => {
+    if (!dbRoom || dbRoom.status === "CLOSED") return;
+    try {
+      setLoading(true);
+      const updatedRoom = await chatApi.handoverToStaff(dbRoom.id, guestId);
+      setDbRoom(updatedRoom);
+      setIsEscalated(true);
+
+      const systemMsg = {
+        id: "sys_" + Date.now(),
+        sender: "system",
+        text: updatedRoom.status === "ACTIVE"
+          ? `Đã kết nối với nhân viên hỗ trợ: ${updatedRoom.staffName || "Nhân viên"}`
+          : "Hiện chưa có nhân viên trực tuyến. Tin nhắn của bạn đã được lưu và báo cho bộ phận hỗ trợ; nhân viên sẽ phản hồi tại đây trong giờ làm việc (8:00–22:00).",
+        timestamp: new Date()
+      };
+      setMessages((prev) => [...prev, systemMsg]);
+    } catch (err) {
+      console.error("Failed to handover session to staff", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSend = async (textToSend, imageBase64) => {
     if (!textToSend.trim() && !imageBase64) return;
+
+    setInputValue("");
+
+    if (isEscalated) {
+      if (dbRoom?.status === "CLOSED") {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: "sys_closed_" + Date.now(),
+            sender: "system",
+            text: "Phiên hỗ trợ này đã kết thúc. Bấm nút làm mới để bắt đầu cuộc trò chuyện mới.",
+            timestamp: new Date()
+          }
+        ]);
+        return;
+      }
+      if (stompClientRef.current && stompClientRef.current.connected && dbRoom) {
+        stompClientRef.current.publish({
+          destination: "/app/chat.sendMessage",
+          body: JSON.stringify({
+            roomId: dbRoom.id,
+            content: textToSend.trim(),
+            type: "TEXT"
+          })
+        });
+      } else {
+        console.warn("WebSocket is not connected. Message not sent.");
+      }
+      return;
+    }
+
+    if (textToSend.trim() === "Yêu cầu gặp nhân viên trực tuyến") {
+      await requestStaffHandover();
+      return;
+    }
 
     const userMsg = {
       id: "msg_" + Date.now(),
@@ -168,89 +470,39 @@ export default function AIChatbotWidget() {
       text: textToSend || "Đã gửi một hình ảnh",
       timestamp: new Date()
     };
-
-    setInputValue("");
-
-    // 1. If chat is escalated, bypass AI and send directly to staff
-    if (isEscalated) {
-      const updatedMessages = [...messages, userMsg];
-      setMessages(updatedMessages);
-
-      const chatData = JSON.parse(localStorage.getItem("aura_chat_session_" + sessionId) || "null");
-      if (chatData) {
-        localStorage.setItem(
-          "aura_chat_session_" + sessionId,
-          JSON.stringify({
-            ...chatData,
-            messages: updatedMessages,
-            lastUpdated: Date.now()
-          })
-        );
-      }
-      return;
-    }
-
-    // 2. Direct manual trigger to call staff
-    if (textToSend.trim() === "Yêu cầu gặp nhân viên trực tuyến") {
-      setIsEscalated(true);
-      const systemMsg = {
-        id: "sys_" + Date.now(),
-        sender: "system",
-        text: "Đang kết nối với nhân viên hỗ trợ...",
-        timestamp: new Date()
-      };
-      const updatedMessages = [...messages, userMsg, systemMsg];
-      setMessages(updatedMessages);
-
-      const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-      if (!activeSessions.includes(sessionId)) {
-        activeSessions.push(sessionId);
-        localStorage.setItem("aura_escalated_sessions", JSON.stringify(activeSessions));
-      }
-      localStorage.setItem(
-        "aura_chat_session_" + sessionId,
-        JSON.stringify({
-          isEscalated: true,
-          messages: updatedMessages,
-          lastUpdated: Date.now()
-        })
-      );
-      return;
-    }
-
-    // 3. Normal AI Chat workflow
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
     try {
-      const response = await aiApi.sendMessage(textToSend, imageBase64, sessionId);
+      const response = await aiApi.sendMessage(textToSend, imageBase64, dbRoom?.id || guestId);
 
       const assistantMsg = {
         id: "msg_" + (Date.now() + 1),
         sender: "assistant",
         text: response.message,
         timestamp: new Date(),
-        products: response.products
+        products: response.products,
+        card: response.card
       };
 
       if (response.intent === "escalate") {
-        setIsEscalated(true);
-        assistantMsg.isEscalated = true;
+        if (dbRoom) {
+          const updatedRoom = await chatApi.handoverToStaff(dbRoom.id, guestId);
+          setDbRoom(updatedRoom);
+          setIsEscalated(true);
 
-        // Auto-register in localStorage
-        const activeSessions = JSON.parse(localStorage.getItem("aura_escalated_sessions") || "[]");
-        if (!activeSessions.includes(sessionId)) {
-          activeSessions.push(sessionId);
-          localStorage.setItem("aura_escalated_sessions", JSON.stringify(activeSessions));
+          const systemMsg = {
+            id: "sys_" + Date.now(),
+            sender: "system",
+            text: updatedRoom.status === "ACTIVE" 
+              ? `Đã kết nối với nhân viên hỗ trợ: ${updatedRoom.staffName || "Nhân viên"}` 
+              : "Rất xin lỗi vì trải nghiệm chưa tốt. Hiện chưa có nhân viên trực tuyến; tin nhắn của bạn đã được lưu và báo cho bộ phận hỗ trợ, nhân viên sẽ phản hồi tại đây trong giờ làm việc (8:00–22:00).",
+            timestamp: new Date()
+          };
+          setMessages((prev) => [...prev, assistantMsg, systemMsg]);
+          setLoading(false);
+          return;
         }
-        localStorage.setItem(
-          "aura_chat_session_" + sessionId,
-          JSON.stringify({
-            isEscalated: true,
-            messages: [...messages, userMsg, assistantMsg],
-            lastUpdated: Date.now()
-          })
-        );
       }
 
       setMessages((prev) => [...prev, assistantMsg]);
@@ -275,17 +527,76 @@ export default function AIChatbotWidget() {
 
     const reader = new FileReader();
     reader.onload = () => {
-      // Simulate visual search triggering within chat
       handleSend("Tìm kiếm sản phẩm tương tự từ hình ảnh tải lên này", reader.result);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleChatImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || !dbRoom) return;
+
+    if (dbRoom.status === "CLOSED") {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: "sys_closed_" + Date.now(),
+          sender: "system",
+          text: "Phiên hỗ trợ này đã kết thúc. Bấm nút làm mới để bắt đầu cuộc trò chuyện mới.",
+          timestamp: new Date()
+        }
+      ]);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { url } = await chatApi.uploadImage(dbRoom.id, file, guestId);
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.publish({
+          destination: "/app/chat.sendMessage",
+          body: JSON.stringify({
+            roomId: dbRoom.id,
+            content: url,
+            type: "IMAGE"
+          })
+        });
+      }
+    } catch (err) {
+      console.error("Failed to upload chat image", err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: "sys_upload_err_" + Date.now(),
+          sender: "system",
+          text: "Không thể gửi ảnh. Vui lòng thử lại.",
+          timestamp: new Date()
+        }
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   };
 
-  const resetChat = () => {
+  const triggerChatImageInput = () => {
+    chatImageInputRef.current?.click();
+  };
+
+  const resetChat = async () => {
+    if (dbRoom) {
+      try {
+        await chatApi.closeMyRoom(dbRoom.id, guestId);
+        const newRoom = await chatApi.getOrCreateRoom(guestId, clientName);
+        setDbRoom(newRoom);
+      } catch (err) {
+        console.error("Failed to reset chat room", err);
+      }
+    }
     setIsEscalated(false);
     setMessages([
       {
@@ -325,6 +636,11 @@ export default function AIChatbotWidget() {
               onClick={(e) => {
                 e.stopPropagation();
                 setShowPopup(false);
+                try {
+                  sessionStorage.setItem("aura_greeting_dismissed", "1");
+                } catch {
+                  // bỏ qua khi trình duyệt chặn storage
+                }
               }}
               className="text-[#968e7d] hover:text-[#c82229] dark:hover:text-rose-400 bg-transparent border-none cursor-pointer p-0.5 shrink-0"
               title="Đóng thông báo"
@@ -361,6 +677,15 @@ export default function AIChatbotWidget() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                {!isEscalated && (
+                  <button
+                    onClick={requestStaffHandover}
+                    className="p-1.5 hover:bg-white/10 rounded-lg text-white/80 hover:text-white transition-colors cursor-pointer border-none bg-transparent"
+                    title="Yêu cầu gặp nhân viên trực tuyến"
+                  >
+                    <Icon name="support_agent" className="text-sm" />
+                  </button>
+                )}
                 <button
                   onClick={resetChat}
                   className="p-1.5 hover:bg-white/10 rounded-lg text-white/80 hover:text-white transition-colors cursor-pointer border-none bg-transparent"
@@ -402,7 +727,7 @@ export default function AIChatbotWidget() {
                   className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs shadow-sm ${
+                    className={`max-w-[85%] rounded-2xl shadow-sm ${msg.imageUrl ? "p-1.5" : "px-4 py-2.5"} text-xs ${
                       msg.sender === "user"
                         ? "bg-rose-600 text-white rounded-br-none"
                         : msg.sender === "system"
@@ -410,7 +735,17 @@ export default function AIChatbotWidget() {
                         : "bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-none"
                     }`}
                   >
-                    <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                    {msg.imageUrl ? (
+                      <a href={msg.imageUrl} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={msg.imageUrl}
+                          alt="Ảnh đính kèm"
+                          className="max-w-full max-h-48 rounded-xl object-cover"
+                        />
+                      </a>
+                    ) : (
+                      <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                    )}
 
                     {/* Recommendation Products */}
                     {msg.products && msg.products.length > 0 && (
@@ -432,9 +767,21 @@ export default function AIChatbotWidget() {
                               <h4 className="font-extrabold text-[10px] text-slate-800 dark:text-slate-200 truncate">
                                 {prod.name}
                               </h4>
-                              <p className="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold mt-0.5">
-                                {formatVnd(prod.price)}
-                              </p>
+                              <div className="flex items-baseline gap-1.5 mt-0.5">
+                                <p className="text-[10px] text-rose-600 dark:text-rose-400 font-extrabold">
+                                  {formatVnd(prod.price)}
+                                </p>
+                                {prod.oldPrice != null && prod.oldPrice > prod.price && (
+                                  <p className="text-[9px] text-slate-400 dark:text-slate-500 line-through">
+                                    {formatVnd(prod.oldPrice)}
+                                  </p>
+                                )}
+                              </div>
+                              {prod.brand && (
+                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">
+                                  {prod.brand}
+                                </span>
+                              )}
                               {prod.matchScore && (
                                 <span className="text-[8px] font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 px-1 py-0.5 rounded mt-1 inline-block">
                                   Độ khớp: {prod.matchScore}%
@@ -453,6 +800,9 @@ export default function AIChatbotWidget() {
                         ))}
                       </div>
                     )}
+
+                    {/* Structured lookup card: order status / loyalty points / vouchers / warranty */}
+                    <ChatCardView card={msg.card} />
                   </div>
                 </div>
               ))}
@@ -488,21 +838,43 @@ export default function AIChatbotWidget() {
 
             {/* Input Bar */}
             <footer className="p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2">
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                accept="image/*"
-                className="hidden"
-              />
-              <button
-                type="button"
-                onClick={triggerFileInput}
-                className="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-500 rounded-full cursor-pointer transition-colors border-none shrink-0"
-                title="Tải ảnh tìm kiếm"
-              >
-                <Icon name="photo_camera" className="text-sm" />
-              </button>
+              {isEscalated ? (
+                <>
+                  <input
+                    type="file"
+                    ref={chatImageInputRef}
+                    onChange={handleChatImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={triggerChatImageInput}
+                    className="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-500 rounded-full cursor-pointer transition-colors border-none shrink-0"
+                    title="Gửi ảnh cho nhân viên hỗ trợ"
+                  >
+                    <Icon name="attach_file" className="text-sm" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={triggerFileInput}
+                    className="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-rose-100 hover:text-rose-600 text-slate-500 rounded-full cursor-pointer transition-colors border-none shrink-0"
+                    title="Tải ảnh tìm kiếm"
+                  >
+                    <Icon name="photo_camera" className="text-sm" />
+                  </button>
+                </>
+              )}
 
               <input
                 type="text"
