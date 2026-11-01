@@ -1,0 +1,85 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowColor #4B5563
+skinparam ArrowThickness 1
+skinparam defaultTextAlignment center
+skinparam actorBorderColor #4B5563
+skinparam actorBackgroundColor #7DCFF0
+skinparam sequenceLifeLineBorderColor #4B5563
+skinparam sequenceLifeLineBackgroundColor #7DCFF0
+skinparam sequenceParticipantBackgroundColor #7DCFF0
+skinparam sequenceParticipantBorderColor #4B5563
+skinparam sequenceGroupBorderColor #4B5563
+skinparam sequenceGroupBackgroundColor white
+skinparam sequenceGroupBodyBackgroundColor white
+skinparam boundaryBackgroundColor #7DCFF0
+skinparam boundaryBorderColor #4B5563
+skinparam controlBackgroundColor #7DCFF0
+skinparam controlBorderColor #4B5563
+skinparam entityBackgroundColor #7DCFF0
+skinparam entityBorderColor #4B5563
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 220
+hide footbox
+autonumber
+
+actor "Khách hàng" as Customer
+boundary "Web" as Web
+control "Hệ thống" as System
+entity "Cơ sở dữ liệu\nđơn hàng" as DB
+
+activate Customer
+Customer -> Web : Mở trang thanh toán
+activate Web
+Web -> System : Yêu cầu xem trước đơn hàng
+activate System
+System -> System : Đọc giỏ và tính chi phí
+System --> Web : Thông tin đơn và bảng giá
+deactivate System
+Web --> Customer : Hiển thị bảng xem trước
+deactivate Web
+
+Customer -> Web : Nhập giao nhận, ưu đãi;\nxác nhận đặt hàng
+activate Web
+Web -> System : Gửi yêu cầu tạo đơn
+activate System
+System -> System : Kiểm tra yêu cầu, dữ liệu;\ngiữ tồn nếu hợp lệ
+alt Yêu cầu bị từ chối
+  System -> System : Bù phần tồn đã giữ nếu cần
+  System --> Web : Kết quả trùng / lỗi dữ liệu / hết hàng
+  Web --> Customer : Hiển thị thông báo
+else Đủ điều kiện tạo đơn
+  System -> DB : Lưu Order(PENDING) và OrderItem\n(transaction tạo đơn)
+  activate DB
+  DB --> System : Commit thành công; mã đơn
+  deactivate DB
+  System -> System : Áp dụng voucher / điểm;\ntính lại giá chính thức
+  alt Hoàn tất các bước sau tạo đơn
+    System -> DB : Lưu số tiền chính thức
+    activate DB
+    DB --> System : Đã lưu giá
+    deactivate DB
+    System -> DB : Lưu OrderCreatedEvent vào outbox\n(transaction sau)
+    activate DB
+    DB --> System : Đã lưu sự kiện
+    deactivate DB
+    System -> System : Xóa giỏ, lưu kết quả yêu cầu
+    System --> Web : Mã đơn và số tiền
+    Web --> Customer : Thông báo đặt hàng thành công
+  else Lỗi sau khi đã commit đơn
+    System -> DB : Hủy đơn + outbox OrderCancelledEvent
+    activate DB
+    DB --> System : Kết quả bù trừ
+    deactivate DB
+    System -> System : Trả ưu đãi đã dùng;\nkho bù trừ qua sự kiện hủy
+    System --> Web : Đặt hàng thất bại
+    Web --> Customer : Hiển thị lỗi
+  end
+end
+deactivate System
+deactivate Web
+deactivate Customer
+@enduml

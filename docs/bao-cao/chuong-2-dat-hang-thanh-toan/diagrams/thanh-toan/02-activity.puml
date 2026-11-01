@@ -1,0 +1,62 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowColor #4B5563
+skinparam ArrowThickness 1
+skinparam defaultTextAlignment center
+skinparam actorBorderColor #4B5563
+skinparam actorBackgroundColor #7DCFF0
+skinparam activityBackgroundColor #7DCFF0
+skinparam activityBorderColor #4B5563
+skinparam activityDiamondBackgroundColor #7DCFF0
+skinparam activityDiamondBorderColor #4B5563
+skinparam activityStartColor black
+skinparam activityEndColor black
+skinparam swimlaneBorderColor black
+skinparam swimlaneBorderThickness 1.5
+skinparam swimlaneTitleBackgroundColor white
+skinparam swimlaneTitleFontStyle bold
+
+|Khách hàng|
+start
+:Chọn thanh toán VNPay\nhoặc thanh toán lại;
+|Hệ thống|
+:Kiểm tra đơn, số tiền\nvà lượt thanh toán trước;
+if (Được phép thanh toán?) then (Không)
+  :Thông báo không thể khởi tạo\nhoặc yêu cầu chờ;
+  |Khách hàng|
+  :Nhận thông báo;
+  stop
+else (Có)
+endif
+|Hệ thống|
+:Tạo / dùng lại Payment(PENDING);\ntạo mã giao dịch và URL có chữ ký;
+|Khách hàng|
+:Mở VNPay và xác nhận giao dịch;
+|VNPay|
+:Xử lý và phản hồi kết quả;
+|Hệ thống|
+:Xác minh chữ ký,\nmã giao dịch và số tiền;
+if (Phản hồi hợp lệ?) then (Không)
+  :Ghi log, trả lỗi;\nkhông thay đổi trạng thái;
+  stop
+else (Có)
+endif
+:Khóa và kiểm tra lại Payment;
+if (Đúng lượt hiện tại và còn PENDING?) then (Không)
+  :Xử lý phản hồi trùng / muộn\nhoặc lượt đã bị thay;
+  stop
+else (Có)
+endif
+if (Giao dịch thành công?) then (Có)
+  :Ghi SUCCESS và sự kiện thành công\ntrong cùng giao dịch;
+  :Xác nhận đơn qua sự kiện;\nxử lý gửi email;
+else (Không)
+  :Ghi FAILED và sự kiện thất bại;\ngiữ đơn để khách có thể thử lại;
+endif
+|Khách hàng|
+:Xem kết quả chính thức từ hệ thống;
+stop
+@enduml

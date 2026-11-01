@@ -1,0 +1,46 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam usecaseBackgroundColor #F5F8FC
+title Hình 2.2. Tài khoản và dịch vụ khách hàng
+actor "Khách vãng lai" as Guest
+actor "Khách hàng" as Customer
+actor "Dịch vụ định danh\nKeycloak" as Identity
+rectangle "AuraTech — Tài khoản và dịch vụ khách hàng" {
+  usecase "UC01. Đăng ký tài khoản" as UC01
+  usecase "UC02. Đăng nhập" as UC02
+  usecase "UC03. Xem và cập nhật hồ sơ" as UC03
+  usecase "UC04. Quản lý địa chỉ giao hàng" as UC04
+  usecase "UC05. Quản lý giỏ hàng" as UC05
+  usecase "UC06. Quản lý sản phẩm yêu thích" as UC06
+  usecase "UC07. Xem điểm và lịch sử điểm" as UC07
+  usecase "UC08. Xem voucher của tôi" as UC08
+  usecase "UC09. Xem thông báo" as UC09
+  usecase "UC10. Xem danh sách và chi tiết đơn" as UC10
+  usecase "UC11. Tra cứu bảo hành đã mua" as UC11
+  usecase "UC12. Viết đánh giá và gửi ảnh" as UC12
+}
+Guest -- UC01
+Guest -- UC02
+Identity -- UC01
+Identity -- UC02
+Customer -- UC03
+Customer -- UC04
+Customer -- UC05
+Customer -- UC06
+Customer -- UC07
+Customer -- UC08
+Customer -- UC09
+Customer -- UC10
+Customer -- UC11
+Customer -- UC12
+legend bottom
+  UC03–UC12 yêu cầu phiên xác thực hợp lệ: đây là tiền điều kiện.
+  Không include "Đăng nhập" vào mọi chức năng đã có phiên đăng nhập.
+  Đánh giá yêu cầu giao dịch mua đủ điều kiện; ảnh đính kèm là tùy chọn.
+endlegend
+@enduml

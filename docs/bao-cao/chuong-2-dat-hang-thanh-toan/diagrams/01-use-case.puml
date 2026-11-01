@@ -1,0 +1,30 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowColor #4B5563
+skinparam ArrowThickness 1
+skinparam defaultTextAlignment center
+skinparam actorBorderColor #4B5563
+skinparam actorBackgroundColor #7DCFF0
+!pragma layout smetana
+left to right direction
+skinparam rectangleBackgroundColor #7DCFF0
+skinparam rectangleBorderColor #4B5563
+skinparam usecaseBackgroundColor #7DCFF0
+skinparam usecaseBorderColor #4B5563
+skinparam usecaseFontSize 14
+
+actor "Khách hàng" as Customer
+actor "Cổng VNPay" as VNPay
+rectangle "AuraTech — Đặt hàng và thanh toán trực tuyến" {
+  usecase "UC04.1\nĐặt hàng trực tuyến" as Order
+  usecase "UC04.2\nThanh toán đơn hàng\nqua VNPay" as Pay
+  usecase "Xem đơn hàng và\nkết quả thanh toán" as View
+}
+Customer -- Order
+Customer -- Pay
+Customer -- View
+Pay -- VNPay
+@enduml

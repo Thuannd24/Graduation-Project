@@ -1,0 +1,118 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam usecaseBackgroundColor #7ACFF5
+skinparam usecaseBorderColor black
+skinparam rectangleBackgroundColor #7ACFF5
+skinparam linetype ortho
+' Repaired from uc_tong_quan.vpp; original role names and use cases retained.
+actor "Guest" as Guest
+actor "Admin" as Admin
+actor "Staff" as Staff
+actor "Customer" as Customer
+actor "Member" as Member
+actor "VNPay" as VNPay
+rectangle "AuraTech E-Commerce" #7ACFF5 {
+  usecase "Login with OIDC / Password" as U1
+  usecase "Process Refund Requests" as U2
+  usecase "Live Handover to Staff" as U3
+  usecase "Direct Customer Support" as U4
+  usecase "Register Account" as U5
+  usecase "Manage User Accounts & RBAC" as U6
+  usecase "Business Statistics" as U7
+  usecase "Configure Camunda Campaign" as U8
+  usecase "Validate BPMN Syntax" as U9
+  usecase "Manage Products & Categories" as U10
+  usecase "Manage Inventory" as U11
+  usecase "Process Orders & Shipping" as U12
+  usecase "Reply to Product Review" as U13
+  usecase "Chat with AI Assistant\n--\nextension points\nRetrieve product / policy context\nLive Handover to Staff" as U14
+  usecase "RAG Context Retrieval" as U15
+  usecase "Hold Inventory Lock" as U16
+  usecase "Manage Cart" as U17
+  usecase "Select Delivery Address" as U18
+  usecase "Place Online Order\n--\nextension points\nUse voucher\nUse loyalty points" as U19
+  usecase "Apply Voucher" as U20
+  usecase "VNPay Payment" as U21
+  usecase "Pay for Order" as U22
+  usecase "Personalized Recommendations" as U23
+  usecase "COD Payment" as U24
+  usecase "Review & Rate Product" as U25
+  usecase "View Product Details" as U26
+  usecase "Search Products" as U27
+  usecase "Retry Payment" as U28
+  usecase "Use Loyalty Points" as U29
+  usecase "Manage Profile & Addresses" as U30
+  usecase "Track Orders" as U31
+  usecase "Manage Wishlist" as U32
+  usecase "View Notifications" as U33
+  usecase "View Loyalty Points & Vouchers" as U34
+  usecase "Preview Order" as U35
+  usecase "View Warranty" as U36
+  usecase "Receive Payment Result" as U37
+  usecase "Cancel Order" as U38
+}
+Member -- U1
+Guest -- U26
+Guest -- U23
+Guest -- U14
+Customer -- U26
+Customer -- U23
+Customer -- U17
+Customer -- U19
+Customer -- U38
+Customer -- U25
+Staff -- U12
+Admin -- U2
+Staff -- U4
+Staff -- U3
+Admin -- U10
+Admin -- U8
+Admin -- U9
+Admin -- U7
+Admin -- U6
+U19 ..> U18 : <<include>>
+U20 ..> U19 : <<extend>>\n[voucher selected]
+U19 ..> U16 : <<include>>
+U19 ..> U22 : <<include>>
+U15 ..> U14 : <<extend>>\n[product or policy question]
+U8 ..> U9 : <<include>>
+U3 ..> U14 : <<extend>>\nModel
+Customer -up-|> Member
+Staff -up-|> Member
+Admin -up-|> Member
+U29 ..> U19 : <<extend>>\n[points requested]
+U21 -up-|> U22
+U24 -up-|> U22
+Admin -up-|> Staff
+Guest -- U5
+Guest -- U1
+Member -- U30
+Guest -- U27
+Customer -- U27
+Customer -- U14
+Guest -- U4
+Customer -- U4
+Staff -- U10
+Staff -- U8
+Staff -- U9
+Staff -- U7
+Staff -- U11
+Staff -- U13
+Staff -- U38
+Customer -- U22
+Customer -- U28
+Customer -- U31
+Customer -- U32
+Customer -- U34
+Customer -- U33
+Customer -- U36
+Customer -- U35
+VNPay -- U21
+VNPay -- U2
+VNPay -- U37
+@enduml

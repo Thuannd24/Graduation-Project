@@ -1,0 +1,352 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1112" height="1590" viewBox="298 343 1112 1590">
+<rect x="298" y="343" width="1112" height="1590" fill="white"/>
+<g class="cluster"><rect x="618" y="363" width="656" height="1540" fill="#7ACFF5" stroke="black"/>
+<text x="946" y="378" text-anchor="middle" font-family="Arial" font-size="11">AuraTech E-Commerce</text>
+</g>
+<g class="link"><path d="M340,1017 L340,406 M340,406 L1046,406 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M520,990 L540,990 M540,990 L540,1351 M540,1351 L683,1351 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M520,978 L550,978 M550,978 L550,1260 M550,1260 L715,1260 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M520,960 L725,960 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M470,1119 L470,1352 M470,1352 L683,1352 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1095 L479,1095 M479,1095 L479,1280 M479,1280 L744,1280 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1059 L726,1059 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1065 L519,1065 M519,1065 L519,1137 M519,1137 L724,1137 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L582,1071 M582,1071 L582,1850 M582,1850 L725,1850 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1090 L489,1090 M489,1090 L489,1292 M489,1292 L958,1292 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M383,878 L383,820 M383,820 L742,820 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,780 L550,780 M550,780 L550,444 M550,444 L767,444 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,936 L398,738 M398,738 L470,738 M470,738 L470,502 M470,502 L756,502 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,936 L398,728 M398,728 L460,728 M460,728 L460,472 M460,472 L1080,472 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,800 L588,800 M588,800 L588,728 M588,728 L747,728 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,780 L500,780 M500,780 L500,633 M500,633 L742,633 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,790 L570,790 M570,790 L570,687 M570,687 L1126,687 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,760 L480,760 M480,760 L480,592 M480,592 L1082,592 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,770 L490,770 M490,770 L490,570 M490,570 L745,570 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M890,1137 L975,1137 M975,1137 L975,1121 M975,1121 L1015,1121 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M1005,1117 L1015,1121 M1015,1121 L1005,1125" fill="none" stroke="black"/>
+<text x="932.5" y="1132" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;include&gt;&gt;</text>
+</g>
+<g class="link"><path d="M904,1162 L1080,1162 M1080,1162 L1080,1161 M1080,1161 L1134,1161 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M914,1166 L904,1162 M904,1162 L914,1158" fill="none" stroke="black"/>
+<text x="992" y="1157" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;extend&gt;&gt;</text>
+</g>
+<g class="link"><path d="M814,1120 L920,1120 M920,1120 L920,1057 M920,1057 L958,1057 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M948,1053 L958,1057 M958,1057 L948,1061" fill="none" stroke="black"/>
+<text x="867" y="1115" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;include&gt;&gt;</text>
+</g>
+<g class="link"><path d="M835,1200 L920,1200 M920,1200 L920,1227 M920,1227 L945,1227 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M935,1223 L945,1227 M945,1227 L935,1231" fill="none" stroke="black"/>
+<text x="877.5" y="1195" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;include&gt;&gt;</text>
+</g>
+<g class="link"><path d="M930,960 L1015,960 M1015,960 L1015,947 M1015,947 L1100,947 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M940,964 L930,960 M930,960 L940,956" fill="none" stroke="black"/>
+<text x="972.5" y="955" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;extend&gt;&gt;</text>
+</g>
+<g class="link"><path d="M903,635 L1019,635 M1019,635 L1016,675 M1016,675 L1116,675 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M1106,671 L1116,675 M1116,675 L1106,679" fill="none" stroke="black"/>
+<text x="961" y="630" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;include&gt;&gt;</text>
+</g>
+<g class="link"><path d="M905,929 L1004,929 M1004,929 L1007,493 M1007,493 L1074,493 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M915,933 L905,929 M905,929 L915,925" fill="none" stroke="black"/>
+<text x="1005.5" y="706" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;extend&gt;&gt;</text>
+</g>
+<g class="link"><path d="M387,1081 L426,1081 " fill="none" stroke="black"/>
+<polygon points="387,1081 397,1085 397,1077" fill="white" stroke="black"/>
+</g>
+<g class="link"><path d="M353,1017 L353,896 M353,896 L368,896 " fill="none" stroke="black"/>
+<polygon points="353,1017 357,1007 349,1007" fill="white" stroke="black"/>
+</g>
+<g class="link"><path d="M340,1017 L340,780 M340,780 L426,780 " fill="none" stroke="black"/>
+<polygon points="340,1017 344,1007 336,1007" fill="white" stroke="black"/>
+</g>
+<g class="link"><path d="M890,1185 L1238,1185 M1238,1185 L1238,1502 M1238,1502 L1040,1502 " fill="none" stroke="black" stroke-dasharray="5,4"/>
+<path d="M900,1189 L890,1185 M890,1185 L900,1181" fill="none" stroke="black"/>
+<text x="1064" y="1180" text-anchor="middle" font-family="Arial" font-size="10">&lt;&lt;extend&gt;&gt;</text>
+</g>
+<g class="link"><path d="M1099,1227 L1120,1227 M1120,1227 L1120,1224 M1120,1224 L1141,1224 " fill="none" stroke="black"/>
+<polygon points="1099,1227 1109,1231 1109,1223" fill="#7ACFF5" stroke="black"/>
+</g>
+<g class="link"><path d="M1099,1227 L1117,1227 M1117,1227 L1117,1278 M1117,1278 L1135,1278 " fill="none" stroke="black"/>
+<polygon points="1099,1227 1109,1231 1109,1223" fill="#7ACFF5" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L325,909 M325,909 L325,780 M325,780 L426,780 " fill="none" stroke="black"/>
+<polygon points="398,909 388,905 388,913" fill="white" stroke="black"/>
+</g>
+<g class="link"><path d="M520,968 L566,968 M566,968 L566,543 M566,543 L1040,543 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M520,968 L574,968 M574,968 L574,415 M574,415 L1038,415 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M368,1047 L582,1047 M582,1047 L582,1514 M582,1514 L712,1514 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M520,968 L590,968 M590,968 L590,1352 M590,1352 L1040,1352 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L550,1071 M550,1071 L550,1352 M550,1352 L1040,1352 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L558,1071 M558,1071 L558,960 M558,960 L712,960 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M520,968 L566,968 M566,968 L566,511 M566,511 L749,511 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L574,1071 M574,1071 L574,511 M574,511 L749,511 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L582,909 M582,909 L582,738 M582,738 L737,738 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L590,909 M590,909 L590,634 M590,634 L742,634 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L550,909 M550,909 L550,677 M550,677 L1117,677 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L558,909 M558,909 L558,604 M558,604 L1065,604 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L566,909 M566,909 L566,790 M566,790 L1040,790 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L574,909 M574,909 L574,872 M574,872 L1040,872 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M398,909 L582,909 M582,909 L582,1850 M582,1850 L725,1850 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L590,1071 M590,1071 L590,1227 M590,1227 L945,1227 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L550,1071 M550,1071 L550,1427 M550,1427 L1040,1427 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L558,1071 M558,1071 L558,1592 M558,1592 L1040,1592 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L566,1071 M566,1071 L566,1592 M566,1592 L712,1592 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L574,1071 M574,1071 L574,1674 M574,1674 L712,1674 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L582,1071 M582,1071 L582,1672 M582,1672 L1040,1672 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L590,1071 M590,1071 L590,1752 M590,1752 L712,1752 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M456,1071 L550,1071 M550,1071 L550,1752 M550,1752 L1040,1752 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M1330,1240 L1281,1240 M1281,1240 L1281,1224 M1281,1224 L1232,1224 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M1330,1240 L1118,1240 M1118,1240 L1118,444 M1118,444 L905,444 " fill="none" stroke="black"/>
+</g>
+<g class="link"><path d="M1330,1240 L1271,1240 M1271,1240 L1271,1832 M1271,1832 L1212,1832 " fill="none" stroke="black"/>
+</g>
+<g class="entity" data-model-id="LbzVSYWGAqAAaxDn">
+<ellipse cx="505" cy="946" rx="7" ry="7" fill="#7ACFF5" stroke="black"/>
+<path d="M505,953 L505,977 M492,963 L518,963 M505,977 L492,994 M505,977 L518,994" fill="none" stroke="black"/>
+<text x="505" y="1010" text-anchor="middle" font-family="Arial" font-size="11">Guest</text>
+</g>
+<g class="entity" data-model-id="ObzVSYWGAqAAaxDk">
+<ellipse cx="441" cy="758" rx="7" ry="7" fill="#7ACFF5" stroke="black"/>
+<path d="M441,765 L441,789 M428,775 L454,775 M441,789 L428,806 M441,789 L454,806" fill="none" stroke="black"/>
+<text x="441" y="822" text-anchor="middle" font-family="Arial" font-size="11">Admin</text>
+</g>
+<g class="entity" data-model-id="_rzVSYWGAqAAaxDh">
+<ellipse cx="383" cy="887" rx="7" ry="7" fill="#7ACFF5" stroke="black"/>
+<path d="M383,894 L383,918 M370,904 L396,904 M383,918 L370,935 M383,918 L396,935" fill="none" stroke="black"/>
+<text x="383" y="951" text-anchor="middle" font-family="Arial" font-size="11">Staff</text>
+</g>
+<g class="entity" data-model-id="lrzVSYWGAqAAaxDe">
+<ellipse cx="441" cy="1049" rx="7" ry="7" fill="#7ACFF5" stroke="black"/>
+<path d="M441,1056 L441,1080 M428,1066 L454,1066 M441,1080 L428,1097 M441,1080 L454,1097" fill="none" stroke="black"/>
+<text x="441" y="1113" text-anchor="middle" font-family="Arial" font-size="11">Customer</text>
+</g>
+<g class="entity" data-model-id="ArzVSYWGAqAAaxDb">
+<ellipse cx="353" cy="1025" rx="7" ry="7" fill="#7ACFF5" stroke="black"/>
+<path d="M353,1032 L353,1056 M340,1042 L366,1042 M353,1056 L340,1073 M353,1056 L366,1073" fill="none" stroke="black"/>
+<text x="353" y="1089" text-anchor="middle" font-family="Arial" font-size="11">Member</text>
+</g>
+<g class="entity" data-model-id="FFLVSYWGAqAAaxIo">
+<ellipse cx="820.5" cy="578" rx="84.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="820.5" y="576" text-anchor="middle" font-family="Arial" font-size="11">Manage User Accounts &amp;</text>
+<text x="820.5" y="588" text-anchor="middle" font-family="Arial" font-size="11">RBAC</text>
+</g>
+<g class="entity" data-model-id="MFLVSYWGAqAAaxIc">
+<ellipse cx="1151" cy="604" rx="86" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1151" y="608" text-anchor="middle" font-family="Arial" font-size="11">Business Statistics</text>
+</g>
+<g class="entity" data-model-id="J5LVSYWGAqAAaxIQ">
+<ellipse cx="1178" cy="677" rx="61" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1178" y="675" text-anchor="middle" font-family="Arial" font-size="11">Validate BPMN</text>
+<text x="1178" y="687" text-anchor="middle" font-family="Arial" font-size="11">Syntax</text>
+</g>
+<g class="entity" data-model-id="3ZLVSYWGAqAAaxIE">
+<ellipse cx="823" cy="634" rx="81" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="823" y="632" text-anchor="middle" font-family="Arial" font-size="11">Configure Camunda</text>
+<text x="823" y="644" text-anchor="middle" font-family="Arial" font-size="11">Campaign</text>
+</g>
+<g class="entity" data-model-id="BZLVSYWGAqAAaxH4">
+<ellipse cx="818.5" cy="738" rx="81.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="818.5" y="736" text-anchor="middle" font-family="Arial" font-size="11">Manage Products &amp;</text>
+<text x="818.5" y="748" text-anchor="middle" font-family="Arial" font-size="11">Categories</text>
+</g>
+<g class="entity" data-model-id="BpLVSYWGAqAAaxHg">
+<ellipse cx="836" cy="444" rx="69" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="836" y="442" text-anchor="middle" font-family="Arial" font-size="11">Process Refund</text>
+<text x="836" y="454" text-anchor="middle" font-family="Arial" font-size="11">Requests</text>
+</g>
+<g class="entity" data-model-id="0pLVSYWGAqAAaxHU">
+<ellipse cx="813.5" cy="818" rx="71.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="813.5" y="816" text-anchor="middle" font-family="Arial" font-size="11">Process Orders &amp;</text>
+<text x="813.5" y="828" text-anchor="middle" font-family="Arial" font-size="11">Shipping</text>
+</g>
+<g class="entity" data-model-id="9JLVSYWGAqAAaxHI">
+<ellipse cx="815" cy="511" rx="66" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="815" y="509" text-anchor="middle" font-family="Arial" font-size="11">Direct Customer</text>
+<text x="815" y="521" text-anchor="middle" font-family="Arial" font-size="11">Support</text>
+</g>
+<g class="entity" data-model-id="SJLVSYWGAqAAaxG8">
+<ellipse cx="1126.5" cy="484" rx="59.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1126.5" y="482" text-anchor="middle" font-family="Arial" font-size="11">Live Handover to</text>
+<text x="1126.5" y="494" text-anchor="middle" font-family="Arial" font-size="11">Staff</text>
+</g>
+<g class="entity" data-model-id="HxLVSYWGAqAAaxGw">
+<ellipse cx="1161" cy="947" rx="61" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1161" y="945" text-anchor="middle" font-family="Arial" font-size="11">RAG Context</text>
+<text x="1161" y="957" text-anchor="middle" font-family="Arial" font-size="11">Retrieval</text>
+</g>
+<g class="entity" data-model-id=".xLVSYWGAqAAaxGk">
+<ellipse cx="821" cy="960" rx="109" ry="40" fill="#7ACFF5" stroke="black"/>
+<text x="821" y="936" text-anchor="middle" font-family="Arial" font-size="11">Chat with AI Assistant</text>
+<path d="M712,952 L930,952" fill="none" stroke="black"/>
+<text x="821" y="965" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold">extension points</text>
+<text x="821" y="977" text-anchor="middle" font-family="Arial" font-size="9">Retrieve product / policy context</text>
+<text x="821" y="988" text-anchor="middle" font-family="Arial" font-size="9">Live Handover to Staff</text>
+</g>
+<g class="entity" data-model-id="oxLVSYWGAqAAaxGY">
+<ellipse cx="1020" cy="1295" rx="62" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1020" y="1293" text-anchor="middle" font-family="Arial" font-size="11">Review &amp; Rate</text>
+<text x="1020" y="1305" text-anchor="middle" font-family="Arial" font-size="11">Product</text>
+</g>
+<g class="entity" data-model-id="bBLVSYWGAqAAaxGM">
+<ellipse cx="787.5" cy="1850" rx="62.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="787.5" y="1854" text-anchor="middle" font-family="Arial" font-size="11">Cancel Order</text>
+</g>
+<g class="entity" data-model-id="..LVSYWGAqAAaxGA">
+<ellipse cx="1186.5" cy="1224" rx="45.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1186.5" y="1222" text-anchor="middle" font-family="Arial" font-size="11">VNPay</text>
+<text x="1186.5" y="1234" text-anchor="middle" font-family="Arial" font-size="11">Payment</text>
+</g>
+<g class="entity" data-model-id="e2LVSYWGAqAAaxF0">
+<ellipse cx="1012" cy="1057" rx="54" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1012" y="1055" text-anchor="middle" font-family="Arial" font-size="11">Hold Inventory</text>
+<text x="1012" y="1067" text-anchor="middle" font-family="Arial" font-size="11">Lock</text>
+</g>
+<g class="entity" data-model-id="jCLVSYWGAqAAaxFo">
+<ellipse cx="1175" cy="1161" rx="41" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1175" y="1159" text-anchor="middle" font-family="Arial" font-size="11">Apply</text>
+<text x="1175" y="1171" text-anchor="middle" font-family="Arial" font-size="11">Voucher</text>
+</g>
+<g class="entity" data-model-id="Q0LVSYWGAqAAaxFc">
+<ellipse cx="1078.5" cy="1121" rx="63.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1078.5" y="1119" text-anchor="middle" font-family="Arial" font-size="11">Select Delivery</text>
+<text x="1078.5" y="1131" text-anchor="middle" font-family="Arial" font-size="11">Address</text>
+</g>
+<g class="entity" data-model-id="KYLVSYWGAqAAaxFQ">
+<ellipse cx="814" cy="1162.5" rx="90" ry="42.5" fill="#7ACFF5" stroke="black"/>
+<text x="814" y="1136" text-anchor="middle" font-family="Arial" font-size="11">Place Online Order</text>
+<path d="M724,1154.5 L904,1154.5" fill="none" stroke="black"/>
+<text x="814" y="1167.5" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold">extension points</text>
+<text x="814" y="1179.5" text-anchor="middle" font-family="Arial" font-size="9">Use voucher</text>
+<text x="814" y="1190.5" text-anchor="middle" font-family="Arial" font-size="9">Use loyalty points</text>
+</g>
+<g class="entity" data-model-id="0QLVSYWGAqAAaxFE">
+<ellipse cx="793" cy="1064.5" rx="69" ry="23.5" fill="#7ACFF5" stroke="black"/>
+<text x="793" y="1068.5" text-anchor="middle" font-family="Arial" font-size="11">Manage Cart</text>
+</g>
+<g class="entity" data-model-id="tALVSYWGAqAAaxE4">
+<ellipse cx="796.5" cy="1264" rx="84.5" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="796.5" y="1262" text-anchor="middle" font-family="Arial" font-size="11">Personalized</text>
+<text x="796.5" y="1274" text-anchor="middle" font-family="Arial" font-size="11">Recommendations</text>
+</g>
+<g class="entity" data-model-id="I3zVSYWGAqAAaxEg">
+<ellipse cx="781" cy="1355.5" rx="99" ry="27.5" fill="#7ACFF5" stroke="black"/>
+<text x="781" y="1359.5" text-anchor="middle" font-family="Arial" font-size="11">View Product Details</text>
+</g>
+<g class="entity" data-model-id="8HzVSYWGAqAAaxD8">
+<ellipse cx="1112" cy="415" rx="74" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1112" y="413" text-anchor="middle" font-family="Arial" font-size="11">Login with OIDC /</text>
+<text x="1112" y="425" text-anchor="middle" font-family="Arial" font-size="11">Password</text>
+</g>
+<g class="entity" data-model-id="e14a536c879f4a26">
+<ellipse cx="1126" cy="543" rx="86" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="547" text-anchor="middle" font-family="Arial" font-size="11">Register Account</text>
+</g>
+<g class="entity" data-model-id="52b07ffc980c4acb">
+<ellipse cx="1126" cy="790" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="794" text-anchor="middle" font-family="Arial" font-size="11">Manage Inventory</text>
+</g>
+<g class="entity" data-model-id="bccd8734223e4727">
+<ellipse cx="1126" cy="872" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="876" text-anchor="middle" font-family="Arial" font-size="11">Reply to Product Review</text>
+</g>
+<g class="entity" data-model-id="9aef7c629e974f9c">
+<ellipse cx="1022" cy="1227" rx="77" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1022" y="1231" text-anchor="middle" font-family="Arial" font-size="11">Pay for Order</text>
+</g>
+<g class="entity" data-model-id="ed28c7a8037846a5">
+<ellipse cx="1184" cy="1278" rx="49" ry="20" fill="#7ACFF5" stroke="black"/>
+<text x="1184" y="1282" text-anchor="middle" font-family="Arial" font-size="11">COD Payment</text>
+</g>
+<g class="entity" data-model-id="9629cf8586f940a8">
+<ellipse cx="1126" cy="1502" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="1506" text-anchor="middle" font-family="Arial" font-size="11">Use Loyalty Points</text>
+</g>
+<g class="entity" data-model-id="8ea09bf1bba14566">
+<ellipse cx="1126" cy="1427" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="1431" text-anchor="middle" font-family="Arial" font-size="11">Retry Payment</text>
+</g>
+<g class="entity" data-model-id="1f817df4c63d4391">
+<ellipse cx="809.5" cy="1514" rx="97.5" ry="24" fill="#7ACFF5" stroke="black"/>
+<text x="809.5" y="1518" text-anchor="middle" font-family="Arial" font-size="11">Manage Profile &amp; Addresses</text>
+</g>
+<g class="entity" data-model-id="896088bc00d04d41">
+<ellipse cx="802" cy="1592" rx="90" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="802" y="1596" text-anchor="middle" font-family="Arial" font-size="11">Manage Wishlist</text>
+</g>
+<g class="entity" data-model-id="e19cd0851532422d">
+<ellipse cx="1126" cy="1592" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="1596" text-anchor="middle" font-family="Arial" font-size="11">Track Orders</text>
+</g>
+<g class="entity" data-model-id="5c229276e54442b7">
+<ellipse cx="809.5" cy="1674" rx="97.5" ry="24" fill="#7ACFF5" stroke="black"/>
+<text x="809.5" y="1678" text-anchor="middle" font-family="Arial" font-size="11">View Loyalty Points &amp; Vouchers</text>
+</g>
+<g class="entity" data-model-id="098dc446c0c54a21">
+<ellipse cx="1126" cy="1672" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="1676" text-anchor="middle" font-family="Arial" font-size="11">View Notifications</text>
+</g>
+<g class="entity" data-model-id="36b05339e2c442cb">
+<ellipse cx="802" cy="1752" rx="90" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="802" y="1756" text-anchor="middle" font-family="Arial" font-size="11">View Warranty</text>
+</g>
+<g class="entity" data-model-id="ababf79261794343">
+<ellipse cx="1126" cy="1752" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="1756" text-anchor="middle" font-family="Arial" font-size="11">Preview Order</text>
+</g>
+<g class="entity" data-model-id="52e9c60111884917">
+<ellipse cx="1126" cy="1832" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="1836" text-anchor="middle" font-family="Arial" font-size="11">Receive Payment Result</text>
+</g>
+<g class="entity" data-model-id="cb6VSYWGAqAAaxAT">
+<ellipse cx="1126" cy="1352" rx="86" ry="22" fill="#7ACFF5" stroke="black"/>
+<text x="1126" y="1356" text-anchor="middle" font-family="Arial" font-size="11">Search Products</text>
+</g>
+<g class="entity" data-model-id="56a65a2699cc472f">
+<ellipse cx="1345" cy="1218" rx="7" ry="7" fill="#7ACFF5" stroke="black"/>
+<path d="M1345,1225 L1345,1249 M1332,1235 L1358,1235 M1345,1249 L1332,1266 M1345,1249 L1358,1266" fill="none" stroke="black"/>
+<text x="1345" y="1282" text-anchor="middle" font-family="Arial" font-size="11">VNPay</text>
+</g>
+</svg>

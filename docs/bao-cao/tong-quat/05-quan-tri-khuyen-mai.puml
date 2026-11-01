@@ -1,0 +1,46 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam usecaseBackgroundColor #F5F8FC
+title Hình 2.6. Quản trị và vận hành khuyến mãi
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Admin -up-|> Staff
+rectangle "AuraTech — Quản trị và khuyến mãi" {
+  usecase "UC46. Thiết kế và lưu chiến dịch" as UC46
+  usecase "UC47. Kiểm tra tính hợp lệ chiến dịch" as UC47
+  usecase "UC48. Bật hoặc tắt chiến dịch" as UC48
+  usecase "UC49. Xem thống kê và voucher phát hành" as UC49
+  usecase "UC50. Xem phân tích khách hàng" as UC50
+  usecase "UC51. Tạo, sửa, xóa tài khoản" as UC51
+  usecase "UC52. Khóa, mở khóa, đặt lại mật khẩu" as UC52
+  usecase "UC53. Gán vai trò và đổi hạng thành viên" as UC53
+  usecase "UC54. Xóa sản phẩm, danh mục, thương hiệu" as UC54
+  usecase "UC55. Xóa chiến dịch" as UC55
+  usecase "UC56. Quản lý thuộc tính catalog" as UC56
+  usecase "UC57. Nhập catalog hàng loạt" as UC57
+}
+Staff -- UC46
+Staff -- UC47
+Staff -- UC48
+Staff -- UC49
+Staff -- UC50
+Admin -- UC51
+Admin -- UC52
+Admin -- UC53
+Admin -- UC54
+Admin -- UC55
+Admin -- UC56
+Admin -- UC57
+legend bottom
+  Kiểm tra chiến dịch được gọi độc lập trên giao diện và thực hiện lại khi triển khai.
+  Camunda/BPMN là công nghệ bên trong hệ thống, không phải actor ở phạm vi toàn AuraTech.
+  UC50 gồm dữ liệu phân khúc khách hàng; dự báo nhu cầu/cảnh báo bất thường hiện có dữ liệu demo.
+  UC57 cho phép kiểm tra trước (dry-run), sau đó mới ghi theo yêu cầu Admin.
+  Phân quyền đối chiếu controller; chưa đưa thao tác AI quản trị chưa có UI thành chức năng đã hoàn thiện.
+endlegend
+@enduml

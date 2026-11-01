@@ -1,0 +1,117 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowColor #4B5563
+skinparam ArrowThickness 1
+skinparam defaultTextAlignment center
+skinparam actorBorderColor #4B5563
+skinparam actorBackgroundColor #7DCFF0
+skinparam sequenceLifeLineBorderColor #4B5563
+skinparam sequenceLifeLineBackgroundColor #7DCFF0
+skinparam sequenceParticipantBackgroundColor #7DCFF0
+skinparam sequenceParticipantBorderColor #4B5563
+skinparam sequenceGroupBorderColor #4B5563
+skinparam sequenceGroupBackgroundColor white
+skinparam sequenceGroupBodyBackgroundColor white
+skinparam boundaryBackgroundColor #7DCFF0
+skinparam boundaryBorderColor #4B5563
+skinparam controlBackgroundColor #7DCFF0
+skinparam controlBorderColor #4B5563
+skinparam entityBackgroundColor #7DCFF0
+skinparam entityBorderColor #4B5563
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 220
+hide footbox
+autonumber
+
+actor "Khách hàng" as Customer
+boundary "Web" as Web
+control "Hệ thống" as System
+entity "Cơ sở dữ liệu" as DB
+participant "VNPay" as VNPay
+
+activate Customer
+Customer -> Web : Chọn thanh toán / thanh toán lại
+activate Web
+Web -> System : Yêu cầu khởi tạo VNPay
+activate System
+System -> System : Kiểm tra đơn, số tiền;\nđối soát lượt trước khi cần
+alt Không được phép khởi tạo
+  System --> Web : Từ chối / yêu cầu chờ / đã trả tiền
+  Web --> Customer : Hiển thị thông báo
+else Được phép khởi tạo
+  System -> DB : Khóa, kiểm tra lại;\nlưu Payment(PENDING), txnRef mới
+  activate DB
+  DB --> System : Đã lưu lượt thanh toán
+  deactivate DB
+  System --> Web : URL có chữ ký
+end
+deactivate System
+deactivate Web
+
+opt Khởi tạo thành công
+  Web -> VNPay : Chuyển tới trang thanh toán
+  activate VNPay
+  Customer -> VNPay : Xác nhận giao dịch
+  VNPay -> System : Callback / IPN kết quả
+  activate System
+  System -> System : Xác minh chữ ký
+  opt Chữ ký hợp lệ
+    System -> DB : Khóa Payment; tìm giao dịch;\nđối chiếu số tiền
+    activate DB
+    DB --> System : Thông tin và trạng thái hiện tại
+    deactivate DB
+  end
+  alt Phản hồi không hợp lệ
+    System -> DB : Ghi nhật ký lỗi
+    activate DB
+    DB --> System : Đã ghi log
+    deactivate DB
+  else Phản hồi trùng / muộn / txnRef cũ
+    System -> System : Xử lý theo trạng thái và lượt;\nkhông ghi thành công hai lần
+  else PENDING và thanh toán thành công
+    System -> DB : SUCCESS + nhật ký\n+ outbox PaymentSuccessEvent
+    activate DB
+    DB --> System : Commit thành công
+    deactivate DB
+  else PENDING và thanh toán thất bại
+    System -> DB : FAILED + nhật ký\n+ outbox PaymentFailedEvent
+    activate DB
+    DB --> System : Commit thành công
+    deactivate DB
+  end
+  alt Callback IPN nền
+    System --> VNPay : JSON xác nhận xử lý / mã lỗi
+  else Callback qua trình duyệt
+    System --> Web : HTTP 302 tới trang kết quả đơn
+  end
+  deactivate System
+  deactivate VNPay
+  Web -> System : Yêu cầu trạng thái chính thức
+  activate Web
+  activate System
+  System -> DB : Đọc trạng thái thanh toán
+  activate DB
+  DB --> System : Trạng thái hiện tại
+  deactivate DB
+  System --> Web : Kết quả thanh toán
+  deactivate System
+  Web --> Customer : Hiển thị kết quả
+  deactivate Web
+end
+deactivate Customer
+
+... Xử lý nền, độc lập với trả kết quả trình duyệt ...
+opt Có sự kiện thanh toán thành công
+  System -> System : Nhận PaymentSuccessEvent
+  activate System
+  System -> DB : Xác nhận đơn nếu trạng thái cho phép;\nlưu OrderConfirmedEvent cùng giao dịch
+  activate DB
+  DB --> System : Kết quả cập nhật đơn
+  deactivate DB
+  System -> System : Xử lý gửi email theo sự kiện
+  deactivate System
+end
+@enduml

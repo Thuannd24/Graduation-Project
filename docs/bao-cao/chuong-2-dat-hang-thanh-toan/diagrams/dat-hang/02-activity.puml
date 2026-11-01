@@ -1,0 +1,65 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowColor #4B5563
+skinparam ArrowThickness 1
+skinparam defaultTextAlignment center
+skinparam actorBorderColor #4B5563
+skinparam actorBackgroundColor #7DCFF0
+skinparam activityBackgroundColor #7DCFF0
+skinparam activityBorderColor #4B5563
+skinparam activityDiamondBackgroundColor #7DCFF0
+skinparam activityDiamondBorderColor #4B5563
+skinparam activityStartColor black
+skinparam activityEndColor black
+skinparam swimlaneBorderColor black
+skinparam swimlaneBorderThickness 1.5
+skinparam swimlaneTitleBackgroundColor white
+skinparam swimlaneTitleFontStyle bold
+
+|Khách hàng|
+start
+:Mở trang thanh toán;
+|Hệ thống|
+:Hiển thị thông tin giao nhận\nvà bảng xem trước đơn hàng;
+|Khách hàng|
+:Nhập thông tin nhận hàng;\nchọn mã giảm giá, điểm nếu có;
+|Hệ thống|
+:Tính lại các khoản chi phí\nvà tổng tiền thanh toán;
+|Khách hàng|
+:Kiểm tra và xác nhận đặt hàng;
+|Hệ thống|
+:Kiểm tra yêu cầu trùng,\ndữ liệu và khả năng đáp ứng;
+if (Yêu cầu mới và hợp lệ?) then (Không)
+  :Trả kết quả cũ / đang xử lý\nhoặc thông báo lỗi;
+  |Khách hàng|
+  :Nhận thông báo;
+  stop
+else (Có)
+endif
+|Hệ thống|
+:Giữ tồn khả dụng;\nlưu đơn PENDING nếu giữ đủ hàng;
+if (Đã commit đơn và chi tiết?) then (Không)
+  :Hoàn phần tồn đã giữ;\nthông báo hết hàng / lỗi tạo đơn;
+  |Khách hàng|
+  :Nhận thông báo thất bại;
+  stop
+else (Có)
+endif
+|Hệ thống|
+:Áp dụng ưu đãi, tính giá chính thức;\nlưu sự kiện tạo đơn vào outbox;
+if (Hoàn tất các bước sau tạo đơn?) then (Có)
+  :Xóa giỏ; trả mã đơn và số tiền;
+  |Khách hàng|
+  :Nhận kết quả đặt hàng;\ncó thể chuyển sang thanh toán;
+else (Không)
+  |Hệ thống|
+  :Hủy đơn, ghi sự kiện bù trừ;\ntrả ưu đãi đã dùng;
+  :Thông báo đặt hàng thất bại;
+  |Khách hàng|
+  :Nhận thông báo thất bại;
+endif
+stop
+@enduml

@@ -1,0 +1,45 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam usecaseBackgroundColor #F5F8FC
+title Hình 2.7. Tư vấn AI và hỗ trợ trực tiếp
+actor "Người truy cập" as Visitor
+actor "Khách vãng lai" as Guest
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+Guest -up-|> Visitor
+Customer -up-|> Visitor
+Admin -up-|> Staff
+rectangle "AuraTech — Tư vấn và chăm sóc khách hàng" {
+  usecase "UC58. Trò chuyện với trợ lý AI" as UC58
+  usecase "UC59. Tư vấn sản phẩm và giá" as UC59
+  usecase "UC60. Hỏi chính sách cửa hàng" as UC60
+  usecase "UC61. Tra cứu đơn, điểm, voucher, bảo hành" as UC61
+  usecase "UC62. Chuyển sang nhân viên hỗ trợ" as UC62
+  usecase "UC63. Chat trực tiếp với nhân viên" as UC63
+  usecase "UC64. Xem lịch sử hội thoại" as UC64
+  usecase "UC65. Tiếp nhận và đóng phiên hỗ trợ" as UC65
+}
+Visitor -- UC58
+Visitor -- UC59
+Visitor -- UC60
+Visitor -- UC62
+Visitor -- UC63
+Visitor -- UC64
+Customer -- UC61
+Staff -- UC63
+Staff -- UC65
+UC62 ..> UC58 : <<extend>>\n[yêu cầu hỗ trợ hoặc cần chuyển tiếp]
+legend bottom
+  Guest và Customer đều được chat AI và hỗ trợ trực tiếp.
+  UC61 yêu cầu xác thực và kiểm tra quyền đối với dữ liệu cá nhân.
+  RAG chỉ dùng ở nhánh sản phẩm/chính sách; tra cứu tài khoản gọi API nghiệp vụ.
+  Không include RAG vào tất cả hội thoại. UC62 mở rộng tại bước tiếp tục xử lý hội thoại.
+  Phiên hỗ trợ và lịch sử do chat-service quản lý; không mô tả là chat mẫu localStorage.
+endlegend
+@enduml

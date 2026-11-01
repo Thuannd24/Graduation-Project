@@ -1,0 +1,52 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam usecaseBackgroundColor #F5F8FC
+title Hình 2.4. Đặt hàng, thanh toán và hủy đơn
+actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+actor "Cổng thanh toán\nVNPay Sandbox" as VNP
+Admin -up-|> Staff
+rectangle "AuraTech — Đặt hàng và thanh toán" {
+  usecase "UC21. Xem trước chi phí đơn" as UC21
+  usecase "UC22. Đặt hàng" as UC22
+  usecase "UC23. Áp dụng voucher" as UC23
+  usecase "UC24. Sử dụng điểm thưởng" as UC24
+  usecase "UC25. Thanh toán đơn hàng" as UC25
+  usecase "UC26. Thanh toán qua VNPay" as UC26
+  usecase "UC27. Chọn trả khi nhận hàng (COD)" as UC27
+  usecase "UC28. Tiếp nhận kết quả VNPay" as UC28
+  usecase "UC29. Xem kết quả thanh toán" as UC29
+  usecase "UC30. Thanh toán lại" as UC30
+  usecase "UC31. Hủy đơn hàng" as UC31
+  usecase "UC32. Thực hiện hoàn tiền thủ công" as UC32
+}
+Customer -- UC21
+Customer -- UC22
+Customer -- UC25
+Customer -- UC29
+Customer -- UC30
+Customer -- UC31
+Staff -- UC31
+Admin -- UC32
+VNP -- UC26
+VNP -- UC28
+VNP -- UC32
+UC23 ..> UC22 : <<extend>>\n[có voucher]
+UC24 ..> UC22 : <<extend>>\n[có điểm yêu cầu sử dụng]
+UC26 -up-|> UC25
+UC27 -up-|> UC25
+legend bottom
+  UC22: đăng nhập, có giỏ hợp lệ, cung cấp địa chỉ/số điện thoại người nhận.
+  Voucher và điểm là tùy chọn; giá và tồn khả dụng được kiểm tra phía server.
+  UC25 có hai phương án loại trừ theo lựa chọn, điều kiện đơn và hạn mức COD.
+  UC30 chỉ cho đơn chưa trả tiền, còn hạn; có thể thử VNPay lại hoặc đổi sang COD.
+  Hủy đơn chưa thanh toán không hoàn tiền; bù trừ tự động nằm trong hậu xử lý sự kiện.
+  UC32 là quyền Admin, khác với việc Staff hủy đơn dẫn tới bù trừ tự động.
+endlegend
+@enduml

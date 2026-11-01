@@ -1,0 +1,41 @@
+@startuml
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam ArrowColor #4B5563
+skinparam ArrowThickness 1
+skinparam defaultTextAlignment center
+skinparam actorBorderColor #4B5563
+skinparam actorBackgroundColor #7DCFF0
+!pragma layout smetana
+skinparam stateBackgroundColor #7DCFF0
+skinparam stateBorderColor #4B5563
+skinparam stateStartColor black
+skinparam stateEndColor black
+hide empty description
+
+state "Chờ xử lý\nPENDING" as Pending
+state "Chờ thanh toán\nAWAITING_PAYMENT" as Awaiting
+state "Đã xác nhận\nCONFIRMED" as Confirmed
+state "Đã hủy\nCANCELLED" as Cancelled
+state "Đang giao\nSHIPPED" as Shipped
+state "Đã giao\nDELIVERED" as Delivered
+state "Chờ hoàn hàng\nRETURNING" as Returning
+state "Đã nhận hàng hoàn\nRETURNED" as Returned
+
+[*] --> Pending : Tạo đơn
+Pending --> Awaiting : Kho trừ thành công
+Pending --> Confirmed : Thanh toán báo\ntrước kết quả kho
+Awaiting --> Confirmed : Thanh toán thành công
+Pending --> Cancelled : Lỗi / hủy /\nquá hạn đơn
+Awaiting --> Cancelled : Hủy / quá hạn đơn
+Confirmed --> Cancelled : Hủy trước\nkhi giao
+Confirmed --> Shipped : Bàn giao\nvận chuyển
+Shipped --> Delivered : Giao\nthành công
+Shipped --> Returning : Hủy khi\nđang giao
+Returning --> Returned : Nhận lại hàng
+Cancelled --> [*]
+Delivered --> [*]
+Returned --> [*]
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam usecaseBackgroundColor #F5F8FC
+title Hình 2.5. Vận hành bán hàng, kho và giao hàng
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
+actor "Hệ thống vận chuyển\n(mô phỏng webhook)" as Carrier
+Admin -up-|> Staff
+rectangle "AuraTech — Vận hành bán hàng" {
+  usecase "UC33. Thêm và sửa sản phẩm" as UC33
+  usecase "UC34. Thêm và sửa danh mục, thương hiệu" as UC34
+  usecase "UC35. Nhập bổ sung hàng vào kho" as UC35
+  usecase "UC36. Điều chỉnh số lượng tồn" as UC36
+  usecase "UC37. Tra cứu lịch sử biến động kho" as UC37
+  usecase "UC38. Xem hàng sắp hết" as UC38
+  usecase "UC39. Tra cứu và giao vận đơn hàng" as UC39
+  usecase "UC40. Cập nhật trạng thái giao hàng" as UC40
+  usecase "UC41. Xác nhận nhận hàng hoàn" as UC41
+  usecase "UC42. Tra cứu giao dịch thanh toán" as UC42
+  usecase "UC43. Tra cứu và thống kê khách hàng" as UC43
+  usecase "UC44. Xem và trả lời đánh giá" as UC44
+  usecase "UC45. Tiếp nhận cập nhật vận chuyển" as UC45
+}
+Staff -- UC33
+Staff -- UC34
+Staff -- UC35
+Staff -- UC36
+Staff -- UC37
+Staff -- UC38
+Staff -- UC39
+Staff -- UC40
+Staff -- UC41
+Staff -- UC42
+Staff -- UC43
+Staff -- UC44
+Carrier -- UC45
+legend bottom
+  Staff/Admin được tạo, sửa catalog; quyền xóa được tách trong Hình 2.6.
+  Giao vận: đơn đủ điều kiện; mã vận đơn hiện được mô phỏng.
+  UC45 nhận webhook có chữ ký; không tuyên bố đã tích hợp hãng vận chuyển thật.
+  UC41 chỉ khi RETURNING; hàng về kho mới kích hoạt hoàn kho và bù trừ tương ứng.
+endlegend
+@enduml
