@@ -1,34 +1,95 @@
 @startuml
+' Doi chieu source local ngay 06/11/2026; xem diagrams/DOI_CHIEU_2026-11-06.md.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
 skinparam shadowing false
-skinparam ArrowColor #4B5563
+skinparam ArrowColor #334155
 skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
-skinparam actorBorderColor #4B5563
-skinparam actorBackgroundColor #7DCFF0
+skinparam NoteBackgroundColor #FFFBEB
+skinparam NoteBorderColor #D6B669
+skinparam actorBackgroundColor #BDE6F8
+skinparam actorBorderColor #365A73
+skinparam usecaseBackgroundColor #BDE6F8
+skinparam usecaseBorderColor #365A73
+skinparam rectangleBackgroundColor #EFF6FF
+skinparam rectangleBorderColor #365A73
+skinparam stateBackgroundColor #BDE6F8
+skinparam stateBorderColor #365A73
+skinparam activityBackgroundColor #BDE6F8
+skinparam activityBorderColor #365A73
+skinparam activityDiamondBackgroundColor #FEF3C7
+skinparam activityDiamondBorderColor #365A73
+skinparam swimlaneTitleBackgroundColor #EFF6FF
+skinparam swimlaneTitleFontStyle bold
+skinparam swimlaneBorderColor #94A3B8
+
 !pragma layout smetana
 left to right direction
-skinparam rectangleBackgroundColor #7DCFF0
-skinparam rectangleBorderColor #4B5563
-skinparam usecaseBackgroundColor #7DCFF0
-skinparam usecaseBorderColor #4B5563
-skinparam usecaseFontSize 14
-
-actor "Khách hàng" as Customer
-rectangle "AuraTech — Đặt hàng trực tuyến" {
-  usecase "Đặt hàng trực tuyến" as Order
-  usecase "Xem trước đơn hàng" as Preview
-  usecase "Cung cấp thông tin\ngiao nhận" as Shipping
-  usecase "Kiểm tra khả năng\nđáp ứng đơn hàng" as Availability
-  usecase "Áp dụng mã giảm giá" as Voucher
-  usecase "Sử dụng điểm thưởng" as Points
+title UC04.1 — ĐẶT HÀNG TRỰC TUYẾN\nPhạm vi: checkout, chưa bao gồm quản trị vòng đời giao hàng
+actor "Khách hàng\nđã đăng nhập" as Customer
+actor "product-service\n(gRPC)" as Product #D1FAE5
+actor "inventory-service\n(gRPC)" as Inventory #D1FAE5
+actor "promotion-service\n(Feign)" as Promotion #D1FAE5
+actor "user-service\n(Feign)" as User #D1FAE5
+rectangle "AuraTech — Phân hệ đặt hàng\nCheckoutPage + API Gateway + order-service" {
+  usecase "Xem trước chi phí\npreviewCheckout()" as Preview
+  usecase "Tạo đơn từ toàn bộ giỏ\ncreateOrder()" as Checkout
+  usecase "Đọc lại giỏ và giá hiện tại\nCartServiceImpl.getCart()" as Reprice
+  usecase "Kiểm tra thông tin và\nđiều kiện đặt hàng" as Validate
+  usecase "Kiểm tra / giữ tồn khả dụng\nRedis Lua; nạp cache khi thiếu" as Stock
+  usecase "Ghi nhận đơn PENDING\nvà các OrderItem" as Persist
+  usecase "Hoàn tất giá, Outbox\nvà xóa giỏ" as Complete
+  usecase "Áp dụng voucher\napplyCouponToOrder()" as Voucher
+  usecase "Đổi điểm thưởng\napplyPointsToOrder()" as Points
+  usecase "Ước tính voucher\npreviewVoucher()" as PreviewVoucher
 }
-Customer -- Order
-Order ..> Preview : <<include>>
-Order ..> Shipping : <<include>>
-Order ..> Availability : <<include>>
-Voucher ..> Preview : <<extend>>\n[khách chọn mã]
-Points ..> Preview : <<extend>>\n[khách chọn điểm]
+Customer -- Preview
+Customer -- Checkout
+Preview ..> Reprice : <<include>>
+Checkout ..> Reprice : <<include>>
+Checkout ..> Validate : <<include>>
+Checkout ..> Stock : <<include>>
+Checkout ..> Persist : <<include>>
+Checkout ..> Complete : <<include>>
+Voucher ..> Checkout : <<extend>>\n[couponCode khác rỗng]
+Points ..> Checkout : <<extend>>\n[pointsToRedeem > 0]
+PreviewVoucher ..> Preview : <<extend>>\n[có mã voucher]
+Product -- Reprice
+Inventory -- Stock
+Promotion -- Voucher
+Promotion -- PreviewVoucher
+User -- Points
+note bottom of Validate
+  CheckoutRequest: người nhận, SĐT, địa chỉ,
+  couponCode, pointsToRedeem, note.
+  Giỏ không rỗng; SĐT VN hợp lệ; quantity ≤ 5;
+  active không false; số đơn PENDING/AWAITING_PAYMENT < 3.
+  JWT / @Valid / idempotency là kiểm soát xuyên suốt.
+end note
+note bottom of Persist
+  TX1: orders + order_items.
+  Voucher / điểm áp dụng sau TX1.
+  TX2: OrderCreatedEvent trong outbox_events.
+  Lỗi: bù trừ theo thời điểm TX1 đã commit hay chưa.
+  Chi tiết ở activity và sequence.
+end note
+note bottom of Preview
+  Preview là request độc lập, không bắt buộc phải
+  thành công trước API checkout; FE có giá dự phòng.
+  Ước tính điểm không gọi redeemPoints().
+  Preview không giữ tồn hoặc tạo đơn.
+end note
+note bottom of Stock
+  Redis là thành phần nội bộ, không phải actor.
+  inventory-service chỉ được gọi để đọc tồn
+  khi cache thiếu và lấy được khóa khởi tạo.
+end note
+legend bottom
+  Actor xanh lá: dịch vụ ngoài ranh giới phân hệ.
+  include: chức năng con cần thực hiện trên đường thành công.
+  extend: hành vi có điều kiện; không biểu diễn thứ tự thực thi.
+  Sau checkout, FE gọi API thanh toán riêng cho COD hoặc VNPAY.
+endlegend
 @enduml

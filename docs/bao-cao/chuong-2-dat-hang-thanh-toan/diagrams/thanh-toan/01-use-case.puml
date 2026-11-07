@@ -1,35 +1,104 @@
 @startuml
+' Doi chieu source local ngay 06/11/2026; xem diagrams/DOI_CHIEU_2026-11-06.md.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
 skinparam shadowing false
-skinparam ArrowColor #4B5563
+skinparam ArrowColor #334155
 skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
-skinparam actorBorderColor #4B5563
-skinparam actorBackgroundColor #7DCFF0
+skinparam NoteBackgroundColor #FFFBEB
+skinparam NoteBorderColor #D6B669
+skinparam actorBackgroundColor #BDE6F8
+skinparam actorBorderColor #365A73
+skinparam usecaseBackgroundColor #BDE6F8
+skinparam usecaseBorderColor #365A73
+skinparam rectangleBackgroundColor #EFF6FF
+skinparam rectangleBorderColor #365A73
+skinparam stateBackgroundColor #BDE6F8
+skinparam stateBorderColor #365A73
+skinparam activityBackgroundColor #BDE6F8
+skinparam activityBorderColor #365A73
+skinparam activityDiamondBackgroundColor #FEF3C7
+skinparam activityDiamondBorderColor #365A73
+skinparam swimlaneTitleBackgroundColor #EFF6FF
+skinparam swimlaneTitleFontStyle bold
+skinparam swimlaneBorderColor #94A3B8
+
 !pragma layout smetana
 left to right direction
-skinparam rectangleBackgroundColor #7DCFF0
-skinparam rectangleBorderColor #4B5563
-skinparam usecaseBackgroundColor #7DCFF0
-skinparam usecaseBorderColor #4B5563
-skinparam usecaseFontSize 14
-
-actor "Khách hàng" as Customer
-actor "Cổng VNPay" as VNPay
-rectangle "AuraTech — Thanh toán đơn hàng qua VNPay" {
-  usecase "Thanh toán đơn hàng\nqua VNPay" as Pay
-  usecase "Kiểm tra điều kiện\nthanh toán" as Validate
-  usecase "Khởi tạo lượt\nthanh toán" as Initiate
-  usecase "Xác minh và ghi nhận\nkết quả giao dịch" as Verify
-  usecase "Xem kết quả\nthanh toán" as Result
+title UC04.2 — THANH TOÁN ĐƠN HÀNG\nVNPay, COD, thanh toán lại và các nghiệp vụ hỗ trợ
+actor "Khách hàng\nchủ đơn" as Customer
+actor "Quản trị viên\nADMIN" as Admin
+actor "Nhân viên\nSTAFF" as Staff
+actor "Cổng VNPay" as VNPay #D1FAE5
+actor "order-service" as Order #D1FAE5
+rectangle "AuraTech — Phân hệ thanh toán\nGiao diện thanh toán + Gateway + payment-service" {
+  usecase "Khởi tạo thanh toán\nPOST /payments/initiate" as Initiate
+  usecase "Kiểm tra chủ đơn, trạng thái,\nhạn thanh toán, số tiền từ server" as Validate
+  usecase "Kiểm tra lượt cũ /\nđối soát khi cần" as Guard
+  usecase "Thanh toán qua VNPay\nURL ký HMAC-SHA512" as PayVN
+  usecase "Chọn thanh toán COD\nPayment vẫn PENDING" as COD
+  usecase "Thanh toán lại / đổi phương thức\nPOST /order/{orderId}/retry" as Retry
+  usecase "Nhận và xác minh kết quả\ncallback / IPN" as Callback
+  usecase "Xem trạng thái chính thức\nGET /order/{orderId}/status" as Status
+  usecase "Đối soát lượt hết hạn\nPaymentScheduler" as Expiry
+  usecase "Ghi nhận đã thu COD\nkhi có OrderDeliveredEvent" as Delivery
+  usecase "Hủy lượt / tạo yêu cầu hoàn\nkhi có OrderCancelledEvent" as AutoRefund
+  usecase "Yêu cầu hoàn tiền\nAdminPaymentController" as AdminRefund
+  usecase "Xử lý yêu cầu hoàn đang chờ\nprocessPendingRefunds()" as RefundWorker
+  usecase "Ghi kết quả hoàn tiền\nhoặc chờ xử lý thủ công" as RefundResult
 }
-Customer -- Pay
-Customer -- Result
-Pay ..> Validate : <<include>>
-Pay ..> Initiate : <<include>>
-Pay ..> Verify : <<include>>
-Pay -- VNPay
-Verify -- VNPay
+Customer -- Initiate
+Customer -- Retry
+Customer -- Status
+Admin -- Status
+Staff -- Status
+Admin -- AdminRefund
+PayVN -|> Initiate
+COD -|> Initiate
+Initiate ..> Validate : <<include>>
+Initiate ..> Guard : <<include>>
+Retry ..> Initiate : <<include>>
+Order -- Validate
+VNPay -- PayVN
+VNPay -- Guard
+VNPay -- Callback
+VNPay -- Expiry
+VNPay -- AdminRefund
+VNPay -- RefundWorker
+Order -- Delivery
+Order -- AutoRefund
+AdminRefund ..> RefundResult : <<include>>
+RefundWorker ..> RefundResult : <<include>>
+note bottom of Initiate
+  Chỉ VNPAY và COD; số tiền lấy từ order-service.
+  Order phải PENDING/AWAITING_PAYMENT, còn hạn.
+  COD ≤ hạn mức cấu hình (mặc định 20.000.000đ).
+  Retry dùng lại Payment; tạo txnRef và attemptAt mới.
+end note
+note bottom of Callback
+  Callback là tương tác riêng, có thể đến muộn / trùng.
+  Kiểm tra chữ ký, txnRef và amount × 100.
+  RspCode=00 nghĩa là xử lý callback thành công,
+  không đồng nghĩa Payment.status=SUCCESS.
+end note
+note bottom of RefundResult
+  Refund và Payment có trạng thái riêng.
+  Hoàn qua VNPay hoặc ghi nhận thủ công cho COD.
+  Chỉ kết quả hoàn thành mới phát RefundCompletedEvent.
+  Yêu cầu hoàn bị từ chối có thể thành PENDING_MANUAL.
+end note
+note bottom of Expiry
+  Scheduler ở bên trong phân hệ, không phải actor.
+  Quét lượt hết hạn mỗi 5 phút; bỏ qua COD.
+  QueryDR chưa rõ kết quả: giữ PENDING.
+  Worker hoàn tiền chạy mỗi 1 phút.
+end note
+legend bottom
+  Các UC callback, xem kết quả, đối soát và hoàn tiền có trigger độc lập.
+  PaymentSuccessEvent / PaymentCODConfirmedEvent đi qua Outbox + CDC,
+  order-service chỉ xác nhận đơn nếu máy trạng thái cho phép.
+  DB, Redis và Kafka là hạ tầng; không đặt thành actor nghiệp vụ.
+endlegend
 @enduml

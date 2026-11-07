@@ -1,62 +1,218 @@
 @startuml
+' Doi chieu source local ngay 06/11/2026; xem diagrams/DOI_CHIEU_2026-11-06.md.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
 skinparam shadowing false
-skinparam ArrowColor #4B5563
+skinparam ArrowColor #334155
 skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
-skinparam actorBorderColor #4B5563
-skinparam actorBackgroundColor #7DCFF0
-skinparam activityBackgroundColor #7DCFF0
-skinparam activityBorderColor #4B5563
-skinparam activityDiamondBackgroundColor #7DCFF0
-skinparam activityDiamondBorderColor #4B5563
-skinparam activityStartColor black
-skinparam activityEndColor black
-skinparam swimlaneBorderColor black
-skinparam swimlaneBorderThickness 1.5
-skinparam swimlaneTitleBackgroundColor white
+skinparam NoteBackgroundColor #FFFBEB
+skinparam NoteBorderColor #D6B669
+skinparam actorBackgroundColor #BDE6F8
+skinparam actorBorderColor #365A73
+skinparam usecaseBackgroundColor #BDE6F8
+skinparam usecaseBorderColor #365A73
+skinparam rectangleBackgroundColor #EFF6FF
+skinparam rectangleBorderColor #365A73
+skinparam stateBackgroundColor #BDE6F8
+skinparam stateBorderColor #365A73
+skinparam activityBackgroundColor #BDE6F8
+skinparam activityBorderColor #365A73
+skinparam activityDiamondBackgroundColor #FEF3C7
+skinparam activityDiamondBorderColor #365A73
+skinparam swimlaneTitleBackgroundColor #EFF6FF
 skinparam swimlaneTitleFontStyle bold
+skinparam swimlaneBorderColor #94A3B8
 
-|Khách hàng|
+!pragma useVerticalIf on
+title THANH TOÁN — ACTIVITY VNPay / COD\nKhởi tạo, callback và đọc kết quả; tác vụ nền được chú thích riêng
+|Khách hàng / FE|
 start
-:Chọn thanh toán VNPay\nhoặc thanh toán lại;
-|Hệ thống|
-:Kiểm tra đơn, số tiền\nvà lượt thanh toán trước;
-if (Được phép thanh toán?) then (Không)
-  :Thông báo không thể khởi tạo\nhoặc yêu cầu chờ;
-  |Khách hàng|
-  :Nhận thông báo;
+:Chọn COD hoặc VNPAY cho đơn đã có;\ninitiatePayment() hoặc retryPayment();
+|PaymentController / PaymentServiceImpl|
+:Lấy userId/email từ JWT, IP từ request;\nchuẩn hóa và kiểm tra phương thức hỗ trợ;
+if (Phương thức hợp lệ?) then (không)
+  :HTTP 400;
   stop
-else (Có)
 endif
-|Hệ thống|
-:Tạo / dùng lại Payment(PENDING);\ntạo mã giao dịch và URL có chữ ký;
-|Khách hàng|
-:Mở VNPay và xác nhận giao dịch;
+|Redis|
+:SET NX payment:initiate:lock:{orderId}\nUUID, TTL 15 giây;
+if (Lấy được khóa?) then (không)
+  |PaymentController / PaymentServiceImpl|
+  :HTTP 409 — đang khởi tạo;
+  stop
+endif
+|order-service|
+:GET /api/internal/orders/{orderId}/summary\nqua RestTemplate, ngoài transaction Payment;
+|PaymentController / PaymentServiceImpl|
+:Kiểm tra chủ đơn, PENDING/AWAITING_PAYMENT,\npaymentDeadline; lấy finalAmount từ server;\nCOD phải trong hạn mức cấu hình;
+if (Đủ điều kiện?) then (không)
+  :Trả lỗi; finally giải phóng khóa Redis nếu còn sở hữu;
+  stop
+endif
+|MariaDB / JPA|
+:PaymentRepository.findByOrderId(orderId);
+|PaymentController / PaymentServiceImpl|
+:Nếu có Payment: rejectIfAlreadySettled(existingPayment);
+if (Payment đã SUCCESS hoặc thuộc nhóm hoàn tiền?) then (có)
+  :HTTP 409; finally giải phóng khóa;
+  stop
+endif
+if (Lượt cũ VNPAY PENDING và chưa quá hạn lượt?) then (có)
+  |VNPay|
+  :QueryDR — standardRestTemplate,\nngoài transaction Payment;
+  |PaymentController / PaymentServiceImpl|
+  if (QueryDR = 00?) then (có)
+    |MariaDB / JPA|
+    :Transaction: khóa theo txnRef;\nnếu vẫn PENDING, ghi SUCCESS + PaymentSuccessEvent;
+    |PaymentController / PaymentServiceImpl|
+    :HTTP 409 — đã thanh toán;\nfinally giải phóng khóa;
+    stop
+  elseif (QueryDR = null?) then (có)
+    :HTTP 409 — kết quả chưa rõ, chờ thêm;\nfinally giải phóng khóa;
+    stop
+  else (kết quả khác)
+    :Cho phép tiếp tục theo guard hiện tại;
+  endif
+endif
+|MariaDB / JPA|
+:TransactionTemplate:\nfindByOrderIdWithLock(); kiểm tra settled lần nữa;
+if (Bản ghi vẫn cho phép khởi tạo?) then (không)
+  |PaymentController / PaymentServiceImpl|
+  :Rollback; trả lỗi; finally giải phóng khóa;
+  stop
+endif
+:save Payment(PENDING): tạo mới hoặc dùng lại;\nnhớ txnRef VNPay cũ; đổi txnRef, attemptAt;\nreset failureCode / gatewayResponse / gatewayTxnId;
+|PaymentController / PaymentServiceImpl|
+if (Phương thức COD?) then (có)
+  |MariaDB / JPA|
+  :Giữ PENDING; lưu Outbox PaymentCODConfirmedEvent;\ncommit cùng transaction khởi tạo;
+  |PaymentController / PaymentServiceImpl|
+  :Trả paymentId, txnRef, redirectUrl rỗng;\nfinally giải phóng khóa;
+  |Khách hàng / FE|
+  :Hiển thị kết quả chọn COD;
+  note right
+    CDC → payment-events → order-service:
+    CONFIRMED nếu transition hợp lệ.
+    COD chỉ SUCCESS khi consumer xử lý OrderDeliveredEvent.
+    Sự kiện này không phát thêm PaymentSuccessEvent trong code.
+  end note
+  stop
+else (VNPAY)
+  :buildVnPayUrl(): amount × 100, HMAC-SHA512;\nexpireAt = min(now + thời hạn lượt, hạn đơn);
+  |MariaDB / JPA|
+  :Commit transaction khởi tạo;
+  |PaymentController / PaymentServiceImpl|
+  :Trả redirectUrl; finally đọc/xóa khóa nếu UUID khớp;
+endif
+|Khách hàng / FE|
+:window.location.href = redirectUrl;\nthao tác tại trang VNPay;
 |VNPay|
-:Xử lý và phản hồi kết quả;
-|Hệ thống|
-:Xác minh chữ ký,\nmã giao dịch và số tiền;
-if (Phản hồi hợp lệ?) then (Không)
-  :Ghi log, trả lỗi;\nkhông thay đổi trạng thái;
-  stop
-else (Có)
+:Xử lý giao dịch;\ngửi IPN hoặc đưa trình duyệt về callback;
+note right
+  Callback là request độc lập: có thể lặp, trễ hoặc không tới.
+  Scheduler quét mỗi 5 phút để đối soát lượt quá hạn.
+  Không giả định IPN và trình duyệt đến theo thứ tự cố định.
+end note
+|PaymentController / PaymentServiceImpl|
+:WebhookController.vnpayCallback();\nverifyVnPayCallback() — @Transactional;
+:Kiểm tra HMAC-SHA512 trên các trường vnp_ đã sắp xếp;
+if (Chữ ký hợp lệ?) then (không)
+  |MariaDB / JPA|
+  :WebhookLog(signatureValid=false, processed=false);
+  |PaymentController / PaymentServiceImpl|
+  :Kết quả xử lý RspCode = 97;
+else (có)
+  |MariaDB / JPA|
+  :findByTxnRefWithLock(txnRef);
+  if (Tìm được lượt hiện tại?) then (có)
+    |PaymentController / PaymentServiceImpl|
+    if (vnp_Amount = Payment.amount × 100?) then (không)
+      |MariaDB / JPA|
+      :WebhookLog(valid=true, processed=false);
+      |PaymentController / PaymentServiceImpl|
+      :RspCode = 04;
+    else (có)
+      :Ghi gatewayTxnId / gatewayResponse;
+      if (Payment.status = PENDING?) then (có)
+        if (vnp_ResponseCode = 00?) then (có)
+          |MariaDB / JPA|
+          :Payment=SUCCESS, paidAt;\nWebhookLog + Outbox PaymentSuccessEvent;
+        else (không)
+          |MariaDB / JPA|
+          :Payment=FAILED, failureCode;\nWebhookLog + Outbox PaymentFailedEvent\n(failureType=GATEWAY_DECLINED, retryable=true);
+        endif
+        |PaymentController / PaymentServiceImpl|
+        :RspCode = 00;
+      elseif (SUCCESS đến muộn cho FAILED / EXPIRED?) then (có)
+        |MariaDB / JPA|
+        :Payment=REFUND_PENDING, paidAt;\nRefund(PENDING) + WebhookLog;
+        |PaymentController / PaymentServiceImpl|
+        :RspCode = 00;
+      else (đã đóng, trường hợp khác)
+        |MariaDB / JPA|
+        :WebhookLog; không phát lại success event;
+        |PaymentController / PaymentServiceImpl|
+        :RspCode = 02;
+      endif
+    endif
+  else (không)
+    |MariaDB / JPA|
+    :findBySupersededTxnRefWithLock(txnRef);
+    if (Tìm được trong previousTxnRefs?) then (không)
+      :WebhookLog(valid=true, processed=false);
+      |PaymentController / PaymentServiceImpl|
+      :RspCode = 01;
+    else (có)
+      |PaymentController / PaymentServiceImpl|
+      if (vnp_ResponseCode khác 00?) then (có)
+        |MariaDB / JPA|
+        :WebhookLog; bỏ qua kết quả thất bại lượt cũ;
+        |PaymentController / PaymentServiceImpl|
+        :RspCode = 00;
+      elseif (Số tiền lượt cũ không khớp?) then (có)
+        |MariaDB / JPA|
+        :WebhookLog(valid=true, processed=false);
+        |PaymentController / PaymentServiceImpl|
+        :RspCode = 04;
+      else (thành công, đúng tiền)
+        |MariaDB / JPA|
+        if (Payment hiện tại PENDING?) then (có)
+          :Nhận txnRef cũ, method=VNPAY, SUCCESS;\nWebhookLog + Outbox PaymentSuccessEvent;\ncập nhật previousTxnRefs;
+        else (đã đóng)
+          :Giữ nguyên Payment.status, bỏ ref đã xử lý;\nRefund(PENDING_MANUAL) + WebhookLog;
+        endif
+        |PaymentController / PaymentServiceImpl|
+        :RspCode = 00;
+      endif
+    endif
+  endif
 endif
-:Khóa và kiểm tra lại Payment;
-if (Đúng lượt hiện tại và còn PENDING?) then (Không)
-  :Xử lý phản hồi trùng / muộn\nhoặc lượt đã bị thay;
-  stop
-else (Có)
+|MariaDB / JPA|
+:Commit transaction callback;\nlỗi persistence/outbox → rollback và HTTP lỗi;
+|PaymentController / PaymentServiceImpl|
+if (Accept chứa text/html?) then (có)
+  |MariaDB / JPA|
+  :WebhookController tìm Payment theo txnRef hiện tại;
+  |PaymentController / PaymentServiceImpl|
+  :HTTP 302 tới /order/{id} nếu tìm được;\nkhông tìm được → /profile;
+  |Khách hàng / FE|
+  :OrderDetailPage gọi API status;\nkhông lấy kết quả chính thức từ query URL;
+  |PaymentController / PaymentServiceImpl|
+  :getPaymentStatus(): thử lấy order summary;\nđọc Payment; kiểm tra chủ đơn hoặc ADMIN/STAFF;
+  :Trả paymentStatus, result, canRetry, canSwitchToCod;
+  |Khách hàng / FE|
+  :Hiển thị kết quả và thao tác được phép;\npoll 2 giây, tối đa 5 lần chỉ khi\nresult=PENDING và !canRetry;
+else (IPN)
+  |VNPay|
+  :Nhận HTTP 200 JSON {RspCode, Message};
 endif
-if (Giao dịch thành công?) then (Có)
-  :Ghi SUCCESS và sự kiện thành công\ntrong cùng giao dịch;
-  :Xác nhận đơn qua sự kiện;\nxử lý gửi email;
-else (Không)
-  :Ghi FAILED và sự kiện thất bại;\ngiữ đơn để khách có thể thử lại;
-endif
-|Khách hàng|
-:Xem kết quả chính thức từ hệ thống;
 stop
+legend bottom
+  Mỗi transaction chỉ bao gồm DB của payment-service.
+  Event ghi vào Outbox → Debezium → Kafka; consumer chạy độc lập với HTTP.
+  GATEWAY_DECLINED / ATTEMPT_EXPIRED không tự hủy Order.
+  Refund worker và OrderCancelledEvent: xem state và thuyết minh đối chiếu.
+endlegend
 @enduml

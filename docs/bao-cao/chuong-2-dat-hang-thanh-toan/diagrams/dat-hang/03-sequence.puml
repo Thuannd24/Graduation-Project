@@ -1,85 +1,313 @@
 @startuml
+' Doi chieu working tree 2026-11-06. Pham vi: POST /api/v1/orders/checkout.
+' Xem 03-sequence-review.md de tra cuu nguon va cac phep rut gon.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
 skinparam shadowing false
-skinparam ArrowColor #4B5563
+skinparam roundcorner 6
+skinparam ArrowColor #334155
 skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
-skinparam actorBorderColor #4B5563
-skinparam actorBackgroundColor #7DCFF0
-skinparam sequenceLifeLineBorderColor #4B5563
-skinparam sequenceLifeLineBackgroundColor #7DCFF0
-skinparam sequenceParticipantBackgroundColor #7DCFF0
-skinparam sequenceParticipantBorderColor #4B5563
-skinparam sequenceGroupBorderColor #4B5563
-skinparam sequenceGroupBackgroundColor white
-skinparam sequenceGroupBodyBackgroundColor white
-skinparam boundaryBackgroundColor #7DCFF0
-skinparam boundaryBorderColor #4B5563
-skinparam controlBackgroundColor #7DCFF0
-skinparam controlBorderColor #4B5563
-skinparam entityBackgroundColor #7DCFF0
-skinparam entityBorderColor #4B5563
+<style>
+participant {
+  Padding 12
+}
+</style>
+skinparam BoxPadding 10
+skinparam maxMessageSize 200
 skinparam sequenceMessageAlign center
-skinparam maxMessageSize 220
+skinparam sequence {
+  ParticipantBackgroundColor #BDE6F8
+  ParticipantBorderColor #365A73
+  ActorBackgroundColor #BDE6F8
+  ActorBorderColor #365A73
+  LifeLineBorderColor #94A3B8
+  LifeLineBackgroundColor #E0F2FE
+  GroupBorderColor #64748B
+  GroupBackgroundColor #F1F5F9
+  GroupBodyBackgroundColor white
+  ReferenceBackgroundColor #F8FAFC
+  ReferenceBorderColor #64748B
+  DividerBackgroundColor #DBEAFE
+  DividerBorderColor #365A73
+  NoteBackgroundColor #FFFBEB
+  NoteBorderColor #D6B669
+  MessageAlign center
+}
 hide footbox
-autonumber
+autonumber "<b>[000]"
+
+title ĐẶT HÀNG — SEQUENCE TẠO ĐƠN\nPOST /api/v1/orders/checkout
+caption Đối chiếu mã nguồn local ngày 06/11/2026 • ref = phần được rút gọn có chủ đích • thanh toán là interaction tiếp theo
 
 actor "Khách hàng" as Customer
-boundary "Web" as Web
-control "Hệ thống" as System
-entity "Cơ sở dữ liệu\nđơn hàng" as DB
+boundary "CheckoutPage\norderApi / apiClient" as Web #BDE6F8
+participant "API Gateway\nUserHeaderFilter" as Gateway #D1FAE5
+box "order-service — tầng ứng dụng" #EFF6FF
+  control "OrderController" as Controller
+  control "OrderServiceImpl" as Service
+  control "CartServiceImpl" as Cart
+end box
+database "Redis\ngiỏ / khóa / tồn tạm" as Redis #FEF3C7
+box "Dịch vụ được gọi" #F0FDF4
+  participant "product-service\nqua ProductGrpcClient" as Product #D1FAE5
+  participant "inventory-service\nqua InventoryGrpcClient" as Inventory #D1FAE5
+  participant "promotion-service\nqua PromotionClient" as Promotion #D1FAE5
+  participant "user-service\nqua UserClient" as User #D1FAE5
+end box
+box "order-service — Spring Data JPA" #EFF6FF
+  entity "OrderRepository" as Orders
+  entity "OrderItemRepository" as Items
+  entity "OutboxEventRepository" as Outbox
+end box
+database "MariaDB\necommerce_order_db" as DB #FEF3C7
 
-activate Customer
-Customer -> Web : Mở trang thanh toán
+note over Customer,Controller
+  Phạm vi bắt đầu khi người dùng xác nhận đặt hàng.
+  Luồng bên dưới giả định form hợp lệ và JWT hợp lệ.
+  Preview giá và lưu địa chỉ mới (nếu chọn) là các API riêng trước checkout.
+end note
+Customer -> Web : Xác nhận đặt hàng
 activate Web
-Web -> System : Yêu cầu xem trước đơn hàng
-activate System
-System -> System : Đọc giỏ và tính chi phí
-System --> Web : Thông tin đơn và bảng giá
-deactivate System
-Web --> Customer : Hiển thị bảng xem trước
-deactivate Web
+Web -> Web : placeOrder(): chống gửi lặp,\nvalidateForm(), kiểm tra giới hạn COD
+Web -> Gateway : POST /api/v1/orders/checkout\nAuthorization: Bearer JWT\nIdempotency-Key + CheckoutRequest
+activate Gateway
+Gateway -> Gateway : Xác thực JWT; bỏ X-User-* từ client;\ngán X-User-Id / X-User-Email từ token
+ref over Gateway,User
+  UserHeaderFilter.ensureProvisioned(): kiểm tra cache Redis;
+  khi cần gọi user-service /api/internal/users/provision (best effort).
+  Đây là xử lý của Gateway, không phải OrderServiceImpl gọi UserClient.
+end ref
+Gateway -> Controller : checkout(userId, email, key, @Valid request)
+activate Controller
+Controller -> Controller : AuthenticatedUserResolver.resolveUserId()
+Controller -> Service : createOrder(userId, request, key, email)
+activate Service
 
-Customer -> Web : Nhập giao nhận, ưu đãi;\nxác nhận đặt hàng
-activate Web
-Web -> System : Gửi yêu cầu tạo đơn
-activate System
-System -> System : Kiểm tra yêu cầu, dữ liệu;\ngiữ tồn nếu hợp lệ
-alt Yêu cầu bị từ chối
-  System -> System : Bù phần tồn đã giữ nếu cần
-  System --> Web : Kết quả trùng / lỗi dữ liệu / hết hàng
-  Web --> Customer : Hiển thị thông báo
-else Đủ điều kiện tạo đơn
-  System -> DB : Lưu Order(PENDING) và OrderItem\n(transaction tạo đơn)
-  activate DB
-  DB --> System : Commit thành công; mã đơn
-  deactivate DB
-  System -> System : Áp dụng voucher / điểm;\ntính lại giá chính thức
-  alt Hoàn tất các bước sau tạo đơn
-    System -> DB : Lưu số tiền chính thức
-    activate DB
-    DB --> System : Đã lưu giá
-    deactivate DB
-    System -> DB : Lưu OrderCreatedEvent vào outbox\n(transaction sau)
-    activate DB
-    DB --> System : Đã lưu sự kiện
-    deactivate DB
-    System -> System : Xóa giỏ, lưu kết quả yêu cầu
-    System --> Web : Mã đơn và số tiền
-    Web --> Customer : Thông báo đặt hàng thành công
-  else Lỗi sau khi đã commit đơn
-    System -> DB : Hủy đơn + outbox OrderCancelledEvent
-    activate DB
-    DB --> System : Kết quả bù trừ
-    deactivate DB
-    System -> System : Trả ưu đãi đã dùng;\nkho bù trừ qua sự kiện hủy
-    System --> Web : Đặt hàng thất bại
-    Web --> Customer : Hiển thị lỗi
+== 1. Chống tạo trùng — trước khối try/catch tạo đơn ==
+opt Idempotency-Key khác rỗng (FE luôn gửi)
+  Service -> Redis : SET checkout:lock:{userId}:{key}\nPROCESSING, NX, TTL 15 phút
+  Redis --> Service : Kết quả setIfAbsent
+  opt Kết quả bằng FALSE: khóa đã tồn tại
+    Service -> Redis : GET checkout:lock:{userId}:{key}
+    Redis --> Service : Giá trị hiện tại
+    break Kết thúc request này — không tạo thêm đơn
+      alt JSON OrderResponse đọc được
+        Service --> Controller : OrderResponse đã lưu
+        Controller --> Gateway : ApiResponse.success(response)
+        Gateway --> Web : HTTP 200 — dùng lại kết quả
+      else PROCESSING / null / JSON không đọc được
+        Service --> Controller : throw DuplicateRequestException
+        ref over Controller,Gateway : GlobalExceptionHandler → HTTP 409
+        Gateway --> Web : HTTP 409 — yêu cầu trùng
+      end
+      ref over Web,Gateway
+        HTTP 200: FE tiếp tục initiatePayment (xem ref cuối sơ đồ).
+        HTTP 409: FE hiển thị lỗi. Cuối xử lý: setSubmitting(false).
+      end ref
+    end
   end
 end
-deactivate System
+
+== 2. Các bước trong try của createOrder() ==
+alt Các bước hoàn tất, không phát sinh exception
+  Service -> Cart : getCart("cart:" + userId)
+  activate Cart
+  Cart -> Redis : HGETALL cart:{userId}
+  Redis --> Cart : Các mục trong giỏ
+  Cart -> Product : gRPC getPriceInfo(productIds)
+  Product --> Cart : Giá, biến thể, trạng thái, khối lượng
+  Cart -> Cart : Ghép giá hiện tại và thông tin sản phẩm;\ntính subtotal / totalAmount
+  Cart --> Service : CartResponse (toàn bộ giỏ đã dựng lại)
+  deactivate Cart
+  Service -> Service : Từ chối giỏ rỗng; chuẩn hóa SĐT VN;\nkiểm tra mỗi mục ≤ 5, sản phẩm còn hoạt động
+  Service -> Orders : countByUserIdAndStatusIn(userId,\n[PENDING, AWAITING_PAYMENT])
+  Orders -> DB : SELECT COUNT(*) FROM orders ...
+  DB --> Orders : Số đơn chưa thanh toán
+  Orders --> Service : count
+  Service -> Service : Từ chối nếu count ≥ 3
+
+  loop Mỗi CartItemResponse trong giỏ
+    Service -> Redis : GET product:stock:{productId}:{variantId}
+    Redis --> Service : Tồn tạm hoặc null (variantId null → 0)
+    opt Chưa có cache tồn
+      ref over Service,Redis
+        Khóa product:stock:lock:{productId}:{variantId}, UUID, NX, TTL 5 giây.
+        Tối đa 10 lượt: thử khóa; nếu chưa được, chờ 100 ms rồi đọc lại tồn.
+        Nếu không lấy được khóa và tồn vẫn null: ServiceUnavailableException.
+      end ref
+      opt Lấy được khóa khởi tạo
+        Service -> Redis : GET stockKey — kiểm tra lại sau khi có khóa
+        Redis --> Service : Giá trị hiện tại
+        opt Cache vẫn thiếu
+          Service -> Inventory : gRPC getInventory(productId, variantId)
+          Inventory --> Service : found / quantity
+          Service -> Redis : SET stockKey = quantity; nếu !found thì 0
+        end
+        Service -> Redis : finally: GET lock; DELETE nếu UUID khớp
+      end
+    end
+    Service -> Redis : EVAL stockDecrementScript(stockKey, quantity)\nLua kiểm tra tồn và trừ nguyên tử
+    Redis --> Service : remaining ≥ 0 / -2 / -1 / null
+    Service -> Service : ≥ 0: thêm vào successfullyDecrementedItems\n-2: hết hàng; -1 / null: dịch vụ không sẵn sàng
+  end
+
+  == 3. TX1 — lưu đơn và chi tiết ==
+  Service -> Service : Dựng Order(status=PENDING), OrderItem[];\nchụp giá / tên / biến thể / số lượng từ CartResponse
+  group TransactionTemplate.execute — transaction cục bộ TX1
+    Service -> Orders : save(order)
+    Orders -> DB : INSERT orders
+    DB --> Orders : Order có id
+    Orders --> Service : savedOrder
+    Service -> Service : Gán orderId vào từng OrderItem
+    Service -> Items : saveAll(orderItems)
+    Items -> DB : INSERT order_items
+    DB --> Items : Ghi chi tiết
+    Items --> Service : Hoàn tất saveAll
+    note over Orders,DB : TransactionTemplate commit TX1 khi callback thành công.
+  end
+  Service -> Service : transaction1Committed = true
+
+  == 4. Ưu đãi và giá chính thức — sau TX1, trước TX2 ==
+  opt Có couponCode sau chuẩn hóa
+    Service -> Promotion : applyVoucher(code, userId, orderId,\norderTotal, serverShippingFee, productIds)
+    Promotion --> Service : VoucherApplyResult
+    Service -> Service : Kiểm tra SUCCESS và applied;\nghi coupon / campaign; applyPricingToOrder()
+    Service -> Orders : save(order đã áp dụng voucher)
+    Orders -> DB : UPDATE orders — transaction của repository
+    note over Service,Promotion
+      Nếu áp voucher lỗi: chạy transaction đánh dấu CANCELLED,
+      rồi ném InvalidCouponException vào catch chung (phần 6).
+    end note
+  end
+  alt pointsToRedeem > 0
+    Service -> User : getProfileByKeycloakId(userId)
+    User --> Service : Hồ sơ có userDbId
+    Service -> User : redeemPoints(userDbId,\npointsToRedeem, orderId, orderAmount)
+    User --> Service : PointRedeemResult
+    Service -> Service : Kiểm tra SUCCESS; ghi pointsRedeemed;\napplyPricingToOrder(voucher + giảm từ điểm)
+    Service -> Orders : save(order đã đổi điểm)
+    Orders -> DB : UPDATE orders — transaction của repository
+    note over Service,User
+      Nếu đổi điểm lỗi: markOrderCancelledAndReleaseVoucher(),
+      rồi ném InvalidOrderStateException vào catch chung.
+    end note
+  else Không dùng điểm và không có coupon
+    Service -> Service : applyPricingToOrder(0, 0, 0)
+    Service -> Orders : save(order với giá chính thức)
+    Orders -> DB : UPDATE orders — transaction của repository
+  else Có coupon, không dùng điểm
+    note right of Service : Giá đã lưu trong applyCouponToOrder().
+  end
+  note over Orders,DB
+    Các lần save() cập nhật ưu đãi ở trên không nằm trong TX1 hoặc TX2.
+    Không giữ transaction của OrderServiceImpl trong lúc gọi dịch vụ ngoài.
+  end note
+
+  == 5. TX2 — Outbox, xóa giỏ và trả kết quả ==
+  group TransactionTemplate.executeWithoutResult — transaction cục bộ TX2
+    Service -> Service : saveOrderCreatedOutboxEvent(order, items, userId, email)
+    Service -> Outbox : save(OutboxEvent: OrderCreatedEvent)
+    Outbox -> DB : INSERT outbox_events
+    DB --> Outbox : Ghi sự kiện
+    Outbox --> Service : Hoàn tất save
+    note over Outbox,DB : TransactionTemplate commit TX2 khi callback thành công.
+  end
+  note over Outbox,DB
+    CDC Debezium → Kafka order-events chạy bất đồng bộ.
+    createOrder() không gọi Kafka trực tiếp để phát OrderCreatedEvent;
+    không chờ consumer xử lý kho trước khi trả HTTP.
+  end note
+  Service -> Cart : clearCart(cartKey, null)
+  activate Cart
+  Cart -> Redis : DELETE cart:{userId}
+  ref over Cart,Redis
+    CartEventProducer.publishCartUpdated(cartKey, null, null, null, 0, "CLEAR_CART")
+    → KafkaTemplate.send("cart-updated-events", cartKey, payload), không chờ ack.
+    Lỗi đồng bộ ở producer được bắt và ghi log.
+  end ref
+  Cart --> Service : Hoàn tất clearCart()
+  deactivate Cart
+  Service -> Service : convertToResponse(savedOrder, orderItems)
+  opt Có Idempotency-Key
+    Service -> Redis : SET lockKey = JSON OrderResponse, TTL 15 phút
+    note right of Redis : Lỗi lưu response chỉ ghi log, vẫn trả thành công.
+  end
+  Service --> Controller : OrderResponse
+  Controller --> Gateway : ApiResponse.success(OrderResponse)
+  Gateway --> Web : HTTP 200 — đơn đã tạo
+
+else Exception tại bất kỳ bước nào trong khối try
+  == 6. Catch chung — dừng tại điểm lỗi và bù những gì đã thực hiện ==
+  ref over Service,DB
+    Thực hiện các bước ở phần 2–5 tới điểm phát sinh exception; bỏ các bước còn lại.
+    Giữ trạng thái thực tế: savedOrder, transaction1Committed, successfullyDecrementedItems.
+    Nếu lỗi voucher / điểm: đã thử xử lý CANCELLED cục bộ như chú thích ở phần 4.
+  end ref
+  alt TX1 đã commit và savedOrder khác null
+    group Thử bù trừ sau commit — exception trong khối này được bắt và ghi log
+      group TransactionTemplate — CANCELLED và Outbox trong cùng transaction
+        Service -> Orders : findById(orderId)
+        Orders -> DB : SELECT orders WHERE id = orderId
+        DB --> Orders : Order hoặc không tìm thấy
+        Orders --> Service : Optional<Order>
+        opt Tìm thấy Order
+          opt Trạng thái chưa CANCELLED
+            Service -> Orders : save(order.status = CANCELLED)
+            Orders -> DB : UPDATE orders
+          end
+          Service -> Outbox : save(OutboxEvent: OrderCancelledEvent,\nitems = successfullyDecrementedItems)
+          Outbox -> DB : INSERT outbox_events
+        end
+        note over Orders,DB
+          Commit khi thành công; rollback transaction bù trừ nếu ghi Outbox lỗi.
+          Nếu transaction bù trừ ném lỗi: bỏ các bước trả voucher / điểm bên dưới.
+        end note
+      end
+      Service -> Promotion : returnVoucherForOrder(orderId):\nreleaseVoucher() rồi restoreVoucher()
+      Service -> User : refundPointsForOrder(order):\ngetProfileByKeycloakId(), rồi refundPoints(..., orderId)
+      ref over Service,DB
+        Lỗi trả voucher / hoàn điểm → scheduleCompensationRetry():
+        CompensationTaskRepository lưu tác vụ PENDING nếu chưa có tác vụ tương ứng.
+        Hoàn điểm vẫn được thử kể cả khi Order chưa ghi nhận pointsRedeemed > 0.
+      end ref
+    end
+    note over Service,Redis
+      Nhánh đã commit KHÔNG cộng tồn Redis trực tiếp trong createOrder().
+      Việc xử lý tồn sau hủy đi qua OrderCancelledEvent ở inventory-service.
+      Bù trừ là nỗ lực phục hồi; code không bảo đảm tất cả bước bù luôn thành công.
+    end note
+  else TX1 chưa commit
+    loop Mỗi item đã có trong successfullyDecrementedItems
+      Service -> Redis : EVAL stockIncrementScript(stockKey, quantity)
+      Redis --> Service : Tồn sau cộng / -1 nếu key đã mất
+      note right of Redis : Key mất: bỏ qua; lỗi bù từng item: ghi log rồi tiếp tục.
+    end
+  end
+  opt Có Idempotency-Key
+    Service -> Redis : DELETE checkout:lock:{userId}:{key}
+  end
+  Service --> Controller : Ném lại RuntimeException
+  ref over Controller,Gateway
+    GlobalExceptionHandler: lỗi nghiệp vụ / hết hàng / voucher → 400;
+    ServiceUnavailableException → 503; lỗi ngoài dự kiến → 500.
+    Lỗi @Valid xảy ra trước createOrder() → 400, không chạy bù trừ này.
+  end ref
+  Gateway --> Web : HTTP lỗi + ApiResponse lỗi
+  Web -> Web : catch: setError(...)
+  Web --> Customer : Hiển thị lỗi đặt hàng
+end
+deactivate Service
+deactivate Controller
+deactivate Gateway
+
+ref over Web,Gateway
+  Chỉ khi createOrder trả thành công (kể cả kết quả idempotency):
+  orderApi.initiatePayment(orderId, paymentMethod) → POST /api/v1/payments/initiate.
+  FE gọi bước này cho cả COD và VNPAY; chi tiết thuộc biểu đồ thanh toán.
+  Nếu bước khởi tạo thanh toán lỗi, FE báo đơn đã tạo và mở chi tiết đơn.
+end ref
+Web -> Web : finally: setSubmitting(false)
 deactivate Web
-deactivate Customer
 @enduml

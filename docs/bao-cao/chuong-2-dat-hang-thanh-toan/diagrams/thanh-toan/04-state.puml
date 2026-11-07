@@ -1,34 +1,93 @@
 @startuml
+' Doi chieu source local ngay 06/11/2026; xem diagrams/DOI_CHIEU_2026-11-06.md.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
 skinparam shadowing false
-skinparam ArrowColor #4B5563
+skinparam ArrowColor #334155
 skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
-skinparam actorBorderColor #4B5563
-skinparam actorBackgroundColor #7DCFF0
+skinparam NoteBackgroundColor #FFFBEB
+skinparam NoteBorderColor #D6B669
+skinparam actorBackgroundColor #BDE6F8
+skinparam actorBorderColor #365A73
+skinparam usecaseBackgroundColor #BDE6F8
+skinparam usecaseBorderColor #365A73
+skinparam rectangleBackgroundColor #EFF6FF
+skinparam rectangleBorderColor #365A73
+skinparam stateBackgroundColor #BDE6F8
+skinparam stateBorderColor #365A73
+skinparam activityBackgroundColor #BDE6F8
+skinparam activityBorderColor #365A73
+skinparam activityDiamondBackgroundColor #FEF3C7
+skinparam activityDiamondBorderColor #365A73
+skinparam swimlaneTitleBackgroundColor #EFF6FF
+skinparam swimlaneTitleFontStyle bold
+skinparam swimlaneBorderColor #94A3B8
+
 !pragma layout smetana
-skinparam stateBackgroundColor #7DCFF0
-skinparam stateBorderColor #4B5563
-skinparam stateStartColor black
-skinparam stateEndColor black
 hide empty description
-
-state "Chờ kết quả\nPENDING" as Pending
-state "Đã thanh toán\nSUCCESS" as Success
-state "Thất bại\nFAILED" as Failed
-state "Hết hạn lượt\nEXPIRED" as Expired
-state "Chờ hoàn tiền\nREFUND_PENDING" as Refunding
-
-[*] --> Pending : Khởi tạo lượt
-Pending --> Success : Callback / đối soát\nxác nhận thành công
-Pending --> Failed : Giao dịch thất bại\nhoặc đơn bị hủy
-Pending --> Expired : Quá hạn lượt;\nđối soát xác nhận chưa trả
-Failed --> Pending : Thử lại\n[đơn hợp lệ]
-Expired --> Pending : Thử lại\n[đơn hợp lệ]
-Pending --> Pending : Thay lượt\n[được phép]
-Failed --> Refunding : Nhận tiền muộn\n[lượt hiện tại]
-Expired --> Refunding : Nhận tiền muộn\n[lượt hiện tại]
-Success --> Refunding : Hủy / hoàn hàng\n[còn tiền cần hoàn]
+title PAYMENT.STATUS — VNPay VÀ COD\nSuy từ các nhánh ghi trạng thái thực tế trong payment-service
+state "PENDING\nChờ kết quả VNPay / chờ thu COD" as Pending
+state "SUCCESS\nĐã thu tiền" as Success
+state "FAILED\nLượt thất bại / đơn đã hủy" as Failed
+state "EXPIRED\nLượt VNPay hết hạn" as Expired
+state "REFUND_PENDING\nĐang xử lý hoàn tự động" as RefundPending
+state "PARTIALLY_REFUNDED\nĐã hoàn một phần" as Partial
+state "REFUNDED\nĐã hoàn toàn bộ" as Refunded
+[*] --> Pending : initiatePayment()\n/ tạo hoặc dùng lại Payment
+Pending --> Pending : initiatePayment() / retry\n[đơn còn hợp lệ, guard và khóa ghi cho phép]\n/ lưu previousTxnRefs; đổi txnRef, attemptAt
+Pending --> Success : Callback hợp lệ: vnp_ResponseCode=00 /\nQueryDR=00 / nhận lượt cũ đã trả tiền /\nCOD + OrderDeliveredEvent
+Pending --> Failed : Callback lượt hiện tại thất bại\n/ PaymentFailedEvent(GATEWAY_DECLINED)
+Pending --> Failed : OrderCancelledEvent → initiateAutoRefund()\n/ failureCode=ORDER_CANCELLED
+Pending --> Expired : cancelExpiredPayments()\n[VNPAY; quá paymentExpiryMinutes;\nQueryDR ∈ {01,02,NOT_FOUND}]
+Failed --> Pending : initiate / retry [đơn còn hợp lệ]\n/ cùng Payment, txnRef và attemptAt mới
+Expired --> Pending : initiate / retry [đơn còn hợp lệ]\n/ cùng Payment, txnRef và attemptAt mới
+Failed --> RefundPending : Callback hợp lệ thành công đến muộn\n[txnRef hiện tại] / Refund(PENDING)
+Expired --> RefundPending : Callback hợp lệ thành công đến muộn\n[txnRef hiện tại] / Refund(PENDING)
+Success --> RefundPending : OrderCancelledEvent\n[tiền còn lại chưa được hoàn / đang hoàn > 0]\n/ initiateAutoRefund(): Refund(PENDING)
+Partial --> RefundPending : OrderCancelledEvent\n[còn tiền chưa được hoàn / đang hoàn]\n/ Refund(PENDING) cho phần còn lại
+Success --> Partial : processRefund() / worker: hoàn thành công một phần
+Success --> Refunded : processRefund() / worker: hoàn thành công phần còn lại
+Partial --> Partial : Hoàn thêm, chưa đủ toàn bộ
+Partial --> Refunded : Hoàn thành công phần còn lại
+RefundPending --> Partial : applyGatewayResult()\n[hoàn thành công chưa đủ toàn bộ]
+RefundPending --> Refunded : applyGatewayResult()\n[hoàn thành công phần còn lại]
+note right of Pending
+  COD initiate vẫn PENDING và ghi PaymentCODConfirmedEvent;
+  Order có thể CONFIRMED trong khi Payment chưa SUCCESS.
+  QueryDR chưa rõ: scheduler giữ trạng thái.
+  COD không bị expire bởi lịch thanh toán.
+  Callback trùng khi đã đóng không phát lại success event.
+end note
+note right of Failed
+  Retry bị chặn nếu Order đã hủy / hết hạn / không ở
+  PENDING hoặc AWAITING_PAYMENT.
+  Giới hạn lượt mặc định 15 phút; hạn đơn 30 phút.
+end note
+note right of RefundPending
+  Refund.status là trạng thái của BẢN GHI KHÁC:
+  PENDING → SUCCESS hoặc PENDING_MANUAL.
+  Lỗi tạm thời: Refund vẫn PENDING để worker thử lại.
+  Từ chối rõ ràng: Refund=PENDING_MANUAL,
+  Payment giữ nguyên, không tự thành REFUNDED.
+end note
+note bottom of Partial
+  Admin hoàn tiền nhưng cổng chưa xác nhận:
+  tạo Refund(PENDING / PENDING_MANUAL),
+  Payment vẫn SUCCESS hoặc PARTIALLY_REFUNDED.
+  Không vẽ cạnh sang REFUND_PENDING cho nhánh admin này.
+end note
+note bottom of Refunded
+  Callback thành công của txnRef đã bị thay:
+  nếu Payment hiện tại PENDING → nhận lượt cũ, chuyển SUCCESS;
+  nếu Payment đã đóng → giữ Payment, tạo Refund(PENDING_MANUAL).
+  Không coi PENDING_MANUAL hoặc NOT_INITIATED là Payment.status.
+end note
+legend bottom
+  init/retry bị chặn ở SUCCESS, REFUND_PENDING, PARTIALLY_REFUNDED, REFUNDED.
+  applyGatewayResult() chỉ cập nhật Payment khi kết quả hoàn là SUCCESS;
+  cùng transaction ghi RefundCompletedEvent vào Outbox.
+  Sơ đồ không gộp kết quả hiển thị của API với trạng thái lưu trong DB.
+endlegend
 @enduml

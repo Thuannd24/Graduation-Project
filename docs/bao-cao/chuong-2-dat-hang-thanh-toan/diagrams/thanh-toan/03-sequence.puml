@@ -1,117 +1,311 @@
 @startuml
+' Doi chieu source local ngay 06/11/2026; xem diagrams/DOI_CHIEU_2026-11-06.md.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
 skinparam shadowing false
-skinparam ArrowColor #4B5563
+skinparam ArrowColor #334155
 skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
-skinparam actorBorderColor #4B5563
-skinparam actorBackgroundColor #7DCFF0
-skinparam sequenceLifeLineBorderColor #4B5563
-skinparam sequenceLifeLineBackgroundColor #7DCFF0
-skinparam sequenceParticipantBackgroundColor #7DCFF0
-skinparam sequenceParticipantBorderColor #4B5563
-skinparam sequenceGroupBorderColor #4B5563
-skinparam sequenceGroupBackgroundColor white
-skinparam sequenceGroupBodyBackgroundColor white
-skinparam boundaryBackgroundColor #7DCFF0
-skinparam boundaryBorderColor #4B5563
-skinparam controlBackgroundColor #7DCFF0
-skinparam controlBorderColor #4B5563
-skinparam entityBackgroundColor #7DCFF0
-skinparam entityBorderColor #4B5563
+skinparam NoteBackgroundColor #FFFBEB
+skinparam NoteBorderColor #D6B669
+skinparam actorBackgroundColor #BDE6F8
+skinparam actorBorderColor #365A73
+skinparam usecaseBackgroundColor #BDE6F8
+skinparam usecaseBorderColor #365A73
+skinparam rectangleBackgroundColor #EFF6FF
+skinparam rectangleBorderColor #365A73
+skinparam stateBackgroundColor #BDE6F8
+skinparam stateBorderColor #365A73
+skinparam activityBackgroundColor #BDE6F8
+skinparam activityBorderColor #365A73
+skinparam activityDiamondBackgroundColor #FEF3C7
+skinparam activityDiamondBorderColor #365A73
+skinparam swimlaneTitleBackgroundColor #EFF6FF
+skinparam swimlaneTitleFontStyle bold
+skinparam swimlaneBorderColor #94A3B8
+
+skinparam sequenceLifeLineBorderColor #94A3B8
+skinparam sequenceLifeLineBackgroundColor #E0F2FE
+skinparam sequenceParticipantBackgroundColor #BDE6F8
+skinparam sequenceParticipantBorderColor #365A73
+skinparam sequenceGroupBorderColor #64748B
+skinparam sequenceGroupBackgroundColor #F1F5F9
+skinparam sequenceReferenceBackgroundColor #F8FAFC
 skinparam sequenceMessageAlign center
-skinparam maxMessageSize 220
+skinparam maxMessageSize 210
 hide footbox
-autonumber
-
+autonumber "<b>[000]"
+title THANH TOÁN — SEQUENCE VNPay / COD\nKhởi tạo, callback, kết quả chính thức và sự kiện bất đồng bộ
 actor "Khách hàng" as Customer
-boundary "Web" as Web
-control "Hệ thống" as System
-entity "Cơ sở dữ liệu" as DB
-participant "VNPay" as VNPay
+boundary "CheckoutPage /\nOrderDetailPage\norderApi" as Web
+box "payment-service — tầng ứng dụng" #EFF6FF
+  control "PaymentController" as Controller
+  control "PaymentServiceImpl" as Service
+  control "WebhookController" as Webhook
+end box
+database "Redis" as Redis #FEF3C7
+participant "order-service\nInternalOrderController /\nPaymentKafkaConsumer" as Order #D1FAE5
+box "payment-service — Spring Data JPA" #EFF6FF
+  entity "PaymentRepository" as Payments
+  entity "WebhookLogRepository" as Logs
+  entity "RefundRepository" as Refunds
+  entity "OutboxEventRepository" as Outbox
+end box
+database "MariaDB\necommerce_payment_db" as DB #FEF3C7
+participant "VNPay" as VNPay #D1FAE5
+participant "Debezium Connect" as CDC #D1FAE5
+queue "Kafka\npayment-events" as Kafka #FEF3C7
+control "PaymentScheduler" as Scheduler
 
-activate Customer
-Customer -> Web : Chọn thanh toán / thanh toán lại
+note over Customer,Controller
+  Order đã được tạo. FE gửi request qua API Gateway.
+  Controller ưu tiên userId/email từ JWT đã xác thực, bổ sung client IP.
+  initiate và retry cùng gọi PaymentServiceImpl.initiatePayment().
+end note
+== 1. Khởi tạo mới / thử lại / đổi phương thức ==
+Customer -> Web : Chọn VNPAY hoặc COD
 activate Web
-Web -> System : Yêu cầu khởi tạo VNPay
-activate System
-System -> System : Kiểm tra đơn, số tiền;\nđối soát lượt trước khi cần
-alt Không được phép khởi tạo
-  System --> Web : Từ chối / yêu cầu chờ / đã trả tiền
-  Web --> Customer : Hiển thị thông báo
-else Được phép khởi tạo
-  System -> DB : Khóa, kiểm tra lại;\nlưu Payment(PENDING), txnRef mới
-  activate DB
-  DB --> System : Đã lưu lượt thanh toán
-  deactivate DB
-  System --> Web : URL có chữ ký
+Web -> Controller : POST /api/v1/payments/initiate\nhoặc /order/{orderId}/retry\n{orderId, paymentMethod}, JWT
+activate Controller
+Controller -> Controller : @Valid; userId/email từ JWT;\nrequest.ipAddress = resolveClientIp()
+Controller -> Service : initiatePayment(request)
+activate Service
+Service -> Service : normalizePaymentMethod()\nchỉ VNPAY / COD
+Service -> Redis : SET NX payment:initiate:lock:{orderId}\nUUID, TTL 15 giây
+Redis --> Service : acquired
+break acquired khác TRUE
+  Service --> Controller : IllegalStateException
+  Controller --> Web : HTTP 409 — đang khởi tạo
 end
-deactivate System
+note over Service,Redis
+  Từ khi có khóa, mọi đường thoát khối try đều chạy finally:
+  GET khóa; DELETE chỉ khi UUID vẫn khớp.
+  Lỗi tham số → 400; IllegalStateException → 409; lỗi chung → 500.
+end note
+Service -> Order : RestTemplate GET\n/api/internal/orders/{id}/summary
+Order --> Service : userId, status, paymentDeadline, finalAmount
+Service -> Service : Kiểm tra chủ đơn, trạng thái chưa thanh toán,\nhạn đơn; dùng finalAmount của server;\nCOD ≤ codMaxAmount
+Service -> Payments : guardInFlightVnPayAttempt(): findByOrderId()
+Payments -> DB : SELECT payments WHERE order_id = ...
+DB --> Payments : Payment hoặc không có
+Payments --> Service : snapshot
+Service -> Service : Nếu có Payment: rejectIfAlreadySettled()\nchặn SUCCESS và các trạng thái hoàn tiền
+opt Snapshot VNPAY PENDING và attemptAt còn trong hạn lượt
+  Service -> VNPay : standardRestTemplate POST querydr\ncheckVnPayTransactionStatus(snapshot)
+  VNPay --> Service : vnp_TransactionStatus / NOT_FOUND / null
+  alt QueryDR = 00
+    group TransactionTemplate — đồng bộ kết quả, khóa lại txnRef
+      Service -> Payments : findByTxnRefWithLock(snapshot.txnRef)
+      Payments -> DB : SELECT ... FOR UPDATE
+      Payments --> Service : Payment hiện tại
+      opt Vẫn PENDING
+        Service -> Payments : save(SUCCESS, paidAt)
+        Payments -> DB : UPDATE payments
+        Service -> Outbox : save(PaymentSuccessEvent)
+        Outbox -> DB : INSERT outbox_events
+      end
+    end
+    break Không tạo lượt mới
+      Service -> Redis : finally: GET / DELETE nếu còn sở hữu
+      Service --> Controller : IllegalStateException — đã trả tiền
+      Controller --> Web : HTTP 409
+    end
+  else QueryDR = null
+    break Chưa rõ kết quả
+      Service -> Redis : finally: GET / DELETE nếu còn sở hữu
+      Service --> Controller : IllegalStateException — chờ thêm
+      Controller --> Web : HTTP 409
+    end
+  else Giá trị khác, không null
+    note right of Service : guard hiện tại cho phép tiếp tục;\nkhông tự ghi FAILED ở bước này.
+  end
+end
+note over Service,Order : Các cuộc gọi order-service và QueryDR ở trên nằm ngoài transaction Payment.
+group TransactionTemplate — tạo / dùng lại Payment
+  Service -> Payments : findByOrderIdWithLock(orderId)
+  Payments -> DB : SELECT ... FOR UPDATE
+  Payments --> Service : Bản ghi mới nhất hoặc không có
+  Service -> Service : Kiểm tra settled lần nữa;\nnhớ txnRef VNPay cũ trong previousTxnRefs;\ntạo UUID txnRef mới, attemptAt=now
+  Service -> Payments : save(Payment(PENDING), amount từ Order,\nmethod; reset các trường kết quả lượt cũ)
+  Payments -> DB : INSERT / UPDATE payments
+  Payments --> Service : Payment có id
+  alt COD
+    Service -> Payments : save(PENDING) — chờ thu tiền khi giao
+    Payments -> DB : UPDATE payments
+    Service -> Outbox : publishPaymentEvent()\n→ save(PaymentCODConfirmedEvent)
+    Outbox -> DB : INSERT outbox_events
+    Service -> Service : redirectUrl = ""
+  else VNPAY
+    Service -> Service : buildVnPayUrl(): amount × 100;\nHMAC-SHA512; expireAt=min(hạn lượt, hạn đơn)
+    note right of Service : Dựng URL cục bộ, chưa gọi VNPay pay API.
+  end
+  note over Payments,DB : Commit transaction trước khi trả khỏi TransactionTemplate.
+end
+Service -> Redis : finally: GET khóa; DELETE nếu UUID khớp
+Service --> Controller : PaymentInitiateResponse(paymentId, txnRef, redirectUrl)
+deactivate Service
+Controller --> Web : HTTP 200 ApiResponse.success(...)
+deactivate Controller
+alt COD
+  Web --> Customer : Hiển thị kết quả chọn COD
+else VNPAY
+  Web -> VNPay : Điều hướng trình duyệt tới redirectUrl
+  Customer -> VNPay : Thực hiện giao dịch / hủy
+end
 deactivate Web
 
-opt Khởi tạo thành công
-  Web -> VNPay : Chuyển tới trang thanh toán
-  activate VNPay
-  Customer -> VNPay : Xác nhận giao dịch
-  VNPay -> System : Callback / IPN kết quả
-  activate System
-  System -> System : Xác minh chữ ký
-  opt Chữ ký hợp lệ
-    System -> DB : Khóa Payment; tìm giao dịch;\nđối chiếu số tiền
-    activate DB
-    DB --> System : Thông tin và trạng thái hiện tại
-    deactivate DB
+== 2. Callback / IPN — request độc lập, có thể trùng hoặc đến muộn ==
+opt Có request tới /api/v1/public/payments/vnpay-callback
+  VNPay -> Webhook : GET queryParams\n(IPN hoặc trình duyệt qua Gateway)
+  activate Webhook
+  Webhook -> Service : verifyVnPayCallback(queryParams)
+  activate Service
+  group @Transactional — callback: Payment, log, refund và Outbox
+    Service -> Service : Lấy các trường vnp_ hợp lệ, sắp xếp,\nURL-encode lại; kiểm tra HMAC-SHA512
+    alt Thiếu / sai chữ ký
+      Service -> Logs : saveWebhookLog(raw, false, false)
+      Logs -> DB : INSERT webhook_logs
+      note right of Service : Kết quả trả về = 97.
+    else Chữ ký hợp lệ
+      Service -> Payments : findByTxnRefWithLock(txnRef)
+      Payments -> DB : SELECT ... FOR UPDATE
+      Payments --> Service : Payment hoặc null
+      alt Không tìm thấy txnRef hiện tại
+        Service -> Payments : findBySupersededTxnRefWithLock(txnRef)
+        Payments -> DB : SELECT previousTxnRefs LIKE ... FOR UPDATE
+        Payments --> Service : Payment lượt cũ hoặc null
+        ref over Service,DB
+          handleSupersededVnPayCallback():
+          • Không tìm được: log, trả 01.
+          • Lượt cũ thất bại: log, bỏ qua, trả 00.
+          • Lượt cũ thành công, sai amount: log, trả 04.
+          • Đúng amount và Payment hiện tại PENDING: nhận txnRef cũ,
+            method=VNPAY, SUCCESS, paidAt, log + PaymentSuccessEvent; trả 00.
+          • Đúng amount, Payment đã đóng: giữ status, xóa ref đã xử lý,
+            RefundRepository.save(PENDING_MANUAL) + log; trả 00.
+        end ref
+      else Đúng txnRef hiện tại
+        Service -> Service : Kiểm tra vnp_Amount = amount × 100
+        alt Sai / thiếu / không parse được số tiền
+          Service -> Logs : saveWebhookLog(raw, true, false)
+          Logs -> DB : INSERT webhook_logs
+          note right of Service : Kết quả trả về = 04.
+        else Đúng số tiền
+          Service -> Service : Ghi gatewayTxnId / gatewayResponse
+          alt Payment PENDING và vnp_ResponseCode = 00
+            Service -> Payments : save(SUCCESS, paidAt)
+            Payments -> DB : UPDATE payments
+            Service -> Logs : saveWebhookLog(raw, true, true)
+            Logs -> DB : INSERT webhook_logs
+            Service -> Outbox : save(PaymentSuccessEvent)
+            Outbox -> DB : INSERT outbox_events
+            note right of Service : Kết quả trả về = 00.
+          else Payment PENDING và vnp_ResponseCode khác 00
+            Service -> Payments : save(FAILED, failureCode)
+            Payments -> DB : UPDATE payments
+            Service -> Logs : saveWebhookLog(raw, true, true)
+            Logs -> DB : INSERT webhook_logs
+            Service -> Outbox : save(PaymentFailedEvent)\nfailureType=GATEWAY_DECLINED; retryable=true
+            Outbox -> DB : INSERT outbox_events
+            note right of Service : Kết quả trả về vẫn = 00 (đã xử lý IPN).
+          else FAILED / EXPIRED nhưng callback thành công
+            Service -> Payments : save(REFUND_PENDING, paidAt)
+            Payments -> DB : UPDATE payments
+            Service -> Refunds : save(Refund(PENDING), toàn bộ amount)
+            Refunds -> DB : INSERT refunds
+            Service -> Logs : saveWebhookLog(raw, true, true)
+            Logs -> DB : INSERT webhook_logs
+            note right of Service : Kết quả trả về = 00; không phát PaymentSuccessEvent.
+          else Payment đã đóng, trường hợp khác
+            Service -> Logs : saveWebhookLog(raw, true, true)
+            Logs -> DB : INSERT webhook_logs
+            note right of Service : Trả 02; không phát lại sự kiện thành công.
+          end
+        end
+      end
+    end
+    note over Payments,DB : Commit khi return bình thường; exception persistence/outbox → rollback.
   end
-  alt Phản hồi không hợp lệ
-    System -> DB : Ghi nhật ký lỗi
-    activate DB
-    DB --> System : Đã ghi log
-    deactivate DB
-  else Phản hồi trùng / muộn / txnRef cũ
-    System -> System : Xử lý theo trạng thái và lượt;\nkhông ghi thành công hai lần
-  else PENDING và thanh toán thành công
-    System -> DB : SUCCESS + nhật ký\n+ outbox PaymentSuccessEvent
-    activate DB
-    DB --> System : Commit thành công
-    deactivate DB
-  else PENDING và thanh toán thất bại
-    System -> DB : FAILED + nhật ký\n+ outbox PaymentFailedEvent
-    activate DB
-    DB --> System : Commit thành công
-    deactivate DB
+  Service --> Webhook : rspCode
+  deactivate Service
+  alt Accept chứa text/html
+    Webhook -> Payments : findByTxnRef(queryParams.txnRef)
+    Payments -> DB : SELECT payments
+    Payments --> Webhook : Payment hiện tại hoặc null
+    Webhook --> Web : HTTP 302 /order/{id}?paymentStatus=...&paymentResult=...\nkhông tìm được orderId → /profile
+  else IPN nền
+    Webhook --> VNPay : HTTP 200 JSON {RspCode, Message}
   end
-  alt Callback IPN nền
-    System --> VNPay : JSON xác nhận xử lý / mã lỗi
-  else Callback qua trình duyệt
-    System --> Web : HTTP 302 tới trang kết quả đơn
-  end
-  deactivate System
-  deactivate VNPay
-  Web -> System : Yêu cầu trạng thái chính thức
-  activate Web
-  activate System
-  System -> DB : Đọc trạng thái thanh toán
-  activate DB
-  DB --> System : Trạng thái hiện tại
-  deactivate DB
-  System --> Web : Kết quả thanh toán
-  deactivate System
-  Web --> Customer : Hiển thị kết quả
-  deactivate Web
+  deactivate Webhook
 end
-deactivate Customer
 
-... Xử lý nền, độc lập với trả kết quả trình duyệt ...
-opt Có sự kiện thanh toán thành công
-  System -> System : Nhận PaymentSuccessEvent
-  activate System
-  System -> DB : Xác nhận đơn nếu trạng thái cho phép;\nlưu OrderConfirmedEvent cùng giao dịch
-  activate DB
-  DB --> System : Kết quả cập nhật đơn
-  deactivate DB
-  System -> System : Xử lý gửi email theo sự kiện
-  deactivate System
+== 3. Giao diện đọc kết quả chính thức ==
+opt Người dùng mở OrderDetailPage
+  Web -> Controller : GET /api/v1/payments/order/{orderId}/status, JWT
+  Controller -> Service : getPaymentStatus(orderId, callerId, isAdminOrStaff)
+  Service -> Order : fetchOrderSummary(orderId) — best effort
+  Order --> Service : orderStatus, owner hoặc lỗi
+  Service -> Payments : findByOrderId(orderId)
+  Payments -> DB : SELECT payments
+  Payments --> Service : Payment hoặc không có
+  Service -> Service : Kiểm tra chủ đơn / ADMIN / STAFF;\nsuy paymentStatus, result, canRetry, canSwitchToCod
+  Service --> Controller : PaymentStatusResponse
+  Controller --> Web : HTTP 200; không đủ quyền → HTTP 403
+  Web --> Customer : Hiển thị trạng thái từ server
+  note over Web,Controller
+    Khi vừa quay về từ VNPay: poll cách 2 giây, tối đa 5 lượt,
+    chỉ tiếp tục khi info.result=PENDING và !info.canRetry.
+    Không lấy query parameter trên URL làm bằng chứng đã thu tiền.
+  end note
 end
+
+== 4. CDC và tác vụ nền — độc lập với thứ tự trả HTTP ==
+opt Outbox đã commit (có thể được xử lý trước hoặc sau HTTP response)
+  DB -->> CDC : Binlog ecommerce_payment_db.outbox_events
+  CDC -->> Kafka : EventRouter → payment-events
+  Kafka -->> Order : PaymentKafkaConsumer.consumePaymentEvent()
+  ref over Order,Kafka
+    PaymentSuccessEvent / PaymentCODConfirmedEvent:
+    OrderServiceImpl.updateOrderStatus(CONFIRMED), khóa Order, kiểm tra transition;
+    trạng thái + OrderConfirmedEvent trong transaction của order-service.
+    GATEWAY_DECLINED / ATTEMPT_EXPIRED: giữ Order để retry.
+    PaymentFailedEvent kiểu cũ: chỉ thử hủy đơn thuộc UNPAID.
+    Các consumer notification độc lập, không nằm trên đường trả HTTP.
+  end ref
+end
+opt Scheduler mỗi 5 phút, lấy được khóa Redis
+  Scheduler -> Service : cancelExpiredPayments()
+  Service -> Payments : findExpiredAttempts(PENDING, cutoff)
+  Payments --> Service : Các lượt quá hạn (attemptAt, fallback createdAt)
+  ref over Service,VNPay
+    Mỗi lượt VNPAY: QueryDR ngoài transaction; sau đó khóa theo txnRef và kiểm tra PENDING.
+    00 → SUCCESS + success Outbox; 01/02/NOT_FOUND → EXPIRED + failed Outbox (ATTEMPT_EXPIRED).
+    Chưa rõ kết quả → giữ trạng thái; COD bị bỏ qua.
+  end ref
+end
+opt OrderCancelledEvent hoặc OrderDeliveredEvent tới payment-service
+  ref over Service,DB
+    OrderKafkaConsumer:
+    CANCELLED → initiateAutoRefund(): khóa Payment; PENDING → FAILED (ORDER_CANCELLED);
+    SUCCESS / PARTIALLY_REFUNDED và còn tiền → REFUND_PENDING + Refund(PENDING).
+    DELIVERED + COD PENDING → SUCCESS, paidAt, save (không phát success Outbox ở nhánh này).
+  end ref
+end
+opt Scheduler mỗi 1 phút, lấy được khóa Redis
+  Scheduler -> Service : processPendingRefunds()
+  Service -> Refunds : findByStatus(PENDING)
+  Refunds --> Service : Refund đang chờ
+  ref over Service,VNPay
+    Đọc Payment / tổng đã hoàn; gọi VNPay refund ngoài transaction (COD không gọi cổng).
+    Transaction ngắn: khóa Refund, rồi Payment; kiểm tra và applyGatewayResult().
+    Thành công → Refund SUCCESS, Payment REFUNDED/PARTIALLY_REFUNDED + RefundCompletedEvent.
+    Lỗi tạm → Refund PENDING; cổng từ chối → PENDING_MANUAL; Payment giữ nguyên.
+  end ref
+end
+legend bottom
+  ref chỉ rõ phần rút gọn; các service ngoài, CDC và consumer không cùng transaction payment-service.
+  Các mũi tên SQL thể hiện thao tác persistence, không phải câu SQL Hibernate nguyên văn.
+  Chi tiết Admin processRefund và các giới hạn đối chiếu nằm trong DOI_CHIEU_2026-11-06.md.
+endlegend
 @enduml

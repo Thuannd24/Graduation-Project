@@ -1,65 +1,225 @@
 @startuml
+' Doi chieu source local ngay 06/11/2026; xem diagrams/DOI_CHIEU_2026-11-06.md.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
 skinparam shadowing false
-skinparam ArrowColor #4B5563
+skinparam ArrowColor #334155
 skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
-skinparam actorBorderColor #4B5563
-skinparam actorBackgroundColor #7DCFF0
-skinparam activityBackgroundColor #7DCFF0
-skinparam activityBorderColor #4B5563
-skinparam activityDiamondBackgroundColor #7DCFF0
-skinparam activityDiamondBorderColor #4B5563
-skinparam activityStartColor black
-skinparam activityEndColor black
-skinparam swimlaneBorderColor black
-skinparam swimlaneBorderThickness 1.5
-skinparam swimlaneTitleBackgroundColor white
+skinparam NoteBackgroundColor #FFFBEB
+skinparam NoteBorderColor #D6B669
+skinparam actorBackgroundColor #BDE6F8
+skinparam actorBorderColor #365A73
+skinparam usecaseBackgroundColor #BDE6F8
+skinparam usecaseBorderColor #365A73
+skinparam rectangleBackgroundColor #EFF6FF
+skinparam rectangleBorderColor #365A73
+skinparam stateBackgroundColor #BDE6F8
+skinparam stateBorderColor #365A73
+skinparam activityBackgroundColor #BDE6F8
+skinparam activityBorderColor #365A73
+skinparam activityDiamondBackgroundColor #FEF3C7
+skinparam activityDiamondBorderColor #365A73
+skinparam swimlaneTitleBackgroundColor #EFF6FF
 skinparam swimlaneTitleFontStyle bold
+skinparam swimlaneBorderColor #94A3B8
 
-|Khách hàng|
+!pragma useVerticalIf on
+title ĐẶT HÀNG — ACTIVITY CHECKOUT\nLàn trách nhiệm theo thành phần thực thi
+|Khách hàng / CheckoutPage|
 start
-:Mở trang thanh toán;
-|Hệ thống|
-:Hiển thị thông tin giao nhận\nvà bảng xem trước đơn hàng;
-|Khách hàng|
-:Nhập thông tin nhận hàng;\nchọn mã giảm giá, điểm nếu có;
-|Hệ thống|
-:Tính lại các khoản chi phí\nvà tổng tiền thanh toán;
-|Khách hàng|
-:Kiểm tra và xác nhận đặt hàng;
-|Hệ thống|
-:Kiểm tra yêu cầu trùng,\ndữ liệu và khả năng đáp ứng;
-if (Yêu cầu mới và hợp lệ?) then (Không)
-  :Trả kết quả cũ / đang xử lý\nhoặc thông báo lỗi;
-  |Khách hàng|
-  :Nhận thông báo;
+:Nhập người nhận, SĐT, địa chỉ;\nchọn voucher / điểm nếu có;
+:orderApi.previewCheckout()\n(debounce 300 ms khi đủ điều kiện);
+|OrderController / OrderServiceImpl|
+:previewCheckout(): đọc giỏ và giá hiện tại;\npreview voucher nếu có; ước tính điểm;\nOrderPricingHelper tính giá;
+note right
+  Preview không tạo đơn, giữ tồn hoặc đổi điểm.
+  FE dùng giá dự phòng nếu preview lỗi.
+  VAT đã có trong giá, không cộng thêm.
+end note
+|Khách hàng / CheckoutPage|
+:Xác nhận đặt hàng;\nvalidateForm(), chống gửi lặp, kiểm tra COD;
+if (Form và kiểm tra FE hợp lệ?) then (không)
+  :Hiển thị lỗi; kết thúc lần bấm;
   stop
-else (Có)
 endif
-|Hệ thống|
-:Giữ tồn khả dụng;\nlưu đơn PENDING nếu giữ đủ hàng;
-if (Đã commit đơn và chi tiết?) then (Không)
-  :Hoàn phần tồn đã giữ;\nthông báo hết hàng / lỗi tạo đơn;
-  |Khách hàng|
-  :Nhận thông báo thất bại;
+:Lưu địa chỉ nếu chọn (API riêng);\ngửi POST /api/v1/orders/checkout\nkèm Idempotency-Key;
+|OrderController / OrderServiceImpl|
+:Gateway xử lý JWT / header / provision;\n@Valid DTO, resolveUserId();
+if (Request qua kiểm tra đầu vào?) then (không)
+  :Trả HTTP lỗi trước createOrder();
   stop
-else (Có)
 endif
-|Hệ thống|
-:Áp dụng ưu đãi, tính giá chính thức;\nlưu sự kiện tạo đơn vào outbox;
-if (Hoàn tất các bước sau tạo đơn?) then (Có)
-  :Xóa giỏ; trả mã đơn và số tiền;
-  |Khách hàng|
-  :Nhận kết quả đặt hàng;\ncó thể chuyển sang thanh toán;
-else (Không)
-  |Hệ thống|
-  :Hủy đơn, ghi sự kiện bù trừ;\ntrả ưu đãi đã dùng;
-  :Thông báo đặt hàng thất bại;
-  |Khách hàng|
-  :Nhận thông báo thất bại;
+|Redis|
+:SET NX checkout:lock:{userId}:{key}\n= PROCESSING, TTL 15 phút [nếu có key];
+if (setIfAbsent trả FALSE?) then (có)
+  :GET giá trị khóa;
+  |OrderController / OrderServiceImpl|
+  if (Đọc được JSON OrderResponse?) then (có)
+    :HTTP 200, dùng lại kết quả;
+    |Khách hàng / CheckoutPage|
+    :Tiếp tục initiatePayment(orderId, method);
+  else (không)
+    :HTTP 409 DuplicateRequestException;
+    |Khách hàng / CheckoutPage|
+    :Hiển thị lỗi yêu cầu trùng;
+  endif
+  stop
 endif
-stop
+|OrderController / OrderServiceImpl|
+:Khởi tạo danh sách item đã giữ;\ntransaction1Committed = false;
+note right
+  Từ đây là khối try của createOrder().
+  "Có lỗi?" trên sơ đồ biểu diễn exception:
+  dừng giai đoạn, bỏ các bước chưa chạy rồi sang catch.
+  Lỗi Redis ở bước idempotency nằm trước khối này.
+end note
+:CartServiceImpl.getCart(cartKey);
+|Redis|
+:Đọc hash cart:{userId};
+|Dịch vụ gRPC / Feign|
+:ProductGrpcClient.getPriceInfo(productIds)\n→ product-service;
+|OrderController / OrderServiceImpl|
+:Dựng CartResponse từ giá hiện tại;\nkiểm tra giỏ, SĐT, quantity ≤ 5, active;
+|MariaDB / JPA|
+:OrderRepository.countByUserIdAndStatusIn()\n[PENDING, AWAITING_PAYMENT];
+|OrderController / OrderServiceImpl|
+:Kiểm tra số đơn chưa trả < 3;\nghi nhận lỗi nếu đọc / kiểm tra thất bại;
+if (Chưa có lỗi?) then (có)
+  while (Còn item và chưa phát sinh lỗi?) is (có)
+    |Redis|
+    :Đọc product:stock:{productId}:{variantId};\nvariantId null được quy về 0;
+    if (Cache tồn thiếu?) then (có)
+      :Thử khóa nạp cache NX UUID, TTL 5 giây;\ntối đa 10 lượt, mỗi lượt chờ 100 ms khi tranh khóa;
+      if (Lấy được khóa?) then (có)
+        :Đọc lại tồn sau khi có khóa;
+        if (Cache vẫn thiếu?) then (có)
+          |Dịch vụ gRPC / Feign|
+          :InventoryGrpcClient.getInventory()\n→ inventory-service;
+          |Redis|
+          :SET tồn = quantity hoặc 0 nếu !found;
+        endif
+        :finally: đọc khóa; xóa nếu UUID khớp;
+      else (không)
+        :Nếu cache vẫn thiếu: ghi nhận lỗi 503;
+      endif
+    endif
+    |OrderController / OrderServiceImpl|
+    if (Khởi tạo tồn không lỗi?) then (có)
+      |Redis|
+      :Lua stockDecrementScript\nkiểm tra và trừ tồn nguyên tử;
+      |OrderController / OrderServiceImpl|
+      if (remaining ≥ 0?) then (có)
+        :Thêm item vào successfullyDecrementedItems;
+      else (không)
+        :Ghi nhận lỗi: -2 → thiếu tồn;\n-1 / null → service unavailable;
+      endif
+    endif
+  endwhile (hết item hoặc có lỗi)
+endif
+|OrderController / OrderServiceImpl|
+if (Chưa lỗi và tất cả item đã giữ thành công?) then (có)
+  :Dựng Order(PENDING) + OrderItem[];\nchụp giá / tên / biến thể / số lượng;
+  |MariaDB / JPA|
+  :Thử TX1 TransactionTemplate:\nOrderRepository.save(order);\nOrderItemRepository.saveAll(items);
+  |OrderController / OrderServiceImpl|
+  if (TX1 commit thành công?) then (có)
+    :transaction1Committed = true;
+    if (Có couponCode?) then (có)
+      |Dịch vụ gRPC / Feign|
+      :PromotionClient.applyVoucher(orderId, ...);
+      |OrderController / OrderServiceImpl|
+      if (Kết quả voucher hợp lệ?) then (có)
+        :applyPricingToOrder(voucher);
+        |MariaDB / JPA|
+        :OrderRepository.save(order);
+      else (không)
+        |MariaDB / JPA|
+        :Thử transaction đánh dấu CANCELLED;
+        |OrderController / OrderServiceImpl|
+        :Ghi nhận lỗi voucher → catch chung;
+      endif
+    endif
+    |OrderController / OrderServiceImpl|
+    if (Chưa lỗi và pointsToRedeem > 0?) then (có)
+      |Dịch vụ gRPC / Feign|
+      :UserClient.getProfileByKeycloakId();\nUserClient.redeemPoints(userDbId, orderId, ...);
+      |OrderController / OrderServiceImpl|
+      if (Đổi điểm thành công?) then (có)
+        :applyPricingToOrder(voucher + điểm);
+        |MariaDB / JPA|
+        :OrderRepository.save(order);
+      else (không)
+        |OrderController / OrderServiceImpl|
+        :Thử markOrderCancelledAndReleaseVoucher();\nghi nhận lỗi điểm → catch chung;
+      endif
+    endif
+    |OrderController / OrderServiceImpl|
+    if (Chưa lỗi, không coupon và không dùng điểm?) then (có)
+      :applyPricingToOrder(0, 0, 0);
+      |MariaDB / JPA|
+      :OrderRepository.save(order);
+    endif
+    |OrderController / OrderServiceImpl|
+    if (Chưa có lỗi?) then (có)
+      |MariaDB / JPA|
+      :Thử TX2 TransactionTemplate:\nOutboxEventRepository.save(OrderCreatedEvent);
+      note right
+        TX1, các lần lưu giá và TX2 là các transaction riêng.
+        CDC chuyển Outbox sang Kafka bất đồng bộ.
+      end note
+    endif
+    |OrderController / OrderServiceImpl|
+    if (TX2 commit và chưa có lỗi?) then (có)
+      :CartServiceImpl.clearCart(cartKey, null);
+      |Redis|
+      :DELETE cartKey;
+      |OrderController / OrderServiceImpl|
+      :Nếu xóa giỏ không lỗi: CartEventProducer\nthử gửi CLEAR_CART không chờ Kafka ack;\nconvertToResponse();
+      note right
+        Lỗi trong try kể cả sau TX2 vẫn đi catch chung.
+        Lỗi gửi hành vi đồng bộ được producer bắt và ghi log.
+      end note
+    endif
+  endif
+endif
+|OrderController / OrderServiceImpl|
+if (Toàn bộ khối try hoàn tất?) then (có)
+  |Redis|
+  :Thử lưu JSON response vào lockKey, TTL 15 phút;\nlỗi cache response chỉ ghi log;
+  |OrderController / OrderServiceImpl|
+  :HTTP 200 ApiResponse<OrderResponse>;
+  |Khách hàng / CheckoutPage|
+  :initiatePayment(orderId, COD hoặc VNPAY);\nchi tiết trong bộ thanh toán;
+  stop
+else (exception)
+  if (TX1 đã commit và savedOrder khác null?) then (có)
+    |MariaDB / JPA|
+    :Thử transaction bù trừ:\nfindById; nếu tìm thấy, CANCELLED nếu cần\n+ Outbox OrderCancelledEvent(items đã giữ);
+    |OrderController / OrderServiceImpl|
+    if (Transaction bù trừ không ném lỗi?) then (có)
+      |Dịch vụ gRPC / Feign|
+      :returnVoucherForOrder(): release rồi restore;\nrefundPointsForOrder(): tìm profile rồi hoàn theo orderId;
+      |OrderController / OrderServiceImpl|
+      :Lỗi trả voucher / điểm → thử lưu CompensationTask;\nlỗi bù trừ được ghi log;
+    else (không)
+      :Ghi log; bỏ các bước bù trừ tiếp theo trong khối này;
+    endif
+    note right
+      Không cộng Redis trực tiếp sau TX1 commit.
+      inventory-service xử lý tồn qua sự kiện hủy.
+    end note
+  else (TX1 chưa commit)
+    |Redis|
+    :Với từng item đã giữ: Lua stockIncrementScript;\nkey thiếu thì bỏ qua; lỗi từng item chỉ ghi log;
+  endif
+  |Redis|
+  :DELETE khóa idempotency nếu có;
+  |OrderController / OrderServiceImpl|
+  :Ném lại exception; GlobalExceptionHandler\nánh xạ HTTP 400 / 503 / 500;
+  |Khách hàng / CheckoutPage|
+  :Hiển thị lỗi đặt hàng;
+  stop
+endif
 @enduml
