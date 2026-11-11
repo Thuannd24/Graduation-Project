@@ -1,0 +1,229 @@
+@startuml uc_tong_quan
+title Hình ảnh 1. Biểu đồ usecase tổng quan Hệ thống Thương mại Điện tử AuraTech
+
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+<style>
+usecaseDiagram {
+  LineColor #000000
+  LineThickness 1.2
+  arrow {
+    LineColor #000000
+    LineThickness 1.2
+    FontColor #000000
+    FontSize 9
+    FontStyle bold
+  }
+  actor {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF4
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  usecase {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF4
+    FontColor #000000
+    FontSize 10
+  }
+  rectangle {
+    LineColor #000000
+    LineThickness 1.5
+    BackgroundColor #7ACFF4
+    FontColor #000000
+    FontSize 12
+    FontStyle bold
+  }
+}
+</style>
+
+left to right direction
+
+skinparam {
+  vpDiagramType UseCaseDiagram
+  defaultFontName "Segoe UI", Arial, sans-serif
+  defaultFontSize 10.5
+  defaultFontColor #000000
+  roundcorner 0
+  shadowing false
+  packageStyle rectangle
+  nodesep 22
+  ranksep 28
+}
+
+' ==============================================================================
+' STYLE VISUAL PARADIGM (CHUẨN ĐỒ ÁN PTIT & BẢN VẼ VPASCODE)
+' Khung System Boundary nền xanh #7ACFF4, các hình Oval Use Case viền đen sắc nét
+' ==============================================================================
+skinparam rectangle {
+    BackgroundColor #7ACFF4
+    BorderColor #000000
+    BorderThickness 1.5
+    FontColor #000000
+    FontStyle bold
+    FontSize 12
+}
+
+skinparam usecase {
+    BackgroundColor #7ACFF4
+    BorderColor #000000
+    BorderThickness 1.2
+    FontColor #000000
+    FontSize 10
+    ArrowColor #000000
+    ArrowThickness 1.2
+    ArrowFontColor #000000
+    ArrowFontSize 9
+    ArrowFontStyle bold
+}
+
+skinparam actor {
+    BackgroundColor #7ACFF4
+    BorderColor #000000
+    BorderThickness 1.2
+    FontColor #000000
+    FontStyle bold
+    FontSize 11
+}
+
+skinparam arrow {
+    Color #000000
+    Thickness 1.2
+    FontColor #000000
+    FontSize 9
+    FontStyle bold
+}
+
+' ==============================================================================
+' 1. TÁC NHÂN (ACTORS - BÊN TRÁI HỆ THỐNG)
+' ==============================================================================
+actor "Admin" as Admin
+actor "Staff" as Staff
+actor "Member" as Member
+actor "Guest" as Guest
+actor "Customer" as Customer
+
+' Kế thừa tác nhân (Generalization <|--)
+Staff <|-- Admin
+Member <|-- Staff
+Member <|-- Customer
+
+' Cố định bố cục vị trí tương đối giữa các tác nhân bên trái
+Admin -[hidden]down-> Staff
+Staff -[hidden]down-> Member
+Admin -[hidden]right-> Guest
+Guest -[hidden]down-> Customer
+
+' ==============================================================================
+' 2. SYSTEM BOUNDARY (KHUNG CHỮ NHẬT XANH AURA TECH E-COMMERCE)
+' ==============================================================================
+rectangle "AuraTech E-Commerce" as SystemBoundary {
+
+    ' --- Cột bên trái trong khung ---
+    usecase "Process Refund Requests" as UC_Refund
+    usecase "Direct Customer Support" as UC_Support
+    usecase "Manage User Accounts & RBAC" as UC_ManageAccount
+    usecase "Configure Camunda Campaign" as UC_Campaign
+    usecase "Manage Products & Categories" as UC_ManageProduct
+    usecase "Process Orders & Shipping" as UC_ProcessOrder
+    usecase "Cancel Order & Refund" as UC_CancelOrder
+    usecase "Chat with AI Assistant\n--\n<size:9><b>extension points</b></size>\n<size:9>Live Handover to Staff</size>" as UC_Chatbot
+    usecase "Manage Cart" as UC_Cart
+    usecase "Place Online Order" as UC_OnlineOrder
+    usecase "Personalized Recommendations" as UC_Recs
+    usecase "View Product Details" as UC_ViewDetail
+
+    ' --- Cột bên phải trong khung ---
+    usecase "Login with OIDC / Password" as UC_Login
+    usecase "Live Handover to Staff" as UC_LiveHandover
+    usecase "Business Statistics" as UC_Statistic
+    usecase "Validate BPMN Syntax" as UC_ValidateBPMN
+    usecase "RAG Context Retrieval" as UC_RAG
+    usecase "Hold Inventory Lock" as UC_HoldStock
+    usecase "Select Delivery Address" as UC_Address
+    usecase "Apply Voucher" as UC_Voucher
+    usecase "VNPay Payment" as UC_Payment
+    usecase "Review & Rate\nProduct" as UC_Review
+}
+
+' Cố định trật tự phân bổ từ trên xuống dưới của cột bên trái trong khung
+UC_Refund -[hidden]down-> UC_Support
+UC_Support -[hidden]down-> UC_ManageAccount
+UC_ManageAccount -[hidden]down-> UC_Campaign
+UC_Campaign -[hidden]down-> UC_ManageProduct
+UC_ManageProduct -[hidden]down-> UC_ProcessOrder
+UC_ProcessOrder -[hidden]down-> UC_CancelOrder
+UC_CancelOrder -[hidden]down-> UC_Chatbot
+UC_Chatbot -[hidden]down-> UC_Cart
+UC_Cart -[hidden]down-> UC_OnlineOrder
+UC_OnlineOrder -[hidden]down-> UC_Recs
+UC_Recs -[hidden]down-> UC_ViewDetail
+
+' Cố định trật tự phân bổ từ trên xuống dưới của cột bên phải trong khung
+UC_Login -[hidden]down-> UC_LiveHandover
+UC_LiveHandover -[hidden]down-> UC_Statistic
+UC_Statistic -[hidden]down-> UC_ValidateBPMN
+UC_ValidateBPMN -[hidden]down-> UC_RAG
+UC_RAG -[hidden]down-> UC_HoldStock
+UC_HoldStock -[hidden]down-> UC_Address
+UC_Address -[hidden]down-> UC_Voucher
+UC_Voucher -[hidden]down-> UC_Payment
+UC_Payment -[hidden]down-> UC_Review
+
+' Cân đối hai cột bên trong khung
+UC_Refund -[hidden]right-> UC_Login
+UC_Support -[hidden]right-> UC_LiveHandover
+UC_ManageAccount -[hidden]right-> UC_Statistic
+UC_Campaign -[hidden]right-> UC_ValidateBPMN
+UC_Chatbot -[hidden]right-> UC_RAG
+UC_OnlineOrder -[hidden]right-> UC_Address
+UC_Recs -[hidden]right-> UC_Review
+
+' ==============================================================================
+' 3. LIÊN KẾT TÁC NHÂN VỚI USE CASE (ASSOCIATIONS - ĐƯỜNG NÉT LIỀN THUẦN TÚY)
+' ==============================================================================
+' Tác nhân Member (đường nối kéo từ ngoài mép trái lên Login)
+Member -- UC_Login
+
+' Tác nhân Admin
+Admin -- UC_Refund
+Admin -- UC_LiveHandover
+Admin -- UC_Support
+Admin -- UC_ManageAccount
+Admin -- UC_Statistic
+Admin -- UC_Campaign
+Admin -- UC_ManageProduct
+Admin -- UC_ProcessOrder
+
+' Tác nhân Guest
+Guest -- UC_Chatbot
+Guest -- UC_Recs
+Guest -- UC_ViewDetail
+
+' Tác nhân Customer
+Customer -- UC_CancelOrder
+Customer -- UC_Chatbot
+Customer -- UC_Cart
+Customer -- UC_OnlineOrder
+Customer -- UC_Recs
+Customer -- UC_Review
+Customer -- UC_ViewDetail
+
+' ==============================================================================
+' 4. QUAN HỆ INCLUDE & EXTEND (CHUẨN UML 2.5 - ĐƯỜNG NÉT ĐỨT)
+' ==============================================================================
+' Quan hệ Extend
+UC_LiveHandover ..> UC_Chatbot : <<Extend>>
+
+' Quan hệ Include
+UC_Campaign ..> UC_ValidateBPMN : <<Include>>
+UC_Chatbot ..> UC_RAG : <<Include>>
+UC_OnlineOrder ..> UC_HoldStock : <<Include>>
+UC_OnlineOrder ..> UC_Address : <<Include>>
+UC_OnlineOrder ..> UC_Voucher : <<Include>>
+UC_OnlineOrder ..> UC_Payment : <<Include>>
+
+@enduml

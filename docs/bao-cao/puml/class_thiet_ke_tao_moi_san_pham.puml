@@ -1,0 +1,292 @@
+@startuml class_thiet_ke_tao_moi_san_pham
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+<style>
+classDiagram {
+  LineColor #000000
+  LineThickness 2.0
+  arrow {
+    LineColor #000000
+    LineThickness 2.0
+    FontColor #000000
+    FontSize 9
+    FontStyle bold
+  }
+  class {
+    LineColor #000000
+    LineThickness 1.5
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontStyle bold
+  }
+  interface {
+    LineColor #000000
+    LineThickness 1.5
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontStyle bold
+  }
+}
+</style>
+
+skinparam {
+  vpDiagramType ClassDiagram
+  defaultFontSize 9
+  defaultFontColor #000000
+  roundcorner 0
+  shadowing false
+  linetype ortho
+  classAttributeIconSize 0
+ nodesep 22
+  ranksep 16
+}
+hide interface circle
+hide class circle
+
+skinparam ClassBackgroundColor #7ACFF5
+skinparam ClassBorderColor #000000
+skinparam ClassBorderThickness 1.5
+skinparam ClassFontColor #000000
+skinparam ClassFontStyle bold
+skinparam ClassAttributeFontColor #000000
+skinparam ClassAttributeFontSize 8
+
+skinparam InterfaceBackgroundColor #7ACFF5
+skinparam InterfaceBorderColor #000000
+skinparam InterfaceBorderThickness 1.5
+skinparam InterfaceFontColor #000000
+skinparam InterfaceFontStyle bold
+skinparam InterfaceAttributeFontSize 8
+
+skinparam ArrowColor #000000
+skinparam ArrowThickness 2.0
+skinparam ArrowFontColor #000000
+skinparam ArrowFontSize 9
+skinparam ArrowFontStyle bold
+
+' ==============================================================================
+' 1. TẦNG GIAO DIỆN & TÁC NHÂN (HÀNG 1 - GỌN GÀNG TRÊN CÙNG)
+' ==============================================================================
+class Member {
+  - id : Long
+  - username : String
+  - fullName : String
+  - email : String
+  - phoneNumber : String
+  + login(u : String, p : String) : boolean
+}
+
+class Staff {
+  - role : String
+  + manageProducts() : void
+  + createProduct() : void
+}
+
+class MainStaffView {
+  - navProducts : link
+  - staff : Staff
+  + navigateToProducts() : void
+}
+
+class ManageProductView {
+  - txtSearchQuery : input
+  - selCategoryFilter : select
+  - selBrandFilter : select
+  - btnAddProduct : submit
+  - tblProducts : table
+  - staff : Staff
+  + onSearch(query : String) : void
+  + onFilterChange() : void
+  + onOpenAddProduct() : void
+}
+
+class AddProductView {
+  - txtName : input
+  - txtSlug : input
+  - txtDescription : textarea
+  - txtPrice : input
+  - txtCostPrice : input
+  - txtSalePrice : input
+  - txtWeight : input
+  - selCategory : select
+  - selBrand : select
+  - fileImages : file
+  - specValues : Map
+  - listVariants : Object[]
+  - btnSubmit : submit
+  - staff : Staff
+  + handleNameChange(e : Event) : void
+  + handleCategoryChange(catId : Long) : void
+  + handleFileUpload(files : FileList) : void
+  + generateVariantsGrid() : void
+  + handleSubmit(e : FormEvent) : void
+}
+Member <|-up- Staff
+Staff -right- MainStaffView
+MainStaffView -right- ManageProductView
+ManageProductView -right- AddProductView
+
+' ==============================================================================
+' 2. TẦNG ĐIỀU KHIỂN & DỊCH VỤ (HÀNG 2 - NẰM NGANG NHAU ĐỂ TIẾT KIỆM CHIỀU CAO)
+' ==============================================================================
+class AdminProductController {
+  - productServiceImpl : ProductServiceImpl
+  + createProduct(dto : ProductDto) : ApiResponse<ProductDto>
+  + uploadProductImage(file : MultipartFile, folder : String) : ApiResponse<Map>
+}
+
+class ProductServiceImpl {
+  - productRepository : ProductRepository
+  - productVariantRepository : ProductVariantRepository
+  - categoryRepository : CategoryRepository
+  - brandRepository : BrandRepository
+  - attributeRepository : AttributeRepository
+  - productAttributeValueRepository : ProductAttributeValueRepository
+  - variantOptionValueRepository : VariantOptionValueRepository
+  - productImageRepository : ProductImageRepository
+  - productTagRepository : ProductTagRepository
+  + createProduct(dto : ProductDto) : ProductDto
+  - saveSpecifications(productId : Long, attrs : Map, attrMap : Map) : void
+  - saveVariantOptions(variantId : Long, attrs : Map, attrMap : Map) : void
+  - normalizeProductPricing(dto : ProductDto) : void
+  - convertToDto(p : Product) : ProductDto
+}
+
+AddProductView -down- AdminProductController
+ProductServiceImpl -right- AdminProductController
+
+' ==============================================================================
+' 3. TẦNG TRUY XUẤT DỮ LIỆU (HÀNG 3 - 3 CỤM REPOSITORIES CỐT LÕI)
+' ==============================================================================
+interface CategoryRepository {
+  + findById(id : Long) : Optional<Category>
+  + findAll() : List<Category>
+}
+
+interface BrandRepository {
+  + findById(id : Long) : Optional<Brand>
+  + findActiveBrandsByCategoryId(catId : Long) : List<Brand>
+}
+
+interface ProductRepository {
+  + save(p : Product) : Product
+  + findBySlug(slug : String) : Optional<Product>
+  + existsBySlug(slug : String) : boolean
+}
+
+interface ProductVariantRepository {
+  + saveAll(list : List<ProductVariant>) : List<ProductVariant>
+  + findByProductId(productId : Long) : List<ProductVariant>
+}
+
+interface AttributeRepository {
+  + findAll() : List<Attribute>
+  + findByCode(code : String) : Optional<Attribute>
+}
+
+CategoryRepository -right- BrandRepository
+BrandRepository -[hidden]right- ProductRepository
+ProductRepository -right- ProductVariantRepository
+ProductVariantRepository -[hidden]right- AttributeRepository
+
+ProductServiceImpl -down- CategoryRepository
+ProductServiceImpl -down- ProductRepository
+ProductServiceImpl -down- AttributeRepository
+
+' ==============================================================================
+' 4. TẦNG THỰC THỂ DỮ LIỆU (HÀNG 4 - THỰC THỂ USE CASE TẠO MỚI)
+' ==============================================================================
+class Category {
+  - id : Long
+  - name : String
+  - slug : String
+  - active : Boolean
+}
+
+class Brand {
+  - id : Long
+  - name : String
+  - slug : String
+  - logoUrl : String
+  - active : Boolean
+}
+
+class Product {
+  - id : Long
+  - name : String
+  - slug : String
+  - description : String
+  - price : BigDecimal
+  - costPrice : BigDecimal
+  - salePrice : BigDecimal
+  - weight : BigDecimal
+  - categoryId : Long
+  - brandId : Long
+  - imageUrl : String
+  - active : Boolean
+}
+
+class ProductVariant {
+  - id : Long
+  - productId : Long
+  - sku : String
+  - price : BigDecimal
+  - costPrice : BigDecimal
+  - salePrice : BigDecimal
+  - weight : BigDecimal
+  - imageUrl : String
+  - active : Boolean
+}
+
+class ProductImage {
+  - id : Long
+  - productId : Long
+  - imageUrl : String
+  - isPrimary : Boolean
+}
+
+class ProductTag {
+  - productId : Long
+  - tag : String
+}
+
+class Attribute {
+  - id : Long
+  - code : String
+  - name : String
+  - valueType : String
+}
+
+class ProductAttributeValue {
+  - id : Long
+  - productId : Long
+  - attributeId : Long
+  - value : String
+}
+
+class VariantOptionValue {
+  - id : Long
+  - variantId : Long
+  - attributeId : Long
+  - value : String
+}
+
+' Liên kết từ Repository xuống Entity (nét liền không mũi tên)
+CategoryRepository -down- Category
+BrandRepository -down- Brand
+ProductRepository -down- Product
+ProductVariantRepository -down- ProductVariant
+AttributeRepository -down- Attribute
+
+' Quan hệ giữa các thực thể
+Product *-right- ProductAttributeValue
+Attribute -down- ProductAttributeValue
+ProductVariant *-right- VariantOptionValue
+Attribute -down- VariantOptionValue
+Product *-right- ProductImage
+Product *-down- ProductTag
+Product *-down- ProductVariant
+Category -right- Brand
+Category o-down- Product
+Brand o-down- Product
+@enduml

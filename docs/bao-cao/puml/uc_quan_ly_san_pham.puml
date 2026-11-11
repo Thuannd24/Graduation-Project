@@ -1,0 +1,186 @@
+@startuml uc_quan_ly_san_pham
+title Hình ảnh 2. Biểu đồ use case phân hệ Quản lý sản phẩm và Kho hàng
+
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+<style>
+usecaseDiagram {
+  LineColor #000000
+  LineThickness 1.2
+  arrow {
+    LineColor #000000
+    LineThickness 1.2
+    FontColor #000000
+    FontSize 9
+    FontStyle bold
+  }
+  actor {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF4
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  usecase {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF4
+    FontColor #000000
+    FontSize 10
+  }
+  rectangle {
+    LineColor #000000
+    LineThickness 1.5
+    BackgroundColor #7ACFF4
+    FontColor #000000
+    FontSize 12
+    FontStyle bold
+  }
+}
+</style>
+
+left to right direction
+
+skinparam {
+  vpDiagramType UseCaseDiagram
+  defaultFontName "Segoe UI", Arial, sans-serif
+  defaultFontSize 10.5
+  defaultFontColor #000000
+  roundcorner 0
+  shadowing false
+  packageStyle rectangle
+  nodesep 22
+  ranksep 28
+}
+
+' ==============================================================================
+' STYLE VISUAL PARADIGM (CHUẨN ĐỒ ÁN PTIT & BẢN VẼ VPASCODE)
+' ==============================================================================
+skinparam rectangle {
+    BackgroundColor #7ACFF4
+    BorderColor #000000
+    BorderThickness 1.5
+    FontColor #000000
+    FontStyle bold
+    FontSize 12
+}
+
+skinparam usecase {
+    BackgroundColor #7ACFF4
+    BorderColor #000000
+    BorderThickness 1.2
+    FontColor #000000
+    FontSize 10
+    ArrowColor #000000
+    ArrowThickness 1.2
+    ArrowFontColor #000000
+    ArrowFontSize 9
+    ArrowFontStyle bold
+}
+
+skinparam actor {
+    BackgroundColor #7ACFF4
+    BorderColor #000000
+    BorderThickness 1.2
+    FontColor #000000
+    FontStyle bold
+    FontSize 11
+}
+
+skinparam arrow {
+    Color #000000
+    Thickness 1.2
+    FontColor #000000
+    FontSize 9
+    FontStyle bold
+}
+
+skinparam stereotype {
+    FontColor #000000
+    FontSize 8.5
+    FontStyle italic
+}
+
+' ==============================================================================
+' 1. TÁC NHÂN (ACTORS - KẾ THỪA CHUẨN VISUAL PARADIGM)
+' ==============================================================================
+actor "Staff\n(Nhân viên vận hành)" as Staff
+actor "Admin\n(Quản trị viên)" as Admin
+
+' Kế thừa Actor (Admin kế thừa toàn bộ quyền của Staff)
+Staff <|-- Admin
+
+' Cố định thứ tự hiển thị cột bên trái
+Staff -[hidden]down-> Admin
+
+' ==============================================================================
+' 2. SYSTEM BOUNDARY (PHÂN HỆ QUẢN LÝ SẢN PHẨM & KHO HÀNG)
+' ==============================================================================
+rectangle "Phân hệ Quản lý sản phẩm & Kho hàng (AuraTech System)" as BoundaryProductInventory {
+
+    ' Nhóm chức năng Quản lý danh mục & thương hiệu
+    usecase "Manage Category" as UC_ManageCategory
+    usecase "Manage Brand" as UC_ManageBrand
+    usecase "Assign Category Attributes" as UC_AssignCategoryAttr
+
+    ' Nhóm chức năng Quản lý sản phẩm cốt lõi
+    usecase "View Product List" as UC_ViewProduct
+    usecase "Create Product" as UC_CreateProduct
+    usecase "Update Product" as UC_UpdateProduct
+    usecase "Delete Product" as UC_DeleteProduct
+    usecase "Toggle Business Status" as UC_ToggleStatus
+    usecase "Reply Review" as UC_ReplyReview
+
+    ' Nhóm chi tiết cấu hình tạo mới & cập nhật sản phẩm
+    usecase "Enter Basic Info" as UC_EnterInfo
+    usecase "Configure Pricing" as UC_SetPrice
+    usecase "Upload Images (MinIO)" as UC_UploadImage
+    usecase "Configure Variants (SKU)" as UC_ConfigVariant
+    usecase "Fill Dynamic Attributes" as UC_FillAttribute
+
+    ' Nhóm nghiệp vụ Quản lý Kho hàng & Tồn kho
+    usecase "Manage Inventory" as UC_ManageStock
+    usecase "Adjust Stock" as UC_UpdateStock
+    usecase "Restock Inventory" as UC_Restock
+    usecase "Record Stock History" as UC_RecordHistory
+    usecase "View Low Stock Alert" as UC_LowStockAlert
+}
+
+' ==============================================================================
+' 3. LIÊN KẾT TÁC NHÂN VỚI USE CASE (ASSOCIATIONS - ĐƯỜNG NÉT LIỀN THUẦN TÚY)
+' ==============================================================================
+' Quyền hạn đặc biệt của Quản trị viên (Admin)
+Admin -- UC_DeleteProduct
+
+' Quyền hạn nghiệp vụ của Nhân viên (Staff)
+Staff -- UC_ViewProduct
+Staff -- UC_CreateProduct
+Staff -- UC_UpdateProduct
+Staff -- UC_ToggleStatus
+Staff -- UC_ManageStock
+Staff -- UC_ManageCategory
+Staff -- UC_ManageBrand
+Staff -- UC_ReplyReview
+
+' ==============================================================================
+' 4. QUAN HỆ INCLUDE & EXTEND (CHUẨN UML 2.5)
+' ==============================================================================
+' Quan hệ Include (Bắt buộc trong quy trình tạo sản phẩm & nhập kho)
+UC_CreateProduct ..> UC_EnterInfo : <<include>>
+UC_CreateProduct ..> UC_SetPrice : <<include>>
+UC_CreateProduct ..> UC_UploadImage : <<include>>
+
+UC_ManageStock ..> UC_Restock : <<include>>
+UC_Restock ..> UC_RecordHistory : <<include>>
+
+' Quan hệ Extend (Mở rộng tùy chọn cho thuộc tính nâng cao và cảnh báo kho)
+UC_ConfigVariant ..> UC_CreateProduct : <<extend>>
+UC_FillAttribute ..> UC_CreateProduct : <<extend>>
+UC_UpdateStock ..> UC_UpdateProduct : <<extend>>
+UC_LowStockAlert ..> UC_ManageStock : <<extend>>
+UC_AssignCategoryAttr ..> UC_ManageCategory : <<extend>>
+
+right footer Powered By Visual Paradigm Community Edition
+
+@enduml

@@ -1,0 +1,412 @@
+@startuml class_thiet_ke_thuc_the
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+<style>
+classDiagram {
+  LineColor #000000
+  LineThickness 1.5
+  arrow {
+    LineColor #000000
+    LineThickness 1.5
+    FontColor #000000
+    FontSize 8
+    FontStyle bold
+  }
+  class {
+    LineColor #000000
+    LineThickness 1.5
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontStyle bold
+  }
+}
+</style>
+
+skinparam {
+  vpDiagramType ClassDiagram
+  defaultFontSize 8
+  defaultFontColor #000000
+  roundcorner 0
+  shadowing false
+  linetype ortho
+  classAttributeIconSize 0
+  nodesep 24
+  ranksep 22
+}
+hide class circle
+
+skinparam ClassBackgroundColor #7ACFF5
+skinparam ClassBorderColor #000000
+skinparam ClassBorderThickness 1.5
+skinparam ClassFontColor #000000
+skinparam ClassFontStyle bold
+skinparam ClassAttributeFontColor #000000
+skinparam ClassAttributeFontSize 8
+
+skinparam ArrowColor #000000
+skinparam ArrowThickness 1.5
+skinparam ArrowFontColor #000000
+skinparam ArrowFontSize 8
+skinparam ArrowFontStyle bold
+
+' ==============================================================================
+' CỘT 1: NGƯỜI DÙNG & ĐỊA CHỈ (USER & ADDRESS DOMAIN)
+' ==============================================================================
+class Member {
+  - id : Long
+  - username : String
+  - fullName : String
+  - email : String
+  - phoneNumber : String
+  - avatarUrl : String
+  - active : Boolean
+  + login() : boolean
+}
+
+class Staff {
+  - role : String
+  - department : String
+}
+
+class Customer {
+  - keycloakUserId : String
+  - customerTier : String
+  - loyaltyPoints : Integer
+  - segmentationLabel : String
+  - isBlacklisted : Boolean
+}
+
+class CustomerStatistics {
+  - totalCustomers : Integer
+  - newCustomersCount : Integer
+  - churnRiskCount : Integer
+}
+
+class Address {
+  - id : Long
+  - userId : Long
+  - recipientName : String
+  - phoneNumber : String
+  - province : String
+  - districtWard : String
+  - detailAddress : String
+  - isDefault : Boolean
+}
+
+class Province {
+  - code : Integer
+  - name : String
+}
+
+class Ward {
+  - code : Integer
+  - name : String
+  - provinceCode : Integer
+}
+
+Member <|-right- Staff
+Member <|-down- Customer
+Customer <|-down- CustomerStatistics
+Customer "<size:8>1</size>" *-down- "<size:8>0..*</size>" Address
+Address "<size:8>0..*</size>" -down- "<size:8>1</size>" Province
+Province "<size:8>1</size>" *-right- "<size:8>0..*</size>" Ward
+Address "<size:8>0..*</size>" -- "<size:8>1</size>" Ward
+
+' ==============================================================================
+' CỘT 2: CHIẾN DỊCH, VOUCHER & TÍCH ĐIỂM (PROMOTION DOMAIN)
+' ==============================================================================
+class Campaign {
+  - id : Long
+  - name : String
+  - totalBudget : BigDecimal
+  - remainingBudget : BigDecimal
+  - startDate : LocalDateTime
+  - endDate : LocalDateTime
+  - bpmnProcessDefinitionKey : String
+  - active : Boolean
+}
+
+class IssuedVoucher {
+  - id : Long
+  - code : String
+  - userId : Long
+  - campaignId : Long
+  - voucherType : String
+  - status : String
+  - discountPercent : BigDecimal
+  - maxDiscountAmount : BigDecimal
+}
+
+class LoyaltyPointTransaction {
+  - id : Long
+  - userId : Long
+  - orderId : Long
+  - campaignId : Long
+  - delta : Integer
+  - balanceAfter : Integer
+  - calculationMode : String
+  - sourceType : String
+  - referenceId : String
+}
+
+Campaign "<size:8>1</size>" *-down- "<size:8>0..*</size>" IssuedVoucher
+Campaign "<size:8>1</size>" -- "<size:8>0..*</size>" LoyaltyPointTransaction
+Customer "<size:8>1</size>" o-right- "<size:8>0..*</size>" IssuedVoucher
+Customer "<size:8>1</size>" o-right- "<size:8>0..*</size>" LoyaltyPointTransaction
+
+' ==============================================================================
+' CỘT 3: ĐƠN HÀNG, THANH TOÁN & HOÀN TIỀN (ORDER & PAYMENT DOMAIN)
+' ==============================================================================
+class Order {
+  - id : Long
+  - userId : String
+  - status : String
+  - totalAmount : BigDecimal
+  - discountAmount : BigDecimal
+  - finalAmount : BigDecimal
+  - shippingFee : BigDecimal
+  - shippingAddress : String
+  - phoneNumber : String
+  - couponCode : String
+  - pointsRedeemed : Integer
+  - createdAt : LocalDateTime
+}
+
+class OrderStatistics {
+  - totalOrders : Integer
+  - totalRevenue : BigDecimal
+  - cancelledOrdersCount : Integer
+}
+
+class Payment {
+  - id : Long
+  - orderId : Long
+  - userId : String
+  - txnRef : String
+  - gatewayTxnId : String
+  - paymentMethod : String
+  - amount : BigDecimal
+  - status : String
+  - paidAt : LocalDateTime
+}
+
+class Refund {
+  - id : Long
+  - paymentId : Long
+  - refundAmount : BigDecimal
+  - reason : String
+  - status : String
+  - requestedBy : String
+}
+
+IssuedVoucher "<size:8>0..1</size>" -right- "<size:8>1</size>" Order
+Customer "<size:8>1</size>" o-right- "<size:8>0..*</size>" Order
+Order <|-down- OrderStatistics
+Order "<size:8>1</size>" -- "<size:8>0..*</size>" LoyaltyPointTransaction
+Order "<size:8>1</size>" o-down- "<size:8>1</size>" Payment
+Payment "<size:8>1</size>" *-right- "<size:8>0..*</size>" Refund
+
+' ==============================================================================
+' CỘT 4: THƯƠNG HIỆU, DANH MỤC, THUỘC TÍNH & MẶT HÀNG (CATALOG DOMAIN)
+' ==============================================================================
+class Brand {
+  - id : Long
+  - name : String
+  - slug : String
+  - logoUrl : String
+}
+
+class Category {
+  - id : Long
+  - name : String
+  - slug : String
+  - parentId : Long
+  - active : Boolean
+}
+
+class CategoryAttribute {
+  - id : Long
+  - categoryId : Long
+  - attributeId : Long
+  - isVariant : Boolean
+  - isRequired : Boolean
+}
+
+class Attribute {
+  - id : Long
+  - code : String
+  - name : String
+  - valueType : String
+}
+
+class OrderItem {
+  - id : Long
+  - orderId : Long
+  - productId : Long
+  - variantId : Long
+  - productName : String
+  - variantAttr : String
+  - unitPrice : BigDecimal
+  - quantity : Integer
+  - subtotal : BigDecimal
+}
+
+Brand "<size:8>0..*</size>" -down- "<size:8>0..*</size>" Category
+Category "<size:8>1</size>" *-down- "<size:8>0..*</size>" CategoryAttribute
+Attribute "<size:8>1</size>" o-right- "<size:8>0..*</size>" CategoryAttribute
+CategoryAttribute -[hidden]down- OrderItem
+Order "<size:8>1</size>" *-right- "<size:8>1..*</size>" OrderItem
+
+' ==============================================================================
+' CỘT 5: SẢN PHẨM & BIẾN THỂ (PRODUCT & VARIANT DOMAIN)
+' ==============================================================================
+class Product {
+  - id : Long
+  - name : String
+  - slug : String
+  - description : String
+  - price : BigDecimal
+  - costPrice : BigDecimal
+  - salePrice : BigDecimal
+  - weight : BigDecimal
+  - categoryId : Long
+  - brandId : Long
+  - active : Boolean
+}
+
+class ProductStatistics {
+  - totalProducts : Integer
+  - topSellingCount : Integer
+  - outOfStockCount : Integer
+}
+
+class ProductImage {
+  - id : Long
+  - productId : Long
+  - imageUrl : String
+  - isPrimary : Boolean
+}
+
+class ProductTag {
+  - id : Long
+  - productId : Long
+  - tag : String
+}
+
+class ProductAttributeValue {
+  - id : Long
+  - productId : Long
+  - attributeId : Long
+  - value : String
+}
+
+class ProductVariant {
+  - id : Long
+  - productId : Long
+  - sku : String
+  - variantAttr : String
+  - price : BigDecimal
+  - salePrice : BigDecimal
+  - weight : BigDecimal
+  - active : Boolean
+}
+
+class VariantOptionValue {
+  - id : Long
+  - variantId : Long
+  - attributeId : Long
+  - value : String
+}
+
+Brand "<size:8>1</size>" o-right- "<size:8>0..*</size>" Product
+Category "<size:8>1</size>" o-right- "<size:8>0..*</size>" Product
+Product <|-down- ProductStatistics
+
+Product "<size:8>1</size>" *-down- "<size:8>0..*</size>" ProductImage
+Product "<size:8>1</size>" *-down- "<size:8>0..*</size>" ProductTag
+Product "<size:8>1</size>" *-down- "<size:8>0..*</size>" ProductAttributeValue
+ProductImage -[hidden]right- ProductTag
+ProductTag -[hidden]right- ProductAttributeValue
+Attribute "<size:8>1</size>" o-down- "<size:8>0..*</size>" ProductAttributeValue
+
+Product "<size:8>1</size>" *-down- "<size:8>1..*</size>" ProductVariant
+OrderItem "<size:8>0..*</size>" o-right- "<size:8>1</size>" ProductVariant
+ProductVariant "<size:8>1</size>" *-up- "<size:8>0..*</size>" VariantOptionValue
+Attribute "<size:8>1</size>" o-right- "<size:8>0..*</size>" VariantOptionValue
+
+' ==============================================================================
+' CỘT 6: ĐÁNH GIÁ, YÊU THÍCH & KHO HÀNG (REVIEW & INVENTORY DOMAIN)
+' ==============================================================================
+class ProductReview {
+  - id : Long
+  - productId : Long
+  - userId : String
+  - orderId : Long
+  - rating : Integer
+  - comment : String
+  - staffReplyContent : String
+  - staffReplierId : String
+}
+
+class WishlistItem {
+  - id : Long
+  - userId : String
+  - productId : Long
+}
+
+class Inventory {
+  - id : Long
+  - productId : Long
+  - variantId : Long
+  - quantity : Integer
+  - updatedAt : LocalDateTime
+}
+
+class InventoryTransaction {
+  - id : Long
+  - orderId : Long
+  - inventoryId : Long
+  - transactionType : String
+  - quantityChanged : Integer
+  - quantityBefore : Integer
+  - quantityAfter : Integer
+}
+
+class RestockRequest {
+  - id : Long
+  - productId : Long
+  - variantId : Long
+  - quantity : Integer
+  - supplier : String
+  - status : String
+  - requestedBy : String
+}
+
+Product "<size:8>1</size>" o-right- "<size:8>0..*</size>" ProductReview
+ProductReview -[hidden]down- WishlistItem
+Product "<size:8>1</size>" o-right- "<size:8>0..*</size>" WishlistItem
+
+Customer "<size:8>1</size>" o-up- "<size:8>0..*</size>" ProductReview
+Order "<size:8>1</size>" -up- "<size:8>0..*</size>" ProductReview
+Customer "<size:8>1</size>" o-up- "<size:8>0..*</size>" WishlistItem
+
+ProductVariant "<size:8>1</size>" *-right- "<size:8>1</size>" Inventory
+Inventory "<size:8>1</size>" *-down- "<size:8>0..*</size>" InventoryTransaction
+Order "<size:8>1</size>" -down- "<size:8>0..*</size>" InventoryTransaction
+ProductVariant "<size:8>1</size>" o-down- "<size:8>0..*</size>" RestockRequest
+
+' ==============================================================================
+' CỐ ĐỊNH 6 CỘT TỶ LỆ CHUẨN A4 LANDSCAPE (THẲNG HÀNG VUÔNG GÓC)
+' ==============================================================================
+Member -[hidden]right- Campaign
+Campaign -[hidden]right- Order
+Order -[hidden]right- Brand
+Brand -[hidden]right- Product
+Product -[hidden]right- ProductReview
+
+Province -[hidden]right- Payment
+Payment -[hidden]right- OrderItem
+OrderItem -[hidden]right- ProductVariant
+ProductVariant -[hidden]right- Inventory
+
+@enduml
