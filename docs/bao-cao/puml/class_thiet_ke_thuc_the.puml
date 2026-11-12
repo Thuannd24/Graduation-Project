@@ -123,6 +123,9 @@ class Campaign {
   - startDate : LocalDateTime
   - endDate : LocalDateTime
   - bpmnProcessDefinitionKey : String
+  - workflowJson : String
+  - bpmnXml : String
+  - triggerType : String
   - active : Boolean
 }
 
@@ -135,6 +138,15 @@ class IssuedVoucher {
   - status : String
   - discountPercent : BigDecimal
   - maxDiscountAmount : BigDecimal
+  - discountAmount : BigDecimal
+  - minOrderValue : BigDecimal
+  - maxShippingDiscount : BigDecimal
+  - restrictedCategoryIds : String
+  - restrictedProductIds : String
+  - expiresAt : LocalDateTime
+  - usedAt : LocalDateTime
+  - usedOrderId : Long
+  - idempotencyKey : String
 }
 
 class LoyaltyPointTransaction {
@@ -147,10 +159,11 @@ class LoyaltyPointTransaction {
   - calculationMode : String
   - sourceType : String
   - referenceId : String
+  - description : String
 }
 
-Campaign "<size:8>1</size>" *-down- "<size:8>0..*</size>" IssuedVoucher
-Campaign "<size:8>1</size>" -- "<size:8>0..*</size>" LoyaltyPointTransaction
+Campaign "<size:8>0..1</size>" o-down- "<size:8>0..*</size>" IssuedVoucher
+Campaign "<size:8>0..1</size>" -- "<size:8>0..*</size>" LoyaltyPointTransaction
 Customer "<size:8>1</size>" o-right- "<size:8>0..*</size>" IssuedVoucher
 Customer "<size:8>1</size>" o-right- "<size:8>0..*</size>" LoyaltyPointTransaction
 
@@ -160,16 +173,23 @@ Customer "<size:8>1</size>" o-right- "<size:8>0..*</size>" LoyaltyPointTransacti
 class Order {
   - id : Long
   - userId : String
+  - email : String
   - status : String
   - totalAmount : BigDecimal
   - discountAmount : BigDecimal
   - finalAmount : BigDecimal
+  - totalWeight : BigDecimal
+  - couponCode : String
+  - appliedCampaignId : String
+  - pointsRedeemed : Integer
+  - pointDiscountAmount : BigDecimal
   - shippingFee : BigDecimal
+  - shippingDiscountAmount : BigDecimal
+  - vatAmount : BigDecimal
+  - trackingCode : String
   - shippingAddress : String
   - phoneNumber : String
-  - couponCode : String
-  - pointsRedeemed : Integer
-  - createdAt : LocalDateTime
+  - note : String
 }
 
 class OrderStatistics {
@@ -182,11 +202,15 @@ class Payment {
   - id : Long
   - orderId : Long
   - userId : String
+  - email : String
   - txnRef : String
   - gatewayTxnId : String
   - paymentMethod : String
   - amount : BigDecimal
+  - currency : String
   - status : String
+  - failureCode : String
+  - gatewayResponse : String
   - paidAt : LocalDateTime
 }
 
@@ -196,14 +220,16 @@ class Refund {
   - refundAmount : BigDecimal
   - reason : String
   - status : String
+  - gatewayRefundId : String
   - requestedBy : String
 }
 
-IssuedVoucher "<size:8>0..1</size>" -right- "<size:8>1</size>" Order
+IssuedVoucher "<size:8>0..*</size>" -right- "<size:8>0..1</size>" Order
 Customer "<size:8>1</size>" o-right- "<size:8>0..*</size>" Order
 Order <|-down- OrderStatistics
-Order "<size:8>1</size>" -- "<size:8>0..*</size>" LoyaltyPointTransaction
-Order "<size:8>1</size>" o-down- "<size:8>1</size>" Payment
+Order "<size:8>0..1</size>" -- "<size:8>0..*</size>" LoyaltyPointTransaction
+Order "<size:8>1</size>" o-down- "<size:8>0..*</size>" Payment
+Customer "<size:8>0..1</size>" o-- "<size:8>0..*</size>" Payment
 Payment "<size:8>1</size>" *-right- "<size:8>0..*</size>" Refund
 
 ' ==============================================================================
@@ -214,6 +240,8 @@ class Brand {
   - name : String
   - slug : String
   - logoUrl : String
+  - description : String
+  - active : Boolean
 }
 
 class Category {
@@ -221,6 +249,9 @@ class Category {
   - name : String
   - slug : String
   - parentId : Long
+  - imageUrl : String
+  - icon : String
+  - sortOrder : Integer
   - active : Boolean
 }
 
@@ -230,6 +261,7 @@ class CategoryAttribute {
   - attributeId : Long
   - isVariant : Boolean
   - isRequired : Boolean
+  - isFilter : Boolean
 }
 
 class Attribute {
@@ -237,6 +269,8 @@ class Attribute {
   - code : String
   - name : String
   - valueType : String
+  - allowedValues : String
+  - isColor : Boolean
 }
 
 class OrderItem {
@@ -245,6 +279,7 @@ class OrderItem {
   - productId : Long
   - variantId : Long
   - productName : String
+  - productImage : String
   - variantAttr : String
   - unitPrice : BigDecimal
   - quantity : Integer
@@ -265,12 +300,23 @@ class Product {
   - name : String
   - slug : String
   - description : String
+  - attributes : String
+  - specsRaw : String
   - price : BigDecimal
   - costPrice : BigDecimal
   - salePrice : BigDecimal
   - weight : BigDecimal
+  - length : BigDecimal
+  - width : BigDecimal
+  - height : BigDecimal
   - categoryId : Long
   - brandId : Long
+  - brand : String
+  - imageUrl : String
+  - warrantyPeriod : Integer
+  - warrantyPolicy : String
+  - salesCount : Integer
+  - ratingAvg : BigDecimal
   - active : Boolean
 }
 
@@ -284,11 +330,11 @@ class ProductImage {
   - id : Long
   - productId : Long
   - imageUrl : String
+  - sortOrder : Integer
   - isPrimary : Boolean
 }
 
 class ProductTag {
-  - id : Long
   - productId : Long
   - tag : String
 }
@@ -306,8 +352,10 @@ class ProductVariant {
   - sku : String
   - variantAttr : String
   - price : BigDecimal
+  - costPrice : BigDecimal
   - salePrice : BigDecimal
   - weight : BigDecimal
+  - imageUrl : String
   - active : Boolean
 }
 
@@ -318,7 +366,7 @@ class VariantOptionValue {
   - value : String
 }
 
-Brand "<size:8>1</size>" o-right- "<size:8>0..*</size>" Product
+Brand "<size:8>0..1</size>" o-right- "<size:8>0..*</size>" Product
 Category "<size:8>1</size>" o-right- "<size:8>0..*</size>" Product
 Product <|-down- ProductStatistics
 
@@ -329,8 +377,9 @@ ProductImage -[hidden]right- ProductTag
 ProductTag -[hidden]right- ProductAttributeValue
 Attribute "<size:8>1</size>" o-down- "<size:8>0..*</size>" ProductAttributeValue
 
-Product "<size:8>1</size>" *-down- "<size:8>1..*</size>" ProductVariant
-OrderItem "<size:8>0..*</size>" o-right- "<size:8>1</size>" ProductVariant
+Product "<size:8>1</size>" *-down- "<size:8>0..*</size>" ProductVariant
+Product "<size:8>1</size>" -left- "<size:8>0..*</size>" OrderItem
+OrderItem "<size:8>0..*</size>" o-right- "<size:8>0..1</size>" ProductVariant
 ProductVariant "<size:8>1</size>" *-up- "<size:8>0..*</size>" VariantOptionValue
 Attribute "<size:8>1</size>" o-right- "<size:8>0..*</size>" VariantOptionValue
 
@@ -344,7 +393,9 @@ class ProductReview {
   - orderId : Long
   - rating : Integer
   - comment : String
+  - imageUrls : String
   - staffReplyContent : String
+  - staffReplyAt : LocalDateTime
   - staffReplierId : String
 }
 
@@ -359,17 +410,19 @@ class Inventory {
   - productId : Long
   - variantId : Long
   - quantity : Integer
-  - updatedAt : LocalDateTime
 }
 
 class InventoryTransaction {
   - id : Long
   - orderId : Long
-  - inventoryId : Long
+  - productId : Long
+  - variantId : Long
   - transactionType : String
   - quantityChanged : Integer
   - quantityBefore : Integer
   - quantityAfter : Integer
+  - referenceId : String
+  - note : String
 }
 
 class RestockRequest {
@@ -390,10 +443,15 @@ Customer "<size:8>1</size>" o-up- "<size:8>0..*</size>" ProductReview
 Order "<size:8>1</size>" -up- "<size:8>0..*</size>" ProductReview
 Customer "<size:8>1</size>" o-up- "<size:8>0..*</size>" WishlistItem
 
-ProductVariant "<size:8>1</size>" *-right- "<size:8>1</size>" Inventory
-Inventory "<size:8>1</size>" *-down- "<size:8>0..*</size>" InventoryTransaction
-Order "<size:8>1</size>" -down- "<size:8>0..*</size>" InventoryTransaction
-ProductVariant "<size:8>1</size>" o-down- "<size:8>0..*</size>" RestockRequest
+Product "<size:8>1</size>" o-right- "<size:8>0..*</size>" Inventory
+ProductVariant "<size:8>0..1</size>" o-right- "<size:8>0..1</size>" Inventory
+Inventory -[hidden]down- InventoryTransaction
+InventoryTransaction -[hidden]down- RestockRequest
+Product "<size:8>1</size>" -down- "<size:8>0..*</size>" InventoryTransaction
+ProductVariant "<size:8>0..1</size>" -down- "<size:8>0..*</size>" InventoryTransaction
+Order "<size:8>0..1</size>" -down- "<size:8>0..*</size>" InventoryTransaction
+Product "<size:8>1</size>" -down- "<size:8>0..*</size>" RestockRequest
+ProductVariant "<size:8>0..1</size>" o-down- "<size:8>0..*</size>" RestockRequest
 
 ' ==============================================================================
 ' CỐ ĐỊNH 6 CỘT TỶ LỆ CHUẨN A4 LANDSCAPE (THẲNG HÀNG VUÔNG GÓC)

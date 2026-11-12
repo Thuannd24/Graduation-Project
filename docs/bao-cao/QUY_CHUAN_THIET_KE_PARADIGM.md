@@ -14,6 +14,7 @@
 6. [Thiết kế Hoạt động (Activity Diagram & Quy trình BPMN Camunda)](#6-thiết-kế-hoạt-động)
 7. [Thiết kế Tuần tự Chi tiết (Design Sequence Diagram - Saga, Kafka, Lock 2 lớp)](#7-thiết-kế-tuần-tự-chi-tiết)
 8. [Thiết kế Triển khai & Gói (Package Diagram & Deployment Diagram Docker Containers)](#8-thiết-kế-triển-khai--gói)
+9. [Quy chuẩn Biểu diễn PlantUML / VPasCode (ERD, Lớp Thực thể & Lớp Chi tiết Module)](#9-quy-chuẩn-biểu-diễn-plantuml--vpascode-erd-lớp-thực-thể--lớp-chi-tiết-module)
 
 ---
 
@@ -486,3 +487,53 @@ Mỗi Microservice backend được tổ chức theo chuẩn Maven đa module:
   * Gateway $\leftrightarrow$ Services: `HTTP/REST nội bộ`.
   * Services $\leftrightarrow$ Kafka: `PLAINTEXT TCP (Port 9092)`.
   * Services $\leftrightarrow$ DB: `JDBC TCP/IP (PostgreSQL/MariaDB)`.
+
+---
+
+## 9. QUY CHUẨN BIỂU DIỄN PLANTUML / VPASCODE (ERD, LỚP THỰC THỂ & LỚP CHI TIẾT MODULE)
+
+Áp dụng thống nhất cho toàn bộ tệp `.puml` trong `docs/bao-cao/puml/` khi render qua VPasCode / PlantUML, đảm bảo hình xuất ra chuẩn giao diện Visual Paradigm, khớp mã nguồn `BE/` / `FE/` và vừa khung in khổ A4.
+
+### 9.1. Quy chuẩn vẽ Physical ERD (`erd_thiet_ke_csdl.puml`)
+1. **Giao diện & Bố cục Visual Paradigm Template:**
+   * Nền bảng màu cam `#F5B67A`, bo góc `roundcorner 10`, viền đen `#000000` (`LineThickness 1.2`), đường nối vuông góc `linetype ortho`, nền trang `#FFFFFF`.
+   * Dùng cỡ chữ **số nguyên** (`defaultFontSize 8`, `FontSize 8`), tuyệt đối **không dùng số thập phân** (vd `8.5`, `9.5`) hoặc stereotype `<<PK>>`/`<<FK>>` để tránh lỗi phóng chữ `80pt` trên trình render SVG của VPasCode.
+   * Đặt `nodesep >= 34`, `ranksep >= 26` để nét đứt không bị dính nhìn giống nét liền; không ghi text label trên đường nối để tránh rối; gắn footer `right footer Powered By Visual Paradigm Community Edition`.
+   * Neo cố định **6 cột A4 Landscape** bằng các liên kết ẩn `-[hidden]right-` ở hàng đầu (`Member`, `Campaign`, `Order`, `Brand`, `Product`, `ProductReview`) và hàng giữa (`Province`, `Payment`, `OrderItem`, `ProductVariant`, `Inventory`).
+2. **Quy chuẩn Icon (OpenIconic) & Định dạng cột:**
+   * **Khóa chính (PK):** `<color:#B8860B><&key></color> <b>tenCot</b> : <b>kieuDuLieu</b> <color:#900000><b>[U]</b></color>` (không dùng dấu `*` của PlantUML để tránh vẽ chấm tròn đen cạnh chìa khóa).
+   * **Khóa chính kiêm Khóa ngoại (PK+FK):** `<color:#2E7D32><&key></color> <b><i>TenBangid</i></b> : <b><i>kieuDuLieu</i></b>` (áp dụng cho bảng con kế thừa `Staff.Memberid`, `Customer.Memberid`, bảng trung gian `BrandCategory(Brandid, Categoryid)`, và khóa kép `ProductTag(Productid, tag)`). Với bảng chỉ có khóa kép, đặt `--` ở dòng cuối trước `}` để tránh PlantUML tự cắt vạch ngang giữa hai khóa.
+   * **Cột thông thường:** `<color:#1D4E89><&spreadsheet></color> tenCot : kieuDuLieu`.
+   * **Khóa ngoại (FK):** `<color:#2E7D32><&key></color> <i>TenBangid</i> : <i>kieuDuLieu</i>` (toàn bộ khóa ngoại đều dùng **chìa khóa màu xanh lá**).
+3. **Quy chuẩn Khóa ngoại, Bản số & Đối chiếu BE:**
+   * Tên FK viết theo quy chuẩn Visual Paradigm `<Entity><pk>` (`Customerid`, `ProductVariantid`, `Provincecode`, `Wardcode`, `Orderid`, `Categoryid`, `Brandid`, `Attributeid`, `Paymentid`, `Campaignid`).
+   * **Đường nối Crow's Foot:**
+     * *Identifying (FK nằm trong PK):* nét liền `--` (`Member ||-right-o| Staff`, `Brand ||-down-o{ BrandCategory`, `Product ||-down-o{ ProductTag`).
+     * *Non-Identifying (FK thường):* nét đứt `..` (`Customer ||.down.o{ Address`, `Order ||.down.o{ Payment`).
+     * *Bắt buộc cú pháp PlantUML IE:* Đầu `0..1` bên trái viết `|o`, đầu `0..1` bên phải phải viết ngược lại là `o|` (không viết `-|o` ở bên phải).
+   * **Tính nhất quán:** Mọi bảng có đường nối quan hệ phải có đúng cột FK tương ứng và ngược lại. Đối chiếu từng entity trong `BE/` (tách `BrandCategory` cho quan hệ N–N `Brand`–`Category`; dùng `Productid` + `ProductVariantid` cho `OrderItem`, `Inventory`, `InventoryTransaction`, `RestockRequest`; giữ `Address` nối `Province`/`Ward`; không vẽ vòng tự liên kết trên `Category`; bỏ bảng log/outbox/chat/thông báo kỹ thuật khỏi ERD nghiệp vụ lõi).
+
+### 9.2. Quy chuẩn vẽ Sơ đồ Lớp Thực thể (`class_thiet_ke_thuc_the.puml`)
+1. **Phạm vi & Cấu trúc:**
+   * Nền lớp màu xanh `#7ACFF5`, góc vuông `roundcorner 0`, viền `#000000`, `linetype ortho`, `hide class circle`.
+   * Bao gồm đầy đủ các lớp thực thể nghiệp vụ lõi (kèm kế thừa `Member <|-- Staff`, `Member <|-- Customer`) và 3 lớp thống kê (`CustomerStatistics`, `OrderStatistics`, `ProductStatistics`); không tách bảng trung gian `BrandCategory` (`Brand "0..*" -- "0..*" Category`).
+2. **Quy chuẩn Thuộc tính & Đối chiếu BE:**
+   * Kiểm tra đầy đủ toàn bộ thuộc tính nghiệp vụ từ từng class JPA `@Entity` trong `BE/` (`attributes`, `specsRaw`, `length`, `width`, `height`, `warrantyPeriod`, `warrantyPolicy`, `salesCount`, `ratingAvg`, `workflowJson`, `bpmnXml`, `triggerType`, `costPrice`, `imageUrl`, `isFilter`, `allowedValues`, `isColor`...).
+   * **Không đưa các trường timestamp kỹ thuật chung (`createdAt`, `updatedAt`, `completedAt`) vào lớp thực thể** để giữ sơ đồ tinh gọn (chỉ giữ các mốc thời gian nghiệp vụ như `startDate`, `endDate`, `expiresAt`, `usedAt`, `paidAt`, `staffReplyAt`).
+   * Sửa các lệch cấu trúc so với BE: `ProductTag` không có `id` giả (`productId`, `tag`); `InventoryTransaction` dùng `productId`, `variantId` (thay cho `inventoryId`); gán đúng bản số `0..1` cho các quan hệ có FK nullable/`0L` và `Order "1" o-- "0..*" Payment`.
+3. **Quy chuẩn Bố cục vừa khung tờ giấy A4:**
+   * Neo 6 cột thẳng hàng ngang và điều chỉnh `nodesep 16`, `ranksep 18`.
+   * Tránh tràn ngang bên trái: xếp `CustomerStatistics` thẳng cột dưới `Customer` (trên `Address`) và xếp `Address` $\rightarrow$ `Province` $\rightarrow$ `Ward` theo chiều dọc.
+   * Tránh kéo dài chiều dọc ở góc dưới phải: chuyển `RestockRequest` và `InventoryTransaction` sang trái (nằm ngang dưới `OrderItem`, bên trái `Inventory`) thay vì xếp chồng dọc dưới `Inventory`.
+
+### 9.3. Quy chuẩn vẽ Sơ đồ Lớp Thiết kế Chi tiết Module (`class_thiet_ke_<use_case>.puml`)
+1. **Bố cục 4 tầng chuẩn hóa:**
+   * **Tầng 1 (Actor & Boundary Views):** `Member`, `Staff`, các `*View` ReactJS (`MainStaffView`, `ManageProductView`, `AddProductView`...).
+   * **Tầng 2 (Control & Service):** `*Controller` và `*ServiceImpl` đặt ngang hàng gọn gàng để tiết kiệm chiều cao.
+   * **Tầng 3 (Repository):** Các `interface *Repository` (`hide interface circle`) tương ứng với thực thể sử dụng trong use case.
+   * **Tầng 4 (Entity):** Đầy đủ các lớp thực thể tham gia use case.
+2. **Đồng bộ Thuộc tính & Bảo toàn Phạm vi Lớp:**
+   * Toàn bộ thuộc tính của mỗi lớp Entity ở Tầng 4 **bắt buộc phải khớp 100%** với định nghĩa của lớp đó trong [class_thiet_ke_thuc_the.puml](file:///d:/Downloads/Graduation-Project/Graduation-Project/docs/bao-cao/puml/class_thiet_ke_thuc_the.puml) (không lược bớt thuộc tính nghiệp vụ, không thêm `createdAt`/`updatedAt`/`completedAt`).
+   * Bổ sung đầy đủ các trường nhập liệu Form State ở `*View`, phụ thuộc Service (`storageService`, `searchService`...) ở Controller/Service, và chỉ ghi đúng tên phương thức Repository thực sự tồn tại trong `BE/`.
+   * **Quy tắc phạm vi lớp:** Không tự ý phát sinh thêm lớp mới ngoài cấu trúc lớp đã chốt của biểu đồ Use Case khi chưa báo cáo và thống nhất trước.
+   * Tuân thủ 100% Quy tắc nối tầng ở Mục 5: View $\leftrightarrow$ Controller $\leftrightarrow$ Service $\leftrightarrow$ Repository $\leftrightarrow$ Entity chỉ dùng nét liền thuần túy `--`; chỉ Tầng Thực thể mới dùng `*--`, `o--`, `<|--`.

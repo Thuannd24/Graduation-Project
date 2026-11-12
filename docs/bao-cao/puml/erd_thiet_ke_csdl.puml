@@ -1,627 +1,532 @@
 @startuml erd_thiet_ke_csdl
-title Hình ảnh 6. Sơ đồ cơ sở dữ liệu quan hệ vật lý (Physical ERD) Hệ thống AuraTech
 
-!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+<style>
+document {
+  BackgroundColor #FFFFFF
+}
+classDiagram {
+  LineColor #000000
+  LineThickness 1.2
+  arrow {
+    LineColor #000000
+    LineThickness 1.2
+    FontColor #000000
+    FontSize 8
+  }
+  class {
+    LineColor #000000
+    LineThickness 1.2
+    RoundCorner 10
+    BackgroundColor #F5B67A
+    FontColor #000000
+    FontStyle bold
+  }
+  entity {
+    LineColor #000000
+    LineThickness 1.2
+    RoundCorner 10
+    BackgroundColor #F5B67A
+    FontColor #000000
+    FontStyle bold
+  }
+}
+footer {
+  FontColor #666666
+  FontSize 8
+}
+</style>
 
 skinparam {
   vpDiagramType ERD
-  defaultFontName "Segoe UI", Arial, sans-serif
-  defaultFontSize 9.5
+  BackgroundColor #FFFFFF
+  defaultFontSize 8
   defaultFontColor #000000
-  roundcorner 0
+  roundcorner 10
   shadowing false
   linetype ortho
-  nodesep 22
-  ranksep 22
+  classAttributeIconSize 0
+  nodesep 34
+  ranksep 26
 }
+hide circle
 
-skinparam entity {
-  BackgroundColor #EBF8FE
-  BorderColor #000000
-  BorderThickness 1.2
-  FontColor #000000
-  FontStyle bold
-  FontSize 9.5
-}
+skinparam ClassBackgroundColor #F5B67A
+skinparam ClassBorderColor #000000
+skinparam ClassBorderThickness 1.2
+skinparam ClassFontColor #000000
+skinparam ClassFontStyle bold
+skinparam ClassAttributeFontColor #000000
+skinparam ClassAttributeFontSize 8
 
-skinparam arrow {
-  Color #000000
-  Thickness 1.2
-  FontColor #000000
-  FontSize 8.5
-}
+skinparam EntityBackgroundColor #F5B67A
+skinparam EntityBorderColor #000000
+skinparam EntityBorderThickness 1.2
+skinparam EntityFontColor #000000
+skinparam EntityFontStyle bold
+skinparam EntityAttributeFontColor #000000
+skinparam EntityAttributeFontSize 8
+
+skinparam ArrowColor #000000
+skinparam ArrowThickness 1.2
+skinparam ArrowFontColor #000000
+skinparam ArrowFontSize 8
 
 ' ==============================================================
-' 1. NHÓM TÁC NHÂN CON NGƯỜI & ĐỐI TÁC CUNG ỨNG
+' CỘT 1: NGƯỜI DÙNG & ĐỊA CHỈ (USER & ADDRESS DOMAIN)
 ' ==============================================================
 entity "Member" as Member {
-  * id : bigint <<PK>>
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  username : varchar(100)
-  password : varchar(255)
-  fullName : varchar(150)
-  email : varchar(150)
-  phoneNumber : varchar(20)
-  avatarUrl : varchar(500)
-  active : boolean
-  createdAt : datetime
-  updatedAt : datetime
+  <color:#1D4E89><&spreadsheet></color> username : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> fullName : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> email : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> phoneNumber : varchar(20)
+  <color:#1D4E89><&spreadsheet></color> avatarUrl : varchar(500)
+  <color:#1D4E89><&spreadsheet></color> active : boolean
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#1D4E89><&spreadsheet></color> updatedAt : datetime
+}
+
+entity "Staff" as Staff {
+  <color:#2E7D32><&key></color> <b><i>Memberid</i></b> : <b><i>bigint</i></b>
+  --
+  <color:#1D4E89><&spreadsheet></color> role : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> department : varchar(100)
 }
 
 entity "Customer" as Customer {
-  * Memberid : bigint <<PK, FK>>
+  <color:#2E7D32><&key></color> <b><i>Memberid</i></b> : <b><i>bigint</i></b>
   --
-  keycloakUserId : varchar(100)
-  customerTier : varchar(20)
-  loyaltyPoints : integer(10)
-  segmentationLabel : varchar(50)
-  isBlacklisted : boolean
-  active : boolean
-}
-
-entity "Employee" as Employee {
-  * Memberid : bigint <<PK, FK>>
-  --
-  employeeCode : varchar(50)
-  role : varchar(50)
-  department : varchar(100)
-  active : boolean
-}
-
-entity "Supplier" as Supplier {
-  * id : bigint <<PK>>
-  --
-  supplierCode : varchar(50)
-  companyName : varchar(200)
-  taxCode : varchar(50)
-  email : varchar(150)
-  phoneNumber : varchar(20)
-  address : varchar(255)
-  active : boolean
-  createdAt : datetime
-}
-
-' ==============================================================
-' 2. NHÓM ĐỊA CHỈ HÀNH CHÍNH
-' ==============================================================
-entity "Province" as Province {
-  * code : integer(10) <<PK>>
-  --
-  name : varchar(100)
-}
-
-entity "Ward" as Ward {
-  * code : integer(10) <<PK>>
-  --
-  name : varchar(100)
-  Provincecode : integer(10) <<FK>>
+  <color:#1D4E89><&spreadsheet></color> keycloakUserId : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> customerTier : varchar(20)
+  <color:#1D4E89><&spreadsheet></color> loyaltyPoints : integer(10)
+  <color:#1D4E89><&spreadsheet></color> segmentationLabel : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> isBlacklisted : boolean
 }
 
 entity "Address" as Address {
-  * id : bigint <<PK>>
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  recipientName : varchar(150)
-  phoneNumber : varchar(20)
-  province : varchar(100)
-  districtWard : varchar(100)
-  detailAddress : varchar(255)
-  isDefault : boolean
-  Customerid : bigint <<FK>>
-  Provincecode : integer(10) <<FK>>
-  Wardcode : integer(10) <<FK>>
+  <color:#1D4E89><&spreadsheet></color> recipientName : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> phoneNumber : varchar(20)
+  <color:#1D4E89><&spreadsheet></color> province : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> districtWard : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> detailAddress : varchar(255)
+  <color:#1D4E89><&spreadsheet></color> isDefault : boolean
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#1D4E89><&spreadsheet></color> updatedAt : datetime
+  <color:#2E7D32><&key></color> <i>Customerid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Provincecode</i> : <i>integer(10)</i>
+  <color:#2E7D32><&key></color> <i>Wardcode</i> : <i>integer(10)</i>
 }
+
+entity "Province" as Province {
+  <color:#B8860B><&key></color> <b>code</b> : <b>integer(10)</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> name : varchar(100)
+}
+
+entity "Ward" as Ward {
+  <color:#B8860B><&key></color> <b>code</b> : <b>integer(10)</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> name : varchar(100)
+  <color:#2E7D32><&key></color> <i>Provincecode</i> : <i>integer(10)</i>
+}
+
+Member ||-right-o| Staff
+Member ||-down-o| Customer
+Customer ||.down.o{ Address
+Address }o.down.|| Province
+Province ||.right.o{ Ward
+Address }o..|| Ward
 
 ' ==============================================================
-' 3. NHÓM SẢN PHẨM, DANH MỤC & THUỘC TÍNH
-' ==============================================================
-entity "Category" as Category {
-  * id : bigint <<PK>>
-  --
-  name : varchar(200)
-  slug : varchar(200)
-  parentId : bigint
-  imageUrl : varchar(500)
-  icon : varchar(100)
-  sortOrder : integer(10)
-  active : boolean
-}
-
-entity "Brand" as Brand {
-  * id : bigint <<PK>>
-  --
-  name : varchar(150)
-  slug : varchar(150)
-  logoUrl : varchar(500)
-  description : text
-}
-
-entity "Product" as Product {
-  * id : bigint <<PK>>
-  --
-  name : varchar(255)
-  slug : varchar(255)
-  description : text
-  attributes : text
-  specsRaw : text
-  price : decimal(15,2)
-  costPrice : decimal(15,2)
-  salePrice : decimal(15,2)
-  weight : decimal(10,2)
-  brand : varchar(100)
-  imageUrl : varchar(500)
-  warrantyPeriod : integer(10)
-  warrantyPolicy : text
-  salesCount : integer(10)
-  ratingAvg : decimal(3,2)
-  active : boolean
-  Categoryid : bigint <<FK>>
-  Brandid : bigint <<FK>>
-}
-
-entity "ProductVariant" as ProductVariant {
-  * id : bigint <<PK>>
-  --
-  sku : varchar(100)
-  variantAttr : text
-  price : decimal(15,2)
-  costPrice : decimal(15,2)
-  salePrice : decimal(15,2)
-  weight : decimal(10,2)
-  imageUrl : varchar(500)
-  active : boolean
-  Productid : bigint <<FK>>
-}
-
-entity "ProductImage" as ProductImage {
-  * id : bigint <<PK>>
-  --
-  imageUrl : varchar(500)
-  sortOrder : integer(10)
-  isPrimary : boolean
-  Productid : bigint <<FK>>
-}
-
-entity "ProductTag" as ProductTag {
-  * id : bigint <<PK>>
-  --
-  tag : varchar(100)
-  Productid : bigint <<FK>>
-}
-
-entity "Attribute" as Attribute {
-  * id : bigint <<PK>>
-  --
-  code : varchar(50)
-  name : varchar(100)
-  valueType : varchar(50)
-  allowedValues : text
-  isColor : boolean
-}
-
-entity "CategoryAttribute" as CategoryAttribute {
-  * id : bigint <<PK>>
-  --
-  isVariant : boolean
-  isRequired : boolean
-  isFilter : boolean
-  Categoryid : bigint <<FK>>
-  Attributeid : bigint <<FK>>
-}
-
-entity "ProductAttributeValue" as ProductAttributeValue {
-  * id : bigint <<PK>>
-  --
-  value : varchar(255)
-  Productid : bigint <<FK>>
-  Attributeid : bigint <<FK>>
-}
-
-entity "VariantOptionValue" as VariantOptionValue {
-  * id : bigint <<PK>>
-  --
-  value : varchar(255)
-  ProductVariantid : bigint <<FK>>
-  Attributeid : bigint <<FK>>
-}
-
-entity "ProductReview" as ProductReview {
-  * id : bigint <<PK>>
-  --
-  rating : integer(10)
-  comment : text
-  imageUrls : text
-  staffReplyContent : text
-  staffReplyAt : datetime
-  staffReplierId : varchar(100)
-  createdAt : datetime
-  Customerid : bigint <<FK>>
-  Productid : bigint <<FK>>
-  Orderid : bigint <<FK>>
-}
-
-entity "WishlistItem" as WishlistItem {
-  * id : bigint <<PK>>
-  --
-  createdAt : datetime
-  Customerid : bigint <<FK>>
-  Productid : bigint <<FK>>
-}
-
-' ==============================================================
-' 4. NHÓM ĐƠN HÀNG, THANH TOÁN & ĐIỂM THƯỞNG
-' ==============================================================
-entity "Order" as Order {
-  * id : bigint <<PK>>
-  --
-  userId : varchar(100)
-  email : varchar(150)
-  status : varchar(30)
-  totalAmount : decimal(15,2)
-  discountAmount : decimal(15,2)
-  finalAmount : decimal(15,2)
-  totalWeight : decimal(10,2)
-  couponCode : varchar(50)
-  appliedCampaignId : varchar(50)
-  pointsRedeemed : integer(10)
-  pointDiscountAmount : decimal(15,2)
-  shippingFee : decimal(15,2)
-  shippingDiscountAmount : decimal(15,2)
-  vatAmount : decimal(15,2)
-  trackingCode : varchar(100)
-  shippingAddress : text
-  phoneNumber : varchar(20)
-  note : text
-  createdAt : datetime
-  updatedAt : datetime
-  Customerid : bigint <<FK>>
-}
-
-entity "OrderItem" as OrderItem {
-  * id : bigint <<PK>>
-  --
-  productName : varchar(255)
-  productImage : varchar(500)
-  variantAttr : text
-  unitPrice : decimal(15,2)
-  quantity : integer(10)
-  subtotal : decimal(15,2)
-  Orderid : bigint <<FK>>
-  ProductVariantid : bigint <<FK>>
-}
-
-entity "Payment" as Payment {
-  * id : bigint <<PK>>
-  --
-  txnRef : varchar(100)
-  gatewayTxnId : varchar(100)
-  paymentMethod : varchar(50)
-  amount : decimal(15,2)
-  currency : varchar(10)
-  status : varchar(20)
-  failureCode : varchar(50)
-  gatewayResponse : text
-  paidAt : datetime
-  createdAt : datetime
-  updatedAt : datetime
-  Orderid : bigint <<FK>>
-  Customerid : bigint <<FK>>
-}
-
-entity "Refund" as Refund {
-  * id : bigint <<PK>>
-  --
-  refundAmount : decimal(15,2)
-  reason : text
-  status : varchar(20)
-  gatewayRefundId : varchar(100)
-  requestedBy : varchar(100)
-  completedAt : datetime
-  createdAt : datetime
-  Paymentid : bigint <<FK>>
-}
-
-entity "WebhookLog" as WebhookLog {
-  * id : bigint <<PK>>
-  --
-  gateway : varchar(50)
-  rawPayload : text
-  signatureValid : boolean
-  processed : boolean
-  createdAt : datetime
-  Paymentid : bigint <<FK>>
-}
-
-entity "LoyaltyPointTransaction" as LoyaltyPointTransaction {
-  * id : bigint <<PK>>
-  --
-  delta : integer(10)
-  balanceAfter : integer(10)
-  calculationMode : varchar(50)
-  sourceType : varchar(50)
-  referenceId : varchar(100)
-  description : text
-  createdAt : datetime
-  Customerid : bigint <<FK>>
-  Orderid : bigint <<FK>>
-  Campaignid : bigint <<FK>>
-}
-
-' ==============================================================
-' 5. NHÓM KHUYẾN MÃI & CHIẾN DỊCH
+' CỘT 2: KHUYẾN MÃI, VOUCHER & ĐIỂM THƯỞNG (PROMOTION DOMAIN)
 ' ==============================================================
 entity "Campaign" as Campaign {
-  * id : bigint <<PK>>
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  name : varchar(255)
-  totalBudget : decimal(15,2)
-  remainingBudget : decimal(15,2)
-  startDate : datetime
-  endDate : datetime
-  bpmnProcessDefinitionKey : varchar(100)
-  workflowJson : text
-  bpmnXml : text
-  triggerType : varchar(50)
-  createdAt : datetime
-  updatedAt : datetime
+  <color:#1D4E89><&spreadsheet></color> name : varchar(255)
+  <color:#1D4E89><&spreadsheet></color> totalBudget : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> remainingBudget : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> startDate : datetime
+  <color:#1D4E89><&spreadsheet></color> endDate : datetime
+  <color:#1D4E89><&spreadsheet></color> bpmnProcessDefinitionKey : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> workflowJson : text
+  <color:#1D4E89><&spreadsheet></color> bpmnXml : text
+  <color:#1D4E89><&spreadsheet></color> triggerType : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> active : boolean
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#1D4E89><&spreadsheet></color> updatedAt : datetime
 }
 
 entity "IssuedVoucher" as IssuedVoucher {
-  * id : bigint <<PK>>
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  code : varchar(50)
-  voucherType : varchar(30)
-  discountPercent : decimal(5,2)
-  maxDiscountAmount : decimal(15,2)
-  discountAmount : decimal(15,2)
-  minOrderValue : decimal(15,2)
-  maxShippingDiscount : decimal(15,2)
-  restrictedCategoryIds : text
-  restrictedProductIds : text
-  expiresAt : datetime
-  usedAt : datetime
-  idempotencyKey : varchar(100)
-  createdAt : datetime
-  Campaignid : bigint <<FK>>
-  Customerid : bigint <<FK>>
-  Orderid : bigint <<FK>>
+  <color:#1D4E89><&spreadsheet></color> code : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> voucherType : varchar(30)
+  <color:#1D4E89><&spreadsheet></color> status : varchar(30)
+  <color:#1D4E89><&spreadsheet></color> discountPercent : decimal(5,2)
+  <color:#1D4E89><&spreadsheet></color> maxDiscountAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> discountAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> minOrderValue : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> maxShippingDiscount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> restrictedCategoryIds : text
+  <color:#1D4E89><&spreadsheet></color> restrictedProductIds : text
+  <color:#1D4E89><&spreadsheet></color> expiresAt : datetime
+  <color:#1D4E89><&spreadsheet></color> usedAt : datetime
+  <color:#1D4E89><&spreadsheet></color> idempotencyKey : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#2E7D32><&key></color> <i>Campaignid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Customerid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Orderid</i> : <i>bigint</i>
 }
 
-entity "ExecutedAction" as ExecutedAction {
-  * id : bigint <<PK>>
+entity "LoyaltyPointTransaction" as LoyaltyPointTransaction {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  idempotencyKey : varchar(100)
-  actionType : varchar(50)
-  createdAt : datetime
-  Campaignid : bigint <<FK>>
+  <color:#1D4E89><&spreadsheet></color> delta : integer(10)
+  <color:#1D4E89><&spreadsheet></color> balanceAfter : integer(10)
+  <color:#1D4E89><&spreadsheet></color> calculationMode : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> sourceType : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> referenceId : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> description : text
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#2E7D32><&key></color> <i>Customerid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Orderid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Campaignid</i> : <i>bigint</i>
 }
 
+Campaign |o.down.o{ IssuedVoucher
+Campaign |o..o{ LoyaltyPointTransaction
+Customer ||.right.o{ IssuedVoucher
+Customer ||.right.o{ LoyaltyPointTransaction
+
 ' ==============================================================
-' 6. NHÓM KHO HÀNG & NHẬP XUẤT
+' CỘT 3: ĐƠN HÀNG, THANH TOÁN & HOÀN TIỀN (ORDER & PAYMENT DOMAIN)
 ' ==============================================================
+entity "Order" as Order {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> email : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> status : varchar(30)
+  <color:#1D4E89><&spreadsheet></color> totalAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> discountAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> finalAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> totalWeight : decimal(10,2)
+  <color:#1D4E89><&spreadsheet></color> couponCode : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> appliedCampaignId : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> pointsRedeemed : integer(10)
+  <color:#1D4E89><&spreadsheet></color> pointDiscountAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> shippingFee : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> shippingDiscountAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> vatAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> trackingCode : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> shippingAddress : text
+  <color:#1D4E89><&spreadsheet></color> phoneNumber : varchar(20)
+  <color:#1D4E89><&spreadsheet></color> note : text
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#1D4E89><&spreadsheet></color> updatedAt : datetime
+  <color:#2E7D32><&key></color> <i>Customerid</i> : <i>bigint</i>
+}
+
+entity "Payment" as Payment {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> email : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> txnRef : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> gatewayTxnId : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> paymentMethod : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> amount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> currency : varchar(10)
+  <color:#1D4E89><&spreadsheet></color> status : varchar(20)
+  <color:#1D4E89><&spreadsheet></color> failureCode : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> gatewayResponse : text
+  <color:#1D4E89><&spreadsheet></color> paidAt : datetime
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#1D4E89><&spreadsheet></color> updatedAt : datetime
+  <color:#2E7D32><&key></color> <i>Orderid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Customerid</i> : <i>bigint</i>
+}
+
+entity "Refund" as Refund {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> refundAmount : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> reason : text
+  <color:#1D4E89><&spreadsheet></color> status : varchar(20)
+  <color:#1D4E89><&spreadsheet></color> gatewayRefundId : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> requestedBy : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> completedAt : datetime
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#2E7D32><&key></color> <i>Paymentid</i> : <i>bigint</i>
+}
+
+IssuedVoucher }o.right.o| Order
+Customer ||.right.o{ Order
+Order |o..o{ LoyaltyPointTransaction
+Order ||.down.o{ Payment
+Customer |o..o{ Payment
+Payment ||.right.o{ Refund
+
+' ==============================================================
+' CỘT 4: THƯƠNG HIỆU, DANH MỤC, THUỘC TÍNH & MẶT HÀNG (CATALOG DOMAIN)
+' ==============================================================
+entity "Brand" as Brand {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> name : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> slug : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> logoUrl : varchar(500)
+  <color:#1D4E89><&spreadsheet></color> description : text
+  <color:#1D4E89><&spreadsheet></color> active : boolean
+}
+
+entity "BrandCategory" as BrandCategory {
+  <color:#2E7D32><&key></color> <b><i>Brandid</i></b> : <b><i>bigint</i></b>
+  <color:#2E7D32><&key></color> <b><i>Categoryid</i></b> : <b><i>bigint</i></b>
+  --
+}
+
+entity "Category" as Category {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> name : varchar(200)
+  <color:#1D4E89><&spreadsheet></color> slug : varchar(200)
+  <color:#1D4E89><&spreadsheet></color> parentId : bigint
+  <color:#1D4E89><&spreadsheet></color> imageUrl : varchar(500)
+  <color:#1D4E89><&spreadsheet></color> icon : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> sortOrder : integer(10)
+  <color:#1D4E89><&spreadsheet></color> active : boolean
+}
+
+entity "CategoryAttribute" as CategoryAttribute {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> isVariant : boolean
+  <color:#1D4E89><&spreadsheet></color> isRequired : boolean
+  <color:#1D4E89><&spreadsheet></color> isFilter : boolean
+  <color:#2E7D32><&key></color> <i>Categoryid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Attributeid</i> : <i>bigint</i>
+}
+
+entity "Attribute" as Attribute {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> code : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> name : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> valueType : varchar(50)
+  <color:#1D4E89><&spreadsheet></color> allowedValues : text
+  <color:#1D4E89><&spreadsheet></color> isColor : boolean
+}
+
+entity "OrderItem" as OrderItem {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> productName : varchar(255)
+  <color:#1D4E89><&spreadsheet></color> productImage : varchar(500)
+  <color:#1D4E89><&spreadsheet></color> variantAttr : text
+  <color:#1D4E89><&spreadsheet></color> unitPrice : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> quantity : integer(10)
+  <color:#1D4E89><&spreadsheet></color> subtotal : decimal(15,2)
+  <color:#2E7D32><&key></color> <i>Orderid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>ProductVariantid</i> : <i>bigint</i>
+}
+
+Brand ||-down-o{ BrandCategory
+BrandCategory }o-down-|| Category
+Category ||.down.o{ CategoryAttribute
+Attribute ||.right.o{ CategoryAttribute
+CategoryAttribute -[hidden]down- OrderItem
+Order ||.right.o{ OrderItem
+
+' ==============================================================
+' CỘT 5: SẢN PHẨM & BIẾN THỂ (PRODUCT & VARIANT DOMAIN)
+' ==============================================================
+entity "Product" as Product {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> name : varchar(255)
+  <color:#1D4E89><&spreadsheet></color> slug : varchar(255)
+  <color:#1D4E89><&spreadsheet></color> description : text
+  <color:#1D4E89><&spreadsheet></color> attributes : text
+  <color:#1D4E89><&spreadsheet></color> specsRaw : text
+  <color:#1D4E89><&spreadsheet></color> price : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> costPrice : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> salePrice : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> weight : decimal(10,2)
+  <color:#1D4E89><&spreadsheet></color> length : decimal(10,2)
+  <color:#1D4E89><&spreadsheet></color> width : decimal(10,2)
+  <color:#1D4E89><&spreadsheet></color> height : decimal(10,2)
+  <color:#1D4E89><&spreadsheet></color> brand : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> imageUrl : varchar(500)
+  <color:#1D4E89><&spreadsheet></color> warrantyPeriod : integer(10)
+  <color:#1D4E89><&spreadsheet></color> warrantyPolicy : text
+  <color:#1D4E89><&spreadsheet></color> salesCount : integer(10)
+  <color:#1D4E89><&spreadsheet></color> ratingAvg : decimal(3,2)
+  <color:#1D4E89><&spreadsheet></color> active : boolean
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#1D4E89><&spreadsheet></color> updatedAt : datetime
+  <color:#2E7D32><&key></color> <i>Categoryid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Brandid</i> : <i>bigint</i>
+}
+
+entity "ProductImage" as ProductImage {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> imageUrl : varchar(500)
+  <color:#1D4E89><&spreadsheet></color> sortOrder : integer(10)
+  <color:#1D4E89><&spreadsheet></color> isPrimary : boolean
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+}
+
+entity "ProductTag" as ProductTag {
+  <color:#2E7D32><&key></color> <b><i>Productid</i></b> : <b><i>bigint</i></b>
+  <color:#B8860B><&key></color> <b>tag</b> : <b>varchar(100)</b>
+  --
+}
+
+entity "ProductAttributeValue" as ProductAttributeValue {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> value : varchar(255)
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Attributeid</i> : <i>bigint</i>
+}
+
+entity "ProductVariant" as ProductVariant {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> sku : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> variantAttr : text
+  <color:#1D4E89><&spreadsheet></color> price : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> costPrice : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> salePrice : decimal(15,2)
+  <color:#1D4E89><&spreadsheet></color> weight : decimal(10,2)
+  <color:#1D4E89><&spreadsheet></color> imageUrl : varchar(500)
+  <color:#1D4E89><&spreadsheet></color> active : boolean
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+}
+
+entity "VariantOptionValue" as VariantOptionValue {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> value : varchar(255)
+  <color:#2E7D32><&key></color> <i>ProductVariantid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Attributeid</i> : <i>bigint</i>
+}
+
+Brand |o.right.o{ Product
+Category ||.right.o{ Product
+
+Product ||.down.o{ ProductImage
+Product ||-down-o{ ProductTag
+Product ||.down.o{ ProductAttributeValue
+ProductImage -[hidden]right- ProductTag
+ProductTag -[hidden]right- ProductAttributeValue
+Attribute ||.right.o{ ProductAttributeValue
+
+Product ||.down.o{ ProductVariant
+Product ||.left.o{ OrderItem
+OrderItem }o.right.o| ProductVariant
+ProductVariant ||.down.o{ VariantOptionValue
+Attribute ||.right.o{ VariantOptionValue
+
+' ==============================================================
+' CỘT 6: ĐÁNH GIÁ, YÊU THÍCH & KHO HÀNG (REVIEW & INVENTORY DOMAIN)
+' ==============================================================
+entity "ProductReview" as ProductReview {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> rating : integer(10)
+  <color:#1D4E89><&spreadsheet></color> comment : text
+  <color:#1D4E89><&spreadsheet></color> imageUrls : text
+  <color:#1D4E89><&spreadsheet></color> staffReplyContent : text
+  <color:#1D4E89><&spreadsheet></color> staffReplyAt : datetime
+  <color:#1D4E89><&spreadsheet></color> staffReplierId : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#2E7D32><&key></color> <i>Customerid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Orderid</i> : <i>bigint</i>
+}
+
+entity "WishlistItem" as WishlistItem {
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
+  --
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#2E7D32><&key></color> <i>Customerid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+}
+
 entity "Inventory" as Inventory {
-  * id : bigint <<PK>>
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  quantity : integer(10)
-  updatedAt : datetime
-  ProductVariantid : bigint <<FK>>
+  <color:#1D4E89><&spreadsheet></color> quantity : integer(10)
+  <color:#1D4E89><&spreadsheet></color> updatedAt : datetime
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>ProductVariantid</i> : <i>bigint</i>
 }
 
 entity "InventoryTransaction" as InventoryTransaction {
-  * id : bigint <<PK>>
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  transactionType : varchar(30)
-  quantityChanged : integer(10)
-  quantityBefore : integer(10)
-  quantityAfter : integer(10)
-  referenceId : varchar(100)
-  note : text
-  createdAt : datetime
-  Inventoryid : bigint <<FK>>
-  Orderid : bigint <<FK>>
+  <color:#1D4E89><&spreadsheet></color> transactionType : varchar(30)
+  <color:#1D4E89><&spreadsheet></color> quantityChanged : integer(10)
+  <color:#1D4E89><&spreadsheet></color> quantityBefore : integer(10)
+  <color:#1D4E89><&spreadsheet></color> quantityAfter : integer(10)
+  <color:#1D4E89><&spreadsheet></color> referenceId : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> note : text
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>ProductVariantid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>Orderid</i> : <i>bigint</i>
 }
 
 entity "RestockRequest" as RestockRequest {
-  * id : bigint <<PK>>
+  <color:#B8860B><&key></color> <b>id</b> : <b>bigint</b> <color:#900000><b>[U]</b></color>
   --
-  quantity : integer(10)
-  status : varchar(30)
-  requestedBy : varchar(100)
-  completedAt : datetime
-  createdAt : datetime
-  Employeeid : bigint <<FK>>
-  Supplierid : bigint <<FK>>
-  ProductVariantid : bigint <<FK>>
+  <color:#1D4E89><&spreadsheet></color> quantity : integer(10)
+  <color:#1D4E89><&spreadsheet></color> supplier : varchar(150)
+  <color:#1D4E89><&spreadsheet></color> status : varchar(30)
+  <color:#1D4E89><&spreadsheet></color> requestedBy : varchar(100)
+  <color:#1D4E89><&spreadsheet></color> completedAt : datetime
+  <color:#1D4E89><&spreadsheet></color> createdAt : datetime
+  <color:#2E7D32><&key></color> <i>Productid</i> : <i>bigint</i>
+  <color:#2E7D32><&key></color> <i>ProductVariantid</i> : <i>bigint</i>
 }
 
-entity "InventoryDailySnapshot" as InventoryDailySnapshot {
-  * id : bigint <<PK>>
-  --
-  stockLevel : integer(10)
-  snapshotDate : date
-  createdAt : datetime
-  ProductVariantid : bigint <<FK>>
-}
+Product ||.right.o{ ProductReview
+ProductReview -[hidden]down- WishlistItem
+Product ||.right.o{ WishlistItem
+
+Customer ||.up.o{ ProductReview
+Order ||.up.o{ ProductReview
+Customer ||.up.o{ WishlistItem
+
+Product ||.right.o{ Inventory
+ProductVariant |o.right.o| Inventory
+Inventory -[hidden]down- InventoryTransaction
+InventoryTransaction -[hidden]down- RestockRequest
+Product ||.down.o{ InventoryTransaction
+ProductVariant |o.down.o{ InventoryTransaction
+Order |o.down.o{ InventoryTransaction
+Product ||.down.o{ RestockRequest
+ProductVariant |o.down.o{ RestockRequest
 
 ' ==============================================================
-' 7. NHÓM TƯ VẤN, THÔNG BÁO & SỰ KIỆN PHÂN TÁN
+' NEO 6 CỘT CHUẨN KHỔ A4 LANDSCAPE
 ' ==============================================================
-entity "ChatRoom" as ChatRoom {
-  * id : bigint <<PK>>
-  --
-  customerName : varchar(150)
-  staffName : varchar(150)
-  status : varchar(30)
-  lastMessage : text
-  lastMessageAt : datetime
-  lastMessageSenderId : varchar(100)
-  createdAt : datetime
-  updatedAt : datetime
-  Customerid : bigint <<FK>>
-  Employeeid : bigint <<FK>>
-}
+Member -[hidden]right- Campaign
+Campaign -[hidden]right- Order
+Order -[hidden]right- Brand
+Brand -[hidden]right- Product
+Product -[hidden]right- ProductReview
 
-entity "ChatMessage" as ChatMessage {
-  * id : bigint <<PK>>
-  --
-  senderId : varchar(100)
-  senderName : varchar(150)
-  senderRole : varchar(30)
-  content : text
-  type : varchar(30)
-  isRead : boolean
-  createdAt : datetime
-  ChatRoomid : bigint <<FK>>
-}
-
-entity "Notification" as Notification {
-  * id : varchar(50) <<PK>>
-  --
-  eventType : varchar(100)
-  channels : varchar(100)
-  recipient : varchar(200)
-  subject : varchar(255)
-  content : text
-  status : varchar(30)
-  deliveryResults : text
-  createdAt : datetime
-  Customerid : bigint <<FK>>
-  NotificationTemplateid : varchar(50) <<FK>>
-  Orderid : bigint <<FK>>
-}
-
-entity "NotificationTemplate" as NotificationTemplate {
-  * id : varchar(50) <<PK>>
-  --
-  code : varchar(100)
-  name : varchar(200)
-  titleTemplate : text
-  bodyTemplate : text
-  channel : varchar(50)
-}
-
-entity "FCMToken" as FCMToken {
-  * id : varchar(50) <<PK>>
-  --
-  token : text
-  platform : varchar(30)
-  deviceId : varchar(100)
-  lastUsedAt : datetime
-  Customerid : bigint <<FK>>
-}
-
-entity "OutboxEvent" as OutboxEvent {
-  * id : bigint <<PK>>
-  --
-  aggregateId : varchar(100)
-  aggregateType : varchar(50)
-  eventType : varchar(100)
-  payload : text
-  status : varchar(20)
-  retryCount : integer(10)
-  createdAt : datetime
-  processedAt : datetime
-  Orderid : bigint <<FK>>
-}
-
-entity "CompensationTask" as CompensationTask {
-  * id : bigint <<PK>>
-  --
-  taskType : varchar(50)
-  status : varchar(30)
-  attempts : integer(10)
-  lastError : text
-  createdAt : datetime
-  updatedAt : datetime
-  Orderid : bigint <<FK>>
-}
-
-entity "UserEvent" as UserEvent {
-  * id : bigint <<PK>>
-  --
-  sessionId : varchar(100)
-  actionType : varchar(50)
-  weight : decimal(5,2)
-  source : varchar(50)
-  createdAt : datetime
-  Customerid : bigint <<FK>>
-  Productid : bigint <<FK>>
-  Categoryid : bigint <<FK>>
-}
-
-' ==============================================================
-' CÁC ĐƯỜNG LIÊN KẾT KHÓA NGOẠI (RELATIONSHIPS)
-' ==============================================================
-Member ||--|| Customer : "Memberid"
-Member ||--|| Employee : "Memberid"
-
-Customer ||--o{ Address : "Customerid"
-Province ||--o{ Ward : "Provincecode"
-Province ||--o{ Address : "Provincecode"
-Ward ||--o{ Address : "Wardcode"
-
-Category ||--o{ Product : "Categoryid"
-Brand ||--o{ Product : "Brandid"
-Category ||--o{ CategoryAttribute : "Categoryid"
-Attribute ||--o{ CategoryAttribute : "Attributeid"
-
-Product ||--o{ ProductVariant : "Productid"
-Product ||--o{ ProductImage : "Productid"
-Product ||--o{ ProductTag : "Productid"
-Product ||--o{ ProductAttributeValue : "Productid"
-Attribute ||--o{ ProductAttributeValue : "Attributeid"
-
-ProductVariant ||--o{ VariantOptionValue : "ProductVariantid"
-Attribute ||--o{ VariantOptionValue : "Attributeid"
-
-Customer ||--o{ Order : "Customerid"
-Order ||--o{ OrderItem : "Orderid"
-ProductVariant ||--o{ OrderItem : "ProductVariantid"
-
-Order ||--|| Payment : "Orderid"
-Customer ||--o{ Payment : "Customerid"
-Payment ||--o{ Refund : "Paymentid"
-Payment ||--o{ WebhookLog : "Paymentid"
-
-Customer ||--o{ ProductReview : "Customerid"
-Product ||--o{ ProductReview : "Productid"
-Order ||--o{ ProductReview : "Orderid"
-
-Customer ||--o{ WishlistItem : "Customerid"
-Product ||--o{ WishlistItem : "Productid"
-
-Customer ||--o{ LoyaltyPointTransaction : "Customerid"
-Order ||--o{ LoyaltyPointTransaction : "Orderid"
-Campaign ||--o{ LoyaltyPointTransaction : "Campaignid"
-
-Campaign ||--o{ IssuedVoucher : "Campaignid"
-Customer ||--o{ IssuedVoucher : "Customerid"
-Order ||--o{ IssuedVoucher : "Orderid"
-Campaign ||--o{ ExecutedAction : "Campaignid"
-
-ProductVariant ||--|| Inventory : "ProductVariantid"
-Inventory ||--o{ InventoryTransaction : "Inventoryid"
-Order ||--o{ InventoryTransaction : "Orderid"
-ProductVariant ||--o{ InventoryDailySnapshot : "ProductVariantid"
-
-Employee ||--o{ RestockRequest : "Employeeid"
-Supplier ||--o{ RestockRequest : "Supplierid"
-ProductVariant ||--o{ RestockRequest : "ProductVariantid"
-
-Customer ||--o{ ChatRoom : "Customerid"
-Employee ||--o{ ChatRoom : "Employeeid"
-ChatRoom ||--o{ ChatMessage : "ChatRoomid"
-
-NotificationTemplate ||--o{ Notification : "NotificationTemplateid"
-Customer ||--o{ Notification : "Customerid"
-Order ||--o{ Notification : "Orderid"
-Customer ||--o{ FCMToken : "Customerid"
-
-Customer ||--o{ UserEvent : "Customerid"
-Product ||--o{ UserEvent : "Productid"
-Category ||--o{ UserEvent : "Categoryid"
-
-Order ||--o{ OutboxEvent : "Orderid"
-Order ||--o{ CompensationTask : "Orderid"
+Province -[hidden]right- Payment
+Payment -[hidden]right- OrderItem
+OrderItem -[hidden]right- ProductVariant
+ProductVariant -[hidden]right- Inventory
 
 right footer Powered By Visual Paradigm Community Edition
 

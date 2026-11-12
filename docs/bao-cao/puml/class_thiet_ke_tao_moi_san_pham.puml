@@ -37,7 +37,7 @@ skinparam {
   shadowing false
   linetype ortho
   classAttributeIconSize 0
- nodesep 22
+  nodesep 22
   ranksep 16
 }
 hide interface circle
@@ -73,11 +73,14 @@ class Member {
   - fullName : String
   - email : String
   - phoneNumber : String
+  - avatarUrl : String
+  - active : Boolean
   + login(u : String, p : String) : boolean
 }
 
 class Staff {
   - role : String
+  - department : String
   + manageProducts() : void
   + createProduct() : void
 }
@@ -92,6 +95,7 @@ class ManageProductView {
   - txtSearchQuery : input
   - selCategoryFilter : select
   - selBrandFilter : select
+  - selActiveFilter : select
   - btnAddProduct : submit
   - tblProducts : table
   - staff : Staff
@@ -108,10 +112,18 @@ class AddProductView {
   - txtCostPrice : input
   - txtSalePrice : input
   - txtWeight : input
+  - txtLength : input
+  - txtWidth : input
+  - txtHeight : input
   - selCategory : select
   - selBrand : select
   - fileImages : file
+  - txtWarrantyPeriod : input
+  - txtWarrantyPolicy : textarea
+  - txtTags : input
+  - chkActive : checkbox
   - specValues : Map
+  - variantOptionValues : Map
   - listVariants : Object[]
   - btnSubmit : submit
   - staff : Staff
@@ -131,6 +143,8 @@ ManageProductView -right- AddProductView
 ' ==============================================================================
 class AdminProductController {
   - productServiceImpl : ProductServiceImpl
+  - categoryService : CategoryService
+  - storageService : StorageService
   + createProduct(dto : ProductDto) : ApiResponse<ProductDto>
   + uploadProductImage(file : MultipartFile, folder : String) : ApiResponse<Map>
 }
@@ -145,10 +159,14 @@ class ProductServiceImpl {
   - variantOptionValueRepository : VariantOptionValueRepository
   - productImageRepository : ProductImageRepository
   - productTagRepository : ProductTagRepository
+  - searchService : SearchService
+  - cacheManager : CacheManager
+  - objectMapper : ObjectMapper
   + createProduct(dto : ProductDto) : ProductDto
   - saveSpecifications(productId : Long, attrs : Map, attrMap : Map) : void
   - saveVariantOptions(variantId : Long, attrs : Map, attrMap : Map) : void
   - normalizeProductPricing(dto : ProductDto) : void
+  - serializeSpecsRaw(specsRaw : Object) : String
   - convertToDto(p : Product) : ProductDto
 }
 
@@ -156,7 +174,7 @@ AddProductView -down- AdminProductController
 ProductServiceImpl -right- AdminProductController
 
 ' ==============================================================================
-' 3. TẦNG TRUY XUẤT DỮ LIỆU (HÀNG 3 - 3 CỤM REPOSITORIES CỐT LÕI)
+' 3. TẦNG TRUY XUẤT DỮ LIỆU (HÀNG 3 - 5 REPOSITORIES CỐT LÕI)
 ' ==============================================================================
 interface CategoryRepository {
   + findById(id : Long) : Optional<Category>
@@ -171,11 +189,10 @@ interface BrandRepository {
 interface ProductRepository {
   + save(p : Product) : Product
   + findBySlug(slug : String) : Optional<Product>
-  + existsBySlug(slug : String) : boolean
 }
 
 interface ProductVariantRepository {
-  + saveAll(list : List<ProductVariant>) : List<ProductVariant>
+  + save(v : ProductVariant) : ProductVariant
   + findByProductId(productId : Long) : List<ProductVariant>
 }
 
@@ -194,12 +211,16 @@ ProductServiceImpl -down- ProductRepository
 ProductServiceImpl -down- AttributeRepository
 
 ' ==============================================================================
-' 4. TẦNG THỰC THỂ DỮ LIỆU (HÀNG 4 - THỰC THỂ USE CASE TẠO MỚI)
+' 4. TẦNG THỰC THỂ DỮ LIỆU (HÀNG 4 - ĐỦ THUỘC TÍNH KHỚP CLASS THỰC THỂ)
 ' ==============================================================================
 class Category {
   - id : Long
   - name : String
   - slug : String
+  - parentId : Long
+  - imageUrl : String
+  - icon : String
+  - sortOrder : Integer
   - active : Boolean
 }
 
@@ -208,6 +229,7 @@ class Brand {
   - name : String
   - slug : String
   - logoUrl : String
+  - description : String
   - active : Boolean
 }
 
@@ -216,13 +238,23 @@ class Product {
   - name : String
   - slug : String
   - description : String
+  - attributes : String
+  - specsRaw : String
   - price : BigDecimal
   - costPrice : BigDecimal
   - salePrice : BigDecimal
   - weight : BigDecimal
+  - length : BigDecimal
+  - width : BigDecimal
+  - height : BigDecimal
   - categoryId : Long
   - brandId : Long
+  - brand : String
   - imageUrl : String
+  - warrantyPeriod : Integer
+  - warrantyPolicy : String
+  - salesCount : Integer
+  - ratingAvg : BigDecimal
   - active : Boolean
 }
 
@@ -230,6 +262,7 @@ class ProductVariant {
   - id : Long
   - productId : Long
   - sku : String
+  - variantAttr : String
   - price : BigDecimal
   - costPrice : BigDecimal
   - salePrice : BigDecimal
@@ -242,6 +275,7 @@ class ProductImage {
   - id : Long
   - productId : Long
   - imageUrl : String
+  - sortOrder : Integer
   - isPrimary : Boolean
 }
 
@@ -255,6 +289,8 @@ class Attribute {
   - code : String
   - name : String
   - valueType : String
+  - allowedValues : String
+  - isColor : Boolean
 }
 
 class ProductAttributeValue {
