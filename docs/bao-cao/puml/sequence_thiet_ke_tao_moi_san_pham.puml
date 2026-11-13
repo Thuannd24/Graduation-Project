@@ -1,0 +1,198 @@
+@startuml sequence_thiet_ke_tao_moi_san_pham
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+<style>
+sequenceDiagram {
+  LineColor #000000
+  LineThickness 1.2
+  arrow {
+    LineColor #000000
+    LineThickness 1.2
+    FontColor #000000
+    FontSize 8
+  }
+  lifeLine {
+    LineColor #000000
+    LineThickness 1.0
+    BackgroundColor #7ACFF5
+  }
+  participant {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 8.5
+    FontStyle bold
+  }
+  actor {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 8.5
+    FontStyle bold
+  }
+  boundary {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 8.5
+    FontStyle bold
+  }
+  control {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 8.5
+    FontStyle bold
+  }
+  entity {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 8.5
+    FontStyle bold
+  }
+}
+</style>
+
+skinparam {
+  vpDiagramType SequenceDiagram
+  defaultFontSize 8
+  defaultFontColor #000000
+  shadowing false
+  roundcorner 0
+  
+  sequenceLifeLineBorderColor #000000
+  sequenceLifeLineBackgroundColor #7ACFF5
+  
+  sequenceParticipantBorderColor #000000
+  sequenceParticipantBackgroundColor #7ACFF5
+  sequenceParticipantFontSize 8.5
+  sequenceParticipantFontStyle bold
+  
+  sequenceActorBorderColor #000000
+  sequenceActorBackgroundColor #7ACFF5
+  sequenceActorFontSize 8.5
+  sequenceActorFontStyle bold
+  
+  sequenceArrowColor #000000
+  sequenceArrowThickness 1.2
+  sequenceArrowFontSize 8
+  sequenceArrowFontColor #000000
+}
+
+actor "Manager Staff" as staff
+boundary "MainStaffView" as mainView
+boundary "ManageProductView" as manageView
+boundary "AddProductView" as addView
+control "AdminProductController" as controller
+control "ProductServiceImpl" as service
+control "ProductRepository" as productRepo
+entity "Product" as product
+
+' ==============================================================================
+' GIAI ĐOẠN 1: ĐIỀU HƯỚNG TỪ MÀN HÌNH CHÍNH VÀO FORM TẠO MỚI SẢN PHẨM (BƯỚC 1-6)
+' ==============================================================================
+staff -> mainView : 1: click manage products
+activate staff
+activate mainView
+mainView -> manageView : 2: call
+activate manageView
+deactivate mainView
+manageView --> staff : 3: display
+staff -> manageView : 4: click add product
+manageView -> addView : 5: call
+activate addView
+deactivate manageView
+addView --> staff : 6: display
+
+' ==============================================================================
+' GIAI ĐOẠN 2: NHẬP TÊN SẢN PHẨM & KIỂM TRA TRÙNG LẶP SLUG (BƯỚC 7-17)
+' ==============================================================================
+staff -> addView : 7: enter product name
+addView -> controller : 8: call
+activate controller
+controller -> controller : 9: doGet()
+activate controller
+controller -> service : 10: call
+activate service
+service -> service : 11: checkSlug(slug: String)
+activate service
+service -> productRepo : 12: call
+activate productRepo
+productRepo -> productRepo : 13: findBySlug(slug: String)
+activate productRepo
+deactivate productRepo
+productRepo --> service : 14: return
+deactivate productRepo
+deactivate service
+service --> controller : 15: return
+deactivate service
+deactivate controller
+controller --> addView : 16: return
+deactivate controller
+addView --> staff : 17: display
+
+' ==============================================================================
+' GIAI ĐOẠN 3: TẢI LÊN HÌNH ẢNH SẢN PHẨM (BƯỚC 18-29)
+' ==============================================================================
+staff -> addView : 18: select image & upload
+addView -> controller : 19: call
+activate controller
+controller -> controller : 20: doPost()
+activate controller
+controller -> controller : 21: uploadProductImage(file)
+activate controller
+controller -> service : 22: call
+activate service
+service -> service : 23: saveImage(file)
+activate service
+service -> product : 24: call
+activate product
+product -> product : 25: Product()
+activate product
+deactivate product
+product --> service : 26: return
+deactivate product
+deactivate service
+service --> controller : 27: return
+deactivate service
+deactivate controller
+controller --> addView : 28: return
+deactivate controller
+deactivate controller
+addView --> staff : 29: display
+
+' ==============================================================================
+' GIAI ĐOẠN 4: NHẬP THÔNG TIN CHI TIẾT & LƯU TẠO MỚI SẢN PHẨM (BƯỚC 30-40)
+' ==============================================================================
+staff -> addView : 30: enter info product
+addView -> controller : 31: call
+activate controller
+controller -> service : 32: createProduct(dto)
+activate service
+service -> product : 33: call
+activate product
+product -> product : 34: Product()
+activate product
+deactivate product
+product --> service : 35: return
+deactivate product
+service -> productRepo : 36: save(product: Product)
+activate productRepo
+productRepo --> service : 37: return
+deactivate productRepo
+service --> controller : 38: return
+deactivate service
+controller --> addView : 39: return
+deactivate controller
+addView --> staff : 40: sucess
+deactivate addView
+deactivate staff
+
+right footer Powered By Visual Paradigm Community Edition
+@enduml

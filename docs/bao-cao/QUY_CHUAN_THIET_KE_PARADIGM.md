@@ -537,3 +537,30 @@ Mỗi Microservice backend được tổ chức theo chuẩn Maven đa module:
    * Bổ sung đầy đủ các trường nhập liệu Form State ở `*View`, phụ thuộc Service (`storageService`, `searchService`...) ở Controller/Service, và chỉ ghi đúng tên phương thức Repository thực sự tồn tại trong `BE/`.
    * **Quy tắc phạm vi lớp:** Không tự ý phát sinh thêm lớp mới ngoài cấu trúc lớp đã chốt của biểu đồ Use Case khi chưa báo cáo và thống nhất trước.
    * Tuân thủ 100% Quy tắc nối tầng ở Mục 5: View $\leftrightarrow$ Controller $\leftrightarrow$ Service $\leftrightarrow$ Repository $\leftrightarrow$ Entity chỉ dùng nét liền thuần túy `--`; chỉ Tầng Thực thể mới dùng `*--`, `o--`, `<|--`.
+
+### 9.4. Quy chuẩn vẽ Sơ đồ Tuần tự Thiết kế Chi tiết (`sequence_thiet_ke_<use_case>.puml`)
+1. **Giao diện & Bố cục Visual Paradigm Robustness/BCE Template:**
+   * Sử dụng theme Visual Paradigm chuẩn: `!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml`.
+   * Khai báo kiểu biểu đồ `vpDiagramType SequenceDiagram`, cỡ chữ `defaultFontSize 8`, màu chữ `#000000`, viền `#000000`, độ dày nét `1.2`.
+   * Toàn bộ các đối tượng tham gia (Lifeline) và thanh kích hoạt (Activation LifeLine) dùng màu xanh nhạt `#7ACFF5` chuẩn Visual Paradigm.
+   * Gắn footer bản quyền chuẩn ở góc dưới phải: `right footer Powered By Visual Paradigm Community Edition`.
+2. **Quy chuẩn Khai báo Lifelines theo Phân loại BCE (Robustness Symbols):**
+   * **Actor:** `actor "Manager Staff" as staff` (biểu tượng hình người que - Stick Figure).
+   * **Boundary (Giao diện):** `boundary "TênView" as alias` (biểu tượng vòng tròn có vạch đứng bên trái `|O`, tương ứng các View/Modal ReactJS như `MainStaffView`, `ManageProductView`, `AddProductView`).
+   * **Control (Điều khiển & Dịch vụ):** `control "TênLớp" as alias` (biểu tượng vòng tròn có mũi tên xoay trên đầu `(c)`, áp dụng cho Controller, ServiceImpl, Repository).
+   * **Entity (Thực thể dữ liệu):** `entity "TênThựcThể" as alias` (biểu tượng vòng tròn đặt trên thanh ngang `_O_`, áp dụng cho các entity JPA như `Product`, `ProductVariant`).
+3. **Quy chuẩn Thông điệp & Luồng Kích hoạt Liền mạch (Seamless Lifeline Activations):**
+   * **Tính liền mạch tuyệt đối của Tác nhân (Actor):** `staff` kích hoạt ngay tại thông điệp đầu tiên (`1: click manage products`) và **giữ nguyên thanh kích hoạt màu xanh liên tục không ngắt quãng** cho tới thông điệp cuối cùng (`40: sucess`) mới kết thúc (`deactivate staff`).
+   * **Quy tắc kích hoạt và chuyển giao giữa các View:**
+     * `MainStaffView` kích hoạt khi nhận tương tác bước 1, gọi chuyển sang `ManageProductView` ở bước 2 rồi `deactivate mainView`.
+     * `ManageProductView` hiển thị danh sách ở bước 3, nhận sự kiện click thêm sản phẩm ở bước 4, gọi mở `AddProductView` ở bước 5 rồi `deactivate manageView`.
+     * `AddProductView` kích hoạt từ bước 5 và giữ thanh kích hoạt liên tục trong suốt các giai đoạn nhập liệu, kiểm tra, tải ảnh và lưu sản phẩm cho tới khi nhận kết quả thành công ở bước 40 mới `deactivate addView`.
+   * **Quy chuẩn Mũi tên & Đánh số Thông điệp:**
+     * Mũi tên gọi đồng bộ (Sync Call): dùng nét liền `->` (`1: click ...`, `2: call`, `8: call`, `9: doGet()`, `32: createProduct(dto)`).
+     * Mũi tên trả về / Hiển thị (Return / Display): dùng nét đứt `-->` (`3: display`, `14: return`, `39: return`, `40: sucess`).
+     * Đánh số liên tục tuần tự từ `1:` đến `40:`, không nhảy cóc hay bỏ sót số thứ tự.
+   * **Cấu trúc 4 Giai đoạn chuẩn hóa (Chuẩn 40 bước PTIT):**
+     * *Giai đoạn 1 (Bước 1 - 6):* Điều hướng từ Màn hình chính vào Form tạo mới sản phẩm.
+     * *Giai đoạn 2 (Bước 7 - 17):* Nhập tên sản phẩm & Kiểm tra tính hợp lệ/trùng lặp của Slug qua Controller $\rightarrow$ Service $\rightarrow$ Repository.
+     * *Giai đoạn 3 (Bước 18 - 29):* Tải lên hình ảnh sản phẩm lên MinIO Storage và cập nhật thực thể `Product`.
+     * *Giai đoạn 4 (Bước 30 - 40):* Nhập đầy đủ thông tin/thông số, khởi tạo thực thể `Product()`, lưu qua `productRepo.save(product)` và trả về thông báo thành công `sucess` cho Nhân viên.
