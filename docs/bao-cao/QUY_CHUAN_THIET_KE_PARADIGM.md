@@ -546,21 +546,24 @@ Mỗi Microservice backend được tổ chức theo chuẩn Maven đa module:
    * Gắn footer bản quyền chuẩn ở góc dưới phải: `right footer Powered By Visual Paradigm Community Edition`.
 2. **Quy chuẩn Khai báo Lifelines theo Phân loại BCE (Robustness Symbols):**
    * **Actor:** `actor "Manager Staff" as staff` (biểu tượng hình người que - Stick Figure).
-   * **Boundary (Giao diện):** `boundary "TênView" as alias` (biểu tượng vòng tròn có vạch đứng bên trái `|O`, tương ứng các View/Modal ReactJS như `MainStaffView`, `ManageProductView`, `AddProductView`).
-   * **Control (Điều khiển & Dịch vụ):** `control "TênLớp" as alias` (biểu tượng vòng tròn có mũi tên xoay trên đầu `(c)`, áp dụng cho Controller, ServiceImpl, Repository).
-   * **Entity (Thực thể dữ liệu):** `entity "TênThựcThể" as alias` (biểu tượng vòng tròn đặt trên thanh ngang `_O_`, áp dụng cho các entity JPA như `Product`, `ProductVariant`).
+   * **Boundary (Giao diện):** `boundary "TênView" as alias` (biểu tượng vòng tròn có vạch đứng bên trái `|O`, gồm 3 View chuẩn: `MainStaffView`, `ManageProductView`, `AddProductView`).
+   * **Control (Điều khiển & Dịch vụ):** `control "TênLớp" as alias` (biểu tượng vòng tròn có mũi tên xoay trên đầu `(c)`, gồm `AdminProductController`, `ProductServiceImpl`, `ProductRepository`, `ProductVariantRepository`).
+   * **Entity (Thực thể dữ liệu):** `entity "TênThựcThể" as alias` (biểu tượng vòng tròn đặt trên thanh ngang `_O_`, gồm `Product`, `ProductVariant`).
 3. **Quy chuẩn Thông điệp & Luồng Kích hoạt Liền mạch (Seamless Lifeline Activations):**
-   * **Tính liền mạch tuyệt đối của Tác nhân (Actor):** `staff` kích hoạt ngay tại thông điệp đầu tiên (`1: click manage products`) và **giữ nguyên thanh kích hoạt màu xanh liên tục không ngắt quãng** cho tới thông điệp cuối cùng (`40: sucess`) mới kết thúc (`deactivate staff`).
+   * **Tính liền mạch tuyệt đối của Tác nhân (Actor):** `staff` kích hoạt ngay tại thông điệp đầu tiên (`1: click navProducts`) và **giữ nguyên thanh kích hoạt màu xanh liên tục không ngắt quãng** cho tới thông điệp cuối cùng (`44: sucess`) mới kết thúc (`deactivate staff`).
    * **Quy tắc kích hoạt và chuyển giao giữa các View:**
-     * `MainStaffView` kích hoạt khi nhận tương tác bước 1, gọi chuyển sang `ManageProductView` ở bước 2 rồi `deactivate mainView`.
-     * `ManageProductView` hiển thị danh sách ở bước 3, nhận sự kiện click thêm sản phẩm ở bước 4, gọi mở `AddProductView` ở bước 5 rồi `deactivate manageView`.
-     * `AddProductView` kích hoạt từ bước 5 và giữ thanh kích hoạt liên tục trong suốt các giai đoạn nhập liệu, kiểm tra, tải ảnh và lưu sản phẩm cho tới khi nhận kết quả thành công ở bước 40 mới `deactivate addView`.
+     * `MainStaffView` kích hoạt khi nhận tương tác bước 1 (`1: click navProducts`), thực thi `navigateToProducts()` rồi gọi `ManageProductView` ở bước 3 và `deactivate mainView`.
+     * `ManageProductView` hiển thị `tblProducts` ở bước 4, nhận sự kiện click `btnAddProduct` ở bước 5, thực thi `onOpenAddProduct()` ở bước 6, gọi mở `AddProductView` ở bước 7 rồi `deactivate manageView`.
+     * `AddProductView` kích hoạt từ bước 7 và giữ thanh kích hoạt liên tục trong suốt các giai đoạn nhập liệu, đổi danh mục, tải ảnh, sinh biến thể và lưu sản phẩm cho tới khi nhận kết quả thành công ở bước 44 mới `deactivate addView`.
+   * **Đồng bộ 100% Phương thức & Thuộc tính với Class Thiết kế (`class_thiet_ke_tao_moi_san_pham.puml`):**
+     * Mọi thông điệp và hàm gọi đều ánh xạ chính xác từ phương thức và thuộc tính của lớp: `navProducts`, `navigateToProducts()`, `btnAddProduct`, `onOpenAddProduct()`, `handleNameChange(e)`, `handleCategoryChange(catId)`, `handleFileUpload(files)`, `uploadProductImage(file, folder)`, `generateVariantsGrid()`, `handleSubmit(e)`, `createProduct(dto)`, `findBySlug(slug)`, `normalizeProductPricing(dto)`, `serializeSpecsRaw(specsRaw)`, `Product()`, `save(product)`, `saveSpecifications(...)`, `ProductVariant()`, `save(variant)`, `saveVariantOptions(...)`, `convertToDto(product)`.
    * **Quy chuẩn Mũi tên & Đánh số Thông điệp:**
-     * Mũi tên gọi đồng bộ (Sync Call): dùng nét liền `->` (`1: click ...`, `2: call`, `8: call`, `9: doGet()`, `32: createProduct(dto)`).
-     * Mũi tên trả về / Hiển thị (Return / Display): dùng nét đứt `-->` (`3: display`, `14: return`, `39: return`, `40: sucess`).
-     * Đánh số liên tục tuần tự từ `1:` đến `40:`, không nhảy cóc hay bỏ sót số thứ tự.
-   * **Cấu trúc 4 Giai đoạn chuẩn hóa (Chuẩn 40 bước PTIT):**
-     * *Giai đoạn 1 (Bước 1 - 6):* Điều hướng từ Màn hình chính vào Form tạo mới sản phẩm.
-     * *Giai đoạn 2 (Bước 7 - 17):* Nhập tên sản phẩm & Kiểm tra tính hợp lệ/trùng lặp của Slug qua Controller $\rightarrow$ Service $\rightarrow$ Repository.
-     * *Giai đoạn 3 (Bước 18 - 29):* Tải lên hình ảnh sản phẩm lên MinIO Storage và cập nhật thực thể `Product`.
-     * *Giai đoạn 4 (Bước 30 - 40):* Nhập đầy đủ thông tin/thông số, khởi tạo thực thể `Product()`, lưu qua `productRepo.save(product)` và trả về thông báo thành công `sucess` cho Nhân viên.
+     * Mũi tên gọi đồng bộ (Sync Call): dùng nét liền `->`.
+     * Mũi tên trả về / Hiển thị (Return / Display): dùng nét đứt `-->`.
+     * Đánh số liên tục tuần tự từ `1:` đến `44:`, không nhảy cóc hay bỏ sót số thứ tự.
+   * **Cấu trúc 5 Giai đoạn chuẩn hóa nghiệp vụ:**
+     * *Giai đoạn 1 (Bước 1 - 4):* Điều hướng từ Màn hình chính sang Quản lý sản phẩm.
+     * *Giai đoạn 2 (Bước 5 - 8):* Mở Form tạo mới sản phẩm.
+     * *Giai đoạn 3 (Bước 9 - 17):* Nhập thông tin cơ bản, chọn danh mục và tải ảnh lên Storage qua Controller.
+     * *Giai đoạn 4 (Bước 18 - 20):* Cấu hình tùy chọn thuộc tính và tự động sinh lưới biến thể SKU (`listVariants`).
+     * *Giai đoạn 5 (Bước 21 - 44):* Gửi Form, kiểm tra slug, chuẩn hóa giá, khởi tạo thực thể `Product`, lưu CSDL, lưu thuộc tính động EAV, khởi tạo và lưu `ProductVariant`, lưu tùy chọn biến thể, chuyển DTO và hiển thị `sucess`.

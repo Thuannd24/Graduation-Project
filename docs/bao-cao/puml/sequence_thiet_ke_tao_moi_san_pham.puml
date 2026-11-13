@@ -92,105 +92,139 @@ boundary "AddProductView" as addView
 control "AdminProductController" as controller
 control "ProductServiceImpl" as service
 control "ProductRepository" as productRepo
+control "ProductVariantRepository" as variantRepo
 entity "Product" as product
+entity "ProductVariant" as variant
 
 ' ==============================================================================
-' GIAI ĐOẠN 1: ĐIỀU HƯỚNG TỪ MÀN HÌNH CHÍNH VÀO FORM TẠO MỚI SẢN PHẨM (BƯỚC 1-6)
+' GIAI ĐOẠN 1: ĐIỀU HƯỚNG TỪ MÀN HÌNH CHÍNH SANG QUẢN LÝ SẢN PHẨM (BƯỚC 1-4)
 ' ==============================================================================
-staff -> mainView : 1: click manage products
+staff -> mainView : 1: click navProducts
 activate staff
 activate mainView
-mainView -> manageView : 2: call
+mainView -> mainView : 2: navigateToProducts()
+activate mainView
+deactivate mainView
+mainView -> manageView : 3: call
 activate manageView
 deactivate mainView
-manageView --> staff : 3: display
-staff -> manageView : 4: click add product
-manageView -> addView : 5: call
+manageView --> staff : 4: display tblProducts
+
+' ==============================================================================
+' GIAI ĐOẠN 2: MỞ FORM TẠO MỚI SẢN PHẨM (BƯỚC 5-8)
+' ==============================================================================
+staff -> manageView : 5: click btnAddProduct
+manageView -> manageView : 6: onOpenAddProduct()
+activate manageView
+deactivate manageView
+manageView -> addView : 7: call
 activate addView
 deactivate manageView
-addView --> staff : 6: display
+addView --> staff : 8: display add product form
 
 ' ==============================================================================
-' GIAI ĐOẠN 2: NHẬP TÊN SẢN PHẨM & KIỂM TRA TRÙNG LẶP SLUG (BƯỚC 7-17)
+' GIAI ĐOẠN 3: NHẬP THÔNG TIN, CHỌN DANH MỤC & TẢI ẢNH LÊN STORAGE (BƯỚC 9-17)
 ' ==============================================================================
-staff -> addView : 7: enter product name
-addView -> controller : 8: call
+staff -> addView : 9: input txtName & txtSlug
+addView -> addView : 10: handleNameChange(e)
+activate addView
+deactivate addView
+
+staff -> addView : 11: select selCategory
+addView -> addView : 12: handleCategoryChange(catId)
+activate addView
+deactivate addView
+
+staff -> addView : 13: select fileImages & upload
+addView -> addView : 14: handleFileUpload(files)
+activate addView
+deactivate addView
+addView -> controller : 15: uploadProductImage(file, folder)
 activate controller
-controller -> controller : 9: doGet()
-activate controller
-controller -> service : 10: call
-activate service
-service -> service : 11: checkSlug(slug: String)
-activate service
-service -> productRepo : 12: call
-activate productRepo
-productRepo -> productRepo : 13: findBySlug(slug: String)
-activate productRepo
-deactivate productRepo
-productRepo --> service : 14: return
-deactivate productRepo
-deactivate service
-service --> controller : 15: return
-deactivate service
+controller --> addView : 16: return ApiResponse(imageUrl)
 deactivate controller
-controller --> addView : 16: return
-deactivate controller
-addView --> staff : 17: display
+addView --> staff : 17: display image preview
 
 ' ==============================================================================
-' GIAI ĐOẠN 3: TẢI LÊN HÌNH ẢNH SẢN PHẨM (BƯỚC 18-29)
+' GIAI ĐOẠN 4: CẤU HÌNH BIẾN THỂ & SINH LƯỚI BIẾN THỂ (BƯỚC 18-20)
 ' ==============================================================================
-staff -> addView : 18: select image & upload
-addView -> controller : 19: call
-activate controller
-controller -> controller : 20: doPost()
-activate controller
-controller -> controller : 21: uploadProductImage(file)
-activate controller
-controller -> service : 22: call
-activate service
-service -> service : 23: saveImage(file)
-activate service
-service -> product : 24: call
-activate product
-product -> product : 25: Product()
-activate product
-deactivate product
-product --> service : 26: return
-deactivate product
-deactivate service
-service --> controller : 27: return
-deactivate service
-deactivate controller
-controller --> addView : 28: return
-deactivate controller
-deactivate controller
-addView --> staff : 29: display
+staff -> addView : 18: configure options & generate variants
+addView -> addView : 19: generateVariantsGrid()
+activate addView
+deactivate addView
+addView --> staff : 20: display listVariants
 
 ' ==============================================================================
-' GIAI ĐOẠN 4: NHẬP THÔNG TIN CHI TIẾT & LƯU TẠO MỚI SẢN PHẨM (BƯỚC 30-40)
+' GIAI ĐOẠN 5: GỬI FORM & LƯU SẢN PHẨM, BIẾN THỂ VÀ THUỘC TÍNH (BƯỚC 21-44)
 ' ==============================================================================
-staff -> addView : 30: enter info product
-addView -> controller : 31: call
+staff -> addView : 21: click btnSubmit
+addView -> addView : 22: handleSubmit(e)
+activate addView
+deactivate addView
+addView -> controller : 23: createProduct(dto)
 activate controller
-controller -> service : 32: createProduct(dto)
+
+controller -> service : 24: createProduct(dto)
 activate service
-service -> product : 33: call
-activate product
-product -> product : 34: Product()
-activate product
-deactivate product
-product --> service : 35: return
-deactivate product
-service -> productRepo : 36: save(product: Product)
+
+service -> productRepo : 25: findBySlug(slug)
 activate productRepo
-productRepo --> service : 37: return
+productRepo --> service : 26: return Optional.empty()
 deactivate productRepo
-service --> controller : 38: return
+
+service -> service : 27: normalizeProductPricing(dto)
+activate service
 deactivate service
-controller --> addView : 39: return
+
+service -> service : 28: serializeSpecsRaw(specsRaw)
+activate service
+deactivate service
+
+service -> product : 29: Product(dto)
+activate product
+product -> product : 30: Product()
+activate product
+deactivate product
+product --> service : 31: return product
+deactivate product
+
+service -> productRepo : 32: save(product)
+activate productRepo
+productRepo --> service : 33: return savedProduct
+deactivate productRepo
+
+service -> service : 34: saveSpecifications(productId, attrs, attrMap)
+activate service
+deactivate service
+
+service -> variant : 35: ProductVariant(variantDto)
+activate variant
+variant -> variant : 36: ProductVariant()
+activate variant
+deactivate variant
+variant --> service : 37: return variant
+deactivate variant
+
+service -> variantRepo : 38: save(variant)
+activate variantRepo
+variantRepo --> service : 39: return savedVariant
+deactivate variantRepo
+
+service -> service : 40: saveVariantOptions(variantId, attrs, attrMap)
+activate service
+deactivate service
+
+service -> service : 41: convertToDto(product)
+activate service
+deactivate service
+
+service --> controller : 42: return productDto
+deactivate service
+
+controller --> addView : 43: return ApiResponse<ProductDto>
 deactivate controller
-addView --> staff : 40: sucess
+
+addView --> staff : 44: sucess
 deactivate addView
 deactivate staff
 
