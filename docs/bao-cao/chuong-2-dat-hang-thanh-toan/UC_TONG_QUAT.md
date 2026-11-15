@@ -1,51 +1,41 @@
-# Use Case tổng quát — Đặt hàng và thanh toán trực tuyến
+# Use Case tổng quát — Giỏ hàng, đặt hàng và thanh toán
 
-Module có **hai UC chính**, mỗi UC được triển khai thành Use Case phân rã, Activity, Sequence và sơ đồ trạng thái trong [trang hình vẽ](HINH_VE.md). Bộ hình trình bày theo ảnh mẫu người dùng cung cấp; nghiệp vụ vẫn theo source AuraTech.
+Sơ đồ thể hiện **mục tiêu và tương tác nghiệp vụ của các tác nhân**, cập nhật ngày 15/11/2026. Giữ khung nền xanh, các điểm mở rộng theo ảnh mẫu và 5 tác nhân đã chọn.
 
 ![Use Case tổng quát](diagrams/01-use-case.svg)
 
 [PlantUML](diagrams/01-use-case.puml) · [SVG](diagrams/01-use-case.svg) · [PNG](diagrams/01-use-case.png)
 
-## Hai UC được chọn
+## Các mục tiêu chính
 
-| Nội dung | UC04.1 — Đặt hàng trực tuyến | UC04.2 — Thanh toán đơn hàng qua VNPay |
-|---|---|---|
-| Mục tiêu | Ghi nhận đơn từ giỏ với giá, giao nhận và số lượng phù hợp | Hoàn tất thanh toán một đơn đã tồn tại |
-| Tác nhân chính | Khách hàng | Khách hàng |
-| Tác nhân hỗ trợ bên ngoài | Không có trong phạm vi hình | Cổng VNPay |
-| Tiền điều kiện | Đã đăng nhập, giỏ có sản phẩm | Đơn thuộc khách, còn hạn, PENDING hoặc AWAITING_PAYMENT |
-| Khởi phát | Khách xác nhận đặt hàng tại checkout | Chọn VNPay tại checkout hoặc thanh toán lại ở trang đơn |
-| Kết quả thành công | Có mã đơn, chi tiết, giá chính thức; sự kiện tạo đơn trong outbox; xóa giỏ | Payment SUCCESS và sự kiện thành công trong outbox; đơn được xác nhận khi xử lý sự kiện hợp lệ |
-| Ngoại lệ chính | Hết tồn, dữ liệu/ưu đãi lỗi, yêu cầu trùng, lỗi sau commit | Giao dịch lỗi/hết hạn, callback sai/trùng/muộn, retry |
-| Đối tượng của state | Order | Payment |
-
-## Lý do tách
-
-CheckoutPage gọi tạo đơn trước, sau đó khởi tạo thanh toán. Nếu khởi tạo thanh toán lỗi, giao diện vẫn giữ mã đơn và chuyển sang trang chi tiết để thử lại. Vì vậy đặt hàng có kết quả độc lập, còn thanh toán có thể thực hiện lại trên cùng đơn.
-
-Không dùng include giữa hai UC chính để biểu thị bước trước/sau: thanh toán lại không tạo đơn mới. Mối liên hệ được mô tả bằng tiền điều kiện/hậu điều kiện và thứ tự tương tác trong Activity/Sequence.
-
-Trong sơ đồ phân rã, include chỉ phần hành vi bắt buộc; extend chỉ lựa chọn voucher/điểm ở preview. Các quan hệ này không chỉ thứ tự gọi API hoặc bắt buộc xử lý đồng bộ.
-
-## Phạm vi nghiệp vụ
-
-Khung hệ thống bao gồm phần đặt hàng và thanh toán của AuraTech. Redis, Kafka, kho và các vi dịch vụ là thành phần nội bộ, không phải tác nhân trong Use Case nghiệp vụ; chúng xuất hiện trong Sequence.
-
-Đăng nhập là tiền điều kiện. Quản lý tài khoản, giỏ hàng, COD và vận hành giao hàng không được mở rộng thành UC chính của bộ này. Các trạng thái giao/hoàn hàng được giữ để nối vòng đời Order, ngoài phạm vi UC đặt hàng. REFUND_PENDING là điểm bàn giao ngoài phạm vi thanh toán, không phải trạng thái kết thúc.
-
-“Xem thông tin đơn hàng và kết quả thanh toán” là chức năng hỗ trợ ở sơ đồ tổng quát, không chọn làm bộ đặc tả thứ ba.
-
-## Phân rã hai UC
-
-| UC | Phần chức năng |
+| Use case | Ý nghĩa với tác nhân |
 |---|---|
-| Đặt hàng | Xem trước đơn; cung cấp giao nhận; kiểm tra khả năng đáp ứng |
-| Lựa chọn khi đặt hàng | Áp dụng mã giảm giá; sử dụng điểm thưởng. Preview chỉ dự tính, backend kiểm tra và áp dụng lại khi tạo đơn |
-| Thanh toán | Kiểm tra điều kiện; khởi tạo lượt; xác minh và ghi nhận kết quả |
-| Hỗ trợ thanh toán | Xem lại kết quả chính thức từ backend; retry là luồng thay thế trên cùng đơn |
+| Quản lý giỏ hàng | Khách chuẩn bị các sản phẩm và số lượng muốn mua. |
+| Đặt hàng trực tuyến (Checkout) | Khách xác nhận mua hàng, cung cấp thông tin nhận hàng và thực hiện bước thanh toán. |
+| Thanh toán đơn hàng | Khách lựa chọn/xác nhận cách trả tiền bằng VNPay hoặc COD. Khách tham gia qua UC Đặt hàng; Cổng VNPay hỗ trợ thanh toán trực tuyến. |
+| Theo dõi và xử lý đơn hàng | Khách theo dõi đơn; Nhân viên/Quản trị viên vận hành đơn; Đơn vị vận chuyển cung cấp trạng thái giao hàng. |
 
-## Dùng trong Chương 2
+## Quan hệ nghiệp vụ
 
-Bắt đầu bằng sơ đồ tổng quát và bảng hai UC. Với từng UC, dùng Use Case phân rã để xác định phạm vi, Activity để mô tả luồng, Sequence để đối chiếu cách triển khai, state để giải thích trạng thái DB và sự kiện đến muộn.
+- **Đặt hàng include Thanh toán:** bước thanh toán là một phần của quy trình đặt hàng (checkout). Với COD, khách xác nhận trả tiền khi nhận hàng; với VNPay, khách thực hiện thanh toán trực tuyến.
+- **Đặt hàng include Cung cấp thông tin nhận hàng:** khách cần xác định người nhận và địa chỉ giao hàng.
+- **Áp dụng ưu đãi extend Đặt hàng:** hành vi tùy chọn tại điểm mở rộng Áp dụng ưu đãi, khi khách có voucher hoặc dùng điểm thưởng.
+- **Thanh toán include Chọn phương thức:** khách chọn VNPay hoặc COD.
+- **Thanh toán trực tuyến qua VNPay extend Thanh toán:** chỉ thực hiện tại điểm mở rộng Thanh toán trực tuyến khi khách chọn VNPay.
+- **Đăng nhập** là UC riêng của khách hàng; đã đăng nhập là tiền điều kiện của các nghiệp vụ mua hàng.
 
-Phương pháp trình bày tham khảo hai thẻ cuối của tài liệu nhóm: **Backup** (t.przan4jkdfvu) và **Báo cáo mẫu** (t.lqjrluy5ko5n). Hành vi lấy từ code; không dùng Order PAID hoặc PAYMENT_FAILED vì source không có các trạng thái đó.
+Đặt hàng trong hình này được hiểu là toàn bộ checkout. Xác nhận thanh toán COD là cam kết trả tiền khi nhận hàng, chưa đồng nghĩa đã thu tiền tại thời điểm đặt đơn. Các luồng thất bại được trình bày trong đặc tả/Activity phù hợp.
+
+## Các tác nhân
+
+| Tác nhân | Vai trò |
+|---|---|
+| Khách hàng | Đăng nhập, quản lý giỏ, đặt hàng và theo dõi đơn của mình; tham gia bước thanh toán trong checkout. |
+| Nhân viên | Theo dõi và xử lý các đơn hàng theo quyền vận hành. |
+| Quản trị viên | Kế thừa các nghiệp vụ vận hành của Nhân viên trong phạm vi hình; mũi tên khái quát hóa hướng về Nhân viên. |
+| Cổng VNPay | Hỗ trợ khách thanh toán trực tuyến. |
+| Đơn vị vận chuyển (giả lập) | Cung cấp trạng thái giao hàng để theo dõi và xử lý đơn. |
+
+Nhóm Theo dõi và xử lý đơn hàng bao quát phần việc của từng vai trò; khách chỉ theo dõi đơn của mình, còn quyền vận hành dành cho Nhân viên/Quản trị viên. Các actor phân hệ hỗ trợ được lược theo phạm vi trình bày đã chọn.
+
+Kiểm tra giỏ, giữ tồn và xác minh webhook thuộc phần xử lý bên trong hệ thống, được trình bày ở [bộ sơ đồ chi tiết](HINH_VE.md). Hình tổng quát tập trung vào mục tiêu, lựa chọn và sự tham gia của tác nhân.

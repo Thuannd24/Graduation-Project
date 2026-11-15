@@ -4,6 +4,14 @@
 
 Các hình lớn nên đọc bằng SVG có phóng to. Mã DH-1…DH-4 và TT-1…TT-4 là mã tạm để nhóm đổi theo mục lục báo cáo.
 
+## Use case tổng quát — Giỏ hàng, đặt hàng và thanh toán
+
+Sơ đồ nghiệp vụ theo góc nhìn tác nhân, giữ 4 UC chính và 5 tác nhân. Đặt hàng (Checkout) include Thanh toán và Cung cấp thông tin nhận hàng; ưu đãi và thanh toán VNPay là các nhánh tùy chọn. Các bước kỹ thuật nằm trong bộ hình chi tiết bên dưới. Cập nhật ngày 15/11/2026. [Phạm vi và giải thích quan hệ](UC_TONG_QUAT.md).
+
+![Use case tổng quát với 5 tác nhân](diagrams/01-use-case.svg)
+
+[SVG](diagrams/01-use-case.svg) · [PNG](diagrams/01-use-case.png) · [PlantUML](diagrams/01-use-case.puml)
+
 ## UC04.1 — Đặt hàng
 
 ### Use case

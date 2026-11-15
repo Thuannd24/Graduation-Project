@@ -1,4 +1,5 @@
 @startuml
+' UC nghiep vu theo goc nhin tac nhan; ket hop anh mau, cap nhat 15/11/2026.
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam defaultFontSize 14
@@ -8,7 +9,6 @@ skinparam ArrowThickness 1
 skinparam defaultTextAlignment center
 skinparam actorBorderColor #4B5563
 skinparam actorBackgroundColor #7DCFF0
-!pragma layout smetana
 left to right direction
 skinparam rectangleBackgroundColor #7DCFF0
 skinparam rectangleBorderColor #4B5563
@@ -17,14 +17,43 @@ skinparam usecaseBorderColor #4B5563
 skinparam usecaseFontSize 14
 
 actor "Khách hàng" as Customer
+actor "Nhân viên" as Staff
+actor "Quản trị viên" as Admin
 actor "Cổng VNPay" as VNPay
-rectangle "AuraTech — Đặt hàng và thanh toán trực tuyến" {
-  usecase "UC04.1\nĐặt hàng trực tuyến" as Order
-  usecase "UC04.2\nThanh toán đơn hàng\nqua VNPay" as Pay
-  usecase "Xem đơn hàng và\nkết quả thanh toán" as View
+actor "Đơn vị vận chuyển\n(giả lập)" as Carrier
+
+rectangle "AuraTech — Phân hệ giỏ hàng, đặt hàng và thanh toán" {
+  usecase "Đăng nhập" as Login
+  usecase "Quản lý giỏ hàng" as Cart
+  usecase "UC04.1\nĐặt hàng trực tuyến\n(Checkout)\n--\nĐiểm mở rộng:\nÁp dụng ưu đãi" as Order
+  usecase "UC04.2\nThanh toán đơn hàng\n--\nĐiểm mở rộng:\nThanh toán trực tuyến" as Pay
+  usecase "Theo dõi và xử lý\nđơn hàng" as Orders
+  usecase "Cung cấp thông tin\nnhận hàng" as Address
+  usecase "Áp dụng ưu đãi\n(voucher / điểm thưởng)" as Discounts
+  usecase "Chọn phương thức\n(VNPay hoặc COD)" as Method
+  usecase "Thanh toán trực tuyến\nqua VNPay" as Online
+
+  ' Canh hidden chi sap xep bo cuc.
+  Login -[hidden]right-> Cart
+  Cart -[hidden]right-> Order
+  Order -[hidden]right-> Orders
+  Address -[hidden]right-> Discounts
+  Method -[hidden]right-> Online
 }
+Customer -- Login
+Customer -- Cart
 Customer -- Order
-Customer -- Pay
-Customer -- View
-Pay -- VNPay
+Customer -- Orders
+Staff -- Orders
+Staff <|-- Admin
+
+Order ..> Address : <<include>>
+Order ..> Pay : <<include>>
+Order <.. Discounts : <<extend>>\n[có voucher hoặc dùng điểm]
+Pay ..> Method : <<include>>
+Pay <.. Online : <<extend>>\n[chọn VNPay]
+
+Online -- VNPay
+Orders -- Carrier
+VNPay -[hidden]right-> Carrier
 @enduml

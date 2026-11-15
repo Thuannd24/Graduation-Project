@@ -4,6 +4,7 @@ Bộ 8 sơ đồ chi tiết được cập nhật theo source local ngày 06/11/
 
 ## Mở xem
 
+- [UC tổng quát theo góc nhìn tác nhân — đặt hàng include thanh toán](UC_TONG_QUAT.md): [SVG](diagrams/01-use-case.svg) · [PNG](diagrams/01-use-case.png) · [PlantUML](diagrams/01-use-case.puml). Cập nhật ngày 15/11/2026.
 - [Mục lục có ảnh xem trước](diagrams/index.html).
 - [Toàn bộ hình và thuyết minh](HINH_VE.md).
 - [Bảng đối chiếu mã nguồn và phạm vi rút gọn](diagrams/DOI_CHIEU_2026-11-06.md).
@@ -28,4 +29,4 @@ Bộ 8 sơ đồ chi tiết được cập nhật theo source local ngày 06/11/
 
 Lệnh render và danh sách nguồn nằm trong [tài liệu đối chiếu](diagrams/DOI_CHIEU_2026-11-06.md). Khi code đổi, cập nhật nguồn PlantUML trước rồi render lại cả SVG và PNG.
 
-Các bản BAO_CAO.md, UC_TONG_QUAT.md và DOI_CHIEU_MA_NGUON.md cũ là tài liệu nền; phạm vi và chi tiết bộ hình hiện tại nằm trong các liên kết trên.
+UC_TONG_QUAT.md mô tả mục tiêu nghiệp vụ với 4 UC chính và 5 tác nhân. Đặt hàng (Checkout) include Thanh toán và Cung cấp thông tin nhận hàng; ưu đãi và VNPay là các nhánh tùy chọn. Các actor phân hệ hỗ trợ được lược khỏi hình. Các bản BAO_CAO.md và DOI_CHIEU_MA_NGUON.md cũ là tài liệu nền; chi tiết bộ 8 hình nằm trong các liên kết trên.
