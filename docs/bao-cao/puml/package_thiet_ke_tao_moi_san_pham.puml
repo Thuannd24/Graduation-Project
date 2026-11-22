@@ -1,0 +1,281 @@
+@startuml package_thiet_ke_tao_moi_san_pham
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+skinparam {
+  vpDiagramType PackageDiagram
+  defaultFontSize 10
+  defaultFontColor #000000
+  defaultFontStyle bold
+  shadowing false
+  roundcorner 0
+  linetype ortho
+  
+  nodesep 10
+  ranksep 12
+  
+  packageBackgroundColor #7ACFF5
+  packageBorderColor #000000
+  packageBorderThickness 1.2
+  packageFontSize 11
+  packageFontStyle bold
+  
+  classBackgroundColor #7ACFF5
+  classBorderColor #000000
+  classBorderThickness 1.2
+  classFontSize 9
+  classFontStyle bold
+  classFontColor #000000
+  classFontName Arial
+  
+  interfaceBackgroundColor #7ACFF5
+  interfaceBorderColor #000000
+  interfaceBorderThickness 1.2
+  interfaceFontSize 9
+  interfaceFontStyle bold
+  interfaceFontColor #000000
+  
+  arrowColor #000000
+  arrowThickness 1.2
+  arrowFontSize 9
+  arrowFontColor #000000
+  arrowFontStyle bold
+}
+
+hide class circle
+hide interface circle
+
+title Sơ đồ Package Thiết kế: Module Tạo mới Sản phẩm (Chuẩn Quan Hệ & Đường Nối UML)
+
+' ==============================================================================
+' 1. GIAO DIỆN (VIEW) - CO GỌN 1 HÀNG KHÍT 100%
+' ==============================================================================
+package "view" as pkg_view {
+  class MainStaffView {
+    - navProducts : link
+    + navigateToProducts() : void
+  }
+  class ManageProductView {
+    - txtSearchQuery : input
+    - selCategoryFilter : select
+    - btnAddProduct : submit
+    - tblProducts : table
+    + onSearch() : void
+    + onOpenAddProduct() : void
+  }
+  class AddProductView {
+    - txtName : input
+    - txtSlug : input
+    - txtPrice : input
+    - selCategory : select
+    - selBrand : select
+    - fileImages : file
+    - listVariants : Object[]
+    - btnSubmit : submit
+    + handleNameChange() : void
+    + handleCategoryChange() : void
+    + handleFileUpload() : void
+    + generateVariantsGrid() : void
+    + handleSubmit() : void
+  }
+  MainStaffView -[hidden]right- ManageProductView
+  ManageProductView -[hidden]right- AddProductView
+}
+
+' ==============================================================================
+' 2. ĐIỀU KHIỂN (CONTROLLER)
+' ==============================================================================
+package "controller" as pkg_ctrl {
+  class AdminProductController {
+    - productServiceImpl : ProductServiceImpl
+    - categoryService : CategoryService
+    - storageService : StorageService
+    + createProduct(dto : ProductDto) : ApiResponse<ProductDto>
+    + uploadProductImage(file : MultipartFile, folder : String) : ApiResponse<Map>
+  }
+}
+
+' ==============================================================================
+' 3. DỊCH VỤ NGHIỆP VỤ (SERVICE) - CO GỌN KHÔNG KHOẢNG TRỐNG
+' ==============================================================================
+package "service" as pkg_serv {
+  interface ProductService <<interface>> {
+    + createProduct(dto : ProductDto) : ProductDto
+  }
+  class ProductServiceImpl {
+    - productRepository : ProductRepository
+    - productVariantRepository : ProductVariantRepository
+    - categoryRepository : CategoryRepository
+    - brandRepository : BrandRepository
+    - attributeRepository : AttributeRepository
+    + createProduct(dto : ProductDto) : ProductDto
+    - saveSpecifications() : void
+    - saveVariantOptions() : void
+    - normalizeProductPricing() : void
+    - serializeSpecsRaw() : String
+    - convertToDto(p : Product) : ProductDto
+  }
+  ProductService <|.. ProductServiceImpl
+}
+
+' ==============================================================================
+' 4. TRUY XUẤT CSDL (REPOSITORY) - 2 HÀNG CÂN XỨNG HOÀN TOÀN
+' ==============================================================================
+package "repository" as pkg_repo {
+  together {
+    interface CategoryRepository <<interface>> {
+      + findById(id : Long) : Optional<Category>
+      + findAll() : List<Category>
+    }
+    interface BrandRepository <<interface>> {
+      + findById(id : Long) : Optional<Brand>
+      + findActiveBrandsByCategoryId(catId : Long) : List<Brand>
+    }
+    interface AttributeRepository <<interface>> {
+      + findAll() : List<Attribute>
+      + findByCode(code : String) : Optional<Attribute>
+    }
+  }
+
+  together {
+    interface ProductRepository <<interface>> {
+      + save(p : Product) : Product
+      + findBySlug(slug : String) : Optional<Product>
+      + existsBySlug(slug : String) : boolean
+    }
+    interface ProductVariantRepository <<interface>> {
+      + save(v : ProductVariant) : ProductVariant
+      + findByProductId(productId : Long) : List<ProductVariant>
+    }
+  }
+
+  CategoryRepository -[hidden]right- BrandRepository
+  BrandRepository -[hidden]right- AttributeRepository
+
+  CategoryRepository -[hidden]down- ProductRepository
+  AttributeRepository -[hidden]down- ProductVariantRepository
+  ProductRepository -[hidden]right- ProductVariantRepository
+}
+
+' ==============================================================================
+' 5. THỰC THỂ DỮ LIỆU (ENTITY) - MA TRẬN 3x3 ĐẶC KHÍT 9 Ô
+' ==============================================================================
+package "entity" as pkg_entity {
+  together {
+    class Category {
+      - id : Long
+      - name : String
+      - slug : String
+      - active : Boolean
+    }
+    class Brand {
+      - id : Long
+      - name : String
+      - slug : String
+      - active : Boolean
+    }
+    class Attribute {
+      - id : Long
+      - code : String
+      - name : String
+      - valueType : String
+    }
+  }
+
+  together {
+    class ProductImage {
+      - id : Long
+      - productId : Long
+      - imageUrl : String
+      - isPrimary : Boolean
+    }
+    class Product {
+      - id : Long
+      - name : String
+      - slug : String
+      - price : BigDecimal
+      - costPrice : BigDecimal
+      - salePrice : BigDecimal
+      - categoryId : Long
+      - brandId : Long
+      - active : Boolean
+    }
+    class ProductTag {
+      - productId : Long
+      - tag : String
+    }
+  }
+
+  together {
+    class ProductVariant {
+      - id : Long
+      - productId : Long
+      - sku : String
+      - price : BigDecimal
+      - active : Boolean
+    }
+    class ProductAttributeValue {
+      - id : Long
+      - productId : Long
+      - attributeId : Long
+      - value : String
+    }
+    class VariantOptionValue {
+      - id : Long
+      - variantId : Long
+      - attributeId : Long
+      - value : String
+    }
+  }
+
+  ' Cố định vị trí ma trận 3x3 (Hidden Links - không hiển thị đường nét thừa)
+  Category -[hidden]right- Brand
+  Brand -[hidden]right- Attribute
+
+  Category -[hidden]down- ProductImage
+  Brand -[hidden]down- Product
+  Attribute -[hidden]down- ProductTag
+
+  ProductImage -[hidden]right- Product
+  Product -[hidden]right- ProductTag
+
+  ProductImage -[hidden]down- ProductVariant
+  Product -[hidden]down- ProductAttributeValue
+  ProductTag -[hidden]down- VariantOptionValue
+
+  ProductVariant -[hidden]right- ProductAttributeValue
+  ProductAttributeValue -[hidden]right- VariantOptionValue
+
+  ' ============================================================================
+  ' QUAN HỆ NGỮ NGHĨA CHUẨN UML 100% (Khớp Class Thiết kế & ERD)
+  ' ============================================================================
+  Category "1" o-- "0..*" Product
+  Brand "0..1" o-- "0..*" Product
+  Category "0..*" -- "0..*" Brand
+
+  Product "1" *-- "0..*" ProductVariant
+  Product "1" *-- "0..*" ProductImage
+  Product "1" *-- "0..*" ProductTag
+  Product "1" *-- "0..*" ProductAttributeValue
+
+  ProductVariant "1" *-right- "0..*" VariantOptionValue
+  Attribute "1" o-- "0..*" ProductAttributeValue
+  Attribute "1" o-- "0..*" VariantOptionValue
+}
+
+' ==============================================================================
+' ĐỊNH VỊ LIÊN KẾT GỌN GÀNG GIỮA CÁC GÓI (PACKAGE DEPENDENCIES)
+' ==============================================================================
+pkg_view -right-> pkg_ctrl : <<call>>
+pkg_ctrl -down-> pkg_serv : <<use>>
+pkg_serv -right-> pkg_repo : <<use>>
+pkg_repo -right-> pkg_entity : <<manage>>
+
+pkg_view -down[hidden]-> pkg_serv
+pkg_ctrl -down[hidden]-> pkg_repo
+
+' Ràng buộc đỉnh để không bị thụt lề
+ProductService -[hidden]right- CategoryRepository
+ProductServiceImpl -[hidden]right- ProductRepository
+
+right footer Powered By Visual Paradigm Community Edition
+@enduml

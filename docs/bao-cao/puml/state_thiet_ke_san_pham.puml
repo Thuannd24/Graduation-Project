@@ -1,0 +1,86 @@
+@startuml state_thiet_ke_san_pham
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+hide empty description
+
+<style>
+stateDiagram {
+  LineColor #000000
+  LineThickness 1.2
+  arrow {
+    LineColor #000000
+    LineThickness 1.2
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  state {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+    roundcorner 15
+  }
+}
+</style>
+
+skinparam {
+  vpDiagramType StateDiagram
+  defaultFontSize 11
+  defaultFontColor #000000
+  defaultFontStyle bold
+  shadowing false
+  roundcorner 15
+  linetype ortho
+  
+  nodesep 90
+  ranksep 75
+  
+  stateBackgroundColor #7ACFF5
+  stateBorderColor #000000
+  stateBorderThickness 1.2
+  stateFontSize 11
+  stateFontStyle bold
+  
+  arrowColor #000000
+  arrowThickness 1.2
+  arrowFontSize 11
+  arrowFontColor #000000
+  arrowFontStyle bold
+}
+
+title Biểu đồ trạng thái: Tạo mới sản phẩm
+
+' ==============================================================================
+' 1. CÁC TRẠNG THÁI CHUẨN XÁC, NGẮN GỌN (KHÔNG LẶP TỪ)
+' ==============================================================================
+state "Khởi tạo Form" as FormInit
+state "Nạp Thuộc tính" as MetaLoaded
+state "Điền thông tin" as InfoFilled
+state "Cấu hình Biến thể" as VariantsConfig
+state checkSlug <<choice>>
+state "Lưu" as Persisting
+
+' ==============================================================================
+' 2. CÁC CHUYỂN DỊCH HÀNH VI RÕ RÀNG, KHÔNG ĐÈ CHỮ
+' ==============================================================================
+[*] -right-> FormInit : Tạo sản phẩm
+
+FormInit -right-> MetaLoaded : Chọn danh mục
+
+MetaLoaded -right-> InfoFilled : Nhập dữ liệu
+
+InfoFilled -right-> VariantsConfig : Thêm biến thể
+
+VariantsConfig -right-> checkSlug : Nhấn Lưu
+
+checkSlug -right-> Persisting : Hợp lệ
+
+Persisting -right-> [*] : Đóng form
+
+checkSlug -down-> InfoFilled : Không hợp lệ
+
+right footer Powered By Visual Paradigm Community Edition
+@enduml

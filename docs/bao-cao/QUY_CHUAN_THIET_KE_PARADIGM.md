@@ -539,31 +539,89 @@ Mỗi Microservice backend được tổ chức theo chuẩn Maven đa module:
    * Tuân thủ 100% Quy tắc nối tầng ở Mục 5: View $\leftrightarrow$ Controller $\leftrightarrow$ Service $\leftrightarrow$ Repository $\leftrightarrow$ Entity chỉ dùng nét liền thuần túy `--`; chỉ Tầng Thực thể mới dùng `*--`, `o--`, `<|--`.
 
 ### 9.4. Quy chuẩn vẽ Sơ đồ Tuần tự Thiết kế Chi tiết (`sequence_thiet_ke_<use_case>.puml`)
-1. **Giao diện & Bố cục Visual Paradigm Robustness/BCE Template:**
+1. **Giao diện & Bố cục Visual Paradigm Template Mẫu Chuẩn (Hình ảnh 2):**
    * Sử dụng theme Visual Paradigm chuẩn: `!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml`.
-   * Khai báo kiểu biểu đồ `vpDiagramType SequenceDiagram`, cỡ chữ `defaultFontSize 8`, màu chữ `#000000`, viền `#000000`, độ dày nét `1.2`.
-   * Toàn bộ các đối tượng tham gia (Lifeline) và thanh kích hoạt (Activation LifeLine) dùng màu xanh nhạt `#7ACFF5` chuẩn Visual Paradigm.
+   * **Quy chuẩn kích thước Font chữ In Đậm (Bold) sắc nét chống mờ khi chụp ảnh:**
+     * Sử dụng font chữ chuẩn: `sequenceParticipantFontSize 11` (bold), `sequenceActorFontSize 11` (bold), `sequenceArrowFontSize 11` (bold).
+     * Cấu hình `defaultFontStyle bold`, `sequenceArrowFontStyle bold` và trong `<style>` đặt `arrow { FontStyle bold }` để **toàn bộ 100% chữ trên sơ đồ (bước gọi, số thứ tự, đối tượng) đều được in đậm**.
+     * Nét chữ in đậm có độ tương phản cao, dày dặn, khắc phục hoàn toàn tình trạng chữ mảnh bị mờ hay nhạt màu khi chụp màn hình.
+     * **Tối ưu chiều dọc & chiều ngang (Thu hẹp triệt để khoảng cách giữa các cột):**
+       * Đặt `ParticipantPadding 3`, `ParticipantMinSize 0`, `BoxPadding 2` và `sequenceMessageAlign center`.
+       * **Rút gọn nhãn các vòng lặp tự gọi (Self-call loop) trên Service và View:** Đặt tên hàm tự gọi ngắn gọn (ví dụ: `41: normalizePricing()`, `42: serializeSpecs()`, `50: saveSpecs()`, `33: genVariants()`...), giúp vòng lặp không bị chìa dài sang phải, nhờ đó các cột gióng kế tiếp (`CategoryRepository`, `AdminProductController`...) tự động **co sát lại ngay cạnh**, triệt tiêu hoàn toàn khoảng cách trống 240px bất thường giữa `ProductServiceImpl` và `CategoryRepository`.
+       * Ngắt dòng 2 tầng (`\n`) cho tên các lớp tham gia ở đầu cột (`ProductService\nImpl`, `Category\nRepository`, `AdminProduct\nController`...) để giảm độ rộng ô tiêu đề xuống còn ~70px.
+       * Toàn bộ 64 bước nghiệp vụ vẫn giữ nguyên 1 dòng, căn giữa cân đối, chuẩn xác 100%.
+   * Toàn bộ các đối tượng tham gia (Lifeline) và thanh kích hoạt (Activation LifeLine) dùng màu xanh nhạt `#7ACFF5` chuẩn Visual Paradigm, viền đen `#000000` (`LineThickness 1.2`).
+   * Tiêu đề sơ đồ đặt ở trên cùng: `title Sơ đồ tuần tự <tên_chức_năng>`.
    * Gắn footer bản quyền chuẩn ở góc dưới phải: `right footer Powered By Visual Paradigm Community Edition`.
-2. **Quy chuẩn Khai báo Lifelines theo Phân loại BCE (Robustness Symbols):**
-   * **Actor:** `actor "Manager Staff" as staff` (biểu tượng hình người que - Stick Figure).
-   * **Boundary (Giao diện):** `boundary "TênView" as alias` (biểu tượng vòng tròn có vạch đứng bên trái `|O`, gồm 3 View chuẩn: `MainStaffView`, `ManageProductView`, `AddProductView`).
-   * **Control (Điều khiển & Dịch vụ):** `control "TênLớp" as alias` (biểu tượng vòng tròn có mũi tên xoay trên đầu `(c)`, gồm `AdminProductController`, `ProductServiceImpl`, `ProductRepository`, `ProductVariantRepository`).
-   * **Entity (Thực thể dữ liệu):** `entity "TênThựcThể" as alias` (biểu tượng vòng tròn đặt trên thanh ngang `_O_`, gồm `Product`, `ProductVariant`).
-3. **Quy chuẩn Thông điệp & Luồng Kích hoạt Liền mạch (Seamless Lifeline Activations):**
-   * **Tính liền mạch tuyệt đối của Tác nhân (Actor):** `staff` kích hoạt ngay tại thông điệp đầu tiên (`1: click navProducts`) và **giữ nguyên thanh kích hoạt màu xanh liên tục không ngắt quãng** cho tới thông điệp cuối cùng (`44: sucess`) mới kết thúc (`deactivate staff`).
-   * **Quy tắc kích hoạt và chuyển giao giữa các View:**
-     * `MainStaffView` kích hoạt khi nhận tương tác bước 1 (`1: click navProducts`), thực thi `navigateToProducts()` rồi gọi `ManageProductView` ở bước 3 và `deactivate mainView`.
-     * `ManageProductView` hiển thị `tblProducts` ở bước 4, nhận sự kiện click `btnAddProduct` ở bước 5, thực thi `onOpenAddProduct()` ở bước 6, gọi mở `AddProductView` ở bước 7 rồi `deactivate manageView`.
-     * `AddProductView` kích hoạt từ bước 7 và giữ thanh kích hoạt liên tục trong suốt các giai đoạn nhập liệu, đổi danh mục, tải ảnh, sinh biến thể và lưu sản phẩm cho tới khi nhận kết quả thành công ở bước 44 mới `deactivate addView`.
-   * **Đồng bộ 100% Phương thức & Thuộc tính với Class Thiết kế (`class_thiet_ke_tao_moi_san_pham.puml`):**
-     * Mọi thông điệp và hàm gọi đều ánh xạ chính xác từ phương thức và thuộc tính của lớp: `navProducts`, `navigateToProducts()`, `btnAddProduct`, `onOpenAddProduct()`, `handleNameChange(e)`, `handleCategoryChange(catId)`, `handleFileUpload(files)`, `uploadProductImage(file, folder)`, `generateVariantsGrid()`, `handleSubmit(e)`, `createProduct(dto)`, `findBySlug(slug)`, `normalizeProductPricing(dto)`, `serializeSpecsRaw(specsRaw)`, `Product()`, `save(product)`, `saveSpecifications(...)`, `ProductVariant()`, `save(variant)`, `saveVariantOptions(...)`, `convertToDto(product)`.
+2. **Quy chuẩn Cân đối Đại diện Đủ 4 Tầng theo Class Thiết kế:**
+   * **Actor (Tác nhân):** `actor "Staff" as staff` (người que to rõ, đầu xanh viền đen).
+   * **Boundary (Giao diện View):** `boundary "MainStaff\nView"`, `boundary "ManageProduct\nView"`, `boundary "AddProduct\nView"`.
+   * **Control (Tầng Điều khiển & Nghiệp vụ):** `control "AdminProduct\nController"`, `control "ProductService\nImpl"`.
+   * **Control / Gateway (Tầng Truy xuất Dữ liệu - Repositories):** `CategoryRepository`, `BrandRepository`, `AttributeRepository`, `ProductRepository`, `ProductVariantRepository`.
+   * **Entity (Thực thể Dữ liệu Domain):** `Product`, `ProductImage`, `ProductAttributeValue`, `ProductVariant`, `VariantOptionValue`.
+3. **Quy chuẩn Thông điệp & Luồng Kích hoạt Liền mạch Chuẩn:**
+   * **Tính liền mạch tuyệt đối của Tác nhân (Actor):** `staff` kích hoạt ngay tại thông điệp đầu tiên (`1: click navProducts`) và **giữ nguyên thanh kích hoạt màu xanh liên tục không ngắt quãng** cho tới thông điệp cuối cùng (`64: sucess`) mới kết thúc (`deactivate staff`).
    * **Quy chuẩn Mũi tên & Đánh số Thông điệp:**
      * Mũi tên gọi đồng bộ (Sync Call): dùng nét liền `->`.
-     * Mũi tên trả về / Hiển thị (Return / Display): dùng nét đứt `-->`.
-     * Đánh số liên tục tuần tự từ `1:` đến `44:`, không nhảy cóc hay bỏ sót số thứ tự.
-   * **Cấu trúc 5 Giai đoạn chuẩn hóa nghiệp vụ:**
-     * *Giai đoạn 1 (Bước 1 - 4):* Điều hướng từ Màn hình chính sang Quản lý sản phẩm.
-     * *Giai đoạn 2 (Bước 5 - 8):* Mở Form tạo mới sản phẩm.
-     * *Giai đoạn 3 (Bước 9 - 17):* Nhập thông tin cơ bản, chọn danh mục và tải ảnh lên Storage qua Controller.
-     * *Giai đoạn 4 (Bước 18 - 20):* Cấu hình tùy chọn thuộc tính và tự động sinh lưới biến thể SKU (`listVariants`).
-     * *Giai đoạn 5 (Bước 21 - 44):* Gửi Form, kiểm tra slug, chuẩn hóa giá, khởi tạo thực thể `Product`, lưu CSDL, lưu thuộc tính động EAV, khởi tạo và lưu `ProductVariant`, lưu tùy chọn biến thể, chuyển DTO và hiển thị `sucess`.
+     * Mũi tên trả về / Hiển thị (Return / Display): dùng nét đứt `-->`. Toàn bộ các thông điệp trả về chỉ ghi ngắn gọn đúng một chữ **`return`** (ví dụ: `11: return`, `20: return`, `45: return`, `63: return`...), không ghi kèm tên đối tượng hay kiểu dữ liệu trả về, đúng chuẩn mẫu Visual Paradigm tham khảo.
+     * Đánh số liên tục tuần tự từ `1:` đến bước cuối cùng, không nhảy cóc hay bỏ sót số thứ tự.
+   * **Cấu trúc 5 Giai đoạn Chi tiết của Luồng Tạo mới Sản phẩm:**
+     * *Giai đoạn 1 (Bước 1 - 4):* Điều hướng từ Màn hình chính sang Danh sách Sản phẩm.
+     * *Giai đoạn 2 (Bước 5 - 14):* Mở form tạo mới sản phẩm & Tải danh mục khởi tạo từ `CategoryRepository`.
+     * *Giai đoạn 3 (Bước 15 - 24):* Chọn danh mục & Tải động danh sách thương hiệu (`BrandRepository`), thuộc tính (`AttributeRepository`).
+     * *Giai đoạn 4 (Bước 25 - 34):* Nhập thông tin cơ bản, tải ảnh sản phẩm lên Storage và cấu hình biến thể trên giao diện.
+     * *Giai đoạn 5 (Bước 35 - 64):* Gửi form và lưu dữ liệu toàn diện qua Service vào `ProductRepository`, khởi tạo các thực thể `Product`, `ProductImage`, `ProductAttributeValue`, `ProductVariant`, `VariantOptionValue` và lưu vào `ProductVariantRepository`, trả về kết quả thành công `sucess`.
+
+
+### 9.5. Quy chuẩn vẽ Biểu đồ Máy trạng thái Use Case Tạo mới Sản phẩm (`state_thiet_ke_san_pham.puml`)
+1. **Giao diện & Bố cục Visual Paradigm Template Mẫu Chuẩn:**
+   * Sử dụng theme Visual Paradigm chuẩn: `!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml`.
+   * **Cấu hình Màu sắc & Hình học State:**
+     * Nền trạng thái (State): `#7ACFF5` (chuẩn màu xanh dương nhạt đặc trưng của Visual Paradigm).
+     * Đường viền: `#000000`, độ dày `1.2`, bo góc cong mượt mà `roundcorner 15`.
+     * Font chữ: Font Arial/sans-serif, chữ in đậm (`bold`), màu đen `#000000`, kích thước `11pt`.
+     * Đường liên kết (Transitions): Đường gấp khúc trực giao 90 độ (`linetype ortho`), nét liền màu đen `arrowThickness 1.2`, nhãn văn bản trên mũi tên in đậm và căn chỉnh rõ ràng.
+     * Cấu hình giãn cách & Thẩm mỹ: `hide empty description` (loại bỏ hoàn toàn đường gạch ngăn cách nội bộ bên trong ô State), `nodesep 80 - 100`, `ranksep 70 - 85` đảm bảo khoảng cách giữa các khối thông thoáng, nhãn mũi tên ngắn gọn không đè lên khối và đường nét.
+     * Điểm bắt đầu (Initial State `[*]`): Điểm tròn đen đặc.
+     * Điểm kết thúc (Final State `[*]`): Vòng tròn hồng tâm lồng nhau (`((O))`).
+2. **Khối điều kiện rẽ nhánh (Choice Pseudo-State `<<choice>>`) chuẩn UML & Visual Paradigm:**
+   * Không sử dụng khối trạng thái thông thường cho xử lý lỗi trùng lặp mà dùng khối điều kiện rẽ nhánh hình thoi `checkSlug <<choice>>`.
+   * Từ hình thoi rẽ ra 2 nhánh rõ ràng với Guard Condition trong ngoặc vuông:
+     * `[Hợp lệ]`: Tiếp tục chuyển sang trạng thái `Lưu CSDL`.
+     * `[Trùng slug] Sửa lại tên & slug`: Vòng cung quay ngược về trạng thái `Điền thông tin`.
+3. **Cấu trúc Trạng thái & Chuyển tiếp Tinh gọn (Tránh trùng lặp từ ngữ, súc tích):**
+   * Các ô trạng thái (State):
+     * `Khởi tạo Form` (Form trống ban đầu)
+     * `Nạp Thuộc tính` (Sau khi chọn danh mục)
+     * `Điền thông tin` (Nhập tên, mô tả & upload ảnh)
+     * `Cấu hình Biến thể` (Sinh SKU, giá & tồn kho)
+     * `checkSlug <<choice>>` (Hình thoi kiểm tra slug duy nhất)
+     * `Lưu CSDL` (Persist thực thể xuống CSDL)
+   * Các nhãn chuyển tiếp (Transitions): Ngắn gọn từ 1 - 3 từ (`Mở form`, `Chọn danh mục`, `Nhập dữ liệu`, `Thêm biến thể`, `Nhấn Lưu`, `[Hợp lệ]`, `Đóng form`), hoàn toàn không lặp lại tên trạng thái.
+
+
+### 9.6. Quy chuẩn vẽ Biểu đồ Gói Phân hệ Tạo mới Sản phẩm (`package_thiet_ke_tao_moi_san_pham.puml`)
+1. **Giao diện & Bố cục Visual Paradigm Template Chuẩn (5 Gói Gọn Gàng - Không Khoảng Trống Thừa):**
+   * Theme Visual Paradigm: `!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml`.
+   * **Cấu hình Màu sắc & Hình học Package & Class:**
+     * Nền package & class: Xanh ngọc `#7ACFF5` đồng bộ.
+     * Đường viền: `#000000`, độ dày `1.2`, góc vuông `roundcorner 0`.
+     * Font chữ: Font Arial/sans-serif, chữ in đậm (`bold`), màu đen `#000000`, kích thước `11pt` cho Package và `9pt-10pt` cho Class/Interface.
+     * Đường liên kết: Trực giao `linetype ortho`, độ dày `arrowThickness 1.2`.
+     * Bố cục 2 hàng chặt chẽ, co gọn tối đa, triệt tiêu mọi khoảng trống thừa:
+       * **Hàng 1 (Giao diện & Điều khiển):**
+         * **Trái:** `package "view"` (chứa `MainStaffView`, `ManageProductView`, `AddProductView` co gọn 1 hàng khít 100%).
+         * **Phải:** `package "controller"` (chứa `AdminProductController`).
+       * **Hàng 2 (Nghiệp vụ, Truy xuất & Thực thể):**
+         * **Trái:** `package "service"` (chứa `ProductService` và `ProductServiceImpl` được neo trực tiếp đỉnh, khít viền).
+         * **Giữa:** `package "repository"` (chứa 5 interface cốt lõi xếp thành 2 hàng cân xứng hoàn hảo: Hàng 1 gồm `CategoryRepository`, `BrandRepository`, `AttributeRepository`; Hàng 2 gồm `ProductRepository`, `ProductVariantRepository`).
+         * **Phải:** `package "entity"` (chứa 9 thực thể xếp ma trận 3x3 đặc khít 9 ô: `Product`, `Category`, `Brand`, `ProductVariant`, `ProductImage`, `ProductTag`, `Attribute`, `ProductAttributeValue`, `VariantOptionValue`).
+2. **Quy chuẩn Nối Quan hệ giữa các Thực thể bên trong `entity`:**
+   * **Hợp thành (`*--` Composition):** `Product *-- ProductVariant`, `Product *-- ProductImage`, `Product *-- ProductTag`, `Product *-- ProductAttributeValue`, `ProductVariant *-- VariantOptionValue`.
+   * **Thu nạp (`o--` Aggregation):** `Category o-- Product`, `Brand o-- Product`.
+   * **Liên kết (`--` Association):** `Category -- Brand`, `Attribute -- ProductAttributeValue`, `Attribute -- VariantOptionValue`.
+3. **Quy chuẩn Đường nối Phụ thuộc giữa các Tầng (Tier Dependencies):**
+   * `pkg_view -right-> pkg_ctrl : <<call>>` (Giao diện gọi Controller tiếp nhận).
+   * `pkg_ctrl -down-> pkg_serv : <<use>>` (Controller chuyển tiếp dữ liệu gọi Service nghiệp vụ).
+   * `pkg_serv -right-> pkg_repo : <<use>>` (Service tương tác tầng Repository để đọc/ghi dữ liệu).
+   * `pkg_repo -right-> pkg_entity : <<manage>>` (Repository quản lý và ánh xạ trực tiếp các Entity tương ứng).

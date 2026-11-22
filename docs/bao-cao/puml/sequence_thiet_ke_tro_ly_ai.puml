@@ -1,0 +1,210 @@
+@startuml sequence_thiet_ke_tro_ly_ai
+!include https://static.visual-paradigm.com/web/resources/plantuml-stdlib/themes/vp.puml
+
+<style>
+sequenceDiagram {
+  LineColor #000000
+  LineThickness 1.2
+  arrow {
+    LineColor #000000
+    LineThickness 1.2
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+    HorizontalAlignment center
+  }
+  lifeLine {
+    LineColor #000000
+    LineThickness 1.0
+    BackgroundColor #7ACFF5
+  }
+  participant {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  actor {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  boundary {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  control {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  database {
+    LineColor #000000
+    LineThickness 1.2
+    BackgroundColor #7ACFF5
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+  note {
+    LineColor #000000
+    LineThickness 1.0
+    BackgroundColor #FFFDE7
+    FontColor #000000
+    FontSize 10
+  }
+  divider {
+    LineColor #000000
+    LineThickness 1.2
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+  }
+}
+</style>
+
+skinparam {
+  vpDiagramType SequenceDiagram
+  defaultFontSize 11
+  defaultFontColor #000000
+  defaultFontStyle bold
+  shadowing false
+  roundcorner 0
+  
+  ParticipantMinSize 0
+  ParticipantPadding 15
+  BoxPadding 2
+  sequenceMessageAlign center
+  
+  sequenceLifeLineBorderColor #000000
+  sequenceLifeLineBackgroundColor #7ACFF5
+  
+  sequenceParticipantBorderColor #000000
+  sequenceParticipantBackgroundColor #7ACFF5
+  sequenceParticipantFontSize 11
+  sequenceParticipantFontStyle bold
+  
+  sequenceActorBorderColor #000000
+  sequenceActorBackgroundColor #7ACFF5
+  sequenceActorFontSize 11
+  sequenceActorFontStyle bold
+  
+  sequenceArrowColor #000000
+  sequenceArrowThickness 1.2
+  sequenceArrowFontSize 11
+  sequenceArrowFontColor #000000
+  sequenceArrowFontStyle bold
+
+  noteBackgroundColor #FFFDE7
+  noteBorderColor #000000
+  noteBorderThickness 1.0
+  noteFontSize 10
+  noteFontColor #000000
+  
+  dividerLineColor #000000
+  dividerLineThickness 1.2
+  dividerFontSize 11
+  dividerFontStyle bold
+  dividerFontColor #000000
+}
+
+title Sơ đồ tuần tự: Trợ lý tư vấn AI 
+actor "Người dùng" as user
+boundary "AIChatbotWidget\n(React UI)" as widget
+control "ChatbotController\n(FastAPI :8002)" as controller
+control "NLUService\n(Classifier)" as nlu
+control "RAGService\n(Policy / Product)" as rag
+database "Redis Cache\n(Session Memory)" as redis
+control "DeepSeek LLM\n(Completions API)" as deepseek
+
+== KHỞI TẠO & TRUY VẤN LỊCH SỬ PHIÊN ==
+
+user -> widget : 1: Nhập câu hỏi & click gửi
+activate user
+activate widget
+
+widget -> controller : 2: POST /api/v1/chatbot/message (sessionId, message)
+activate controller
+
+controller -> redis : 3: LRANGE chat:{sessionId}:history 0 19
+activate redis
+note right of redis
+  Lấy tối đa 20 bản ghi mới nhất
+  (10 lượt hội thoại gần nhất)
+end note
+
+redis --> controller : 4: Danh sách JSON (Mới nhất -> Cũ nhất)
+deactivate redis
+
+controller -> controller : 5: history.reverse()\n(Tái lập trật tự thời gian)
+activate controller
+deactivate controller
+
+== PHÂN TÍCH Ý ĐỊNH & GHI NHẬN TIN NHẮN NGƯỜI DÙNG ==
+
+controller -> nlu : 6: analyze(user_message, chat_history)
+activate nlu
+nlu --> controller : 7: Trả về {intent, sentiment, order_id}
+deactivate nlu
+
+controller -> redis : 8: LPUSH chat:{sessionId}:history {role: "user", content}\nLTRIM 0 19 | EXPIRE 86400
+activate redis
+note right of redis
+  Lưu tin nhắn người dùng ngay lập tức,
+  cắt tỉa 20 bản ghi & gia hạn TTL 24h
+end note
+redis --> controller : 9: return OK
+deactivate redis
+
+== TRUY XUẤT TRI THỨC RAG & SUY LUẬN MÔ HÌNH ==
+
+controller -> rag : 10: retrieve_context(user_message, intent)
+activate rag
+note over rag
+  - intent == 'policy_faq': FAISS Vector Index (policy.index)
+  - intent == 'product_search': Product Service Catalog
+end note
+rag --> controller : 11: Trả về context_str & danh sách sản phẩm (items)
+deactivate rag
+
+controller -> controller : 12: build_system_prompt(context, user_info)
+activate controller
+deactivate controller
+
+controller -> deepseek : 13: POST /chat/completions (system_prompt, history, message)
+activate deepseek
+deepseek --> controller : 14: Trả lời thoại tự nhiên (bot_reply)
+deactivate deepseek
+
+== GHI NHẬN LỜI ĐÁP BOT & PHẢN HỒI GIAO DIỆN ==
+
+controller -> redis : 15: LPUSH chat:{sessionId}:history {role: "bot", content: bot_reply}\nLTRIM 0 19 | EXPIRE 86400
+activate redis
+note right of redis
+  Lưu lời đáp bot vào đầu danh sách,
+  cắt tỉa 20 bản ghi & duy trì TTL 24h
+end note
+redis --> controller : 16: return OK
+deactivate redis
+
+controller --> widget : 17: Phản hồi JSON {message, products, card}
+deactivate controller
+
+widget --> user : 18: Hiển thị lời thoại tư vấn kèm thẻ sản phẩm
+deactivate widget
+deactivate user
+
+right footer Powered By Visual Paradigm Community Edition
+@enduml

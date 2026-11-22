@@ -60,7 +60,6 @@ class Member {
   - phoneNumber : String
   - avatarUrl : String
   - active : Boolean
-  + login() : boolean
 }
 
 class Staff {

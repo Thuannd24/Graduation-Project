@@ -1,0 +1,79 @@
+@startuml architecture_transactional_outbox_cdc
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam roundCorner 12
+skinparam shadowing true
+skinparam arrowThickness 1.8
+skinparam arrowColor #334155
+
+skinparam rectangle {
+    BackgroundColor #F8FAFC
+    BorderColor #64748B
+    FontColor #0F172A
+    FontSize 12
+}
+
+skinparam database {
+    BackgroundColor #FFFFFF
+    BorderColor #2563EB
+    FontColor #1E3A8A
+    FontSize 12
+}
+
+skinparam queue {
+    BackgroundColor #FEF2F2
+    BorderColor #DC2626
+    FontColor #7F1D1D
+    FontSize 12
+}
+
+title **KIẾN TRÚC GIAO DỊCH PHÂN TÁN: TRANSACTIONAL OUTBOX PATTERN KẾT HỢP DEBEZIUM CDC & APACHE KAFKA**
+
+actor "Khách hàng\n(Client App)" as Client #EEF2FF;line:4F46E5;text:312E81
+
+package "Dịch vụ Đơn hàng (order-service)" as OrderSvcPkg #F0FDF4;line:16A34A;text:14532D {
+    rectangle "  **Order Controller & Service**  \n• Tiếp nhận yêu cầu POST /api/orders\n• Khởi tạo đơn hàng trạng thái PENDING\n• Quản lý Local ACID Transaction" as OrderService #FFFFFF;line:16A34A;text:14532D
+}
+
+package "Cơ sở Dữ liệu Đơn hàng (MySQL 8.0)" as OrderDBPkg #EFF6FF;line:2563EB;text:1E3A8A {
+    database "  **Bảng Nghiệp vụ (orders)**  \nLưu chi tiết đơn hàng, tổng tiền" as OrdersTable #DBEAFE;line:2563EB;text:1E3A8A
+    database "  **Bảng Hộp thư (outbox_events)**  \n• id, aggregate_type, aggregate_id\n• type, payload (JSON), timestamp" as OutboxTable #FEF3C7;line:D97706;text:78350F
+    database "  **MySQL Binary Log (Binlog)**  \nNhật ký ghi nhận thay đổi CSDL" as Binlog #E0E7FF;line:4338CA;text:312E81
+}
+
+package "Hạ tầng Điều phối Sự kiện (Event Pipeline)" as PipelinePkg #F8FAFC;line:475569;text:0F172A {
+    rectangle "  **Debezium MySQL Connector**  \n(Kafka Connect Cluster)\n• Đọc MySQL Binlog không xâm lấn\n• Outbox Event Router (SMT)\n• Định tuyến tự động theo aggregate_type" as Debezium #FEF3C7;line:B45309;text:78350F
+    
+    queue "  **Apache Kafka Cluster**  \nTopic: **order-events**\n(Partitioned by order_id)" as KafkaTopic #FEE2E2;line:DC2626;text:991B1B
+}
+
+package "Các Dịch vụ Tiêu thụ Sự kiện (Downstream Consumers)" as ConsumersPkg #F5F3FF;line:7C3AED;text:4C1D95 {
+    rectangle "  **inventory-service**  \nTrừ tồn kho qua Redis Lua Script\n(Saga Step 1: Stock Reserve)" as InvSvc #FFFFFF;line:0284C7;text:075985
+    rectangle "  **payment-service**  \nKhởi tạo phiên thanh toán VNPay\n(Saga Step 2: Payment Init)" as PaySvc #FFFFFF;line:059669;text:064E3B
+    rectangle "  **notification-service**  \nGửi email xác nhận đặt hàng (JavaMail)\n& Đẩy thông báo tức thời (Firebase FCM)" as NotifSvc #FFFFFF;line:D97706;text:78350F
+    rectangle "  **promotion-service**  \nKích hoạt Camunda BPMN\ntích lũy doanh số & điểm thưởng" as PromoSvc #FFFFFF;line:7C3AED;text:4C1D95
+}
+
+' ========================================================
+' LUỒNG ĐIỀU PHỐI (NUMBERED WORKFLOW)
+' ========================================================
+Client -[#4F46E5,thickness=2]-> OrderService : " **[1.1]** Gửi yêu cầu đặt hàng\n(POST /api/orders)"
+
+OrderService -[#16A34A,thickness=2]-> OrdersTable : " **[1.2] Ghi dữ liệu đơn hàng**\n(INSERT INTO orders)"
+
+OrderService -[#D97706,thickness=2]-> OutboxTable : " **[1.3] Ghi sự kiện hộp thư**\n(INSERT INTO outbox_events)\n**==> Cùng 1 Local Transaction (ACID)**"
+
+OrdersTable -[#4338CA,dashed]-> Binlog : " Tự động ghi nhận\nCommit Log"
+OutboxTable -[#4338CA,dashed]-> Binlog : " Tự động ghi nhận\nCommit Log"
+
+Binlog -[#D97706,thickness=2]-> Debezium : " **[2] Đọc Binlog không xâm lấn**\n(Change Data Capture - CDC)"
+
+Debezium -[#DC2626,thickness=2]-> KafkaTopic : " **[3] Phát sự kiện vào Kafka**\n(Event Router đẩy vào order-events)"
+
+KafkaTopic -[#0284C7,thickness=2]-> InvSvc : " **[4a]** Nhận sự kiện trừ kho"
+KafkaTopic -[#059669,thickness=2]-> PaySvc : " **[4b]** Nhận sự kiện thanh toán"
+KafkaTopic -[#D97706,thickness=2]-> NotifSvc : " **[4c]** Gửi email & push"
+KafkaTopic -[#7C3AED,thickness=2]-> PromoSvc : " **[4d]** Kích hoạt Camunda"
+
+@enduml

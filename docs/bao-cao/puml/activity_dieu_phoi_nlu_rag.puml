@@ -1,0 +1,68 @@
+@startuml activity_dieu_phoi_nlu_rag
+skinparam {
+  shadowing true
+  roundcorner 14
+  defaultFontName "Segoe UI", Arial, sans-serif
+  defaultFontSize 11
+  defaultFontColor #0F172A
+  arrowColor #475569
+  arrowThickness 1.4
+}
+
+skinparam activity {
+  BackgroundColor #FFFFFF
+  BorderColor #64748B
+  BorderThickness 1.2
+  FontColor #0F172A
+  FontSize 11
+  FontStyle bold
+}
+
+skinparam partition {
+  BorderColor #64748B
+  BorderThickness 1.5
+  FontStyle bold
+  FontSize 12
+}
+
+title **SƠ ĐỒ HOẠT ĐỘNG: ĐIỀU PHỐI Ý ĐỊNH NLU, ĐỊNH TUYẾN 100% NO-LLM & DUAL-RAG PIPELINE**
+
+start
+
+:Người dùng gửi câu hỏi x;
+
+:One-Pass NLU Classifier (DeepSeek JSON Schema Mode):
+Nhận diện: intent, sentiment, order_id, account_topic;
+
+if (Kiểm tra Phân loại Ý định (Intent)?) then (order_tracking / order_action)
+  partition "LUỒNG QUYẾT ĐỊNH XÁC ĐỊNH (100% No-LLM)" #FFFDF0 {
+    :Định tuyến tới công cụ nội bộ Read-only:
+    get_order_status / get_loyalty_points / get_vouchers;
+    :Chuyển tiếp JWT Token + Header X-User-Id sang Backend;
+    :Backend thực thi kiểm tra quyền sở hữu (Defense in Depth);
+    :Đóng gói dữ liệu Payload thành Rich Card UI;
+    :Trả kết quả trực tiếp cho Client (Độ trễ ~250ms, 0% Ảo giác);
+    stop
+  }
+elseif (Intent là off_topic?) then (Đúng)
+  :Kích hoạt Bộ lọc Ranh giới Nội miền;
+  Trả thông báo từ chối lịch sự OFFTOPIC_MSG;
+  stop
+else (product_search / price_inquiry / policy_faq / general_chat)
+  partition "LUỒNG TẠO SINH TĂNG CƯỜNG (DUAL-RAG + LLM)" #FAF5FF {
+    if (Intent thuộc nhóm Sản phẩm?) then (product_search / price_inquiry)
+      :Kích hoạt Product RAG Pipeline:
+      Lọc Stopwords NFD -> Tìm kiếm danh mục -> Kéo Specs song song;
+    else (policy_faq)
+      :Kích hoạt Policy RAG Pipeline:
+      Truy vấn FAISS kNN -> Kiểm tra ngưỡng Gatekeeper;
+    endif
+    :Bộ ghép nối ngữ cảnh PromptBuilderService:
+    System Prompt + Tri thức trích xuất + Thông tin User;
+    :Gọi DeepSeek-Chat suy luận tạo sinh văn bản tự nhiên;
+    :Trả câu trả lời kèm nguồn dẫn minh bạch (Độ trễ ~2200ms);
+    stop
+  }
+endif
+
+@enduml

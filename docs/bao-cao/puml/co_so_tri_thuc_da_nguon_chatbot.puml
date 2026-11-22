@@ -1,0 +1,68 @@
+@startuml co_so_tri_thuc_da_nguon_chatbot
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam roundCorner 14
+skinparam shadowing true
+skinparam arrowThickness 2
+skinparam arrowColor #475569
+
+skinparam rectangle {
+    BackgroundColor #F8FAFC
+    BorderColor #64748B
+    FontColor #0F172A
+    FontSize 12
+}
+
+skinparam database {
+    BackgroundColor #FFFFFF
+    BorderColor #6366F1
+    FontColor #1E1B4B
+    FontSize 12
+}
+
+' ========================================================
+' ĐỈNH: KHÁCH HÀNG / NGƯỜI DÙNG
+' ========================================================
+rectangle "  **Khách hàng / Người dùng**  \n(Giao diện Web / Ứng dụng Di động)" as User #EDE9FE;line:7C3AED;text:4C1D95
+
+' ========================================================
+' TRUNG TÂM: AURA DIALOGUE ENGINE
+' ========================================================
+rectangle "  **Bộ máy Điều phối Hội thoại Aura**  \n(Aura Task-Oriented Dialogue Engine)\n• Phân loại Ý định NLU (One-Pass Classifier)\n• Định tuyến No-LLM & Dual-RAG Pipeline" as Engine #EEF2FF;line:4F46E5;text:1E1B4B
+
+' ========================================================
+' TẦNG DƯỚI: HỆ THỐNG CƠ SỞ TRI THỨC ĐA NGUỒN
+' ========================================================
+package "Cơ sở Tri thức Đa nguồn" as KB_Container #FFFBEB;line:D97706;text:92400E {
+    
+    database "  **Kho Tri thức Chính sách**  \n**Phi cấu trúc**\n---\n• Tài liệu Markdown Corpus\n• Chỉ mục FAISS Vector DB\n• multilingual-e5-base" as PolicyKB #F5F3FF;line:7C3AED;text:4C1D95
+    
+    database "  **Cơ sở Dữ liệu Sản phẩm**  \n**Thời gian thực**\n---\n• Product Service (:8089)\n• Catalog danh mục hạ cấp\n• Đa luồng lấy Specs (CPU, RAM)" as ProductKB #F0F9FF;line:0284C7;text:075985
+    
+    database "  **Dữ liệu Giao dịch**  \n**Khách hàng**\n---\n• Order, User, Promotion\n• Tra cứu đơn hàng, Voucher\n• Bảo mật JWT + Defense-in-Depth" as TransKB #ECFDF5;line:059669;text:064E3B
+}
+
+' ========================================================
+' LUỒNG GIAO TIẾP VỚI NGƯỜI DÙNG
+' ========================================================
+User -[#4F46E5,thickness=2]-> Engine : " 1. Truy vấn ngôn ngữ tự nhiên (x)"
+Engine -[#059669,thickness=2]-> User : " 2. Phản hồi tự nhiên kèm Thẻ trực quan (Card UI)"
+
+' ========================================================
+' LUỒNG TÍCH HỢP TRI THỨC VỚI 3 NGUỒN DỮ LIỆU
+' ========================================================
+' 1. Policy KB
+Engine -[#7C3AED,thickness=2]-> PolicyKB : " Truy xuất Ngữ nghĩa Dày đặc\n(Dense Semantic Retrieval)"
+PolicyKB -[#7C3AED,thickness=2,dashed]-> Engine : " Đoạn tri thức chính sách chuẩn xác\n(Top-5 Chunks + Điểm tự tin)"
+
+' 2. Product KB
+Engine -[#0284C7,thickness=2]-> ProductKB : " Tìm kiếm Từ khóa & Thuộc tính\n(Lexical & Feature Search)"
+ProductKB -[#0284C7,thickness=2,dashed]-> Engine : " Thông số kỹ thuật & Giá thời gian thực\n(Real-time Specs & Live Price)"
+
+' 3. Transaction KB
+Engine -[#059669,thickness=2]-> TransKB : " Gọi Công cụ Xác định\n(Deterministic Tool Ingestion)"
+TransKB -[#059669,thickness=2,dashed]-> Engine : " Trạng thái đơn hàng, Voucher, Điểm thưởng\n(JSON Payload -> Render Card)"
+
+@enduml
+

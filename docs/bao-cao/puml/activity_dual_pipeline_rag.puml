@@ -1,0 +1,77 @@
+@startuml activity_dual_pipeline_rag
+skinparam {
+  shadowing true
+  roundcorner 14
+  defaultFontName "Segoe UI", Arial, sans-serif
+  defaultFontSize 11
+  defaultFontColor #0F172A
+  arrowColor #475569
+  arrowThickness 1.5
+  linetype ortho
+}
+
+skinparam rectangle {
+  BorderThickness 1.5
+  FontColor #0F172A
+  FontSize 11
+  FontStyle bold
+}
+
+title **KIẾN TRÚC DUAL-PIPELINE RAG: RETRIEVAL-AUGMENTED GENERATION (AURATECH AI)**
+
+package "Product RAG Pipeline (Thực thể Thời gian thực)" as pkg_prod #FAF5FF;line:9333EA;line.bold {
+  rectangle "Câu truy vấn sản phẩm" as prod_query #FFFFFF;line:A855F7
+  rectangle "Bộ phân tách so sánh _split_comparison" as split_comp #F5F3FF;line:8B5CF6
+  rectangle "Khử dấu NFD & Lọc SEARCH_STOPWORDS" as nfd_stopwords #FFFFFF;line:A855F7
+  rectangle "API Catalog: product-service :8089
+(5 Cấp độ hạ cấp Fallback)" as api_catalog #EDE9FE;line:7C3AED;text:2E1065
+  rectangle "ThreadPoolExecutor đa luồng
+Kéo song song thuộc tính _specs" as thread_pool #F5F3FF;line:8B5CF6
+
+  prod_query -down-> split_comp
+  split_comp -down-> nfd_stopwords : Truy vấn đơn
+  split_comp -down-> api_catalog : Phát hiện "A vs B"
+(2 vế độc lập song song)
+  nfd_stopwords -down-> api_catalog
+  api_catalog -down-> thread_pool : Lấy RAM, CPU, Pin, Màn hình
+}
+
+package "Policy RAG Pipeline (Ngữ nghĩa Dày đặc)" as pkg_policy #F0FDF4;line:059669;line.bold {
+  rectangle "Câu truy vấn chính sách" as policy_query #FFFFFF;line:10B981
+  rectangle "Chuẩn hóa Tiền tố bất đối xứng
+'query: <câu hỏi>'" as prefix_norm #ECFDF5;line:10B981
+  rectangle "Encoder: multilingual-e5-base
+Vector 768 chiều (Unit L2 Norm)" as encoder_e5 #D1FAE5;line:059669;text:064E3B
+  rectangle "Chỉ mục FAISS IndexFlatIP
+Cosine kNN Search (Top-5)" as faiss_index #ECFDF5;line:10B981
+  rectangle "Tập 5 Chunks kèm điểm s_i" as top5_chunks #FFFFFF;line:10B981
+
+  policy_query -down-> prefix_norm
+  prefix_norm -down-> encoder_e5
+  encoder_e5 -down-> faiss_index
+  faiss_index -down-> top5_chunks
+}
+
+package "Cổng Kiểm soát Độ tin cậy (Gatekeeper)" as pkg_gate #FFFBEB;line:D97706;line.bold {
+  rectangle "Đánh giá s_max = max(s_i)
+(So khớp ngưỡng tin cậy & Ngắt ảo giác)" as eval_smax #FEF3C7;line:F59E0B;text:78350F
+}
+
+top5_chunks -down-> eval_smax
+
+rectangle "Bộ ghép nối Ngữ cảnh PromptBuilderService" as prompt_builder #EDE9FE;line:6366F1;text:312E81
+rectangle "Mô hình DeepSeek-Chat Sinh Lời thoại" as deepseek_model #FCE7F3;line:DB2777;text:831843
+rectangle "Phản hồi cuối cùng cho Khách hàng" as final_response #CCFBF1;line:0D9488;text:115E59
+rectangle "Hard Stop: Hotline 0389.468.847
+(Từ chối sinh ngôn ngữ - Ngắt gọi LLM)" as hard_stop #FEE2E2;line:DC2626;text:7F1D1D
+
+thread_pool -down-> prompt_builder : Ngữ cảnh thông số kỹ thuật
+
+eval_smax -down-> prompt_builder : s_max >= 0.82 (OK)
+eval_smax -down-> prompt_builder : 0.80 <= s_max < 0.82 (Disclaimer)
+eval_smax -down-> hard_stop : s_max < 0.80 (Reject ngắt LLM)
+
+prompt_builder -down-> deepseek_model
+deepseek_model -down-> final_response
+
+@enduml

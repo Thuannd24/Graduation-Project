@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-11-19T16:45:00.000Z" agent="Antigravity AI" version="24.0.0" type="device">
+  <diagram id="Dual_RAG_Pipeline" name="Kiến trúc Dual-Pipeline RAG">
+    <mxGraphModel dx="1400" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1200" math="0" shadow="1">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Top Title Bar -->
+        <mxCell id="main_title" value="KIẾN TRÚC DUAL-PIPELINE RAG: RETRIEVAL-AUGMENTED GENERATION HỆ THỐNG AURATECH" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=15;fontColor=#0f172a;letterSpacing=0.5;" vertex="1" parent="1">
+          <mxGeometry x="150" y="15" width="800" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================================================= -->
+        <!-- 1. LEFT CONTAINER: PRODUCT RAG PIPELINE -->
+        <!-- ========================================================================= -->
+        <mxCell id="box_prod_rag" value="Product RAG Pipeline (Thực thể Thời gian thực)" style="swimlane;startSize=34;rounded=1;arcSize=8;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#6b21a8;collapsible=0;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="460" height="640" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Câu truy vấn sản phẩm -->
+        <mxCell id="prod_query" value="Câu truy vấn sản phẩm&#xa;&lt;font color='#64748b' style='font-size: 10px;'&gt;[User Query: Sản phẩm / Giá / So sánh]&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ffffff;strokeColor=#a855f7;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#1e1b4b;shadow=1;" vertex="1" parent="box_prod_rag">
+          <mxGeometry x="110" y="55" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Bộ phân tách so sánh _split_comparison -->
+        <mxCell id="split_comp" value="Bộ phân tách so sánh _split_comparison&#xa;&lt;font color='#7c3aed' style='font-size: 10px; font-family: monospace;'&gt;Detection: 'vs', 'so với', 'hay hơn'&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#f5f3ff;strokeColor=#8b5cf6;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#2e1065;shadow=1;" vertex="1" parent="box_prod_rag">
+          <mxGeometry x="85" y="145" width="290" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_pq_to_split" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=2;" edge="1" parent="box_prod_rag" source="prod_query" target="split_comp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Khử dấu NFD & Lọc SEARCH_STOPWORDS -->
+        <mxCell id="nfd_stopwords" value="Khử dấu NFD &amp; Lọc SEARCH_STOPWORDS&#xa;&lt;font color='#64748b' style='font-size: 10px;'&gt;Loại bỏ từ dừng (tìm, mua, giá, rẻ...)&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ffffff;strokeColor=#a855f7;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#1e1b4b;shadow=1;" vertex="1" parent="box_prod_rag">
+          <mxGeometry x="30" y="250" width="250" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Edge: Truy vấn đơn -->
+        <mxCell id="e_split_to_nfd" value="Truy vấn đơn" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=1.5;fontColor=#7e22ce;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="box_prod_rag" source="split_comp" target="nfd_stopwords">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node: API Catalog: product-service :8089 (5 Cấp độ hạ cấp) -->
+        <mxCell id="api_catalog" value="API Catalog: product-service :8089&#xa;&lt;font color='#6b21a8' style='font-size: 10px;'&gt;(5 Cấp độ tìm kiếm hạ cấp Fallback)&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#2e1065;shadow=1;" vertex="1" parent="box_prod_rag">
+          <mxGeometry x="85" y="360" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_nfd_to_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=2;" edge="1" parent="box_prod_rag" source="nfd_stopwords" target="api_catalog">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Edge: Phát hiện A vs B -->
+        <mxCell id="e_split_to_catalog" value="Phát hiện &quot;A vs B&quot;&#xa;&lt;font style='font-size: 9px;'&gt;(2 vế độc lập song song)&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=1.5;fontColor=#7e22ce;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="box_prod_rag" source="split_comp" target="api_catalog">
+          <mxGeometry relative="1" as="geometry">
+            <Array points="340 220, 340 340" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Node: ThreadPoolExecutor đa luồng -->
+        <mxCell id="thread_pool" value="ThreadPoolExecutor đa luồng&#xa;&lt;font color='#64748b' style='font-size: 10px;'&gt;Kéo song song thuộc tính _specs sản phẩm&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#f5f3ff;strokeColor=#8b5cf6;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#2e1065;shadow=1;" vertex="1" parent="box_prod_rag">
+          <mxGeometry x="85" y="475" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Edge: Lấy RAM, CPU, Pin, Màn hình -->
+        <mxCell id="e_catalog_to_pool" value="Lấy RAM, CPU, Pin, Màn hình" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=2;fontColor=#6b21a8;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="box_prod_rag" source="api_catalog" target="thread_pool">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================================================= -->
+        <!-- 2. RIGHT TOP CONTAINER: POLICY RAG PIPELINE -->
+        <!-- ========================================================================= -->
+        <mxCell id="box_policy_rag" value="Policy RAG Pipeline (Ngữ nghĩa Dày đặc)" style="swimlane;startSize=34;rounded=1;arcSize=8;fillColor=#f0fdf4;strokeColor=#059669;strokeWidth=2;fontStyle=1;fontSize=13;fontColor=#065f46;collapsible=0;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="50" width="460" height="530" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Câu truy vấn chính sách -->
+        <mxCell id="policy_query" value="Câu truy vấn chính sách&#xa;&lt;font color='#64748b' style='font-size: 10px;'&gt;[Chính sách bảo hành, đổi trả, ship]&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ffffff;strokeColor=#10b981;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#064e3b;shadow=1;" vertex="1" parent="box_policy_rag">
+          <mxGeometry x="110" y="55" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Chuẩn hóa Tiền tố bất đối xứng 'query: <câu hỏi>' -->
+        <mxCell id="prefix_norm" value="Chuẩn hóa Tiền tố bất đối xứng&#xa;&lt;font color='#047857' style='font-size: 10px; font-family: monospace;'&gt;'query: &amp;lt;câu hỏi&amp;gt;'&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#064e3b;shadow=1;" vertex="1" parent="box_policy_rag">
+          <mxGeometry x="85" y="145" width="290" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_pq_to_prefix" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="box_policy_rag" source="policy_query" target="prefix_norm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Encoder: multilingual-e5-base Vector 768 chiều -->
+        <mxCell id="encoder_e5" value="Encoder: multilingual-e5-base&#xa;&lt;font color='#047857' style='font-size: 10px;'&gt;Dense Vector 768 chiều (Unit L2 Norm)&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#d1fae5;strokeColor=#059669;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#064e3b;shadow=1;" vertex="1" parent="box_policy_rag">
+          <mxGeometry x="80" y="240" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_prefix_to_enc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="box_policy_rag" source="prefix_norm" target="encoder_e5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Chỉ mục FAISS IndexFlatIP Cosine kNN Search (Top-5) -->
+        <mxCell id="faiss_index" value="Chỉ mục FAISS IndexFlatIP&#xa;&lt;font color='#047857' style='font-size: 10px;'&gt;Cosine kNN Search (Top-5 chunks)&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#064e3b;shadow=1;" vertex="1" parent="box_policy_rag">
+          <mxGeometry x="85" y="340" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_enc_to_faiss" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="box_policy_rag" source="encoder_e5" target="faiss_index">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Tập 5 Chunks kèm điểm s_i -->
+        <mxCell id="top5_chunks" value="Tập 5 Chunks kèm điểm s_i&#xa;&lt;font color='#64748b' style='font-size: 10px;'&gt;Similarity Scores: s_1, s_2, ..., s_5&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ffffff;strokeColor=#10b981;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#064e3b;shadow=1;" vertex="1" parent="box_policy_rag">
+          <mxGeometry x="100" y="440" width="260" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_faiss_to_chunks" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="box_policy_rag" source="faiss_index" target="top5_chunks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================================================= -->
+        <!-- 3. RIGHT BOTTOM CONTAINER: CỔNG KIỂM SOÁT ĐỘ TIN CẬY (GATEKEEPER) -->
+        <!-- ========================================================================= -->
+        <mxCell id="box_gatekeeper" value="Cổng Kiểm soát Độ tin cậy (Gatekeeper)" style="swimlane;startSize=30;rounded=1;arcSize=8;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#92400e;collapsible=0;dropTarget=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="605" width="460" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Đánh giá s_max = max(s_i) -->
+        <mxCell id="eval_smax" value="Đánh giá s_max = max(s_i)&#xa;&lt;font color='#b45309' style='font-size: 10px;'&gt;So khớp ngưỡng tin cậy &amp; Ngắt ảo giác Hallucination&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#fef3c7;strokeColor=#f59e0b;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#78350f;shadow=1;" vertex="1" parent="box_gatekeeper">
+          <mxGeometry x="60" y="40" width="340" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_chunks_to_eval" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="1" source="top5_chunks" target="eval_smax">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================================================= -->
+        <!-- 4. BOTTOM PIPELINE: SYNTHESIS, LLM & FINAL RESPONSE -->
+        <!-- ========================================================================= -->
+
+        <!-- Node: Bộ ghép nối Ngữ cảnh PromptBuilderService -->
+        <mxCell id="prompt_builder" value="Bộ ghép nối Ngữ cảnh PromptBuilderService&#xa;&lt;font color='#4338ca' style='font-size: 10px;'&gt;System Prompt + User Info + Context RAG (Specs / Policy Chunks)&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ede9fe;strokeColor=#6366f1;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#312e81;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="770" width="380" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Edge from Product ThreadPoolExecutor to PromptBuilder -->
+        <mxCell id="e_pool_to_builder" value="Ngữ cảnh thông số kỹ thuật" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=2;fontColor=#6b21a8;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="thread_pool" target="prompt_builder">
+          <mxGeometry relative="1" as="geometry">
+            <Array points="225 740, 420 740" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Decision Branches from Gatekeeper eval_smax -->
+        <!-- Branch 1: s_max >= 0.82 (OK) -->
+        <mxCell id="e_gate_ok" value="s_max &gt;= 0.82 (OK)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16a34a;strokeWidth=2;fontColor=#15803d;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="eval_smax" target="prompt_builder">
+          <mxGeometry relative="1" as="geometry">
+            <Array points="630 735, 520 735" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Branch 2: 0.80 <= s_max < 0.82 (Disclaimer) -->
+        <mxCell id="e_gate_disc" value="0.80 &lt;= s_max &lt; 0.82 (Disclaimer)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d97706;strokeWidth=2;fontColor=#b45309;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="eval_smax" target="prompt_builder">
+          <mxGeometry relative="1" as="geometry">
+            <Array points="710 750, 600 750" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Branch 3: s_max < 0.80 (Reject ngắt LLM) -> Hard Stop -->
+        <mxCell id="hard_stop_node" value="Hard Stop: Hotline 0389.468.847&#xa;&lt;font color='#991b1b' style='font-size: 10px;'&gt;Từ chối sinh ngôn ngữ - Ngắt gọi LLM&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#fee2e2;strokeColor=#dc2626;strokeWidth=2;fontStyle=1;fontSize=11;fontColor=#7f1d1d;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="740" y="770" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_gate_reject" value="s_max &lt; 0.80 (Reject ngắt LLM)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#dc2626;strokeWidth=2;fontColor=#b91c1c;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="eval_smax" target="hard_stop_node">
+          <mxGeometry relative="1" as="geometry">
+            <Array points="810 740, 870 740" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Node: Mô hình DeepSeek-Chat Sinh Lời thoại -->
+        <mxCell id="deepseek_model" value="Mô hình DeepSeek-Chat Sinh Lời thoại&#xa;&lt;font color='#831843' style='font-size: 10px; font-family: monospace;'&gt;POST https://api.deepseek.com/chat/completions&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#fce7f3;strokeColor=#db2777;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#831843;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="325" y="875" width="350" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_builder_to_deepseek" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6366f1;strokeWidth=2;" edge="1" parent="1" source="prompt_builder" target="deepseek_model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Node: Phản hồi cuối cùng cho Khách hàng -->
+        <mxCell id="final_response" value="Phản hồi cuối cùng cho Khách hàng&#xa;&lt;font color='#0f766e' style='font-size: 10px;'&gt;JSON Payload {message, products, card} render AIChatbotWidget&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;rounded=1;arcSize=16;fillColor=#ccfbf1;strokeColor=#0d9488;strokeWidth=2;fontStyle=1;fontSize=12;fontColor=#115e59;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="315" y="980" width="370" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_deepseek_to_final" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#db2777;strokeWidth=2;" edge="1" parent="1" source="deepseek_model" target="final_response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

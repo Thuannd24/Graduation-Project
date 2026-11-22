@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net" agent="Antigravity AI">
+  <diagram id="NLU_RAG_Decision_Flow" name="Sơ đồ Định tuyến NLU &amp; RAG">
+    <mxGraphModel dx="2367" dy="671" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1150" pageHeight="820" math="0" shadow="1">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=14;fontColor=#0f172a;" value="SƠ ĐỒ ĐIỀU PHỐI Ý ĐỊNH NLU, ĐỊNH TUYẾN NO-LLM &amp; DUAL-RAG PIPELINE" vertex="1">
+          <mxGeometry height="30" width="560" x="280" y="15" as="geometry" />
+        </mxCell>
+        <mxCell id="start_node" parent="1" style="ellipse;fillColor=#0f172a;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="28" width="28" x="466" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="user_query" parent="1" style="rounded=1;arcSize=25;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;strokeWidth=1.5;fontStyle=1;fontSize=11;fontColor=#1e293b;shadow=1;" value="Người dùng gửi câu hỏi x" vertex="1">
+          <mxGeometry height="38" width="190" x="385" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="e_start_to_query" edge="1" parent="1" source="start_node" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#475569;strokeWidth=2;" target="user_query">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nlu_classifier" parent="1" style="rounded=1;arcSize=18;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#2563eb;strokeWidth=2;fontStyle=1;fontSize=11;fontColor=#1e3a8a;shadow=1;" value="One-Pass NLU Classifier (DeepSeek JSON Schema Mode):&#xa;Nhận diện: intent, sentiment, order_id, account_topic" vertex="1">
+          <mxGeometry height="48" width="380" x="290" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="e_query_to_nlu" edge="1" parent="1" source="user_query" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#475569;strokeWidth=2;" target="nlu_classifier">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_intent" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#2563eb;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#1e40af;shadow=1;" value="Kiểm tra Phân loại Ý định (Intent)?" vertex="1">
+          <mxGeometry height="46" width="220" x="90" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="e_nlu_to_dec1" edge="1" parent="1" source="nlu_classifier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#2563eb;strokeWidth=2;" target="dec_intent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_offtopic" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#dc2626;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#991b1b;shadow=1;" value="Intent là off_topic?" vertex="1">
+          <mxGeometry height="46" width="140" x="380" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dec1_to_dec2" edge="1" parent="1" source="dec_intent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#475569;strokeWidth=1.5;" target="dec_offtopic">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="offtopic_msg" parent="1" style="rounded=1;arcSize=18;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#dc2626;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#7f1d1d;shadow=1;" value="Kích hoạt Bộ lọc Ranh giới Nội miền;&#xa;Trả thông báo từ chối lịch sự OFFTOPIC_MSG" vertex="1">
+          <mxGeometry height="52" width="240" x="330" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="e_offtopic_true" edge="1" parent="1" source="dec_offtopic" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#dc2626;strokeWidth=2;fontColor=#991b1b;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" target="offtopic_msg" value="Đúng">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="end_offtopic" parent="1" style="ellipse;html=1;shape=endState;fillColor=#dc2626;strokeColor=#7f1d1d;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="438" y="426" as="geometry" />
+        </mxCell>
+        <mxCell id="e_off_to_end" edge="1" parent="1" source="offtopic_msg" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#dc2626;strokeWidth=2;" target="end_offtopic">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box_deterministic" parent="1" style="swimlane;startSize=28;rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fffdf0;strokeColor=#d97706;strokeWidth=2;fontStyle=1;fontSize=11;fontColor=#92400e;collapsible=0;dropTarget=0;" value="LUỒNG QUYẾT ĐỊNH XÁC ĐỊNH (100% No-LLM)" vertex="1">
+          <mxGeometry height="425" width="340" x="-20" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="det_tools" parent="box_deterministic" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f59e0b;strokeWidth=1.2;fontStyle=1;fontSize=10;fontColor=#78350f;shadow=1;" value="Định tuyến tới công cụ nội bộ Read-only:&#xa;get_order_status / get_loyalty_points / get_vouchers" vertex="1">
+          <mxGeometry height="48" width="300" x="20" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="det_jwt" parent="box_deterministic" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f59e0b;strokeWidth=1.2;fontStyle=1;fontSize=10;fontColor=#78350f;shadow=1;" value="Chuyển tiếp JWT Token + Header X-User-Id sang Backend" vertex="1">
+          <mxGeometry height="40" width="300" x="20" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="e_det1" edge="1" parent="box_deterministic" source="det_tools" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d97706;strokeWidth=1.5;" target="det_jwt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="det_defense" parent="box_deterministic" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f59e0b;strokeWidth=1.2;fontStyle=1;fontSize=10;fontColor=#78350f;shadow=1;" value="Backend thực thi kiểm tra quyền sở hữu (Defense in Depth)" vertex="1">
+          <mxGeometry height="40" width="300" x="20" y="174" as="geometry" />
+        </mxCell>
+        <mxCell id="e_det2" edge="1" parent="box_deterministic" source="det_jwt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d97706;strokeWidth=1.5;" target="det_defense">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="det_card" parent="box_deterministic" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#f59e0b;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#78350f;shadow=1;" value="Đóng gói dữ liệu Payload thành Rich Card UI" vertex="1">
+          <mxGeometry height="40" width="300" x="20" y="236" as="geometry" />
+        </mxCell>
+        <mxCell id="e_det3" edge="1" parent="box_deterministic" source="det_defense" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d97706;strokeWidth=1.5;" target="det_card">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="det_result" parent="box_deterministic" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontStyle=1;fontSize=10;fontColor=#15803d;shadow=1;" value="Trả kết quả trực tiếp cho Client (Độ trễ ~250ms, 0% Ảo giác)" vertex="1">
+          <mxGeometry height="46" width="300" x="20" y="298" as="geometry" />
+        </mxCell>
+        <mxCell id="e_det4" edge="1" parent="box_deterministic" source="det_card" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16a34a;strokeWidth=2;" target="det_result">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="end_det" parent="box_deterministic" style="ellipse;html=1;shape=endState;fillColor=#16a34a;strokeColor=#14532d;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="158" y="375" as="geometry" />
+        </mxCell>
+        <mxCell id="e_det_end" edge="1" parent="box_deterministic" source="det_result" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16a34a;strokeWidth=2;" target="end_det">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dec1_to_deter" edge="1" parent="1" source="dec_intent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d97706;strokeWidth=2;fontColor=#b45309;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" target="det_tools" value="order_tracking / order_action">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box_rag" parent="1" style="swimlane;startSize=28;rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=2;fontStyle=1;fontSize=11;fontColor=#6b21a8;collapsible=0;dropTarget=0;" value="LUỒNG TẠO SINH TĂNG CƯỜNG (DUAL-RAG + LLM)" vertex="1">
+          <mxGeometry height="455" width="540" x="580" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="dec_rag_prod" parent="box_rag" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f3ff;strokeColor=#9333ea;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#581c87;shadow=1;" value="Intent thuộc nhóm Sản phẩm?" vertex="1">
+          <mxGeometry height="42" width="190" x="175" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rag_prod_step" parent="box_rag" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9333ea;strokeWidth=1.2;fontStyle=1;fontSize=10;fontColor=#3b0764;shadow=1;" value="Kích hoạt Product RAG Pipeline:&#xa;Lọc Stopwords NFD -&gt; Tìm kiếm danh mục -&gt; Kéo Specs song song" vertex="1">
+          <mxGeometry height="52" width="245" x="15" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="e_to_prod_rag" edge="1" parent="box_rag" source="dec_rag_prod" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=1.5;fontColor=#7e22ce;fontSize=9;fontStyle=1;labelBackgroundColor=#ffffff;" target="rag_prod_step" value="product_search / price_inquiry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rag_policy_step" parent="box_rag" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#059669;strokeWidth=1.2;fontStyle=1;fontSize=10;fontColor=#064e3b;shadow=1;" value="Kích hoạt Policy RAG Pipeline:&#xa;Truy vấn FAISS kNN -&gt; Kiểm tra ngưỡng Gatekeeper" vertex="1">
+          <mxGeometry height="52" width="245" x="280" y="112" as="geometry" />
+        </mxCell>
+        <mxCell id="e_to_policy_rag" edge="1" parent="box_rag" source="dec_rag_prod" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#065f46;fontSize=9;fontStyle=1;labelBackgroundColor=#ffffff;" target="rag_policy_step" value="policy_faq">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="merge_rag" parent="box_rag" style="rhombus;fillColor=#9333ea;strokeColor=#581c87;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="258" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="e_merge1" edge="1" parent="box_rag" source="rag_prod_step" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=1.5;" target="merge_rag">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_merge2" edge="1" parent="box_rag" source="rag_policy_step" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#059669;strokeWidth=1.5;" target="merge_rag">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rag_prompt_builder" parent="box_rag" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#6366f1;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#312e81;shadow=1;" value="Bộ ghép nối ngữ cảnh PromptBuilderService:&#xa;System Prompt + Tri thức trích xuất + Thông tin User" vertex="1">
+          <mxGeometry height="48" width="380" x="80" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="e_merge_to_builder" edge="1" parent="box_rag" source="merge_rag" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=2;" target="rag_prompt_builder">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rag_deepseek" parent="box_rag" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#831843;shadow=1;" value="Gọi DeepSeek-Chat suy luận tạo sinh văn bản tự nhiên" vertex="1">
+          <mxGeometry height="40" width="340" x="100" y="303" as="geometry" />
+        </mxCell>
+        <mxCell id="e_builder_to_llm" edge="1" parent="box_rag" source="rag_prompt_builder" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#6366f1;strokeWidth=2;" target="rag_deepseek">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rag_final_reply" parent="box_rag" style="rounded=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#4f46e5;strokeWidth=1.5;fontStyle=1;fontSize=10;fontColor=#312e81;shadow=1;" value="Trả câu trả lời kèm nguồn dẫn minh bạch (Độ trễ ~2200ms)" vertex="1">
+          <mxGeometry height="44" width="360" x="90" y="363" as="geometry" />
+        </mxCell>
+        <mxCell id="e_llm_to_reply" edge="1" parent="box_rag" source="rag_deepseek" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#db2777;strokeWidth=2;" target="rag_final_reply">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_nlu_to_rag" edge="1" parent="1" source="nlu_classifier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333ea;strokeWidth=2;fontColor=#7e22ce;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" target="dec_rag_prod" value="product_search / price_inquiry / policy_faq / general_chat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="end_rag" parent="1" style="ellipse;html=1;shape=endState;fillColor=#4f46e5;strokeColor=#312e81;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="838" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="e_rag_to_end" edge="1" parent="1" source="rag_final_reply" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#4f46e5;strokeWidth=2;" target="end_rag">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
