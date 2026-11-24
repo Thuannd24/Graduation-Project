@@ -49,8 +49,8 @@ eureka:
 
 vnpay:
   pay-url: ${VNPAY_PAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
-  tmn-code: ${VNPAY_TMN_CODE:TRVXA332}
-  hash-secret: ${VNPAY_HASH_SECRET:PXUX3WDDCDW2EF8IUESPEAY9USTWJGUB}
+  tmn-code: ${VNPAY_TMN_CODE:03VD9F7B}
+  hash-secret: ${VNPAY_HASH_SECRET:BC08N5MUF40GMGAG0ZXZAO7ELOGQ9J2B}
   return-url: ${VNPAY_RETURN_URL:http://localhost:8080/api/v1/public/payments/vnpay-callback}
   expiry-hours: ${VNPAY_EXPIRY_HOURS:1}
   query-url: ${VNPAY_QUERY_URL:https://sandbox.vnpayment.vn/merchant_webapi/api/transaction}

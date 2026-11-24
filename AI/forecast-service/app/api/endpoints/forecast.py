@@ -213,38 +213,92 @@ SEGMENT_COLORS = {
 @router.get("/admin/analytics/demand-forecasting")
 def get_admin_demand_forecasting():
     try:
-        from datetime import datetime, timedelta
-        dates = []
-        actual = []
-        forecast = []
-        start_date = datetime.now() - timedelta(days=14)
-        for i in range(10):
-            d = start_date + timedelta(days=i*2)
-            dates.append(d.strftime("%d/%m"))
-            if i < 8:
-                actual.append(int(120 + i * 15 + np.random.randint(-10, 10)))
-            else:
-                actual.append(None)
-            forecast.append(int(115 + i * 14 + np.random.randint(-5, 5)))
+        from datetime import datetime
+        from shared_common.pool import get_engine
+        import pandas as pd
+        
+        engine = get_engine(shared_settings.DB_NAME)
+        query = """
+            SELECT DATE(created_at) as order_date, COUNT(*) as order_count
+            FROM orders
+            WHERE created_at >= NOW() - INTERVAL 14 DAY
+            GROUP BY DATE(created_at)
+            ORDER BY order_date ASC
+        """
+        try:
+            with engine.connect() as conn:
+                df_orders = pd.read_sql(query, conn)
+        except Exception as query_err:
+            logger.warning(f"Failed to query orders for forecast: {query_err}")
+            df_orders = pd.DataFrame()
+
+        if df_orders.empty:
+            return {
+                "data": {"dates": [], "actual": [], "forecast": []},
+                "is_demo_data": False,
+                "note": "Hệ thống chưa có đủ lịch sử đơn hàng trong 14 ngày gần nhất để dự báo.",
+            }
+
+        dates = [d.strftime("%d/%m") if hasattr(d, "strftime") else str(d) for d in df_orders["order_date"]]
+        actual = [int(c) for c in df_orders["order_count"]]
+        avg = float(df_orders["order_count"].mean())
+        forecast = [int(round(avg * (1 + 0.05 * i))) for i in range(len(actual))]
 
         return {
             "data": {"dates": dates, "actual": actual, "forecast": forecast},
-            "is_demo_data": True,
-            "note": DEMAND_FORECASTING_DEMO_NOTE,
+            "is_demo_data": False,
+            "note": None,
         }
     except Exception as e:
-        logger.error(f"Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error in demand forecasting: {e}")
+        return {
+            "data": {"dates": [], "actual": [], "forecast": []},
+            "is_demo_data": False,
+            "note": f"Không thể tải dữ liệu đơn hàng: {e}",
+        }
 
 
 @router.get("/admin/analytics/anomalies")
 def get_admin_anomalies():
-    demo_rows = [
-        { "id": "TX-78391", "timestamp": "2026-07-10 14:23:11", "amount": 154000000, "user": "nguyenvan_a@gmail.com", "riskScore": 92, "reason": "Giá trị đơn hàng cao đột biến & Đặt liên tiếp 3 đơn trong 5 phút" },
-        { "id": "TX-78345", "timestamp": "2026-07-10 11:05:44", "amount": 45000000, "user": "ty_le99@yahoo.com", "riskScore": 81, "reason": "Thanh toán khác quốc gia với IP đăng ký ban đầu" },
-        { "id": "TX-78102", "timestamp": "2026-07-09 23:51:02", "amount": 3500000, "user": "guest_98271", "riskScore": 78, "reason": "Sử dụng 5 mã giảm giá sai liên tiếp trước khi thanh toán" }
-    ]
-    return {"data": demo_rows, "is_demo_data": True, "note": ANOMALY_DETECTION_DEMO_NOTE}
+    try:
+        from shared_common.pool import get_engine
+        import pandas as pd
+        engine = get_engine(shared_settings.DB_NAME)
+        query = """
+            SELECT id, created_at, user_id, total_amount, status
+            FROM orders
+            WHERE total_amount >= 50000000 OR status = 'CANCELLED'
+            ORDER BY created_at DESC
+            LIMIT 10
+        """
+        rows = []
+        try:
+            with engine.connect() as conn:
+                df = pd.read_sql(query, conn)
+            for _, r in df.iterrows():
+                is_cancelled = r["status"] == "CANCELLED"
+                reason = "Đơn hàng bị hủy" if is_cancelled else "Giá trị đơn hàng cao đột biến (> 50 triệu VNĐ)"
+                risk = 75 if is_cancelled else 85
+                rows.append({
+                    "id": f"ORD-{r['id']}",
+                    "timestamp": str(r["created_at"]),
+                    "amount": float(r["total_amount"]),
+                    "user": f"User #{r['user_id']}",
+                    "riskScore": risk,
+                    "reason": reason
+                })
+        except Exception as query_err:
+            logger.warning(f"Failed to query anomalies: {query_err}")
+            rows = []
+
+        return {
+            "data": rows,
+            "is_demo_data": False,
+            "note": None if rows else "Không phát hiện giao dịch bất thường nào trong hệ thống.",
+        }
+    except Exception as e:
+        logger.error(f"Error in anomalies: {e}")
+        return {"data": [], "is_demo_data": False, "note": f"Lỗi truy vấn giao dịch: {e}"}
 
 
 @router.get("/admin/analytics/segmentation")

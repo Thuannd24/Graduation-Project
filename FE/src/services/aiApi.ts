@@ -165,15 +165,10 @@ export const aiApi = {
     try {
       return await apiClient.get("/admin/analytics/demand-forecasting");
     } catch (err) {
-      const dates = ["01/07", "03/07", "05/07", "07/07", "09/07", "11/07", "13/07", "15/07", "17/07", "19/07"];
       return {
-        data: {
-          dates,
-          actual: [120, 150, 140, 190, 160, 210, 180, 240, null, null],
-          forecast: [115, 145, 142, 185, 165, 205, 182, 230, 250, 280]
-        },
-        is_demo_data: true,
-        note: "Không gọi được máy chủ AI — hiển thị dữ liệu minh họa dự phòng."
+        data: { dates: [], actual: [], forecast: [] },
+        is_demo_data: false,
+        note: "Chưa kết nối được dịch vụ AI Dự báo (forecast-service)."
       };
     }
   },
@@ -187,13 +182,9 @@ export const aiApi = {
       return await apiClient.get("/admin/analytics/anomalies");
     } catch (err) {
       return {
-        data: [
-          { id: "TX-78391", timestamp: "2026-07-10 14:23:11", amount: 154000000, user: "nguyenvan_a@gmail.com", riskScore: 92, reason: "Giá trị đơn hàng cao đột biến & Đặt liên tiếp 3 đơn trong 5 phút" },
-          { id: "TX-78345", timestamp: "2026-07-10 11:05:44", amount: 45000000, user: "ty_le99@yahoo.com", riskScore: 81, reason: "Thanh toán khác quốc gia với IP đăng ký ban đầu" },
-          { id: "TX-78102", timestamp: "2026-07-09 23:51:02", amount: 3500000, user: "guest_98271", riskScore: 78, reason: "Sử dụng 5 mã giảm giá sai liên tiếp trước khi thanh toán" }
-        ],
-        is_demo_data: true,
-        note: "Không gọi được máy chủ AI — hiển thị dữ liệu minh họa dự phòng."
+        data: [],
+        is_demo_data: false,
+        note: "Chưa kết nối được dịch vụ AI Phát hiện bất thường (forecast-service)."
       };
     }
   },
@@ -207,14 +198,9 @@ export const aiApi = {
       return await apiClient.get("/admin/analytics/segmentation");
     } catch (err) {
       return {
-        data: [
-          { segment: "VIP Champions", count: 245, percentage: 12.5, color: "#10b981", spendRatio: 45 },
-          { segment: "Loyal Regulars", count: 680, percentage: 34.6, color: "#3b82f6", spendRatio: 35 },
-          { segment: "Lapsed", count: 820, percentage: 41.8, color: "#f59e0b", spendRatio: 15 },
-          { segment: "At Risk", count: 220, percentage: 11.2, color: "#ef4444", spendRatio: 5 }
-        ],
-        is_demo_data: true,
-        note: "Không gọi được máy chủ AI — hiển thị dữ liệu minh họa dự phòng."
+        data: [],
+        is_demo_data: false,
+        note: "Chưa kết nối được dịch vụ AI Phân cụm khách hàng (forecast-service)."
       };
     }
   }

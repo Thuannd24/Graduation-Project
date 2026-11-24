@@ -459,29 +459,9 @@ export default function CartPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: idx * 0.05 }}
-                className="flex flex-col justify-between bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-3 shadow-sm hover:shadow-md transition-all group"
+                className="h-full"
               >
-                <div className="flex-1">
-                  <ProductCard product={product} />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // addToCart tự báo kết quả thật (thành công / hết hàng / ngừng kinh doanh) sau khi server trả lời.
-                    addToCart({
-                      id: product.id,
-                      name: product.name,
-                      price: product.price,
-                      image: product.image,
-                      qty: 1,
-                      variant: "Tiêu chuẩn"
-                    });
-                  }}
-                  className="w-full mt-3 py-2 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]"
-                >
-                  <Icon name="add_shopping_cart" className="text-xs" />
-                  Thêm nhanh vào giỏ
-                </button>
+                <ProductCard product={product} />
               </motion.div>
             ))}
           </div>

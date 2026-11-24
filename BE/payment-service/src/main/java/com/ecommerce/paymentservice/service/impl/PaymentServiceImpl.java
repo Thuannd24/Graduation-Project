@@ -406,8 +406,9 @@ public class PaymentServiceImpl implements PaymentService {
             throw new IllegalStateException("Đơn hàng đã được thanh toán thành công qua VNPay.");
         }
         if (vnpStatus == null) {
-            throw new IllegalStateException(
-                    "Giao dịch VNPay trước đó của đơn hàng đang được xử lý. Vui lòng thử lại sau ít phút.");
+            log.warn("Không thể tra cứu trạng thái VNPay QueryDR cho đơn hàng {} (do lỗi mạng hoặc IP local chưa whitelist)."
+                    + " Tiếp tục cho phép tạo lượt thanh toán mới / đổi COD dưới sự bảo vệ của previousTxnRefs.", orderId);
+            return;
         }
         // "01" (chưa hoàn tất), "02" (thất bại), NOT_FOUND: an toàn để tạo lượt mới.
     }

@@ -1,5 +1,10 @@
 import os
 from pydantic import BaseModel
+from shared_common.config import shared_settings
+
+# forecast-service requires order tables (orders, order_items, user_events) which live in ecommerce_order_db
+if os.getenv("DB_NAME") is None or shared_settings.DB_NAME == "ecommerce_product_db":
+    shared_settings.DB_NAME = os.getenv("FORECAST_DB_NAME", "ecommerce_order_db")
 
 class ForecastSettings(BaseModel):
     PROJECT_NAME: str = "Forecast & Analytics Service"
