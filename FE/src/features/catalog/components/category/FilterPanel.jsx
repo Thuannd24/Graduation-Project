@@ -57,7 +57,9 @@ export default function FilterPanel({
         <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
           {brands.map((brandObj) => {
             const brand = brandObj.name;
-            const checked = selectedBrands.includes(brand);
+            const checked = selectedBrands.some(
+              (b) => b.toLowerCase() === brand.toLowerCase()
+            );
             return (
               <label
                 key={brandObj.id}

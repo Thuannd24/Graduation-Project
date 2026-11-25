@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
 import OrderSummary from "../../cart/components/OrderSummary.jsx";
+import CheckoutSteps from "../components/CheckoutSteps.jsx";
 import VoucherPicker from "../components/VoucherPicker.jsx";
 import LoyaltyPointsPicker from "../components/LoyaltyPointsPicker.jsx";
 import { useCart } from "../../../context/CartContext.jsx";
@@ -375,29 +376,7 @@ export default function CheckoutPage() {
     return (
       <div className="space-y-8 py-6 max-w-2xl mx-auto">
         {/* Checkout steps bar */}
-        <div className="flex items-center justify-between relative py-2 mb-6">
-          <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[3px] bg-slate-200 dark:bg-slate-800 z-0">
-            <div className="h-full bg-emerald-650 transition-all duration-300" style={{ width: "100%" }}></div>
-          </div>
-          <div className="flex flex-col items-center gap-1.5 z-10">
-            <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow">
-              ✓
-            </div>
-            <span className="text-xs font-bold text-emerald-600">Giỏ hàng</span>
-          </div>
-          <div className="flex flex-col items-center gap-1.5 z-10">
-            <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow">
-              ✓
-            </div>
-            <span className="text-xs font-bold text-emerald-600">Thông tin giao nhận</span>
-          </div>
-          <div className="flex flex-col items-center gap-1.5 z-10">
-            <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow ring-4 ring-emerald-500/20">
-              3
-            </div>
-            <span className="text-xs font-bold text-emerald-600">Thành công</span>
-          </div>
-        </div>
+        <CheckoutSteps currentStep={3} completed />
 
         {/* Success Card layout */}
         <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-md text-center space-y-6">
@@ -461,29 +440,7 @@ export default function CheckoutPage() {
   return (
     <div className="space-y-8 py-4">
       {/* Checkout steps bar */}
-      <div className="max-w-xl mx-auto flex items-center justify-between relative py-2">
-        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[3px] bg-slate-200 dark:bg-slate-800 z-0">
-          <div className="h-full bg-primary transition-all duration-300" style={{ width: "50%" }}></div>
-        </div>
-        <div className="flex flex-col items-center gap-1.5 z-10">
-          <div className="w-8 h-8 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center ring-4 ring-red-500/20 shadow">
-            1
-          </div>
-          <span className="text-xs font-bold text-primary">Giỏ hàng</span>
-        </div>
-        <div className="flex flex-col items-center gap-1.5 z-10">
-          <div className="w-8 h-8 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center ring-4 ring-red-500/20 shadow">
-            2
-          </div>
-          <span className="text-xs font-bold text-primary">Thông tin giao nhận</span>
-        </div>
-        <div className="flex flex-col items-center gap-1.5 z-10">
-          <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-400 font-bold text-xs flex items-center justify-center">
-            3
-          </div>
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Thanh toán</span>
-        </div>
-      </div>
+      <CheckoutSteps currentStep={2} />
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Left column forms */}

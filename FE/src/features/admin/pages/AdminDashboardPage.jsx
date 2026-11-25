@@ -25,7 +25,6 @@ const AddProductTab = lazy(() => import("../components/AddProductTab.jsx"));
 const AdminRoleTab = lazy(() => import("../components/AdminRoleTab.jsx"));
 const BrandsTab = lazy(() => import("../components/BrandsTab.jsx"));
 const ReviewsTab = lazy(() => import("../components/ReviewsTab.jsx"));
-const AnalyticsAITab = lazy(() => import("../components/AnalyticsAITab.jsx"));
 const SupportChatTab = lazy(() => import("../components/SupportChatTab.jsx"));
 
 function TabFallback() {
@@ -352,10 +351,6 @@ export default function AdminDashboardPage() {
 
         {activeTab === "reviews" && (
           <ReviewsTab />
-        )}
-
-        {activeTab === "analytics-ai" && (
-          <AnalyticsAITab onNavigate={setActiveTab} />
         )}
 
         {activeTab === "support-chat" && (

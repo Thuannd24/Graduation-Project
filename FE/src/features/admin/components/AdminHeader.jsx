@@ -66,8 +66,6 @@ export default function AdminHeader({ activeTab, darkMode, onToggleDarkMode, ord
         return "Phân Quyền Quản Trị";
       case "reviews":
         return "Quản Lý Đánh Giá";
-      case "analytics-ai":
-        return "Phân Tích AI";
       case "support-chat":
         return "Hỗ Trợ Khách Hàng";
       default:

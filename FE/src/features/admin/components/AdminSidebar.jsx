@@ -11,7 +11,6 @@ const NAV_MAIN = [
   { tab: "customers", icon: "group", label: "Khách hàng" },
   { tab: "campaigns", icon: "local_offer", label: "Khuyến mãi & Voucher" },
   { tab: "promotion-stats", icon: "insights", label: "Thống kê khuyến mãi" },
-  { tab: "analytics-ai", icon: "psychology", label: "Phân tích AI", activeClass: "bg-rose-600" },
   { tab: "support-chat", icon: "chat", label: "Chat hỗ trợ" },
   { tab: "categories", icon: "category", label: "Danh mục" },
   { tab: "transactions", icon: "account_balance_wallet", label: "Giao dịch" },

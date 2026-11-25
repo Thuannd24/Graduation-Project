@@ -56,7 +56,9 @@ export default function ProductToolbar({
         <div className="flex gap-2 overflow-x-auto pb-1 hide-scrollbar">
           {brands.map((brandObj) => {
             const brandName = brandObj.name;
-            const isSelected = selectedBrands.includes(brandName);
+            const isSelected = selectedBrands.some(
+              (b) => b.toLowerCase() === brandName.toLowerCase()
+            );
             const officialLogo = getBrandLogo(brandName);
 
             return (

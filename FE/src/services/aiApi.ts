@@ -149,59 +149,5 @@ export const aiApi = {
       console.warn("Cross-sell API fallback.", err);
       return [];
     }
-  },
-
-  // 4. AI Admin Analytics Charts
-  //
-  // Cả 3 endpoint dưới đây trả kèm `is_demo_data` + `note`: `segmentation` đã nối vào model churn
-  // thật (is_demo_data=false); `demand-forecasting`/`anomalies` vẫn là dữ liệu minh họa vì dựng bản
-  // thật là hướng phát triển riêng ngoài phạm vi churn-risk — xem AI/forecast-service/app/api/
-  // endpoints/forecast.py. AnalyticsAITab.jsx đọc cờ này để hiển thị banner, không im lặng nữa.
-  getDemandForecasting: async (): Promise<{
-    data: { dates: string[]; actual: (number | null)[]; forecast: number[] };
-    is_demo_data: boolean;
-    note: string | null;
-  }> => {
-    try {
-      return await apiClient.get("/admin/analytics/demand-forecasting");
-    } catch (err) {
-      return {
-        data: { dates: [], actual: [], forecast: [] },
-        is_demo_data: false,
-        note: "Chưa kết nối được dịch vụ AI Dự báo (forecast-service)."
-      };
-    }
-  },
-
-  getAnomalyLogs: async (): Promise<{
-    data: Array<{ id: string; timestamp: string; amount: number; user: string; riskScore: number; reason: string }>;
-    is_demo_data: boolean;
-    note: string | null;
-  }> => {
-    try {
-      return await apiClient.get("/admin/analytics/anomalies");
-    } catch (err) {
-      return {
-        data: [],
-        is_demo_data: false,
-        note: "Chưa kết nối được dịch vụ AI Phát hiện bất thường (forecast-service)."
-      };
-    }
-  },
-
-  getCustomerSegmentation: async (): Promise<{
-    data: Array<{ segment: string; count: number; percentage: number; color: string; spendRatio: number }>;
-    is_demo_data: boolean;
-    note: string | null;
-  }> => {
-    try {
-      return await apiClient.get("/admin/analytics/segmentation");
-    } catch (err) {
-      return {
-        data: [],
-        is_demo_data: false,
-        note: "Chưa kết nối được dịch vụ AI Phân cụm khách hàng (forecast-service)."
-      };
-    }
   }
 };

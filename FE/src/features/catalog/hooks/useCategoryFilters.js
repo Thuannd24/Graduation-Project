@@ -63,8 +63,10 @@ export function useCategoryFilters() {
 
   const toggleBrand = useCallback(
     (brand) => {
-      const nextBrands = brands.includes(brand)
-        ? brands.filter((b) => b !== brand)
+      const target = brand.toLowerCase();
+      const exists = brands.some((b) => b.toLowerCase() === target);
+      const nextBrands = exists
+        ? brands.filter((b) => b.toLowerCase() !== target)
         : [...brands, brand];
       updateFilters({ brand: nextBrands });
     },

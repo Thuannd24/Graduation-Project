@@ -65,7 +65,12 @@ export default function CategoryPage() {
 
   const activeCategory = resolved?.category;
   const parentCategory = resolved?.parent;
-  const displayTitle = formatCategoryName(activeCategory?.name || categorySlug || "Sản phẩm");
+  const displayTitle =
+    activeCategory?.name || categorySlug
+      ? formatCategoryName(activeCategory?.name || categorySlug)
+      : selectedBrands.length > 0
+        ? selectedBrands.join(", ")
+        : "Sản phẩm";
 
   const dynamicSpecFilters = useMemo(() => {
     if (!categoryAttributes.length) return [];
@@ -154,11 +159,11 @@ export default function CategoryPage() {
   }, []);
 
   useEffect(() => {
-    if (!categorySlug && rootCategories.length > 0) {
+    if (!categorySlug && selectedBrands.length === 0 && rootCategories.length > 0) {
       const preferred = rootCategories[0];
       if (preferred?.slug) setCategory(preferred.slug);
     }
-  }, [categorySlug, rootCategories, setCategory]);
+  }, [categorySlug, selectedBrands.length, rootCategories, setCategory]);
 
   useEffect(() => {
     setPriceDraft({ min: minPrice, max: maxPrice });
@@ -196,7 +201,7 @@ export default function CategoryPage() {
         if (activeCategory?.id) {
           items = await fetchAllCategoryProducts(productApi, activeCategory.id);
         } else {
-          items = await productApi.listProducts();
+          items = await productApi.listAllProducts();
         }
         if (!cancelled) setProducts(items);
       } catch (err) {

@@ -474,12 +474,6 @@ export default function OrdersTab({
                       <span className="text-slate-700 font-extrabold">Thành tiền:</span>
                       <span className="font-black text-emerald-600">{formatVnd(Number(selectedOrder.finalAmount || 0))}</span>
                     </div>
-                    {selectedOrder.vatAmount > 0 && (
-                      <div className="flex justify-between text-[10px] text-slate-400">
-                        <span>Trong đó VAT (10%):</span>
-                        <span>{formatVnd(Number(selectedOrder.vatAmount))}</span>
-                      </div>
-                    )}
 
                     <div className="border-t border-slate-200/60 my-2"></div>
                     

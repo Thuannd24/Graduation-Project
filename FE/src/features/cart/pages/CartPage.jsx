@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Icon from "../../../components/common/Icon.jsx";
 import OrderSummary from "../components/OrderSummary.jsx";
+import CheckoutSteps from "../../checkout/components/CheckoutSteps.jsx";
 import ProductCard from "../../catalog/components/ProductCard.jsx";
 import { useCart } from "../../../context/CartContext.jsx";
 import { productApi } from "../../../services/productApi";
@@ -294,54 +295,16 @@ export default function CartPage() {
         : 0,
       pointDiscount: backendSummary ? Number(backendSummary.pointDiscount || 0) : 0,
     });
-    const shippingPending = totals.shipping > 0;
     return {
       ...totals,
-      shippingPending,
-      total: shippingPending ? totals.total - totals.shipping : totals.total,
+      shippingPending: false,
     };
   }, [summary, backendSummary]);
-
-  const steps = [
-    { num: 1, label: "Giỏ hàng", active: true },
-    { num: 2, label: "Thông tin giao nhận", active: false },
-    { num: 3, label: "Thanh toán", active: false },
-  ];
 
   return (
     <div className="space-y-6 py-4">
       {/* ===================== Checkout Steps ===================== */}
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between relative">
-          {/* Progress line */}
-          <div className="absolute left-[40px] right-[40px] top-[18px] h-[3.5px] bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-primary to-red-500 rounded-full transition-all duration-500" 
-              style={{ width: `${(steps.findIndex(s => s.active) / (steps.length - 1)) * 100}%` }} 
-            />
-          </div>
-
-          {steps.map((step, idx) => (
-            <div key={step.num} className="flex flex-col items-center gap-1.5 z-10">
-              <motion.div
-                initial={false}
-                animate={step.active ? { scale: [1, 1.15, 1] } : {}}
-                transition={{ duration: 0.4 }}
-                className={`w-9 h-9 rounded-full flex items-center justify-center font-extrabold text-xs shadow-sm transition-all ${
-                  step.active
-                    ? "bg-gradient-to-br from-primary to-red-600 text-white ring-4 ring-red-500/20"
-                    : "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500"
-                }`}
-              >
-                {step.active ? <Icon name="shopping_cart" className="text-sm" /> : step.num}
-              </motion.div>
-              <span className={`text-[10px] font-bold whitespace-nowrap ${step.active ? "text-primary" : "text-slate-400 dark:text-slate-500"}`}>
-                {step.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <CheckoutSteps currentStep={1} />
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* ===================== Left: Cart Items ===================== */}

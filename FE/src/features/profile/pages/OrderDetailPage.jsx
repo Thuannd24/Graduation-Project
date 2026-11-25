@@ -482,13 +482,6 @@ export default function OrderDetailPage() {
                 </div>
               )}
 
-              {order.vatAmount > 0 && (
-                <div className="flex justify-between text-slate-400 text-[11px]">
-                  <span>Trong đó VAT (10%):</span>
-                  <span className="font-semibold">{formatVnd(Number(order.vatAmount))}</span>
-                </div>
-              )}
-
               <div className="border-t border-slate-100 dark:border-slate-800 my-1.5 pt-2.5 flex justify-between items-center text-sm">
                 <span className="font-black text-slate-850 dark:text-slate-200">Tổng cộng:</span>
                 <span className="text-lg font-black text-primary">

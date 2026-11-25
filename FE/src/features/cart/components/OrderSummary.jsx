@@ -123,18 +123,6 @@ export default function OrderSummary({
                 <span className="text-slate-800 dark:text-slate-200 font-extrabold text-xs">{formatVnd(summary.shipping)}</span>
               )}
             </div>
-
-            {summary.vatIncluded ? (
-              <div className="flex justify-between items-center">
-                <span className="text-slate-400 font-semibold text-[11px]">Trong đó VAT (10%)</span>
-                <span className="text-slate-400 font-bold text-[11px]">{formatVnd(summary.vat || 0)}</span>
-              </div>
-            ) : (
-              <div className="flex justify-between items-center">
-                <span className="text-slate-500 font-semibold text-xs">Thuế VAT (10%)</span>
-                <span className="text-slate-800 dark:text-slate-200 font-extrabold text-xs">{formatVnd(summary.vat)}</span>
-              </div>
-            )}
           </div>
 
           <div className="border-t border-dashed border-slate-200 dark:border-slate-800 my-4" />
