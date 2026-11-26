@@ -119,7 +119,10 @@ public class OrderServiceImpl implements OrderService {
         boolean transaction1Committed = false;
         try {
             String cartKey = "cart:" + userId;
-            CartResponse cart = cartService.getCart(cartKey);
+            boolean isDirectBuy = checkoutRequest.getItems() != null && !checkoutRequest.getItems().isEmpty();
+            CartResponse cart = isDirectBuy
+                    ? cartService.buildDirectCart(checkoutRequest.getItems())
+                    : cartService.getCart(cartKey);
 
             if (cart.getItems() == null || cart.getItems().isEmpty()) {
                 throw new InvalidOrderStateException("Cart is empty");
@@ -365,8 +368,10 @@ public class OrderServiceImpl implements OrderService {
                 throw ex;
             }
 
-            // Clear Cart (không có session HTTP request ở bước checkout này, không cần cho hành vi)
-            cartService.clearCart(cartKey, null);
+            // Clear Cart chỉ khi checkout từ giỏ hàng; Mua ngay giữ nguyên giỏ cũ của khách.
+            if (!isDirectBuy) {
+                cartService.clearCart(cartKey, null);
+            }
 
             OrderResponse response = convertToResponse(savedOrder, finalOrderItems);
 
@@ -514,7 +519,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public CheckoutPreviewResponse previewCheckout(String userId, CheckoutPreviewRequest request) {
-        CartResponse cart = cartService.getCart("cart:" + userId);
+        boolean isDirectBuy = request != null && request.getItems() != null && !request.getItems().isEmpty();
+        CartResponse cart = isDirectBuy
+                ? cartService.buildDirectCart(request.getItems())
+                : cartService.getCart("cart:" + userId);
         if (cart.getItems() == null || cart.getItems().isEmpty()) {
             throw new InvalidOrderStateException("Cart is empty");
         }

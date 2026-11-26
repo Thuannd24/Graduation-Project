@@ -71,13 +71,38 @@ public class CartServiceImpl implements CartService {
         String key = getRedisKey(cartKey);
         Map<Object, Object> entries = redisTemplate.opsForHash().entries(key);
 
+        List<CartItemRequest> rawItems = new ArrayList<>();
+        for (Map.Entry<Object, Object> entry : entries.entrySet()) {
+            CartItemRequest reqItem = deserializeCartItem(entry.getValue());
+            if (reqItem != null) {
+                rawItems.add(reqItem);
+            }
+        }
+
+        String userId = cartKey.startsWith(CART_PREFIX) ? cartKey.substring(CART_PREFIX.length()) : cartKey;
+        return resolveCartResponse(userId, rawItems, false);
+    }
+
+    @Override
+    public CartResponse buildDirectCart(List<CartItemRequest> directItems) {
+        if (directItems == null || directItems.isEmpty()) {
+            return CartResponse.builder().items(Collections.emptyList()).totalAmount(BigDecimal.ZERO).build();
+        }
+        for (CartItemRequest req : directItems) {
+            if (req.getProductId() == null || req.getQuantity() == null || req.getQuantity() <= 0) {
+                throw new BusinessRuleException("INVALID_DIRECT_ITEM", "Thông tin sản phẩm mua ngay không hợp lệ.");
+            }
+            OrderPolicy.checkQuantity(req.getQuantity());
+        }
+        return resolveCartResponse(null, directItems, true);
+    }
+
+    private CartResponse resolveCartResponse(String userId, List<CartItemRequest> rawItems, boolean strictDirectBuy) {
         List<CartItemResponse> items = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
 
-        if (!entries.isEmpty()) {
-            List<Long> productIds = entries.values().stream()
-                    .map(this::deserializeCartItem)
-                    .filter(Objects::nonNull)
+        if (!rawItems.isEmpty()) {
+            List<Long> productIds = rawItems.stream()
                     .map(CartItemRequest::getProductId)
                     .distinct()
                     .collect(Collectors.toList());
@@ -98,16 +123,16 @@ public class CartServiceImpl implements CartService {
                 }
             }
 
-            for (Map.Entry<Object, Object> entry : entries.entrySet()) {
-                CartItemRequest reqItem = deserializeCartItem(entry.getValue());
-                if (reqItem == null)
-                    continue;
-
+            for (CartItemRequest reqItem : rawItems) {
                 Long productId = reqItem.getProductId();
                 Long variantId = reqItem.getVariantId();
                 ProductPriceInfoGrpc prodInfo = productDetails.get(productId);
 
                 if (prodInfo != null) {
+                    if (strictDirectBuy && prodInfo.getDiscontinued()) {
+                        throw new BusinessRuleException("PRODUCT_INACTIVE",
+                                "Sản phẩm " + prodInfo.getName() + " đã ngừng kinh doanh.");
+                    }
                     BigDecimal unitPrice = ProductGrpcClient.getPrice(prodInfo);
                     String productName = prodInfo.getName();
                     String imageUrl = prodInfo.getImageUrl();
@@ -149,6 +174,9 @@ public class CartServiceImpl implements CartService {
                                     log.error("Failed to parse variant attributes: {}", e.getMessage());
                                 }
                             }
+                        } else if (strictDirectBuy) {
+                            throw new BusinessRuleException("VARIANT_NOT_FOUND",
+                                    "Phiên bản sản phẩm không tồn tại hoặc đã ngừng bán.");
                         }
                     }
 
@@ -169,13 +197,14 @@ public class CartServiceImpl implements CartService {
                             .weight(weight)
                             .active(!prodInfo.getDiscontinued())
                             .build());
+                } else if (strictDirectBuy) {
+                    throw new BusinessRuleException("PRODUCT_NOT_FOUND",
+                            "Không tìm thấy sản phẩm #" + productId);
                 } else {
                     log.warn("Product ID {} in cart not found in product-service details", productId);
                 }
             }
         }
-
-        String userId = cartKey.startsWith(CART_PREFIX) ? cartKey.substring(CART_PREFIX.length()) : cartKey;
 
         return CartResponse.builder()
                 .userId(userId)

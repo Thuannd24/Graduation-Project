@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -33,4 +34,9 @@ public class CheckoutRequest {
     private Integer pointsToRedeem;
 
     private String note;
+
+    /**
+     * Danh sách sản phẩm mua trực tiếp (luồng Mua ngay). Nếu null hoặc rỗng thì checkout toàn bộ giỏ hàng.
+     */
+    private List<CartItemRequest> items;
 }

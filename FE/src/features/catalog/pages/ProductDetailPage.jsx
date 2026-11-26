@@ -572,20 +572,39 @@ export default function ProductDetailPage() {
     setSelectedOptions((current) => ({ ...current, [axisCode]: optionValue }));
   };
 
-  const handleBuyNow = async (e) => {
+  const handleBuyNow = (e) => {
     e.preventDefault();
-    if (!product) return;
-    if (!canPurchase) return;
-    const checkoutProduct = { ...product, selectedVariant: selectedVariant || null, buyQty: quantity };
+    if (!product || !canPurchase) return;
+    let variantLabel = "Tiêu chuẩn";
+    if (selectedVariant?.variantAttr) {
+      try {
+        const attr =
+          typeof selectedVariant.variantAttr === "string"
+            ? JSON.parse(selectedVariant.variantAttr)
+            : selectedVariant.variantAttr;
+        if (attr && typeof attr === "object") {
+          variantLabel = Object.values(attr).join(" - ") || variantLabel;
+        }
+      } catch {
+        // ignore
+      }
+    }
+    const buyNowPayload = {
+      id: String(product.id),
+      productId: String(product.id),
+      variantId: selectedVariant?.id ? String(selectedVariant.id) : "",
+      name: product.name,
+      image: selectedVariant?.imageUrl || activeImage || product.image || "",
+      price: Number(basePrice || 0),
+      qty: Number(quantity || 1),
+      variant: variantLabel,
+    };
+    sessionStorage.setItem("buy_now_item", JSON.stringify(buyNowPayload));
     if (!keycloak.authenticated) {
-      sessionStorage.setItem("pending_buy_now", JSON.stringify(checkoutProduct));
-      keycloak.login({ redirectUri: window.location.origin + "/checkout" });
+      keycloak.login({ redirectUri: window.location.origin + "/checkout?mode=buy_now" });
       return;
     }
-    const success = await addToCart(checkoutProduct, selectedVariant || null, quantity);
-    if (success) {
-      navigate("/checkout");
-    }
+    navigate("/checkout?mode=buy_now");
   };
 
   const handleAddToCart = async () => {

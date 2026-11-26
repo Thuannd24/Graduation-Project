@@ -29,10 +29,15 @@ const SupportChatTab = lazy(() => import("../components/SupportChatTab.jsx"));
 
 function TabFallback() {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "40vh" }}>
-      <span className="material-symbols-outlined" style={{ fontSize: 32, animation: "spin 1s linear infinite" }}>
-        progress_activity
-      </span>
+    <div
+      className="flex items-center justify-center min-h-[45vh] bg-slate-50/70 dark:bg-slate-950/70 backdrop-blur-[2px]"
+      role="status"
+      aria-label="Đang tải nội dung"
+    >
+      <div className="flex flex-col items-center gap-3 px-6 py-4 rounded-2xl bg-white/90 dark:bg-slate-900/90 shadow-md border border-slate-200/80 dark:border-slate-700">
+        <div className="w-9 h-9 border-4 border-emerald-500/25 border-t-emerald-600 rounded-full animate-spin" />
+        <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Đang tải...</span>
+      </div>
     </div>
   );
 }

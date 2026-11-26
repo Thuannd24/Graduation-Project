@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "../../../components/common/Icon.jsx";
 import OrderSummary from "../../cart/components/OrderSummary.jsx";
 import CheckoutSteps from "../components/CheckoutSteps.jsx";
@@ -17,7 +17,9 @@ import { trackBehavior } from "../../../services/behaviorTracker.ts";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const { items, summary, showToast, reloadCart, addToCart } = useCart();
+  const [searchParams] = useSearchParams();
+  const isBuyNow = searchParams.get("mode") === "buy_now";
+  const { items, summary, showToast, reloadCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [successOrder, setSuccessOrder] = useState(null);
@@ -25,38 +27,51 @@ export default function CheckoutPage() {
   const idempotencyKeyRef = useRef(crypto.randomUUID());
   const [isInitialized, setIsInitialized] = useState(false);
 
+  const [buyNowItem] = useState(() => {
+    if (searchParams.get("mode") !== "buy_now") return null;
+    try {
+      const raw = sessionStorage.getItem("buy_now_item");
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const activeItems = useMemo(
+    () => (isBuyNow ? (buyNowItem ? [buyNowItem] : []) : items),
+    [isBuyNow, buyNowItem, items]
+  );
+
+  const activeSubtotal = useMemo(
+    () =>
+      isBuyNow
+        ? activeItems.reduce((sum, it) => sum + Number(it.price || 0) * Number(it.qty || 1), 0)
+        : summary.subtotal,
+    [isBuyNow, activeItems, summary.subtotal]
+  );
+
+  const directApiItems = useMemo(
+    () =>
+      isBuyNow && buyNowItem
+        ? [
+            {
+              productId: Number(buyNowItem.productId || buyNowItem.id),
+              variantId: buyNowItem.variantId ? Number(buyNowItem.variantId) : null,
+              quantity: Number(buyNowItem.qty || 1),
+            },
+          ]
+        : undefined,
+    [isBuyNow, buyNowItem]
+  );
+
   // Vào luồng thanh toán = bước sâu nhất của phễu trước khi mua. Bỏ giỏ SAU mốc này mang ý nghĩa
   // khác hẳn bỏ giỏ ngay ở trang sản phẩm — đây là thông tin mà số đếm tổng hợp không diễn đạt được.
   useEffect(() => {
-    trackBehavior("BEGIN_CHECKOUT", { weight: items.length });
+    trackBehavior("BEGIN_CHECKOUT", { weight: activeItems.length });
     // Trang checkout luôn hiển thị phí vận chuyển trong phần tổng kết đơn -> vào trang là đã thấy.
     // Ghi riêng thành 1 action vì "nhìn thấy phí ship rồi mới rời đi" là tín hiệu ma sát kinh điển.
     trackBehavior("VIEW_SHIPPING_FEE");
   }, []);
-
-  // Handle pending guest purchase after logging in
-  useEffect(() => {
-    const handlePendingBuyNow = async () => {
-      const pendingStr = sessionStorage.getItem("pending_buy_now");
-      if (pendingStr) {
-        try {
-          const product = JSON.parse(pendingStr);
-          sessionStorage.removeItem("pending_buy_now");
-          showToast("Đang thêm sản phẩm vào đơn hàng...");
-          const success = await addToCart(product);
-          if (success) {
-            reloadCart?.();
-          } else {
-            navigate("/cart");
-          }
-        } catch (err) {
-          console.error("Failed to add pending buy-now product to cart:", err);
-          navigate("/cart");
-        }
-      }
-    };
-    handlePendingBuyNow();
-  }, [addToCart, reloadCart, showToast, navigate]);
 
   // Controlled fields
   const [fullName, setFullName] = useState(() => {
@@ -127,12 +142,12 @@ export default function CheckoutPage() {
     loadAddressData();
   }, []);
 
-  // Redirect to cart if the cart is empty after initialization
+  // Redirect to cart if no active items to checkout after initialization
   useEffect(() => {
-    if (isInitialized && !submitting && !successOrder && items.length === 0) {
+    if (isInitialized && !submitting && !successOrder && activeItems.length === 0) {
       navigate("/cart");
     }
-  }, [isInitialized, items, successOrder, navigate, submitting]);
+  }, [isInitialized, activeItems, successOrder, navigate, submitting]);
 
   // Fetch wards when province changes
   useEffect(() => {
@@ -183,8 +198,9 @@ export default function CheckoutPage() {
     }
   };
 
-  // Load applied coupon from CartPage
+  // Load applied coupon from CartPage (only when checking out cart, not buy_now)
   useEffect(() => {
+    if (isBuyNow) return;
     const code = sessionStorage.getItem("techstore_coupon_code");
     const pct = sessionStorage.getItem("techstore_coupon_discount_percent");
     if (code && pct) {
@@ -196,7 +212,7 @@ export default function CheckoutPage() {
         title: `Mã ${code} (${parseFloat(pct) * 100}%)`
       });
     }
-  }, []);
+  }, [isBuyNow]);
 
   // Sync appliedVoucher changes
   useEffect(() => {
@@ -211,7 +227,7 @@ export default function CheckoutPage() {
 
   // Ước tính tại chỗ (giá đã gồm VAT, cùng công thức với order-service) để hiển thị ngay khi đổi voucher/điểm
   const estimatedSummary = useMemo(() => {
-    const subtotal = summary.subtotal;
+    const subtotal = activeSubtotal;
     let discount = 0;
 
     if (appliedVoucher?.productDiscountAmount !== undefined) {
@@ -228,24 +244,28 @@ export default function CheckoutPage() {
       pointDiscount: appliedPoints?.pointDiscount || 0,
       shippingDiscount: appliedVoucher?.shippingDiscountAmount || 0
     });
-  }, [summary, discountPercent, appliedVoucher, appliedPoints]);
+  }, [activeSubtotal, discountPercent, appliedVoucher, appliedPoints]);
 
   // Số tiền do server tính là số tiền thật sẽ bị trừ -> ưu tiên hiển thị số này để xem trước và đơn tạo ra luôn khớp
   const [serverPreview, setServerPreview] = useState(null);
   const pointsToRedeem = appliedPoints?.pointsToRedeem || 0;
   useEffect(() => {
-    if (!summary.subtotal) {
+    if (!activeSubtotal) {
       setServerPreview(null);
       return;
     }
     let cancelled = false;
     const timer = setTimeout(() => {
-      orderApi.previewCheckout({ couponCode: couponCode || undefined, pointsToRedeem: pointsToRedeem || undefined })
+      orderApi.previewCheckout({
+        couponCode: couponCode || undefined,
+        pointsToRedeem: pointsToRedeem || undefined,
+        items: directApiItems,
+      })
         .then((p) => { if (!cancelled) setServerPreview(p); })
         .catch(() => { if (!cancelled) setServerPreview(null); });
     }, 300);
     return () => { cancelled = true; clearTimeout(timer); };
-  }, [couponCode, pointsToRedeem, summary.subtotal]);
+  }, [couponCode, pointsToRedeem, activeSubtotal, directApiItems]);
 
   const localSummary = useMemo(() => {
     if (!serverPreview) return estimatedSummary;
@@ -303,6 +323,7 @@ export default function CheckoutPage() {
 
     if (paymentMethod === "COD" && !codAllowed) {
       setError(`Đơn hàng trên ${formatVnd(COD_LIMIT)} cần thanh toán trước qua VNPAY.`);
+      setSubmitting(false);
       return;
     }
 
@@ -336,13 +357,18 @@ export default function CheckoutPage() {
         phoneNumber: phoneNumber.trim(),
         couponCode: couponCode.trim() || null,
         pointsToRedeem: appliedPoints?.pointsToRedeem || null,
-        note: note.trim() || null
+        note: note.trim() || null,
+        items: directApiItems,
       }, idempotencyKeyRef.current);
       setPlacedAddress(orderData?.shippingAddress || finalShippingAddress.trim());
 
-      // Clear applied vouchers
-      sessionStorage.removeItem("techstore_coupon_code");
-      sessionStorage.removeItem("techstore_coupon_discount_percent");
+      // Clear temporary session state for the completed checkout mode
+      if (isBuyNow) {
+        sessionStorage.removeItem("buy_now_item");
+      } else {
+        sessionStorage.removeItem("techstore_coupon_code");
+        sessionStorage.removeItem("techstore_coupon_discount_percent");
+      }
 
       // Initiate payment (COD or VNPAY)
       try {
@@ -356,14 +382,14 @@ export default function CheckoutPage() {
         // Đơn đã tạo và đang được giữ: đưa khách tới trang đơn hàng để thanh toán lại hoặc đổi phương thức.
         console.error("Payment initiation failed", payErr);
         showToast("Đơn hàng đã được tạo nhưng chưa thanh toán được: " + payErr.message);
-        reloadCart?.();
+        if (!isBuyNow) reloadCart?.();
         navigate(`/order/${orderData.id}`);
         return;
       }
 
       setSuccessOrder(orderData);
       showToast("Đặt hàng thành công!");
-      reloadCart?.();
+      if (!isBuyNow) reloadCart?.();
     } catch (err) {
       setError(err.message || "Đặt hàng thất bại. Vui lòng thử lại.");
     } finally {
@@ -726,7 +752,7 @@ export default function CheckoutPage() {
         <aside className="w-full lg:w-[380px] shrink-0 space-y-4 lg:sticky lg:top-24">
           {/* Voucher Picker placed prominently at the top of sidebar */}
           <VoucherPicker
-            orderTotal={summary.subtotal}
+            orderTotal={activeSubtotal}
             appliedVoucher={appliedVoucher}
             onApplied={(v) => {
               // Áp mã thành công vs thất bại là 2 tín hiệu RẤT khác nhau về khả năng bỏ giỏ
@@ -738,18 +764,18 @@ export default function CheckoutPage() {
           />
 
           <LoyaltyPointsPicker
-            orderAmount={summary.subtotal - localSummary.discount}
+            orderAmount={activeSubtotal - localSummary.discount}
             appliedPoints={appliedPoints}
             onApplied={setAppliedPoints}
             onClear={() => setAppliedPoints(null)}
           />
 
           <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
-            <h2 className="text-base font-black text-slate-850 dark:text-slate-205 uppercase tracking-wider pb-2 border-b border-slate-50 dark:border-slate-800/80">
+            <h2 className="text-base font-black text-slate-850 dark:text-slate-200 uppercase tracking-wider pb-2 border-b border-slate-50 dark:border-slate-800/80">
               Sản phẩm mua
             </h2>
             <div className="divide-y divide-slate-100 dark:divide-slate-800/80 max-h-60 overflow-y-auto pr-1">
-              {items.map((item) => (
+              {activeItems.map((item) => (
                 <article key={`${item.id}-${item.variant}`} className="py-3 flex gap-3 items-center">
                   <img alt={item.name} src={item.image} className="w-12 h-12 object-contain border border-slate-100 dark:border-slate-800 rounded" />
                   <div className="min-w-0 flex-1 text-xs">
