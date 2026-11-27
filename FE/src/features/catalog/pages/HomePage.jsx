@@ -11,6 +11,7 @@ import { getRootCategories } from "../utils/categoryUtils.js";
 import BrandShowcaseSection from "../components/BrandShowcaseSection.jsx";
 import { SubBannersGrid, WidePromoBanner } from "../components/PromoBannersSection.jsx";
 import { aiApi } from "../../../services/aiApi.ts";
+import PromotionalVoucherModal from "../../../components/common/PromotionalVoucherModal.jsx";
 
 import banner0 from "../../../assets/images/banner0.webp";
 import banner1 from "../../../assets/images/banner1.webp";
@@ -275,6 +276,9 @@ export default function HomePage() {
 
       {/* Brand Showcase Section */}
       <BrandShowcaseSection />
+
+      {/* Popup Voucher Chiến Dịch Shopee-style */}
+      <PromotionalVoucherModal />
     </div>
   );
 }
